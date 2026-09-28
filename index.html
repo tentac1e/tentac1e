@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Гид по базилику</title>
+<meta name="description" content="Подробное руководство по выращиванию базилика: сорта, посев и рассада, свет и полив, удобрения по стадиям роста, прищипывание, сбор, хранение, болезни и вредители. С калькуляторами и тренажёром.">
+<meta name="theme-color" content="#2D6932">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30 C 16 22 16 16 16 10' stroke='%232D6932' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z' fill='%236AA83D' stroke='%231D4B22' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- Shared SVG sprite: leaf shape, gradients, icons -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="lg-hero" x1="0" y1="1" x2="0.3" y2="0">
+      <stop offset="0" style="stop-color: var(--hero-leaf-a)"/>
+      <stop offset="1" style="stop-color: var(--hero-leaf-b)"/>
+    </linearGradient>
+    <g id="leaf-shape">
+      <path d="M0 0 L0 -7" fill="none" stroke-width="2"/>
+      <path d="M0 -6 C 20 -14 27 -44 0 -68 C -27 -44 -20 -14 0 -6 Z" stroke-width="1.3"/>
+      <path d="M0 -8 Q 1.6 -36 0 -63 M0.6 -20 Q 9 -24 14 -33 M0.6 -20 Q -8 -24 -13 -33 M0.8 -34 Q 8 -38 11 -46 M0.8 -34 Q -7 -38 -10 -46 M0.6 -47 Q 5 -51 7 -56 M0.6 -47 Q -4 -51 -6 -56" fill="none" stroke-width="1" opacity=".75"/>
+    </g>
+  </defs>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.2c-3.4 4.3-6 7.7-6 10.9a6 6 0 0 0 12 0c0-3.2-2.6-6.6-6-10.9z"/><path d="M9.2 14.6a3 3 0 0 0 2.4 2.6"/></symbol>
+  <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4 4 0 1 1-4 0z"/><path d="M12 9v7.5"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6.5" r="2.6"/><circle cx="6" cy="17.5" r="2.6"/><path d="M8.2 8L20 17.5M8.2 16L20 6.5"/></symbol>
+  <symbol id="i-flower" viewBox="0 0 24 24"><path d="M12 21.5V4.5"/><path d="M12 7.5c-1.6 0-2.8-.9-3.2-2.3 1.6 0 2.8.9 3.2 2.3zm0 0c1.6 0 2.8-.9 3.2-2.3-1.6 0-2.8.9-3.2 2.3zM12 12c-1.8 0-3.2-1-3.7-2.6 1.8 0 3.2 1 3.7 2.6zm0 0c1.8 0 3.2-1 3.7-2.6-1.8 0-3.2 1-3.7 2.6zM12 16.5c-2 0-3.5-1.1-4-2.8 2 0 3.5 1.1 4 2.8zm0 0c2 0 3.5-1.1 4-2.8-2 0-3.5 1.1-4 2.8z"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.2L5 18.4A1.8 1.8 0 0 0 6.6 21h10.8a1.8 1.8 0 0 0 1.6-2.6L14 9.2V3"/><path d="M7.2 15h9.6"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19C5 10.5 10.6 5 20 5c0 9.4-5.5 14.9-14 14.9z"/><path d="M5 19l8.5-8.5"/></symbol>
+  <symbol id="i-pot" viewBox="0 0 24 24"><path d="M4 9.5h16l-1.8 10.7a1 1 0 0 1-1 .8H6.8a1 1 0 0 1-1-.8z"/><path d="M12 9.5V5.8M12 6.2c0-2 1.6-3.2 3.6-3.2 0 2-1.6 3.2-3.6 3.2zM12 7c0-1.8-1.4-2.8-3.2-2.8 0 1.8 1.4 2.8 3.2 2.8z"/></symbol>
+  <symbol id="i-bug" viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="4.2" ry="5.5"/><path d="M12 8.5v11M9.5 5.5 12 8.5l2.5-3M7.8 11.5 4.5 10M16.2 11.5l3.3-1.5M7.8 15.5H4M16.2 15.5H20M8.4 18.8 5.5 20.5M15.6 18.8l2.9 1.7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-seed" viewBox="0 0 24 24"><path d="M12 3.5c4.2 3.2 5.2 9.6 0 17-5.2-7.4-4.2-13.8 0-17z"/><path d="M12 8v9"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-8.5"/><path d="M12 12.5C12 8.6 9.4 6.4 5 6.4c0 3.9 2.6 6.1 7 6.1zM12 10.4c0-3.9 2.6-6.1 7-6.1 0 3.9-2.6 6.1-7 6.1z"/></symbol>
+  <symbol id="i-lamp" viewBox="0 0 24 24"><path d="M5 4.5h14l-2.8 5H7.8z"/><path d="M8.5 13l-1.2 3M12 13v4M15.5 13l1.2 3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-6.5 8 6.5V20H4z"/><path d="M9.5 20v-5h5v5"/></symbol>
+  <symbol id="i-balcony" viewBox="0 0 24 24"><path d="M3.5 12h17M3.5 20.5h17M6 12v8.5M10 12v8.5M14 12v8.5M18 12v8.5"/><path d="M7.5 12V4h9v8"/></symbol>
+  <symbol id="i-garden" viewBox="0 0 24 24"><path d="M2.5 20h19"/><path d="M6 20v-4.5M6 15.5c0-2 1.2-3 3-3 0 2-1.2 3-3 3zM12 20v-7M12 13c0-2.4 1.4-3.6 3.6-3.6 0 2.4-1.4 3.6-3.6 3.6zM12 15c0-2-1.3-3-3.2-3 0 2 1.3 3 3.2 3zM18 20v-4.5M18 15.5c0-2-1.2-3-3-3 0 2 1.2 3 3 3z"/></symbol>
+  <symbol id="i-greenhouse" viewBox="0 0 24 24"><path d="M3 20.5V11a9 9 0 0 1 18 0v9.5z"/><path d="M12 2v18.5M3 14h18M7.5 4.5v16M16.5 4.5v16"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8.5h11a3 3 0 1 0-3-3M3 15.5h14.5a3 3 0 1 1-3 3M3 12h7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2.5v19M3.8 7.2l16.4 9.6M20.2 7.2 3.8 16.8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17.2v.1"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.1"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></symbol>
+  <symbol id="i-jar" viewBox="0 0 24 24"><path d="M7 3.5h10M8 3.5v3M16 3.5v3M6.5 6.5h11a1 1 0 0 1 1 1V19a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V7.5a1 1 0 0 1 1-1z"/><path d="M5.5 11h13"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M6 4h12l-1.5 16.5h-9z"/><path d="M6.8 12h10.4"/><path d="M12 12V6.5M12 7.5c0-1.6 1.2-2.6 2.8-2.6 0 1.6-1.2 2.6-2.8 2.6z"/></symbol>
+</svg>
+
+<canvas id="leaf-field" aria-hidden="true"></canvas>
+<div class="aura" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<div class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top" aria-label="Гид по базилику — наверх">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 30 C 16 22 16 16 16 10" style="stroke: var(--basil)" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z" style="fill: var(--leaf); stroke: var(--basil-deep)" stroke-width="1.6"/></svg>
+      <span>Базилик<small>гид садовода</small></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Разделы">
+      <a href="#sorta">Сорта</a>
+      <a href="#mesto">Место</a>
+      <a href="#kalendar">Календарь</a>
+      <a href="#posev">Посев</a>
+      <a href="#uhod">Уход</a>
+      <a href="#udobreniya">Удобрения</a>
+      <a href="#prishchipyvanie">Прищипка</a>
+      <a href="#urozhay">Урожай</a>
+      <a href="#cherenki">Черенки</a>
+      <a href="#problemy">Проблемы</a>
+      <a href="#voprosy">Вопросы</a>
+      <a href="#chek-list">Чек-лист</a>
+    </nav>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-label="Сменить тему">
+      <svg class="ico"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow"><span><i>Ocimum basilicum</i> L. · семейство Яснотковые</span></p>
+      <h1>Базилик <em>от семечка до&nbsp;песто</em></h1>
+      <p class="lead">Подробный гид по выращиванию: сорта, посев и рассада, свет и полив, удобрения по стадиям роста, прищипывание, сбор, хранение и лечение. Подходит для подоконника, балкона, грядки, теплицы и гидропоники.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#posev"><svg class="ico"><use href="#i-seed"/></svg>Начать с посева</a>
+        <a class="btn btn-ghost" href="#kalendar"><svg class="ico"><use href="#i-cal"/></svg>Рассчитать сроки</a>
+      </div>
+      <nav class="tool-links" aria-label="Инструменты на странице">
+        <p>Инструменты на странице</p>
+        <a href="#kalendar"><svg class="ico"><use href="#i-cal"/></svg>Календарь посадки</a>
+        <a href="#stadii"><svg class="ico"><use href="#i-flask"/></svg>Подкормки по стадиям</a>
+        <a href="#kalkulyator"><svg class="ico"><use href="#i-jar"/></svg>Калькулятор раствора</a>
+        <a href="#trenazher"><svg class="ico"><use href="#i-scissors"/></svg>Тренажёр прищипывания</a>
+        <a href="#diagnostika"><svg class="ico"><use href="#i-bug"/></svg>Диагностика по листьям</a>
+      </nav>
+    </div>
+
+    <div class="hero-art">
+      <div class="halo" aria-hidden="true"></div>
+      <svg class="sprig" viewBox="0 0 400 520" role="img" aria-label="Веточка базилика">
+        <g class="sprig-sway">
+          <path class="sprig-stem" d="M200 512 C 197 430 205 340 200 250 C 196 180 203 120 200 66"/>
+          <g transform="translate(199 448)">
+            <g class="sw" style="--d:6.4s;--dl:-1s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-64) scale(1.32)"/></g>
+            <g class="sw" style="--d:5.8s;--dl:-2.6s"><use href="#leaf-shape" class="lf-hero" transform="rotate(64) scale(1.32)"/></g>
+            <g class="sw" style="--d:4.6s;--dl:-.4s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-24) scale(.42)"/></g>
+            <g class="sw" style="--d:5.2s;--dl:-3.2s"><use href="#leaf-shape" class="lf-hero" transform="rotate(24) scale(.42)"/></g>
+          </g>
+          <g transform="translate(202 372)">
+            <g class="sw" style="--d:6s;--dl:-1.8s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-58) scale(.96 1.2)"/></g>
+            <g class="sw" style="--d:6.6s;--dl:-.9s"><use href="#leaf-shape" class="lf-hero" transform="rotate(58) scale(.96 1.2)"/></g>
+          </g>
+          <g transform="translate(202 298)">
+            <g class="sw" style="--d:5.4s;--dl:-2.2s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-55) scale(1.08)"/></g>
+            <g class="sw" style="--d:6.2s;--dl:-.3s"><use href="#leaf-shape" class="lf-hero" transform="rotate(55) scale(1.08)"/></g>
+            <g class="sw" style="--d:4.4s;--dl:-1.4s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-20) scale(.34)"/></g>
+            <g class="sw" style="--d:4.9s;--dl:-2.8s"><use href="#leaf-shape" class="lf-hero" transform="rotate(20) scale(.34)"/></g>
+          </g>
+          <g transform="translate(199 232)">
+            <g class="sw" style="--d:5.6s;--dl:-3s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-49) scale(.74 .92)"/></g>
+            <g class="sw" style="--d:5.1s;--dl:-1.1s"><use href="#leaf-shape" class="lf-hero" transform="rotate(49) scale(.74 .92)"/></g>
+          </g>
+          <g transform="translate(199 176)">
+            <g class="sw" style="--d:4.8s;--dl:-.7s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-43) scale(.76)"/></g>
+            <g class="sw" style="--d:5.3s;--dl:-2s"><use href="#leaf-shape" class="lf-hero" transform="rotate(43) scale(.76)"/></g>
+          </g>
+          <g transform="translate(201 128)">
+            <g class="sw" style="--d:4.4s;--dl:-1.6s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-35) scale(.48 .6)"/></g>
+            <g class="sw" style="--d:4.7s;--dl:-.2s"><use href="#leaf-shape" class="lf-hero" transform="rotate(35) scale(.48 .6)"/></g>
+          </g>
+          <g transform="translate(200 92)">
+            <g class="sw" style="--d:4s;--dl:-1s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-24) scale(.45)"/></g>
+            <g class="sw" style="--d:4.3s;--dl:-2.2s"><use href="#leaf-shape" class="lf-hero" transform="rotate(24) scale(.45)"/></g>
+          </g>
+          <g transform="translate(200 70)">
+            <g class="sw" style="--d:3.6s;--dl:-.5s"><use href="#leaf-shape" class="lf-hero" transform="rotate(-12) scale(.28)"/></g>
+            <g class="sw" style="--d:3.9s;--dl:-1.5s"><use href="#leaf-shape" class="lf-hero" transform="rotate(12) scale(.28)"/></g>
+          </g>
+        </g>
+      </svg>
+      <aside class="passport" aria-label="Паспорт растения">
+        <p class="passport-kicker">Паспорт растения</p>
+        <p class="passport-name">Ocimum basilicum L.</p>
+        <dl>
+          <div><dt>Тепло</dt><dd>20–28&nbsp;°C, ночью не ниже 16&nbsp;°C</dd></div>
+          <div><dt>Холод</dt><dd>ниже +10&nbsp;°C рост стоп, при +5&nbsp;°C чернеет</dd></div>
+          <div><dt>Свет</dt><dd>6–8&nbsp;ч солнца или 14–16&nbsp;ч под лампой</dd></div>
+          <div><dt>Почва</dt><dd>рыхлая, pH 6,0–7,0</dd></div>
+          <div><dt>Полив</dt><dd>когда подсохли верхние 1–2&nbsp;см</dd></div>
+          <div><dt>Урожай</dt><dd>через 6–8 недель после всходов</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GOLDEN RULES ============ -->
+<section class="section" id="glavnoe">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Если читать только одно</p>
+      <h2>Восемь правил, на&nbsp;которых <em>держится урожай</em></h2>
+      <p class="lead">Базилик прощает многое, но эти вещи решают всё. Остальная страница подробно разбирает каждую из них.</p>
+    </div>
+    <div class="rules">
+      <article class="rule float-card rise">
+        <div class="rule-ico is-oil"><svg class="ico"><use href="#i-thermo"/></svg></div>
+        <h4>Тепло важнее всего</h4>
+        <p>Базилик родом из тропиков. Растёт при 20–28&nbsp;°C, при 12&nbsp;°C останавливается, ниже +5&nbsp;°C листья чернеют, а заморозок убивает сразу. На улицу его выносят, когда ночи стабильно теплее +10&nbsp;°C.</p>
+      </article>
+      <article class="rule float-card rise">
+        <div class="rule-ico is-oil"><svg class="ico"><use href="#i-sun"/></svg></div>
+        <h4>Много света</h4>
+        <p>Нужно 6–8 часов прямого солнца. Дома зимой — 14–16 часов под лампой. В тени базилик вытягивается, бледнеет и почти не пахнет.</p>
+      </article>
+      <article class="rule float-card rise">
+        <div class="rule-ico"><svg class="ico"><use href="#i-scissors"/></svg></div>
+        <h4>Прищипывайте рано</h4>
+        <p>Когда у растения 3–4 пары настоящих листьев, срежьте верхушку над 2-й или 3-й парой. Из пазух пойдут два побега, и вместо одного стебля вырастет куст.</p>
+      </article>
+      <article class="rule float-card rise">
+        <div class="rule-ico is-opal"><svg class="ico"><use href="#i-flower"/></svg></div>
+        <h4>Не давайте цвести</h4>
+        <p>Как только появились бутоны, срезайте их вместе с парой листьев под ними. После цветения листья мельчают, грубеют и горчат.</p>
+      </article>
+      <article class="rule float-card rise">
+        <div class="rule-ico"><svg class="ico"><use href="#i-drop"/></svg></div>
+        <h4>Поливайте без крайностей</h4>
+        <p>Когда верхние 1–2&nbsp;см грунта сухие. Тёплой отстоянной водой, утром, под корень. Пересушка провоцирует цветение, перелив — гниль корней.</p>
+      </article>
+      <article class="rule float-card rise">
+        <div class="rule-ico"><svg class="ico"><use href="#i-flask"/></svg></div>
+        <h4>Кормите понемногу</h4>
+        <p>Половинные дозы раз в 1–2 недели лучше редких ударных. Избыток азота даёт водянистую зелень без аромата и накапливает нитраты.</p>
+      </article>
+      <article class="rule float-card rise">
+        <div class="rule-ico"><svg class="ico"><use href="#i-leaf"/></svg></div>
+        <h4>Срезайте сверху</h4>
+        <p>Всегда над парой листьев, а не отдельные листья снизу. За раз снимайте не больше трети куста, и через 1–2 недели он снова будет густым.</p>
+      </article>
+      <article class="rule float-card rise">
+        <div class="rule-ico is-opal"><svg class="ico"><use href="#i-pot"/></svg></div>
+        <h4>Магазинный горшок рассадите</h4>
+        <p>В горшке из супермаркета растёт 10–30 сеянцев. Разделите ком на 3–5 частей и посадите в отдельные горшки, иначе они погибнут в тесноте.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VARIETIES ============ -->
+<section class="section" id="sorta">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Выбор сорта</p>
+      <h2>Какой базилик <em>сажать</em></h2>
+      <p class="lead">У&nbsp;вида <i>Ocimum basilicum</i> десятки сортов, а рядом с ним — родственные виды с лимонным, коричным и гвоздичным ароматом. Уход у всех почти одинаковый, различаются вкус, размер куста и назначение.</p>
+    </div>
+    <div class="filters" id="variety-filters" role="group" aria-label="Фильтр сортов">
+      <button class="chip" type="button" data-filter="all" aria-pressed="true">Все</button>
+      <button class="chip" type="button" data-filter="pesto" aria-pressed="false">Для песто</button>
+      <button class="chip" type="button" data-filter="pot" aria-pressed="false">Для подоконника</button>
+      <button class="chip" type="button" data-filter="purple" aria-pressed="false">Фиолетовые</button>
+      <button class="chip" type="button" data-filter="asian" aria-pressed="false">Азиатская кухня</button>
+      <button class="chip" type="button" data-filter="tea" aria-pressed="false">Чай и десерты</button>
+      <button class="chip" type="button" data-filter="decor" aria-pressed="false">Декоративные</button>
+      <span class="count" id="variety-count" aria-live="polite"></span>
+    </div>
+    <div class="var-grid" id="variety-grid"></div>
+    <div class="callout var-note">
+      <svg class="ico"><use href="#i-info"/></svg>
+      <p><b>F1 на пакете</b> означает гибрид: растения дружные и часто устойчивее к болезням, но собранные с них семена не повторят сорт. Если хотите собирать свои семена, берите сортовой базилик и не сажайте разные сорта рядом: они переопыляются.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLACE ============ -->
+<section class="section" id="mesto">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Где растить</p>
+      <h2>Подоконник, балкон, грядка, <em>теплица или гидропоника</em></h2>
+      <p class="lead">Базилик растёт где угодно, если ему тепло и светло. Выберите свой вариант: условия, сроки и типичные ошибки отличаются.</p>
+    </div>
+    <div class="pane rise">
+      <div class="tabs" id="place-tabs" role="tablist" aria-label="Место выращивания"></div>
+      <div class="place-panel" id="place-panel" role="tabpanel"></div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-head">
+        <h3>Соседи по грядке и ящику</h3>
+        <p>Совместимость растений изучена мало: большинство советов — садоводческая практика. Главный критерий простой: соседи должны любить тот же свет, тепло и полив.</p>
+      </div>
+      <div class="companions">
+        <div class="card rise">
+          <h4 class="hand">Хорошо рядом</h4>
+          <ul class="comp-list">
+            <li><b>Томаты</b><span>Классическая пара: одинаковые требования к теплу и поливу. В теплице базилик сажают между кустами томатов.</span></li>
+            <li><b>Перец и баклажаны</b><span>Такие же теплолюбивые, режим ухода совпадает.</span></li>
+            <li><b>Салат, шпинат, петрушка</b><span>Нетребовательные соседи по балконному ящику, не затеняют.</span></li>
+            <li><b>Бархатцы и календула</b><span>Привлекают опылителей и полезных хищных насекомых.</span></li>
+          </ul>
+        </div>
+        <div class="card rise">
+          <h4 class="hand">Лучше отдельно</h4>
+          <ul class="comp-list">
+            <li><b>Розмарин, тимьян, лаванда, шалфей</b><span>Любят сухость и бедную почву. При общем поливе кто-то из соседей будет страдать.</span></li>
+            <li><b>Огурцы</b><span>Им нужна сырость и влажный воздух, в котором базилик болеет ложной мучнистой росой.</span></li>
+            <li><b>Фенхель</b><span>Традиционно считается плохим соседом для большинства культур и сильно разрастается.</span></li>
+            <li><b>Базилик после базилика</b><span>Возбудитель фузариоза годами сохраняется в почве. Возвращайте базилик на то же место через 3–4 года.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CALENDAR ============ -->
+<section class="section" id="kalendar">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Сроки</p>
+      <h2>Календарь посадки <em>под ваш климат</em></h2>
+      <p class="lead">Базилик сажают не по календарю, а по погоде. Для грядки и теплицы укажите среднюю дату последнего весеннего заморозка в вашей местности. Для дома — дату посева. Мы посчитаем, когда сеять, пикировать, высаживать и собирать.</p>
+    </div>
+    <div class="pane cal-tool rise">
+      <div class="cal-top">
+        <div class="seg" role="group" aria-label="Где выращиваете">
+          <button type="button" id="cal-mode-garden" data-mode="garden" aria-pressed="true">Грядка или теплица</button>
+          <button type="button" id="cal-mode-home" data-mode="home" aria-pressed="false">Дом и подоконник</button>
+        </div>
+        <div class="cal-controls">
+          <div class="field" id="cal-preset-field">
+            <label for="cal-preset">Климат</label>
+            <select id="cal-preset"></select>
+          </div>
+          <div class="field">
+            <label for="cal-date" id="cal-date-label">Последний заморозок</label>
+            <input type="date" id="cal-date">
+          </div>
+        </div>
+      </div>
+      <p class="cal-season" id="cal-season"></p>
+      <div class="gantt" id="cal-gantt" aria-hidden="true"></div>
+      <ul class="gantt-legend" id="cal-legend"></ul>
+      <ol class="timeline" id="cal-timeline"></ol>
+      <div class="callout is-warn">
+        <svg class="ico"><use href="#i-snow"/></svg>
+        <p>Даты в пресетах усреднены. Смотрите на прогноз: высаживайте, когда ночи 7–10 дней подряд теплее +10&nbsp;°C, а почва на глубине 10&nbsp;см прогрелась до +15&nbsp;°C. При угрозе похолодания укройте посадки нетканым материалом.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOWING ============ -->
+<section class="section" id="posev">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Посев и рассада</p>
+      <h2>От семечка до <em>крепкого сеянца</em></h2>
+      <p class="lead">Семена базилика мелкие: в 1&nbsp;г их около 600–800 штук, всхожесть держится 4–5 лет. Во влажном грунте они покрываются слизистой оболочкой — это нормально, так семя удерживает воду.</p>
+    </div>
+    <div class="two-col">
+      <ol class="steps">
+        <li class="step card float-card rise">
+          <span class="step-num">1</span>
+          <div><span class="step-meta">за день до посева</span><h4>Подготовьте ёмкости и грунт</h4>
+          <p>Кассеты, стаканчики или контейнер с дренажными отверстиями. Грунт лёгкий: торфяная смесь для рассады пополам с перлитом или вермикулитом. Пролейте его раствором фитоспорина или горячей водой для профилактики чёрной ножки. Удобрения в посевной грунт не добавляйте.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">2</span>
+          <div><span class="step-meta">день 0</span><h4>Посейте</h4>
+          <p>Разложите семена по влажной поверхности через 1–2&nbsp;см или по 2–3 штуки в ячейку. Присыпьте слоем 0,5&nbsp;см (не глубже 1&nbsp;см), слегка прижмите и увлажните из распылителя. Замачивать семена не нужно: намокшие, они слипаются в комки.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">3</span>
+          <div><span class="step-meta">дни 0–7</span><h4>Мини-парник</h4>
+          <p>Накройте крышкой или плёнкой и держите при 22–25&nbsp;°C. До всходов свет не обязателен, но раз в день проветривайте и убирайте конденсат.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">4</span>
+          <div><span class="step-meta">дни 5–10</span><h4>Всходы</h4>
+          <p>Появляются через 5–10 дней, при 18&nbsp;°C — до двух недель. Сразу снимите укрытие и переставьте на самое светлое место или под лампу на 14–16 часов. Температуру снизьте до 20–22&nbsp;°C, чтобы сеянцы не вытянулись.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">5</span>
+          <div><span class="step-meta">дни 14–21</span><h4>Пикировка или прореживание</h4>
+          <p>Когда появятся 1–2 пары настоящих листьев, рассадите сеянцы в стаканы по 200–300&nbsp;мл, заглубляя до семядолей. Или проредите, оставив в ячейке одно самое сильное растение.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">6</span>
+          <div><span class="step-meta">недели 3–6</span><h4>Уход за рассадой</h4>
+          <p>Поливайте умеренно, лучше снизу через поддон. Первая подкормка — через 7–10 дней после пикировки, в четверть дозы. Поворачивайте ёмкости к свету.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">7</span>
+          <div><span class="step-meta">недели 5–6</span><h4>Первое прищипывание</h4>
+          <p>При 3–4 парах настоящих листьев прищипните верхушку над 2-й или 3-й парой. Рассада станет коренастой и лучше перенесёт пересадку.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">8</span>
+          <div><span class="step-meta">за 7–10 дней до высадки</span><h4>Закаливание</h4>
+          <p>Выносите рассаду на улицу: сначала на 1–2 часа в тень, затем на целый день. На ночь заносите в тепло, пока ночи холоднее +10&nbsp;°C.</p></div>
+        </li>
+        <li class="step card float-card rise">
+          <span class="step-num">9</span>
+          <div><span class="step-meta">в возрасте 6–8 недель</span><h4>Высадка на место</h4>
+          <p>Вечером или в пасмурный день, когда почва прогрелась до +15&nbsp;°C. Схема 25–30 × 40&nbsp;см, в горшок — одно растение на 1,5–3&nbsp;л. Полейте тёплой водой и замульчируйте.</p></div>
+        </li>
+      </ol>
+      <aside class="sticky-side">
+        <div class="card rise">
+          <h3>Частые ошибки</h3>
+          <ul class="ticks is-bad">
+            <li><b>Глубокая заделка.</b> Семена глубже 1&nbsp;см часто не всходят.</li>
+            <li><b>Холодный подоконник.</b> Грунт на нём на 3–5&nbsp;°C холоднее воздуха. Подложите пенопласт или пробку.</li>
+            <li><b>Густой посев.</b> Сеянцы вытягиваются и болеют чёрной ножкой.</li>
+            <li><b>Промедление со светом.</b> Без света после всходов сеянцы за 1–2 дня превращаются в ниточки.</li>
+            <li><b>Удобрения в посевном грунте.</b> Соли обжигают нежный корешок.</li>
+            <li><b>Перелив.</b> В первые недели корни маленькие и легко загнивают.</li>
+          </ul>
+        </div>
+        <div class="card rise">
+          <h3>Посев сразу в грунт</h3>
+          <p>В тёплых регионах и в теплице можно сеять прямо на грядку, когда почва прогреется до +15&nbsp;°C. Рядки через 30–40&nbsp;см, заделка 0,5–1&nbsp;см, затем проредите до 20–30&nbsp;см между растениями. Урожай будет на 3–4 недели позже, чем с рассады.</p>
+          <p class="hand">Лишние сеянцы при прореживании — уже микрозелень для салата.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARE ============ -->
+<section class="section" id="uhod">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Условия</p>
+      <h2>Свет, вода, тепло <em>и почва</em></h2>
+      <p class="lead">От этих четырёх вещей зависит всё остальное. Если базилику плохо, почти всегда виновата одна из них, а не нехватка удобрений.</p>
+    </div>
+    <div class="care-grid">
+      <article class="card care-card float-card rise">
+        <header><div class="rule-ico is-oil"><svg class="ico"><use href="#i-sun"/></svg></div><h3>Свет</h3></header>
+        <dl class="data-rows">
+          <div><dt>Прямое солнце</dt><dd>6–8 ч в день</dd></div>
+          <div><dt>Под лампой</dt><dd>14–16 ч в день</dd></div>
+          <div><dt>Интенсивность</dt><dd>PPFD 200–400 мкмоль/м²·с</dd></div>
+          <div><dt>Дневная сумма</dt><dd>DLI 12–17 моль/м²</dd></div>
+          <div><dt>Лампа</dt><dd>LED, 3000–6500 K, 20–40 см</dd></div>
+        </dl>
+        <p>На южном окне летом света хватает, с октября по март — нет. Признаки нехватки: длинные междоузлия, мелкие бледные листья, стебель тянется к стеклу. Полуденное солнце за стеклом может обжечь листья — в жару притеняйте тюлем.</p>
+      </article>
+      <article class="card care-card float-card rise">
+        <header><div class="rule-ico"><svg class="ico"><use href="#i-drop"/></svg></div><h3>Полив</h3></header>
+        <dl class="data-rows">
+          <div><dt>Когда</dt><dd>верхние 1–2 см сухие</dd></div>
+          <div><dt>Вода</dt><dd>комнатной t°, отстоянная</dd></div>
+          <div><dt>Время</dt><dd>утро</dd></div>
+          <div><dt>Как</dt><dd>под корень, до стока в поддон</dd></div>
+          <div><dt>Лишняя вода</dt><dd>слить через 15 мин</dd></div>
+        </dl>
+        <p>Проверяйте пальцем, а не по календарю. В жару на балконе горшок может просыхать ежедневно, зимой на прохладном окне — раз в 4–5 дней. Жёсткая вода со временем защелачивает грунт: раз в месяц промывайте его обильным поливом.</p>
+      </article>
+      <article class="card care-card float-card rise">
+        <header><div class="rule-ico is-oil"><svg class="ico"><use href="#i-thermo"/></svg></div><h3>Тепло и воздух</h3></header>
+        <dl class="data-rows">
+          <div><dt>Прорастание</dt><dd>22–25 °C</dd></div>
+          <div><dt>Рост днём</dt><dd>20–28 °C</dd></div>
+          <div><dt>Ночью</dt><dd>не ниже 16 °C</dd></div>
+          <div><dt>Остановка роста</dt><dd>ниже 12 °C</dd></div>
+          <div><dt>Повреждение</dt><dd>ниже +5…+10 °C</dd></div>
+          <div><dt>Жара</dt><dd>выше 32–35 °C — стресс</dd></div>
+          <div><dt>Влажность воздуха</dt><dd>40–60 %</dd></div>
+        </dl>
+        <p>Сквозняк из форточки и холодное стекло зимой — частая причина чёрных пятен на листьях. От батареи — сухой воздух и паутинный клещ. Слишком сырой и душный воздух провоцирует грибковые болезни.</p>
+      </article>
+      <article class="card care-card float-card rise">
+        <header><div class="rule-ico"><svg class="ico"><use href="#i-pot"/></svg></div><h3>Почва и горшок</h3></header>
+        <dl class="data-rows">
+          <div><dt>Структура</dt><dd>лёгкая, рыхлая</dd></div>
+          <div><dt>Кислотность</dt><dd>pH 6,0–7,0</dd></div>
+          <div><dt>Горшок</dt><dd>1,5–3 л на куст</dd></div>
+          <div><dt>Дренаж</dt><dd>отверстия + 1–2 см керамзита</dd></div>
+          <div><dt>Грядка</dt><dd>3–5 кг компоста на м²</dd></div>
+        </dl>
+        <div class="mix">
+          <b>Смесь для горшка</b>
+          <div class="mix-bar" role="img" aria-label="2 части торфяного грунта, 1 часть перлита, 1 часть биогумуса">
+            <span class="m-a">Торфогрунт · 2 части</span>
+            <span class="m-b">Перлит · 1</span>
+            <span class="m-c">Биогумус · 1</span>
+          </div>
+          <small>Перлит можно заменить вермикулитом, биогумус — зрелым компостом. Свежий навоз под базилик не вносят: он даёт избыток азота и заносит болезни.</small>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FERTILIZERS ============ -->
+<section class="section" id="udobreniya">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Питание</p>
+      <h2>Удобрения: что, зачем <em>и когда</em></h2>
+      <p class="lead">Базилик — листовая культура с быстрым ростом и регулярной срезкой. Ему нужно много азота для зелени, калий для аромата и немного фосфора для корней. Но избыток вреднее недостатка: перекормленный базилик водянистый, пресный и полон нитратов.</p>
+    </div>
+
+    <div class="principles">
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-drop"/></svg>Только по влажному грунту</h4><p>Сначала обычный полив, через 20–30 минут — раствор. По сухому грунту соли обжигают корни.</p></article>
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-pot"/></svg>Свежий грунт кормит сам</h4><p>В покупных смесях есть стартовые удобрения на 3–4 недели. В это время подкормки не нужны.</p></article>
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-flask"/></svg>Чаще, но слабее</h4><p>В горшке — половина дозы с упаковки раз в 7–14 дней. На грядке — полная доза раз в 2–3 недели.</p></article>
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-alert"/></svg>Больных не кормят</h4><p>Корни, ослабленные переливом, засухой или холодом, удобрение не усвоят. Сначала устраните причину.</p></article>
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-leaf"/></svg>Азот с оглядкой</h4><p>Прекращайте азотные подкормки за 2 недели до массового сбора на заготовки: будет больше аромата и меньше нитратов.</p></article>
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-sun"/></svg>Внекорневые вдвое слабее</h4><p>Опрыскивайте вечером или в пасмурную погоду, не на солнце. Это экспресс-помощь, а не основное питание.</p></article>
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-wind"/></svg>Промывайте грунт</h4><p>Раз в месяц пролейте горшок чистой водой в объёме 2–3 горшков. Это вымывает накопившиеся соли.</p></article>
+      <article class="card principle float-card rise"><h4><svg class="ico"><use href="#i-thermo"/></svg>В холод кормить бесполезно</h4><p>При грунте холоднее 12–14&nbsp;°C корни почти не берут азот и фосфор. Сначала утеплите.</p></article>
+    </div>
+
+    <div class="sub" id="elementy">
+      <div class="sub-head">
+        <h3>Что за что отвечает</h3>
+        <p>Нажмите на элемент, чтобы узнать его роль, признаки нехватки и избытка и где его взять. Стрелка в углу подсказывает, где искать симптомы: ↓ на старых нижних листьях, ↑ на молодых верхних.</p>
+      </div>
+      <div class="el-layout">
+        <div>
+          <div class="el-grid" id="el-grid" role="group" aria-label="Элементы питания"></div>
+          <ul class="el-legend">
+            <li><b class="c-macro">N</b> макроэлементы</li>
+            <li><b class="c-meso">Ca</b> мезоэлементы</li>
+            <li><b class="c-micro">Fe</b> микроэлементы</li>
+          </ul>
+          <div class="mobility card">
+            <svg viewBox="0 0 120 200" aria-hidden="true">
+              <ellipse cx="60" cy="42" rx="52" ry="38" style="fill: var(--opal-soft)"/>
+              <ellipse cx="60" cy="160" rx="58" ry="40" style="fill: var(--leaf-soft)"/>
+              <path d="M60 198 L60 18" class="mini-stem"/>
+              <g transform="translate(60 176)"><use href="#leaf-shape" class="mini-leaf" style="fill: var(--lf-lime)" transform="rotate(-64) scale(.52)"/><use href="#leaf-shape" class="mini-leaf" style="fill: var(--lf-lime)" transform="rotate(64) scale(.52)"/></g>
+              <g transform="translate(60 140)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-58) scale(.36 .46)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(58) scale(.36 .46)"/></g>
+              <g transform="translate(60 104)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-52) scale(.4)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(52) scale(.4)"/></g>
+              <g transform="translate(60 70)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-44) scale(.26 .32)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(44) scale(.26 .32)"/></g>
+              <g transform="translate(60 44)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-30) scale(.24)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(30) scale(.24)"/></g>
+              <g transform="translate(60 24)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-12) scale(.14)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(12) scale(.14)"/></g>
+            </svg>
+            <div>
+              <div class="mob-row mob-top"><b>↑ Ca · Fe · S · B · Mn · Cu</b><span>Неподвижные: растение не может перебросить их из старых листьев, поэтому нехватка видна на верхушке.</span></div>
+              <div class="mob-row mob-bottom"><b>↓ N · P · K · Mg · Mo</b><span>Подвижные: растение забирает их из старых листьев для молодых, поэтому страдают нижние. Цинк — частично подвижен.</span></div>
+            </div>
+          </div>
+        </div>
+        <article class="pane el-detail" id="el-detail" aria-live="polite"></article>
+      </div>
+    </div>
+
+    <div class="sub" id="stadii">
+      <div class="sub-head">
+        <h3>Питание по стадиям роста</h3>
+        <p>Потребности меняются от посева до конца сезона. Выберите стадию: покажем, какие элементы важнее, чем кормить, как часто и чего избегать.</p>
+      </div>
+      <div class="pane rise">
+        <div class="stage-track" id="stage-track" role="tablist" aria-label="Стадия роста"></div>
+        <input class="stage-range" type="range" id="stage-range" min="0" max="6" step="1" value="3" aria-label="Стадия роста">
+        <div class="stage-body">
+          <div>
+            <h3 class="stage-title" id="stage-title"></h3>
+            <p class="stage-days" id="stage-days"></p>
+            <div class="npk" id="stage-npk"></div>
+            <p class="npk-caption">Длина полосы — относительная потребность в элементе на этой стадии.</p>
+            <div class="ratio"><span>Соотношение N : P : K</span><b id="stage-ratio"></b></div>
+          </div>
+          <div>
+            <dl class="stage-info" id="stage-info"></dl>
+            <ul class="ticks stage-tips" id="stage-tips"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub" id="tablica">
+      <div class="sub-head">
+        <h3>Какие удобрения использовать</h3>
+        <p>Дозы — ориентир для базилика. Если на упаковке указано иначе, следуйте инструкции производителя. Для горшков берите половину от дозы для грядки.</p>
+      </div>
+      <div class="table-wrap rise">
+        <table>
+          <thead>
+            <tr><th scope="col">Удобрение</th><th scope="col">Состав, %</th><th scope="col">Для чего</th><th scope="col">Когда</th><th scope="col">Доза</th></tr>
+          </thead>
+          <tbody>
+            <tr class="group"><th colspan="5" scope="colgroup">Минеральные</th></tr>
+            <tr><td>Комплексное «для зелени» с микроэлементами</td><td class="comp">N &gt; K &gt; P + микро</td><td>Основной вариант для горшков: всё в одном флаконе или пакете</td><td>Весь сезон после приживания</td><td class="dose">по инструкции; в горшке ½ дозы</td></tr>
+            <tr><td>Нитроаммофоска (азофоска)</td><td class="comp">N16 · P16 · K16</td><td>Универсальная подкормка и заправка грядки</td><td>Подготовка почвы, активный рост</td><td class="dose">в почву 20–30 г/м²; раствор 1–1,5 г/л</td></tr>
+            <tr><td>Мочевина (карбамид)</td><td class="comp">N46</td><td>Быстрая помощь при азотном голодании</td><td>Активный рост, после сильной срезки</td><td class="dose">0,5 г/л, не чаще раза в 2 недели</td></tr>
+            <tr><td>Калийная селитра</td><td class="comp">N13 · K46</td><td>Аромат, плотные листья, отрастание после срезок</td><td>Рост и регулярные срезки</td><td class="dose">1 г/л</td></tr>
+            <tr><td>Кальциевая селитра</td><td class="comp">N15,5 · Ca19</td><td>Крепкие ткани, профилактика деформации верхушек</td><td>Рост, гидропоника, мягкая вода</td><td class="dose">1 г/л; не смешивать в одном растворе с фосфатами и сульфатами</td></tr>
+            <tr><td>Монокалийфосфат</td><td class="comp">P52 · K34</td><td>Корни рассады, приживание, цветение и семена</td><td>Рассада, пересадка, цветение</td><td class="dose">1 г/л; внекорневая 0,5 г/л</td></tr>
+            <tr><td>Сульфат калия</td><td class="comp">K50 · S18</td><td>Калий без азота: аромат и финиш сезона</td><td>Срезки, конец сезона</td><td class="dose">1 г/л</td></tr>
+            <tr><td>Сульфат магния</td><td class="comp">MgO16 · S13</td><td>Лечение и профилактика хлороза между жилками</td><td>Раз в месяц весь сезон</td><td class="dose">корневая 2 г/л; внекорневая 1 г/л</td></tr>
+            <tr><td>Хелат железа</td><td class="comp">Fe (ЭДТА, ДТПА)</td><td>Хлороз молодых листьев при жёсткой воде</td><td>По симптомам, в гидропонике постоянно</td><td class="dose">по инструкции</td></tr>
+            <tr><td>Суперфосфат двойной</td><td class="comp">P46 + Ca</td><td>Фосфор впрок: растворяется медленно</td><td>Осенью или весной до посадки</td><td class="dose">15–20 г/м² в почву</td></tr>
+            <tr class="group"><th colspan="5" scope="colgroup">Органические</th></tr>
+            <tr><td>Биогумус (вермикомпост)</td><td class="comp">NPK 1–2 + гуматы</td><td>Мягкое питание, структура грунта, полезная микрофлора</td><td>Любая стадия, кроме посева</td><td class="dose">10–20 % объёма грунта; жидкий — по инструкции</td></tr>
+            <tr><td>Компост перепревший</td><td class="comp">NPK ≈ 1</td><td>Заправка грядки, улучшение почвы</td><td>До посадки</td><td class="dose">3–5 кг/м²</td></tr>
+            <tr><td>Настой крапивы</td><td class="comp">N, K, Ca, Fe</td><td>«Зелёное удобрение» для наращивания массы</td><td>Активный рост</td><td class="dose">перебродивший настой 1:10, раз в 10–14 дней</td></tr>
+            <tr><td>Древесная зола</td><td class="comp">K 5–12 · Ca до 30 · P 1–3</td><td>Калий и кальций, раскисление почвы</td><td>Срезки, конец сезона</td><td class="dose">настой 10 г/л; в почву 100 г/м²; не вместе с азотными</td></tr>
+            <tr><td>Настой куриного помёта</td><td class="comp">N высокий</td><td>Сильная азотная подкормка</td><td>Только грядка, активный рост</td><td class="dose">1:20, под корень, не чаще раза в 3 недели</td></tr>
+            <tr><td>Гумат калия</td><td class="comp">гуминовые кислоты</td><td>Корнеобразование, снятие стресса</td><td>Пересадка, после холода и жары</td><td class="dose">по инструкции</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sub" id="kalkulyator">
+      <div class="sub-head">
+        <h3>Калькулятор раствора</h3>
+        <p>Выберите удобрение, объём воды и силу раствора — посчитаем граммы и ложки. Ложки — приблизительно: сыпучие удобрения весят по-разному, поэтому точнее взвесить на кухонных весах.</p>
+      </div>
+      <div class="pane dose-tool rise">
+        <form class="dose-form" id="dose-form" novalidate>
+          <div class="row">
+            <div class="field">
+              <label for="dose-fert">Удобрение</label>
+              <select id="dose-fert"></select>
+            </div>
+            <div class="field">
+              <label for="dose-water">Вода, л</label>
+              <input type="number" id="dose-water" min="0.25" max="100" step="0.25" value="2" inputmode="decimal">
+            </div>
+          </div>
+          <fieldset class="field" style="border:0;padding:0;margin:0">
+            <legend class="label" style="padding:0;margin-bottom:6px">Сила раствора</legend>
+            <div class="radio-cards">
+              <label><input type="radio" name="dose-strength" id="dose-s-full" value="1">Полная<small>грядка, теплица</small></label>
+              <label><input type="radio" name="dose-strength" id="dose-s-half" value="0.5" checked>Половина<small>горшок, взрослые</small></label>
+              <label><input type="radio" name="dose-strength" id="dose-s-quarter" value="0.25">Четверть<small>рассада, сеянцы</small></label>
+              <label><input type="radio" name="dose-strength" id="dose-s-foliar" value="foliar">По листу<small>опрыскивание</small></label>
+            </div>
+          </fieldset>
+        </form>
+        <output class="dose-out" id="dose-out" for="dose-fert dose-water" aria-live="polite"></output>
+      </div>
+    </div>
+
+    <div class="sub" id="gidroponika">
+      <div class="sub-head">
+        <h3>Гидропоника: EC и pH по стадиям</h3>
+        <p>В гидропонике всё питание — в растворе, поэтому концентрацию контролируют кондуктометром (EC) и pH-метром. Используйте удобрения, созданные для гидропоники: почвенные не содержат всего набора элементов.</p>
+      </div>
+      <div class="card rise" style="overflow-x:auto">
+        <table class="mini-table">
+          <thead><tr><th scope="col">Стадия</th><th scope="col">EC, mS/см</th><th scope="col">pH</th><th scope="col">Комментарий</th></tr></thead>
+          <tbody>
+            <tr><td>Сеянцы, 1–2 пары листьев</td><td class="num">0,4–0,8</td><td class="num">5,8–6,2</td><td>Слабый раствор, корни ещё нежные</td></tr>
+            <tr><td>Активный рост</td><td class="num">1,0–1,4</td><td class="num">5,5–6,5</td><td>Повышайте постепенно, на 0,1–0,2 в неделю</td></tr>
+            <tr><td>Регулярные срезки</td><td class="num">1,2–1,6</td><td class="num">5,5–6,5</td><td>Выше 1,8–2,0 — риск ожога корней и горечи</td></tr>
+            <tr><td>Температура раствора</td><td class="num">18–22 °C</td><td class="num">—</td><td>Выше 24&nbsp;°C кислорода мало, корни гниют</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sub" id="mify">
+      <div class="sub-head">
+        <h3>Мифы о подкормках</h3>
+        <p>Народные рецепты из интернета, которые в горшке с базиликом не работают или вредят.</p>
+      </div>
+      <div class="myths">
+        <article class="card myth float-card rise"><span class="myth-label">Миф</span><h4>Дрожжи — стимулятор роста</h4><p>Питательных веществ в дрожжах почти нет. Они только ускоряют разложение органики, а в торфяном горшке брожение может навредить корням.</p></article>
+        <article class="card myth float-card rise"><span class="myth-label">Миф</span><h4>Скорлупа даёт кальций</h4><p>Яичная скорлупа растворяется в почве годами и быстро дефицит не закроет. Годится разве что как дренаж.</p></article>
+        <article class="card myth float-card rise"><span class="myth-label">Миф</span><h4>Кофейная гуща — удобрение</h4><p>Азота в ней немного, а в горшке она слёживается коркой и плесневеет. Лучше отправить её в компост.</p></article>
+        <article class="card myth float-card rise"><span class="myth-label">Миф</span><h4>Сахар подпитывает растение</h4><p>Базилик сам производит сахара на свету. Сахар в грунте кормит бактерии и плесень, а не корни.</p></article>
+        <article class="card myth float-card rise"><span class="myth-label">Миф</span><h4>Банановая кожура — калий</h4><p>Калий в ней есть, но в горшке кожура гниёт и привлекает мошек. Для компостной кучи — да, в горшок — нет.</p></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PINCHING ============ -->
+<section class="section" id="prishchipyvanie">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Формирование куста</p>
+      <h2>Прищипывание: главный секрет <em>густого базилика</em></h2>
+      <p class="lead">Верхушка стебля вырабатывает гормон ауксин, который не даёт проснуться пазушным почкам. Уберите верхушку, и две спящие почки под срезом превратятся в два новых стебля. Повторяйте это на каждом побеге, и через месяц-полтора вместо одного стебля будет 8–16.</p>
+    </div>
+
+    <div class="pinch-cols">
+      <article class="card rise">
+        <h3><svg class="ico"><use href="#i-cal"/></svg>Когда</h3>
+        <ul class="ticks">
+          <li><b>Первый раз</b> — при 3–4 парах настоящих листьев и высоте 10–15&nbsp;см, обычно на 5–6-й неделе после всходов.</li>
+          <li><b>Дальше</b> — каждый раз, когда на новом побеге вырастет 3–4 пары листьев, примерно раз в 2–3 недели.</li>
+          <li><b>Бутоны</b> — удаляйте сразу, как заметите, вместе с 1–2 парами листьев под ними.</li>
+        </ul>
+      </article>
+      <article class="card rise">
+        <h3><svg class="ico"><use href="#i-scissors"/></svg>Как</h3>
+        <ol>
+          <li>Найдите пару листьев, над которой будете резать. В пазухах видны крошечные листочки — это будущие побеги.</li>
+          <li>Срежьте стебель ножницами или прищипните ногтями в 3–5&nbsp;мм над узлом.</li>
+          <li>Оставляйте на побеге минимум 2 пары листьев.</li>
+          <li>Срезанную верхушку положите в салат или поставьте в воду укореняться.</li>
+        </ol>
+      </article>
+      <article class="card rise">
+        <h3><svg class="ico"><use href="#i-alert"/></svg>Чего не делать</h3>
+        <ul class="ticks is-bad">
+          <li>Не срезайте ниже самой нижней пары листьев: из голого стебля побеги не вырастут.</li>
+          <li>Не обрывайте крупные нижние листья — это фабрика питания для всего куста.</li>
+          <li>Не снимайте больше трети куста за раз.</li>
+          <li>Не оставляйте высокий пенёк над узлом: он засохнет или загниёт.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="diagram-pinch">
+      <figure class="card rise">
+        <svg viewBox="0 0 160 200" aria-hidden="true">
+          <path d="M80 196 L80 40" class="mini-stem"/>
+          <g transform="translate(80 172)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-62) scale(.56)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(62) scale(.56)"/></g>
+          <g transform="translate(80 134)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-56) scale(.4 .5)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(56) scale(.4 .5)"/></g>
+          <g transform="translate(80 98)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-50) scale(.42)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(50) scale(.42)"/></g>
+          <g transform="translate(80 68)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-40) scale(.3)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(40) scale(.3)"/></g>
+          <g transform="translate(80 44)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-14) scale(.16)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(14) scale(.16)"/></g>
+          <circle class="bud" cx="75" cy="130" r="2.6"/><circle class="bud" cx="85" cy="130" r="2.6"/>
+          <line class="cut-mark" x1="60" y1="124" x2="100" y2="124"/>
+          <text class="arrow-lbl" x="104" y="122">срез</text>
+        </svg>
+        <figcaption><b>1. До</b>4 пары листьев. Режем над 2-й парой, где в пазухах видны почки.</figcaption>
+      </figure>
+      <figure class="card rise">
+        <svg viewBox="0 0 160 200" aria-hidden="true">
+          <path d="M80 196 L80 125" class="mini-stem"/>
+          <line class="s-stub" x1="74" y1="124" x2="86" y2="124"/>
+          <g transform="translate(80 172)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-62) scale(.56)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(62) scale(.56)"/></g>
+          <g transform="translate(80 134)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-56) scale(.4 .5)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(56) scale(.4 .5)"/></g>
+          <g transform="translate(76 130)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-30) scale(.16)"/></g>
+          <g transform="translate(84 130)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(30) scale(.16)"/></g>
+          <text class="arrow-lbl" x="18" y="84">почки</text>
+          <text class="arrow-lbl" x="18" y="100">проснулись</text>
+          <path d="M62 102 Q 70 112 74 120" fill="none" style="stroke: var(--opal)" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <figcaption><b>2. Через неделю</b>Из двух пазух пошли новые побеги.</figcaption>
+      </figure>
+      <figure class="card rise">
+        <svg viewBox="0 0 160 200" aria-hidden="true">
+          <path d="M80 196 L80 128" class="mini-stem"/>
+          <path d="M80 128 Q 66 96 52 56" class="mini-stem"/>
+          <path d="M80 128 Q 94 96 108 56" class="mini-stem"/>
+          <g transform="translate(80 172)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-62) scale(.56)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(62) scale(.56)"/></g>
+          <g transform="translate(80 134)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-62) scale(.4 .5)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(62) scale(.4 .5)"/></g>
+          <g transform="translate(70 104)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-78) scale(.36)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(28) scale(.36)"/></g>
+          <g transform="translate(90 104)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(78) scale(.36)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(-28) scale(.36)"/></g>
+          <g transform="translate(60 78)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-70) scale(.26 .32)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(26) scale(.26 .32)"/></g>
+          <g transform="translate(100 78)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(70) scale(.26 .32)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(-26) scale(.26 .32)"/></g>
+          <g transform="translate(53 58)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-36) scale(.15)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(4) scale(.15)"/></g>
+          <g transform="translate(107 58)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(36) scale(.15)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(-4) scale(.15)"/></g>
+        </svg>
+        <figcaption><b>3. Через 2–3 недели</b>Две верхушки вместо одной. Когда у них будет по 3–4 пары, повторите.</figcaption>
+      </figure>
+    </div>
+
+    <div class="sub" id="trenazher">
+      <div class="sub-head">
+        <h3>Тренажёр прищипывания</h3>
+        <p>Нажимайте на узел (точку между парами листьев), чтобы срезать стебель над ним. Кнопка «Неделя вперёд» выращивает куст. Цель — вырастить 8 верхушек и не дать растению зацвести.</p>
+      </div>
+      <div class="pane sim rise">
+        <div class="sim-stage">
+          <svg id="sim-svg" viewBox="-160 -300 320 370" role="group" aria-label="Растение базилика в горшке. Узлы можно выбрать клавишей Tab и срезать клавишей Enter."></svg>
+          <span class="sim-week" id="sim-week"></span>
+          <span class="sim-help hand" aria-hidden="true">жми на узел ✂</span>
+        </div>
+        <div class="sim-side">
+          <div class="sim-stats">
+            <div class="stat"><span>Верхушек роста</span><b id="sim-tips">1</b></div>
+            <div class="stat"><span>Листьев на кусте</span><b id="sim-leaves">8</b></div>
+            <div class="stat"><span>Собрано листьев</span><b id="sim-harvest">0</b></div>
+            <div class="stat is-aroma" id="sim-aroma-box"><span>Аромат</span><b id="sim-aroma">отличный</b></div>
+          </div>
+          <p class="sim-msg" id="sim-msg" role="status" aria-live="polite"></p>
+          <div class="sim-actions">
+            <button class="btn btn-primary" type="button" id="sim-week-btn"><svg class="ico"><use href="#i-sprout"/></svg>Неделя вперёд</button>
+            <button class="btn btn-ghost" type="button" id="sim-reset"><svg class="ico"><use href="#i-seed"/></svg>Сначала</button>
+          </div>
+          <p class="sim-goal">Правило тренажёра: побег зацветает, если не прищипывать его, пока он не наберёт 6–8 пар листьев. <b>Срезайте соцветия</b> вместе с парой листьев под ними.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="callout is-opal">
+        <svg class="ico"><use href="#i-flower"/></svg>
+        <p><b>Цветение: удалить или оставить?</b> Если нужны листья, удаляйте бутоны вместе с 1–2 парами листьев под ними. Цветы съедобны: вкус тот же, только мягче, ими украшают салаты. Оставьте 1–2 куста цвести, если хотите собрать свои семена или порадовать пчёл: базилик — хороший медонос.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HARVEST ============ -->
+<section class="section" id="urozhay">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Сбор и хранение</p>
+      <h2>Как собирать, чтобы <em>куст рос дальше</em></h2>
+      <p class="lead">Правильный сбор — это то же прищипывание. Чем регулярнее вы срезаете верхушки, тем гуще куст и тем дольше он не зацветает.</p>
+    </div>
+    <div class="two-col">
+      <div class="card rise">
+        <h3>Правила сбора</h3>
+        <ul class="ticks">
+          <li><b>Первый урожай</b> — через 6–8 недель после всходов, когда куст вырос до 15–20&nbsp;см. Первая срезка и есть прищипывание.</li>
+          <li><b>Срезайте верхушки побегов</b> над парой листьев, а не отдельные листья снизу.</li>
+          <li><b>Не больше трети куста за раз</b>, следующий сбор — через 1–2 недели.</li>
+          <li><b>Утром</b>, когда высохла роса, но ещё нет жары: листья упругие и ароматные.</li>
+          <li><b>Для заготовок</b> срезайте перед бутонизацией — в это время в листьях больше всего эфирных масел.</li>
+          <li><b>В конце сезона</b>, до первых заморозков, срежьте всё или выкопайте куст. Уже при +5&nbsp;°C листья темнеют.</li>
+        </ul>
+      </div>
+      <aside class="sticky-side">
+        <div class="callout is-warn">
+          <svg class="ico"><use href="#i-snow"/></svg>
+          <p><b>Не кладите базилик в холодильник без нужды.</b> Ниже 10&nbsp;°C клетки листа повреждаются, и он темнеет за сутки-двое.</p>
+        </div>
+        <div class="card rise">
+          <p class="hand" style="margin:0">С одного ухоженного куста можно срезать урожай каждые 1–2 недели всё лето.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="sub">
+      <div class="sub-head"><h3>Хранение и заготовки</h3></div>
+      <div class="storage">
+        <article class="card store-card float-card rise"><h4>Букет в воде</h4><span class="term">5–7 дней</span><p>Поставьте стебли в стакан с водой при комнатной температуре и накройте свободным пакетом. Меняйте воду раз в 2 дня.</p></article>
+        <article class="card store-card float-card rise"><h4>Холодильник</h4><span class="term">2–4 дня</span><p>Только в самом тёплом отделе, завернув в сухое бумажное полотенце и пакет. Холод и влага — главные враги.</p></article>
+        <article class="card store-card float-card rise"><h4>Заморозка в масле</h4><span class="term">до 6–12 мес</span><p>Измельчите листья с оливковым маслом и разложите по формочкам для льда. Кубики бросайте прямо в соус или суп.</p></article>
+        <article class="card store-card float-card rise"><h4>Бланширование</h4><span class="term">до 6 мес</span><p>Опустите листья в кипяток на 3–5 секунд, затем в ледяную воду, обсушите и заморозьте. Цвет останется ярко-зелёным.</p></article>
+        <article class="card store-card float-card rise"><h4>Сушка</h4><span class="term">до года</span><p>В тени при 30–35&nbsp;°C, пучками вниз листьями или в сушилке. Храните в стеклянной банке. Аромат слабее свежего и уходит в чайную сторону.</p></article>
+        <article class="card store-card float-card rise"><h4>Базиликовая соль</h4><span class="term">месяцы</span><p>Перетрите листья с крупной солью в пропорции 1:4 и подсушите. Хранится в банке, отлично подходит к томатам.</p></article>
+        <article class="card store-card float-card rise"><h4>Масло с базиликом</h4><span class="term">4–5 дней</span><p>Только в холодильнике, или сразу замораживайте. Свежая зелень в масле без доступа воздуха — риск ботулизма.</p></article>
+        <article class="card store-card float-card rise"><h4>Песто</h4><span class="term">неделя / 6 мес</span><p>В холодильнике под слоем масла — до недели. Для заморозки готовьте без сыра и чеснока, их добавляйте после разморозки.</p></article>
+      </div>
+    </div>
+
+    <div class="sub">
+      <article class="recipe rise">
+        <h3>Песто по-генуэзски</h3>
+        <p class="hand">классика из Лигурии, на 4 порции пасты</p>
+        <div class="recipe-grid">
+          <ul class="ingredients">
+            <li><span>Листья генуэзского базилика</span><span>50 г</span></li>
+            <li><span>Оливковое масло extra virgin</span><span>70–100 мл</span></li>
+            <li><span>Пармезан, тёртый</span><span>40–50 г</span></li>
+            <li><span>Пекорино, тёртый</span><span>15–20 г</span></li>
+            <li><span>Кедровые орехи</span><span>15 г</span></li>
+            <li><span>Чеснок</span><span>1–2 зубчика</span></li>
+            <li><span>Крупная соль</span><span>щепотка</span></li>
+          </ul>
+          <ol>
+            <li>В ступке разотрите чеснок с солью, затем добавьте орехи.</li>
+            <li>Добавляйте листья понемногу и растирайте пестиком круговыми движениями, не отбивая.</li>
+            <li>Вмешайте оба сыра.</li>
+            <li>Тонкой струйкой влейте масло до густоты соуса.</li>
+            <li>В блендере работайте импульсами с охлаждённой чашей, иначе базилик нагреется и потемнеет.</li>
+          </ol>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CUTTINGS ============ -->
+<section class="section" id="cherenki">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Размножение</p>
+      <h2>Черенки: <em>бесконечный базилик</em></h2>
+      <p class="lead">Черенок укореняется в стакане воды за 1–2 недели и через месяц даёт урожай. Так можно перенести любимый куст на зиму, размножить стерильные сорта вроде африканского синего и вырастить базилик даже из свежего пучка с рынка.</p>
+    </div>
+    <div class="two-col">
+      <ol class="steps">
+        <li class="step card float-card rise"><span class="step-num">1</span><div><h4>Выберите побег</h4><p>Здоровая верхушка длиной 8–12&nbsp;см с 3–4 парами листьев, без бутонов. Срежьте чуть ниже узла.</p></div></li>
+        <li class="step card float-card rise"><span class="step-num">2</span><div><h4>Уберите нижние листья</h4><p>Оборвите листья с нижней трети черенка: в воде они сгниют. Крупные верхние листья можно укоротить наполовину, чтобы черенок меньше испарял.</p></div></li>
+        <li class="step card float-card rise"><span class="step-num">3</span><div><h4>Поставьте в воду</h4><p>Вода комнатной температуры, 1–2 нижних узла под водой. Место светлое, но без прямого солнца.</p></div></li>
+        <li class="step card float-card rise"><span class="step-num">4</span><div><h4>Меняйте воду</h4><p>Каждые 2–3 дня. Белые корешки появятся через 5–14 дней.</p></div></li>
+        <li class="step card float-card rise"><span class="step-num">5</span><div><h4>Посадите в грунт</h4><p>Когда корни отрастут на 2–5&nbsp;см, посадите черенок в горшок с влажным грунтом. Первые 3–4 дня притеняйте и накрывайте пакетом, чтобы он не вял.</p></div></li>
+      </ol>
+      <aside class="sticky-side">
+        <div class="card rise">
+          <h3>Зимовка через черенки</h3>
+          <p>В конце августа или в сентябре укорените 3–5 черенков с уличных кустов. К зиме у вас будут молодые растения на подоконнике, а старые кусты можно убрать. Взрослый куст, выкопанный с грядки, переносит переезд домой плохо.</p>
+        </div>
+        <div class="callout">
+          <svg class="ico"><use href="#i-cup"/></svg>
+          <p><b>Черенок гниёт вместо укоренения?</b> Вода слишком тёплая или редко меняется, в воде остались листья, либо черенок одревесневший. Возьмите молодую зелёную верхушку.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEMS ============ -->
+<section class="section" id="problemy">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Диагностика</p>
+      <h2>Что случилось <em>с базиликом</em></h2>
+      <p class="lead">Выберите симптом — покажем вероятные причины, от самой частой к редкой, и что делать. В девяти случаях из десяти причина в условиях: свет, полив, температура.</p>
+    </div>
+    <div class="diag" id="diagnostika">
+      <div class="diag-groups" id="diag-groups"></div>
+      <div class="pane diag-result" id="diag-result" aria-live="polite"></div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-head">
+        <h3>Болезни и вредители</h3>
+        <p>Базилик едят свежим, поэтому выбирайте биологические препараты (на основе <i>Bacillus subtilis</i>, <i>Trichoderma</i>, аверсектина) или калийное мыло и соблюдайте срок ожидания с упаковки. Системные химические пестициды на пряной зелени дома не используют.</p>
+      </div>
+      <div class="ref-grid" id="ref-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section" id="voprosy">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Вопросы</p>
+      <h2>Частые <em>вопросы</em></h2>
+    </div>
+    <div class="faq">
+      <details><summary>Почему базилик из магазина погибает через неделю?</summary>
+        <div class="faq-body"><p>В горшке из супермаркета растёт 10–30 сеянцев, выращенных в теплице при идеальном свете и на удобрениях. Дома им тесно, темно и сухо. Достаньте ком, аккуратно разделите на 3–5 частей и рассадите по горшкам от 1&nbsp;л. Поставьте на самое светлое окно, а через неделю прищипните верхушки.</p></div></details>
+      <details><summary>Можно ли выращивать базилик зимой?</summary>
+        <div class="faq-body"><p>Да, но только с досветкой: 14–16 часов в сутки светодиодной лампой. Держите горшок подальше от холодного стекла и батареи. Зимой растение растёт медленнее, поэтому кормите реже — раз в 2–3 недели.</p></div></details>
+      <details><summary>Базилик однолетник или многолетник?</summary>
+        <div class="faq-body"><p>В тропиках это короткоживущий многолетник. В нашем климате его выращивают как однолетник: холод он не переносит. Дома при хорошем свете куст живёт до года, но с возрастом деревенеет и даёт меньше листьев, поэтому его проще обновлять черенками.</p></div></details>
+      <details><summary>Обязательно ли удалять цветы?</summary>
+        <div class="faq-body"><p>Если вам нужны листья — да. После цветения растение тратит силы на семена, листья мельчают, грубеют и горчат, а куст перестаёт расти. Цветы съедобны, их можно добавлять в салаты.</p></div></details>
+      <details><summary>Как собрать свои семена?</summary>
+        <div class="faq-body"><p>Оставьте 1–2 куста цвести. Когда нижние чашечки соцветия побуреют (через 4–6 недель после начала цветения), срежьте кисти, досушите в бумажном пакете и вытрясите семена. Семена гибридов F1 не повторяют признаки родителей, а разные сорта, растущие рядом, переопыляются.</p></div></details>
+      <details><summary>Почему листья горчат?</summary>
+        <div class="faq-body"><p>Чаще всего растение начало цвести. Другие причины: жара выше 30&nbsp;°C, пересушка, старые нижние листья, мало света. Собирайте молодые верхушки, удаляйте бутоны и не допускайте пересыхания.</p></div></details>
+      <details><summary>Сколько кустов сажать?</summary>
+        <div class="faq-body"><p>Для свежего потребления семье из 2–3 человек хватит 3–5 кустов. Если хотите делать песто и заготовки на зиму — 10–15 кустов и больше.</p></div></details>
+      <details><summary>Можно ли сажать несколько растений в один горшок?</summary>
+        <div class="faq-body"><p>Можно, если горшок большой: 2–3 растения на 3–5&nbsp;л. В горшке на 1–2&nbsp;л — одно растение. В тесноте кусты конкурируют за свет и воду и быстрее зацветают.</p></div></details>
+      <details><summary>Какая лампа нужна для подоконника?</summary>
+        <div class="faq-body"><p>Светодиодная полного спектра или белая 4000–6500&nbsp;K. Для одного-двух горшков достаточно лампы с реальной мощностью 15–25&nbsp;Вт на расстоянии 20–30&nbsp;см. Удобно включать её через розетку-таймер на 14–16 часов.</p></div></details>
+      <details><summary>Почему семена не всходят?</summary>
+        <div class="faq-body"><p>Частые причины: старые семена (больше 5 лет), заделка глубже 1&nbsp;см, холодный грунт ниже 18&nbsp;°C, пересохший или, наоборот, заболоченный субстрат. При 22–25&nbsp;°C базилик всходит за 5–10 дней, при прохладе — до двух недель.</p></div></details>
+      <details><summary>Опасен ли базилик для кошек и собак?</summary>
+        <div class="faq-body"><p>Нет, базилик не токсичен для кошек и собак (по данным ASPCA). Но если питомец постоянно его грызёт, поставьте горшок повыше.</p></div></details>
+      <details><summary>Можно пересадить взрослый куст с грядки домой?</summary>
+        <div class="faq-body"><p>Можно, но результат обычно слабый: куст уже старый, корни травмированы, а дома мало света. Надёжнее укоренить черенки в конце лета.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHECKLIST ============ -->
+<section class="section" id="chek-list">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Чек-лист</p>
+      <h2>Сезон базилика <em>по шагам</em></h2>
+      <p class="lead">Отмечайте выполненное — отметки сохраняются в этом браузере.</p>
+    </div>
+    <div class="check-top">
+      <div class="check-progress">
+        <div class="bar"><i id="check-bar"></i></div>
+        <p id="check-count"></p>
+      </div>
+      <button class="btn btn-ghost btn-small" type="button" id="check-reset">Снять все отметки</button>
+    </div>
+    <div class="check-groups" id="check-groups"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>
+      <a class="brand" href="#top">Базилик</a>
+      <p>Дозы и сроки на этой странице — ориентиры для средних условий. Инструкция производителя удобрения всегда в приоритете, а погода важнее календаря.</p>
+    </div>
+    <p class="hand">Растите с удовольствием и ешьте песто ✿</p>
+  </div>
+</footer>
+
+</div>
+
+<button class="to-top" id="to-top" type="button" aria-label="Наверх"><svg class="ico"><use href="#i-arrow-up"/></svg></button>
+
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>
