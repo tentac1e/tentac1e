@@ -2037,3 +2037,17 @@ main { view-transition-name: main; }
   }
   ::view-transition-old(main), ::view-transition-new(main) { animation: none !important; }
 }
+
+/* ================= selection =================
+   text you read stays selectable; controls, drawings and things you drag are not —
+   rubbing a leaf, turning the season wheel or double-clicking a heading no longer paints words blue */
+::selection { background: color-mix(in srgb, var(--basil) 32%, transparent); color: inherit; }
+button, summary, label, .btn, .chip, .seg, .nav, .subnav, .tabbar, .pager, .deep-index, .depth-seg, .depth-pop, .rb-filter,
+.plant-stage, .hero-art, .ch-hero-art, .season-mark, .wheel-wrap, .mol-stage, .lab-chart, .lab-controls, .sim, .sim-stage,
+svg, canvas {
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (hover: none) {
+  a, button, summary, label, .chip { -webkit-tap-highlight-color: transparent; }
+}
