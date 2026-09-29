@@ -194,6 +194,8 @@
   function scrollAfter(r, changedView) {
     const behavior = changedView ? 'auto' : smooth();
     if (r.target) {
+      const box = r.target.matches('details') ? r.target : r.target.closest('details');
+      if (box && !box.open) box.open = true;
       r.target.scrollIntoView({ block: 'start', behavior });
       return;
     }
@@ -372,7 +374,7 @@
       add({ title: p.dataset.title, sub: ch.title, text: textOf(p).slice(0, 400), hash: p.id, icon: 'list' });
     });
     let n = 0;
-    const skip = '#chapters, #quick, #tools-home, #journey, .diag-result, .el-detail, #variety-detail, .quiz, .plan-list, .timeline, .dose-out, .npk-out, .soil-out, .dli-out, .stage-body, .pager, .sim, #glossary, #disease-grid, #pest-grid, #diag-groups, #place-panel, #check-groups';
+    const skip = '#chapters, #quick, #tools-home, #journey, .diag-result, .el-detail, #variety-detail, .quiz, .plan-list, .timeline, .dose-out, .npk-out, .soil-out, .dli-out, .stage-body, .pager, .sim, #glossary, #disease-grid, #pest-grid, #diag-groups, #place-panel, #check-groups, .lab-tool, .deep-index';
     $$('[data-view] h3, [data-view] h4, [data-view] summary').forEach(h => {
       if (h.closest(skip)) return;
       const view = h.closest('[data-view]');
@@ -381,7 +383,13 @@
       if (!h.id) h.id = 's-' + (++n);
       const box = h.closest('details, .card, .step, .pane, article, .rule, li') || h.parentElement;
       const text = textOf(box);
-      add({ title: h.textContent.trim(), sub: (ch ? ch.title : 'Главная') + (panel && panel.dataset.title ? ' · ' + panel.dataset.title : ''), text: text.slice(0, 360), hash: h.id, icon: h.tagName === 'SUMMARY' ? 'info' : 'leaf' });
+      const deep = h.tagName === 'SUMMARY' && h.parentElement.classList.contains('deep') ? h.parentElement : null;
+      const where = (ch ? ch.title : 'Главная') + (panel && panel.dataset.title ? ' · ' + panel.dataset.title : '');
+      if (deep) {
+        add({ title: $('.deep-title', h).textContent.trim(), sub: 'Глубже · ' + where, text: textOf($('.deep-sub', h)) + ' ' + textOf($('.deep-body', deep)).slice(0, 420), hash: deep.id, icon: 'hex' });
+        return;
+      }
+      add({ title: h.textContent.trim(), sub: where + (h.closest('.deep') ? ' · Глубже' : ''), text: text.slice(0, 360), hash: h.id, icon: h.tagName === 'SUMMARY' ? 'info' : 'leaf' });
     });
     B.DIAG.forEach(g => g.items.forEach(it => add({ title: it.title, sub: 'Проблемы · Диагностика', text: it.causes.map(c => c.name + '. ' + c.check).join(' '), hash: 'problemy-diagnostika', icon: 'bug', after: () => selectSymptom(it.id, true) })));
     B.ELEMENTS.forEach((e, i) => add({ title: `${e.name} (${e.sym})`, sub: 'Удобрения · Элементы', text: e.role + ' ' + e.def, hash: 'udobreniya-elementy', icon: 'flask', after: () => selectElement(i, true) }));
@@ -389,6 +397,10 @@
     B.DISEASES.forEach((d, i) => add({ title: d.name, sub: 'Проблемы · Болезни', text: d.sign + ' ' + d.fix, hash: 'dis-' + i, icon: 'alert' }));
     B.PESTS.forEach((d, i) => add({ title: d.name, sub: 'Проблемы · Вредители', text: d.sign + ' ' + d.fix, hash: 'pest-' + i, icon: 'bug' }));
     B.GLOSSARY.forEach(([t, d], i) => add({ title: t, sub: 'Справка · Словарь', text: d, hash: 'g-' + i, icon: 'book' }));
+    if (window.BasilScience) {
+      Object.values(window.BasilScience.MOLS).forEach(m => add({ title: m.name + (m.alt ? ` (${m.alt})` : ''), sub: 'Вкус · Молекулы аромата', text: `${m.cls}. Запах: ${m.smell}. Есть в: ${m.where}. Сорта: ${m.basil}. ${m.note}`, hash: 'vkus-molekuly', icon: 'hex' }));
+      window.BasilScience.PAIRS.forEach(pr => add({ title: `Базилик и ${pr.name.toLowerCase()}`, sub: 'Вкус · Сочетания', text: pr.why + ' ' + pr.dish, hash: 'vkus-sochetaniya', icon: 'nose' }));
+    }
     searchIndex = idx;
   }
 
@@ -487,8 +499,52 @@
   }
 
   /* ================================================================== */
-  /* AMBIENT LEAF FIELD                                                  */
+  /* LIVING SCENE: greenhouse background, hero basil, hover light        */
   /* ================================================================== */
+  function initScene() {
+    const S = window.BasilScene;
+    if (!S) { initLeafField(); return; }
+    S.initBackground($('#leaf-field'));
+    const g = $('#hero-plant-g');
+    if (!g) return;
+    const layer = $('#aroma-layer');
+    const hint = $('#plant-hint');
+    const spec = S.basil({ nodes: 8, scale: 1.95, w: 12 });
+    spec.children = [
+      { at: 1, spec: S.basil({ id: 'sL', nodes: 5, scale: 1.25, w: 7, angle: -0.72, flex: 1.3 }) },
+      { at: 1, spec: S.basil({ id: 'sR', nodes: 5, scale: 1.25, w: 7, angle: 0.72, flex: 1.3 }) },
+      { at: 3, spec: S.basil({ id: 'uL', nodes: 4, scale: 1, w: 5, angle: -0.5, flex: 1.5 }) },
+      { at: 3, spec: S.basil({ id: 'uR', nodes: 4, scale: 1, w: 5, angle: 0.5, flex: 1.5 }) }
+    ];
+    S.Plant(g, spec, {
+      leafScale: 0.8, interactive: true, growDur: 2.8,
+      onAroma: (x, y) => { S.aroma(layer, x, y); if (hint) hint.classList.add('is-used'); }
+    });
+  }
+
+  function initHoverLight() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const sel = '.ch-card, .q-card, .tool, .rule, .deep > summary, .world-card, .lab-tool';
+    document.addEventListener('pointermove', e => {
+      const el = e.target.closest && e.target.closest(sel);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      el.style.setProperty('--my', `${e.clientY - r.top}px`);
+    }, { passive: true });
+    $$('.ch-hero').forEach(hero => {
+      const art = $('.ch-hero-art', hero);
+      if (!art) return;
+      hero.addEventListener('pointermove', e => {
+        const r = art.getBoundingClientRect();
+        const dx = clamp((e.clientX - (r.left + r.width / 2)) / 300, -1, 1), dy = clamp((e.clientY - (r.top + r.height / 2)) / 300, -1, 1);
+        art.style.setProperty('--ry', `${f1(dx * 12)}deg`);
+        art.style.setProperty('--rx', `${f1(-dy * 12)}deg`);
+      });
+      hero.addEventListener('pointerleave', () => { art.style.setProperty('--ry', '0deg'); art.style.setProperty('--rx', '0deg'); });
+    });
+  }
+
   function initLeafField() {
     const cv = $('#leaf-field');
     if (!cv || !cv.getContext) return;
@@ -1784,7 +1840,8 @@
   /* BOOT                                                                */
   /* ================================================================== */
   const boot = () => {
-    const steps = [initTheme, initLeafField, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, initSheets, initPagers, buildSearchIndex, initSearch, initScrollChrome, initRouter];
+    const science = function initScience() { if (window.BasilScience) window.BasilScience.init({ toast }); };
+    const steps = [initTheme, initScene, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, science, initHoverLight, initSheets, initPagers, buildSearchIndex, initSearch, initScrollChrome, initRouter];
     steps.forEach(fn => {
       try { fn(); } catch (err) { console.error(`[basil] ${fn.name} failed`, err); }
     });
