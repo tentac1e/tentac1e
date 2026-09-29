@@ -194,9 +194,21 @@
   function scrollAfter(r, changedView) {
     const behavior = changedView ? 'auto' : smooth();
     if (r.target) {
-      const box = r.target.matches('details') ? r.target : r.target.closest('details');
-      if (box && !box.open) box.open = true;
+      const rc = r.target.closest('.recipe-card');
+      if (rc && rc.hidden) { const all = $('.rb-filter [data-cat="all"]'); if (all) all.click(); }
+      let opened = false;
+      for (let box = r.target.closest('details'); box; box = box.parentElement && box.parentElement.closest('details')) {
+        if (!box.open) { box.open = true; opened = true; }
+      }
       r.target.scrollIntoView({ block: 'start', behavior });
+      // models above the target mount lazily and push it down — land again once they settle
+      if (opened) {
+        const target = r.target;
+        setTimeout(() => {
+          const want = stickyOffset() + 64;
+          if (Math.abs(target.getBoundingClientRect().top - want) > 48) target.scrollIntoView({ block: 'start', behavior: smooth() });
+        }, 700);
+      }
       return;
     }
     const wrap = $('.subnav-wrap', r.view);
@@ -374,16 +386,21 @@
       add({ title: p.dataset.title, sub: ch.title, text: textOf(p).slice(0, 400), hash: p.id, icon: 'list' });
     });
     let n = 0;
-    const skip = '#chapters, #quick, #tools-home, #journey, .diag-result, .el-detail, #variety-detail, .quiz, .plan-list, .timeline, .dose-out, .npk-out, .soil-out, .dli-out, .stage-body, .pager, .sim, #glossary, #disease-grid, #pest-grid, #diag-groups, #place-panel, #check-groups, .lab-tool, .deep-index';
+    const skip = '#chapters, #quick, #tools-home, #journey, .diag-result, .el-detail, #variety-detail, .quiz, .plan-list, .timeline, .dose-out, .npk-out, .soil-out, .dli-out, .stage-body, .pager, .sim, #glossary, #disease-grid, #pest-grid, #diag-groups, #place-panel, #check-groups, .lab-tool, .deep-index, .recipe-book, .deep-src';
     $$('[data-view] h3, [data-view] h4, [data-view] summary').forEach(h => {
       if (h.closest(skip)) return;
       const view = h.closest('[data-view]');
       const ch = chapterById(view.dataset.view);
       const panel = h.closest('[data-panel]');
-      if (!h.id) h.id = 's-' + (++n);
+      if (!h.id) h.id = h.parentElement.classList.contains('deeper') && h.closest('details.deep') ? h.closest('details.deep').id + '-glubzhe' : 's-' + (++n);
       const box = h.closest('details, .card, .step, .pane, article, .rule, li') || h.parentElement;
       const text = textOf(box);
       const deep = h.tagName === 'SUMMARY' && h.parentElement.classList.contains('deep') ? h.parentElement : null;
+      if (h.tagName === 'SUMMARY' && h.parentElement.classList.contains('deeper')) {
+        const host = h.closest('details.deep');
+        add({ title: $('.deeper-t', h).textContent.trim(), sub: 'Ещё глубже · ' + (host ? host.dataset.short : where), text: textOf(h.nextElementSibling).slice(0, 420), hash: h.id, icon: 'hex' });
+        return;
+      }
       const where = (ch ? ch.title : 'Главная') + (panel && panel.dataset.title ? ' · ' + panel.dataset.title : '');
       if (deep) {
         add({ title: $('.deep-title', h).textContent.trim(), sub: 'Глубже · ' + where, text: textOf($('.deep-sub', h)) + ' ' + textOf($('.deep-body', deep)).slice(0, 420), hash: deep.id, icon: 'hex' });
@@ -396,6 +413,10 @@
     B.VARIETIES.forEach((v, i) => add({ title: `Сорт «${v.name}»`, sub: 'Сорта · Каталог', text: v.desc + ' ' + v.use, hash: 'sorta-katalog', icon: 'seed', after: () => openVariety(i) }));
     B.DISEASES.forEach((d, i) => add({ title: d.name, sub: 'Проблемы · Болезни', text: d.sign + ' ' + d.fix, hash: 'dis-' + i, icon: 'alert' }));
     B.PESTS.forEach((d, i) => add({ title: d.name, sub: 'Проблемы · Вредители', text: d.sign + ' ' + d.fix, hash: 'pest-' + i, icon: 'bug' }));
+    if (B.RECIPES) {
+      const catName = Object.fromEntries(B.RECIPE_CATS.map(([id, name, ic]) => [id, [name, ic]]));
+      B.RECIPES.forEach(r => add({ title: r.title, sub: 'Рецепты · ' + catName[r.cat][0], text: `${r.orig}. ${r.ing.map(i => i[0]).join(', ')}. ${r.sci[0]}`, hash: 'r-' + r.id, icon: catName[r.cat][1] }));
+    }
     B.GLOSSARY.forEach(([t, d], i) => add({ title: t, sub: 'Справка · Словарь', text: d, hash: 'g-' + i, icon: 'book' }));
     if (window.BasilScience) {
       Object.values(window.BasilScience.MOLS).forEach(m => add({ title: m.name + (m.alt ? ` (${m.alt})` : ''), sub: 'Вкус · Молекулы аромата', text: `${m.cls}. Запах: ${m.smell}. Есть в: ${m.where}. Сорта: ${m.basil}. ${m.note}`, hash: 'vkus-molekuly', icon: 'hex' }));
@@ -1836,12 +1857,61 @@
     update();
   }
 
+  function initRecipes() {
+    const book = $('#recipe-book');
+    if (!book || !B.RECIPES) return;
+    const cats = Object.fromEntries(B.RECIPE_CATS.map(([id, name, ic]) => [id, { name, ic }]));
+    const linkLabel = href => {
+      const el = document.getElementById(href.slice(1));
+      if (!el) return 'подробнее';
+      if (el.classList.contains('deep')) return 'Глубже: ' + el.dataset.short;
+      const ch = chapterById(el.closest('[data-view]').dataset.view);
+      return `${ch ? ch.title : ''} · ${el.dataset.title}`;
+    };
+    const count = c => B.RECIPES.filter(r => c === 'all' || r.cat === c).length;
+    const card = r => `
+      <details class="recipe-card${r.feat ? ' is-feat' : ''}" id="r-${r.id}" data-cat="${r.cat}"${r.feat ? ' open' : ''}>
+        <summary><span class="rc-sum">
+          <span class="rc-ico" aria-hidden="true">${icon(cats[r.cat].ic)}</span>
+          <span class="rc-head"><span class="rc-cat">${cats[r.cat].name}<span class="rc-time"> · ${nb(r.time)}</span></span><span class="rc-title">${r.title}</span><span class="rc-orig">${r.orig}</span></span>
+          <span class="deep-plus" aria-hidden="true"></span>
+        </span></summary>
+        <div class="rc-body">
+          <p class="rc-facts"><span>${icon('cal')}${nb(r.time)}</span><span>${icon('leaf')}${r.basil}</span></p>
+          <div class="recipe-grid">
+            <ul class="ingredients">${r.ing.map(([n, v]) => `<li><span>${n}</span>${v ? `<span>${nb(v)}</span>` : ''}</li>`).join('')}</ul>
+            <ol class="rc-steps">${r.steps.map(x => `<li>${nb(x)}</li>`).join('')}</ol>
+          </div>
+          ${r.tip ? `<p class="rc-tip">${icon('info')}<span>${nb(r.tip)}</span></p>` : ''}
+          <div class="rc-sci">
+            <span class="rc-sci-k">${icon('hex')}Наука рецепта</span>
+            <p>${nb(r.sci[0])}</p>
+            <a href="${r.sci[1]}">${esc(linkLabel(r.sci[1]))} <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </details>`;
+    book.innerHTML = `
+      <div class="chips-row rb-filter" role="group" aria-label="Разделы книги рецептов">
+        <button type="button" class="chip" data-cat="all" aria-pressed="true">Все <b>${count('all')}</b></button>
+        ${B.RECIPE_CATS.map(([id, name, ic]) => `<button type="button" class="chip" data-cat="${id}" aria-pressed="false">${icon(ic)}${name} <b>${count(id)}</b></button>`).join('')}
+      </div>
+      <div class="rb-grid">${B.RECIPES.map(card).join('')}</div>`;
+    const cards = $$('.recipe-card', book);
+    $('.rb-filter', book).addEventListener('click', e => {
+      const b = e.target.closest('[data-cat]');
+      if (!b) return;
+      const c = b.dataset.cat;
+      $$('.rb-filter [data-cat]', book).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      cards.forEach(el => { el.hidden = c !== 'all' && el.dataset.cat !== c; });
+    });
+  }
+
   /* ================================================================== */
   /* BOOT                                                                */
   /* ================================================================== */
   const boot = () => {
     const science = function initScience() { if (window.BasilScience) window.BasilScience.init({ toast }); };
-    const steps = [initTheme, initScene, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, science, initHoverLight, initSheets, initPagers, buildSearchIndex, initSearch, initScrollChrome, initRouter];
+    const steps = [initTheme, initScene, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, initRecipes, science, initHoverLight, initSheets, initPagers, buildSearchIndex, initSearch, initScrollChrome, initRouter];
     steps.forEach(fn => {
       try { fn(); } catch (err) { console.error(`[basil] ${fn.name} failed`, err); }
     });

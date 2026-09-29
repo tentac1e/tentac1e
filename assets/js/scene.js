@@ -246,13 +246,15 @@ window.BasilScene = (() => {
       };
     }
     const makeMote = anywhere => ({ x: Math.random() * W, y: anywhere ? Math.random() * H : H + 10, z: Math.random(), r: 0.7 + Math.random() * 1.7, ph: Math.random() * TAU, sp: 0.6 + Math.random() * 1.6, seed: Math.random() * 40, vx: 0, vy: 0 });
-    const makeFly = () => ({ x: Math.random() * W, y: H * (0.2 + Math.random() * 0.8), vx: 0, vy: 0, seed: Math.random() * 40, period: 3.2 + Math.random() * 4, on: 0.9 + Math.random() * 0.8, off: Math.random() * 6, size: 26 + Math.random() * 26 });
+    /* fireflies keep to the margins and the lower part of the screen, glow softly and rarely */
+    const sideX = () => { const r = Math.random(); if (W < 900 || r > 0.8) return Math.random() * W; const m = Math.max(40, (W - 1100) / 2 + 60); return r < 0.4 ? Math.random() * m : W - Math.random() * m; };
+    const makeFly = () => ({ x: sideX(), y: H * (0.45 + Math.random() * 0.5), vx: 0, vy: 0, seed: Math.random() * 40, period: 6 + Math.random() * 5, on: 2 + Math.random() * 1.2, off: Math.random() * 10, size: 12 + Math.random() * 9 });
 
     function populate() {
       const small = W < 700;
       const nLeaves = small ? 11 : 19;
       const nMotes = pal.night ? 0 : small ? 30 : 64;
-      const nFlies = pal.night ? (small ? 10 : 18) : 0;
+      const nFlies = pal.night ? (small ? 4 : 8) : 0;
       while (leaves.length < nLeaves) leaves.push(makeLeaf(true));
       leaves.length = nLeaves;
       leaves.sort((a, b) => a.z - b.z);
@@ -363,10 +365,12 @@ window.BasilScene = (() => {
     }
 
     function stepFly(f, t, dt) {
-      const ang = noise3(f.seed, t * 0.16, 0.5) * TAU * 1.5;
-      let ax = Math.cos(ang) * 18, ay = Math.sin(ang) * 12 - 2;
+      const ang = noise3(f.seed, t * 0.1, 0.5) * TAU * 1.5;
+      let ax = Math.cos(ang) * 9, ay = Math.sin(ang) * 6 - 1;
       const dx = ptr.x - f.x, dy = ptr.y - f.y, d = Math.hypot(dx, dy);
-      if (d < 280 && d > 30) { ax += dx / d * 26 - dy / d * 20; ay += dy / d * 26 + dx / d * 20; }
+      if (d < 220 && d > 40) { ax += dx / d * 8 - dy / d * 8; ay += dy / d * 8 + dx / d * 8; }
+      if (W > 900) { const half = Math.min(560, W / 2 - 60), off = f.x - W / 2; if (Math.abs(off) < half) ax += Math.sign(off || 1) * 10 * (1 - Math.abs(off) / half); }
+      if (f.y < H * 0.35) ay += 8;
       const k = Math.pow(0.4, dt);
       f.vx = f.vx * k + ax * dt * 2;
       f.vy = f.vy * k + ay * dt * 2;
@@ -379,13 +383,12 @@ window.BasilScene = (() => {
     }
     function drawFly(f, t) {
       const local = ((t + f.off) % f.period + f.period) % f.period;
-      const pulse = local < f.on ? Math.pow(Math.sin(Math.PI * local / f.on), 2) : 0;
-      const I = 0.08 + pulse * 0.92;
-      const s = f.size * (0.7 + pulse * 0.5);
-      ctx.globalAlpha = I * 0.75;
+      const pulse = local < f.on ? Math.pow(Math.sin(Math.PI * local / f.on), 3) : 0;
+      const s = f.size * (0.8 + pulse * 0.35);
+      ctx.globalAlpha = 0.03 + pulse * 0.22;
       ctx.drawImage(flyGlow, f.x - s / 2, f.y - s / 2, s, s);
-      ctx.globalAlpha = 0.35 + pulse * 0.65;
-      ctx.drawImage(flyGlow, f.x - 3, f.y - 3, 6, 6);
+      ctx.globalAlpha = 0.12 + pulse * 0.3;
+      ctx.drawImage(flyGlow, f.x - 1.5, f.y - 1.5, 3, 3);
     }
 
     function drawSky(t) {
@@ -420,7 +423,7 @@ window.BasilScene = (() => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       for (const m of motes) { if (moving) stepMote(m, t, dt); drawMote(m, t); }
       if (flies.length) {
-        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalCompositeOperation = 'screen';
         for (const f of flies) { if (moving) stepFly(f, t, dt); drawFly(f, t); }
         ctx.globalCompositeOperation = 'source-over';
       }
@@ -431,7 +434,7 @@ window.BasilScene = (() => {
         p.vx *= Math.pow(0.2, dt); p.vy = p.vy * Math.pow(0.2, dt) - 8 * dt;
         p.x += p.vx * dt; p.y += p.vy * dt;
         const s2 = p.r * 6;
-        ctx.globalAlpha = clamp(p.life / p.max, 0, 1) * 0.9;
+        ctx.globalAlpha = clamp(p.life / p.max, 0, 1) * (pal.night ? 0.35 : 0.9);
         ctx.drawImage(pal.night ? flyGlow : glow, p.x - s2 / 2, p.y - s2 / 2, s2, s2);
       }
       for (; i < leaves.length; i++) {

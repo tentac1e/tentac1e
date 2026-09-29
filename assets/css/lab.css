@@ -37,7 +37,7 @@
   --sc-alpha: .46;
   --sc-ray: rgba(255, 244, 206, .55);
   --sc-mote: rgba(255, 232, 160, 1);
-  --sc-firefly: rgba(214, 246, 110, 1);
+  --sc-firefly: rgba(214, 228, 170, 1);
   --sc-moon: rgba(170, 205, 255, .16);
   --sc-night: 0;
 
@@ -144,8 +144,8 @@
     --sc-p2: #6E3C78;
     --sc-alpha: .4;
     --sc-ray: rgba(170, 210, 255, .2);
-    --sc-mote: rgba(214, 246, 110, 1);
-    --sc-firefly: rgba(214, 246, 110, 1);
+    --sc-mote: rgba(214, 228, 170, 1);
+    --sc-firefly: rgba(214, 228, 170, 1);
     --sc-moon: rgba(150, 190, 255, .13);
     --sc-night: 1;
     --pl-a: #2B612B;
@@ -228,8 +228,8 @@
   --sc-p2: #6E3C78;
   --sc-alpha: .4;
   --sc-ray: rgba(170, 210, 255, .2);
-  --sc-mote: rgba(214, 246, 110, 1);
-  --sc-firefly: rgba(214, 246, 110, 1);
+  --sc-mote: rgba(214, 228, 170, 1);
+  --sc-firefly: rgba(214, 228, 170, 1);
   --sc-moon: rgba(150, 190, 255, .13);
   --sc-night: 1;
   --pl-a: #2B612B;
@@ -453,7 +453,8 @@ body::after {
 }
 
 /* ================= deep dives: pages from a lab notebook ================= */
-.deep-zone { display: grid; gap: 14px; margin-top: clamp(30px, 4vw, 46px); }
+.deep-zone { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin-top: clamp(30px, 4vw, 46px); }
+.deep-zone > *, .deep-body, .deep-text, .deep-aside { min-width: 0; }
 .deep-zone-label {
   display: flex;
   align-items: baseline;
@@ -484,10 +485,7 @@ body::after {
 .deep:hover { border-color: color-mix(in srgb, var(--k) 55%, var(--line)); }
 .deep[open] { box-shadow: var(--shadow-float); }
 .deep > summary {
-  display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) auto;
-  gap: 16px;
-  align-items: center;
+  display: block;
   padding: 16px 18px;
   cursor: pointer;
   list-style: none;
@@ -501,6 +499,8 @@ body::after {
   transition: background-position .8s var(--ease-float);
 }
 .deep > summary::-webkit-details-marker { display: none; }
+.deep > summary::marker { content: ""; }
+.deep-sum { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 16px; align-items: center; }
 .deep > summary:hover { background-position: 0 0, 0 0, 6px 4px, 6px 4px; }
 .deep-ico {
   position: relative;
@@ -538,16 +538,14 @@ body::after {
 .deep[open] .deep-plus { transform: rotate(135deg); background: var(--k); }
 .deep[open] .deep-plus::before, .deep[open] .deep-plus::after { background: var(--surface); }
 @media (max-width: 640px) {
-  .deep > summary { grid-template-columns: 42px minmax(0, 1fr) 34px; gap: 12px; padding: 14px; }
+  .deep > summary { padding: 14px; }
+  .deep-sum { grid-template-columns: 42px minmax(0, 1fr) 34px; gap: 12px; }
   .deep-ico { width: 42px; height: 42px; border-radius: 13px; }
   .deep-ico .ico { width: 22px; height: 22px; }
   .deep-meta .deep-tag, .deep-meta .deep-time { display: none; }
   .deep-sub { font-size: .82rem; }
 }
 
-.deep::details-content { transition: content-visibility .45s allow-discrete, block-size .45s var(--ease-float); block-size: 0; }
-.deep[open]::details-content { block-size: auto; }
-@supports (interpolate-size: allow-keywords) { .deep { interpolate-size: allow-keywords; } }
 .deep-body {
   padding: clamp(18px, 3vw, 30px) clamp(16px, 3vw, 30px) clamp(20px, 3vw, 30px);
   border-top: 1px dashed color-mix(in srgb, var(--k) 40%, var(--line));
@@ -555,8 +553,6 @@ body::after {
   background-image: linear-gradient(var(--paper-line) 1px, transparent 1px), linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
   background-size: 22px 22px;
 }
-.deep[open] .deep-body { animation: deep-in .5s var(--ease-float) both; }
-@keyframes deep-in { from { opacity: 0; translate: 0 10px; } }
 .deep-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 280px); gap: clamp(18px, 3vw, 40px); align-items: start; }
 .deep-text { max-width: 64ch; }
 .deep-text p { color: var(--ink-2); }
@@ -823,6 +819,7 @@ body::after {
 .stave.is-limit { fill: var(--danger); stroke: var(--danger); }
 .stave.is-sel { stroke: var(--ink); stroke-width: 2; }
 .stave-lbl { font: 700 11px/1 var(--font-mono); fill: var(--ink-2); }
+.lab-tool[data-lab="window"] .lab-chart svg { overflow: hidden; }
 .stave-lbl.is-limit { fill: var(--danger); }
 .hoop { fill: var(--hoop); opacity: .85; }
 .barrel-spill { fill: none; stroke: var(--water-line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 5 6; animation: flow-dash .8s linear infinite; }
@@ -1166,6 +1163,248 @@ body::after {
   .germ-root, .germ-hypo { stroke-dashoffset: 0; }
   .aroma-label { opacity: 1; transform: translate(-50%, -140%); animation: fade-out 2.4s forwards !important; }
   .ch-hero-art { transform: none; }
-  .deep::details-content { transition: none; }
 }
 @keyframes fade-out { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ================= depth of reading: header menu + home switch ================= */
+.deep-toggle[data-depth="2"] { box-shadow: 0 0 0 4px color-mix(in srgb, var(--sci-chem) 22%, transparent); }
+.deep-toggle[data-depth="2"]::after { inset: -7px; opacity: .9; }
+.depth-pop {
+  position: fixed;
+  z-index: 60;
+  width: min(300px, calc(100vw - 16px));
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+  animation: pop-in .28s var(--ease-float) both;
+}
+.depth-pop[hidden] { display: none; }
+.depth-pop::before { content: ""; position: absolute; top: -7px; right: calc(var(--arrow, 30px) - 7px); width: 12px; height: 12px; background: var(--surface); border-left: 1px solid var(--line); border-top: 1px solid var(--line); transform: rotate(45deg); }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-6px) scale(.97); } }
+.depth-pop-h { margin: 4px 8px 8px; font: 500 .68rem/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.depth-pop button {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+.depth-pop button:hover, .depth-pop button:focus-visible { background: var(--surface-2); outline: none; }
+.depth-pop button[aria-checked="true"] { background: var(--sci-chem-soft); }
+.depth-pop b { display: block; font-size: .95rem; }
+.depth-pop small { display: block; font-size: .78rem; line-height: 1.3; color: var(--ink-3); }
+.depth-dots { display: inline-flex; align-items: flex-end; justify-content: center; gap: 3px; height: 22px; }
+.depth-dots i { width: 6px; border-radius: 3px; background: var(--sci-chem); opacity: .85; }
+.depth-dots i:nth-child(1) { height: 8px; } .depth-dots i:nth-child(2) { height: 14px; } .depth-dots i:nth-child(3) { height: 20px; }
+
+.depth-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; max-width: 520px; margin: 18px 0 20px; padding: 6px; border-radius: 22px; border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 70%, transparent); }
+.depth-seg button {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  padding: 10px 12px 11px;
+  border: 0;
+  border-radius: 16px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .25s, color .25s, transform .35s var(--ease-float);
+}
+.depth-seg button:hover { background: var(--surface-2); transform: translateY(-2px); }
+.depth-seg button b { font-size: .95rem; }
+.depth-seg button small { font-size: .74rem; line-height: 1.25; color: var(--ink-3); }
+.depth-seg .depth-dots { height: 20px; margin-bottom: 4px; }
+.depth-seg button[aria-pressed="true"] { background: var(--sci-chem); color: var(--surface); }
+.depth-seg button[aria-pressed="true"] small { color: color-mix(in srgb, var(--surface) 80%, transparent); }
+.depth-seg button[aria-pressed="true"] .depth-dots i { background: var(--surface); }
+@media (max-width: 420px) { .depth-seg button small { display: none; } }
+
+/* ================= deep dive: footer, tag, «ещё глубже», sources ================= */
+.deep-tag.is-deeper { background: transparent; border: 1px dashed color-mix(in srgb, var(--k) 55%, transparent); }
+.deep-foot { display: flex; justify-content: center; margin-top: 22px; }
+.deep-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--k) 40%, var(--line));
+  background: var(--surface);
+  color: var(--k);
+  font: 600 .84rem/1 var(--font-body, inherit);
+  cursor: pointer;
+  transition: background-color .2s, color .2s, transform .35s var(--ease-float);
+}
+.deep-close:hover { background: var(--k); color: var(--surface); transform: translateY(-2px); }
+
+.deeper {
+  position: relative;
+  margin-top: 24px;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--k) 28%, var(--line));
+  background: color-mix(in srgb, var(--k) 5%, var(--surface));
+  overflow: clip;
+}
+.deeper::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0; background: var(--k); opacity: .7; }
+.deeper > summary {
+  display: block;
+  position: relative;
+  padding: 14px 58px 14px 20px;
+  cursor: pointer;
+  list-style: none;
+}
+.deeper > summary::-webkit-details-marker { display: none; }
+.deeper > summary::marker { content: ""; }
+.deeper-k { display: block; margin-bottom: 3px; font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
+.deeper-k::before { content: "▾▾ "; letter-spacing: -.1em; }
+.deeper-t { display: block; font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.22rem; line-height: 1.15; color: var(--ink); }
+.deeper-plus { position: absolute; right: 16px; top: 50%; width: 28px; height: 28px; margin-top: -14px; border-radius: 50%; border: 1px dashed color-mix(in srgb, var(--k) 60%, transparent); transition: transform .45s var(--ease-float), background-color .3s; }
+.deeper-plus::before, .deeper-plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 1.6px; margin: -.8px 0 0 -5px; background: var(--k); }
+.deeper-plus::after { transform: rotate(90deg); }
+.deeper[open] .deeper-plus { transform: rotate(135deg); background: var(--k-soft); }
+.deeper > summary:hover .deeper-t { color: var(--k); }
+.deeper-body { padding: 2px 20px 18px; }
+.deeper-body > p { max-width: 68ch; color: var(--ink-2); font-size: .95rem; }
+.deeper-body > p b { color: var(--ink); }
+.deeper-body .eq { max-width: 560px; margin-top: 10px; background: var(--surface); }
+@media (min-width: 900px) {
+  .deeper-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 290px); grid-auto-flow: row dense; column-gap: 36px; align-items: start; }
+  .deeper-body > p { grid-column: 1; }
+  .deeper-body > .eq { grid-column: 2; margin: 0 0 12px; }
+}
+
+.deep-src { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--line-strong); }
+.deep-src-h { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.deep-src-h::before { content: ""; width: 14px; height: 10px; border: 1.5px solid currentColor; border-radius: 2px 5px 5px 2px; }
+.deep-src ol { margin: 0; padding: 0; list-style: none; counter-reset: src; display: grid; gap: 5px; }
+.deep-src li { counter-increment: src; position: relative; padding-left: 30px; font-size: .8rem; line-height: 1.45; color: var(--ink-3); }
+.deep-src li::before { content: "[" counter(src) "]"; position: absolute; left: 0; font: 500 .74rem/1.45 var(--font-mono); color: var(--k); }
+.deep-src i { color: var(--ink-2); }
+
+/* ================= «Любопытно»: margin notes ================= */
+.sci-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; margin-top: clamp(26px, 4vw, 40px); }
+.sci-note {
+  --k: var(--sci-bio);
+  --k-soft: var(--sci-bio-soft);
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 16px 18px 16px;
+  border-radius: 6px 20px 6px 20px;
+  border: 1px solid color-mix(in srgb, var(--k) 26%, var(--line));
+  background:
+    linear-gradient(var(--paper-line) 1px, transparent 1px) 0 12px / 100% 24px,
+    color-mix(in srgb, var(--k) 7%, var(--surface));
+  box-shadow: var(--shadow-sm);
+  transform: rotate(-.5deg);
+  transition: transform .5s var(--ease-float), box-shadow .5s var(--ease-float);
+}
+.sci-note:nth-child(even) { transform: rotate(.45deg); }
+.sci-note:hover { transform: rotate(0) translateY(-3px); box-shadow: var(--shadow-float); }
+.sci-note::after { content: ""; position: absolute; top: -8px; left: 50%; width: 64px; height: 16px; margin-left: -32px; border-radius: 2px; background: color-mix(in srgb, var(--k) 22%, var(--surface)); opacity: .8; transform: rotate(-2deg); }
+.sci-note[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
+.sci-note[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
+.sci-note[data-kind="taste"] { --k: var(--sci-taste); --k-soft: var(--sci-taste-soft); }
+.sci-note-k { display: inline-flex; align-items: center; gap: 6px; color: var(--k); }
+.sci-note-k .ico { width: 20px; height: 20px; }
+.sci-note-k .hand { font-size: 1.35rem; color: var(--k); }
+.sci-note p { margin: 0; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
+.sci-note-link { justify-self: start; margin-top: 2px; font: 500 .74rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
+.sci-note-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ================= recipe book ================= */
+.rb-intro { max-width: 62ch; }
+.rb-intro h3 { margin: 8px 0 8px; font-size: clamp(1.7rem, 3.4vw, 2.3rem); }
+.rb-intro p:last-child { color: var(--ink-2); }
+.rb-filter { margin: 18px 0 18px; }
+.rb-filter .chip .ico { width: 17px; height: 17px; }
+.rb-filter .chip b { font: 500 .72rem/1 var(--font-mono); color: inherit; opacity: .7; }
+.rb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; align-items: start; }
+.recipe-card {
+  --rc: var(--basil);
+  position: relative;
+  border-radius: 8px 28px 8px 28px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  overflow: clip;
+  scroll-margin-top: calc(var(--sticky-top, 80px) + 70px);
+  transition: box-shadow .5s var(--ease-float), border-color .3s, transform .5s var(--ease-float);
+}
+.recipe-card[hidden] { display: none; }
+.recipe-card:hover { border-color: color-mix(in srgb, var(--rc) 45%, var(--line)); }
+.recipe-card:not([open]):hover { transform: translateY(-3px); box-shadow: var(--shadow-float); }
+.recipe-card[open], .recipe-card.is-feat { grid-column: 1 / -1; }
+.recipe-card[open] { box-shadow: var(--shadow-float); }
+.recipe-card[data-cat="drink"] { --rc: var(--sci-phys); }
+.recipe-card[data-cat="dessert"] { --rc: var(--sci-chem); }
+.recipe-card[data-cat="keep"] { --rc: var(--sci-taste); }
+.recipe-card[data-cat="hot"] { --rc: var(--oil); }
+.recipe-card > summary { display: block; padding: 16px 18px; cursor: pointer; list-style: none; }
+.recipe-card > summary::-webkit-details-marker { display: none; }
+.recipe-card > summary::marker { content: ""; }
+.rc-sum { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.rc-ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: color-mix(in srgb, var(--rc) 12%, var(--surface)); color: var(--rc); transition: transform .6s var(--ease-float); }
+.rc-ico .ico { width: 24px; height: 24px; }
+.recipe-card > summary:hover .rc-ico { transform: rotate(-10deg) scale(1.06); }
+.rc-head { display: grid; gap: 2px; min-width: 0; }
+.rc-cat { font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--rc); }
+.rc-title { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.1; color: var(--ink); text-wrap: balance; }
+.rc-orig { font-family: var(--font-hand); font-weight: 600; font-size: 1.15rem; line-height: 1.1; color: var(--opal); }
+.rc-time { color: var(--ink-3); letter-spacing: .06em; }
+.recipe-card .deep-plus { --k: var(--rc); }
+.recipe-card[open] .deep-plus { transform: rotate(135deg); background: var(--rc); }
+.recipe-card[open] .deep-plus::before, .recipe-card[open] .deep-plus::after { background: var(--surface); }
+.recipe-card.is-feat > summary { padding: 22px 24px; background: radial-gradient(420px circle at 0 0, color-mix(in srgb, var(--rc) 10%, transparent), transparent 70%); }
+.recipe-card.is-feat .rc-title { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+.recipe-card.is-feat .rc-ico { width: 58px; height: 58px; }
+.recipe-card.is-feat .rc-sum { grid-template-columns: 58px minmax(0, 1fr) auto; }
+.rc-body { padding: 4px clamp(16px, 3vw, 28px) clamp(18px, 3vw, 26px); border-top: 1px dashed var(--line-strong); }
+.rc-facts { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 14px 0 12px; font-size: .86rem; color: var(--ink-2); }
+.rc-facts span { display: inline-flex; align-items: center; gap: 6px; }
+.rc-facts .ico { width: 17px; height: 17px; color: var(--rc); }
+.rc-steps { margin: 0; padding-left: 1.3em; display: grid; align-content: start; gap: 8px; font-size: .94rem; color: var(--ink-2); }
+.rc-steps li::marker { font-family: var(--font-display); font-weight: 700; color: var(--rc); }
+.rc-tip { display: flex; gap: 10px; align-items: flex-start; margin: 16px 0 0; padding: 10px 14px; border-radius: 12px; background: var(--oil-soft); font-size: .86rem; color: var(--ink-2); }
+.rc-tip .ico { width: 18px; height: 18px; margin-top: 1px; color: var(--oil); }
+.rc-sci {
+  --k: var(--sci-chem);
+  display: grid;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background:
+    linear-gradient(var(--paper-line) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, var(--paper-line) 1px, transparent 1px) 0 0 / 22px 22px,
+    var(--sci-chem-soft);
+  border: 1px solid color-mix(in srgb, var(--k) 22%, transparent);
+}
+.rc-sci-k { display: inline-flex; align-items: center; gap: 6px; font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
+.rc-sci-k .ico { width: 16px; height: 16px; }
+.rc-sci p { margin: 0; font-size: .92rem; color: var(--ink-2); max-width: 72ch; }
+.rc-sci a { justify-self: start; font: 500 .76rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
+.rc-sci a:hover { color: var(--ink); }
+@media (max-width: 640px) {
+  .rc-sum, .recipe-card.is-feat .rc-sum { grid-template-columns: 40px minmax(0, 1fr) 34px; gap: 12px; }
+  .rc-ico, .recipe-card.is-feat .rc-ico { width: 40px; height: 40px; }
+  .recipe-card > summary, .recipe-card.is-feat > summary { padding: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .depth-pop { animation: none; }
+  .sci-note, .sci-note:nth-child(even), .sci-note:hover { transform: none; }
+}

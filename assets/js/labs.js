@@ -39,9 +39,9 @@
           s += `<clipPath id="lab-win-clip"><rect x="${wallX}" y="${Y(3)}" width="${r1(4.2 * sc)}" height="${r1(3 * sc)}"/></clipPath>`;
           s += `<polygon class="win-light" clip-path="url(#lab-win-clip)" points="${wallX},${Y(2.2)} ${wallX},${Y(0.85)} ${X(a)},${floorY} ${X(b)},${floorY}"/>`;
           const rad = alt * Math.PI / 180;
-          const len = Math.max(w, hh);
           for (let k = 0; k < 5; k++) {
             const y0 = 0.95 + k * 0.3;
+            const len = Math.min(wallX / Math.max(Math.cos(rad), 1e-3), Y(y0) / Math.max(Math.sin(rad), 1e-3));
             s += `<line class="win-ray" x1="${r1(wallX - Math.cos(rad) * len)}" y1="${r1(Y(y0) - Math.sin(rad) * len)}" x2="${wallX}" y2="${Y(y0)}"/>`;
           }
           const sx = clamp(wallX - Math.cos(rad) * wallX * 0.72, 18, wallX - 20), sy = clamp(Y(1.5) - Math.tan(rad) * (wallX - sx), 18, floorY - 18);
@@ -323,7 +323,7 @@
 
   register('spectrum', el => {
     el.innerHTML = h.head('Что поглощает лист', 'Спектры поглощения пигментов (схематично, по максимуму) и спектр источника света. Ведите по графику, чтобы увидеть значения.') +
-      `<div class="lab-controls">${h.segHtml('lab-sp-l', 'Источник', [['sun', 'Солнце'], ['led', 'Белый LED'], ['fito', 'Красно-синий'], ['none', 'Без лампы']], 'led')}</div>
+      `<div class="lab-controls">${h.chipsHtml('lab-sp-l', 'Источник', [['sun', 'Солнце'], ['led', 'Белый LED'], ['fito', 'Красно-синий'], ['none', 'Без лампы']], 'led')}</div>
        <div class="lab-chart" id="lab-sp-ch"></div>
        <ul class="legend legend-lines"><li><i class="k-s1"></i>хлорофилл a</li><li><i class="k-s2"></i>хлорофилл b</li><li><i class="k-s3"></i>каротиноиды</li><li><i class="k-lamp"></i>спектр источника</li></ul>`;
     let lamp = 'led', hover = null;
@@ -335,7 +335,7 @@
         const lampPts = pts(LAMPS[lamp]);
         const mx = Math.max(...lampPts.map(p => p[1])) || 1;
         const P = h.plot({ w, h: hh, pad: P0, x: [400, 700], y: [0, 1.08], xticks: [400, 450, 500, 550, 600, 650, 700], yticks: [0, 0.5, 1], fy: v => v === 0 ? '0' : v === 1 ? 'макс' : '', xlab: 'длина волны, нм',
-          series: [{ pts: lampPts.map(p => [p[0], p[1] / mx]), cls: 'lamp', area: true }, { pts: pts(CAR), cls: 's3', label: 'каротиноиды', labelAt: 500, ldy: -4, anchor: 'start' }, { pts: pts(CHLB), cls: 's2', label: 'хл. b', labelAt: 642, ldy: -8 }, { pts: pts(CHLA), cls: 's1', label: 'хл. a', labelAt: 662, ldy: -8 }],
+          series: [{ pts: lampPts.map(p => [p[0], p[1] / mx]), cls: 'lamp', area: true }, { pts: pts(CAR), cls: 's3', label: w >= 480 ? 'каротиноиды' : '', labelAt: 500, ldy: -4, anchor: 'start' }, { pts: pts(CHLB), cls: 's2', label: w >= 480 ? 'хл. b' : '', labelAt: 642, ldy: -8 }, { pts: pts(CHLA), cls: 's1', label: w >= 480 ? 'хл. a' : '', labelAt: 668, ldy: -8 }],
           hover });
         let s = `<defs><linearGradient id="lab-sp-grad" x1="0" x2="1">${[400, 430, 460, 490, 520, 550, 580, 610, 640, 670, 700].map((l, i) => `<stop offset="${i / 10}" stop-color="${wl2rgb(l)}"/>`).join('')}</linearGradient></defs>`;
         s += P.s + `<rect class="spec-band" x="${P.p.l}" y="${hh - P0.b + 24}" width="${P.iw}" height="8" rx="4" fill="url(#lab-sp-grad)"/>`;
@@ -688,7 +688,7 @@
       h: w => clamp(w * 0.7, 250, 330),
       draw(w, hh) {
         const bw = Math.min(w - PAD * 2, 380), x0 = (w - bw) / 2, top = 28, bottom = hh - 30;
-        const sw = bw / STAVES.length;
+        const sw = bw / STAVES.length, fs = r1(Math.min(11, sw / 3.3));
         const Y = v => r1(bottom - (bottom - top) * v / 100);
         const min = Math.min(...STAVES.map(s => vals[s[0]]));
         const limit = STAVES.find(s => vals[s[0]] === min)[0];
@@ -699,7 +699,7 @@
           const x = x0 + i * sw;
           const isLim = k === limit, isSel = k === sel;
           s += `<rect class="stave${isLim ? ' is-limit' : ''}${isSel ? ' is-sel' : ''}" x="${r1(x + 1.5)}" y="${Y(vals[k])}" width="${r1(sw - 3)}" height="${r1(bottom - Y(vals[k]))}" rx="3" data-k="${k}"/>`;
-          s += `<text class="stave-lbl${isLim ? ' is-limit' : ''}" x="${r1(x + sw / 2)}" y="${bottom + 16}" text-anchor="middle">${name}</text>`;
+          s += `<text class="stave-lbl${isLim ? ' is-limit' : ''}" x="${r1(x + sw / 2)}" y="${bottom + 16}" text-anchor="middle" style="font-size:${fs}px">${name}</text>`;
           if (isLim) s += `<path class="barrel-spill" d="M${r1(x + sw / 2)} ${Y(min) - 1} q 8 6 6 20 t -2 ${r1(bottom - Y(min) - 12)}"/>`;
         });
         [0.3, 0.72].forEach(f => { s += `<rect class="hoop" x="${r1(x0 - 3)}" y="${r1(bottom - (bottom - top) * f)}" width="${r1(bw + 6)}" height="6" rx="3"/>`; });

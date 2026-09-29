@@ -67,6 +67,11 @@
   <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12c1.7-4.5 3.3-4.5 5 0s3.3 4.5 5 0 3.3-4.5 5 0"/><path d="M19 9.5l2.5 2.5-2.5 2.5"/></symbol>
   <symbol id="i-cell" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7.5"/><circle cx="10.5" cy="11" r="2.6"/><circle cx="16" cy="14.6" r=".9"/><circle cx="7" cy="15" r=".7"/></symbol>
   <symbol id="i-nose" viewBox="0 0 24 24"><path d="M7.5 21c0-3.2 3-4.3 3-7.5S7.5 9.2 7.5 6s1.4-3 1.4-3"/><path d="M14 21c0-3.2 3-4.3 3-7.5S14 9.2 14 6s1.4-3 1.4-3"/></symbol>
+  <symbol id="i-mortar" viewBox="0 0 24 24"><path d="M3.5 11.5h17c0 4.4-3.4 8-8.5 8s-8.5-3.6-8.5-8z"/><path d="M8.5 19.2l-.8 1.8h8.6l-.8-1.8"/><path d="M13.5 11.3l6-7.6a1.5 1.5 0 0 1 2.3 1.9l-6.2 6.2"/><path d="M7 9.2c.8-1.4 2.2-2.1 3.8-1.8"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18c0 4.7-4 8.5-9 8.5S3 15.7 3 11z"/><path d="M9 19.2V21h6v-1.8"/><path d="M8 8.2c0-1.6 1-2.6 1-4M12 8.2c0-1.6 1-2.6 1-4M16 8.2c0-1.6 1-2.6 1-4"/></symbol>
+  <symbol id="i-glass" viewBox="0 0 24 24"><path d="M6 3.5h12l-1.6 16.2a1.6 1.6 0 0 1-1.6 1.3H9.2a1.6 1.6 0 0 1-1.6-1.3z"/><path d="M6.7 9.5h10.6"/><path d="M14.5 3.5l2.8-2"/><circle cx="10.5" cy="14" r="1"/><circle cx="13.5" cy="16.8" r=".8"/></symbol>
+  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M5.5 20.5v-6.8c0-1.2 1-2.2 2.2-2.2h8.6c1.2 0 2.2 1 2.2 2.2v6.8"/><path d="M5.5 15.4c1.1 1.1 2.1 1.1 3.2 0s2.1-1.1 3.3 0 2.1 1.1 3.2 0 2.1-1.1 3.3 0"/><path d="M12 11.5V8.5"/><path d="M12 8.5c-1.8-.4-2.6-1.8-2.2-3.6 1.8.4 2.6 1.8 2.2 3.6zm0 0c1.8-.4 2.6-1.8 2.2-3.6-1.8.4-2.6 1.8-2.2 3.6z"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17.5h6M9.8 20.5h4.4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1 1.4 1 2.2v1.5h5.2V16c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M12 7.2v3.2"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
   <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.2c-3.4 4.3-6 7.7-6 10.9a6 6 0 0 0 12 0c0-3.2-2.6-6.6-6-10.9z"/><path d="M9.2 14.6a3 3 0 0 0 2.4 2.6"/></symbol>
@@ -265,7 +270,7 @@
     <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
       <svg class="ico"><use href="#i-search"/></svg><span>Поиск</span><kbd>/</kbd>
     </button>
-    <button class="icon-btn deep-toggle" id="deep-toggle" type="button" aria-pressed="false" aria-label="Открыть все научные развороты">
+    <button class="icon-btn deep-toggle" id="deep-toggle" type="button" aria-pressed="false" aria-expanded="false" aria-label="Глубина чтения">
       <svg class="ico"><use href="#i-hex"/></svg>
     </button>
     <button class="icon-btn" id="theme-toggle" type="button" aria-label="Сменить тему">
@@ -285,7 +290,7 @@
     <div class="hero-text">
       <p class="eyebrow"><span><i>Ocimum basilicum</i> L. · семейство Яснотковые</span></p>
       <h1>Базилик <em>от семечка до&nbsp;песто</em></h1>
-      <p class="lead">Гид по выращиванию в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, прищипывание, урожай и лечение. А ещё химия аромата и физика роста — в научных разворотах «Глубже». Для подоконника, балкона, грядки, теплицы и гидропоники.</p>
+      <p class="lead">Гид по выращиванию в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, прищипывание, урожай и лечение. А ещё химия аромата и физика роста — в научных разворотах «Глубже», и 17 рецептов, от песто до шербета. Для подоконника, балкона, грядки, теплицы и гидропоники.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#start"><svg class="ico"><use href="#i-sprout"/></svg>С чего начать</a>
         <a class="btn btn-ghost" href="#glavy"><svg class="ico"><use href="#i-book"/></svg>Все главы</a>
@@ -368,11 +373,16 @@
       <div class="sh-text">
         <p class="eyebrow">Научный слой</p>
         <h2 id="nauka-h">Почему базилик <em>именно такой</em></h2>
-        <p>Под практическими советами в каждой главе спрятаны развороты «Глубже»: химия аромата, физика света и воды, биология роста. Внутри — схемы и живые модели, от дефицита давления пара до бочки Либиха. Раскрывайте по одному или все сразу кнопкой с шестиугольником в шапке.</p>
+        <p>Под практическими советами в каждой главе спрятаны развороты «Глубже»: химия аромата, физика света и воды, биология роста. Внутри — схемы и живые модели, от дефицита давления пара до бочки Либиха, а в самом низу — раздел «Ещё глубже» с механизмами и источниками. Выберите, насколько глубоко читать: выбор запомнится и действует во всех главах.</p>
         <ul class="sh-kinds" id="sh-kinds" aria-label="Развороты по темам"></ul>
+        <div class="depth-seg" role="group" aria-label="Глубина чтения">
+          <button type="button" data-depth-pick="0" aria-pressed="true"><span class="depth-dots" aria-hidden="true"><i></i></span><b>Практика</b><small>только советы</small></button>
+          <button type="button" data-depth-pick="1" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i></span><b>Наука</b><small>все развороты</small></button>
+          <button type="button" data-depth-pick="2" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Лаборатория</b><small>и «ещё глубже»</small></button>
+        </div>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#vkus"><svg class="ico"><use href="#i-nose"/></svg>Глава «Вкус и аромат»</a>
-          <button class="btn btn-ghost" type="button" data-deep-toggle><svg class="ico"><use href="#i-hex"/></svg><span>Открыть все развороты</span></button>
+          <a class="btn btn-primary" href="#vkus"><svg class="ico"><use href="#i-nose"/></svg>Вкус и аромат</a>
+          <a class="btn btn-ghost" href="#urozhay-recepty"><svg class="ico"><use href="#i-mortar"/></svg>Книга рецептов</a>
         </div>
       </div>
       <figure class="sh-mol">
@@ -479,14 +489,24 @@
       </div>
       <p class="count-line"><span id="variety-count" aria-live="polite"></span> · нажмите на карточку, чтобы открыть подробности</p>
       <div class="var-grid" id="variety-grid"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Название — от греческого <i>basilikón</i>, «царский». Во многих языках базилик до сих пор «царская трава».</p>
+        </aside>
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Генуэзский базилик с 2005 года защищён в ЕС знаком происхождения DOP: так его охраняют наравне с сырами и винами.</p>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-himotipy" data-kind="chem" data-short="Химотипы">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Почему сорта пахнут по-разному</span><span class="deep-sub">Химотипы и ферменты-переключатели</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">таблица</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -513,14 +533,30 @@
               </table>
             </div>
             <p class="deep-link"><a href="#vkus-himotipy">Химические «отпечатки» всех сортов — в главе «Вкус»</a></p>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Одна аминокислота меняет запах</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Метилтрансферазы базилика переносят метильную группу с универсального донора — S-аденозилметионина — на гидроксил молекулы-субстрата. Хавикол-O-метилтрансфераза (CVOMT) и эвгенол-O-метилтрансфераза (EOMT) похожи почти на 90&nbsp;%. В опытах замена <b>одной аминокислоты</b> в их активном центре переключала фермент с хавикола на эвгенол.</p>
+                <p>Так эволюция и селекция получают новые химотипы: не нужен новый ген, достаточно точечной мутации в старом. Поэтому в одном виде <i>Ocimum basilicum</i> уживаются и анисовые, и гвоздичные сорта.</p>
+                <div class="eq"><span class="eq-label">Реакция метилирования</span><p>хавикол + SAM <span class="eq-enz">CVOMT</span>→ эстрагол + SAH</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Gang D. R. et al. Characterization of phenylpropene O-methyltransferases from sweet basil. <i>The Plant Cell</i>, 2002.</li>
+                <li>Iijima Y. et al. The biochemical and molecular basis for the divergent patterns in the biosynthesis of terpenes and phenylpropenes in the peltate glands of three cultivars of basil. <i>Plant Physiology</i>, 2004.</li>
+                <li>Simon J. E. et al. Basil: a source of aroma compounds and a popular culinary and ornamental herb. In: <i>Perspectives on New Crops and New Uses</i>. ASHS Press, 1999.</li>
+              </ol>
+            </div>
           </div>
         </details>
         <details class="deep" id="deep-antociany" data-kind="chem" data-short="Антоцианы">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Откуда фиолетовый цвет</span><span class="deep-sub">Пигмент-солнцезащита, который меняет цвет от кислоты</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -534,6 +570,19 @@
                 <p class="aside-cap">Цвет антоцианового настоя по pH. Покрутить шкалу можно в <a href="#vkus-kuhnya">«Физике кухни»</a>.</p>
               </aside>
             </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему фиолетовый базилик не выцветает</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Голый антоциан нестабилен: в нейтральной среде он быстро теряет цвет. У базилика антоцианы <b>ацилированы</b> — к их сахарам пришиты остатки ароматических кислот. Эти «ручки» складываются стопкой с окрашенной частью молекулы и защищают её от воды. Химики называют это внутримолекулярной копигментацией.</p>
+                <p>Цвет сдвигают и соседи по клеточному соку: другие полифенолы (межмолекулярная копигментация) и ионы металлов делают оттенок синее. Поэтому один и тот же пигмент в разных растениях даёт то пурпур, то синеву васильков.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Brouillard R. Chemical structure of anthocyanins. In: <i>Anthocyanins as Food Colors</i>. Academic Press, 1982.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -541,14 +590,20 @@
 
     <div class="panel" data-panel id="sorta-podbor" data-title="Подбор сорта">
       <div class="pane quiz" id="quiz"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Тулси — не сорт, а отдельный вид, <i>Ocimum tenuiflorum</i>. В Индии его сажают у домов и храмов как священное растение.</p>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-fenotip" data-kind="bio" data-short="Генотип × среда">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Сорт — половина результата</span><span class="deep-sub">Почему один и тот же сорт растёт по-разному</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -565,6 +620,22 @@
                 <div class="eq"><span class="eq-label">Формула селекционеров</span><p>Фенотип = генотип + среда + их взаимодействие</p></div>
                 <p class="hand margin-note">тот же сорт на юге и на северном окне — два разных растения</p>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Формула фенотипа</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Генетики раскладывают разброс признака на части: <b>P = G + E + G×E</b>. G — вклад генов, E — вклад среды, а G×E — их взаимодействие, когда разные сорта по-разному отвечают на одни и те же условия. Именно G×E объясняет, почему в северной теплице выигрывает один сорт, а на южной грядке — другой.</p>
+                <p>Долю разброса, которую объясняют гены, называют наследуемостью. Это свойство не признака «вообще», а конкретной группы растений в конкретной среде. В одинаковых условиях почти вся разница между растениями генетическая, в пёстрых — средовая.</p>
+                <p>Среду растение «читает» датчиками. Фитохромы сравнивают красный и дальний красный свет, криптохромы и фототропины ловят синий, белок UVR8 — ультрафиолет B. UVR8 включает гены защиты, и в листе прибавляется фенольных соединений. Отсюда более «гвоздичный» аромат базилика под открытым небом.</p>
+                <div class="eq"><span class="eq-label">Разложение изменчивости</span><p>V<sub>P</sub> = V<sub>G</sub> + V<sub>E</sub> + V<sub>G×E</sub></p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Falconer D. S., Mackay T. F. C. <i>Introduction to Quantitative Genetics</i>. 4th ed. Longman, 1996.</li>
+                <li>Rizzini L. et al. Perception of UV-B by the Arabidopsis UVR8 protein. <i>Science</i>, 2011.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -612,14 +683,21 @@
           <div class="pick card"><svg class="ico"><use href="#i-drop"/></svg><h4>Сыро и прохладно</h4><p>Проспера, амазель, теплица</p></div>
         </div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Базилик опыляют пчёлы и шмели. Сорта, цветущие рядом, переопыляются, поэтому семена с дачи часто дают «сюрприз».</p>
+          <a class="sci-note-link" href="#deep-genetika">Глубже: Генетика семян <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-ustoychivost" data-kind="bio" data-short="Устойчивость">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Устойчивость: гонка с патогеном</span><span class="deep-sub">Гены распознавания, гибриды F1 и стерильные сорта</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -633,6 +711,20 @@
                 <div class="num-note"><b>2001–2007</b><span>годы, когда ложная мучнистая роса базилика распространилась по Европе и США</span></div>
                 <div class="num-note"><b>1–2 гена</b><span>на которых часто держится устойчивость сорта</span></div>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Зигзаг иммунитета</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>У растений два эшелона обороны. Первый узнаёт общие для всех микробов молекулы — например, фрагменты клеточной стенки. Патоген в ответ выделяет <b>эффекторы</b> — белки, которые глушат эту тревогу. Второй эшелон — белки-рецепторы NLR, закодированные генами устойчивости. Они узнают сами эффекторы и включают сильный ответ вплоть до гибели заражённых клеток.</p>
+                <p>Дальше идёт гонка: патоген теряет или меняет узнаваемый эффектор, растение отбирает новый рецептор. Биологи рисуют это как зигзаг. Отсюда и практический вывод: устойчивость, основанная на одном гене, со временем может «сломаться».</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Thines M. et al. Identity of the downy mildew pathogens of basil, coleus, and sage with implications for quarantine measures. <i>Mycological Research</i>, 2009.</li>
+                <li>Jones J. D. G., Dangl J. L. The plant immune system. <i>Nature</i>, 2006.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -690,14 +782,25 @@
           </div>
         </div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Базилик — растение C₃, как томат и пшеница. У кукурузы (C₄) фотосинтез в жару эффективнее, поэтому базилик в 35&nbsp;°C «стоит», а кукуруза растёт.</p>
+          <a class="sci-note-link" href="#deep-fermenty">Глубже: Ферменты и жара <span aria-hidden="true">→</span></a>
+        </aside>
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Теплица греется в основном не «парниковым эффектом» в атмосферном смысле: стекло и плёнка просто не дают нагретому воздуху уйти с ветром. Это показал опытом ещё в 1909 году физик Роберт Вуд.</p>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-okno" data-kind="phys" data-short="Солнце в окне">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Солнце в окне</span><span class="deep-sub">Высота солнца, угол падения лучей и стекло</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -712,6 +815,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="window" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">От ватт к фотонам</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>За пределами атмосферы на квадратный метр, повёрнутый к солнцу, приходит около <b>1361&nbsp;Вт</b> — это солнечная постоянная. У поверхности в ясный полдень остаётся порядка 1000&nbsp;Вт/м². Чем ниже солнце, тем длиннее путь сквозь воздух: при высоте 11° луч проходит примерно в пять раз больше атмосферы, чем в зените.</p>
+                <p>Растениям достаётся фотосинтетически активная часть — около 45&nbsp;% энергии солнечного света. Для солнечного спектра 1&nbsp;Вт/м² ФАР соответствует примерно 4,6&nbsp;мкмоль фотонов в секунду на квадратный метр. Летний полдень даёт около 2000&nbsp;мкмоль/м²·с — в пять–десять раз больше, чем бытовая фитолампа.</p>
+                <div class="eq"><span class="eq-label">Воздушная масса</span><p>m ≈ 1 / sin h</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Allen R. G. et al. Crop evapotranspiration. <i>FAO Irrigation and Drainage Paper 56</i>, 1998.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -762,14 +879,25 @@
           </div>
         </aside>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Одно семя базилика весит около 1,3–1,7&nbsp;мг — в грамме их 600–800.</p>
+        </aside>
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Слизь на семенах — полисахариды. Сухое семя, брошенное в воду, за 15 минут обрастает прозрачным гелем, как лягушачья икра.</p>
+          <a class="sci-note-link" href="#deep-prorastanie">Глубже: Прорастание <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-prorastanie" data-kind="bio" data-short="Прорастание">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Что происходит внутри семечки</span><span class="deep-sub">Набухание, слизь и термальное время</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -784,6 +912,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="germ" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Гормоны пробуждения</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Решение прорасти принимают два гормона-антагониста. <b>Абсцизовая кислота</b> держит зародыш в покое и защищает его от засухи. <b>Гиббереллины</b> запускают синтез ферментов, которые разбирают запасы, и ослабляют ткани вокруг корешка. Прорастание начинается, когда баланс сдвигается в пользу гиббереллинов.</p>
+                <p>У базилика глубокого покоя нет: свежие семена прорастают почти сразу, если тепло и влажно. Поэтому они не нуждаются в стратификации, как семена многих многолетников умеренного пояса.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Bierhuizen J. F., Wagenvoort W. A. Some aspects of seed germination in vegetables: the determination and application of heat sums and minimum temperature for germination. <i>Scientia Horticulturae</i>, 1974.</li>
+                <li>Garcia-Huidobro J., Monteith J. L., Squire G. R. Time, temperature and germination of pearl millet. <i>Journal of Experimental Botany</i>, 1982.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -853,14 +995,21 @@
           </div>
         </aside>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Сеянцы в магазинном горшке тянутся из-за фитохрома — того же белка-датчика, которым растение измеряет длину ночи.</p>
+          <a class="sci-note-link" href="#deep-ten">Глубже: Теснота и тень <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-ten" data-kind="bio" data-short="Теснота и тень">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Почему в тесноте растения вытягиваются</span><span class="deep-sub">Фитохром, дальний красный свет и самоизреживание</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -875,6 +1024,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="shade" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Как устроен фитохром</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Фитохром — белок с пигментом-хромофором (фитохромобилином). Форма Pr сильнее всего поглощает свет около 660&nbsp;нм и, поглотив фотон, перестраивается в форму Pfr с максимумом около 730&nbsp;нм. Дальний красный переводит её обратно. На свету устанавливается равновесие, и доля Pfr работает как «измеритель» отношения R:FR.</p>
+                <p>Главный датчик тени у растений — фитохром B. Активная форма уходит в ядро и помечает для разрушения белки PIF, которые включают гены роста стебля. В тени PIF накапливаются, и стебель тянется. Синий свет растение чувствует другими датчиками — криптохромами и фототропинами, ультрафиолет — белком UVR8.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Franklin K. A. Shade avoidance. <i>New Phytologist</i>, 2008.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -935,14 +1097,20 @@
           </div>
         </div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Керамзит — глина, обожжённая при 1100–1300&nbsp;°C: газы внутри вспучивают её, как попкорн.</p>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-voda-v-gorshke" data-kind="phys" data-short="Подвешенная вода">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Физика горшка: подвешенная вода</span><span class="deep-sub">Почему слой керамзита на дне не работает как дренаж</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -959,6 +1127,21 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="perched" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Капилляр в цифрах</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Для воды поверхностное натяжение γ&nbsp;≈&nbsp;0,072&nbsp;Н/м. Если принять угол смачивания нулевым, пора радиусом 0,4&nbsp;мм удержит столб высотой около 3,7&nbsp;см, пора 0,1&nbsp;мм — уже почти 15&nbsp;см. В грунте поры разного размера соединены, поэтому реальная картина описывается кривой водоудерживания, но порядок величин тот же.</p>
+                <p>Перлит и кора добавляют крупные поры: насыщенный слой становится ниже, а воздуха у корней больше. Мелкий торф и песок, наоборот, держат воду выше.</p>
+                <div class="eq"><span class="eq-label">Пример</span><p>h = 2·0,072 / (1000·9,81·0,0004) ≈ 0,037&nbsp;м</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Jurin J. An account of some experiments shown before the Royal Society. <i>Philosophical Transactions of the Royal Society</i>, 1718.</li>
+                <li>Bilderback T. E., Fonteno W. C. Effects of container geometry and media physical properties on air and water volumes in containers. <i>Journal of Environmental Horticulture</i>, 1987.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1016,14 +1199,26 @@
         <p>Даты в пресетах усреднены. Высаживайте, когда ночи 7–10 дней подряд теплее +10&nbsp;°C, а почва на глубине 10&nbsp;см прогрелась до +15&nbsp;°C. При угрозе похолодания укройте посадки нетканым материалом.</p>
       </div>
     </div>
+    <div class="sci-notes">
+      <aside class="sci-note" data-kind="phys">
+        <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+        <p>Самый длинный день в Москве — 17,6 часа, в Петербурге — 18,8, а в Мурманске летом около двух месяцев солнце не заходит вовсе.</p>
+        <a class="sci-note-link" href="#deep-fotoperiod">Глубже: Длина дня <span aria-hidden="true">→</span></a>
+      </aside>
+      <aside class="sci-note" data-kind="bio">
+        <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+        <p>Базилик родом из тропиков Азии и Африки. У него нет механизмов закаливания к холоду, как у капусты или шпината.</p>
+        <a class="sci-note-link" href="#deep-zamorozok">Глубже: Холод и лёд <span aria-hidden="true">→</span></a>
+      </aside>
+    </div>
     <div class="deep-zone">
       <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
       <details class="deep" id="deep-fotoperiod" data-kind="bio" data-short="Длина дня">
-        <summary>
+        <summary><span class="deep-sum">
           <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
           <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Как растение считает дни</span><span class="deep-sub">Фитохром, длина ночи и цветение</span></span>
           <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-        </summary>
+        </span></summary>
         <div class="deep-body">
           <div class="deep-grid">
             <div class="deep-text">
@@ -1038,14 +1233,27 @@
             </aside>
           </div>
           <div class="lab-tool" data-lab="daylen" data-kind="bio"></div>
+          <details class="deeper">
+            <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Модель внешнего совпадения</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+            <div class="deeper-body">
+              <p>У модельного растения арабидопсиса механизм изучен лучше всего. Внутренние часы включают ген <i>CONSTANS</i> к вечеру. Белок CO стабилен только на свету: в короткий день к вечеру уже темно, и он разрушается. В длинный день вечерний пик совпадает со светом, белок накапливается и включает ген флоригена <i>FT</i>.</p>
+              <p>Получается, что растение измеряет не длину дня как таковую, а совпадение внутреннего ритма со светом. Поэтому ночная вспышка света может «обмануть» растение и сработать как длинный день.</p>
+            </div>
+          </details>
+          <div class="deep-src">
+            <p class="deep-src-h">Откуда это известно</p>
+            <ol>
+              <li>Corbesier L. et al. FT protein movement contributes to long-distance signaling in floral induction of Arabidopsis. <i>Science</i>, 2007.</li>
+            </ol>
+          </div>
         </div>
       </details>
       <details class="deep" id="deep-zamorozok" data-kind="phys" data-short="Холод и лёд">
-        <summary>
+        <summary><span class="deep-sum">
           <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
           <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Почему холод убивает базилик</span><span class="deep-sub">Радиационный заморозок, лёд в межклетниках и холодовой шок</span></span>
           <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-        </summary>
+        </span></summary>
         <div class="deep-body">
           <div class="deep-grid">
             <div class="deep-text">
@@ -1059,14 +1267,28 @@
               <div class="num-note"><b>1–3&nbsp;°C</b><span>запас, который даёт нетканое укрытие в ясную ночь</span></div>
             </aside>
           </div>
+          <details class="deeper">
+            <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Переохлаждение и бактерии-льдообразователи</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+            <div class="deeper-body">
+              <p>Чистая вода в тканях может переохлаждаться до −2…−5&nbsp;°C, не замерзая: кристаллу льда нужен «зародыш». На листьях таким зародышем часто служат бактерии, например некоторые штаммы <i>Pseudomonas syringae</i>. Их белок на поверхности клетки выстраивает молекулы воды в решётку льда уже около −2&nbsp;°C.</p>
+              <p>Поэтому один и тот же лёгкий заморозок одно растение переживает, а соседнее — нет. Такие бактерии используют и на искусственном снегу.</p>
+            </div>
+          </details>
+          <div class="deep-src">
+            <p class="deep-src-h">Откуда это известно</p>
+            <ol>
+              <li>Levitt J. <i>Responses of Plants to Environmental Stresses</i>. Vol. 1. Academic Press, 1980.</li>
+              <li>Lindow S. E., Arny D. C., Upper C. D. Bacterial ice nucleation: a factor in frost injury to plants. <i>Plant Physiology</i>, 1982.</li>
+            </ol>
+          </div>
         </div>
       </details>
       <details class="deep" id="deep-gradusodni" data-kind="bio" data-short="Градусо-дни">
-        <summary>
+        <summary><span class="deep-sum">
           <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
           <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Термальное время: почему в прохладное лето базилик стоит</span><span class="deep-sub">Сумма тепла вместо календаря</span></span>
           <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-        </summary>
+        </span></summary>
         <div class="deep-body">
           <div class="deep-grid">
             <div class="deep-text">
@@ -1078,6 +1300,22 @@
             </aside>
           </div>
           <div class="lab-tool" data-lab="gdd" data-kind="bio"></div>
+          <details class="deeper">
+            <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Кривая вместо прямой</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+            <div class="deeper-body">
+              <p>Считать тепло, а не дни, предложил в 1735 году Рене Антуан Реомюр — тот самый, чьей шкалой термометра пользовались в России XIX века. Он заметил, что сумма средних температур от посева до созревания у одной культуры из года в год почти постоянна.</p>
+              <p>Линейная модель — упрощение. На деле скорость развития растёт с температурой по кривой: медленно у базовой температуры, почти линейно в середине и резко падает выше оптимума. Современные модели описывают это «бета-функцией» с тремя кардинальными точками: минимумом, оптимумом и максимумом.</p>
+              <p>Важен и суточный ход. Если днём 34&nbsp;°C, а ночью 10&nbsp;°C, средняя получается 22&nbsp;°C, но полезного тепла меньше: жаркие часы выше оптимума почти ничего не добавляют, а холодные ниже базы не добавляют вовсе. Поэтому точные расчёты ведут по часам, а не по суткам.</p>
+              <div class="eq"><span class="eq-label">Кардинальные температуры базилика (ориентир)</span><p>T<sub>min</sub> ≈ 10&nbsp;°C · T<sub>opt</sub> ≈ 25–28&nbsp;°C · T<sub>max</sub> ≈ 35–40&nbsp;°C</p></div>
+            </div>
+          </details>
+          <div class="deep-src">
+            <p class="deep-src-h">Откуда это известно</p>
+            <ol>
+              <li>Réaumur R.-A. F. Observations du thermomètre faites à Paris pendant l’année 1735. <i>Mémoires de l’Académie royale des sciences</i>, 1735.</li>
+              <li>Yin X. et al. A nonlinear model for crop development as a function of temperature. <i>Agricultural and Forest Meteorology</i>, 1995.</li>
+            </ol>
+          </div>
         </div>
       </details>
     </div>
@@ -1145,14 +1383,26 @@
         </div>
         <div class="dli-out" id="dli-out" aria-live="polite"></div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Люксметр меряет свет «глазами человека», с упором на зелёный. Растение считает фотоны всех цветов, поэтому для фитоламп люксы почти бесполезны.</p>
+          <a class="sci-note-link" href="#deep-fotosintez">Глубже: Фотосинтез <span aria-hidden="true">→</span></a>
+        </aside>
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Летний полдень даёт около 2000&nbsp;мкмоль/м²·с — в 5–10 раз больше, чем хорошая комнатная фитолампа.</p>
+          <a class="sci-note-link" href="#deep-lampa">Глубже: Обратные квадраты <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-fotosintez" data-kind="phys" data-short="Фотосинтез">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Фотосинтез: как свет становится листом</span><span class="deep-sub">Спектр поглощения, фотоны и почему базилик зелёный</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1167,14 +1417,28 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="spectrum" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Z-схема и квантовый выход</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Световые реакции идут через две фотосистемы. Фотосистема II (реакционный центр P680) отнимает электроны у воды, фотосистема I (P700) поднимает их ещё выше по энергии, чтобы восстановить НАДФ⁺. На энергетической диаграмме путь электрона похож на букву Z.</p>
+                <p>Чтобы выделить одну молекулу O₂, нужно передать четыре электрона, и каждый проходит обе фотосистемы — отсюда минимум восемь фотонов. На практике лист связывает около 0,05–0,1 молекулы CO₂ на поглощённый фотон. Кривая Маккри показывает, что красные фотоны работают эффективнее всего, но и зелёные дают около 70&nbsp;% их отдачи.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>McCree K. J. The action spectrum, absorptance and quantum yield of photosynthesis in crop plants. <i>Agricultural Meteorology</i>, 1972.</li>
+                <li>Terashima I. et al. Green light drives leaf photosynthesis more efficiently than red light in strong white light. <i>Plant and Cell Physiology</i>, 2009.</li>
+              </ol>
+            </div>
           </div>
         </details>
         <details class="deep" id="deep-lampa" data-kind="phys" data-short="Обратные квадраты">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Почему лампу нельзя просто поднять повыше</span><span class="deep-sub">Закон обратных квадратов для фитолампы</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1188,6 +1452,21 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="lamp" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Сколько света даёт ватт</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Эффективность фитолампы измеряют в <b>микромолях фотонов на джоуль</b> (мкмоль/Дж). Лучшие светодиодные панели дают 2,5–3&nbsp;мкмоль/Дж, натриевые лампы — около 1,7–1,9, люминесцентные — 1–1,3.</p>
+                <p>Прикинем: панель на 30&nbsp;Вт с эффективностью 2,5&nbsp;мкмоль/Дж испускает 75&nbsp;мкмоль фотонов в секунду. Если почти весь свет попадает на площадь 50&nbsp;×&nbsp;50&nbsp;см (0,25&nbsp;м²), в среднем выйдет 300&nbsp;мкмоль/м²·с — как раз столько, сколько нужно базилику.</p>
+                <div class="eq"><span class="eq-label">Оценка</span><p>PPFD ≈ P × η / S = 30 × 2,5 / 0,25 = 300</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Thimijan R. W., Heins R. D. Photometric, radiometric, and quantum light units of measure. <i>HortScience</i>, 1983.</li>
+                <li>Both A.-J. et al. Proposed product label for electric lamps used in the plant sciences. <i>HortTechnology</i>, 2017.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1243,14 +1522,21 @@
           </ul>
         </div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>До 95–99&nbsp;% воды, которую выпивает растение, уходит через устьица в воздух. На рост тканей остаётся лишь малая доля.</p>
+          <a class="sci-note-link" href="#deep-vpd">Глубже: Путь воды и VPD <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-vpd" data-kind="phys" data-short="Путь воды и VPD">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Путь воды: от корня до устьица</span><span class="deep-sub">Водный потенциал и дефицит давления пара (VPD)</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1266,6 +1552,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="vpd" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Точка росы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Если лист холоднее точки росы, на нём конденсируется вода. Ночью так бывает часто: лист излучает тепло в небо и остывает на 1–3&nbsp;°C ниже воздуха. При влажности 85&nbsp;% и 18&nbsp;°C точка росы — около 15,5&nbsp;°C, так что роса выпадет уже при небольшом охлаждении. Мокрый лист — вход для ложной мучнистой росы.</p>
+                <div class="eq"><span class="eq-label">Формула Магнуса</span><p>γ = ln(RH/100) + 17,27·T/(237,3 + T)<br>T<sub>р</sub> = 237,3·γ / (17,27 − γ)</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Tetens O. Über einige meteorologische Begriffe. <i>Zeitschrift für Geophysik</i>, 1930.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1311,14 +1610,21 @@
           </ul>
         </div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>При нагреве на 10&nbsp;°C большинство реакций в клетке ускоряется примерно вдвое — до тех пор, пока белки не начинают разрушаться.</p>
+          <a class="sci-note-link" href="#deep-fermenty">Глубже: Ферменты и жара <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-fermenty" data-kind="chem" data-short="Ферменты и жара">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Температура и ферменты</span><span class="deep-sub">Правило Q₁₀, рубиско и цена жары</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1332,6 +1638,21 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="temp" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Уравнение Аррениуса</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Правило Q₁₀ — упрощение уравнения Аррениуса: скорость реакции растёт экспоненциально с температурой, а крутизну задаёт энергия активации E<sub>a</sub>. Для типичной ферментной реакции с E<sub>a</sub>&nbsp;≈&nbsp;50&nbsp;кДж/моль около 20&nbsp;°C как раз получается Q₁₀&nbsp;≈&nbsp;2.</p>
+                <p>Выше оптимума в игру вступает обратный процесс — белки начинают разворачиваться, и кривая скорости падает. Поэтому у каждого фермента своя температура, при которой он работает быстрее всего.</p>
+                <div class="eq"><span class="eq-label">Аррениус</span><p>k = A · e<sup>−E<sub>a</sub>/RT</sup>, Q₁₀ = e<sup>10·E<sub>a</sub>/(R·T·(T+10))</sup></p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Arrhenius S. Über die Reaktionsgeschwindigkeit bei der Inversion von Rohrzucker durch Säuren. <i>Zeitschrift für physikalische Chemie</i>, 1889.</li>
+                <li>Farquhar G. D., von Caemmerer S., Berry J. A. A biochemical model of photosynthetic CO<sub>2</sub> assimilation in leaves of C<sub>3</sub> species. <i>Planta</i>, 1980.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1369,14 +1690,21 @@
           <p class="muted">Проверить pH можно полосками или pH-метром в вытяжке: 1 часть грунта на 2 части дистиллированной воды, настоять 30 минут.</p>
         </div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>В грамме плодородной почвы живёт до миллиарда бактерий. Большая часть питания корней проходит через их «руки».</p>
+          <a class="sci-note-link" href="#deep-azot">Глубже: Круговорот азота <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-ph" data-kind="chem" data-short="pH и доступность">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">pH: почему кислотность решает, что доступно корням</span><span class="deep-sub">Ионы, заряды и ёмкость катионного обмена</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1391,6 +1719,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="ph" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Буфер и доломит</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Грунт сопротивляется изменению pH: гумус и глина держат запас ионов H⁺ на своих зарядах. Поэтому, чтобы поднять pH верхового торфа с 3,5–4,5 до 6, нужно не щепотка, а несколько граммов доломитовой муки на литр.</p>
+                <p>Доломит — двойной карбонат кальция и магния CaMg(CO₃)₂. Он растворяется медленно и только в кислой среде, поэтому передозировать его труднее, чем гашёную известь, а заодно он даёт кальций и магний.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Truog E. Soil reaction influence on availability of plant nutrients. <i>Soil Science Society of America Proceedings</i>, 1946.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1403,14 +1744,21 @@
         <article class="card season s-autumn"><h3>Осень</h3><ul class="ticks"><li>Черенки для подоконника</li><li>Заготовки на пике аромата</li><li>Финальный сбор до заморозков</li><li>Перенос горшков в дом, полив реже</li></ul></article>
         <article class="card season s-winter"><h3>Зима</h3><ul class="ticks"><li>Лампа 14–16 часов</li><li>18–24&nbsp;°C, подальше от холодного стекла</li><li>Полив по подсыханию, реже</li><li>Подкормки раз в 2–3 недели ½ дозы</li></ul></article>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>В декабре в Москве солнце в полдень поднимается всего на 11° — примерно на высоту кулака на вытянутой руке.</p>
+          <a class="sci-note-link" href="#deep-zima">Глубже: Зимний свет <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-zima" data-kind="phys" data-short="Зимний свет">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Зимний свет в цифрах</span><span class="deep-sub">Сколько солнечной энергии приходит в каждый месяц</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1422,6 +1770,22 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="solar" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Облака, снег и рассеянный свет</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Формула в развороте считает свет над облаками. У земли всё решает облачность: сплошной слой туч пропускает лишь 10–30&nbsp;% энергии ясного дня. Ноябрь и декабрь в средней полосе — самые пасмурные месяцы, поэтому реальная разница между июнем и декабрём ближе к 15–20 разам.</p>
+                <p>Зимой помогает снег. Свежий снег отражает 80–90&nbsp;% света, трава — около 20&nbsp;%. Свет от сугробов входит в окно снизу и заметно добавляет освещённости подоконнику, особенно на нижних этажах. Долю отражённого света физики называют <b>альбедо</b>.</p>
+                <p>У облаков есть и плюс: рассеянный свет приходит со всего неба и проникает в затенённую середину куста. При той же сумме фотонов рассеянный свет растения используют эффективнее прямого, поэтому в лёгкую дымку фотосинтез всего растения бывает даже выше, чем под палящим солнцем.</p>
+                <div class="eq"><span class="eq-label">Альбедо поверхностей</span><p>свежий снег 0,8–0,9 · трава ≈ 0,2 · асфальт ≈ 0,05–0,1</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Iqbal M. <i>An Introduction to Solar Radiation</i>. Academic Press, 1983.</li>
+                <li>Mercado L. M. et al. Impact of changes in diffuse radiation on the global land carbon sink. <i>Nature</i>, 2009.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1479,14 +1843,20 @@
           <p class="muted"><b>Что делать:</b> пролить горшок чистой водой в объёме 3 горшков, 2–3 недели не кормить, дальше — половинные дозы.</p>
         </article>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Сухая масса растения почти целиком — углерод, кислород и водород из воздуха и воды. На минеральные элементы из почвы приходится лишь несколько процентов.</p>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-osmos" data-kind="phys" data-short="Осмос">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Осмос: почему крепкий раствор сушит корни</span><span class="deep-sub">Водный потенциал, EC и «ожог» удобрениями</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1501,6 +1871,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="osmos" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Уравнение Вант-Гоффа</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Осмотический потенциал раствора можно оценить по концентрации частиц. Для раствора калийной селитры 10&nbsp;ммоль/л (каждая формульная единица распадается на два иона) при 20&nbsp;°C получается около −0,05&nbsp;МПа. Раствор в 20 раз крепче уже сравнялся бы с клеточным соком корня.</p>
+                <div class="eq"><span class="eq-label">Вант-Гофф</span><p>Ψ<sub>s</sub> = −i · C · R · T</p></div>
+                <p>Здесь i — число частиц на формульную единицу, C — концентрация в моль/м³, R — газовая постоянная, T — температура в кельвинах.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>U.S. Salinity Laboratory Staff. <i>Diagnosis and Improvement of Saline and Alkali Soils</i>. USDA Handbook 60, 1954.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1536,14 +1920,21 @@
         </div>
         <article class="pane el-detail" id="el-detail" aria-live="polite"></article>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>В каждой молекуле хлорофилла ровно один атом магния — того же, что в английской соли, сульфате магния.</p>
+          <a class="sci-note-link" href="#deep-mobilnost">Глубже: Ксилема и флоэма <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-mobilnost" data-kind="bio" data-short="Ксилема и флоэма">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Почему голод виден в разных местах</span><span class="deep-sub">Ксилема, флоэма и молекула хлорофилла</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1557,6 +1948,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="flows" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему кальций не ходит по флоэме</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Флоэма — живые клетки, и концентрацию кальция в них растение держит очень низкой: кальций служит сигнальным ионом, а вместе с фосфатами сока он выпал бы в осадок. Поэтому весь кальций идёт по ксилеме с потоком испарения и оседает там, где испарение сильнее, — в старых крупных листьях.</p>
+                <p>Отсюда болезни «недостатка кальция» при полном грунте: краевой ожог листьев салата и вершинная гниль томата. Помогает не кальциевая подкормка, а ровный полив и умеренная влажность воздуха.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Marschner P. (ed.) <i>Marschner’s Mineral Nutrition of Higher Plants</i>. 3rd ed. Academic Press, 2012.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1593,14 +1997,21 @@
           <div class="table-scroll"><table class="mini-table" id="feed-table"></table></div>
         </details>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Юстус фон Либих прославился не только законом минимума: его «мясной экстракт» стал предком бульонных кубиков.</p>
+          <a class="sci-note-link" href="#deep-libih">Глубже: Закон минимума <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-libih" data-kind="bio" data-short="Закон минимума">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Закон минимума: бочка Либиха</span><span class="deep-sub">Урожай ограничивает самый дефицитный фактор</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1613,6 +2024,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="barrel" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">От бочки к кривой Митчерлиха</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>В 1909 году Эйльхард Митчерлих уточнил закон минимума: урожай растёт с дозой удобрения не ступенькой, а плавно, и каждая следующая порция даёт меньше предыдущей. Кривая стремится к пределу, который задают другие факторы.</p>
+                <div class="eq"><span class="eq-label">Закон Митчерлиха</span><p>y = A · (1 − e<sup>−c·x</sup>)</p></div>
+                <p>Практический вывод: последние граммы удобрения самые «дорогие» — они почти не прибавляют урожая, зато копятся в грунте солями.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Liebig J. <i>Die organische Chemie in ihrer Anwendung auf Agricultur und Physiologie</i>, 1840.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1637,11 +2062,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-azot" data-kind="chem" data-short="Круговорот азота">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Круговорот азота в горшке</span><span class="deep-sub">От органики до нитрата: кто работает на базилик</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1655,6 +2080,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="ncycle" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Бактерии, которые едят аммиак</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Нитрифицирующих бактерий открыл Сергей Виноградский в 1890-х годах. Они — хемолитоавтотрофы: энергию получают, окисляя аммоний или нитрит, а углерод берут из CO₂, как растения. Энергии такая «еда» даёт мало, поэтому растут они медленно и чувствительны к холоду, кислотности и нехватке кислорода.</p>
+                <p>После пересадки в свежий торфяной грунт этих бактерий почти нет, и аммоний какое-то время не превращается в нитрат. Отчасти поэтому в первые недели лучше работают удобрения с нитратным азотом.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Smil V. <i>Enriching the Earth: Fritz Haber, Carl Bosch, and the Transformation of World Food Production</i>. MIT Press, 2001.</li>
+                <li>Galloway J. N. et al. The nitrogen cascade. <i>BioScience</i>, 2003.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1702,14 +2141,21 @@
           </table>
         </div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Почти весь азот удобрений получают из воздуха процессом Габера — Боша. По оценкам, около половины азота в теле современного человека прошло через такие заводы.</p>
+          <a class="sci-note-link" href="#deep-azot">Глубже: Круговорот азота <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-oksidy" data-kind="chem" data-short="Оксиды на упаковке">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Цифры на упаковке: оксиды вместо элементов</span><span class="deep-sub">Почему в «16-16-16» только 7&nbsp;% фосфора</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1722,6 +2168,21 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="oxide" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему удобрение слёживается</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>У каждой соли есть <b>критическая относительная влажность</b>: если воздух влажнее, кристаллы тянут из него воду и расплываются. При 30&nbsp;°C для аммиачной селитры это около 59&nbsp;%, для мочевины — около 73&nbsp;%, для хлорида калия — 84&nbsp;%, а для кальциевой селитры — всего около 47&nbsp;%.</p>
+                <p>Смеси коварнее чистых солей. У смеси мочевины с аммиачной селитрой критическая влажность падает примерно до 18&nbsp;%, то есть она мокнет почти в любой комнате. Поэтому эти два удобрения не смешивают впрок, а открытую пачку кальциевой селитры держат плотно закрытой.</p>
+                <p>Кристаллы, которые намокли и снова высохли, срастаются мостиками — так появляются каменные комки. Состав от этого не меняется: комок можно раскрошить или просто дольше растворять.</p>
+                <div class="eq"><span class="eq-label">Условие слёживания</span><p>влажность воздуха &gt; КОВ соли → соль впитывает воду</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>IFDC, UNIDO. <i>Fertilizer Manual</i>. 3rd ed. Kluwer Academic, 1998.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1774,11 +2235,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-ec" data-kind="phys" data-short="EC и ppm">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">EC и ppm: как измеряют соли</span><span class="deep-sub">Электропроводность раствора и шкалы TDS-метров</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1791,6 +2252,23 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="ec" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Эстафета протонов</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Не все ионы одинаково подвижны. Проводимость зависит от заряда иона и от того, как быстро он движется в воде. Калий и нитрат бегут примерно одинаково, а ион водорода — почти в пять раз быстрее: он не плывёт сам, а передаётся по цепочке молекул воды, как эстафетная палочка. Этот механизм предложил Теодор фон Гроттгус ещё в 1806 году.</p>
+                <p>В крепких растворах ионы мешают друг другу, и проводимость растёт медленнее концентрации. Фридрих Кольрауш в XIX веке вывел для разбавленных растворов закон квадратного корня. Для гидропоники вывод простой: удвоив дозу удобрения, вы получите EC чуть меньше двойной.</p>
+                <p>Удобное правило из почвоведения: сумма катионов в миллиэквивалентах на литр примерно в 10 раз больше EC в мС/см. Раствор с EC 1,5 несёт около 15&nbsp;мг-экв катионов на литр — калия, кальция, магния и аммония вместе.</p>
+                <div class="eq"><span class="eq-label">Закон Кольрауша</span><p>Λ = Λ<sub>0</sub> − K·√c</p></div>
+                <div class="eq"><span class="eq-label">Правило для растворов</span><p>катионы, мг-экв/л ≈ 10 × EC, мС/см</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Kohlrausch F., Holborn L. <i>Das Leitvermögen der Elektrolyte</i>. Teubner, 1898.</li>
+                <li>Agmon N. The Grotthuss mechanism. <i>Chemical Physics Letters</i>, 1995.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1829,14 +2307,21 @@
           </ul>
         </article>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Первый опыт гидропоники описал англичанин Джон Вудворд в 1699 году: он растил мяту в воде из разных источников и сравнивал прирост.</p>
+          <a class="sci-note-link" href="#deep-kislorod">Глубже: Кислород и хелаты <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-kislorod" data-kind="phys" data-short="Кислород и хелаты">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Кислород в растворе и хелаты</span><span class="deep-sub">Почему тёплая вода душит корни</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1855,6 +2340,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="o2" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Закон Генри в цифрах</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Концентрация газа в воде пропорциональна его парциальному давлению над водой. Кислорода в воздухе 21&nbsp;%, и при 20&nbsp;°C литр пресной воды держит около 9&nbsp;мг O₂. В тёплой воде константа растворимости меньше, а в солёной — ещё меньше: питательный раствор держит чуть меньше кислорода, чем чистая вода.</p>
+                <p>Аэратор не «накачивает» воду кислородом сверх нормы: он лишь быстрее восполняет то, что съели корни и микробы, и не даёт образоваться застойным зонам.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Morard P., Silvestre J. Plant injury due to oxygen deficiency in the root environment of soilless culture: a review. <i>Plant and Soil</i>, 1996.</li>
+                <li>Lucena J. J. Fe chelates for remediation of Fe chlorosis in strategy I plants. <i>Journal of Plant Nutrition</i>, 2003.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -1872,11 +2371,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-mify-himiya" data-kind="chem" data-short="Химия мифов">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Химия народных подкормок</span><span class="deep-sub">Что на самом деле происходит со скорлупой, золой и дрожжами</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -1890,6 +2389,21 @@
                 <div class="eq"><span class="eq-label">Кислота растворяет скорлупу</span><p>CaCO<sub>3</sub> + 2H<sup>+</sup> → Ca<sup>2+</sup> + CO<sub>2</sub>↑ + H<sub>2</sub>O</p></div>
                 <div class="eq"><span class="eq-label">Зола и аммоний</span><p>NH<sub>4</sub><sup>+</sup> + OH<sup>−</sup> → NH<sub>3</sub>↑ + H<sub>2</sub>O</p></div>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Буфер: почему грунт сопротивляется</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Один и тот же стакан золы по-разному сдвинет pH торфа и суглинка. Всё решает <b>буферная ёмкость</b> — запас веществ, которые связывают лишние ионы водорода или гидроксида. В грунте это прежде всего органическое вещество и глина: их поверхность покрыта отрицательными зарядами, на которых «сидят» катионы.</p>
+                <p>Кислотность грунта бывает двух видов. Активная — ионы водорода в почвенном растворе, её показывает pH-метр. Обменная — ионы водорода и алюминия, прилипшие к частицам, и её обычно в сотни и тысячи раз больше. Поэтому известь действует медленно: сдвиг pH появится только после того, как она выбьет из частиц этот запас.</p>
+                <p>В бедном буфером субстрате — кокосе, перлите, песке — щепоть золы поднимает pH на единицу-другую. В чернозёме та же щепоть почти незаметна. Поэтому «народные» раскислители опаснее всего именно в горшках с лёгкими смесями.</p>
+                <div class="eq"><span class="eq-label">Уравнение Хендерсона — Хассельбаха</span><p>pH = pK<sub>a</sub> + lg([A<sup>−</sup>] / [HA])</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Brady N. C., Weil R. R. <i>The Nature and Properties of Soils</i>. 15th ed. Pearson, 2017.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -2001,14 +2515,21 @@
           <li><b>16</b><span>для большого горшка или грядки</span></li>
         </ol>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Ауксин «нашёл» ещё Чарльз Дарвин с сыном: в 1880 году они заметили, что проростки гнутся к свету, только если освещена сама верхушка.</p>
+          <a class="sci-note-link" href="#deep-auksin">Глубже: Апикальное доминирование <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-auksin" data-kind="bio" data-short="Апикальное доминирование">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Химия прищипывания</span><span class="deep-sub">Ауксин, цитокинины и сахарный сигнал</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2023,6 +2544,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="auxin" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Опыт Тиманна и Скуга</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>В 1933 году Кеннет Тиманн и Фольке Скуг срезали верхушку у проростков бобов и клали на срез кусочек агара, пропитанного ауксином. Боковые почки оставались спящими, будто верхушка на месте. Так было доказано, что тормозит почки именно вещество, идущее сверху.</p>
+                <p>Позже выяснилось, что ауксин течёт по «каналам» из клеток с белками PIN и что почка просыпается, когда может проложить собственный канал оттока ауксина в стебель. Верхушка, занимая стебель своим потоком, не даёт ей этого сделать.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Thimann K. V., Skoog F. Studies on the growth hormone of plants. <i>PNAS</i>, 1933.</li>
+                <li>Mason M. G. et al. Sugar demand, not auxin, is the initial regulator of apical dominance. <i>PNAS</i>, 2014.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2054,11 +2589,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-2n" data-kind="bio" data-short="Геометрия куста">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Геометрия куста: 2ⁿ верхушек</span><span class="deep-sub">Перекрёстные пары листьев и самозатенение</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2071,6 +2606,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="branch" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Где появится следующий лист</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Положение листьев задаёт сама верхушка. На поверхности меристемы ауксин собирается в точки максимума, и из них вырастают зачатки листьев. Новый максимум появляется подальше от уже существующих, потому что старые зачатки откачивают ауксин из своего окружения.</p>
+                <p>У базилика и других яснотковых так получаются пары листьев, повёрнутые на 90°. У многих других растений тот же механизм даёт спираль с углом около 137,5° — «золотым углом», который видно в семечках подсолнуха.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Reinhardt D. et al. Regulation of phyllotaxis by polar auxin transport. <i>Nature</i>, 2003.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2102,14 +2650,21 @@
         <svg class="ico"><use href="#i-scissors"/></svg>
         <p><b>Кустовые сорта</b> вроде греческого и пистоу почти не требуют прищипывания. Просто подстригайте их по контуру раз в 1–2 недели — получится ровный зелёный шар.</p>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Цветок базилика двугубый, как у всех яснотковых: верхняя губа из четырёх сросшихся лепестков, нижняя — из одного.</p>
+          <a class="sci-note-link" href="#deep-florigen">Глубже: Флориген <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-florigen" data-kind="bio" data-short="Флориген">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Как растение решает цвести</span><span class="deep-sub">Флориген, меристема и перераспределение ресурсов</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2121,6 +2676,19 @@
               <aside class="deep-aside">
                 <p class="hand margin-note">флориген искали 70 лет: гипотезу выдвинул Михаил Чайлахян в 1936 году, белок FT нашли только в 2000-х</p>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Как искали флориген</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>В 1936 году Михаил Чайлахян прививал растения в разных условиях освещения и увидел, что сигнал к цветению передаётся от листьев к верхушке через прививку. Он назвал гипотетическое вещество флоригеном. Семьдесят лет его не могли найти, пока в 2005–2007 годах несколько групп не показали, что роль флоригена играет белок FT, который путешествует по флоэме.</p>
+                <p>Белок FT работает не только в цветении: родственные ему белки у картофеля запускают образование клубней, у лука — луковиц.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Corbesier L. et al. <i>Science</i>, 2007.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -2172,14 +2740,21 @@
           </div>
         </aside>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Посмотрите на лист базилика против света через лупу: железки с маслом видны как крошечные золотистые точки.</p>
+          <a class="sci-note-link" href="#deep-sutki">Глубже: Суточный ритм аромата <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-sutki" data-kind="taste" data-short="Суточный ритм аромата">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-nose"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · вкус</span><span class="deep-title">Когда в листе больше всего аромата</span><span class="deep-sub">Железки-хранилища, испарение и утренний сбор</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2194,6 +2769,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="diurnal" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Испарение по Клаузиусу — Клапейрону</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Давление насыщенного пара вещества растёт с температурой экспоненциально. Для линалоола с температурой кипения 198&nbsp;°C нагрев листа с 20 до 28&nbsp;°C ускоряет испарение примерно в 1,5 раза, а до 35&nbsp;°C — больше чем вдвое.</p>
+                <div class="eq"><span class="eq-label">Клаузиус — Клапейрон</span><p>ln(P₂/P₁) = (ΔH<sub>исп</sub>/R) · (1/T₁ − 1/T₂)</p></div>
+                <p>Лёгкие молекулы вроде цинеола и оцимена улетают ещё быстрее, поэтому к вечеру жаркого дня в запахе куста больше тяжёлых, гвоздичных нот.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Gang D. R. et al. An investigation of the storage and biosynthesis of phenylpropenes in sweet basil. <i>Plant Physiology</i>, 2001.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2210,14 +2799,21 @@
         <article class="card store-card"><h4>Масло с базиликом</h4><span class="term">4–5 дней</span><p>Только в холодильнике или сразу в морозилку. Свежая зелень в масле без доступа воздуха — риск ботулизма.</p></article>
         <article class="card store-card"><h4>Песто</h4><span class="term">неделя / 6 мес</span><p>В холодильнике под слоем масла — до недели. Для заморозки готовьте без сыра и чеснока, их добавляйте после.</p></article>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Слово «песто» — от итальянского <i>pestare</i>, «толочь». В Генуе его по-прежнему делают в мраморной ступке.</p>
+          <a class="sci-note-link" href="#deep-pesto">Глубже: Химия песто <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-holod" data-kind="chem" data-short="Холод и потемнение">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Холод, лёд и потемнение</span><span class="deep-sub">Холодовое повреждение, ферменты и заморозка</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2231,99 +2827,40 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="storage" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Какие мембраны боятся холода</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Мембрана — двойной слой липидов. Если в их жирнокислотных хвостах много двойных связей, хвосты изогнуты, плотно не упаковываются, и мембрана остаётся жидкой на холоде. У холодостойких растений таких «изломанных» липидов больше.</p>
+                <p>В 1980-х годах японский биохимик Норио Мурата показал, что чувствительные к холоду растения содержат больше насыщенных молекул фосфатидилглицерина. Эти молекулы переходят в гель при температуре выше нуля, и мембраны тропических растений «застывают» уже около +10&nbsp;°C.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Lange D. D., Cameron A. C. Postharvest shelf life of sweet basil. <i>HortScience</i>, 1994.</li>
+                <li>Murata N. Molecular species composition of phosphatidylglycerols from chilling-sensitive and chilling-resistant plants. <i>Plant and Cell Physiology</i>, 1983.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
     </div>
 
     <div class="panel" data-panel id="urozhay-recepty" data-title="Рецепты">
-      <article class="recipe">
-        <h3>Песто по-генуэзски</h3>
-        <p class="hand">классика из Лигурии, на 4 порции пасты</p>
-        <div class="recipe-grid">
-          <ul class="ingredients">
-            <li><span>Листья генуэзского базилика</span><span>50 г</span></li>
-            <li><span>Оливковое масло extra virgin</span><span>70–100 мл</span></li>
-            <li><span>Пармезан, тёртый</span><span>40–50 г</span></li>
-            <li><span>Пекорино, тёртый</span><span>15–20 г</span></li>
-            <li><span>Кедровые орехи</span><span>15 г</span></li>
-            <li><span>Чеснок</span><span>1–2 зубчика</span></li>
-            <li><span>Крупная соль</span><span>щепотка</span></li>
-          </ul>
-          <ol>
-            <li>В ступке разотрите чеснок с солью, затем добавьте орехи.</li>
-            <li>Добавляйте листья понемногу и растирайте пестиком круговыми движениями, не отбивая.</li>
-            <li>Вмешайте оба сыра.</li>
-            <li>Тонкой струйкой влейте масло до густоты соуса.</li>
-            <li>В блендере работайте импульсами с охлаждённой чашей, иначе базилик нагреется и потемнеет.</li>
-          </ol>
-        </div>
-      </article>
-      <div class="recipes-more">
-        <article class="recipe">
-          <h3>Лимонад с базиликом</h3>
-          <p class="hand">на 1 литр, с лимонным или генуэзским</p>
-          <div class="recipe-grid">
-            <ul class="ingredients">
-              <li><span>Листья базилика</span><span>15–20 г</span></li>
-              <li><span>Лимоны</span><span>2 шт.</span></li>
-              <li><span>Сахар или мёд</span><span>60–80 г</span></li>
-              <li><span>Вода (можно газированную)</span><span>1 л</span></li>
-              <li><span>Лёд</span><span>по вкусу</span></li>
-            </ul>
-            <ol>
-              <li>Растворите сахар в 100&nbsp;мл горячей воды.</li>
-              <li>Разомните листья в сиропе толкушкой.</li>
-              <li>Добавьте сок лимонов и остальную воду, процедите.</li>
-              <li>Охладите 20–30 минут и подавайте со льдом. С фиолетовым базиликом лимонад станет розовым.</li>
-            </ol>
-          </div>
-        </article>
-        <article class="recipe">
-          <h3>Базиликовое масло</h3>
-          <p class="hand">ярко-зелёное, для супов и заправок</p>
-          <div class="recipe-grid">
-            <ul class="ingredients">
-              <li><span>Листья базилика</span><span>50 г</span></li>
-              <li><span>Оливковое или подсолнечное масло</span><span>200 мл</span></li>
-              <li><span>Соль</span><span>щепотка</span></li>
-            </ul>
-            <ol>
-              <li>Бланшируйте листья 5 секунд и сразу опустите в ледяную воду.</li>
-              <li>Отожмите досуха и пробейте блендером с маслом.</li>
-              <li>Процедите через марлю или кофейный фильтр.</li>
-              <li>Храните в холодильнике до 5 дней или заморозьте порциями.</li>
-            </ol>
-          </div>
-        </article>
-        <article class="recipe">
-          <h3>Капрезе</h3>
-          <p class="hand">когда базилика много, а времени мало</p>
-          <div class="recipe-grid">
-            <ul class="ingredients">
-              <li><span>Спелые томаты</span><span>2–3 шт.</span></li>
-              <li><span>Моцарелла</span><span>125 г</span></li>
-              <li><span>Листья базилика</span><span>10–15 шт.</span></li>
-              <li><span>Оливковое масло</span><span>2 ст. л.</span></li>
-              <li><span>Соль, перец</span><span>по вкусу</span></li>
-            </ul>
-            <ol>
-              <li>Нарежьте томаты и моцареллу кружками одной толщины.</li>
-              <li>Выложите внахлёст, чередуя.</li>
-              <li>Листья рвите руками прямо перед подачей — так края меньше темнеют.</li>
-              <li>Посолите, поперчите и полейте маслом.</li>
-            </ol>
-          </div>
-        </article>
+      <div class="rb-intro">
+        <p class="eyebrow">Книга рецептов</p>
+        <h3>От ступки до морозилки</h3>
+        <p>Соусы, закуски, горячее, напитки, десерты и заготовки — от лигурийского песто до тайского пад кра пао и кавказского шербета. У каждого рецепта есть строка «Наука рецепта»: почему он работает и где об этом подробнее.</p>
       </div>
+      <div class="recipe-book" id="recipe-book"></div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-pesto" data-kind="taste" data-short="Химия песто">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-nose"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · вкус</span><span class="deep-title">Химия песто</span><span class="deep-sub">Почему песто темнеет и как сохранить зелёный цвет</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">лаборатория</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2338,6 +2875,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="pesto" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Кинетика потемнения</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Скорость ферментативного потемнения, как и любой реакции, подчиняется уравнению Аррениуса. Для типичных коэффициентов Q₁₀&nbsp;≈&nbsp;2–3 перенос песто из кухни (22&nbsp;°C) в холодильник (4&nbsp;°C) замедляет потемнение примерно в 3–7 раз.</p>
+                <p>Кислота действует двояко. Полифенолоксидаза активнее всего в слабокислой и нейтральной среде, и лимонный сок её тормозит. Но в кислой среде хлорофилл быстрее теряет магний и оливкует. Поэтому аскорбиновая кислота в малом количестве лучше лимонного сока: она восстанавливает хиноны обратно и почти не меняет pH.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Mayer A. M. Polyphenol oxidases in plants and fungi: going places? A review. <i>Phytochemistry</i>, 2006.</li>
+                <li>Schwartz S. J., von Elbe J. H. Kinetics of chlorophyll degradation to pyropheophytin in vegetables. <i>Journal of Food Science</i>, 1983.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2393,14 +2944,21 @@
         </article>
       </div>
       <div class="lab-tool lab-wide" data-lab="pathway" data-kind="chem"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="taste">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Если зажать нос, базилик, мята и укроп на вкус почти не различаются: язык чувствует лишь горечь и свежесть.</p>
+          <a class="sci-note-link" href="#deep-nos">Глубже: Как работает нос <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-geksenal" data-kind="chem" data-short="Запах разреза">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Почему срезанный базилик пахнет травой</span><span class="deep-sub">Липоксигеназа и альдегиды «зелёного листа»</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2411,6 +2969,22 @@
               <aside class="deep-aside">
                 <div class="eq"><span class="eq-label">Конвейер «зелёного запаха»</span><p>линоленовая кислота <span class="eq-enz">ЛОГ</span>→ гидропероксид <span class="eq-enz">ГПЛ</span>→ (Z)-3-гексеналь → (E)-2-гексеналь</p></div>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Альдегид, спирт, эфир</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Конвейер на альдегидах не останавливается. Фермент алкогольдегидрогеназа восстанавливает их в спирты: из (Z)-3-гексеналя получается (Z)-3-гексенол — «листовой спирт» с запахом свежей травы. Его добавляют в духи и пищевые ароматизаторы. Затем часть спирта превращается в сложный эфир — (Z)-3-гексенилацетат с более мягкой, фруктовой зеленью.</p>
+                <p>Поэтому запах разреза меняется за минуты: резкий альдегидный всплеск, затем травяной спирт, затем фруктовые эфиры. Ту же смену вы чувствуете на свежескошенном газоне.</p>
+                <p>Нос чувствует (Z)-3-гексеналь в ничтожных количествах — долях микрограмма на литр воды. Поэтому даже несколько надрезанных листьев меняют запах целой миски салата.</p>
+                <div class="eq"><span class="eq-label">Путь «зелёного» запаха</span><p>линоленовая кислота <span class="eq-enz">LOX</span>→ гидропероксид <span class="eq-enz">HPL</span>→ (Z)-3-гексеналь <span class="eq-enz">ADH</span>→ (Z)-3-гексенол</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Hatanaka A. The biogeneration of green odour by green leaves. <i>Phytochemistry</i>, 1993.</li>
+                <li>Matsui K. Green leaf volatiles: hydroperoxide lyase pathway of oxylipin metabolism. <i>Current Opinion in Plant Biology</i>, 2006.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -2423,11 +2997,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-nos" data-kind="bio" data-short="Как работает нос">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Как нос различает молекулы</span><span class="deep-sub">400 рецепторов, комбинаторный код и зеркальные двойники</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2441,6 +3015,20 @@
                 <div class="num-note"><b>5 вкусов</b><span>различает язык: сладкий, солёный, кислый, горький и умами — остальное делает нос</span></div>
               </aside>
             </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Нобелевская премия за обоняние</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>В 1991 году Линда Бак и Ричард Аксель нашли семейство генов обонятельных рецепторов — самое большое семейство генов у млекопитающих. В 2004 году за это открытие они получили Нобелевскую премию. Рецепторы относятся к белкам, связанным с G-белками: молекула запаха меняет их форму, и в нейроне запускается электрический сигнал.</p>
+                <p>Каждый обонятельный нейрон несёт рецептор одного типа, а все нейроны одного типа сходятся в один «клубочек» обонятельной луковицы. Мозг получает карту активированных клубочков — это и есть код запаха.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Buck L., Axel R. A novel multigene family may encode odorant receptors. <i>Cell</i>, 1991.</li>
+                <li>Malnic B. et al. Combinatorial receptor codes for odors. <i>Cell</i>, 1999.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2452,11 +3040,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-himotip-sreda" data-kind="bio" data-short="Химотип и среда">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Почему у одного сорта разный аромат</span><span class="deep-sub">Свет, сезон и стадия меняют пропорции молекул</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2471,6 +3059,22 @@
               <aside class="deep-aside">
                 <p class="hand margin-note">один сорт — разные урожаи: июльский генуэзский пахнет гвоздичнее майского</p>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Как молекулы аромата считают</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Состав эфирного масла определяют газовой хроматографией. Каплю масла испаряют и прогоняют током гелия через тонкую колонку длиной 30–60&nbsp;м. Молекулы по-разному «липнут» к её покрытию и выходят в разное время: лёгкий цинеол — раньше, тяжёлый эвгенол — позже.</p>
+                <p>На выходе стоит масс-спектрометр. Он разбивает каждую молекулу на осколки, и их узор служит отпечатком пальца: сравнивая его с библиотекой, химик узнаёт вещество, а по площади пика — его долю.</p>
+                <p>Отсюда оговорка про проценты: обычно это доли площади пиков, а не массы. Разные вещества дают разный сигнал, а способ получения масла тоже меняет картину: при долгой перегонке с паром часть молекул разрушается или не успевает отогнаться.</p>
+                <div class="eq"><span class="eq-label">Индекс удерживания Ковача</span><p>I = 100·[n + (lg t<sub>x</sub> − lg t<sub>n</sub>) / (lg t<sub>n+1</sub> − lg t<sub>n</sub>)]</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Grayer R. J. et al. Infraspecific taxonomy and essential oil chemotypes in sweet basil, <i>Ocimum basilicum</i>. <i>Phytochemistry</i>, 1996.</li>
+                <li>Adams R. P. <i>Identification of Essential Oil Components by Gas Chromatography/Mass Spectrometry</i>. 4th ed. Allured, 2007.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -2504,11 +3108,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-letuchest" data-kind="taste" data-short="Летучесть">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-nose"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · вкус</span><span class="deep-title">Почему базилик кладут в конце</span><span class="deep-sub">Давление пара, правило Трутона и «верхние ноты»</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2521,6 +3125,19 @@
                 <div class="eq"><span class="eq-label">Правило Трутона</span><p>ΔH<sub>исп</sub> ≈ 88 · T<sub>кип</sub>&nbsp;Дж/моль</p></div>
                 <div class="eq"><span class="eq-label">Давление пара при T</span><p>ln(P / 1&nbsp;атм) ≈ 10,6 · (1 − T<sub>кип</sub> / T)</p></div>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Масло или вода: коэффициент logP</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Насколько молекула предпочитает жир воде, показывает логарифм коэффициента распределения октанол/вода, logP. Для линалоола он около 3, для эстрагола — около 3,5, для эвгенола — около 2,3. Значение 3 означает, что в жирной фазе молекул примерно в тысячу раз больше, чем в водной.</p>
+                <p>Поэтому в сливочном соусе или масле аромат базилика держится дольше: молекулы сидят в жире и медленно выходят в воздух. А в бульоне они быстро поднимаются к поверхности и улетают с паром.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Trouton F. On molecular latent heat. <i>Philosophical Magazine</i>, 1884.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -2544,11 +3161,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-pary" data-kind="taste" data-short="Гипотеза пищевых пар">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-nose"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · вкус</span><span class="deep-title">Работает ли правило «общих молекул»</span><span class="deep-sub">Сеть ароматов и разные кухни мира</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2559,6 +3176,19 @@
               <aside class="deep-aside">
                 <div class="num-note"><b>56&nbsp;498</b><span>рецептов из разных кухонь мира в исследовании «сети ароматов» 2011 года</span></div>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Кухня как сеть</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Исследователи построили сеть, где узлы — продукты, а связи — общие ароматические вещества. Толщина связи — число общих молекул. В такой сети базилик тесно связан с томатом, мятой, цитрусами и кориандром.</p>
+                <p>Сравнивая рецепты с этой сетью, авторы и увидели разницу кухонь. Но общие молекулы не учитывают концентрации и пороги восприятия: одна и та же молекула может быть главной нотой в одном продукте и неощутимой примесью в другом.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Ahn Y.-Y., Ahnert S. E., Bagrow J. P., Barabási A.-L. Flavor network and the principles of food pairing. <i>Scientific Reports</i>, 2011.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -2609,14 +3239,21 @@
           </div>
         </aside>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Корни из стебля легко отращивают многие яснотковые: мята, мелисса, розмарин, шалфей. Это семейное умение.</p>
+          <a class="sci-note-link" href="#deep-korni">Глубже: Придаточные корни <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-korni" data-kind="bio" data-short="Придаточные корни">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Как стебель отращивает корни</span><span class="deep-sub">Придаточные корни, ауксин и вода</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2630,6 +3267,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="roots" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Откуда берутся клетки корня</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Придаточные корни закладываются из клеток, которые сохранили способность делиться, — прежде всего вокруг проводящих пучков стебля. Высокий уровень ауксина у среза включает в них гены-«переключатели» судьбы клетки, и они образуют зачаток корня с собственной меристемой.</p>
+                <p>Молодые побеги укореняются легче старых: с возрастом стебель одревесневает, а чувствительность тканей к ауксину падает. Поэтому для черенков берут мягкие зелёные верхушки.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Bellini C., Pacurar D. I., Perrone I. Adventitious roots and lateral roots: similarities and differences. <i>Annual Review of Plant Biology</i>, 2014.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2658,14 +3308,21 @@
           </div>
         </aside>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>«Семена» базилика — на самом деле плодики-орешки: плод распадается на четыре эремы, как у всех яснотковых.</p>
+          <a class="sci-note-link" href="#deep-genetika">Глубже: Генетика семян <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-genetika" data-kind="bio" data-short="Генетика семян">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Генетика своих семян</span><span class="deep-sub">Перекрёстное опыление, F1 и расщепление признаков</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2677,14 +3334,28 @@
                 <div class="num-note"><b>2n = 48</b><span>число хромосом у большинства сортов базилика душистого</span></div>
               </aside>
             </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Сложная генетика тетраплоида</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Базилик душистый, по-видимому, возник как гибрид двух предковых видов с удвоением хромосом. Поэтому многие его гены представлены не парой, а четырьмя копиями. Для признака, который определяет один ген с четырьмя копиями, во втором поколении возможно больше вариантов, чем у гороха Менделя, а доля «чистых» растений меньше.</p>
+                <p>Практический вывод для семеновода: чтобы закрепить понравившееся растение, отбор приходится вести несколько поколений подряд.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Paton A. J., Harley R. M., Harley M. M. Ocimum: an overview of classification and relationships. In: <i>Basil: The Genus Ocimum</i>. Harwood Academic, 1999.</li>
+                <li>Carović-Stanko K. et al. Genetic relations among basil taxa (<i>Ocimum</i> L.) based on molecular markers, nuclear DNA content, and chromosome number. <i>Plant Systematics and Evolution</i>, 2010.</li>
+              </ol>
+            </div>
           </div>
         </details>
         <details class="deep" id="deep-starenie-semyan" data-kind="chem" data-short="Старение семян">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Почему семена стареют</span><span class="deep-sub">Правила Харрингтона: холод и сухость продлевают жизнь</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2697,6 +3368,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="seedlife" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Стекло внутри семени</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>В сухом семени цитоплазма переходит в <b>стеклообразное состояние</b>: вязкость так высока, что молекулы почти не могут двигаться, и реакции старения идут крайне медленно. Чем ниже температура и влажность, тем глубже семя в «стекле».</p>
+                <p>На этом держатся семенные банки. Во Всемирном семенохранилище на Шпицбергене образцы хранят при −18&nbsp;°C, высушенными до низкой влажности. Для многих культур такие условия дают десятки, а то и сотни лет жизни.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Harrington J. F. Seed storage and longevity. In: <i>Seed Biology</i>, vol. III. Academic Press, 1972.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2727,14 +3411,21 @@
         <div class="diag-groups" id="diag-groups"></div>
         <div class="pane diag-result" id="diag-result" aria-live="polite"></div>
       </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Спутники следят за здоровьем полей по тому же принципу, что и вы: здоровый лист иначе отражает свет, особенно невидимый инфракрасный.</p>
+          <a class="sci-note-link" href="#deep-pigmenty">Глубже: Язык цвета <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-pigmenty" data-kind="chem" data-short="Язык цвета">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Язык цвета листа</span><span class="deep-sub">Хлорофиллы, каротиноиды и антоцианы</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2748,6 +3439,21 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="pigment" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Красный край и спутники</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Здоровый лист сильно поглощает красный свет, а ближний инфракрасный (около 800&nbsp;нм) почти полностью отражает — его рассеивает губчатая ткань с воздушными полостями. Резкий скачок отражения около 700&nbsp;нм называют «красным краем».</p>
+                <p>Спутники оценивают здоровье полей по индексу NDVI, который сравнивает отражение в ближнем инфракрасном и красном. Больное или обезвоженное растение отражает меньше инфракрасного, и индекс падает — иногда раньше, чем симптомы заметит глаз.</p>
+                <div class="eq"><span class="eq-label">Индекс растительности</span><p>NDVI = (NIR − Red) / (NIR + Red)</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Lichtenthaler H. K. Chlorophylls and carotenoids: pigments of photosynthetic biomembranes. <i>Methods in Enzymology</i>, 1987.</li>
+                <li>Rouse J. W. et al. Monitoring vegetation systems in the Great Plains with ERTS. NASA, 1974.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2755,14 +3461,21 @@
 
     <div class="panel" data-panel id="problemy-bolezni" data-title="Болезни">
       <div class="ref-grid" id="disease-grid"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Возбудителя ложной мучнистой росы базилика описали как отдельный вид только в 2009 году.</p>
+          <a class="sci-note-link" href="#deep-oomicet">Глубже: Ложная мучнистая роса <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-oomicet" data-kind="bio" data-short="Ложная мучнистая роса">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Ложная мучнистая роса — не гриб</span><span class="deep-sub">Оомицет, ночная влажность и жизненный цикл</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2776,6 +3489,20 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="dm" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Родня картофельной фитофторы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>К оомицетам относится и <i>Phytophthora infestans</i> — возбудитель фитофтороза картофеля, из-за которого в 1845–1849 годах в Ирландии случился Великий голод. У многих оомицетов, включая фитофтору, есть подвижные зооспоры с двумя жгутиками: они плавают в плёнке воды и находят устьица по химическому следу. У <i>Peronospora belbahrii</i> таких спор нет — её спорангии прорастают сразу трубкой. Но и им нужна капля воды на листе, поэтому вся эта родня так любит мокрую листву.</p>
+                <p>Возбудитель ложной мучнистой росы базилика как отдельный вид, <i>Peronospora belbahrii</i>, описали только в 2009 году. До этого его путали с похожими паразитами других яснотковых.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Cohen Y. et al. Light suppresses sporulation and epidemics of <i>Peronospora belbahrii</i>. <i>PLoS ONE</i>, 2013.</li>
+                <li>Thines M. et al. <i>Mycological Research</i>, 2009.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2783,14 +3510,21 @@
 
     <div class="panel" data-panel id="problemy-vrediteli" data-title="Вредители">
       <div class="ref-grid" id="pest-grid"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Взрослая божья коровка съедает десятки тлей в день, а её личинка — ещё больше. Это самый дешёвый «инсектицид».</p>
+          <a class="sci-note-link" href="#deep-tlya">Глубже: Экспонента тли <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-tlya" data-kind="bio" data-short="Экспонента тли">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Экспонента тли</span><span class="deep-sub">Почему пара тлей за три недели становится колонией</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2803,6 +3537,19 @@
               </aside>
             </div>
             <div class="lab-tool" data-lab="aphid" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Крылатые и бескрылые</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Пока еды много, тля рожает бескрылых самок: им не нужно тратить ресурсы на крылья и мышцы. Когда на растении становится тесно или оно стареет, появляются крылатые особи и улетают искать новый дом. Осенью у многих видов рождаются самцы, и откладываются зимующие яйца.</p>
+                <p>Экологи называют такой цикл циклическим партеногенезом: он сочетает скорость бесполого размножения с разнообразием, которое даёт половое.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Dixon A. F. G. <i>Aphid Ecology</i>. 2nd ed. Chapman &amp; Hall, 1998.</li>
+              </ol>
+            </div>
           </div>
         </details>
       </div>
@@ -2835,11 +3582,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-oborona" data-kind="chem" data-short="Химическая оборона">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Химическая оборона базилика</span><span class="deep-sub">Эфирные масла, жасмонаты и зов на помощь</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
@@ -2851,6 +3598,23 @@
               <aside class="deep-aside">
                 <div class="num-note"><b>C<sub>12</sub>H<sub>18</sub>O<sub>3</sub></b><span>жасмоновая кислота — гормон ответа на поедание</span></div>
               </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Рост или оборона</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Защита стоит дорого. Углерод и азот, ушедшие на эфирное масло и ингибиторы, не превратятся в новые листья. Поэтому у растений есть внутренний переключатель: жасмонат запускает оборону и одновременно тормозит рост, а гиббереллины, гормоны роста, делают наоборот.</p>
+                <p>Сердце переключателя — белки-репрессоры JAZ и DELLA. Пока жасмоната нет, JAZ держат гены защиты выключенными, а сигнал тревоги отправляет их на разрушение. DELLA сдерживают рост и заодно связывают JAZ, так что две системы перетягивают канат.</p>
+                <p>Отсюда садовое наблюдение: базилик, который пережил нашествие тли или сильную стрижку, часто пахнет сильнее, но растёт медленнее. Умеренный стресс делает аромат ярче, если не жалеть урожай.</p>
+                <div class="eq"><span class="eq-label">Сигнальная цепочка</span><p>повреждение → жасмонат → распад JAZ → гены защиты</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Li Z. et al. Chemical changes and overexpressed genes in sweet basil upon methyl jasmonate treatment. <i>Journal of Agricultural and Food Chemistry</i>, 2007.</li>
+                <li>Huot B. et al. Growth–defense tradeoffs in plants: a balancing act to optimize fitness. <i>Molecular Plant</i>, 2014.</li>
+                <li>Yang D.-L. et al. Plant hormone jasmonate prioritizes defense over growth by interfering with gibberellin signaling cascade. <i>PNAS</i>, 2012.</li>
+              </ol>
             </div>
           </div>
         </details>
@@ -2899,11 +3663,11 @@
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
         <details class="deep" id="deep-cifry" data-kind="phys" data-short="Базилик в цифрах">
-          <summary>
+          <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
             <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Базилик в физических величинах</span><span class="deep-sub">Все ключевые числа гида в одной таблице</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-tag">таблица</span><span class="deep-time"></span><span class="deep-plus"></span></span>
-          </summary>
+          </span></summary>
           <div class="deep-body">
             <div class="table-scroll lab-table">
               <table class="mini-table">
@@ -2924,6 +3688,22 @@
                   <tr><td>Хранение семян</td><td class="num">сухо и прохладно</td><td><a href="#deep-starenie-semyan">Старение семян</a></td></tr>
                 </tbody>
               </table>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Как переводить единицы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Люксы и микромоли меряют разное. Люкс взвешивает свет по чувствительности глаза с пиком в зелёном, а микромоль просто считает фотоны от 400 до 700&nbsp;нм. Поэтому коэффициент перевода зависит от спектра: для солнца 1000&nbsp;лк ≈ 18,5&nbsp;мкмоль/м²·с, для натриевой лампы — около 12, для белых светодиодов — обычно 13–16.</p>
+                <p>Моль фотонов — это 6,02·10<sup>23</sup> частиц, как моль любого вещества. Дневная сумма 15&nbsp;моль/м² значит, что на квадратный метр листьев за день падает около 9·10<sup>24</sup> фотонов. На одну молекулу CO₂ лист тратит минимум 8 фотонов, а в обычном воздухе — ближе к 15–20.</p>
+                <p>Остальные величины гида тоже «переводятся» друг в друга: VPD связывает температуру и влажность, EC — дозу удобрения и солёность, градусо-дни — погоду и календарь. Таблица выше — это общий язык, на котором растение сообщает, чего ему не хватает.</p>
+                <div class="eq"><span class="eq-label">Дневная сумма света</span><p>DLI, моль/м² = PPFD × часы × 0,0036</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Thimijan R. W., Heins R. D. <i>HortScience</i>, 1983.</li>
+                <li>Ehleringer J., Pearcy R. W. Variation in quantum yield for CO<sub>2</sub> uptake among C<sub>3</sub> and C<sub>4</sub> plants. <i>Plant Physiology</i>, 1983.</li>
+              </ol>
             </div>
           </div>
         </details>

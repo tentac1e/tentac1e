@@ -485,11 +485,115 @@ window.BasilScience = (() => {
   /* deep blocks: reading time, chapter index, open-all switch           */
   /* ------------------------------------------------------------------ */
   const KIND = { chem: ['Химия', 'hex'], phys: ['Физика', 'wave'], bio: ['Биология', 'cell'], taste: ['Вкус', 'nose'] };
-  const DEEP_KEY = 'basil-deep';
+  const DEPTH_KEY = 'basil-depth';
+  const DEPTHS = [
+    ['Практика', 'только советы, развороты свёрнуты'],
+    ['Наука', 'раскрыть все развороты «Глубже»'],
+    ['Лаборатория', 'и ещё глубже: механизмы, формулы, источники']
+  ];
   const store = {
-    get() { try { return localStorage.getItem(DEEP_KEY) === '1'; } catch (e) { return false; } },
-    set(v) { try { localStorage.setItem(DEEP_KEY, v ? '1' : '0'); } catch (e) { /* private mode */ } }
+    get() {
+      try {
+        const v = localStorage.getItem(DEPTH_KEY);
+        if (v !== null) return clamp(parseInt(v, 10) || 0, 0, 2);
+        return localStorage.getItem('basil-deep') === '1' ? 1 : 0;
+      } catch (e) { return 0; }
+    },
+    set(v) { try { localStorage.setItem(DEPTH_KEY, String(v)); } catch (e) { /* private mode */ } }
   };
+
+  /* smooth open/close that works the same in every browser */
+  const EASE = 'cubic-bezier(.22,.8,.26,1)';
+  function animateDetails(d, open) {
+    const body = Array.from(d.children).find(c => c.tagName !== 'SUMMARY');
+    if (d._anim) { d._anim.cancel(); d._anim = null; }
+    if (!body || !body.animate || reduce.matches) { d.open = open; return; }
+    body.style.overflow = 'hidden';
+    const done = () => { body.style.overflow = ''; d._anim = null; };
+    if (open) {
+      d.open = true;
+      const h = body.scrollHeight;
+      d._anim = body.animate([{ height: '0px', opacity: 0 }, { height: h + 'px', opacity: 1 }], { duration: Math.min(560, 240 + h / 8), easing: EASE });
+      d._anim.onfinish = done;
+      d._anim.oncancel = done;
+    } else {
+      const h = body.offsetHeight;
+      d._anim = body.animate([{ height: h + 'px', opacity: 1 }, { height: '0px', opacity: 0 }], { duration: Math.min(380, 200 + h / 14), easing: 'ease-in' });
+      d._anim.onfinish = () => { d.open = false; done(); };
+      d._anim.oncancel = done;
+    }
+  }
+  const ANIMATED = 'details.deep, details.deeper, details.recipe-card';
+
+  function setDepth(level, announce) {
+    level = clamp(level | 0, 0, 2);
+    const root = document.documentElement;
+    root.dataset.depth = String(level);
+    root.classList.toggle('deep-on', level > 0);
+    $$('details.deep').forEach(d => { d.open = level > 0; });
+    $$('details.deeper').forEach(d => { d.open = level > 1; });
+    const btn = $('#deep-toggle');
+    if (btn) {
+      btn.dataset.depth = String(level);
+      btn.setAttribute('aria-label', `Глубина чтения: ${DEPTHS[level][0]}`);
+      btn.setAttribute('aria-pressed', String(level > 0));
+    }
+    $$('[data-depth-pick]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.depthPick === level)));
+    $$('.depth-pop [role="menuitemradio"]').forEach(b => b.setAttribute('aria-checked', String(+b.dataset.depthPick === level)));
+    if (announce && ctx.toast) {
+      const n = $$('details.deep').length, m = $$('details.deeper').length;
+      ctx.toast(level === 0 ? 'Практика: научные развороты свёрнуты' : level === 1 ? `Наука: открыто ${n} ${plural(n, 'разворот', 'разворота', 'разворотов')}` : `Лаборатория: открыто всё, включая ${m} ${plural(m, 'раздел', 'раздела', 'разделов')} «Ещё глубже»`);
+    }
+  }
+
+  function initDepthControl() {
+    const btn = $('#deep-toggle');
+    if (btn) {
+      const pop = document.createElement('div');
+      pop.className = 'depth-pop';
+      pop.id = 'depth-pop';
+      pop.setAttribute('role', 'menu');
+      pop.setAttribute('aria-label', 'Глубина чтения');
+      pop.hidden = true;
+      pop.innerHTML = `<p class="depth-pop-h">Глубина чтения</p>` + DEPTHS.map(([name, note], i) =>
+        `<button type="button" role="menuitemradio" aria-checked="false" data-depth-pick="${i}"><span class="depth-dots" aria-hidden="true">${'<i></i>'.repeat(i + 1)}</span><span><b>${name}</b><small>${note}</small></span></button>`).join('');
+      btn.after(pop);
+      btn.setAttribute('aria-haspopup', 'menu');
+      btn.setAttribute('aria-controls', 'depth-pop');
+      const close = () => { pop.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+      const place = () => {
+        const r = btn.getBoundingClientRect();
+        pop.style.top = Math.round(r.bottom + 10) + 'px';
+        pop.style.right = Math.max(8, Math.round(window.innerWidth - r.right - 60)) + 'px';
+        pop.style.setProperty('--arrow', Math.round(window.innerWidth - r.right + r.width / 2 - parseFloat(pop.style.right)) + 'px');
+      };
+      const openPop = () => {
+        place();
+        pop.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+        const cur = $('[aria-checked="true"]', pop) || $('button', pop);
+        cur.focus();
+      };
+      btn.addEventListener('click', e => { e.stopPropagation(); if (pop.hidden) openPop(); else close(); });
+      pop.addEventListener('click', e => {
+        const b = e.target.closest('[data-depth-pick]');
+        if (!b) return;
+        const v = +b.dataset.depthPick;
+        store.set(v); setDepth(v, true); close(); btn.focus();
+      });
+      pop.addEventListener('keydown', e => {
+        const items = $$('button', pop), i = items.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); items[(i + items.length - 1) % items.length].focus(); }
+        if (e.key === 'Escape') { close(); btn.focus(); }
+      });
+      document.addEventListener('click', e => { if (!pop.hidden && !pop.contains(e.target)) close(); });
+      window.addEventListener('hashchange', close);
+      window.addEventListener('resize', () => { if (!pop.hidden) place(); });
+    }
+    $$('.depth-seg [data-depth-pick]').forEach(b => b.addEventListener('click', () => { const v = +b.dataset.depthPick; store.set(v); setDepth(v, true); }));
+    setDepth(store.get(), false);
+  }
 
   function initDeep() {
     const blocks = $$('details.deep');
@@ -500,17 +604,39 @@ window.BasilScience = (() => {
       const t = $('.deep-time', d);
       if (t) t.textContent = `≈ ${Math.max(1, Math.ceil(words / 150))} мин`;
       if (tools && !$('.deep-tag', d)) $('.deep-meta', d).insertAdjacentHTML('afterbegin', '<span class="deep-tag">интерактив</span>');
+      if ($('details.deeper', body)) $('.deep-meta', d).insertAdjacentHTML('afterbegin', '<span class="deep-tag is-deeper" title="Есть раздел «Ещё глубже»">+1 уровень</span>');
       d.addEventListener('toggle', () => { if (d.open) $$('.lab-tool', d).forEach(el => requestAnimationFrame(() => mount(el))); });
+      const foot = document.createElement('div');
+      foot.className = 'deep-foot';
+      foot.innerHTML = `<button type="button" class="deep-close"><span aria-hidden="true">↑</span> Свернуть разворот</button>`;
+      body.appendChild(foot);
+      $('.deep-close', foot).addEventListener('click', () => {
+        const top = d.getBoundingClientRect().top;
+        const offset = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64) + 70;
+        if (top < offset) window.scrollBy({ top: top - offset, behavior: 'auto' });
+        animateDetails(d, false);
+        $('summary', d).focus({ preventScroll: true });
+      });
+    });
+
+    document.addEventListener('click', e => {
+      const sm = e.target.closest('summary');
+      if (!sm) return;
+      const d = sm.parentElement;
+      if (!d || !d.matches(ANIMATED)) return;
+      e.preventDefault();
+      animateDetails(d, !d.open);
     });
 
     $$('[data-view]').forEach(view => {
       const list = $$('details.deep', view);
       const hero = $('.ch-hero-text', view);
       if (!list.length || !hero) return;
+      const deeper = $$('details.deeper', view).length;
       const nav = document.createElement('nav');
       nav.className = 'deep-index';
       nav.setAttribute('aria-label', 'Научные развороты главы');
-      nav.innerHTML = `<span class="deep-index-label">${icon('hex')}Глубже <b>${list.length}</b></span>` +
+      nav.innerHTML = `<span class="deep-index-label">${icon('hex')}Глубже <b>${list.length}${deeper ? ` · ещё глубже ${deeper}` : ''}</b></span>` +
         list.map(d => `<a href="#${d.id}" data-kind="${d.dataset.kind}">${icon(KIND[d.dataset.kind][1])}${esc(d.dataset.short)}</a>`).join('');
       hero.appendChild(nav);
     });
@@ -520,23 +646,9 @@ window.BasilScience = (() => {
       kinds.innerHTML = Object.entries(KIND).map(([k, [name, ic]]) => {
         const n = blocks.filter(d => d.dataset.kind === k).length;
         return `<li data-kind="${k}">${icon(ic)}<b>${n}</b><span>${name}</span></li>`;
-      }).join('') + `<li class="is-total">${icon('grid')}<b>${$$('.lab-tool').length}</b><span>моделей</span></li>`;
+      }).join('') + `<li class="is-total">${icon('grid')}<b>${$$('.lab-tool').length}</b><span>моделей</span></li><li class="is-total">${icon('book')}<b>${$$('details.deeper').length}</b><span>«ещё глубже»</span></li>`;
     }
-
-    const toggles = [$('#deep-toggle'), ...$$('[data-deep-toggle]')].filter(Boolean);
-    const apply = (on, announce) => {
-      document.documentElement.classList.toggle('deep-on', on);
-      blocks.forEach(d => { d.open = on; });
-      toggles.forEach(b => {
-        b.setAttribute('aria-pressed', String(on));
-        if (b.id === 'deep-toggle') b.setAttribute('aria-label', on ? 'Свернуть научные развороты' : 'Открыть все научные развороты');
-        const label = $('span', b);
-        if (label) label.textContent = on ? 'Свернуть развороты' : 'Открыть все развороты';
-      });
-      if (announce && ctx.toast) ctx.toast(on ? `Научный слой открыт: ${blocks.length} ${plural(blocks.length, 'разворот', 'разворота', 'разворотов')}` : 'Научные развороты свёрнуты');
-    };
-    toggles.forEach(b => b.addEventListener('click', () => { const on = !document.documentElement.classList.contains('deep-on'); store.set(on); apply(on, true); }));
-    if (store.get()) apply(true, false);
+    initDepthControl();
   }
 
   function initHomeMolecule() {
@@ -569,7 +681,7 @@ window.BasilScience = (() => {
 
   const api = {
     $, $$, clamp, lerp, fmt, fmt0, f1, minus, nb, esc, css, icon, sub, mix, ramp, parseColor, reduce,
-    rangeHtml, segHtml, chipsHtml, bindRange, bindPick, readHtml, head, chart, plot, tip,
+    animateDetails, rangeHtml, segHtml, chipsHtml, bindRange, bindPick, readHtml, head, chart, plot, tip,
     dayLength, h0, noonSun, decl, DOY21, CITIES, MOLS, EXTRA, FAM, CHEMO, CHEMO_COLS, PAIRS, molName, molFam, MolViewer,
     ctx: () => ctx, mount
   };
