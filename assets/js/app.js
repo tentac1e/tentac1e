@@ -204,9 +204,14 @@
       // models above the target mount lazily and push it down — land again once they settle
       if (opened) {
         const target = r.target;
+        const USER = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+        let touched = false;
+        const stop = () => { touched = true; };
+        USER.forEach(ev => window.addEventListener(ev, stop, { once: true, passive: true }));
         setTimeout(() => {
+          USER.forEach(ev => window.removeEventListener(ev, stop));
           const want = stickyOffset() + 64;
-          if (Math.abs(target.getBoundingClientRect().top - want) > 48) target.scrollIntoView({ block: 'start', behavior: smooth() });
+          if (!touched && Math.abs(target.getBoundingClientRect().top - want) > 48) target.scrollIntoView({ block: 'start', behavior: smooth() });
         }, 700);
       }
       return;
