@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Собирает сайт в один HTML-файл: стили и скрипты встраиваются в страницу.
+"""Встраивает стили и скрипты страницы в один HTML-файл.
 
-    python3 scripts/bundle.py                     # dist/gid-po-baziliku.html
-    python3 scripts/bundle.py out.html --fragment  # без <!doctype>/<html>/<head>/<body>
+    python3 scripts/bundle.py out.html --from page.html   # любую собранную страницу
+    python3 scripts/bundle.py out.html --fragment         # без <!doctype>/<html>/<head>/<body>
+
+Книгу целиком одним файлом собирает scripts/build.py --single out.html.
 """
 import pathlib
 import re
@@ -12,11 +14,17 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
 def main() -> None:
-    args = [a for a in sys.argv[1:] if not a.startswith('--')]
-    fragment = '--fragment' in sys.argv
+    argv = sys.argv[1:]
+    src = ROOT / 'index.html'
+    if '--from' in argv:
+        i = argv.index('--from')
+        src = pathlib.Path(argv[i + 1])
+        del argv[i:i + 2]
+    args = [a for a in argv if not a.startswith('--')]
+    fragment = '--fragment' in argv
     out = pathlib.Path(args[0]) if args else ROOT / 'dist' / 'gid-po-baziliku.html'
 
-    html = (ROOT / 'index.html').read_text(encoding='utf-8')
+    html = src.read_text(encoding='utf-8')
 
     def inline_css(match: re.Match) -> str:
         css = (ROOT / match.group(1)).read_text(encoding='utf-8')

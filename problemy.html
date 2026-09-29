@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Гид по базилику</title>
-<meta name="description" content="Подробный гид по выращиванию базилика в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, прищипывание, урожай, химия вкуса и аромата, размножение, болезни. С калькуляторами, научными разворотами и интерактивными моделями.">
+<title>Проблемы — Гид по базилику</title>
+<meta name="description" content="Диагностика по симптомам, болезни, вредители, профилактика. Глава 10 гида по выращиванию базилика.">
 <meta name="theme-color" content="#2D6932">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30 C 16 22 16 16 16 10' stroke='%232D6932' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z' fill='%236AA83D' stroke='%231D4B22' stroke-width='1.6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -252,7 +252,7 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="#glavnaya" aria-label="Гид по базилику — на главную">
+    <a class="brand" href="index.html" aria-label="Гид по базилику — на главную">
       <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 30 C 16 22 16 16 16 10" style="stroke: var(--basil)" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z" style="fill: var(--leaf); stroke: var(--basil-deep)" stroke-width="1.6"/></svg>
       <span>Базилик<small>гид садовода</small></span>
     </a>
@@ -266,7 +266,7 @@
       <a data-nav="urozhay" href="urozhay.html">Урожай</a>
       <a data-nav="vkus" href="vkus.html">Вкус</a>
       <a data-nav="razmnozhenie" href="razmnozhenie.html">Размножение</a>
-      <a data-nav="problemy" href="problemy.html">Проблемы</a>
+      <a data-nav="problemy" aria-current="page" class="is-active" href="#problemy">Проблемы</a>
       <a data-nav="spravka" href="spravka.html">Справка</a>
     </nav>
     <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
@@ -283,178 +283,236 @@
 </header>
 
 <main id="main">
-<section class="view is-active view-home" data-view="glavnaya" aria-label="Главная">
-  <div class="hero wrap">
-    <div class="hero-text">
-      <p class="eyebrow"><span><i>Ocimum basilicum</i> L. · семейство Яснотковые</span></p>
-      <h1>Базилик <em>от семечка до&nbsp;песто</em></h1>
-      <p class="lead">Гид по выращиванию в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, прищипывание, урожай и лечение. А ещё химия аромата и физика роста — в научных разворотах «Глубже», и 17 рецептов, от песто до шербета. Для подоконника, балкона, грядки, теплицы и гидропоники.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start"><svg class="ico"><use href="#i-sprout"/></svg>С чего начать</a>
-        <a class="btn btn-ghost" href="#glavy"><svg class="ico"><use href="#i-book"/></svg>Все главы</a>
-      </div>
-      <a class="continue" id="continue" href="#glavnaya" hidden><span>Продолжить чтение</span><b id="continue-title"></b><svg class="ico"><use href="#i-arrow-r"/></svg></a>
-    </div>
-    <div class="hero-art">
-      <div class="halo" aria-hidden="true"></div>
-      <div class="plant-stage" id="plant-stage">
-        <svg class="hero-plant" id="hero-plant" viewBox="-210 -440 420 540" role="img" aria-label="Живой куст базилика в горшке. Коснитесь листа, чтобы выпустить аромат.">
-          <g class="pot" aria-hidden="true">
-            <ellipse class="pot-shadow" cx="0" cy="88" rx="104" ry="10"/>
-            <path class="pot-body" d="M-76 10 L76 10 L61 80 Q59 88 51 88 L-51 88 Q-59 88 -61 80 Z"/>
-            <path class="pot-band" d="M-73 26 L73 26 L70.5 38 L-70.5 38 Z"/>
-            <path class="pot-shine" d="M-58 18 L-47 78"/>
-            <rect class="pot-rim" x="-86" y="-6" width="172" height="22" rx="7"/>
-            <ellipse class="pot-soil" cx="0" cy="-3" rx="78" ry="7"/>
-            <g class="pot-grain"><circle cx="-46" cy="-3" r="2.2"/><circle cx="-26" cy="-6" r="1.6"/><circle cx="30" cy="-2" r="2"/><circle cx="54" cy="-5" r="1.5"/><circle cx="10" cy="-7" r="1.3"/><circle cx="-10" cy="-1" r="1.8"/></g>
-            <g class="pot-tag" transform="translate(58 -34) rotate(9)"><path class="pot-stick" d="M0 -8 L0 40"/><rect x="-26" y="-30" width="52" height="26" rx="4"/><text x="0" y="-12" text-anchor="middle">Genovese</text></g>
-          </g>
-          <g id="hero-plant-g"></g>
-        </svg>
-        <div class="aroma-layer" id="aroma-layer" aria-hidden="true"></div>
-        <p class="plant-hint hand" id="plant-hint" aria-hidden="true">потрите листик</p>
-      </div>
-      <aside class="passport" aria-label="Паспорт растения">
-        <p class="passport-kicker">Паспорт растения</p>
-        <p class="passport-name">Ocimum basilicum L.</p>
-        <dl>
-          <div><dt>Тепло</dt><dd>20–28&nbsp;°C, ночью не ниже 16&nbsp;°C</dd></div>
-          <div><dt>Холод</dt><dd>ниже +10&nbsp;°C рост стоп, при +5&nbsp;°C чернеет</dd></div>
-          <div><dt>Свет</dt><dd>6–8&nbsp;ч солнца или 14–16&nbsp;ч под лампой</dd></div>
-          <div><dt>Почва</dt><dd>рыхлая, pH 6,0–7,0</dd></div>
-          <div><dt>Полив</dt><dd>когда подсохли верхние 1–2&nbsp;см</dd></div>
-        </dl>
-      </aside>
-    </div>
-  </div>
-
+<section class="view is-active" data-view="problemy" aria-label="Проблемы">
   <div class="wrap">
-    <ul class="facts" aria-label="Базилик в цифрах">
-      <li><b>600–800</b><span>семян в 1&nbsp;г</span></li>
-      <li><b>5–10</b><span>дней до всходов при 22–25&nbsp;°C</span></li>
-      <li><b>6–8</b><span>недель от всходов до первого урожая</span></li>
-      <li><b>4–5</b><span>лет сохраняется всхожесть семян</span></li>
-      <li><b>⅓</b><span>куста — максимум за одну срезку</span></li>
-      <li><b>+10&nbsp;°C</b><span>минимум ночью для высадки на улицу</span></li>
-    </ul>
+    <header class="ch-hero">
+      <div class="ch-hero-text">
+        <p class="eyebrow">Глава 10</p>
+        <h1>Что случилось <em>с базиликом</em></h1>
+        <p class="lead">В девяти случаях из десяти причина в условиях: свет, полив, температура. Начните с диагностики по симптому, а справочники болезней и вредителей помогут уточнить.</p>
+      </div>
+      <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-problemy"/></svg></span></div>
+    </header>
+    <div class="subnav-wrap"><nav class="subnav" aria-label="Разделы главы">
+      <a href="#problemy-diagnostika">Диагностика</a><a href="#problemy-bolezni">Болезни</a><a href="#problemy-vrediteli">Вредители</a><a href="#problemy-profilaktika">Профилактика и средства</a>
+    </nav></div>
+
+    <div class="panel is-active" data-panel id="problemy-diagnostika" data-title="Диагностика по симптомам">
+      <div class="diag">
+        <div class="diag-groups" id="diag-groups"></div>
+        <div class="pane diag-result" id="diag-result" aria-live="polite"></div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Спутники следят за здоровьем полей по тому же принципу, что и вы: здоровый лист иначе отражает свет, особенно невидимый инфракрасный.</p>
+          <a class="sci-note-link" href="#deep-pigmenty">Глубже: Язык цвета <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-pigmenty" data-kind="chem" data-short="Язык цвета">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Язык цвета листа</span><span class="deep-sub">Хлорофиллы, каротиноиды и антоцианы</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Цвет листа — сумма трёх групп пигментов. <b>Хлорофиллы</b> поглощают синий и красный свет и отражают зелёный. <b>Каротиноиды</b>, жёлтые и оранжевые, защищают фотосистему от избытка света; их в листе много, но хлорофилл их маскирует. <b>Антоцианы</b>, красные и фиолетовые, растворены в клеточном соке.</p>
+                <p>Хлороз — пожелтение — это разрушение или недостаточный синтез хлорофилла. Каротиноиды при этом остаются, и лист становится жёлтым. Не хватает азота — желтеет весь старый лист; магния или железа — ткань между жилками.</p>
+                <p>Фиолетовый оттенок у зелёного сорта — накопление антоцианов. Так бывает при нехватке фосфора и в холод: сахара, которые растение не может потратить на рост, уходят на синтез пигмента.</p>
+                <p>Бурые мёртвые участки — некроз: клетки погибли, и их содержимое окислилось.</p>
+              </div>
+              <aside class="deep-aside">
+                <p class="hand margin-note">осенний клён желтеет по той же химии: хлорофилл уходит, каротиноиды остаются</p>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="pigment" data-kind="chem"></div>
+            <details class="deeper">
+              <summary id="deep-pigmenty-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Красный край и спутники</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Здоровый лист сильно поглощает красный свет, а ближний инфракрасный (около 800&nbsp;нм) почти полностью отражает — его рассеивает губчатая ткань с воздушными полостями. Резкий скачок отражения около 700&nbsp;нм называют «красным краем».</p>
+                <p>Спутники оценивают здоровье полей по индексу NDVI, который сравнивает отражение в ближнем инфракрасном и красном. Больное или обезвоженное растение отражает меньше инфракрасного, и индекс падает — иногда раньше, чем симптомы заметит глаз.</p>
+                <div class="eq"><span class="eq-label">Индекс растительности</span><p>NDVI = (NIR − Red) / (NIR + Red)</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Lichtenthaler H. K. Chlorophylls and carotenoids: pigments of photosynthetic biomembranes. <i>Methods in Enzymology</i>, 1987.</li>
+                <li>Rouse J. W. et al. Monitoring vegetation systems in the Great Plains with ERTS. NASA, 1974.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="panel" data-panel id="problemy-bolezni" data-title="Болезни">
+      <div class="ref-grid" id="disease-grid"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Возбудителя ложной мучнистой росы базилика описали как отдельный вид только в 2009 году.</p>
+          <a class="sci-note-link" href="#deep-oomicet">Глубже: Ложная мучнистая роса <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-oomicet" data-kind="bio" data-short="Ложная мучнистая роса">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Ложная мучнистая роса — не гриб</span><span class="deep-sub">Оомицет, ночная влажность и жизненный цикл</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Возбудитель, <i>Peronospora belbahrii</i>, похож на плесень, но относится к <b>оомицетам</b> — дальней родне бурых водорослей и диатомей. Стенки его клеток из целлюлозы, а не из хитина, как у грибов. Поэтому многие средства против настоящих грибов на него не действуют.</p>
+                <p>Спорангий попадает на лист и прорастает, если на поверхности есть плёнка воды. Нити возбудителя проникают через устьица, разрастаются в межклетниках и упираются в крупные жилки — отсюда угловатые жёлтые пятна. Через 5–10 дней на нижней стороне листа появляется серо-фиолетовый налёт: новые спороносцы выходят наружу через устьица. Ветер разносит споры далеко.</p>
+                <p>Спороношение идёт ночью: ему нужны темнота и влажность воздуха выше примерно 85&nbsp;% в течение нескольких часов. В опытах ночная подсветка и ночное проветривание вентиляторами заметно подавляли болезнь в теплицах.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>&gt; 85&nbsp;%</b><span>влажность воздуха ночью, при которой идёт спороношение</span></div>
+                <div class="num-note"><b>5–10 дней</b><span>от заражения до налёта на нижней стороне листа</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="dm" data-kind="bio"></div>
+            <details class="deeper">
+              <summary id="deep-oomicet-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Родня картофельной фитофторы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>К оомицетам относится и <i>Phytophthora infestans</i> — возбудитель фитофтороза картофеля, из-за которого в 1845–1849 годах в Ирландии случился Великий голод. У многих оомицетов, включая фитофтору, есть подвижные зооспоры с двумя жгутиками: они плавают в плёнке воды и находят устьица по химическому следу. У <i>Peronospora belbahrii</i> таких спор нет — её спорангии прорастают сразу трубкой. Но и им нужна капля воды на листе, поэтому вся эта родня так любит мокрую листву.</p>
+                <p>Возбудитель ложной мучнистой росы базилика как отдельный вид, <i>Peronospora belbahrii</i>, описали только в 2009 году. До этого его путали с похожими паразитами других яснотковых.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Cohen Y. et al. Light suppresses sporulation and epidemics of <i>Peronospora belbahrii</i>. <i>PLoS ONE</i>, 2013.</li>
+                <li>Thines M. et al. <i>Mycological Research</i>, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="panel" data-panel id="problemy-vrediteli" data-title="Вредители">
+      <div class="ref-grid" id="pest-grid"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Взрослая божья коровка съедает десятки тлей в день, а её личинка — ещё больше. Это самый дешёвый «инсектицид».</p>
+          <a class="sci-note-link" href="#deep-tlya">Глубже: Экспонента тли <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-tlya" data-kind="bio" data-short="Экспонента тли">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Экспонента тли</span><span class="deep-sub">Почему пара тлей за три недели становится колонией</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Летом тля размножается без самцов (партеногенез) и рожает живых личинок. Внутри взрослой самки развиваются дочери, внутри которых уже закладываются внучки: это <b>телескопические поколения</b>. В тепле молодая тля начинает рожать через 7–10 дней и производит по нескольку личинок в день.</p>
+                <p>Тля питается соком флоэмы: сахара в нём много, а азота мало. Перекормленный азотом базилик с мягкими сочными тканями для неё — лучший ресторан: больше аминокислот, быстрее размножение.</p>
+                <p>Лишний сахар тля выделяет липкой падью. На ней поселяются сажистые грибки, а муравьи охраняют колонию от хищников ради сладкого.</p>
+              </div>
+              <aside class="deep-aside">
+                <p class="hand margin-note">осматривайте нижнюю сторону листьев раз в неделю: неделя промедления — десятикратная разница</p>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="aphid" data-kind="bio"></div>
+            <details class="deeper">
+              <summary id="deep-tlya-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Крылатые и бескрылые</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Пока еды много, тля рожает бескрылых самок: им не нужно тратить ресурсы на крылья и мышцы. Когда на растении становится тесно или оно стареет, появляются крылатые особи и улетают искать новый дом. Осенью у многих видов рождаются самцы, и откладываются зимующие яйца.</p>
+                <p>Экологи называют такой цикл циклическим партеногенезом: он сочетает скорость бесполого размножения с разнообразием, которое даёт половое.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Dixon A. F. G. <i>Aphid Ecology</i>. 2nd ed. Chapman &amp; Hall, 1998.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="panel" data-panel id="problemy-profilaktika" data-title="Профилактика и средства">
+      <div class="cols-2">
+        <article class="card">
+          <h3 id="problemy-h1">Профилактика</h3>
+          <ul class="ticks">
+            <li>Семена и рассада — у надёжных продавцов, новые растения — на карантин на 1–2 недели.</li>
+            <li>Сейте реже и сажайте просторно: воздух между кустами — лучшая защита от грибков.</li>
+            <li>Поливайте утром и под корень, не мочите листья.</li>
+            <li>Проветривайте теплицу и комнату.</li>
+            <li>Не переливайте: мокрый грунт — это гнили и мошки.</li>
+            <li>Не перекармливайте азотом: мягкие ткани привлекают тлю.</li>
+            <li>Раз в неделю осматривайте нижнюю сторону листьев.</li>
+            <li>Не сажайте базилик на одно место чаще раза в 3–4 года.</li>
+            <li>Мойте горшки и инструмент, убирайте больные листья сразу.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 id="problemy-h2">Чем обрабатывать</h3>
+          <p class="muted">Базилик едят свежим, поэтому выбирайте биологические препараты и бытовые средства и соблюдайте срок ожидания с упаковки. Системные химические пестициды на пряной зелени дома не используют.</p>
+          <div class="table-scroll">
+            <table class="mini-table" id="treat-table"></table>
+          </div>
+        </article>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-oborona" data-kind="chem" data-short="Химическая оборона">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Химическая оборона базилика</span><span class="deep-sub">Эфирные масла, жасмонаты и зов на помощь</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Эфирные масла базилик производит не для нас, а для защиты. Эвгенол, эстрагол, линалоол и цинеол отпугивают многих насекомых и подавляют бактерии и грибы. Розмариновая кислота в тканях — антиоксидант и антимикробное вещество.</p>
+                <p>Когда насекомое повреждает лист, в тканях быстро синтезируется гормон <b>жасмоновая кислота</b>. Она включает гены защиты: больше железок и горьких веществ, ингибиторы пищеварительных ферментов насекомых. В опытах обработка базилика жасмонатом увеличивала число железистых волосков и выход эфирного масла.</p>
+                <p>Повреждённые растения выделяют в воздух летучие сигналы, и на этот запах летят хищные клещи и паразитические наездники. Экологи называют это «зовом на помощь»; поэтому живые хищники в теплице работают лучше, чем кажется.</p>
+                <p><b>Калийное мыло</b> действует на мягкотелых насекомых физически: соли жирных кислот растворяют восковой слой их покровов и нарушают мембраны клеток. Поэтому мыло работает только при прямом попадании и не оставляет длительной защиты.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>C<sub>12</sub>H<sub>18</sub>O<sub>3</sub></b><span>жасмоновая кислота — гормон ответа на поедание</span></div>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-oborona-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Рост или оборона</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Защита стоит дорого. Углерод и азот, ушедшие на эфирное масло и ингибиторы, не превратятся в новые листья. Поэтому у растений есть внутренний переключатель: жасмонат запускает оборону и одновременно тормозит рост, а гиббереллины, гормоны роста, делают наоборот.</p>
+                <p>Сердце переключателя — белки-репрессоры JAZ и DELLA. Пока жасмоната нет, JAZ держат гены защиты выключенными, а сигнал тревоги отправляет их на разрушение. DELLA сдерживают рост и заодно связывают JAZ, так что две системы перетягивают канат.</p>
+                <p>Отсюда садовое наблюдение: базилик, который пережил нашествие тли или сильную стрижку, часто пахнет сильнее, но растёт медленнее. Умеренный стресс делает аромат ярче, если не жалеть урожай.</p>
+                <div class="eq"><span class="eq-label">Сигнальная цепочка</span><p>повреждение → жасмонат → распад JAZ → гены защиты</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Li Z. et al. Chemical changes and overexpressed genes in sweet basil upon methyl jasmonate treatment. <i>Journal of Agricultural and Food Chemistry</i>, 2007.</li>
+                <li>Huot B. et al. Growth–defense tradeoffs in plants: a balancing act to optimize fitness. <i>Molecular Plant</i>, 2014.</li>
+                <li>Yang D.-L. et al. Plant hormone jasmonate prioritizes defense over growth by interfering with gibberellin signaling cascade. <i>PNAS</i>, 2012.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <nav class="pager" aria-label="Соседние главы"></nav>
   </div>
-
-  <section class="wrap home-block" id="start" aria-labelledby="start-h">
-    <div class="block-head">
-      <h2 id="start-h">С чего <em>начать?</em></h2>
-      <p>Выберите свою ситуацию — отправим сразу в нужное место.</p>
-    </div>
-    <div class="quick" id="quick"></div>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="season-h">
-    <div class="season-tip" id="season-tip">
-      <div class="season-mark" aria-hidden="true"><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-kalendar"/></svg></span></div>
-      <div>
-        <p class="eyebrow" id="season-h">Сейчас в саду</p>
-        <p class="season-text" id="season-text"></p>
-        <p class="season-note">Для умеренного климата. Точные сроки под ваш регион — в <a href="kalendar.html">календаре посадки</a>.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap home-block" id="glavy" aria-labelledby="glavy-h">
-    <div class="block-head">
-      <h2 id="glavy-h">Главы <em>гида</em></h2>
-      <p>От выбора сорта до заготовок на зиму. Читать можно в любом порядке.</p>
-    </div>
-    <div class="chapters" id="chapters"></div>
-  </section>
-
-  <section class="wrap home-block" id="nauka" aria-labelledby="nauka-h">
-    <div class="science-home">
-      <div class="sh-text">
-        <p class="eyebrow">Научный слой</p>
-        <h2 id="nauka-h">Почему базилик <em>именно такой</em></h2>
-        <p>Под практическими советами в каждой главе спрятаны развороты «Глубже»: химия аромата, физика света и воды, биология роста. Внутри — схемы и живые модели, от дефицита давления пара до бочки Либиха, а в самом низу — раздел «Ещё глубже» с механизмами и источниками. Выберите, насколько глубоко читать: выбор запомнится и действует во всех главах.</p>
-        <ul class="sh-kinds" id="sh-kinds" aria-label="Развороты по темам"></ul>
-        <div class="depth-seg" role="group" aria-label="Глубина чтения">
-          <button type="button" data-depth-pick="0" aria-pressed="true"><span class="depth-dots" aria-hidden="true"><i></i></span><b>Практика</b><small>только советы</small></button>
-          <button type="button" data-depth-pick="1" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i></span><b>Наука</b><small>все развороты</small></button>
-          <button type="button" data-depth-pick="2" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Лаборатория</b><small>и «ещё глубже»</small></button>
-        </div>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="vkus.html"><svg class="ico"><use href="#i-nose"/></svg>Вкус и аромат</a>
-          <a class="btn btn-ghost" href="urozhay.html#urozhay-recepty"><svg class="ico"><use href="#i-mortar"/></svg>Книга рецептов</a>
-        </div>
-      </div>
-      <figure class="sh-mol">
-        <div class="mol-stage"><canvas class="mol-canvas" id="home-molecule" role="img" aria-label="Трёхмерная модель молекулы аромата базилика"></canvas><span class="mol-hint hand" aria-hidden="true">покрутите</span></div>
-        <figcaption><b id="home-mol-name">Линалоол</b><span id="home-mol-note">C₁₀H₁₈O · цветочная нота генуэзского базилика</span></figcaption>
-        <div class="chips-row" id="home-mol-chips" role="group" aria-label="Выбор молекулы"></div>
-      </figure>
-    </div>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="journey-h">
-    <div class="block-head">
-      <h2 id="journey-h">Путь <em>базилика</em></h2>
-      <p>Полный цикл занимает около двух месяцев от посева до первого песто.</p>
-    </div>
-    <ol class="journey" id="journey"></ol>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="tools-h">
-    <div class="block-head">
-      <h2 id="tools-h">Инструменты</h2>
-      <p>Калькуляторы, планировщики и тренажёр, спрятанные в главах.</p>
-    </div>
-    <div class="tools-grid" id="tools-home"></div>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="rules-h">
-    <div class="block-head">
-      <h2 id="rules-h">Восемь правил, на&nbsp;которых <em>держится урожай</em></h2>
-      <p>Если читать только одно — прочитайте это.</p>
-    </div>
-    <div class="rules" id="rules">
-      <article class="rule float-card">
-        <div class="rule-ico is-oil"><svg class="ico"><use href="#i-thermo"/></svg></div>
-        <h3 id="glavnaya-h1">Тепло важнее всего</h3>
-        <p>Базилик родом из тропиков. Растёт при 20–28&nbsp;°C, при 12&nbsp;°C останавливается, ниже +5&nbsp;°C листья чернеют, а заморозок убивает сразу.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico is-oil"><svg class="ico"><use href="#i-sun"/></svg></div>
-        <h3 id="glavnaya-h2">Много света</h3>
-        <p>Нужно 6–8 часов прямого солнца. Дома зимой — 14–16 часов под лампой. В тени базилик вытягивается и почти не пахнет.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-scissors"/></svg></div>
-        <h3 id="glavnaya-h3">Прищипывайте рано</h3>
-        <p>При 3–4 парах настоящих листьев срежьте верхушку над 2-й или 3-й парой. Из пазух пойдут два побега, и вырастет куст.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico is-opal"><svg class="ico"><use href="#i-flower"/></svg></div>
-        <h3 id="glavnaya-h4">Не давайте цвести</h3>
-        <p>Бутоны срезайте вместе с парой листьев под ними. После цветения листья мельчают, грубеют и горчат.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-drop"/></svg></div>
-        <h3 id="glavnaya-h5">Поливайте без крайностей</h3>
-        <p>Когда верхние 1–2&nbsp;см грунта сухие. Тёплой водой, утром, под корень. Пересушка — к цветению, перелив — к гнили.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-flask"/></svg></div>
-        <h3 id="glavnaya-h6">Кормите понемногу</h3>
-        <p>Половинные дозы раз в 1–2 недели лучше редких ударных. Избыток азота даёт водянистую зелень без аромата.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-leaf"/></svg></div>
-        <h3 id="glavnaya-h7">Срезайте сверху</h3>
-        <p>Всегда над парой листьев, а не отдельные листья снизу. За раз — не больше трети куста.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico is-opal"><svg class="ico"><use href="#i-pot"/></svg></div>
-        <h3 id="glavnaya-h8">Магазинный горшок рассадите</h3>
-        <p>В нём растёт 10–30 сеянцев. Разделите ком на 3–5 частей, иначе они погибнут в тесноте.</p>
-      </article>
-    </div>
-  </section>
 </section>
 
 </main>
@@ -462,7 +520,7 @@
 <footer class="footer">
   <div class="wrap footer-inner">
     <div>
-      <a class="brand" href="#glavnaya">Базилик</a>
+      <a class="brand" href="index.html">Базилик</a>
       <p>Дозы и сроки в гиде — ориентиры для средних условий. Инструкция производителя удобрения всегда в приоритете, а погода важнее календаря.</p>
     </div>
     <p class="hand">Растите с удовольствием и ешьте песто ✿</p>
@@ -473,7 +531,7 @@
 
 <!-- mobile tab bar -->
 <nav class="tabbar" aria-label="Навигация">
-  <a class="tab-item" href="#glavnaya" data-tab="home"><svg class="ico"><use href="#i-home"/></svg><span>Главная</span></a>
+  <a class="tab-item" href="index.html" data-tab="home"><svg class="ico"><use href="#i-home"/></svg><span>Главная</span></a>
   <button class="tab-item" type="button" data-open="sheet-chapters"><svg class="ico"><use href="#i-book"/></svg><span>Главы</span></button>
   <button class="tab-item" type="button" data-open="sheet-tools"><svg class="ico"><use href="#i-tools"/></svg><span>Инструменты</span></button>
   <button class="tab-item" type="button" data-open="sheet-search"><svg class="ico"><use href="#i-search"/></svg><span>Поиск</span></button>

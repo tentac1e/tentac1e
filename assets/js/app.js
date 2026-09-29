@@ -35,7 +35,9 @@
     if (b === 1) return one;
     return many;
   };
-  const fmtNum = (v, digits = 1) => v.toLocaleString('ru-RU', { maximumFractionDigits: digits, minimumFractionDigits: 0 });
+  // one Intl formatter per precision: toLocaleString builds a new one on every call, which is slow
+  const NF = {};
+  const fmtNum = (v, digits = 1) => (NF[digits] || (NF[digits] = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: digits, minimumFractionDigits: 0 }))).format(v);
 
   const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
   const MONTHS_NOM = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
@@ -56,6 +58,37 @@
   const dayDiff = (a, b) => Math.round((b - a) / 864e5);
   const icon = name => `<svg class="ico" aria-hidden="true"><use href="#i-${name}"/></svg>`;
   const chapterById = id => B.CHAPTERS.find(c => c.id === id);
+
+  /* ---------------- pages: every chapter is its own HTML file ---------------- */
+  // BASIL_PAGES comes from scripts/build.py; without it (one-file build) all chapters share one page
+  const PAGES = window.BASIL_PAGES || null;
+  const here = (document.querySelector('[data-view]') || { dataset: {} }).dataset.view || 'glavnaya';
+  const pageOf = id => {
+    if (!PAGES || !id) return null;
+    if (PAGES.files[id]) return id;
+    if (PAGES.ids[id]) return PAGES.ids[id];
+    for (const pre in PAGES.prefixes) if (id.startsWith(pre)) return PAGES.prefixes[pre];
+    return null;
+  };
+  // «#id» → the address that really shows it: same page keeps the hash, another chapter gets «page.html#id»
+  const urlFor = hash => {
+    const id = decodeURIComponent(String(hash || '').replace(/^#/, ''));
+    if (!PAGES || !id || id === 'main' || id === 'top' || id === here || document.getElementById(id)) return '#' + id;
+    const pg = pageOf(id);
+    if (!pg || pg === here) return '#' + id;
+    if (PAGES.files[id]) return PAGES.files[id];
+    return PAGES.files[pg] + '#' + id;
+  };
+  function fixLinks(root) {
+    if (!PAGES || !root || !root.querySelectorAll) return;
+    const list = root.matches && root.matches('a[href^="#"]') ? [root] : [];
+    root.querySelectorAll('a[href^="#"]').forEach(a => list.push(a));
+    list.forEach(a => {
+      const h = a.getAttribute('href');
+      const u = urlFor(h);
+      if (u !== h) a.setAttribute('href', u);
+    });
+  }
   const smooth = () => (reduceMotion.matches ? 'auto' : 'smooth');
 
   let toastTimer = 0;
@@ -136,9 +169,10 @@
   }
   window.addEventListener('resize', () => { stickyPx = null; });
 
+  const homeView = () => views.get('glavnaya') || views.values().next().value;
   function resolve(raw) {
     const hash = decodeURIComponent(String(raw || '').replace(/^#/, ''));
-    if (!hash || hash === 'top') return { view: views.get('glavnaya') };
+    if (!hash || hash === 'top') return { view: homeView() };
     if (views.has(hash)) return { view: views.get(hash) };
     const el = document.getElementById(hash);
     const view = el && el.closest('[data-view]');
@@ -146,7 +180,10 @@
       const panel = el.matches('[data-panel]') ? el : el.closest('[data-panel]');
       return { view, panel, target: el === panel ? null : el };
     }
-    return { view: views.get('glavnaya') };
+    // lives in another chapter (also rescues old «index.html#…» bookmarks)
+    const u = urlFor(hash);
+    if (!u.startsWith('#')) return { external: u };
+    return { view: homeView() };
   }
 
   function activatePanel(view, panel, animate) {
@@ -177,7 +214,11 @@
 
   function updateChrome(view) {
     const id = view.dataset.view;
-    $$('#nav a').forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + id));
+    $$('#nav a').forEach(a => {
+      const on = (a.dataset.nav || a.getAttribute('href').replace(/^#/, '')) === id;
+      a.classList.toggle('is-active', on);
+      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
     $$('.tab-item[data-tab="home"]').forEach(a => a.classList.toggle('is-active', id === 'glavnaya'));
     const ch = chapterById(id);
     let title = 'Гид по базилику';
@@ -186,7 +227,7 @@
       const panel = panelId && document.getElementById(panelId);
       const sub = panel && panel.dataset.title;
       title = `${ch.title}${sub && $$('[data-panel]', view).length > 1 ? ' · ' + sub : ''} — Гид по базилику`;
-      store.set('basil-last', { view: id, panel: panelId || null });
+      store.set('basil-last', { view: id, panel: panelId || null, sub: sub && $$('[data-panel]', view).length > 1 ? sub : '' });
     }
     document.title = title;
   }
@@ -226,8 +267,12 @@
   }
 
   function route(hash, opts = {}) {
-    $$('dialog.sheet[open]').forEach(d => closeSheet(d));
     const r = resolve(hash);
+    if (r.external) {
+      if (opts.initial) location.replace(r.external); else location.href = r.external;
+      return;
+    }
+    $$('dialog.sheet[open]').forEach(d => closeSheet(d));
     const changedView = r.view !== currentView;
     const apply = () => {
       if (changedView) {
@@ -263,6 +308,8 @@
       const hash = a.getAttribute('href');
       if (hash === '#main') return;
       e.preventDefault();
+      const u = urlFor(hash);
+      if (!u.startsWith('#')) { location.href = u; return; }
       const dlg = a.closest('dialog');
       if (dlg && dlg.open) dlg.close();
       navigate(hash, { replace: !!a.closest('.subnav') });
@@ -293,8 +340,9 @@
       const ch = last && chapterById(last.view);
       if (!cont || !ch) return;
       const panel = last.panel && document.getElementById(last.panel);
-      cont.href = '#' + (panel ? last.panel : ch.id);
-      $('#continue-title').textContent = ch.title + (panel && panel.dataset.title && $$('[data-panel]', views.get(ch.id)).length > 1 ? ' · ' + panel.dataset.title : '');
+      const sub = panel ? (panel.dataset.title && $$('[data-panel]', views.get(ch.id)).length > 1 ? panel.dataset.title : '') : last.sub;
+      cont.href = urlFor('#' + (panel || (PAGES && last.panel) ? last.panel : ch.id));
+      $('#continue-title').textContent = ch.title + (sub ? ' · ' + sub : '');
       cont.hidden = false;
     };
     showContinue();
@@ -317,8 +365,8 @@
     };
     window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
     window.addEventListener('resize', update);
-    document.addEventListener('basil:view', update);
-    update();
+    document.addEventListener('basil:view', () => requestAnimationFrame(update));
+    requestAnimationFrame(update); // measure together with the first frame's layout, not in the middle of start-up
     if (toTop) toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: smooth() }));
   }
 
@@ -337,6 +385,7 @@
     if (id === 'sheet-search') {
       const input = $('#search-input');
       setTimeout(() => { input.focus(); input.select(); }, 30);
+      loadSearch();
     }
   }
   function closeSheet(d) {
@@ -386,13 +435,14 @@
     const add = e => idx.push(Object.assign({ n: norm(e.title + ' ' + (e.text || '')), nt: norm(e.title) }, e));
     B.CHAPTERS.forEach(c => add({ title: c.title, sub: `Глава ${c.num}`, text: c.desc, hash: c.id, icon: 'book' }));
     B.TOOLS.forEach(t => add({ title: t.title, sub: 'Инструмент', text: t.desc, hash: t.hash, icon: t.icon }));
-    $$('[data-panel]').forEach(p => {
+    if (window.BASIL_SEARCH) window.BASIL_SEARCH.forEach(add); // text of every chapter, indexed at build time
+    else $$('[data-panel]').forEach(p => {
       const ch = chapterById(p.closest('[data-view]').dataset.view);
       add({ title: p.dataset.title, sub: ch.title, text: textOf(p).slice(0, 400), hash: p.id, icon: 'list' });
     });
     let n = 0;
     const skip = '#chapters, #quick, #tools-home, #journey, .diag-result, .el-detail, #variety-detail, .quiz, .plan-list, .timeline, .dose-out, .npk-out, .soil-out, .dli-out, .stage-body, .pager, .sim, #glossary, #disease-grid, #pest-grid, #diag-groups, #place-panel, #check-groups, .lab-tool, .deep-index, .recipe-book, .deep-src';
-    $$('[data-view] h3, [data-view] h4, [data-view] summary').forEach(h => {
+    if (!window.BASIL_SEARCH) $$('[data-view] h3, [data-view] h4, [data-view] summary').forEach(h => {
       if (h.closest(skip)) return;
       const view = h.closest('[data-view]');
       const ch = chapterById(view.dataset.view);
@@ -413,9 +463,9 @@
       }
       add({ title: h.textContent.trim(), sub: where + (h.closest('.deep') ? ' · Глубже' : ''), text: text.slice(0, 360), hash: h.id, icon: h.tagName === 'SUMMARY' ? 'info' : 'leaf' });
     });
-    B.DIAG.forEach(g => g.items.forEach(it => add({ title: it.title, sub: 'Проблемы · Диагностика', text: it.causes.map(c => c.name + '. ' + c.check).join(' '), hash: 'problemy-diagnostika', icon: 'bug', after: () => selectSymptom(it.id, true) })));
-    B.ELEMENTS.forEach((e, i) => add({ title: `${e.name} (${e.sym})`, sub: 'Удобрения · Элементы', text: e.role + ' ' + e.def, hash: 'udobreniya-elementy', icon: 'flask', after: () => selectElement(i, true) }));
-    B.VARIETIES.forEach((v, i) => add({ title: `Сорт «${v.name}»`, sub: 'Сорта · Каталог', text: v.desc + ' ' + v.use, hash: 'sorta-katalog', icon: 'seed', after: () => openVariety(i) }));
+    B.DIAG.forEach(g => g.items.forEach(it => add({ title: it.title, sub: 'Проблемы · Диагностика', text: it.causes.map(c => c.name + '. ' + c.check).join(' '), hash: 'problemy-diagnostika', icon: 'bug', act: 'sym:' + it.id, after: () => selectSymptom(it.id, true) })));
+    B.ELEMENTS.forEach((e, i) => add({ title: `${e.name} (${e.sym})`, sub: 'Удобрения · Элементы', text: e.role + ' ' + e.def, hash: 'udobreniya-elementy', icon: 'flask', act: 'el:' + i, after: () => selectElement(i, true) }));
+    B.VARIETIES.forEach((v, i) => add({ title: `Сорт «${v.name}»`, sub: 'Сорта · Каталог', text: v.desc + ' ' + v.use, hash: 'sorta-katalog', icon: 'seed', act: 'var:' + i, after: () => openVariety(i) }));
     B.DISEASES.forEach((d, i) => add({ title: d.name, sub: 'Проблемы · Болезни', text: d.sign + ' ' + d.fix, hash: 'dis-' + i, icon: 'alert' }));
     B.PESTS.forEach((d, i) => add({ title: d.name, sub: 'Проблемы · Вредители', text: d.sign + ' ' + d.fix, hash: 'pest-' + i, icon: 'bug' }));
     if (B.RECIPES) {
@@ -427,7 +477,26 @@
       Object.values(window.BasilScience.MOLS).forEach(m => add({ title: m.name + (m.alt ? ` (${m.alt})` : ''), sub: 'Вкус · Молекулы аромата', text: `${m.cls}. Запах: ${m.smell}. Есть в: ${m.where}. Сорта: ${m.basil}. ${m.note}`, hash: 'vkus-molekuly', icon: 'hex' }));
       window.BasilScience.PAIRS.forEach(pr => add({ title: `Базилик и ${pr.name.toLowerCase()}`, sub: 'Вкус · Сочетания', text: pr.why + ' ' + pr.dish, hash: 'vkus-sochetaniya', icon: 'nose' }));
     }
+    idx.forEach(e => { if (!e.page) e.page = pageOf(e.hash) || here; });
     searchIndex = idx;
+  }
+  const entryUrl = e => {
+    if (!PAGES || e.page === here) return '#' + e.hash;
+    return PAGES.files[e.page] + (e.act ? '?do=' + encodeURIComponent(e.act) : '') + (PAGES.files[e.hash] ? '' : '#' + e.hash);
+  };
+  // the index of all chapters is a separate file: fetched the first time search opens
+  let searchReady = null;
+  function loadSearch() {
+    if (searchReady) return searchReady;
+    searchReady = new Promise(resolve => {
+      if (!PAGES || window.BASIL_SEARCH) { resolve(); return; }
+      const self = $('script[src$="app.js"]');
+      const tag = document.createElement('script');
+      tag.src = self ? self.getAttribute('src').replace(/app\.js$/, 'search-index.js') : 'assets/js/search-index.js';
+      tag.onload = tag.onerror = () => resolve();
+      document.head.appendChild(tag);
+    }).then(() => { buildSearchIndex(); document.dispatchEvent(new CustomEvent('basil:search-ready')); });
+    return searchReady;
   }
 
   function highlight(text, words) {
@@ -484,7 +553,7 @@
         return;
       }
       box.innerHTML = results.map((e, i) => `
-        <a class="sr-item${i === 0 ? ' is-active' : ''}" href="#${e.hash}" data-i="${i}" role="option" aria-selected="${i === 0}">
+        <a class="sr-item${i === 0 ? ' is-active' : ''}" href="${esc(entryUrl(e))}" data-i="${i}" role="option" aria-selected="${i === 0}">
           <span class="sr-ico">${icon(e.icon)}</span>
           <span><b>${highlight(e.title, words)}</b><small>${esc(e.sub)}</small><span class="sr-snip">${highlight(snippet(e.text || '', words[0]), words)}</span></span>
         </a>`).join('');
@@ -494,6 +563,8 @@
       const e = results[i];
       if (!e) return;
       closeSheet($('#sheet-search'));
+      const u = entryUrl(e);
+      if (!u.startsWith('#')) { location.href = u; return; }
       navigate('#' + e.hash);
       if (e.after) setTimeout(e.after, 60);
     };
@@ -521,6 +592,7 @@
       const item = e.target.closest('.sr-item');
       if (item) { e.preventDefault(); e.stopPropagation(); go(+item.dataset.i); }
     });
+    document.addEventListener('basil:search-ready', render);
     render();
   }
 
@@ -543,7 +615,7 @@
       { at: 3, spec: S.basil({ id: 'uR', nodes: 4, scale: 1, w: 5, angle: 0.5, flex: 1.5 }) }
     ];
     S.Plant(g, spec, {
-      leafScale: 0.8, interactive: true, growDur: 2.8,
+      leafScale: 0.8, interactive: true, growDur: 2.8, raster: true,
       onAroma: (x, y) => { S.aroma(layer, x, y); if (hint) hint.classList.add('is-used'); }
     });
   }
@@ -551,24 +623,46 @@
   function initHoverLight() {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     const sel = '.ch-card, .q-card, .tool, .rule, .deep > summary, .world-card, .lab-tool';
-    document.addEventListener('pointermove', e => {
+    // one style write per frame at most, however fast the mouse reports
+    let pending = null, queued = false;
+    const flush = () => {
+      queued = false;
+      const e = pending;
       const el = e.target.closest && e.target.closest(sel);
       if (!el) return;
       const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      el.style.setProperty('--my', `${e.clientY - r.top}px`);
+      el.style.setProperty('--mx', `${Math.round(e.clientX - r.left)}px`);
+      el.style.setProperty('--my', `${Math.round(e.clientY - r.top)}px`);
+    };
+    document.addEventListener('pointermove', e => {
+      pending = e;
+      if (!queued) { queued = true; requestAnimationFrame(flush); }
     }, { passive: true });
     $$('.ch-hero').forEach(hero => {
       const art = $('.ch-hero-art', hero);
       if (!art) return;
+      let last = null, busy = false;
       hero.addEventListener('pointermove', e => {
-        const r = art.getBoundingClientRect();
-        const dx = clamp((e.clientX - (r.left + r.width / 2)) / 300, -1, 1), dy = clamp((e.clientY - (r.top + r.height / 2)) / 300, -1, 1);
-        art.style.setProperty('--ry', `${f1(dx * 12)}deg`);
-        art.style.setProperty('--rx', `${f1(-dy * 12)}deg`);
-      });
+        last = e;
+        if (busy) return;
+        busy = true;
+        requestAnimationFrame(() => {
+          busy = false;
+          const r = art.getBoundingClientRect();
+          const dx = clamp((last.clientX - (r.left + r.width / 2)) / 300, -1, 1), dy = clamp((last.clientY - (r.top + r.height / 2)) / 300, -1, 1);
+          art.style.setProperty('--ry', `${f1(dx * 12)}deg`);
+          art.style.setProperty('--rx', `${f1(-dy * 12)}deg`);
+        });
+      }, { passive: true });
       hero.addEventListener('pointerleave', () => { art.style.setProperty('--ry', '0deg'); art.style.setProperty('--rx', '0deg'); });
     });
+  }
+
+  /* endless decorative animations stop while their block is off screen */
+  function initOffscreenPause() {
+    if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(entries => entries.forEach(en => en.target.classList.toggle('is-off', !en.isIntersecting)), { rootMargin: '120px 0px' });
+    $$('.lab-tool, .ch-hero-art, .season-mark, .halo, .passport, .hero-art, .plant-stage').forEach(el => io.observe(el));
   }
 
   function initLeafField() {
@@ -1868,7 +1962,7 @@
     const cats = Object.fromEntries(B.RECIPE_CATS.map(([id, name, ic]) => [id, { name, ic }]));
     const linkLabel = href => {
       const el = document.getElementById(href.slice(1));
-      if (!el) return 'подробнее';
+      if (!el) return (PAGES && PAGES.titles && PAGES.titles[href.slice(1)]) || 'подробнее';
       if (el.classList.contains('deep')) return 'Глубже: ' + el.dataset.short;
       const ch = chapterById(el.closest('[data-view]').dataset.view);
       return `${ch ? ch.title : ''} · ${el.dataset.title}`;
@@ -1911,15 +2005,47 @@
     });
   }
 
+  /* links to other chapters point at their pages — also those scripts add later */
+  function initLinks() {
+    if (!PAGES) return;
+    fixLinks(document.body);
+    if ('MutationObserver' in window) {
+      new MutationObserver(list => list.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) fixLinks(n); })))
+        .observe(document.body, { childList: true, subtree: true });
+    }
+  }
+  /* a search hit on another page arrives as «page.html?do=…#…»: open the symptom, element or variety it named */
+  function initPageAction() {
+    let act = null;
+    try { act = new URLSearchParams(location.search).get('do'); } catch (e) { /* old browser */ }
+    if (!act) return;
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* sandboxed */ }
+    const [kind, arg] = act.split(':');
+    setTimeout(() => {
+      if (kind === 'sym') selectSymptom(arg, true);
+      else if (kind === 'el') selectElement(+arg, true);
+      else if (kind === 'var') openVariety(+arg);
+    }, 60);
+  }
+
   /* ================================================================== */
   /* BOOT                                                                */
   /* ================================================================== */
   const boot = () => {
     const science = function initScience() { if (window.BasilScience) window.BasilScience.init({ toast }); };
-    const steps = [initTheme, initScene, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, initRecipes, science, initHoverLight, initSheets, initPagers, buildSearchIndex, initSearch, initScrollChrome, initRouter];
-    steps.forEach(fn => {
-      try { fn(); } catch (err) { console.error(`[basil] ${fn.name} failed`, err); }
-    });
+    // content first, decoration after: the animated background and bush start once the chapter is ready
+    const steps = [initTheme, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, initRecipes, science, initSheets, initPagers, initSearch, initScrollChrome, initRouter, initLinks, initPageAction, initHoverLight, initOffscreenPause, initScene];
+    // hand control back to the browser every ~40 ms so taps and scrolling never wait for start-up
+    const pause = () => (window.scheduler && typeof window.scheduler.yield === 'function' ? window.scheduler.yield() : new Promise(r => setTimeout(r, 0)));
+    (async () => {
+      let t0 = performance.now();
+      for (const fn of steps) {
+        try { fn(); } catch (err) { console.error(`[basil] ${fn.name} failed`, err); }
+        if (performance.now() - t0 > 40) { await pause(); t0 = performance.now(); }
+      }
+      document.documentElement.classList.add('is-ready');
+      document.dispatchEvent(new CustomEvent('basil:ready'));
+    })();
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();

@@ -1148,7 +1148,7 @@ body::after {
   background-image: radial-gradient(280px circle at var(--mx, -400px) var(--my, -400px), var(--hover-light), transparent 70%);
 }
 .ch-hero-art { transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .6s var(--ease-float); transform-style: preserve-3d; }
-.ch-hero-art svg { transform: translateZ(30px); }
+.ch-hero-art .art-float { transform: translateZ(30px); }
 
 /* flavor art */
 .ar-wisp { fill: none; stroke: var(--opal); stroke-width: 2.2; stroke-linecap: round; opacity: .8; }
@@ -1408,3 +1408,9 @@ body::after {
   .depth-pop { animation: none; }
   .sci-note, .sci-note:nth-child(even), .sci-note:hover { transform: none; }
 }
+
+/* ================= paint isolation =================
+   everything that moves every frame gets its own compositor layer, so the browser repaints
+   only that small piece instead of the whole long page */
+.plant-stage { will-change: transform; }
+.lab-tool:not(.is-off) svg:has(.pl-stems, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .germ-gel) { will-change: transform; }

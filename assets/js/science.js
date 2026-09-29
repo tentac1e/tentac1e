@@ -9,8 +9,10 @@ window.BasilScience = (() => {
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const lerp = (a, b, t) => a + (b - a) * t;
   const minus = x => x.replace(/^-/, '\u2212');
-  const fmt = (v, d = 1) => minus(Number(v).toLocaleString('ru-RU', { maximumFractionDigits: d, minimumFractionDigits: d }));
-  const fmt0 = v => minus(Math.round(v).toLocaleString('ru-RU'));
+  const NF = {};
+  const nf = d => NF[d] || (NF[d] = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: d, minimumFractionDigits: d }));
+  const fmt = (v, d = 1) => minus(nf(d).format(Number(v)));
+  const fmt0 = v => minus(nf(0).format(Math.round(v)));
   const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1 ');
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -424,14 +426,16 @@ window.BasilScience = (() => {
         }
       }
     }
+    const ready = window.BasilScene && window.BasilScene.gate ? window.BasilScene.gate(60, 30) : () => true;
     function frame(ts) {
       raf = 0;
       if (!visible || document.hidden) return;
+      raf = requestAnimationFrame(frame);
+      if (!drag && !ready(ts)) return;
       const t = ts / 1000, dt = Math.min(0.05, t - (last || t));
       last = t;
       if (!drag) { yaw += vy * dt; vy += (0.35 - vy) * 0.02; }
       draw();
-      raf = requestAnimationFrame(frame);
     }
     const wake = () => { if (reduce.matches) { draw(); return; } if (!raf) { last = 0; raf = requestAnimationFrame(frame); } };
     canvas.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, t: performance.now() }; canvas.setPointerCapture(e.pointerId); });
@@ -465,10 +469,27 @@ window.BasilScience = (() => {
   /* ------------------------------------------------------------------ */
   const labs = {};
   const register = (name, fn) => { labs[name] = fn; };
+  /* the 36 models live in labs.js; a page fetches it only when the first model scrolls near */
+  const SELF = document.currentScript && document.currentScript.src;
+  let labsLoad = null;
+  function ensureLabs() {
+    if (Object.keys(labs).length) return Promise.resolve();
+    if (!labsLoad) {
+      labsLoad = new Promise((resolve, reject) => {
+        const tag = document.createElement('script');
+        tag.src = SELF ? SELF.replace(/science\.js(\?.*)?$/, 'labs.js') : 'assets/js/labs.js';
+        tag.onload = resolve;
+        tag.onerror = () => { labsLoad = null; reject(new Error('labs.js')); };
+        document.head.appendChild(tag);
+      });
+    }
+    return labsLoad;
+  }
   let ctx = {};
 
   function mount(el) {
     if (el.dataset.ready) return;
+    if (!Object.keys(labs).length) { ensureLabs().then(() => mount(el), () => { el.innerHTML = '<p class="muted">Модель не загрузилась. Обновите страницу.</p>'; }); return; }
     const fn = labs[el.dataset.lab];
     if (!fn) return;
     el.dataset.ready = '1';
@@ -542,7 +563,8 @@ window.BasilScience = (() => {
     $$('.depth-pop [role="menuitemradio"]').forEach(b => b.setAttribute('aria-checked', String(+b.dataset.depthPick === level)));
     if (announce && ctx.toast) {
       const n = $$('details.deep').length, m = $$('details.deeper').length;
-      ctx.toast(level === 0 ? 'Практика: научные развороты свёрнуты' : level === 1 ? `Наука: открыто ${n} ${plural(n, 'разворот', 'разворота', 'разворотов')}` : `Лаборатория: открыто всё, включая ${m} ${plural(m, 'раздел', 'раздела', 'разделов')} «Ещё глубже»`);
+      if (!n) ctx.toast(level === 0 ? 'Практика: научные развороты будут свёрнуты во всех главах' : level === 1 ? 'Наука: во всех главах развороты «Глубже» будут открыты' : 'Лаборатория: во всех главах открыто всё, вплоть до «Ещё глубже»');
+      else ctx.toast(level === 0 ? 'Практика: научные развороты свёрнуты' : level === 1 ? `Наука: открыто ${n} ${plural(n, 'разворот', 'разворота', 'разворотов')}` : `Лаборатория: открыто всё, включая ${m} ${plural(m, 'раздел', 'раздела', 'разделов')} «Ещё глубже»`);
     }
   }
 
@@ -605,7 +627,6 @@ window.BasilScience = (() => {
       if (t) t.textContent = `≈ ${Math.max(1, Math.ceil(words / 150))} мин`;
       if (tools && !$('.deep-tag', d)) $('.deep-meta', d).insertAdjacentHTML('afterbegin', '<span class="deep-tag">интерактив</span>');
       if ($('details.deeper', body)) $('.deep-meta', d).insertAdjacentHTML('afterbegin', '<span class="deep-tag is-deeper" title="Есть раздел «Ещё глубже»">+1 уровень</span>');
-      d.addEventListener('toggle', () => { if (d.open) $$('.lab-tool', d).forEach(el => requestAnimationFrame(() => mount(el))); });
       const foot = document.createElement('div');
       foot.className = 'deep-foot';
       foot.innerHTML = `<button type="button" class="deep-close"><span aria-hidden="true">↑</span> Свернуть разворот</button>`;
@@ -643,10 +664,11 @@ window.BasilScience = (() => {
 
     const kinds = $('#sh-kinds');
     if (kinds) {
-      kinds.innerHTML = Object.entries(KIND).map(([k, [name, ic]]) => {
-        const n = blocks.filter(d => d.dataset.kind === k).length;
-        return `<li data-kind="${k}">${icon(ic)}<b>${n}</b><span>${name}</span></li>`;
-      }).join('') + `<li class="is-total">${icon('grid')}<b>${$$('.lab-tool').length}</b><span>моделей</span></li><li class="is-total">${icon('book')}<b>${$$('details.deeper').length}</b><span>«ещё глубже»</span></li>`;
+      // on the home page the chapters are other files: take the counts the build wrote down
+      const st = window.BASIL_PAGES && window.BASIL_PAGES.stats;
+      const count = k => st ? (st.kinds[k] || 0) : blocks.filter(d => d.dataset.kind === k).length;
+      kinds.innerHTML = Object.entries(KIND).map(([k, [name, ic]]) => `<li data-kind="${k}">${icon(ic)}<b>${count(k)}</b><span>${name}</span></li>`).join('') +
+        `<li class="is-total">${icon('grid')}<b>${st ? st.labs : $$('.lab-tool').length}</b><span>моделей</span></li><li class="is-total">${icon('book')}<b>${st ? st.deeper : $$('details.deeper').length}</b><span>«ещё глубже»</span></li>`;
     }
     initDepthControl();
   }

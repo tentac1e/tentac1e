@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Уход — Гид по базилику</title>
+<meta name="description" content="Свет, полив, тепло, почва и уход по сезонам. Глава 4 гида по выращиванию базилика.">
+<meta name="theme-color" content="#2D6932">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30 C 16 22 16 16 16 10' stroke='%232D6932' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z' fill='%236AA83D' stroke='%231D4B22' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/lab.css">
+</head>
+<body>
+<script>document.documentElement.classList.add('js');try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+
+<!-- ================= SVG SPRITE ================= -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="lg-hero" x1="0" y1="1" x2="0.3" y2="0">
+      <stop offset="0" style="stop-color: var(--hero-leaf-a)"/>
+      <stop offset="1" style="stop-color: var(--hero-leaf-b)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-a)"/>
+      <stop offset="1" style="stop-color: var(--pl-b)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad-young" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-b)"/>
+      <stop offset="1" style="stop-color: var(--pl-c)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad-back" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-back-a)"/>
+      <stop offset="1" style="stop-color: var(--pl-back-b)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad-purple" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-pa)"/>
+      <stop offset="1" style="stop-color: var(--pl-pb)"/>
+    </linearGradient>
+    <linearGradient id="pl-stem-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-stem-a)"/>
+      <stop offset=".55" style="stop-color: var(--pl-stem-b)"/>
+      <stop offset="1" style="stop-color: var(--pl-stem-a)"/>
+    </linearGradient>
+    <linearGradient id="pot-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color: var(--pot-a)"/>
+      <stop offset=".45" style="stop-color: var(--pot-b)"/>
+      <stop offset="1" style="stop-color: var(--pot-a)"/>
+    </linearGradient>
+    <g id="pl-leaf">
+      <path class="pl-pet" d="M0 1 L0 -12"/>
+      <path class="pl-blade" d="M0 -10 C 22 -11 31 -30 30 -50 C 29 -72 13 -98 0 -110 C -13 -98 -29 -72 -30 -50 C -31 -30 -22 -11 0 -10 Z"/>
+      <path class="pl-fold" d="M0 -10 C 22 -11 31 -30 30 -50 C 29 -72 13 -98 0 -110 Z"/>
+      <path class="pl-shine" d="M-4 -20 C -19 -27 -24 -46 -21 -62 C -18 -78 -9 -92 -2 -101 C -7 -82 -10 -52 -4 -20 Z"/>
+      <path class="pl-vein" d="M0 -11 Q 1.6 -58 0 -105 M0.4 -28 Q 12 -32 21 -45 M0.4 -28 Q -12 -32 -21 -45 M0.6 -46 Q 11 -51 18 -64 M0.6 -46 Q -11 -51 -18 -64 M0.5 -64 Q 8 -69 12 -80 M0.5 -64 Q -8 -69 -12 -80 M0.4 -80 Q 5 -85 7 -93 M0.4 -80 Q -5 -85 -7 -93"/>
+    </g>
+    <g id="leaf-shape">
+      <path d="M0 0 L0 -7" fill="none" stroke-width="2"/>
+      <path d="M0 -6 C 20 -14 27 -44 0 -68 C -27 -44 -20 -14 0 -6 Z" stroke-width="1.3"/>
+      <path d="M0 -8 Q 1.6 -36 0 -63 M0.6 -20 Q 9 -24 14 -33 M0.6 -20 Q -8 -24 -13 -33 M0.8 -34 Q 8 -38 11 -46 M0.8 -34 Q -7 -38 -10 -46 M0.6 -47 Q 5 -51 7 -56 M0.6 -47 Q -4 -51 -6 -56" fill="none" stroke-width="1" opacity=".75"/>
+    </g>
+  </defs>
+  <!-- icons -->
+  <symbol id="i-hex" viewBox="0 0 24 24"><path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><circle cx="12" cy="12" r="3.4"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12c1.7-4.5 3.3-4.5 5 0s3.3 4.5 5 0 3.3-4.5 5 0"/><path d="M19 9.5l2.5 2.5-2.5 2.5"/></symbol>
+  <symbol id="i-cell" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7.5"/><circle cx="10.5" cy="11" r="2.6"/><circle cx="16" cy="14.6" r=".9"/><circle cx="7" cy="15" r=".7"/></symbol>
+  <symbol id="i-nose" viewBox="0 0 24 24"><path d="M7.5 21c0-3.2 3-4.3 3-7.5S7.5 9.2 7.5 6s1.4-3 1.4-3"/><path d="M14 21c0-3.2 3-4.3 3-7.5S14 9.2 14 6s1.4-3 1.4-3"/></symbol>
+  <symbol id="i-mortar" viewBox="0 0 24 24"><path d="M3.5 11.5h17c0 4.4-3.4 8-8.5 8s-8.5-3.6-8.5-8z"/><path d="M8.5 19.2l-.8 1.8h8.6l-.8-1.8"/><path d="M13.5 11.3l6-7.6a1.5 1.5 0 0 1 2.3 1.9l-6.2 6.2"/><path d="M7 9.2c.8-1.4 2.2-2.1 3.8-1.8"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18c0 4.7-4 8.5-9 8.5S3 15.7 3 11z"/><path d="M9 19.2V21h6v-1.8"/><path d="M8 8.2c0-1.6 1-2.6 1-4M12 8.2c0-1.6 1-2.6 1-4M16 8.2c0-1.6 1-2.6 1-4"/></symbol>
+  <symbol id="i-glass" viewBox="0 0 24 24"><path d="M6 3.5h12l-1.6 16.2a1.6 1.6 0 0 1-1.6 1.3H9.2a1.6 1.6 0 0 1-1.6-1.3z"/><path d="M6.7 9.5h10.6"/><path d="M14.5 3.5l2.8-2"/><circle cx="10.5" cy="14" r="1"/><circle cx="13.5" cy="16.8" r=".8"/></symbol>
+  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M5.5 20.5v-6.8c0-1.2 1-2.2 2.2-2.2h8.6c1.2 0 2.2 1 2.2 2.2v6.8"/><path d="M5.5 15.4c1.1 1.1 2.1 1.1 3.2 0s2.1-1.1 3.3 0 2.1 1.1 3.2 0 2.1-1.1 3.3 0"/><path d="M12 11.5V8.5"/><path d="M12 8.5c-1.8-.4-2.6-1.8-2.2-3.6 1.8.4 2.6 1.8 2.2 3.6zm0 0c1.8-.4 2.6-1.8 2.2-3.6-1.8.4-2.6 1.8-2.2 3.6z"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17.5h6M9.8 20.5h4.4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1 1.4 1 2.2v1.5h5.2V16c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M12 7.2v3.2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.2c-3.4 4.3-6 7.7-6 10.9a6 6 0 0 0 12 0c0-3.2-2.6-6.6-6-10.9z"/><path d="M9.2 14.6a3 3 0 0 0 2.4 2.6"/></symbol>
+  <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4 4 0 1 1-4 0z"/><path d="M12 9v7.5"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6.5" r="2.6"/><circle cx="6" cy="17.5" r="2.6"/><path d="M8.2 8L20 17.5M8.2 16L20 6.5"/></symbol>
+  <symbol id="i-flower" viewBox="0 0 24 24"><path d="M12 21.5V4.5"/><path d="M12 7.5c-1.6 0-2.8-.9-3.2-2.3 1.6 0 2.8.9 3.2 2.3zm0 0c1.6 0 2.8-.9 3.2-2.3-1.6 0-2.8.9-3.2 2.3zM12 12c-1.8 0-3.2-1-3.7-2.6 1.8 0 3.2 1 3.7 2.6zm0 0c1.8 0 3.2-1 3.7-2.6-1.8 0-3.2 1-3.7 2.6zM12 16.5c-2 0-3.5-1.1-4-2.8 2 0 3.5 1.1 4 2.8zm0 0c2 0 3.5-1.1 4-2.8-2 0-3.5 1.1-4 2.8z"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.2L5 18.4A1.8 1.8 0 0 0 6.6 21h10.8a1.8 1.8 0 0 0 1.6-2.6L14 9.2V3"/><path d="M7.2 15h9.6"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19C5 10.5 10.6 5 20 5c0 9.4-5.5 14.9-14 14.9z"/><path d="M5 19l8.5-8.5"/></symbol>
+  <symbol id="i-pot" viewBox="0 0 24 24"><path d="M4 9.5h16l-1.8 10.7a1 1 0 0 1-1 .8H6.8a1 1 0 0 1-1-.8z"/><path d="M12 9.5V5.8M12 6.2c0-2 1.6-3.2 3.6-3.2 0 2-1.6 3.2-3.6 3.2zM12 7c0-1.8-1.4-2.8-3.2-2.8 0 1.8 1.4 2.8 3.2 2.8z"/></symbol>
+  <symbol id="i-bug" viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="4.2" ry="5.5"/><path d="M12 8.5v11M9.5 5.5 12 8.5l2.5-3M7.8 11.5 4.5 10M16.2 11.5l3.3-1.5M7.8 15.5H4M16.2 15.5H20M8.4 18.8 5.5 20.5M15.6 18.8l2.9 1.7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-seed" viewBox="0 0 24 24"><path d="M12 3.5c4.2 3.2 5.2 9.6 0 17-5.2-7.4-4.2-13.8 0-17z"/><path d="M12 8v9"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-8.5"/><path d="M12 12.5C12 8.6 9.4 6.4 5 6.4c0 3.9 2.6 6.1 7 6.1zM12 10.4c0-3.9 2.6-6.1 7-6.1 0 3.9-2.6 6.1-7 6.1z"/></symbol>
+  <symbol id="i-lamp" viewBox="0 0 24 24"><path d="M5 4.5h14l-2.8 5H7.8z"/><path d="M8.5 13l-1.2 3M12 13v4M15.5 13l1.2 3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-6.5 8 6.5V20H4z"/><path d="M9.5 20v-5h5v5"/></symbol>
+  <symbol id="i-balcony" viewBox="0 0 24 24"><path d="M3.5 12h17M3.5 20.5h17M6 12v8.5M10 12v8.5M14 12v8.5M18 12v8.5"/><path d="M7.5 12V4h9v8"/></symbol>
+  <symbol id="i-garden" viewBox="0 0 24 24"><path d="M2.5 20h19"/><path d="M6 20v-4.5M6 15.5c0-2 1.2-3 3-3 0 2-1.2 3-3 3zM12 20v-7M12 13c0-2.4 1.4-3.6 3.6-3.6 0 2.4-1.4 3.6-3.6 3.6zM12 15c0-2-1.3-3-3.2-3 0 2 1.3 3 3.2 3zM18 20v-4.5M18 15.5c0-2-1.2-3-3-3 0 2 1.2 3 3 3z"/></symbol>
+  <symbol id="i-greenhouse" viewBox="0 0 24 24"><path d="M3 20.5V11a9 9 0 0 1 18 0v9.5z"/><path d="M12 2v18.5M3 14h18M7.5 4.5v16M16.5 4.5v16"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8.5h11a3 3 0 1 0-3-3M3 15.5h14.5a3 3 0 1 1-3 3M3 12h7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2.5v19M3.8 7.2l16.4 9.6M20.2 7.2 3.8 16.8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17.2v.1"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.1"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></symbol>
+  <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-jar" viewBox="0 0 24 24"><path d="M7 3.5h10M8 3.5v3M16 3.5v3M6.5 6.5h11a1 1 0 0 1 1 1V19a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V7.5a1 1 0 0 1 1-1z"/><path d="M5.5 11h13"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M6 4h12l-1.5 16.5h-9z"/><path d="M6.8 12h10.4"/><path d="M12 12V6.5M12 7.5c0-1.6 1.2-2.6 2.8-2.6 0 1.6-1.2 2.6-2.8 2.6z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1 1 0 0 1 0 1.4l-7.3 7.3a1 1 0 0 1-1.4 0z"/><circle cx="8.2" cy="8.2" r="1.6"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9z"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20.5 20.5"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h2M12 17h8"/><circle cx="16" cy="7" r="2.5"/><circle cx="9" cy="17" r="2.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v13"/></symbol>
+
+  <!-- chapter illustrations, 120×120 -->
+  <symbol id="art-sorta" viewBox="0 0 120 120">
+    <g transform="translate(82 104)"><use href="#leaf-shape" class="ar-leaf-p" transform="rotate(40) scale(.7)"/></g>
+    <g transform="translate(86 106)"><use href="#leaf-shape" class="ar-leaf-l" transform="rotate(70) scale(.56)"/></g>
+    <path class="ar-paper" d="M22 26 h56 v72 a4 4 0 0 1 -4 4 h-48 a4 4 0 0 1 -4 -4 z"/>
+    <path class="ar-band" d="M22 26 h56 v14 h-56 z"/>
+    <path class="ar-zig" d="M22 40 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4"/>
+    <g transform="translate(50 80)"><use href="#leaf-shape" class="ar-leaf" transform="scale(.46)"/></g>
+    <path class="ar-line" d="M34 88 h32 M38 94 h24"/>
+    <g transform="translate(92 110)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(10) scale(.8)"/></g>
+    <ellipse class="ar-seed" cx="16" cy="108" rx="3" ry="2" transform="rotate(-20 16 108)"/>
+    <ellipse class="ar-seed" cx="24" cy="112" rx="3" ry="2" transform="rotate(15 24 112)"/>
+    <ellipse class="ar-seed" cx="10" cy="114" rx="3" ry="2"/>
+  </symbol>
+  <symbol id="art-posadka" viewBox="0 0 120 120">
+    <path class="ar-stem" d="M60 80 V48"/>
+    <ellipse class="ar-coty" cx="48" cy="66" rx="10" ry="4.6" transform="rotate(-18 48 66)"/>
+    <ellipse class="ar-coty" cx="72" cy="66" rx="10" ry="4.6" transform="rotate(18 72 66)"/>
+    <g transform="translate(60 52)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-42) scale(.48)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(42) scale(.48)"/></g>
+    <g transform="translate(60 48)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-14) scale(.2)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(14) scale(.2)"/></g>
+    <path class="ar-pot" d="M30 82 L90 82 L82 114 L38 114 Z"/>
+    <rect class="ar-rim" x="26" y="75" width="68" height="11" rx="3"/>
+    <ellipse class="ar-soil" cx="60" cy="77" rx="31" ry="3.4"/>
+    <path class="ar-shine" d="M36 92 L40 110"/>
+  </symbol>
+  <symbol id="art-kalendar" viewBox="0 0 120 120">
+    <rect class="ar-paper" x="16" y="24" width="86" height="82" rx="9"/>
+    <path class="ar-head" d="M16 46 V33 a9 9 0 0 1 9 -9 h68 a9 9 0 0 1 9 9 V46 z"/>
+    <rect class="ar-ring" x="36" y="16" width="6" height="16" rx="3"/>
+    <rect class="ar-ring" x="76" y="16" width="6" height="16" rx="3"/>
+    <g class="ar-dotg">
+      <circle cx="30" cy="58" r="2.6"/><circle cx="44" cy="58" r="2.6"/><circle cx="58" cy="58" r="2.6"/><circle cx="72" cy="58" r="2.6"/><circle cx="86" cy="58" r="2.6"/>
+      <circle cx="30" cy="72" r="2.6"/><circle cx="44" cy="72" r="2.6"/><circle cx="58" cy="72" r="2.6"/><circle cx="86" cy="72" r="2.6"/>
+      <circle cx="30" cy="86" r="2.6"/><circle cx="44" cy="86" r="2.6"/><circle cx="58" cy="86" r="2.6"/><circle cx="72" cy="86" r="2.6"/>
+    </g>
+    <circle class="ar-hl" cx="72" cy="72" r="7.5"/>
+    <circle class="ar-hl-dot" cx="72" cy="72" r="3"/>
+    <g transform="translate(100 108)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-8) scale(.52)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(48) scale(.4)"/></g>
+  </symbol>
+  <symbol id="art-uhod" viewBox="0 0 120 120">
+    <circle class="ar-sun" cx="90" cy="28" r="12"/>
+    <path class="ar-rays" d="M90 8 v5 M90 43 v5 M70 28 h5 M105 28 h5 M76 14 l3.4 3.4 M100.6 38.6 l3.4 3.4 M76 42 l3.4 -3.4 M100.6 17.4 l3.4 -3.4"/>
+    <path class="ar-can-s" d="M42 60 C 46 42 72 42 76 60"/>
+    <path class="ar-can-s" d="M80 68 C 99 68 99 96 80 96"/>
+    <path class="ar-can-s ar-spout" d="M38 74 L14 52"/>
+    <rect class="ar-can" x="34" y="58" width="48" height="44" rx="9"/>
+    <ellipse class="ar-can" cx="12" cy="50" rx="6" ry="4" transform="rotate(-45 12 50)"/>
+    <path class="ar-shine" d="M42 66 V94"/>
+    <path class="ar-water" d="M8 64 c-2.4 3-3.8 5.3-3.8 7.2a3.8 3.8 0 0 0 7.6 0c0-1.9-1.4-4.2-3.8-7.2z"/>
+    <path class="ar-water" d="M18 72 c-2 2.6-3.2 4.5-3.2 6.1a3.2 3.2 0 0 0 6.4 0c0-1.6-1.2-3.5-3.2-6.1z"/>
+    <path class="ar-water" d="M6 82 c-2 2.6-3.2 4.5-3.2 6.1a3.2 3.2 0 0 0 6.4 0c0-1.6-1.2-3.5-3.2-6.1z"/>
+    <g transform="translate(106 112)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-20) scale(.44)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(30) scale(.36)"/></g>
+  </symbol>
+  <symbol id="art-udobreniya" viewBox="0 0 120 120">
+    <g transform="translate(60 40)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(26) scale(.62)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(-36) scale(.44)"/></g>
+    <path class="ar-liquid" d="M39.2 72 L80.8 72 L90 92 a8 8 0 0 1 -7 12 h-46 a8 8 0 0 1 -7 -12 z"/>
+    <circle class="ar-bubble" cx="50" cy="88" r="3.4"/><circle class="ar-bubble" cx="63" cy="80" r="2.2"/><circle class="ar-bubble" cx="72" cy="94" r="2.8"/>
+    <path class="ar-glass" d="M52 18 v26 L30 92 a8 8 0 0 0 7 12 h46 a8 8 0 0 0 7 -12 L68 44 V18 z"/>
+    <path class="ar-rim-line" d="M47 18 h26"/>
+    <text class="ar-text" x="60" y="64" text-anchor="middle">N·P·K</text>
+    <ellipse class="ar-sun" cx="100" cy="100" rx="4" ry="3"/><ellipse class="ar-seed" cx="108" cy="104" rx="3.4" ry="2.4"/><ellipse class="ar-coty" cx="98" cy="108" rx="3.2" ry="2.4"/>
+  </symbol>
+  <symbol id="art-formirovka" viewBox="0 0 120 120">
+    <g class="ar-ghost">
+      <path class="ar-stem" d="M48 58 V28"/>
+      <g transform="translate(48 42)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-44) scale(.32)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(44) scale(.32)"/></g>
+    </g>
+    <path class="ar-stem" d="M48 114 V62"/>
+    <g transform="translate(48 100)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-62) scale(.56)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(62) scale(.56)"/></g>
+    <g transform="translate(48 72)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-58) scale(.4 .5)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(58) scale(.4 .5)"/></g>
+    <g transform="translate(48 70)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-24) scale(.16)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(24) scale(.16)"/></g>
+    <path class="ar-cut" d="M28 62 H68"/>
+    <path class="ar-blade" d="M98 74 L84 64 L60 56"/>
+    <path class="ar-blade" d="M102 56 L84 64 L60 66"/>
+    <circle class="ar-handle" cx="102" cy="78" r="7.5"/>
+    <circle class="ar-handle" cx="106" cy="52" r="7.5"/>
+    <circle class="ar-sun" cx="84" cy="64" r="2.6"/>
+  </symbol>
+  <symbol id="art-urozhay" viewBox="0 0 120 120">
+    <rect class="ar-glass" x="30" y="40" width="56" height="68" rx="12"/>
+    <rect class="ar-pesto" x="33.5" y="54" width="49" height="50.5" rx="9"/>
+    <circle class="ar-bubble" cx="42" cy="62" r="2"/><circle class="ar-bubble" cx="70" cy="96" r="2.4"/>
+    <rect class="ar-lid" x="33" y="28" width="50" height="15" rx="4"/>
+    <path class="ar-lid-line" d="M40 31 v9 M48 31 v9 M56 31 v9 M64 31 v9 M72 31 v9"/>
+    <rect class="ar-paper" x="40" y="68" width="36" height="22" rx="3"/>
+    <g transform="translate(58 86)"><use href="#leaf-shape" class="ar-leaf" transform="scale(.24)"/></g>
+    <g transform="translate(96 110)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-16) scale(.64)"/><use href="#leaf-shape" class="ar-leaf-p" transform="rotate(36) scale(.46)"/></g>
+    <ellipse class="ar-nut" cx="18" cy="106" rx="3.6" ry="2.4" transform="rotate(-25 18 106)"/>
+    <ellipse class="ar-nut" cx="12" cy="112" rx="3.6" ry="2.4" transform="rotate(10 12 112)"/>
+    <ellipse class="ar-nut" cx="22" cy="113" rx="3.6" ry="2.4" transform="rotate(40 22 113)"/>
+  </symbol>
+  <symbol id="art-razmnozhenie" viewBox="0 0 120 120">
+    <path class="ar-water" d="M34.5 66 L85.5 66 L82 104 a6 6 0 0 1 -6 5 h-32 a6 6 0 0 1 -6 -5 z"/>
+    <path class="ar-stem" d="M60 100 V26"/>
+    <path class="ar-root" d="M60 98 q -6 6 -13 8 M60 95 q 8 4 13 10 M60 90 q -5 6 -11 5 M60 100 q 3 5 0 8 M60 86 q 6 4 9 2"/>
+    <path class="ar-glass" d="M32 40 L38 104 a6 6 0 0 0 6 5 h32 a6 6 0 0 0 6 -5 L88 40 z"/>
+    <path class="ar-shine" d="M38 48 L42 98"/>
+    <g transform="translate(60 42)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-58) scale(.5)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(58) scale(.5)"/></g>
+    <g transform="translate(60 28)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-30) scale(.28)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(30) scale(.28)"/></g>
+  </symbol>
+  <symbol id="art-problemy" viewBox="0 0 120 120">
+    <g transform="translate(46 108) rotate(-18) scale(1.18)">
+      <use href="#leaf-shape" class="ar-leaf-sick"/>
+      <circle class="ar-spot" cx="5" cy="-30" r="3.6"/><circle class="ar-spot" cx="-7" cy="-44" r="2.8"/><circle class="ar-spot" cx="-5" cy="-18" r="2.4"/><circle class="ar-spot" cx="8" cy="-50" r="2"/>
+    </g>
+    <circle class="ar-lens" cx="80" cy="56" r="20"/>
+    <circle class="ar-spot" cx="76" cy="54" r="5.5"/>
+    <path class="ar-lens-h" d="M94.5 70.5 L108 86"/>
+  </symbol>
+  <symbol id="art-vkus" viewBox="0 0 120 120">
+    <g transform="translate(44 100)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-26) scale(.82)"/></g>
+    <path class="ar-wisp" d="M24 44 c-5 -6 5 -10 0 -17 M34 38 c-5 -6 5 -10 0 -17"/>
+    <g transform="translate(80 34)">
+      <path class="ar-mol" d="M0 -16 L13.9 -8 L13.9 8 L0 16 L-13.9 8 L-13.9 -8 Z M13.9 -8 L24 -14 M0 16 L0 25"/>
+      <circle class="ar-mol" r="6.6"/>
+      <circle class="ar-o" cx="25" cy="-14.6" r="3.6"/>
+      <circle class="ar-c" cx="0" cy="26" r="2.6"/>
+    </g>
+    <path class="ar-oil" d="M88 64 c-6 8 -10 13 -10 18 a10 10 0 0 0 20 0 c0 -5 -4 -10 -10 -18z"/>
+    <path class="ar-shine" d="M84 80 a5 5 0 0 0 3 5"/>
+  </symbol>
+  <symbol id="art-spravka" viewBox="0 0 120 120">
+    <path class="ar-cover" d="M12 40 V100 C 30 95 48 95 60 104 C 72 95 90 95 108 100 V40"/>
+    <path class="ar-paper" d="M60 42 C 48 34 30 34 18 38 V96 C 30 92 48 92 60 100 Z"/>
+    <path class="ar-paper" d="M60 42 C 72 34 90 34 102 38 V96 C 90 92 72 92 60 100 Z"/>
+    <path class="ar-line" d="M26 50 C 36 47 46 48 52 51 M26 60 C 36 57 46 58 52 61 M26 70 C 36 67 46 68 52 71 M26 80 C 36 77 46 78 52 81 M68 51 C 74 48 84 47 94 50 M68 61 C 74 58 84 57 94 60 M68 71 C 74 68 84 67 94 70"/>
+    <g transform="translate(84 44)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(10) scale(.5)"/></g>
+  </symbol>
+</svg>
+
+<canvas id="leaf-field" aria-hidden="true"></canvas>
+<div class="aura" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<div class="page">
+
+<a class="skip" href="#main">К содержанию</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Гид по базилику — на главную">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 30 C 16 22 16 16 16 10" style="stroke: var(--basil)" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z" style="fill: var(--leaf); stroke: var(--basil-deep)" stroke-width="1.6"/></svg>
+      <span>Базилик<small>гид садовода</small></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Главы">
+      <a data-nav="sorta" href="sorta.html">Сорта</a>
+      <a data-nav="posadka" href="posadka.html">Посадка</a>
+      <a data-nav="kalendar" href="kalendar.html">Календарь</a>
+      <a data-nav="uhod" aria-current="page" class="is-active" href="#uhod">Уход</a>
+      <a data-nav="udobreniya" href="udobreniya.html">Удобрения</a>
+      <a data-nav="formirovka" href="formirovka.html">Прищипка</a>
+      <a data-nav="urozhay" href="urozhay.html">Урожай</a>
+      <a data-nav="vkus" href="vkus.html">Вкус</a>
+      <a data-nav="razmnozhenie" href="razmnozhenie.html">Размножение</a>
+      <a data-nav="problemy" href="problemy.html">Проблемы</a>
+      <a data-nav="spravka" href="spravka.html">Справка</a>
+    </nav>
+    <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
+      <svg class="ico"><use href="#i-search"/></svg><span>Поиск</span><kbd>/</kbd>
+    </button>
+    <button class="icon-btn deep-toggle" id="deep-toggle" type="button" aria-pressed="false" aria-expanded="false" aria-label="Глубина чтения">
+      <svg class="ico"><use href="#i-hex"/></svg>
+    </button>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-label="Сменить тему">
+      <svg class="ico"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+<section class="view is-active" data-view="uhod" aria-label="Уход">
+  <div class="wrap">
+    <header class="ch-hero">
+      <div class="ch-hero-text">
+        <p class="eyebrow">Глава 4</p>
+        <h1>Свет, вода, тепло <em>и почва</em></h1>
+        <p class="lead">От этих четырёх вещей зависит всё остальное. Если базилику плохо, почти всегда виновата одна из них, а не нехватка удобрений.</p>
+      </div>
+      <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-uhod"/></svg></span></div>
+    </header>
+    <div class="subnav-wrap"><nav class="subnav" aria-label="Разделы главы">
+      <a href="#uhod-svet">Свет</a><a href="#uhod-poliv">Полив</a><a href="#uhod-teplo">Тепло и воздух</a><a href="#uhod-pochva">Почва и pH</a><a href="#uhod-sezony">По сезонам</a>
+    </nav></div>
+
+    <div class="panel is-active" data-panel id="uhod-svet" data-title="Свет">
+      <div class="cols-2">
+        <div class="card">
+          <h3 id="uhod-h1">Сколько света нужно</h3>
+          <dl class="data-rows">
+            <div><dt>Прямое солнце</dt><dd>6–8 ч в день</dd></div>
+            <div><dt>Под лампой</dt><dd>14–16 ч в день</dd></div>
+            <div><dt>Интенсивность</dt><dd>PPFD 200–400 мкмоль/м²·с</dd></div>
+            <div><dt>Дневная сумма</dt><dd>DLI 12–17 моль/м²</dd></div>
+            <div><dt>Лампа</dt><dd>LED, 3000–6500 K, 20–40 см</dd></div>
+          </dl>
+          <p class="muted">Признаки нехватки: длинные междоузлия, мелкие бледные листья, стебель тянется к стеклу, слабый аромат. Избыток за стеклом в жару — светлые обожжённые пятна.</p>
+        </div>
+        <div class="card">
+          <h3 id="uhod-h2">Хватит ли вашего окна</h3>
+          <div class="table-scroll">
+            <table class="mini-table">
+              <thead><tr><th scope="col">Окно</th><th scope="col">Весна–лето</th><th scope="col">Осень–зима</th></tr></thead>
+              <tbody>
+                <tr><td><b>Юг</b></td><td>6–8 ч солнца, хватает; в жару притенять в полдень</td><td>лампа утром и вечером, итого 14–16 ч света</td></tr>
+                <tr><td><b>Восток, запад</b></td><td>3–5 ч солнца: растёт медленнее, вечером желательна лампа</td><td>лампа 10–12 ч</td></tr>
+                <tr><td><b>Север</b></td><td>мало, базилик вытягивается: лампа 8–10 ч</td><td>только лампа 14–16 ч</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="sub pane dli-tool" id="dli">
+        <div class="dli-form">
+          <h3 id="uhod-h3">Калькулятор досветки</h3>
+          <p class="muted">PPFD лампы на нужной высоте обычно указан в характеристиках фитолампы. Если нет — выберите примерный вариант.</p>
+          <div class="chips-row" id="dli-presets">
+            <button class="chip" type="button" data-ppfd="100">Слабая лампа ≈ 100</button>
+            <button class="chip" type="button" data-ppfd="250">Панель 20–30 Вт ≈ 250</button>
+            <button class="chip" type="button" data-ppfd="400">Мощная панель ≈ 400</button>
+          </div>
+          <div class="row-2">
+            <div class="field"><label for="dli-ppfd">PPFD, мкмоль/м²·с</label><input type="number" id="dli-ppfd" min="10" max="1500" step="10" value="250" inputmode="numeric"></div>
+            <div class="field"><label for="dli-hours">Часов в сутки: <b id="dli-hours-val">14</b></label><input type="range" id="dli-hours" min="6" max="20" step="1" value="14" class="range"></div>
+          </div>
+        </div>
+        <div class="dli-out" id="dli-out" aria-live="polite"></div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Люксметр меряет свет «глазами человека», с упором на зелёный. Растение считает фотоны всех цветов, поэтому для фитоламп люксы почти бесполезны.</p>
+          <a class="sci-note-link" href="#deep-fotosintez">Глубже: Фотосинтез <span aria-hidden="true">→</span></a>
+        </aside>
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Летний полдень даёт около 2000&nbsp;мкмоль/м²·с — в 5–10 раз больше, чем хорошая комнатная фитолампа.</p>
+          <a class="sci-note-link" href="#deep-lampa">Глубже: Обратные квадраты <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-fotosintez" data-kind="phys" data-short="Фотосинтез">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Фотосинтез: как свет становится листом</span><span class="deep-sub">Спектр поглощения, фотоны и почему базилик зелёный</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Итог фотосинтеза выглядит просто, но за ним десятки реакций. Энергия света разрывает молекулы воды (отсюда кислород) и заряжает переносчики энергии АТФ и НАДФН. Ими в цикле Кальвина растение «пришивает» CO<sub>2</sub> к сахарам — из них строятся листья, стебли и эфирные масла.</p>
+                <p>Для фотосинтеза важна не мощность лампы в ваттах, а <b>число фотонов</b> в диапазоне 400–700&nbsp;нм (ФАР). Каждый поглощённый фотон возбуждает одну молекулу пигмента, поэтому свет для растений меряют в микромолях фотонов: PPFD — мкмоль/м²·с, а за сутки DLI — моль/м².</p>
+                <p>Хлорофиллы a и b сильнее всего поглощают синий (430–450&nbsp;нм) и красный (640–680&nbsp;нм) свет. Зелёный поглощается хуже: часть отражается, поэтому листья зелёные. Но и зелёный свет работает — он проникает глубже в лист, к нижним слоям клеток. Годится весь диапазон ФАР, поэтому белые светодиоды — хороший выбор для подоконника.</p>
+                <p>С ростом освещённости фотосинтез сначала растёт почти линейно, потом выходит на плато — <b>световое насыщение</b>. Сверх него фотоны превращаются в тепло и стресс, а не в листья.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Итоговое уравнение</span><p>6CO<sub>2</sub> + 6H<sub>2</sub>O + свет → C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> + 6O<sub>2</sub></p></div>
+                <div class="num-note"><b>8–10</b><span>фотонов нужно, чтобы связать одну молекулу CO<sub>2</sub></span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="spectrum" data-kind="phys"></div>
+            <details class="deeper">
+              <summary id="deep-fotosintez-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Z-схема и квантовый выход</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Световые реакции идут через две фотосистемы. Фотосистема II (реакционный центр P680) отнимает электроны у воды, фотосистема I (P700) поднимает их ещё выше по энергии, чтобы восстановить НАДФ⁺. На энергетической диаграмме путь электрона похож на букву Z.</p>
+                <p>Чтобы выделить одну молекулу O₂, нужно передать четыре электрона, и каждый проходит обе фотосистемы — отсюда минимум восемь фотонов. На практике лист связывает около 0,05–0,1 молекулы CO₂ на поглощённый фотон. Кривая Маккри показывает, что красные фотоны работают эффективнее всего, но и зелёные дают около 70&nbsp;% их отдачи.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>McCree K. J. The action spectrum, absorptance and quantum yield of photosynthesis in crop plants. <i>Agricultural Meteorology</i>, 1972.</li>
+                <li>Terashima I. et al. Green light drives leaf photosynthesis more efficiently than red light in strong white light. <i>Plant and Cell Physiology</i>, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-lampa" data-kind="phys" data-short="Обратные квадраты">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Почему лампу нельзя просто поднять повыше</span><span class="deep-sub">Закон обратных квадратов для фитолампы</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Свет точечного источника расходится во все стороны: те же фотоны распределяются по сфере, площадь которой растёт как квадрат расстояния. Поднимите маленькую лампу вдвое выше — на лист придёт вчетверо меньше света.</p>
+                <p>Широкая светодиодная панель вблизи ведёт себя мягче: она похожа на светящуюся плоскость, и освещённость падает медленнее. Но когда расстояние становится больше размера панели, снова работает обратный квадрат.</p>
+                <p>Слишком низко тоже плохо: в центре пятна света избыток, по краям мало, а горячие лампы обжигают листья. Для светодиодов обычно выбирают 20–40&nbsp;см.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Точечный источник</span><p>E = E₀ · (d₀ / d)²</p></div>
+                <div class="eq"><span class="eq-label">Круглая панель радиуса R</span><p>E ∝ R² / (R² + d²)</p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="lamp" data-kind="phys"></div>
+            <details class="deeper">
+              <summary id="deep-lampa-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Сколько света даёт ватт</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Эффективность фитолампы измеряют в <b>микромолях фотонов на джоуль</b> (мкмоль/Дж). Лучшие светодиодные панели дают 2,5–3&nbsp;мкмоль/Дж, натриевые лампы — около 1,7–1,9, люминесцентные — 1–1,3.</p>
+                <p>Прикинем: панель на 30&nbsp;Вт с эффективностью 2,5&nbsp;мкмоль/Дж испускает 75&nbsp;мкмоль фотонов в секунду. Если почти весь свет попадает на площадь 50&nbsp;×&nbsp;50&nbsp;см (0,25&nbsp;м²), в среднем выйдет 300&nbsp;мкмоль/м²·с — как раз столько, сколько нужно базилику.</p>
+                <div class="eq"><span class="eq-label">Оценка</span><p>PPFD ≈ P × η / S = 30 × 2,5 / 0,25 = 300</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Thimijan R. W., Heins R. D. Photometric, radiometric, and quantum light units of measure. <i>HortScience</i>, 1983.</li>
+                <li>Both A.-J. et al. Proposed product label for electric lamps used in the plant sciences. <i>HortTechnology</i>, 2017.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="panel" data-panel id="uhod-poliv" data-title="Полив">
+      <div class="cols-2">
+        <div class="card">
+          <h3 id="uhod-h4">Как поливать</h3>
+          <dl class="data-rows">
+            <div><dt>Когда</dt><dd>верхние 1–2 см сухие</dd></div>
+            <div><dt>Вода</dt><dd>комнатной t°, отстоянная</dd></div>
+            <div><dt>Время</dt><dd>утро</dd></div>
+            <div><dt>Как</dt><dd>под корень, до стока в поддон</dd></div>
+            <div><dt>Лишняя вода</dt><dd>слить через 15 мин</dd></div>
+          </dl>
+          <p class="muted">Проверяйте пальцем, а не по календарю. В жару на балконе горшок может просыхать ежедневно, зимой на прохладном окне — раз в 4–5 дней. Жёсткая вода со временем защелачивает грунт: раз в месяц промывайте его обильным поливом.</p>
+        </div>
+        <div class="card">
+          <h3 id="uhod-h5">Перелив или недолив?</h3>
+          <div class="table-scroll">
+            <table class="mini-table compare">
+              <thead><tr><th scope="col">Признак</th><th scope="col">Перелив</th><th scope="col">Недолив</th></tr></thead>
+              <tbody>
+                <tr><td>Листья</td><td>вялые, но мягкие, желтеют снизу</td><td>вялые, сухие, края хрустят</td></tr>
+                <tr><td>Грунт</td><td>сырой, тяжёлый, пахнет кислым</td><td>сухой, отходит от стенок</td></tr>
+                <tr><td>Стебель</td><td>темнеет у основания</td><td>тонкий, жёсткий</td></tr>
+                <tr><td>Гости</td><td>мошки над грунтом</td><td>паутинный клещ</td></tr>
+                <tr><td>Что делать</td><td>подсушить, проверить дренаж</td><td>полить в два захода или снизу</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="sub cols-2">
+        <div class="card">
+          <h3 id="uhod-h6">Уезжаю на неделю</h3>
+          <ul class="ticks">
+            <li><b>Фитильный полив:</b> синтетический шнур одним концом в дренажное отверстие или грунт, другим — в банку с водой.</li>
+            <li><b>Поддон с мокрым керамзитом</b> под все горшки сразу.</li>
+            <li><b>Отодвиньте от окна</b> в светлую полутень — испарение меньше.</li>
+            <li><b>Срежьте верхушки</b> перед отъездом: меньше листьев — меньше воды.</li>
+            <li>Прозрачный пакет-колпак спасёт на 3–4 дня, но только не на солнце.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 id="uhod-h7">Какая вода подходит</h3>
+          <ul class="ticks">
+            <li><b>Отстоянная водопроводная</b> — сутки в открытой ёмкости, чтобы ушёл хлор и она согрелась.</li>
+            <li><b>Фильтрованная или дождевая</b> — лучший вариант при жёсткой воде.</li>
+            <li><b>Холодная из-под крана</b> вызывает стресс корней: базилик теплолюбив.</li>
+            <li><b>Кипячёная</b> не нужна, а солевой налёт остаётся и в ней.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>До 95–99&nbsp;% воды, которую выпивает растение, уходит через устьица в воздух. На рост тканей остаётся лишь малая доля.</p>
+          <a class="sci-note-link" href="#deep-vpd">Глубже: Путь воды и VPD <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-vpd" data-kind="phys" data-short="Путь воды и VPD">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Путь воды: от корня до устьица</span><span class="deep-sub">Водный потенциал и дефицит давления пара (VPD)</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Растение не качает воду насосом. Её тянет разница <b>водных потенциалов</b>. У влажного грунта потенциал около −0,01…−0,1&nbsp;МПа, в листе −0,5…−1,5&nbsp;МПа, а у воздуха при 20&nbsp;°C и 50&nbsp;% влажности — примерно −94&nbsp;МПа. Вода всегда движется туда, где потенциал ниже.</p>
+                <p>Испаряясь из устьиц, вода тянет за собой непрерывный столб воды в сосудах ксилемы. Молекулы держатся друг за друга водородными связями, а за стенки сосудов — силами прилипания, поэтому столб не рвётся даже под натяжением. Это теория сцепления-натяжения.</p>
+                <p>Испарение ещё и охлаждает: на каждый грамм воды уходит около 2,4&nbsp;кДж. На солнце лист с открытыми устьицами может быть на несколько градусов прохладнее листа, который их закрыл.</p>
+                <p>Тепличники следят не за влажностью, а за <b>VPD</b> — дефицитом давления пара. Он показывает, сколько ещё водяного пара может принять воздух при данной температуре, и прямо задаёт силу, с которой воздух вытягивает воду из листа. При тех же 60&nbsp;% влажности в 30-градусную жару VPD почти вдвое выше, чем при 20&nbsp;°C.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Давление насыщенного пара</span><p>e<sub>s</sub> = 0,611 · exp(17,27·T / (T + 237,3)) кПа</p></div>
+                <div class="eq"><span class="eq-label">Дефицит</span><p>VPD = e<sub>s</sub> · (1 − RH/100)</p></div>
+                <div class="eq"><span class="eq-label">Потенциал воды в воздухе</span><p>Ψ = (RT / V̄<sub>w</sub>) · ln(RH)</p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="vpd" data-kind="phys"></div>
+            <details class="deeper">
+              <summary id="deep-vpd-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Точка росы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Если лист холоднее точки росы, на нём конденсируется вода. Ночью так бывает часто: лист излучает тепло в небо и остывает на 1–3&nbsp;°C ниже воздуха. При влажности 85&nbsp;% и 18&nbsp;°C точка росы — около 15,5&nbsp;°C, так что роса выпадет уже при небольшом охлаждении. Мокрый лист — вход для ложной мучнистой росы.</p>
+                <div class="eq"><span class="eq-label">Формула Магнуса</span><p>γ = ln(RH/100) + 17,27·T/(237,3 + T)<br>T<sub>р</sub> = 237,3·γ / (17,27 − γ)</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Tetens O. Über einige meteorologische Begriffe. <i>Zeitschrift für Geophysik</i>, 1930.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="panel" data-panel id="uhod-teplo" data-title="Тепло и воздух">
+      <div class="card">
+        <h3 id="uhod-h8">Температурная шкала базилика</h3>
+        <div class="scale" id="temp-scale" role="img" aria-label="Шкала температур от 0 до 40 градусов: ниже 5 — повреждение, 5–12 — рост остановлен, 12–16 — медленный рост, 16–20 — нормально, 20–28 — оптимум, 28–32 — терпимо, выше 32 — стресс и цветение">
+          <div class="scale-bar">
+            <span class="z-dead" style="flex:5">гибель</span>
+            <span class="z-cold" style="flex:7">стоп</span>
+            <span class="z-slow" style="flex:4">медленно</span>
+            <span class="z-ok" style="flex:4">норма</span>
+            <span class="z-best" style="flex:8">оптимум</span>
+            <span class="z-ok" style="flex:4">терпимо</span>
+            <span class="z-hot" style="flex:8">жара</span>
+          </div>
+          <div class="scale-ticks"><span style="left:0%">0°</span><span style="left:12.5%">5°</span><span style="left:30%">12°</span><span style="left:40%">16°</span><span style="left:50%">20°</span><span style="left:70%">28°</span><span style="left:80%">32°</span><span style="left:100%">40°</span></div>
+        </div>
+        <dl class="data-rows scale-notes">
+          <div><dt>Прорастание семян</dt><dd>22–25 °C</dd></div>
+          <div><dt>Рост днём</dt><dd>20–28 °C</dd></div>
+          <div><dt>Ночью</dt><dd>не ниже 16 °C</dd></div>
+          <div><dt>Остановка роста</dt><dd>ниже 12 °C</dd></div>
+          <div><dt>Холодовые повреждения</dt><dd>ниже +5…+10 °C</dd></div>
+          <div><dt>Стресс и раннее цветение</dt><dd>выше 32–35 °C</dd></div>
+        </dl>
+      </div>
+      <div class="sub cols-2">
+        <div class="card">
+          <h3 id="uhod-h9">Воздух и влажность</h3>
+          <p>Оптимальная влажность — 40–60&nbsp;%. Слишком сухо (батарея, кондиционер) — паутинный клещ и сухие края листьев. Слишком сыро и душно — ложная мучнистая роса и серая гниль.</p>
+          <p class="muted">Не опрыскивайте листья: мокрая листва болеет. Влажность повышайте поддоном с мокрым керамзитом.</p>
+        </div>
+        <div class="card">
+          <h3 id="uhod-h10">Опасные места в квартире</h3>
+          <ul class="ticks is-warn">
+            <li>Холодное стекло зимой — листья, прижатые к нему, чернеют.</li>
+            <li>Форточка и кондиционер — сквозняк и перепады температуры.</li>
+            <li>Батарея под подоконником — сухой горячий воздух снизу.</li>
+            <li>Застеклённый балкон в июльский полдень — выше 40&nbsp;°C.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>При нагреве на 10&nbsp;°C большинство реакций в клетке ускоряется примерно вдвое — до тех пор, пока белки не начинают разрушаться.</p>
+          <a class="sci-note-link" href="#deep-fermenty">Глубже: Ферменты и жара <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-fermenty" data-kind="chem" data-short="Ферменты и жара">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Температура и ферменты</span><span class="deep-sub">Правило Q₁₀, рубиско и цена жары</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Почти все процессы в клетке ведут ферменты, и их скорость подчиняется правилу <b>Q<sub>10</sub></b>: при нагреве на 10&nbsp;°C реакция ускоряется примерно вдвое — пока белок не начнёт терять форму.</p>
+                <p>Дыхание растёт с температурой неуклонно, а фотосинтез выходит на максимум около 25–30&nbsp;°C и дальше падает. Одна из причин — фермент <b>рубиско</b>. Он присоединяет CO<sub>2</sub>, но иногда по ошибке хватает O<sub>2</sub>. С нагревом CO<sub>2</sub> растворяется в клетке хуже, чем кислород, и ошибок становится больше. На их исправление — фотодыхание — уходят энергия и уже связанный углерод.</p>
+                <p>Прирост — это разница между фотосинтезом и дыханием. Поэтому в жару выше 32–35&nbsp;°C базилик «стоит»: сахара сгорают почти так же быстро, как образуются. Тёплые ночи вредят по той же причине: ночью фотосинтеза нет, а дыхание идёт.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Правило Q₁₀</span><p>v(T) = v₂₀ · Q₁₀<sup>(T − 20)/10</sup>, Q₁₀ ≈ 2</p></div>
+                <div class="num-note"><b>25–30&nbsp;°C</b><span>максимум фотосинтеза у базилика</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="temp" data-kind="chem"></div>
+            <details class="deeper">
+              <summary id="deep-fermenty-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Уравнение Аррениуса</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Правило Q₁₀ — упрощение уравнения Аррениуса: скорость реакции растёт экспоненциально с температурой, а крутизну задаёт энергия активации E<sub>a</sub>. Для типичной ферментной реакции с E<sub>a</sub>&nbsp;≈&nbsp;50&nbsp;кДж/моль около 20&nbsp;°C как раз получается Q₁₀&nbsp;≈&nbsp;2.</p>
+                <p>Выше оптимума в игру вступает обратный процесс — белки начинают разворачиваться, и кривая скорости падает. Поэтому у каждого фермента своя температура, при которой он работает быстрее всего.</p>
+                <div class="eq"><span class="eq-label">Аррениус</span><p>k = A · e<sup>−E<sub>a</sub>/RT</sup>, Q₁₀ = e<sup>10·E<sub>a</sub>/(R·T·(T+10))</sup></p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Arrhenius S. Über die Reaktionsgeschwindigkeit bei der Inversion von Rohrzucker durch Säuren. <i>Zeitschrift für physikalische Chemie</i>, 1889.</li>
+                <li>Farquhar G. D., von Caemmerer S., Berry J. A. A biochemical model of photosynthetic CO<sub>2</sub> assimilation in leaves of C<sub>3</sub> species. <i>Planta</i>, 1980.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="panel" data-panel id="uhod-pochva" data-title="Почва и pH">
+      <div class="cols-2">
+        <div class="card">
+          <h3 id="uhod-h11">Почва</h3>
+          <dl class="data-rows">
+            <div><dt>Структура</dt><dd>лёгкая, рыхлая</dd></div>
+            <div><dt>Кислотность</dt><dd>pH 6,0–7,0</dd></div>
+            <div><dt>Горшок</dt><dd>1,5–3 л на куст</dd></div>
+            <div><dt>Грядка</dt><dd>3–5 кг компоста на м²</dd></div>
+          </dl>
+          <div class="mix">
+            <b>Смесь для горшка</b>
+            <div class="mix-bar" role="img" aria-label="2 части торфяного грунта, 1 часть перлита, 1 часть биогумуса">
+              <span class="m-a" style="flex:2">Торфогрунт · 2</span><span class="m-b" style="flex:1">Перлит · 1</span><span class="m-c" style="flex:1">Биогумус · 1</span>
+            </div>
+            <small>Свежий навоз под базилик не вносят: он даёт избыток азота и заносит болезни. Точные литры — в <a href="posadka.html#posadka-gorshok">калькуляторе грунта</a>.</small>
+          </div>
+        </div>
+        <div class="card">
+          <h3 id="uhod-h12">Шкала pH: что доступно корням</h3>
+          <div class="scale ph" role="img" aria-label="Шкала pH от 4,5 до 8,5. Оптимум для базилика 6,0–7,0.">
+            <div class="scale-bar ph-bar"><span class="ph-opt" style="left:37.5%;width:25%">оптимум</span></div>
+            <div class="scale-ticks"><span style="left:0%">4,5</span><span style="left:25%">5,5</span><span style="left:37.5%">6,0</span><span style="left:62.5%">7,0</span><span style="left:75%">7,5</span><span style="left:100%">8,5</span></div>
+          </div>
+          <ul class="ph-notes">
+            <li><b>Ниже 5,5</b> — кислый: хуже доступны фосфор, кальций и магний, избыток марганца. Раскисляют доломитовой мукой.</li>
+            <li><b>6,0–7,0</b> — все элементы доступны.</li>
+            <li><b>Выше 7,5</b> — щелочной: блокируются железо, марганец и цинк, молодые листья желтеют. Помогают хелаты и мягкая вода.</li>
+          </ul>
+          <p class="muted">Проверить pH можно полосками или pH-метром в вытяжке: 1 часть грунта на 2 части дистиллированной воды, настоять 30 минут.</p>
+        </div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>В грамме плодородной почвы живёт до миллиарда бактерий. Большая часть питания корней проходит через их «руки».</p>
+          <a class="sci-note-link" href="udobreniya.html#deep-azot">Глубже: Круговорот азота <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-ph" data-kind="chem" data-short="pH и доступность">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">pH: почему кислотность решает, что доступно корням</span><span class="deep-sub">Ионы, заряды и ёмкость катионного обмена</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>pH — логарифмическая мера концентрации ионов водорода: при pH&nbsp;5 их в десять раз больше, чем при pH&nbsp;6, и в сто раз больше, чем при pH&nbsp;7.</p>
+                <p>Корни берут элементы только растворёнными, в виде ионов, а кислотность меняет их форму. При высоком pH железо, марганец и цинк переходят в нерастворимые гидроксиды и оксиды. Фосфор в щелочной среде связывается кальцием, а в кислой — железом и алюминием. Поэтому фосфор доступнее всего в узком окне pH 6–7.</p>
+                <p>Частицы глины и гумуса заряжены отрицательно и удерживают положительные ионы: K<sup>+</sup>, Ca<sup>2+</sup>, Mg<sup>2+</sup>, NH<sub>4</sub><sup>+</sup>. Это <b>ёмкость катионного обмена</b>, почвенный аккумулятор. Корни выделяют ионы H<sup>+</sup> и выменивают их на нужные катионы. Нитрат NO<sub>3</sub><sup>−</sup> заряжен отрицательно, почва его не держит, и он легко вымывается поливом.</p>
+                <p>Жёсткая водопроводная вода несёт гидрокарбонаты и постепенно подщелачивает грунт в горшке. Отсюда совет промывать грунт и поливать мягкой водой.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Определение</span><p>pH = −lg [H<sup>+</sup>]</p></div>
+                <div class="num-note"><b>6,0–7,0</b><span>окно, где доступны все элементы</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="ph" data-kind="chem"></div>
+            <details class="deeper">
+              <summary id="deep-ph-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Буфер и доломит</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Грунт сопротивляется изменению pH: гумус и глина держат запас ионов H⁺ на своих зарядах. Поэтому, чтобы поднять pH верхового торфа с 3,5–4,5 до 6, нужно не щепотка, а несколько граммов доломитовой муки на литр.</p>
+                <p>Доломит — двойной карбонат кальция и магния CaMg(CO₃)₂. Он растворяется медленно и только в кислой среде, поэтому передозировать его труднее, чем гашёную известь, а заодно он даёт кальций и магний.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Truog E. Soil reaction influence on availability of plant nutrients. <i>Soil Science Society of America Proceedings</i>, 1946.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="panel" data-panel id="uhod-sezony" data-title="Уход по сезонам">
+      <div class="seasons">
+        <article class="card season s-spring"><h3 id="uhod-h13">Весна</h3><ul class="ticks"><li>Посев и рассада с досветкой</li><li>Пикировка и первые подкормки в ¼ дозы</li><li>Закаливание перед высадкой</li><li>Высадка, когда ночи теплее +10&nbsp;°C</li></ul></article>
+        <article class="card season s-summer"><h3 id="uhod-h14">Лето</h3><ul class="ticks"><li>В жару — полив ежедневно, утром</li><li>Срезки каждые 1–2 недели</li><li>Удаление бутонов</li><li>Подкормки после срезок, притенение в полдень</li></ul></article>
+        <article class="card season s-autumn"><h3 id="uhod-h15">Осень</h3><ul class="ticks"><li>Черенки для подоконника</li><li>Заготовки на пике аромата</li><li>Финальный сбор до заморозков</li><li>Перенос горшков в дом, полив реже</li></ul></article>
+        <article class="card season s-winter"><h3 id="uhod-h16">Зима</h3><ul class="ticks"><li>Лампа 14–16 часов</li><li>18–24&nbsp;°C, подальше от холодного стекла</li><li>Полив по подсыханию, реже</li><li>Подкормки раз в 2–3 недели ½ дозы</li></ul></article>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>В декабре в Москве солнце в полдень поднимается всего на 11° — примерно на высоту кулака на вытянутой руке.</p>
+          <a class="sci-note-link" href="#deep-zima">Глубже: Зимний свет <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-zima" data-kind="phys" data-short="Зимний свет">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Зимний свет в цифрах</span><span class="deep-sub">Сколько солнечной энергии приходит в каждый месяц</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Энергия, которую солнце за день приносит на горизонтальную поверхность, зависит от высоты солнца и длины дня. Для верхней границы атмосферы её можно вычислить точно; облака и оконное стекло только уменьшают эту величину.</p>
+                <p>На широте Москвы в декабре приходит примерно в 10 раз меньше солнечной энергии, чем в июне, — и это ещё без облаков, которых зимой больше. Поэтому зимой окно даёт базилику лишь малую долю нужного света, и без лампы он вытягивается при любом уходе.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Суточная инсоляция</span><p>H₀ ∝ ω<sub>s</sub>·sin φ·sin δ + cos φ·cos δ·sin ω<sub>s</sub></p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="solar" data-kind="phys"></div>
+            <details class="deeper">
+              <summary id="deep-zima-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Облака, снег и рассеянный свет</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Формула в развороте считает свет над облаками. У земли всё решает облачность: сплошной слой туч пропускает лишь 10–30&nbsp;% энергии ясного дня. Ноябрь и декабрь в средней полосе — самые пасмурные месяцы, поэтому реальная разница между июнем и декабрём ближе к 15–20 разам.</p>
+                <p>Зимой помогает снег. Свежий снег отражает 80–90&nbsp;% света, трава — около 20&nbsp;%. Свет от сугробов входит в окно снизу и заметно добавляет освещённости подоконнику, особенно на нижних этажах. Долю отражённого света физики называют <b>альбедо</b>.</p>
+                <p>У облаков есть и плюс: рассеянный свет приходит со всего неба и проникает в затенённую середину куста. При той же сумме фотонов рассеянный свет растения используют эффективнее прямого, поэтому в лёгкую дымку фотосинтез всего растения бывает даже выше, чем под палящим солнцем.</p>
+                <div class="eq"><span class="eq-label">Альбедо поверхностей</span><p>свежий снег 0,8–0,9 · трава ≈ 0,2 · асфальт ≈ 0,05–0,1</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Iqbal M. <i>An Introduction to Solar Radiation</i>. Academic Press, 1983.</li>
+                <li>Mercado L. M. et al. Impact of changes in diffuse radiation on the global land carbon sink. <i>Nature</i>, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <nav class="pager" aria-label="Соседние главы"></nav>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>
+      <a class="brand" href="index.html">Базилик</a>
+      <p>Дозы и сроки в гиде — ориентиры для средних условий. Инструкция производителя удобрения всегда в приоритете, а погода важнее календаря.</p>
+    </div>
+    <p class="hand">Растите с удовольствием и ешьте песто ✿</p>
+  </div>
+</footer>
+
+</div>
+
+<!-- mobile tab bar -->
+<nav class="tabbar" aria-label="Навигация">
+  <a class="tab-item" href="index.html" data-tab="home"><svg class="ico"><use href="#i-home"/></svg><span>Главная</span></a>
+  <button class="tab-item" type="button" data-open="sheet-chapters"><svg class="ico"><use href="#i-book"/></svg><span>Главы</span></button>
+  <button class="tab-item" type="button" data-open="sheet-tools"><svg class="ico"><use href="#i-tools"/></svg><span>Инструменты</span></button>
+  <button class="tab-item" type="button" data-open="sheet-search"><svg class="ico"><use href="#i-search"/></svg><span>Поиск</span></button>
+</nav>
+
+<button class="to-top" id="to-top" type="button" aria-label="Наверх"><svg class="ico"><use href="#i-arrow-up"/></svg></button>
+
+<!-- sheets -->
+<dialog class="sheet" id="sheet-chapters" aria-labelledby="sheet-chapters-h">
+  <div class="sheet-inner">
+    <div class="sheet-head"><h2 id="sheet-chapters-h">Главы</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
+    <nav class="sheet-list" id="sheet-chapters-list" aria-label="Главы"></nav>
+  </div>
+</dialog>
+<dialog class="sheet" id="sheet-tools" aria-labelledby="sheet-tools-h">
+  <div class="sheet-inner">
+    <div class="sheet-head"><h2 id="sheet-tools-h">Инструменты</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
+    <nav class="sheet-list" id="sheet-tools-list" aria-label="Инструменты"></nav>
+  </div>
+</dialog>
+<dialog class="sheet sheet-search" id="sheet-search" aria-label="Поиск">
+  <div class="sheet-inner">
+    <div class="search-box">
+      <svg class="ico"><use href="#i-search"/></svg>
+      <input type="search" id="search-input" placeholder="Что ищем? Например, желтеют листья" autocomplete="off" aria-label="Поиск по гиду" aria-controls="search-results">
+      <button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="search-results" id="search-results" role="listbox" aria-label="Результаты поиска"></div>
+  </div>
+</dialog>
+<dialog class="sheet sheet-variety" id="sheet-variety" aria-labelledby="variety-h">
+  <div class="sheet-inner">
+    <div class="sheet-head"><span></span><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
+    <div id="variety-detail"></div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
+<script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/pages.js" defer></script>
+<script src="assets/js/scene.js" defer></script>
+<script src="assets/js/science.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>

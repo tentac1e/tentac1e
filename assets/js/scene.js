@@ -10,6 +10,28 @@ window.BasilScene = (() => {
   const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
   /* ------------------------------------------------------------------ */
+  /* frame budget shared by every animation on the page                  */
+  /* 60 fps at most (120 Hz screens would otherwise draw twice as often),*/
+  /* 30 fps on touch devices or once the page proves to be struggling    */
+  /* ------------------------------------------------------------------ */
+  const coarse = window.matchMedia('(pointer: coarse)').matches;
+  const perf = { low: coarse, listeners: [] };
+  function setLow() {
+    if (perf.low) return;
+    perf.low = true;
+    perf.listeners.forEach(fn => fn());
+  }
+  function gate(hi = 60, lo = 30) {
+    let prev = -1e9;
+    return ts => {
+      const fps = perf.low ? lo : hi;
+      if (ts - prev < 1000 / fps - 3) return false;
+      prev = ts;
+      return true;
+    };
+  }
+
+  /* ------------------------------------------------------------------ */
   /* value noise (seeded, so the scene looks the same on every visit)   */
   /* ------------------------------------------------------------------ */
   let seed = 20240517;
@@ -187,9 +209,33 @@ window.BasilScene = (() => {
       flyGlow = radial(pal.fly, 64, 0.06);
     }
 
+    /* sky: light beams by day, moon glow by night — composited CSS layers, not per-frame canvas work */
+    const sky = document.createElement('div');
+    sky.className = 'sky-layer';
+    sky.setAttribute('aria-hidden', 'true');
+    canvas.parentNode.insertBefore(sky, canvas);
+    function buildSky() {
+      sky.textContent = '';
+      if (pal.night) {
+        const moon = document.createElement('div');
+        moon.className = 'sky-moon';
+        sky.appendChild(moon);
+        return;
+      }
+      for (const b of beams) {
+        const wrap = document.createElement('div');
+        wrap.className = 'sky-beam';
+        wrap.style.animationDelay = `${(-b.ph / 0.07).toFixed(1)}s`;
+        b.c.style.animationDuration = `${(Math.PI / b.sp).toFixed(1)}s`;
+        b.c.style.animationDelay = `${(-b.ph / b.sp).toFixed(1)}s`;
+        wrap.appendChild(b.c);
+        sky.appendChild(wrap);
+      }
+    }
+
     function buildBeams() {
       beams = [];
-      if (pal.night) return;
+      if (pal.night) { buildSky(); return; }
       const q = 0.25;
       const defs = [[0.1, 0.22, 0.34], [0.42, 0.14, 0.3], [0.78, 0.18, 0.36]];
       defs.forEach(([fx, fw, tilt], i) => {
@@ -219,6 +265,7 @@ window.BasilScene = (() => {
         g.fillRect(0, 0, W, H);
         beams.push({ c, ph: i * 1.7, sp: 0.12 + i * 0.03, fx, tilt, x0, w1 });
       });
+      buildSky();
     }
 
     const beamAt = (x, y, t) => {
@@ -265,7 +312,8 @@ window.BasilScene = (() => {
     }
 
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      // soft background leaves do not need retina pixels; 1–1.5x keeps them crisp enough at a third of the cost
+      dpr = Math.min(window.devicePixelRatio || 1, perf.low ? 1 : 1.5);
       W = window.innerWidth;
       H = window.innerHeight;
       canvas.width = Math.round(W * dpr);
@@ -391,29 +439,11 @@ window.BasilScene = (() => {
       ctx.drawImage(flyGlow, f.x - 1.5, f.y - 1.5, 3, 3);
     }
 
-    function drawSky(t) {
-      if (pal.night) {
-        const g = ctx.createRadialGradient(W * 0.86, -H * 0.05, 0, W * 0.86, -H * 0.05, Math.max(W, H) * 0.7);
-        g.addColorStop(0, pal.moon);
-        g.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.globalAlpha = 0.85 + 0.15 * Math.sin(t * 0.2);
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, W, H);
-        return;
-      }
-      for (const b of beams) {
-        ctx.globalAlpha = 0.22 + 0.4 * (0.5 + 0.5 * Math.sin(t * b.sp + b.ph));
-        const sway = Math.sin(t * 0.07 + b.ph) * W * 0.012;
-        ctx.drawImage(b.c, sway, 0, W, H);
-      }
-    }
-
     function render(t, dt) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.globalAlpha = 1;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawSky(t);
       const moving = dt > 0;
       let i = 0;
       for (; i < leaves.length && leaves[i].layer === 2; i++) {
@@ -444,8 +474,18 @@ window.BasilScene = (() => {
       ctx.globalAlpha = 1;
     }
 
+    const ready = gate(60, 30);
+    let prevTs = 0, ema = 16.7, warm = 0;
     function frame(ts) {
       raf = requestAnimationFrame(frame);
+      // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps
+      if (prevTs) {
+        const iv = Math.min(100, ts - prevTs);
+        if (warm < 90) warm++;
+        else { ema += (iv - ema) * 0.05; if (ema > 24) setLow(); }
+      }
+      prevTs = ts;
+      if (!ready(ts)) return;
       const t = ts / 1000;
       let dt = t - last;
       last = t;
@@ -455,11 +495,13 @@ window.BasilScene = (() => {
       ptr.vx *= k; ptr.vy *= k;
       render(t, dt);
     }
+    perf.listeners.push(() => { resize(); });
 
     function start() {
       cancelAnimationFrame(raf);
       if (reduce.matches) { render(now(), 0); return; }
       last = performance.now() / 1000;
+      prevTs = 0;
       raf = requestAnimationFrame(frame);
     }
 
@@ -579,6 +621,42 @@ window.BasilScene = (() => {
     return grow('r', 0, rounds, 0);
   }
 
+  /* ------------------------------------------------------------------ */
+  /* leaf bitmaps: the hero bush moves ~40 leaves every frame; drawing  */
+  /* ready-made pictures is far cheaper than re-painting vector leaves  */
+  /* with gradients and veins, and looks the same                       */
+  /* ------------------------------------------------------------------ */
+  const LEAF_D = { pet: 'M0 1 L0 -12', blade: 'M0 -10 C 22 -11 31 -30 30 -50 C 29 -72 13 -98 0 -110 C -13 -98 -29 -72 -30 -50 C -31 -30 -22 -11 0 -10 Z', fold: 'M0 -10 C 22 -11 31 -30 30 -50 C 29 -72 13 -98 0 -110 Z', shine: 'M-4 -20 C -19 -27 -24 -46 -21 -62 C -18 -78 -9 -92 -2 -101 C -7 -82 -10 -52 -4 -20 Z', vein: 'M0 -11 Q 1.6 -58 0 -105 M0.4 -28 Q 12 -32 21 -45 M0.4 -28 Q -12 -32 -21 -45 M0.6 -46 Q 11 -51 18 -64 M0.6 -46 Q -11 -51 -18 -64 M0.5 -64 Q 8 -69 12 -80 M0.5 -64 Q -8 -69 -12 -80 M0.4 -80 Q 5 -85 7 -93 M0.4 -80 Q -5 -85 -7 -93' };
+  const LEAF_BOX = { x: -33, y: -112, w: 66, h: 116 };
+  const LEAF_FILLS = { 'url(#pl-grad)': ['--pl-a', '--pl-b'], 'url(#pl-grad-young)': ['--pl-b', '--pl-c'], 'url(#pl-grad-back)': ['--pl-back-a', '--pl-back-b'], 'url(#pl-grad-purple)': ['--pl-pa', '--pl-pb'] };
+  let leafArt = null, leafArtTheme = '';
+  function leafBitmaps() {
+    const theme = ['--pl-a', '--pl-b', '--pl-c', '--pl-back-a', '--pl-pa', '--pl-vein'].map(css).join('|');
+    if (leafArt && leafArtTheme === theme) return leafArt;
+    leafArtTheme = theme;
+    const R = clamp(Math.ceil((window.devicePixelRatio || 1) * 1.6), 2, 4);
+    const B = LEAF_BOX;
+    leafArt = Promise.all(Object.entries(LEAF_FILLS).map(([fill, [a, b]]) => new Promise(resolve => {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${B.w * R}" height="${B.h * R}" viewBox="${B.x} ${B.y} ${B.w} ${B.h}">` +
+        `<defs><linearGradient id="g" x1="0" y1="1" x2="0.25" y2="0"><stop offset="0" stop-color="${css(a)}"/><stop offset="1" stop-color="${css(b)}"/></linearGradient></defs>` +
+        `<path d="${LEAF_D.pet}" fill="none" stroke="${css('--pl-pet')}" stroke-width="3.4" stroke-linecap="round"/>` +
+        `<path d="${LEAF_D.blade}" fill="url(#g)"/><path d="${LEAF_D.fold}" fill="${css('--pl-fold')}"/><path d="${LEAF_D.shine}" fill="${css('--pl-shine')}"/>` +
+        `<path d="${LEAF_D.vein}" fill="none" stroke="${css('--pl-vein')}" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const c = makeCanvas(B.w * R, B.h * R);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          if (c.toBlob && window.URL && URL.createObjectURL) c.toBlob(b => resolve([fill, b ? URL.createObjectURL(b) : c.toDataURL('image/png')]), 'image/png');
+          else resolve([fill, c.toDataURL('image/png')]);
+        } catch (e) { resolve([fill, null]); }
+      };
+      img.onerror = () => resolve([fill, null]);
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }))).then(list => Object.fromEntries(list.filter(x => x[1])));
+    return leafArt;
+  }
+
   function Plant(svg, spec, o = {}) {
     const root = svg.ownerSVGElement || svg;
     const layers = {
@@ -592,6 +670,26 @@ window.BasilScene = (() => {
     let shoots = [];
     let raf = 0, last = 0, visible = true, running = false;
     const ptr = { x: -9999, y: -9999, speed: 0, down: false, lastAroma: 0 };
+    let bitmaps = null;
+    // o.raster: swap vector leaves for bitmaps once they are drawn (and again after a theme change)
+    function applyBitmaps(map) {
+      bitmaps = map;
+      for (const sh of shoots) for (const lf of sh.leaves) {
+        const art = map[lf.fill];
+        if (!art) continue;
+        if (lf.el.tagName.toLowerCase() === 'image') { lf.el.setAttribute('href', art); continue; }
+        const img = mk('image', { href: art, class: lf.el.getAttribute('class'), x: LEAF_BOX.x, y: LEAF_BOX.y, width: LEAF_BOX.w, height: LEAF_BOX.h });
+        const tr = lf.el.getAttribute('transform');
+        if (tr) img.setAttribute('transform', tr);
+        img.style.display = lf.el.style.display;
+        lf.el.replaceWith(img);
+        lf.el = img;
+      }
+    }
+    if (o.raster) {
+      leafBitmaps().then(applyBitmaps);
+      document.addEventListener('basil:theme', () => { setTimeout(() => leafBitmaps().then(applyBitmaps), 60); });
+    }
 
     function build(sp, parent, at, keep) {
       const prev = keep && keep.get(sp.id);
@@ -613,9 +711,12 @@ window.BasilScene = (() => {
         const pairSide = i % 2 === 0;
         const spreadBase = 64 - 40 * Math.pow(i / Math.max(1, n - 1), 1.15);
         const mkLeaf = (layer, side, kind, extraFill) => {
-          const e = mk('use', { href: '#pl-leaf', class: 'pl-leaf' + (kind === 'back' ? ' is-back' : '') }, layer);
-          e.style.fill = extraFill || fill;
-          s.leaves.push({ el: e, node: i, side, kind, size, spread: spreadBase, a: 0, v: 0, ph: Math.random() * TAU });
+          const f = extraFill || fill;
+          const cls = 'pl-leaf' + (kind === 'back' ? ' is-back' : '');
+          const art = bitmaps && bitmaps[f];
+          const e = art ? mk('image', { href: art, class: cls, x: LEAF_BOX.x, y: LEAF_BOX.y, width: LEAF_BOX.w, height: LEAF_BOX.h }, layer) : mk('use', { href: '#pl-leaf', class: cls }, layer);
+          if (!art) e.style.fill = f;
+          s.leaves.push({ el: e, fill: f, node: i, side, kind, size, spread: spreadBase, a: 0, v: 0, ph: Math.random() * TAU });
         };
         if (pairSide) {
           mkLeaf(layers.mid, -1, 'side');
@@ -695,8 +796,12 @@ window.BasilScene = (() => {
         h += (i ? ' L' : 'M') + f2(p.x - Math.cos(p.a) * w) + ' ' + f2(p.y - Math.sin(p.a) * w);
       }
       s.hl.setAttribute('d', h);
-      s.hl.style.strokeWidth = Math.max(0.6, sp.w0 * 0.14);
-      if (s.cap) { s.cap.setAttribute('cx', f2(tip.x)); s.cap.setAttribute('cy', f2(tip.y)); s.cap.style.opacity = s.grow > 0.9 ? 1 : 0; }
+      if (!s._sw) { s._sw = 1; s.hl.style.strokeWidth = Math.max(0.6, sp.w0 * 0.14); }
+      if (s.cap) {
+        s.cap.setAttribute('cx', f2(tip.x)); s.cap.setAttribute('cy', f2(tip.y));
+        const op = s.grow > 0.9 ? 1 : 0;
+        if (s._cap !== op) { s._cap = op; s.cap.style.opacity = op; }
+      }
     }
 
     function draw(t, dt) {
@@ -717,15 +822,18 @@ window.BasilScene = (() => {
         }
         stemPath(s);
         const vis = s.grow > 0.001;
-        s.stem.style.display = vis ? '' : 'none';
-        s.hl.style.display = vis ? '' : 'none';
+        if (s._vis !== vis) {
+          s._vis = vis;
+          s.stem.style.display = vis ? '' : 'none';
+          s.hl.style.display = vis ? '' : 'none';
+        }
       }
       for (const s of shoots) {
         for (const lf of s.leaves) {
           const e = nodeE(s, lf.node);
           const p = s.pts[lf.node + 1];
-          if (!p || e <= 0.02) { lf.el.style.display = 'none'; continue; }
-          lf.el.style.display = '';
+          if (!p || e <= 0.02) { if (lf._vis !== false) { lf._vis = false; lf.el.style.display = 'none'; } continue; }
+          if (lf._vis !== true) { lf._vis = true; lf.el.style.display = ''; }
           const g = Math.pow(Math.max(0, (e - 0.25) / 0.75), 0.8);
           const flutter = Math.sin(t * 2.2 + lf.ph) * 2.2 * (1 + Math.abs(w)) + w * 7;
           if (dt > 0) {
@@ -785,9 +893,14 @@ window.BasilScene = (() => {
       return best;
     }
 
+    // growth and touch get up to 60 fps; gentle idle swaying needs no more than 30
+    const fast = gate(60, 30), calm = gate(30, 30);
     function frame(ts) {
       raf = 0;
       if (!visible || document.hidden) { running = false; return; }
+      raf = requestAnimationFrame(frame);
+      const active = ptr.x > -9000 || ptr.speed > 2 || shoots.some(sh => sh.grow < 1 || Math.abs(sh.sv) > 0.02);
+      if (!(active ? fast(ts) : calm(ts))) return;
       const t = ts / 1000;
       let dt = t - last;
       last = t;
@@ -795,7 +908,6 @@ window.BasilScene = (() => {
       pushFromPointer();
       ptr.speed *= 0.85;
       draw(t, Math.max(0, dt));
-      raf = requestAnimationFrame(frame);
     }
     function wake() {
       if (reduce.matches || o.static) { draw(now(), 0); return; }
@@ -903,5 +1015,5 @@ window.BasilScene = (() => {
     if (opts.onNote) opts.onNote(name, note);
   }
 
-  return { wind, gust, noise3, initBackground, Plant, basil, bush, aroma, reduce };
+  return { wind, gust, noise3, initBackground, Plant, basil, bush, aroma, reduce, gate, perf };
 })();

@@ -353,6 +353,16 @@ h4 { margin: 0 0 .35em; font-size: 1.04rem; font-weight: 700; line-height: 1.3; 
 .aura span:nth-child(2) { width: 44vmax; height: 44vmax; right: -16vmax; top: 30vh; background: radial-gradient(circle, color-mix(in srgb, var(--opal) 14%, transparent), transparent 65%); animation-duration: 32s; animation-delay: -8s; }
 .aura span:nth-child(3) { width: 40vmax; height: 40vmax; left: 20vw; bottom: -22vmax; background: radial-gradient(circle, color-mix(in srgb, var(--oil-bright) 14%, transparent), transparent 65%); animation-duration: 38s; animation-delay: -14s; }
 @keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(4vw, 3vh, 0) scale(1.08); } }
+/* sky layers: animated by the compositor, the main thread never repaints them */
+.sky-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.sky-beam { position: absolute; inset: 0; animation: sky-sway 44.9s ease-in-out infinite alternate; will-change: transform; }
+.sky-beam canvas { display: block; width: 100%; height: 100%; opacity: .42; animation: sky-breathe 13s ease-in-out infinite alternate; will-change: opacity; }
+.sky-moon { position: absolute; inset: 0; background: radial-gradient(70vmax circle at 86% -5%, var(--sc-moon, rgba(190, 220, 255, .12)), transparent); animation: sky-moon 15.7s ease-in-out infinite alternate; will-change: opacity; }
+@keyframes sky-breathe { from { opacity: .22; } to { opacity: .62; } }
+@keyframes sky-sway { from { transform: translate3d(-1.2vw, 0, 0); } to { transform: translate3d(1.2vw, 0, 0); } }
+@keyframes sky-moon { from { opacity: .7; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .sky-beam, .sky-beam canvas, .sky-moon { animation: none; } }
+.is-off, .is-off *, .is-off::before, .is-off::after, .is-off *::before, .is-off *::after { animation-play-state: paused !important; }
 
 .page { position: relative; z-index: 1; overflow-x: clip; }
 
@@ -654,6 +664,8 @@ main { view-transition-name: main; }
 
 @keyframes vt-out { to { opacity: 0; translate: 0 -10px; } }
 @keyframes vt-in { from { opacity: 0; translate: 0 18px; } }
+/* chapters are separate pages: browsers that can cross-fade between documents do it */
+@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
 ::view-transition-old(main) { animation: vt-out .18s ease-in both; }
 ::view-transition-new(main) { animation: vt-in .42s var(--ease-float) both; }
 
@@ -1015,7 +1027,8 @@ main { view-transition-name: main; }
   border: 1px solid var(--line-strong);
   box-shadow: var(--shadow-float);
 }
-.season-mark svg { width: 110px; height: 110px; animation: bob 9s ease-in-out infinite; }
+.season-mark .art-float { width: 110px; height: 110px; }
+.season-mark svg { width: 110px; height: 110px; }
 .season-text { margin: 8px 0 6px; font-family: var(--font-display); font-size: clamp(1.35rem, 2.4vw, 1.75rem); font-weight: 600; line-height: 1.25; color: var(--ink); }
 .season-note { margin: 0; font-size: .86rem; color: var(--ink-3); }
 @media (max-width: 560px) {
@@ -1184,13 +1197,27 @@ main { view-transition-name: main; }
   border-radius: 42% 58% 62% 38% / 45% 40% 60% 55%;
   box-shadow: var(--shadow-float);
   animation: morph 14s ease-in-out infinite;
+  will-change: transform;
 }
-.ch-hero-art svg { position: relative; width: 78%; height: 78%; animation: bob 9s ease-in-out infinite; }
+/* the blob «breathes» between two outlines: a cross-fade and a turn run on the compositor, no repaint per frame */
+.ch-hero-art .blob::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 58% 42% 45% 55% / 55% 60% 40% 45%;
+  background: inherit;
+  opacity: 0;
+  animation: morph-fade 14s ease-in-out infinite;
+  will-change: opacity;
+}
+.art-float { position: relative; display: grid; place-items: center; width: 78%; height: 78%; animation: bob 9s ease-in-out infinite; will-change: translate; }
+.ch-hero-art .art-float svg { width: 100%; height: 100%; }
 @keyframes morph {
-  0%, 100% { border-radius: 42% 58% 62% 38% / 45% 40% 60% 55%; rotate: 0deg; }
-  33% { border-radius: 58% 42% 45% 55% / 55% 60% 40% 45%; rotate: 8deg; }
-  66% { border-radius: 38% 62% 55% 45% / 40% 52% 48% 60%; rotate: -6deg; }
+  0%, 100% { rotate: 0deg; scale: 1; }
+  33% { rotate: 8deg; scale: 1.03; }
+  66% { rotate: -6deg; scale: .98; }
 }
+@keyframes morph-fade { 0%, 100% { opacity: 0; } 33% { opacity: 1; } 66% { opacity: .35; } }
 @media (max-width: 700px) {
   .ch-hero { grid-template-columns: minmax(0, 1fr) 96px; gap: 14px; align-items: start; padding-top: 22px; }
   .ch-hero-text { display: contents; }
