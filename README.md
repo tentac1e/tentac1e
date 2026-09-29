@@ -50,8 +50,13 @@
 
 ```
 python3 scripts/build.py                                   # 12 страниц в корне
+python3 scripts/build.py --clean --out dist/site           # версия для хостинга с адресами без .html
 python3 scripts/build.py --single dist/gid-po-baziliku.html  # вся книга одним файлом
 ```
+
+### Адреса без «.html»
+
+Версия `--clean` ссылается на главы как `sorta`, а не `sorta.html`, и кладёт рядом `.htaccess` (исходник — `src/.htaccess`). На хостинге с Apache (REG.RU и большинство обычных хостингов) адрес `ваш-сайт/sorta` показывает `sorta.html`, а старые `sorta.html`, `sorta/` и `index.html` навсегда перенаправляются на новые адреса. На хостинг загружается всё содержимое `dist/site`, включая скрытый файл `.htaccess`. Если сайт лежит не в корне домена, а в подпапке, её нужно вписать в строку `RewriteBase` в `.htaccess`.
 
 ```
 src/layout.html          общий каркас: шапка, спрайт, фон, меню, поиск, подвал
@@ -67,6 +72,7 @@ assets/js/science.js     развороты и глубина чтения, да
 assets/js/labs.js        36 интерактивных моделей
 assets/js/app.js         навигация, поиск и инструменты глав
 scripts/build.py         сборка страниц
+src/.htaccess            правила Apache для адресов без .html
 scripts/bundle.py        встраивание стилей и скриптов в один файл
 ```
 

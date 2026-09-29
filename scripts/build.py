@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Сборка сайта из исходников в src/.
 
-    python3 scripts/build.py                 # 12 страниц в корне репозитория
-    python3 scripts/build.py --single PATH   # вся книга одним HTML-файлом (все главы на одной странице)
+    python3 scripts/build.py                           # 12 страниц в корне репозитория (ссылки вида sorta.html)
+    python3 scripts/build.py --clean --out dist/site   # версия для хостинга с адресами без .html + .htaccess
+    python3 scripts/build.py --single PATH             # вся книга одним HTML-файлом (все главы на одной странице)
 
 Исходники:
     src/layout.html        общий каркас: шапка, спрайт, фон, подвал, поиск, меню
@@ -19,6 +20,7 @@
 """
 import json
 import re
+import shutil
 import sys
 from html import escape
 from html.parser import HTMLParser
@@ -163,6 +165,12 @@ def main():
     single = None
     if '--single' in sys.argv:
         single = Path(sys.argv[sys.argv.index('--single') + 1]).resolve()
+    out_dir = ROOT
+    if '--out' in sys.argv:
+        out_dir = Path(sys.argv[sys.argv.index('--out') + 1]).resolve()
+    # --clean: links say «sorta», not «sorta.html»; the server maps one onto the other (src/.htaccess)
+    clean = '--clean' in sys.argv
+    LINK = {v: ('./' if v == 'glavnaya' else v) for v, _ in PAGES} if clean else dict(FILE)
 
     layout = (SRC / 'layout.html').read_text(encoding='utf-8')
     src = {v: (SRC / 'pages' / f'{v}.html').read_text(encoding='utf-8') for v, _ in PAGES}
@@ -244,11 +252,11 @@ def main():
         if target in FILE:
             if target == here:
                 return '#' + target
-            return FILE[target]
+            return LINK[target]
         page = owner.get(target) or next((p for pre, p in PREFIXES.items() if target.startswith(pre)), None)
         if not page or page == here:
             return '#' + target
-        return f'{FILE[page]}#{target}'
+        return f'{LINK[page]}#{target}'
 
     def rewrite_links(html, here):
         def fix(m):
@@ -259,9 +267,13 @@ def main():
         return re.sub(r'(<a\b[^>]*?\s)href="#([^"]+)"', fix, html)
 
     # 3. generated data files
-    js = ROOT / 'assets' / 'js'
+    if out_dir != ROOT:
+        shutil.copytree(ROOT / 'assets', out_dir / 'assets', dirs_exist_ok=True)
+        if clean and (SRC / '.htaccess').exists():
+            shutil.copy(SRC / '.htaccess', out_dir / '.htaccess')
+    js = out_dir / 'assets' / 'js'
     pages_js = {
-        'files': FILE,
+        'files': LINK,
         'prefixes': PREFIXES,
         'ids': {k: v for k, v in sorted(owner.items()) if not k.startswith('lab-')},
         'stats': stats,
@@ -308,8 +320,8 @@ def main():
         return
 
     for view, file in PAGES:
-        (ROOT / file).write_text(page_html([view], view), encoding='utf-8')
-        print(f'{file:18} {len((ROOT / file).read_bytes()) // 1024:4} КБ')
+        (out_dir / file).write_text(page_html([view], view), encoding='utf-8')
+        print(f'{file:18} {len((out_dir / file).read_bytes()) // 1024:4} КБ')
     print(f'pages.js {len((js / "pages.js").read_bytes()) // 1024} КБ, search-index.js {len((js / "search-index.js").read_bytes()) // 1024} КБ, '
           f'{len(static_entries_panels) + len(static_entries_heads)} записей в индексе')
 
