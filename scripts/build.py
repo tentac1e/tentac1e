@@ -49,6 +49,22 @@ SLUG = {'glavnaya': '', 'sorta': 'сорта', 'posadka': 'посадка', 'kal
         'udobreniya': 'удобрения', 'formirovka': 'прищипывание', 'urozhay': 'урожай', 'vkus': 'вкус',
         'razmnozhenie': 'размножение', 'problemy': 'проблемы', 'spravka': 'справка'}
 
+# short Russian anchors for chapter tabs: /удобрения#план instead of #udobreniya-plan.
+# Sources, data and old bookmarks keep the long ids — the build and the router translate them.
+TAB = {
+    'sorta-katalog': 'каталог', 'sorta-podbor': 'подбор', 'sorta-vybor': 'выбор',
+    'posadka-mesto': 'место', 'posadka-posev': 'посев', 'posadka-magazin': 'магазин', 'posadka-gorshok': 'горшок',
+    'uhod-svet': 'свет', 'uhod-poliv': 'полив', 'uhod-teplo': 'тепло', 'uhod-pochva': 'почва', 'uhod-sezony': 'сезоны',
+    'udobreniya-osnovy': 'основы', 'udobreniya-elementy': 'элементы', 'udobreniya-stadii': 'стадии', 'udobreniya-plan': 'план',
+    'udobreniya-sredstva': 'средства', 'udobreniya-kalkulyator': 'калькулятор', 'udobreniya-gidro': 'гидропоника', 'udobreniya-mify': 'мифы',
+    'formirovka-osnovy': 'основы', 'formirovka-trenazher': 'тренажер', 'formirovka-cvetenie': 'цветение',
+    'urozhay-sbor': 'сбор', 'urozhay-hranenie': 'хранение', 'urozhay-recepty': 'рецепты',
+    'vkus-aromat': 'аромат', 'vkus-molekuly': 'молекулы', 'vkus-himotipy': 'химотипы', 'vkus-kuhnya': 'кухня', 'vkus-sochetaniya': 'сочетания',
+    'razmnozhenie-cherenki': 'черенки', 'razmnozhenie-semena': 'семена',
+    'problemy-diagnostika': 'диагностика', 'problemy-bolezni': 'болезни', 'problemy-vrediteli': 'вредители', 'problemy-profilaktika': 'профилактика',
+    'spravka-voprosy': 'вопросы', 'spravka-slovar': 'словарь', 'spravka-chek-list': 'чек-лист',
+}
+
 
 def htaccess():
     """Apache rules for the --clean build. Only ASCII inside: Cyrillic is written as UTF-8 byte escapes,
@@ -297,17 +313,30 @@ def main():
             owner.setdefault(m.group(1), view)
         owner[view] = view
 
+    alias = {} if single else dict(TAB)
+    for view, _ in PAGES:
+        panels = re.findall(r'<div class="panel" data-panel id="([^"]+)"', src[view])
+        assert set(panels) <= set(TAB), set(panels) - set(TAB)
+        shorts = [TAB[i] for i in panels]
+        assert len(shorts) == len(set(shorts)), view
+        clash = set(shorts) & set(re.findall(r'\sid="([^"]+)"', src[view]))
+        assert not clash, (view, clash)
+        if not single:
+            for old in panels:
+                src[view] = src[view].replace(f'data-panel id="{old}"', f'data-panel id="{TAB[old]}"')
+
     def href_for(target, here):
         if single:
             return '#' + target
+        anchor = alias.get(target, target)
         if target in FILE:
             if target == here:
                 return '#' + target
             return LINK[target]
         page = owner.get(target) or next((p for pre, p in PREFIXES.items() if target.startswith(pre)), None)
         if not page or page == here:
-            return '#' + target
-        return f'{LINK[page]}#{target}'
+            return '#' + anchor
+        return f'{LINK[page]}#{anchor}'
 
     def rewrite_links(html, here):
         def fix(m):
@@ -329,6 +358,7 @@ def main():
         'ids': {k: v for k, v in sorted(owner.items()) if not k.startswith('lab-')},
         'stats': stats,
         'titles': titles,
+        'alias': alias,
     }
     (js / 'pages.js').write_text(
         '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'

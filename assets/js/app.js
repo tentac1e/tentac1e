@@ -70,14 +70,17 @@
     for (const pre in PAGES.prefixes) if (id.startsWith(pre)) return PAGES.prefixes[pre];
     return null;
   };
-  // «#id» → the address that really shows it: same page keeps the hash, another chapter gets «page.html#id»
+  // tabs have short anchors (#план); data and old bookmarks use the long ids (#udobreniya-plan)
+  const aliasOf = id => (PAGES && PAGES.alias && PAGES.alias[id]) || id;
+  // «#id» → the address that really shows it: same page keeps the hash, another chapter gets «page#id»
   const urlFor = hash => {
-    const id = decodeURIComponent(String(hash || '').replace(/^#/, ''));
+    let id = String(hash || '').replace(/^#/, '');
+    try { id = decodeURIComponent(id); } catch (e) { /* already plain */ }
     if (!PAGES || !id || id === 'main' || id === 'top' || id === here || document.getElementById(id)) return '#' + id;
     const pg = pageOf(id);
-    if (!pg || pg === here) return '#' + id;
+    if (!pg || pg === here) return '#' + aliasOf(id);
     if (PAGES.files[id]) return PAGES.files[id];
-    return PAGES.files[pg] + '#' + id;
+    return PAGES.files[pg] + '#' + aliasOf(id);
   };
   function fixLinks(root) {
     if (!PAGES || !root || !root.querySelectorAll) return;
@@ -171,7 +174,13 @@
 
   const homeView = () => views.get('glavnaya') || views.values().next().value;
   function resolve(raw) {
-    const hash = decodeURIComponent(String(raw || '').replace(/^#/, ''));
+    let hash = String(raw || '').replace(/^#/, '');
+    try { hash = decodeURIComponent(hash); } catch (e) { /* malformed — use as is */ }
+    // an old long tab id on its own page: switch to the short anchor
+    if (hash && !document.getElementById(hash) && aliasOf(hash) !== hash && document.getElementById(aliasOf(hash))) {
+      hash = aliasOf(hash);
+      try { history.replaceState(null, '', '#' + hash); } catch (e) { /* sandboxed */ }
+    }
     if (!hash || hash === 'top') return { view: homeView() };
     if (views.has(hash)) return { view: views.get(hash) };
     const el = document.getElementById(hash);
@@ -305,11 +314,12 @@
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = e.target.closest('a[href^="#"]');
       if (!a) return;
-      const hash = a.getAttribute('href');
+      let hash = a.getAttribute('href');
       if (hash === '#main') return;
       e.preventDefault();
       const u = urlFor(hash);
       if (!u.startsWith('#')) { location.href = u; return; }
+      hash = u;
       const dlg = a.closest('dialog');
       if (dlg && dlg.open) dlg.close();
       navigate(hash, { replace: !!a.closest('.subnav') });
@@ -341,7 +351,8 @@
       if (!cont || !ch) return;
       const panel = last.panel && document.getElementById(last.panel);
       const sub = panel ? (panel.dataset.title && $$('[data-panel]', views.get(ch.id)).length > 1 ? panel.dataset.title : '') : last.sub;
-      cont.href = urlFor('#' + (panel || (PAGES && last.panel) ? last.panel : ch.id));
+      // short tab anchors repeat between chapters, so the chapter comes from the saved view
+      cont.href = panel ? '#' + last.panel : PAGES && last.panel ? PAGES.files[last.view] + '#' + aliasOf(last.panel) : urlFor('#' + ch.id);
       $('#continue-title').textContent = ch.title + (sub ? ' · ' + sub : '');
       cont.hidden = false;
     };
@@ -481,8 +492,8 @@
     searchIndex = idx;
   }
   const entryUrl = e => {
-    if (!PAGES || e.page === here) return '#' + e.hash;
-    return PAGES.files[e.page] + (e.act ? '?do=' + encodeURIComponent(e.act) : '') + (PAGES.files[e.hash] ? '' : '#' + e.hash);
+    if (!PAGES || e.page === here) return '#' + aliasOf(e.hash);
+    return PAGES.files[e.page] + (e.act ? '?do=' + encodeURIComponent(e.act) : '') + (PAGES.files[e.hash] ? '' : '#' + aliasOf(e.hash));
   };
   // the index of all chapters is a separate file: fetched the first time search opens
   let searchReady = null;
@@ -565,7 +576,7 @@
       closeSheet($('#sheet-search'));
       const u = entryUrl(e);
       if (!u.startsWith('#')) { location.href = u; return; }
-      navigate('#' + e.hash);
+      navigate(u);
       if (e.after) setTimeout(e.after, 60);
     };
 
