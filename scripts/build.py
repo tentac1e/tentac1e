@@ -18,6 +18,7 @@
       (страница подгружает его, только когда открывают поиск).
 Ничего не сжимается и не минифицируется: сгенерированные файлы остаются читаемыми.
 """
+import hashlib
 import json
 import re
 import shutil
@@ -360,13 +361,22 @@ def main():
         'titles': titles,
         'alias': alias,
     }
-    (js / 'pages.js').write_text(
-        '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
-        'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
     (js / 'search-index.js').write_text(
         '/* Гид по базилику — поисковый индекс по тексту глав. Файл создаёт scripts/build.py */\n'
         'window.BASIL_SEARCH = ' + json.dumps(static_entries_panels + static_entries_heads, ensure_ascii=False, indent=0) + ';\n',
         encoding='utf-8')
+    # every asset address carries a short fingerprint of its content (style.css?v=3f2a91c0):
+    # after an update browsers fetch the new files instead of mixing them with cached old ones
+    ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
+    pages_js['v'] = {'labs': ver(js / 'labs.js'), 'search': ver(js / 'search-index.js')}
+    (js / 'pages.js').write_text(
+        '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
+        'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
+
+    def fingerprint(html):
+        if single:
+            return html
+        return re.sub(r'((?:href|src)="(assets/(?:css|js)/[a-z-]+\.(?:css|js)))"', lambda m: f'{m.group(1)}?v={ver(out_dir / m.group(2))}"', html)
 
     # 4. pages
     def page_html(views, here):
@@ -389,7 +399,7 @@ def main():
             scripts = scripts.replace('<script src="assets/js/science.js" defer></script>',
                                       '<script src="assets/js/science.js" defer></script>\n<script src="assets/js/labs.js" defer></script>')
         out = out.replace('{{scripts}}', scripts)
-        return out
+        return fingerprint(out)
 
     if single:
         html = page_html([v for v, _ in PAGES], 'glavnaya')

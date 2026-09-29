@@ -664,8 +664,8 @@ main { view-transition-name: main; }
 
 @keyframes vt-out { to { opacity: 0; translate: 0 -10px; } }
 @keyframes vt-in { from { opacity: 0; translate: 0 18px; } }
-/* chapters are separate pages: browsers that can cross-fade between documents do it */
-@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
+/* no cross-document view transition between chapter pages: in Safari the page stays covered by the
+   transition snapshot and ignores taps until it ends, and on long pages on iPhone it may never end */
 ::view-transition-old(main) { animation: vt-out .18s ease-in both; }
 ::view-transition-new(main) { animation: vt-in .42s var(--ease-float) both; }
 

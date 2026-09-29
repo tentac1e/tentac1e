@@ -563,5 +563,9 @@ window.BASIL_PAGES = {
   "spravka-voprosy": "вопросы",
   "spravka-slovar": "словарь",
   "spravka-chek-list": "чек-лист"
+ },
+ "v": {
+  "labs": "97e1bdc1",
+  "search": "368ff0d5"
  }
 };

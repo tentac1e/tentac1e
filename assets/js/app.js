@@ -501,9 +501,10 @@
     if (searchReady) return searchReady;
     searchReady = new Promise(resolve => {
       if (!PAGES || window.BASIL_SEARCH) { resolve(); return; }
-      const self = $('script[src$="app.js"]');
+      const self = $('script[src*="/app.js"]');
       const tag = document.createElement('script');
-      tag.src = self ? self.getAttribute('src').replace(/app\.js$/, 'search-index.js') : 'assets/js/search-index.js';
+      const v = PAGES && PAGES.v ? '?v=' + PAGES.v.search : '';
+      tag.src = (self ? self.getAttribute('src').replace(/app\.js(\?.*)?$/, 'search-index.js') : 'assets/js/search-index.js') + v;
       tag.onload = tag.onerror = () => resolve();
       document.head.appendChild(tag);
     }).then(() => { buildSearchIndex(); document.dispatchEvent(new CustomEvent('basil:search-ready')); });

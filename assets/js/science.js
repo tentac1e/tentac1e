@@ -477,7 +477,8 @@ window.BasilScience = (() => {
     if (!labsLoad) {
       labsLoad = new Promise((resolve, reject) => {
         const tag = document.createElement('script');
-        tag.src = SELF ? SELF.replace(/science\.js(\?.*)?$/, 'labs.js') : 'assets/js/labs.js';
+        const v = window.BASIL_PAGES && window.BASIL_PAGES.v ? '?v=' + window.BASIL_PAGES.v.labs : '';
+        tag.src = (SELF ? SELF.replace(/science\.js(\?.*)?$/, 'labs.js') : 'assets/js/labs.js') + v;
         tag.onload = resolve;
         tag.onerror = () => { labsLoad = null; reject(new Error('labs.js')); };
         document.head.appendChild(tag);
