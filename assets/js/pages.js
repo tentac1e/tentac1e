@@ -566,6 +566,6 @@ window.BASIL_PAGES = {
  },
  "v": {
   "labs": "97e1bdc1",
-  "search": "368ff0d5"
+  "search": "1572dd26"
  }
 };
