@@ -64,7 +64,7 @@
       atoms: 'OCCCCCC', bonds: [[0, 1, 2], [1, 2], [2, 3], [3, 4, 2], [4, 5], [5, 6]]
     }
   };
-  const EXTRA = { meu: { name: 'Метилэвгенол', fam: 'phen' }, ber: { name: 'α-Бергамотен', fam: 'sesq' } };
+  const EXTRA = { meu: { name: 'Метилэвгенол', fam: 'phen', smell: 'гвоздика с анисом, тёплый' }, ber: { name: 'α-Бергамотен', fam: 'sesq', smell: 'древесный, чайный, с бергамотом' } };
   const molName = id => (MOLS[id] || EXTRA[id]).name;
   const molFam = id => (MOLS[id] || EXTRA[id]).fam;
 

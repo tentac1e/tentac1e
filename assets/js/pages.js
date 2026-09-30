@@ -530,7 +530,48 @@ window.BASIL_PAGES = {
   "spravka-slovar": "Справка · Словарь",
   "spravka-chek-list": "Справка · Чек-лист сезона"
  },
- "alias": {},
+ "alias": {
+  "sorta-katalog": "каталог",
+  "sorta-podbor": "подбор",
+  "sorta-vybor": "выбор",
+  "posadka-mesto": "место",
+  "posadka-posev": "посев",
+  "posadka-magazin": "магазин",
+  "posadka-gorshok": "горшок",
+  "uhod-svet": "свет",
+  "uhod-poliv": "полив",
+  "uhod-teplo": "тепло",
+  "uhod-pochva": "почва",
+  "uhod-sezony": "сезоны",
+  "udobreniya-osnovy": "основы",
+  "udobreniya-elementy": "элементы",
+  "udobreniya-stadii": "стадии",
+  "udobreniya-plan": "план",
+  "udobreniya-sredstva": "средства",
+  "udobreniya-kalkulyator": "калькулятор",
+  "udobreniya-gidro": "гидропоника",
+  "udobreniya-mify": "мифы",
+  "formirovka-osnovy": "основы",
+  "formirovka-trenazher": "тренажер",
+  "formirovka-cvetenie": "цветение",
+  "urozhay-sbor": "сбор",
+  "urozhay-hranenie": "хранение",
+  "urozhay-recepty": "рецепты",
+  "vkus-aromat": "аромат",
+  "vkus-molekuly": "молекулы",
+  "vkus-himotipy": "химотипы",
+  "vkus-kuhnya": "кухня",
+  "vkus-sochetaniya": "сочетания",
+  "razmnozhenie-cherenki": "черенки",
+  "razmnozhenie-semena": "семена",
+  "problemy-diagnostika": "диагностика",
+  "problemy-bolezni": "болезни",
+  "problemy-vrediteli": "вредители",
+  "problemy-profilaktika": "профилактика",
+  "spravka-voprosy": "вопросы",
+  "spravka-slovar": "словарь",
+  "spravka-chek-list": "чек-лист"
+ },
  "v": {
   "labs": {
    "posadka": "d1c98df9",
@@ -539,10 +580,10 @@ window.BASIL_PAGES = {
    "udobreniya": "3f24c4d8",
    "formirovka": "81c2d3c1",
    "urozhay": "aa4db63d",
-   "vkus": "bcd60c34",
+   "vkus": "fea8c70f",
    "razmnozhenie": "c15ac9bf",
    "problemy": "eb11f160"
   },
-  "search": "866af8b1"
+  "search": "31720564"
  }
 };

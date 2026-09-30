@@ -206,7 +206,7 @@
   }
 
   const api = {
-    $, $$, clamp, lerp, fmt, fmt0, f1, minus, nb, esc, css, icon, sub, mix, ramp, parseColor, reduce,
+    $, $$, clamp, lerp, fmt, fmt0, f1, minus, nb, esc, css, icon, sub, plural, mix, ramp, parseColor, reduce,
     animateDetails, rangeHtml, segHtml, chipsHtml, bindRange, bindPick, readHtml, head, chart, plot, tip,
     dayLength, h0, noonSun, decl, DOY21, CITIES, MOLS, EXTRA, FAM, CHEMO, CHEMO_COLS, PAIRS, molName, molFam, MolViewer,
     ctx: () => ctx, mount

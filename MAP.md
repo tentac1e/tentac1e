@@ -121,10 +121,10 @@
 | `trichome` | Вкус и аромат | Лист под микроскопом | `src/labs/vkus/trichome.js` · `src/labs/vkus/trichome.css` |
 | `pathway` | Вкус и аромат | Два конвейера аромата | `src/labs/vkus/pathway.js` · `src/labs/vkus/pathway.css` |
 | `molecules` | Вкус и аромат |  | `src/labs/vkus/molecules.js` · `src/labs/vkus/molecules.css` |
-| `chemotype` | Вкус и аромат |  | `src/labs/vkus/chemotype.js` · `src/labs/vkus/chemotype.css` |
+| `chemotype` | Вкус и аромат | Химический отпечаток сорта | `src/labs/vkus/chemotype.js` · `src/labs/vkus/chemotype.css` |
 | `heat` | Вкус и аромат | Когда класть базилик | `src/labs/vkus/heat.js` · `src/labs/vkus/heat.css` |
 | `anthocyanin` | Вкус и аромат | Фиолетовый базилик и pH | `src/labs/vkus/anthocyanin.js` · `src/labs/vkus/anthocyanin.css` |
-| `pairing` | Вкус и аромат |  | `src/labs/vkus/pairing.js` · `src/labs/vkus/pairing.css` |
+| `pairing` | Вкус и аромат | Лаборатория сочетаний | `src/labs/vkus/pairing.js` · `src/labs/vkus/pairing.css` |
 | `roots` | Размножение | Черенок в стакане | `src/labs/razmnozhenie/roots.js` · `src/labs/razmnozhenie/roots.css` |
 | `seedlife` | Размножение | Срок жизни семян | `src/labs/razmnozhenie/seedlife.js` · `src/labs/razmnozhenie/seedlife.css` |
 | `pigment` | Проблемы | Смешайте пигменты | `src/labs/problemy/pigment.js` · `src/labs/problemy/pigment.css` |
@@ -194,5 +194,5 @@
 ## Стили (src/css/)
 
 **style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`
-**lab.css**: `00-tokens.css`, `01-hero.css`, `02-header.css`, `03-deep-switch.css`, `04-deep-index.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `10-depth.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
+**lab.css**: `00-aroma.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `02-header.css`, `03-deep-switch.css`, `04-deep-index.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `10-depth.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
 

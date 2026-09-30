@@ -1,21 +1,51 @@
-/* chemotype matrix */
-.chemo { width: 100%; min-width: 620px; border-collapse: collapse; font-size: .84rem; }
-.chemo th, .chemo td { padding: 6px 4px; text-align: center; border-bottom: 1px dashed var(--line); }
-.chemo thead th { height: 92px; vertical-align: bottom; font-weight: 600; color: var(--ink-3); font-size: .74rem; }
-.chemo thead th span { display: inline-block; writing-mode: vertical-rl; rotate: 180deg; white-space: nowrap; }
-.chemo thead th:first-child { text-align: left; }
-.chemo tbody th { text-align: left; }
-.chemo td { position: relative; height: 48px; min-width: 40px; }
-.chemo td small { position: absolute; left: 0; right: 0; bottom: 1px; font: 600 .62rem/1 var(--font-mono); color: var(--ink-3); }
-.bub { display: inline-block; width: var(--s); height: var(--s); border-radius: 50%; vertical-align: middle; opacity: .85; }
-.bub.s1 { background: var(--ser-1); } .bub.s2 { background: var(--ser-2); } .bub.s3 { background: var(--ser-3); }
-.bub-none { color: var(--line-strong); }
-.chemo-row { border: 0; background: none; padding: 6px 8px; border-radius: 10px; font: 700 .86rem/1.2 var(--font-body); color: var(--ink-2); cursor: pointer; text-align: left; white-space: nowrap; }
-.chemo-row:hover { color: var(--ink); }
-.chemo-row[aria-pressed="true"] { background: var(--k); color: var(--surface); }
-.chemo tr.is-sel td { background: color-mix(in srgb, var(--k) 6%, transparent); }
-.chemo-info { margin-top: 14px; padding: 16px; border-radius: 16px; background: var(--k-soft); }
-.chemo-info p { margin: 0 0 8px; }
-.chemo-top { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: .88rem; }
-.chemo-top b { font-family: var(--font-mono); }
-
+/* chemotype: composition ring, character web, sorts as stacked bars */
+.chemo-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 18px; margin-top: 14px; align-items: start; }
+@media (max-width: 860px) { .chemo-grid { grid-template-columns: 1fr; } }
+.chemo-card { padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.chemo-figs { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.25fr); gap: 8px; align-items: center; }
+@media (max-width: 520px) { .chemo-figs { grid-template-columns: 1fr; } }
+.chemo-fig { display: grid; gap: 6px; }
+.chemo-ring-bg { fill: none; stroke: var(--m-rest); opacity: .6; }
+.chemo-seg { fill: none; transition: stroke-dasharray .6s var(--ease-float), stroke-dashoffset .6s var(--ease-float), opacity .3s; }
+.chemo-seg.is-dim { opacity: .18; }
+.chemo-c1 { font: 700 22px/1 var(--font-display); fill: var(--ink); }
+.chemo-c2 { font: 600 12.5px/1 var(--font-body); fill: var(--ink-2); }
+.chemo-top { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.chemo-top li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: .86rem; color: var(--ink-2); }
+.chemo-top i { width: 12px; height: 12px; border-radius: 4px; }
+.chemo-top b { font: 600 .8rem/1 var(--font-mono); color: var(--ink); }
+@media (max-width: 520px) {
+  .chemo-fig:first-child { grid-template-columns: 150px minmax(0, 1fr); align-items: center; }
+}
+.chemo-web { fill: none; stroke: var(--line); stroke-width: 1; }
+.chemo-web:last-of-type { stroke: var(--line-strong); }
+.chemo-axis { stroke: var(--line); stroke-width: 1; }
+.chemo-ax { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); }
+.chemo-shape { fill: color-mix(in srgb, var(--k) 22%, transparent); stroke: var(--k); stroke-width: 2.2; stroke-linejoin: round; }
+.chemo-ref { fill: none; stroke: var(--ink-3); stroke-width: 1.4; stroke-dasharray: 4 4; }
+.chemo-pt { fill: var(--surface); stroke: var(--k); stroke-width: 2; }
+.chemo-info { margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: var(--k-soft); }
+.chemo-info h5 { font-family: var(--font-display); font-size: 1.3rem; margin: 2px 0 6px; }
+.chemo-info p { margin: 0; font-size: .95rem; line-height: 1.55; }
+.chemo-cmp { margin-top: 8px !important; display: flex; align-items: center; gap: 8px; font-size: .82rem !important; color: var(--ink-3); }
+.chemo-cmp i { width: 22px; border-top: 1.6px dashed var(--ink-3); }
+.chemo-side .lab-label { display: block; margin: 0 0 8px; }
+.chemo-side .lab-label + .chemo-mols { margin-bottom: 8px; }
+.chemo-list { display: grid; gap: 4px; margin-bottom: 16px; }
+.chemo-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 42px; gap: 10px; align-items: center; padding: 7px 8px; border: 1px solid transparent; border-radius: 12px; background: none; font: inherit; color: var(--ink-2); cursor: pointer; text-align: left; transition: background .2s, border-color .2s; }
+.chemo-row:hover { background: var(--surface-2); }
+.chemo-row[aria-pressed="true"] { background: var(--surface); border-color: var(--k); color: var(--ink); }
+.chemo-name { font: 700 .86rem/1.15 var(--font-body); }
+.chemo-bar { display: flex; height: 16px; border-radius: 6px; overflow: hidden; gap: 1.5px; background: var(--m-rest); }
+.chemo-bar i { display: block; min-width: 0; transition: opacity .25s; }
+.chemo-bar i.is-rest { background: var(--m-rest); }
+.chemo-val { font: 600 .78rem/1 var(--font-mono); color: var(--ink); text-align: right; }
+.chemo-list[data-m]:not([data-m=""]) .chemo-bar i { opacity: .16; }
+.chemo-list[data-m="lin"] .chemo-bar i[data-m="lin"], .chemo-list[data-m="cin"] .chemo-bar i[data-m="cin"], .chemo-list[data-m="cit"] .chemo-bar i[data-m="cit"],
+.chemo-list[data-m="cam"] .chemo-bar i[data-m="cam"], .chemo-list[data-m="est"] .chemo-bar i[data-m="est"], .chemo-list[data-m="meu"] .chemo-bar i[data-m="meu"],
+.chemo-list[data-m="eug"] .chemo-bar i[data-m="eug"], .chemo-list[data-m="mci"] .chemo-bar i[data-m="mci"], .chemo-list[data-m="car"] .chemo-bar i[data-m="car"],
+.chemo-list[data-m="ber"] .chemo-bar i[data-m="ber"] { opacity: 1; }
+.chemo-mols { display: flex; flex-wrap: wrap; gap: 6px; }
+.chemo-mol { display: inline-flex; align-items: center; gap: 6px; }
+.chemo-mol i { width: 10px; height: 10px; border-radius: 50%; }
+.chemo-mol[aria-pressed="true"] i { box-shadow: 0 0 0 2px var(--surface); }

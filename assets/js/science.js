@@ -267,7 +267,7 @@ window.BasilScience = (() => {
       atoms: 'OCCCCCC', bonds: [[0, 1, 2], [1, 2], [2, 3], [3, 4, 2], [4, 5], [5, 6]]
     }
   };
-  const EXTRA = { meu: { name: 'Метилэвгенол', fam: 'phen' }, ber: { name: 'α-Бергамотен', fam: 'sesq' } };
+  const EXTRA = { meu: { name: 'Метилэвгенол', fam: 'phen', smell: 'гвоздика с анисом, тёплый' }, ber: { name: 'α-Бергамотен', fam: 'sesq', smell: 'древесный, чайный, с бергамотом' } };
   const molName = id => (MOLS[id] || EXTRA[id]).name;
   const molFam = id => (MOLS[id] || EXTRA[id]).fam;
 
@@ -724,7 +724,7 @@ window.BasilScience = (() => {
   }
 
   const api = {
-    $, $$, clamp, lerp, fmt, fmt0, f1, minus, nb, esc, css, icon, sub, mix, ramp, parseColor, reduce,
+    $, $$, clamp, lerp, fmt, fmt0, f1, minus, nb, esc, css, icon, sub, plural, mix, ramp, parseColor, reduce,
     animateDetails, rangeHtml, segHtml, chipsHtml, bindRange, bindPick, readHtml, head, chart, plot, tip,
     dayLength, h0, noonSun, decl, DOY21, CITIES, MOLS, EXTRA, FAM, CHEMO, CHEMO_COLS, PAIRS, molName, molFam, MolViewer,
     ctx: () => ctx, mount

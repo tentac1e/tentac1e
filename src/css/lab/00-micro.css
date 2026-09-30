@@ -1,0 +1,150 @@
+/* Micro-anatomy palette: leaf sections and zoomed-in views (trichomes, stomata, disease under the lens).
+   Colours of a fresh, unstained section under a light microscope; lignin is shown crimson as after safranin. */
+:root {
+  --mic-air: #E6F1F5;
+  --mic-air-2: #F4F8F1;
+  --mic-gas: #F1F6EA;
+  --mic-wall: #6A9950;
+  --mic-wall-soft: rgba(106, 153, 80, .45);
+  --mic-cut: #C79A2E;
+  --mic-epi: #F7FAEE;
+  --mic-epi-2: #E8F1D8;
+  --mic-pal: #C4DF9C;
+  --mic-pal-2: #A9D07E;
+  --mic-spo: #DCEBC4;
+  --mic-spo-2: #CBE2AB;
+  --mic-chl: #3F8A2C;
+  --mic-chl-hi: #86C353;
+  --mic-nuc: #8A7AAE;
+  --mic-sec: #F2EBB8;
+  --mic-sec-2: #E3D98C;
+  --mic-oil: #E2A91E;
+  --mic-oil-hi: #FFF1B8;
+  --mic-oil-deep: #A06C06;
+  --mic-xyl: #B4456B;
+  --mic-xyl-lumen: #FBF1F4;
+  --mic-phl: #5E93BD;
+  --mic-phl-soft: #DCEAF5;
+  --mic-sheath: #D6E8B8;
+  --mic-guard: #8DC266;
+  --mic-hair: #F3F6E6;
+  --mic-label-bg: rgba(251, 253, 248, .86);
+  --mic-sel: #1E5B28;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mic-air: #0F1E26;
+    --mic-air-2: #122017;
+    --mic-gas: #13231A;
+    --mic-wall: #8CC274;
+    --mic-wall-soft: rgba(140, 194, 116, .4);
+    --mic-cut: #D9B44E;
+    --mic-epi: #1E2E20;
+    --mic-epi-2: #243A26;
+    --mic-pal: #2F5B25;
+    --mic-pal-2: #3B6E2E;
+    --mic-spo: #25431F;
+    --mic-spo-2: #2C4F25;
+    --mic-chl: #8FD05C;
+    --mic-chl-hi: #C4EC8C;
+    --mic-nuc: #B2A4DA;
+    --mic-sec: #4A4626;
+    --mic-sec-2: #5C5630;
+    --mic-oil: #E9B936;
+    --mic-oil-hi: #FFF0B0;
+    --mic-oil-deep: #B98512;
+    --mic-xyl: #E68AAC;
+    --mic-xyl-lumen: #2B1A22;
+    --mic-phl: #86BCE2;
+    --mic-phl-soft: #1D3140;
+    --mic-sheath: #2E4B26;
+    --mic-guard: #6FA85A;
+    --mic-hair: #2B3B29;
+    --mic-label-bg: rgba(22, 36, 26, .86);
+    --mic-sel: #C4EC8C;
+  }
+}
+
+:root[data-theme="dark"] {
+  --mic-air: #0F1E26;
+  --mic-air-2: #122017;
+  --mic-gas: #13231A;
+  --mic-wall: #8CC274;
+  --mic-wall-soft: rgba(140, 194, 116, .4);
+  --mic-cut: #D9B44E;
+  --mic-epi: #1E2E20;
+  --mic-epi-2: #243A26;
+  --mic-pal: #2F5B25;
+  --mic-pal-2: #3B6E2E;
+  --mic-spo: #25431F;
+  --mic-spo-2: #2C4F25;
+  --mic-chl: #8FD05C;
+  --mic-chl-hi: #C4EC8C;
+  --mic-nuc: #B2A4DA;
+  --mic-sec: #4A4626;
+  --mic-sec-2: #5C5630;
+  --mic-oil: #E9B936;
+  --mic-oil-hi: #FFF0B0;
+  --mic-oil-deep: #B98512;
+  --mic-xyl: #E68AAC;
+  --mic-xyl-lumen: #2B1A22;
+  --mic-phl: #86BCE2;
+  --mic-phl-soft: #1D3140;
+  --mic-sheath: #2E4B26;
+  --mic-guard: #6FA85A;
+  --mic-hair: #2B3B29;
+  --mic-label-bg: rgba(22, 36, 26, .86);
+  --mic-sel: #C4EC8C;
+}
+
+/* shared pieces of every micro drawing */
+.mic-lbl { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); }
+.mic-lbl-bg { fill: var(--mic-label-bg); stroke: var(--line); stroke-width: 1; }
+.mic-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+.mic-scale line { stroke: var(--ink); stroke-width: 2; }
+.mic-scale text { font: 500 10.5px/1 var(--font-mono); fill: var(--ink-2); }
+
+/* tissues */
+.mic-gasbg { fill: var(--mic-gas); }
+.mic-epi { fill: var(--mic-epi); stroke: var(--mic-wall); stroke-width: 1.3; }
+.mic-cut { fill: none; stroke: var(--mic-cut); stroke-width: 2.4; stroke-linecap: round; }
+.mic-pal { fill: var(--mic-pal); stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-spo { fill: var(--mic-spo); stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-chl { fill: var(--mic-chl); stroke: var(--mic-chl-hi); stroke-width: .6; }
+.mic-chl.is-pale { opacity: .75; }
+.mic-nuc { fill: var(--mic-nuc); opacity: .8; }
+.mic-sheath { fill: var(--mic-sheath); stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-bundle { fill: color-mix(in srgb, var(--mic-epi) 70%, var(--mic-phl-soft)); stroke: var(--mic-wall-soft); stroke-width: 1; }
+.mic-xyl { fill: var(--mic-xyl-lumen); stroke: var(--mic-xyl); stroke-width: 2.3; }
+.mic-phl { fill: var(--mic-phl-soft); stroke: var(--mic-phl); stroke-width: 1.1; }
+.mic-comp { fill: var(--mic-phl); }
+.mic-cavity { fill: var(--mic-gas); stroke: var(--mic-wall-soft); stroke-width: 1; stroke-dasharray: 2 2.5; }
+.mic-guard { fill: var(--mic-guard); stroke: var(--mic-wall); stroke-width: 1.2; }
+.mic-guard-wall { fill: none; stroke: var(--mic-wall); stroke-width: 2.2; stroke-linecap: round; }
+.mic-hit { fill: transparent; }
+/* glands and hairs */
+.mic-gl-base { fill: var(--mic-epi-2); stroke: var(--mic-wall); stroke-width: 1.2; }
+.mic-gl-stalk { fill: var(--mic-epi); stroke: var(--mic-wall); stroke-width: 1.2; }
+.mic-sec { fill: var(--mic-sec); stroke: var(--mic-sec-2); stroke-width: 1.3; }
+.mic-oil { fill: url(#mic-oil-grad); stroke: none; }
+.mic-oil.is-film, .mic-oil.is-cap { fill: var(--mic-oil); opacity: .75; }
+.mic-dome-cut { fill: none; stroke: var(--mic-cut); stroke-width: 1.8; }
+.mic-shine { fill: var(--mic-oil-hi); opacity: .75; }
+.mic-hair { fill: var(--mic-hair); stroke: var(--mic-wall); stroke-width: 1.2; stroke-linejoin: round; }
+.mic-hair-wall { stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-wart { fill: var(--mic-wall); opacity: .55; }
+.mic-dome { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .35s var(--ease-float), opacity .3s; }
+.mic-torn { opacity: 0; transition: opacity .3s .12s; }
+.mic-drop { fill: var(--mic-oil); opacity: 0; transform-box: fill-box; transform-origin: center; }
+.is-burst .mic-dome { transform: scale(1.2, .06); opacity: 0; }
+.is-burst .mic-torn { opacity: 1; }
+.is-burst:not(.is-done) .mic-drop { animation: mic-fly .9s var(--dl, 0s) cubic-bezier(.2, .7, .3, 1) both; }
+@keyframes mic-fly {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.3); }
+}
+@media (prefers-reduced-motion: reduce) { .is-burst .mic-drop { animation: none !important; } }
+/* picking a tissue: the rest steps back */
+.mic-t { transition: opacity .25s; }
+.has-sel .mic-t:not(.is-sel), .has-sel .mic-label:not(.is-sel) { opacity: .3; }

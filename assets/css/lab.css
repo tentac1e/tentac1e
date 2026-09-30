@@ -1,4 +1,250 @@
 /* Файл собирает scripts/build.py из src/css/lab/ и src/labs/<глава>/<модель>.css — правьте там */
+/* Aroma molecules: one colour each, grouped by family — monoterpenes green and teal,
+   phenylpropanoids plum and cinnamon, sesquiterpenes gold, green-leaf aldehydes blue. */
+:root {
+  --m-lin: #3F8F3C;
+  --m-cin: #3E9C8E;
+  --m-cit: #98A91C;
+  --m-cam: #5F92AD;
+  --m-est: #7C4E9C;
+  --m-eug: #AE4775;
+  --m-meu: #9474BE;
+  --m-mci: #BD6641;
+  --m-car: #A87D14;
+  --m-ber: #C9A456;
+  --m-hex: #2F7FB8;
+  --m-rest: #D5DDD0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --m-lin: #7CC66A;
+    --m-cin: #6CC9B9;
+    --m-cit: #CAD64A;
+    --m-cam: #8CC0DA;
+    --m-est: #B98FDA;
+    --m-eug: #E27CA8;
+    --m-meu: #C7A9EA;
+    --m-mci: #EC946D;
+    --m-car: #E2B84C;
+    --m-ber: #EACD8C;
+    --m-hex: #6FB2E4;
+    --m-rest: #34463A;
+  }
+}
+:root[data-theme="dark"] {
+  --m-lin: #7CC66A;
+  --m-cin: #6CC9B9;
+  --m-cit: #CAD64A;
+  --m-cam: #8CC0DA;
+  --m-est: #B98FDA;
+  --m-eug: #E27CA8;
+  --m-meu: #C7A9EA;
+  --m-mci: #EC946D;
+  --m-car: #E2B84C;
+  --m-ber: #EACD8C;
+  --m-hex: #6FB2E4;
+  --m-rest: #34463A;
+}
+
+/* food illustrations: physical colours, the same in both themes */
+:root {
+  --fd-hi: #FFFFFF;
+  --fd-dark: #2A2420;
+  --fd-leaf: #4F9A3A;
+  --fd-leaf-d: #2F6B22;
+  --fd-tomato: #E0452E;
+  --fd-tomato-d: #A92B1B;
+  --fd-straw: #E23B4A;
+  --fd-straw-d: #A8202F;
+  --fd-seed: #F3D36B;
+  --fd-lemon: #F4D23C;
+  --fd-lemon-d: #CFA11B;
+  --fd-peach: #F7A56B;
+  --fd-peach-b: #E4605A;
+  --fd-cori: #D5B68A;
+  --fd-cori-d: #99774B;
+  --fd-fennel: #EAF2D4;
+  --fd-fennel-d: #B9CF93;
+  --fd-fennel-g: #7FB34E;
+  --fd-bay: #6C9A45;
+  --fd-clove: #7A4A2A;
+  --fd-pepper: #3A3230;
+  --fd-pepper-hi: #7A6C64;
+  --fd-rosemary: #587F4E;
+  --fd-stem: #7A6A3A;
+  --fd-mint: #46AD4C;
+  --fd-mint-d: #2E7F34;
+  --fd-choc: #5A3422;
+  --fd-choc-hi: #82533A;
+  --fd-oil: #D8B436;
+  --fd-oil-d: #A9861C;
+  --fd-olive: #6F812A;
+  --fd-melon: #EF5B6A;
+  --fd-rind: #3F8A3A;
+  --fd-cuke: #3C7F34;
+  --fd-cuke-f: #D3EAAE;
+  --fd-cheese: #F7F4EA;
+  --fd-cheese-d: #D9D2BD;
+  --fd-parm: #F1D98A;
+  --fd-parm-d: #D2AF52;
+  --fd-rind-p: #B8923A;
+  --fd-garlic: #F4EFE6;
+  --fd-garlic-d: #D8CFC0;
+  --fd-garlic-p: #B69CC8;
+  --fd-chili: #D8342A;
+  --fd-coco: #7A5534;
+  --fd-coco-f: #F8F5EC;
+}
+/* Micro-anatomy palette: leaf sections and zoomed-in views (trichomes, stomata, disease under the lens).
+   Colours of a fresh, unstained section under a light microscope; lignin is shown crimson as after safranin. */
+:root {
+  --mic-air: #E6F1F5;
+  --mic-air-2: #F4F8F1;
+  --mic-gas: #F1F6EA;
+  --mic-wall: #6A9950;
+  --mic-wall-soft: rgba(106, 153, 80, .45);
+  --mic-cut: #C79A2E;
+  --mic-epi: #F7FAEE;
+  --mic-epi-2: #E8F1D8;
+  --mic-pal: #C4DF9C;
+  --mic-pal-2: #A9D07E;
+  --mic-spo: #DCEBC4;
+  --mic-spo-2: #CBE2AB;
+  --mic-chl: #3F8A2C;
+  --mic-chl-hi: #86C353;
+  --mic-nuc: #8A7AAE;
+  --mic-sec: #F2EBB8;
+  --mic-sec-2: #E3D98C;
+  --mic-oil: #E2A91E;
+  --mic-oil-hi: #FFF1B8;
+  --mic-oil-deep: #A06C06;
+  --mic-xyl: #B4456B;
+  --mic-xyl-lumen: #FBF1F4;
+  --mic-phl: #5E93BD;
+  --mic-phl-soft: #DCEAF5;
+  --mic-sheath: #D6E8B8;
+  --mic-guard: #8DC266;
+  --mic-hair: #F3F6E6;
+  --mic-label-bg: rgba(251, 253, 248, .86);
+  --mic-sel: #1E5B28;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mic-air: #0F1E26;
+    --mic-air-2: #122017;
+    --mic-gas: #13231A;
+    --mic-wall: #8CC274;
+    --mic-wall-soft: rgba(140, 194, 116, .4);
+    --mic-cut: #D9B44E;
+    --mic-epi: #1E2E20;
+    --mic-epi-2: #243A26;
+    --mic-pal: #2F5B25;
+    --mic-pal-2: #3B6E2E;
+    --mic-spo: #25431F;
+    --mic-spo-2: #2C4F25;
+    --mic-chl: #8FD05C;
+    --mic-chl-hi: #C4EC8C;
+    --mic-nuc: #B2A4DA;
+    --mic-sec: #4A4626;
+    --mic-sec-2: #5C5630;
+    --mic-oil: #E9B936;
+    --mic-oil-hi: #FFF0B0;
+    --mic-oil-deep: #B98512;
+    --mic-xyl: #E68AAC;
+    --mic-xyl-lumen: #2B1A22;
+    --mic-phl: #86BCE2;
+    --mic-phl-soft: #1D3140;
+    --mic-sheath: #2E4B26;
+    --mic-guard: #6FA85A;
+    --mic-hair: #2B3B29;
+    --mic-label-bg: rgba(22, 36, 26, .86);
+    --mic-sel: #C4EC8C;
+  }
+}
+
+:root[data-theme="dark"] {
+  --mic-air: #0F1E26;
+  --mic-air-2: #122017;
+  --mic-gas: #13231A;
+  --mic-wall: #8CC274;
+  --mic-wall-soft: rgba(140, 194, 116, .4);
+  --mic-cut: #D9B44E;
+  --mic-epi: #1E2E20;
+  --mic-epi-2: #243A26;
+  --mic-pal: #2F5B25;
+  --mic-pal-2: #3B6E2E;
+  --mic-spo: #25431F;
+  --mic-spo-2: #2C4F25;
+  --mic-chl: #8FD05C;
+  --mic-chl-hi: #C4EC8C;
+  --mic-nuc: #B2A4DA;
+  --mic-sec: #4A4626;
+  --mic-sec-2: #5C5630;
+  --mic-oil: #E9B936;
+  --mic-oil-hi: #FFF0B0;
+  --mic-oil-deep: #B98512;
+  --mic-xyl: #E68AAC;
+  --mic-xyl-lumen: #2B1A22;
+  --mic-phl: #86BCE2;
+  --mic-phl-soft: #1D3140;
+  --mic-sheath: #2E4B26;
+  --mic-guard: #6FA85A;
+  --mic-hair: #2B3B29;
+  --mic-label-bg: rgba(22, 36, 26, .86);
+  --mic-sel: #C4EC8C;
+}
+
+/* shared pieces of every micro drawing */
+.mic-lbl { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); }
+.mic-lbl-bg { fill: var(--mic-label-bg); stroke: var(--line); stroke-width: 1; }
+.mic-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+.mic-scale line { stroke: var(--ink); stroke-width: 2; }
+.mic-scale text { font: 500 10.5px/1 var(--font-mono); fill: var(--ink-2); }
+
+/* tissues */
+.mic-gasbg { fill: var(--mic-gas); }
+.mic-epi { fill: var(--mic-epi); stroke: var(--mic-wall); stroke-width: 1.3; }
+.mic-cut { fill: none; stroke: var(--mic-cut); stroke-width: 2.4; stroke-linecap: round; }
+.mic-pal { fill: var(--mic-pal); stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-spo { fill: var(--mic-spo); stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-chl { fill: var(--mic-chl); stroke: var(--mic-chl-hi); stroke-width: .6; }
+.mic-chl.is-pale { opacity: .75; }
+.mic-nuc { fill: var(--mic-nuc); opacity: .8; }
+.mic-sheath { fill: var(--mic-sheath); stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-bundle { fill: color-mix(in srgb, var(--mic-epi) 70%, var(--mic-phl-soft)); stroke: var(--mic-wall-soft); stroke-width: 1; }
+.mic-xyl { fill: var(--mic-xyl-lumen); stroke: var(--mic-xyl); stroke-width: 2.3; }
+.mic-phl { fill: var(--mic-phl-soft); stroke: var(--mic-phl); stroke-width: 1.1; }
+.mic-comp { fill: var(--mic-phl); }
+.mic-cavity { fill: var(--mic-gas); stroke: var(--mic-wall-soft); stroke-width: 1; stroke-dasharray: 2 2.5; }
+.mic-guard { fill: var(--mic-guard); stroke: var(--mic-wall); stroke-width: 1.2; }
+.mic-guard-wall { fill: none; stroke: var(--mic-wall); stroke-width: 2.2; stroke-linecap: round; }
+.mic-hit { fill: transparent; }
+/* glands and hairs */
+.mic-gl-base { fill: var(--mic-epi-2); stroke: var(--mic-wall); stroke-width: 1.2; }
+.mic-gl-stalk { fill: var(--mic-epi); stroke: var(--mic-wall); stroke-width: 1.2; }
+.mic-sec { fill: var(--mic-sec); stroke: var(--mic-sec-2); stroke-width: 1.3; }
+.mic-oil { fill: url(#mic-oil-grad); stroke: none; }
+.mic-oil.is-film, .mic-oil.is-cap { fill: var(--mic-oil); opacity: .75; }
+.mic-dome-cut { fill: none; stroke: var(--mic-cut); stroke-width: 1.8; }
+.mic-shine { fill: var(--mic-oil-hi); opacity: .75; }
+.mic-hair { fill: var(--mic-hair); stroke: var(--mic-wall); stroke-width: 1.2; stroke-linejoin: round; }
+.mic-hair-wall { stroke: var(--mic-wall); stroke-width: 1.1; }
+.mic-wart { fill: var(--mic-wall); opacity: .55; }
+.mic-dome { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .35s var(--ease-float), opacity .3s; }
+.mic-torn { opacity: 0; transition: opacity .3s .12s; }
+.mic-drop { fill: var(--mic-oil); opacity: 0; transform-box: fill-box; transform-origin: center; }
+.is-burst .mic-dome { transform: scale(1.2, .06); opacity: 0; }
+.is-burst .mic-torn { opacity: 1; }
+.is-burst:not(.is-done) .mic-drop { animation: mic-fly .9s var(--dl, 0s) cubic-bezier(.2, .7, .3, 1) both; }
+@keyframes mic-fly {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.3); }
+}
+@media (prefers-reduced-motion: reduce) { .is-burst .mic-drop { animation: none !important; } }
+/* picking a tissue: the rest steps back */
+.mic-t { transition: opacity .25s; }
+.has-sel .mic-t:not(.is-sel), .has-sel .mic-label:not(.is-sel) { opacity: .3; }
 /* Научный слой: живая сцена, развороты «Глубже» как страницы лабораторного журнала,
    модели и глава «Вкус». Цвет дисциплины: химия — антоциан, физика — вода и свет,
    биология — лист, вкус — оливковое масло. */
@@ -892,34 +1138,34 @@ body::after {
 .pesto-notes { margin-top: 16px; font-size: .92rem; }
 
 /* trichomes */
-.tr-wrap { position: relative; }
-.tr-svg { font-family: var(--font-body); }
-.tr-air { fill: color-mix(in srgb, var(--sci-phys-soft) 55%, transparent); }
-.tr-cut { stroke: var(--oil); stroke-width: 2.5; opacity: .6; }
-.tr-epi { fill: color-mix(in srgb, var(--leaf-soft) 55%, var(--surface)); stroke: color-mix(in srgb, var(--stem) 55%, transparent); stroke-width: 1.2; }
-.tr-pal { fill: color-mix(in srgb, var(--leaf-soft) 80%, var(--leaf) 20%); stroke: color-mix(in srgb, var(--stem) 55%, transparent); stroke-width: 1.2; }
-.tr-chl { fill: var(--pl-a); opacity: .8; }
-.tr-spo { fill: color-mix(in srgb, var(--leaf-soft) 70%, var(--surface)); stroke: color-mix(in srgb, var(--stem) 45%, transparent); stroke-width: 1.2; }
-.tr-stoma ellipse { fill: var(--leaf); stroke: var(--pl-a); stroke-width: 1.4; }
-.tr-vein { fill: color-mix(in srgb, var(--sci-phys) 25%, var(--surface)); stroke: var(--sci-phys); stroke-width: 1.5; }
-.tr-stalk { fill: color-mix(in srgb, var(--leaf-soft) 60%, var(--surface)); stroke: var(--stem); stroke-width: 1.2; }
-.tr-head { fill: var(--leaf); stroke: var(--pl-a); stroke-width: 1.2; }
-.tr-oil { fill: color-mix(in srgb, var(--oil-bright) 70%, transparent); stroke: var(--oil); stroke-width: 1.4; transform-box: fill-box; transform-origin: 50% 100%; transition: transform .4s var(--ease-float), opacity .4s; }
-.tr-gland.is-pel { cursor: pointer; outline: none; }
-.tr-gland.is-pel:hover .tr-oil, .tr-gland.is-pel:focus-visible .tr-oil { transform: scale(1.12); }
-.tr-gland.is-pel:focus-visible .tr-oil { stroke: var(--ink); stroke-width: 2.4; }
-.tr-gland.is-burst .tr-oil { transform: scale(1.6, .35); opacity: .25; }
-.tr-cap { fill: color-mix(in srgb, var(--oil-bright) 45%, var(--leaf)); stroke: var(--pl-a); stroke-width: 1.2; }
-.tr-hair { fill: none; stroke: color-mix(in srgb, var(--stem) 60%, var(--surface)); stroke-width: 4; stroke-linecap: round; }
-.tr-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
-.tr-lbl { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
-.tr-grid { margin-top: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); }
+.tr-controls { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 18px; }
+.tr-controls .lab-actions { margin: 0; }
+.tr-wrap { position: relative; margin-top: 12px; }
+.tr-chart { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--mic-air); }
+.tr-svg { display: block; font-family: var(--font-body); }
+.tr-svg .mic-t { cursor: pointer; }
+.tr-pel { outline: none; }
+.tr-pel:focus-visible .mic-dome-cut { stroke: var(--ink); stroke-width: 2.6; }
+@media (hover: hover) { .tr-pel:not(.is-burst):hover .mic-dome { transform: scale(1.06); } }
+.tr-light-note { margin: 8px 2px 0; }
+.tr-info { margin-top: 12px; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); min-height: 7.5em; }
+.tr-info h5 { font-family: var(--font-display); font-size: 1.3rem; margin: 2px 0 6px; }
+.tr-info p { margin: 0; color: var(--ink-2); font-size: .95rem; line-height: 1.55; }
+.tr-controls .lab-seg button { white-space: nowrap; }
+.tr-info .tr-size { margin-top: 8px; font: 500 .78rem/1.4 var(--font-mono); color: var(--ink-3); }
+.tr-grid { margin-top: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); align-items: center; }
 .tr-top { display: grid; gap: 6px; justify-items: center; text-align: center; }
-.tr-top svg { width: 100%; max-width: 200px; height: auto; }
-.tr-surf { fill: color-mix(in srgb, var(--leaf-soft) 80%, var(--leaf) 20%); }
-.tr-cellline { stroke: color-mix(in srgb, var(--stem) 30%, transparent); stroke-width: 1; fill: none; }
-.tr-dot { fill: color-mix(in srgb, var(--oil-bright) 80%, transparent); stroke: var(--oil); stroke-width: 1.2; }
-
+.tr-top svg { width: 100%; max-width: 220px; height: auto; border-radius: 16px; box-shadow: 0 0 0 1px var(--line); }
+.tr-surf { fill: var(--mic-epi-2); }
+.tr-wall { fill: none; stroke: var(--mic-wall-soft); stroke-width: 1.2; }
+.tr-sto ellipse { fill: var(--mic-guard); stroke: var(--mic-wall); stroke-width: .8; }
+.tr-sto path { stroke: var(--mic-wall); stroke-width: 1; }
+.tr-capdot { fill: var(--mic-sec-2); stroke: var(--mic-oil); stroke-width: 1; }
+.tr-pelrim { fill: var(--mic-sec); stroke: var(--mic-wall-soft); stroke-width: 1; }
+.tr-pelx { stroke: var(--mic-oil-deep); stroke-width: .7; opacity: .45; }
+.tr-pelhi { fill: var(--mic-oil-hi); opacity: .8; }
+.tr-hairtop { fill: none; stroke: var(--mic-wall); stroke-width: 2.6; stroke-linecap: round; opacity: .55; }
+@media (max-width: 560px) { .tr-grid { grid-template-columns: 1fr; } }
 /* pathway */
 .pw-svg { font-family: var(--font-body); }
 .pw-edge { stroke: var(--line-strong); stroke-width: 1.8; transition: stroke .3s; }
@@ -992,27 +1238,57 @@ body::after {
   .vol-track, .vol-axis { min-width: 600px; }
 }
 
-/* chemotype matrix */
-.chemo { width: 100%; min-width: 620px; border-collapse: collapse; font-size: .84rem; }
-.chemo th, .chemo td { padding: 6px 4px; text-align: center; border-bottom: 1px dashed var(--line); }
-.chemo thead th { height: 92px; vertical-align: bottom; font-weight: 600; color: var(--ink-3); font-size: .74rem; }
-.chemo thead th span { display: inline-block; writing-mode: vertical-rl; rotate: 180deg; white-space: nowrap; }
-.chemo thead th:first-child { text-align: left; }
-.chemo tbody th { text-align: left; }
-.chemo td { position: relative; height: 48px; min-width: 40px; }
-.chemo td small { position: absolute; left: 0; right: 0; bottom: 1px; font: 600 .62rem/1 var(--font-mono); color: var(--ink-3); }
-.bub { display: inline-block; width: var(--s); height: var(--s); border-radius: 50%; vertical-align: middle; opacity: .85; }
-.bub.s1 { background: var(--ser-1); } .bub.s2 { background: var(--ser-2); } .bub.s3 { background: var(--ser-3); }
-.bub-none { color: var(--line-strong); }
-.chemo-row { border: 0; background: none; padding: 6px 8px; border-radius: 10px; font: 700 .86rem/1.2 var(--font-body); color: var(--ink-2); cursor: pointer; text-align: left; white-space: nowrap; }
-.chemo-row:hover { color: var(--ink); }
-.chemo-row[aria-pressed="true"] { background: var(--k); color: var(--surface); }
-.chemo tr.is-sel td { background: color-mix(in srgb, var(--k) 6%, transparent); }
-.chemo-info { margin-top: 14px; padding: 16px; border-radius: 16px; background: var(--k-soft); }
-.chemo-info p { margin: 0 0 8px; }
-.chemo-top { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: .88rem; }
-.chemo-top b { font-family: var(--font-mono); }
-
+/* chemotype: composition ring, character web, sorts as stacked bars */
+.chemo-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 18px; margin-top: 14px; align-items: start; }
+@media (max-width: 860px) { .chemo-grid { grid-template-columns: 1fr; } }
+.chemo-card { padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.chemo-figs { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.25fr); gap: 8px; align-items: center; }
+@media (max-width: 520px) { .chemo-figs { grid-template-columns: 1fr; } }
+.chemo-fig { display: grid; gap: 6px; }
+.chemo-ring-bg { fill: none; stroke: var(--m-rest); opacity: .6; }
+.chemo-seg { fill: none; transition: stroke-dasharray .6s var(--ease-float), stroke-dashoffset .6s var(--ease-float), opacity .3s; }
+.chemo-seg.is-dim { opacity: .18; }
+.chemo-c1 { font: 700 22px/1 var(--font-display); fill: var(--ink); }
+.chemo-c2 { font: 600 12.5px/1 var(--font-body); fill: var(--ink-2); }
+.chemo-top { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.chemo-top li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: .86rem; color: var(--ink-2); }
+.chemo-top i { width: 12px; height: 12px; border-radius: 4px; }
+.chemo-top b { font: 600 .8rem/1 var(--font-mono); color: var(--ink); }
+@media (max-width: 520px) {
+  .chemo-fig:first-child { grid-template-columns: 150px minmax(0, 1fr); align-items: center; }
+}
+.chemo-web { fill: none; stroke: var(--line); stroke-width: 1; }
+.chemo-web:last-of-type { stroke: var(--line-strong); }
+.chemo-axis { stroke: var(--line); stroke-width: 1; }
+.chemo-ax { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); }
+.chemo-shape { fill: color-mix(in srgb, var(--k) 22%, transparent); stroke: var(--k); stroke-width: 2.2; stroke-linejoin: round; }
+.chemo-ref { fill: none; stroke: var(--ink-3); stroke-width: 1.4; stroke-dasharray: 4 4; }
+.chemo-pt { fill: var(--surface); stroke: var(--k); stroke-width: 2; }
+.chemo-info { margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: var(--k-soft); }
+.chemo-info h5 { font-family: var(--font-display); font-size: 1.3rem; margin: 2px 0 6px; }
+.chemo-info p { margin: 0; font-size: .95rem; line-height: 1.55; }
+.chemo-cmp { margin-top: 8px !important; display: flex; align-items: center; gap: 8px; font-size: .82rem !important; color: var(--ink-3); }
+.chemo-cmp i { width: 22px; border-top: 1.6px dashed var(--ink-3); }
+.chemo-side .lab-label { display: block; margin: 0 0 8px; }
+.chemo-side .lab-label + .chemo-mols { margin-bottom: 8px; }
+.chemo-list { display: grid; gap: 4px; margin-bottom: 16px; }
+.chemo-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 42px; gap: 10px; align-items: center; padding: 7px 8px; border: 1px solid transparent; border-radius: 12px; background: none; font: inherit; color: var(--ink-2); cursor: pointer; text-align: left; transition: background .2s, border-color .2s; }
+.chemo-row:hover { background: var(--surface-2); }
+.chemo-row[aria-pressed="true"] { background: var(--surface); border-color: var(--k); color: var(--ink); }
+.chemo-name { font: 700 .86rem/1.15 var(--font-body); }
+.chemo-bar { display: flex; height: 16px; border-radius: 6px; overflow: hidden; gap: 1.5px; background: var(--m-rest); }
+.chemo-bar i { display: block; min-width: 0; transition: opacity .25s; }
+.chemo-bar i.is-rest { background: var(--m-rest); }
+.chemo-val { font: 600 .78rem/1 var(--font-mono); color: var(--ink); text-align: right; }
+.chemo-list[data-m]:not([data-m=""]) .chemo-bar i { opacity: .16; }
+.chemo-list[data-m="lin"] .chemo-bar i[data-m="lin"], .chemo-list[data-m="cin"] .chemo-bar i[data-m="cin"], .chemo-list[data-m="cit"] .chemo-bar i[data-m="cit"],
+.chemo-list[data-m="cam"] .chemo-bar i[data-m="cam"], .chemo-list[data-m="est"] .chemo-bar i[data-m="est"], .chemo-list[data-m="meu"] .chemo-bar i[data-m="meu"],
+.chemo-list[data-m="eug"] .chemo-bar i[data-m="eug"], .chemo-list[data-m="mci"] .chemo-bar i[data-m="mci"], .chemo-list[data-m="car"] .chemo-bar i[data-m="car"],
+.chemo-list[data-m="ber"] .chemo-bar i[data-m="ber"] { opacity: 1; }
+.chemo-mols { display: flex; flex-wrap: wrap; gap: 6px; }
+.chemo-mol { display: inline-flex; align-items: center; gap: 6px; }
+.chemo-mol i { width: 10px; height: 10px; border-radius: 50%; }
+.chemo-mol[aria-pressed="true"] i { box-shadow: 0 0 0 2px var(--surface); }
 /* heat model */
 .heat-rows { display: grid; gap: 8px; margin-top: 8px; }
 .heat-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) 60px; gap: 12px; align-items: center; }
@@ -1033,24 +1309,46 @@ body::after {
 .anth-leaf { opacity: .9; }
 .anth-out { margin: 0; font-size: .92rem; color: var(--ink-2); }
 
-/* pairing */
-.pair-grid { margin-top: 10px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
-@media (max-width: 760px) { .pair-grid { grid-template-columns: 1fr; } }
-.lab-svg path.pair-link { fill: none; stroke-width: 2.4; opacity: .85; }
-.lab-svg .pair-link.s1 { stroke: var(--ser-1); } .pair-link.s2 { stroke: var(--ser-2); } .pair-link.s3 { stroke: var(--ser-3); } .pair-link.s4 { stroke: var(--ser-4); }
-.pair-link.is-kin { stroke-dasharray: 5 5; }
-.pair-dot { opacity: .3; stroke: var(--surface); stroke-width: 2; }
-.pair-dot.s1 { fill: var(--ser-1); } .pair-dot.s2 { fill: var(--ser-2); } .pair-dot.s3 { fill: var(--ser-3); } .pair-dot.s4 { fill: var(--ser-4); }
-.pair-dot.is-hot { opacity: 1; }
-.pair-name { font: 500 12px/1 var(--font-body); fill: var(--ink-3); }
-.pair-name.is-hot { font-weight: 700; fill: var(--ink); }
-.pair-node circle { fill: var(--sci-taste-soft); stroke: var(--sci-taste); stroke-width: 2; }
-.pair-node.is-contrast circle { stroke-dasharray: 5 4; }
-.pair-node text { font: 700 12px/1 var(--font-body); fill: var(--ink); }
-.pair-node .pair-node-s { font-weight: 500; font-size: 11px; fill: var(--ink-2); }
-.pair-info { padding: 16px 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
-.pair-mols { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 8px; font-weight: 600; font-size: .9rem; }
-
+/* pairing lab: your basil → foods ranked → the bridge of shared molecules */
+.pa-varieties, .pa-foods { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity; padding: 2px 2px 10px; margin: 0 -2px 6px; scrollbar-width: thin; }
+.pa-var { flex: none; display: inline-flex; align-items: center; gap: 6px; scroll-snap-align: start; }
+.pa-var svg { width: 14px; height: 24px; }
+.pa-foods { gap: 10px; }
+.pa-food { flex: none; width: 112px; scroll-snap-align: start; display: grid; justify-items: center; gap: 4px; padding: 10px 8px 9px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); font: inherit; color: var(--ink-2); cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .2s; }
+.pa-food:hover { border-color: var(--line-strong); }
+.pa-food[aria-pressed="true"] { border-color: var(--k); box-shadow: 0 0 0 2px color-mix(in srgb, var(--k) 30%, transparent); color: var(--ink); }
+.pa-ico { width: 52px; height: 52px; }
+.pa-name { font: 700 .8rem/1.15 var(--font-body); text-align: center; min-height: 2.3em; display: grid; place-items: center; }
+.pa-meter { width: 100%; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); }
+.pa-meter i { display: block; height: 100%; width: calc(var(--v, 0) * 100%); background: var(--k); border-radius: 3px; transition: width .5s var(--ease-float); }
+.pa-food.is-contrast .pa-meter i { background: repeating-linear-gradient(90deg, var(--ink-3) 0 6px, transparent 6px 9px); }
+.pa-word { font: 500 .68rem/1.1 var(--font-mono); color: var(--ink-3); text-align: center; }
+.pa-food.is-contrast + .pa-food:not(.is-contrast), .pa-food:not(.is-contrast) + .pa-food.is-contrast { margin-left: 14px; }
+.pa-stage { margin-top: 6px; padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.pa-title { margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font: 600 1.25rem/1.2 var(--font-display); color: var(--ink); }
+.pa-title i { font-style: normal; color: var(--k); }
+.pa-chart { margin: 0 -6px; }
+.pa-rib { fill: none; opacity: .55; stroke-linecap: round; stroke-dasharray: 1 0; }
+.pa-rib.is-dash { stroke-dasharray: .035 .025; opacity: .7; }
+.pa-rib.is-in { animation: pa-draw .7s var(--ease-float) both; animation-delay: inherit; }
+.pa-rib.is-dash.is-in { animation: none; }
+@keyframes pa-draw { from { stroke-dasharray: 0 1; } to { stroke-dasharray: 1 0; } }
+.pa-node { stroke-width: 6; stroke-opacity: .25; paint-order: stroke; }
+.pa-node.is-faint { fill-opacity: .15; stroke-dasharray: 3 3; stroke-opacity: .8; stroke-width: 1.5; }
+.pa-lever { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.2; }
+.pa-mol { font: 700 12px/1 var(--font-body); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.pa-sub { font: 500 10.5px/1 var(--font-mono); fill: var(--ink-3); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.pa-info { padding: 12px 14px; border-radius: 14px; background: var(--k-soft); }
+.pa-info p { margin: 0 0 8px; font-size: .95rem; line-height: 1.55; }
+.pa-verdict { font-size: .9rem !important; color: var(--ink-2); }
+.pa-verdict b { color: var(--ink); }
+@media (min-width: 900px) {
+  .pa-foods, .pa-varieties { flex-wrap: wrap; overflow: visible; }
+  .pa-food { width: calc((100% - 50px) / 6); }
+  .pa-food.is-contrast + .pa-food:not(.is-contrast), .pa-food:not(.is-contrast) + .pa-food.is-contrast { margin-left: 0; }
+  .pa-stage { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 4px 18px; align-items: center; }
+  .pa-title { grid-column: 1 / -1; }
+}
 /* roots */
 .roots-svg { width: 100%; max-width: 250px; height: auto; }
 .rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }

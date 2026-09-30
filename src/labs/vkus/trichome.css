@@ -1,29 +1,29 @@
 /* trichomes */
-.tr-wrap { position: relative; }
-.tr-svg { font-family: var(--font-body); }
-.tr-air { fill: color-mix(in srgb, var(--sci-phys-soft) 55%, transparent); }
-.tr-cut { stroke: var(--oil); stroke-width: 2.5; opacity: .6; }
-.tr-epi { fill: color-mix(in srgb, var(--leaf-soft) 55%, var(--surface)); stroke: color-mix(in srgb, var(--stem) 55%, transparent); stroke-width: 1.2; }
-.tr-pal { fill: color-mix(in srgb, var(--leaf-soft) 80%, var(--leaf) 20%); stroke: color-mix(in srgb, var(--stem) 55%, transparent); stroke-width: 1.2; }
-.tr-chl { fill: var(--pl-a); opacity: .8; }
-.tr-spo { fill: color-mix(in srgb, var(--leaf-soft) 70%, var(--surface)); stroke: color-mix(in srgb, var(--stem) 45%, transparent); stroke-width: 1.2; }
-.tr-stoma ellipse { fill: var(--leaf); stroke: var(--pl-a); stroke-width: 1.4; }
-.tr-vein { fill: color-mix(in srgb, var(--sci-phys) 25%, var(--surface)); stroke: var(--sci-phys); stroke-width: 1.5; }
-.tr-stalk { fill: color-mix(in srgb, var(--leaf-soft) 60%, var(--surface)); stroke: var(--stem); stroke-width: 1.2; }
-.tr-head { fill: var(--leaf); stroke: var(--pl-a); stroke-width: 1.2; }
-.tr-oil { fill: color-mix(in srgb, var(--oil-bright) 70%, transparent); stroke: var(--oil); stroke-width: 1.4; transform-box: fill-box; transform-origin: 50% 100%; transition: transform .4s var(--ease-float), opacity .4s; }
-.tr-gland.is-pel { cursor: pointer; outline: none; }
-.tr-gland.is-pel:hover .tr-oil, .tr-gland.is-pel:focus-visible .tr-oil { transform: scale(1.12); }
-.tr-gland.is-pel:focus-visible .tr-oil { stroke: var(--ink); stroke-width: 2.4; }
-.tr-gland.is-burst .tr-oil { transform: scale(1.6, .35); opacity: .25; }
-.tr-cap { fill: color-mix(in srgb, var(--oil-bright) 45%, var(--leaf)); stroke: var(--pl-a); stroke-width: 1.2; }
-.tr-hair { fill: none; stroke: color-mix(in srgb, var(--stem) 60%, var(--surface)); stroke-width: 4; stroke-linecap: round; }
-.tr-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
-.tr-lbl { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
-.tr-grid { margin-top: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); }
+.tr-controls { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 18px; }
+.tr-controls .lab-actions { margin: 0; }
+.tr-wrap { position: relative; margin-top: 12px; }
+.tr-chart { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--mic-air); }
+.tr-svg { display: block; font-family: var(--font-body); }
+.tr-svg .mic-t { cursor: pointer; }
+.tr-pel { outline: none; }
+.tr-pel:focus-visible .mic-dome-cut { stroke: var(--ink); stroke-width: 2.6; }
+@media (hover: hover) { .tr-pel:not(.is-burst):hover .mic-dome { transform: scale(1.06); } }
+.tr-light-note { margin: 8px 2px 0; }
+.tr-info { margin-top: 12px; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); min-height: 7.5em; }
+.tr-info h5 { font-family: var(--font-display); font-size: 1.3rem; margin: 2px 0 6px; }
+.tr-info p { margin: 0; color: var(--ink-2); font-size: .95rem; line-height: 1.55; }
+.tr-controls .lab-seg button { white-space: nowrap; }
+.tr-info .tr-size { margin-top: 8px; font: 500 .78rem/1.4 var(--font-mono); color: var(--ink-3); }
+.tr-grid { margin-top: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); align-items: center; }
 .tr-top { display: grid; gap: 6px; justify-items: center; text-align: center; }
-.tr-top svg { width: 100%; max-width: 200px; height: auto; }
-.tr-surf { fill: color-mix(in srgb, var(--leaf-soft) 80%, var(--leaf) 20%); }
-.tr-cellline { stroke: color-mix(in srgb, var(--stem) 30%, transparent); stroke-width: 1; fill: none; }
-.tr-dot { fill: color-mix(in srgb, var(--oil-bright) 80%, transparent); stroke: var(--oil); stroke-width: 1.2; }
-
+.tr-top svg { width: 100%; max-width: 220px; height: auto; border-radius: 16px; box-shadow: 0 0 0 1px var(--line); }
+.tr-surf { fill: var(--mic-epi-2); }
+.tr-wall { fill: none; stroke: var(--mic-wall-soft); stroke-width: 1.2; }
+.tr-sto ellipse { fill: var(--mic-guard); stroke: var(--mic-wall); stroke-width: .8; }
+.tr-sto path { stroke: var(--mic-wall); stroke-width: 1; }
+.tr-capdot { fill: var(--mic-sec-2); stroke: var(--mic-oil); stroke-width: 1; }
+.tr-pelrim { fill: var(--mic-sec); stroke: var(--mic-wall-soft); stroke-width: 1; }
+.tr-pelx { stroke: var(--mic-oil-deep); stroke-width: .7; opacity: .45; }
+.tr-pelhi { fill: var(--mic-oil-hi); opacity: .8; }
+.tr-hairtop { fill: none; stroke: var(--mic-wall); stroke-width: 2.6; stroke-linecap: round; opacity: .55; }
+@media (max-width: 560px) { .tr-grid { grid-template-columns: 1fr; } }

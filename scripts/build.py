@@ -287,7 +287,7 @@ def assemble(src_pages):
 
     # models: which page shows which, in page order
     order = [(v, page_labs(src_pages[v])) for v, _ in PAGES]
-    known = {f.stem for f in (SRC / 'labs').glob('*/*.js') if not f.name.startswith('_')}
+    known = {f.stem for f in (SRC / 'labs').glob('*/*.js') if not f.name.startswith('_') and f.parent.name != '_lib'}
     used = [l for _, labs in order for l in labs]
     assert len(used) == len(set(used)), 'a model is placed twice'
     assert set(used) <= known, set(used) - known
@@ -314,7 +314,13 @@ def assemble(src_pages):
         if not labs:
             continue
         d = SRC / 'labs' / v
-        parts = ([d / '_shared.js'] if (d / '_shared.js').exists() else []) + [d / f'{l}.js' for l in labs]
+        # a model asks for a shared drawing library with a line «/* @use micro */»; each goes in once
+        libs = []
+        for l in labs:
+            for m in re.finditer(r'/\* @use ([a-z, -]+) \*/', (d / f'{l}.js').read_text(encoding='utf-8')):
+                libs += [x.strip() for x in m.group(1).split(',') if x.strip() not in libs]
+        parts = [SRC / 'labs' / '_lib' / f'{x}.js' for x in libs]
+        parts += ([d / '_shared.js'] if (d / '_shared.js').exists() else []) + [d / f'{l}.js' for l in labs]
         body = '\n'.join(f.read_text(encoding='utf-8') for f in parts)
         text = frame.replace('{{chapter}}', CH[v]['title'] if v in CH else v).replace('/*@labs*/\n', body)
         (out / f'{v}.js').write_text(banner(text, f'src/labs/{v}/'), encoding='utf-8')

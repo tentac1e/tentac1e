@@ -1,0 +1,96 @@
+/* Aroma molecules: one colour each, grouped by family — monoterpenes green and teal,
+   phenylpropanoids plum and cinnamon, sesquiterpenes gold, green-leaf aldehydes blue. */
+:root {
+  --m-lin: #3F8F3C;
+  --m-cin: #3E9C8E;
+  --m-cit: #98A91C;
+  --m-cam: #5F92AD;
+  --m-est: #7C4E9C;
+  --m-eug: #AE4775;
+  --m-meu: #9474BE;
+  --m-mci: #BD6641;
+  --m-car: #A87D14;
+  --m-ber: #C9A456;
+  --m-hex: #2F7FB8;
+  --m-rest: #D5DDD0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --m-lin: #7CC66A;
+    --m-cin: #6CC9B9;
+    --m-cit: #CAD64A;
+    --m-cam: #8CC0DA;
+    --m-est: #B98FDA;
+    --m-eug: #E27CA8;
+    --m-meu: #C7A9EA;
+    --m-mci: #EC946D;
+    --m-car: #E2B84C;
+    --m-ber: #EACD8C;
+    --m-hex: #6FB2E4;
+    --m-rest: #34463A;
+  }
+}
+:root[data-theme="dark"] {
+  --m-lin: #7CC66A;
+  --m-cin: #6CC9B9;
+  --m-cit: #CAD64A;
+  --m-cam: #8CC0DA;
+  --m-est: #B98FDA;
+  --m-eug: #E27CA8;
+  --m-meu: #C7A9EA;
+  --m-mci: #EC946D;
+  --m-car: #E2B84C;
+  --m-ber: #EACD8C;
+  --m-hex: #6FB2E4;
+  --m-rest: #34463A;
+}
+
+/* food illustrations: physical colours, the same in both themes */
+:root {
+  --fd-hi: #FFFFFF;
+  --fd-dark: #2A2420;
+  --fd-leaf: #4F9A3A;
+  --fd-leaf-d: #2F6B22;
+  --fd-tomato: #E0452E;
+  --fd-tomato-d: #A92B1B;
+  --fd-straw: #E23B4A;
+  --fd-straw-d: #A8202F;
+  --fd-seed: #F3D36B;
+  --fd-lemon: #F4D23C;
+  --fd-lemon-d: #CFA11B;
+  --fd-peach: #F7A56B;
+  --fd-peach-b: #E4605A;
+  --fd-cori: #D5B68A;
+  --fd-cori-d: #99774B;
+  --fd-fennel: #EAF2D4;
+  --fd-fennel-d: #B9CF93;
+  --fd-fennel-g: #7FB34E;
+  --fd-bay: #6C9A45;
+  --fd-clove: #7A4A2A;
+  --fd-pepper: #3A3230;
+  --fd-pepper-hi: #7A6C64;
+  --fd-rosemary: #587F4E;
+  --fd-stem: #7A6A3A;
+  --fd-mint: #46AD4C;
+  --fd-mint-d: #2E7F34;
+  --fd-choc: #5A3422;
+  --fd-choc-hi: #82533A;
+  --fd-oil: #D8B436;
+  --fd-oil-d: #A9861C;
+  --fd-olive: #6F812A;
+  --fd-melon: #EF5B6A;
+  --fd-rind: #3F8A3A;
+  --fd-cuke: #3C7F34;
+  --fd-cuke-f: #D3EAAE;
+  --fd-cheese: #F7F4EA;
+  --fd-cheese-d: #D9D2BD;
+  --fd-parm: #F1D98A;
+  --fd-parm-d: #D2AF52;
+  --fd-rind-p: #B8923A;
+  --fd-garlic: #F4EFE6;
+  --fd-garlic-d: #D8CFC0;
+  --fd-garlic-p: #B69CC8;
+  --fd-chili: #D8342A;
+  --fd-coco: #7A5534;
+  --fd-coco-f: #F8F5EC;
+}
