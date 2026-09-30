@@ -11,3 +11,5 @@
 .heat-val { font: 600 .82rem/1 var(--font-mono); text-align: right; }
 @media (max-width: 520px) { .heat-row { grid-template-columns: 104px minmax(0, 1fr) 46px; gap: 8px; } .heat-name b { font-size: .8rem; white-space: nowrap; } }
 
+.heat-sort { min-width: 200px; }
+.heat-sort select { width: 100%; }

@@ -1379,6 +1379,17 @@ body::after {
 .chemo-mol { display: inline-flex; align-items: center; gap: 6px; }
 .chemo-mol i { width: 10px; height: 10px; border-radius: 50%; }
 .chemo-mol[aria-pressed="true"] i { box-shadow: 0 0 0 2px var(--surface); }
+/* the catalogue's sorts under their chemotype */
+.chemo-group { display: grid; gap: 4px; }
+.chemo-row.is-cur:not([aria-pressed="true"]) { border-color: var(--line-strong); background: var(--surface); }
+.chemo-sorts { display: flex; flex-wrap: wrap; gap: 4px 6px; padding: 0 8px 6px 18px; }
+.chemo-sort { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px 3px 6px; border-radius: 999px; border: 1px solid var(--line); background: none; font: 600 .74rem/1.2 var(--font-body); color: var(--ink-2); cursor: pointer; transition: border-color .2s, background .2s; }
+.chemo-sort:hover { border-color: var(--line-strong); }
+.chemo-sort[aria-pressed="true"] { background: var(--k); border-color: var(--k); color: var(--surface); }
+.chemo-sort i { width: 9px; height: 12px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--lf-green); }
+.chemo-sort.lf-deep i { background: var(--lf-deep); } .chemo-sort.lf-purple i { background: var(--lf-purple); } .chemo-sort.lf-thai i { background: var(--lf-thai); } .chemo-sort.lf-lime i { background: var(--lf-lime); }
+.chemo-aroma { font-weight: 600; color: var(--ink) !important; margin-bottom: 4px !important; }
+.chemo-note { margin-top: 8px !important; font-size: .84rem !important; color: var(--ink-3); }
 /* heat model */
 .heat-rows { display: grid; gap: 8px; margin-top: 8px; }
 .heat-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) 60px; gap: 12px; align-items: center; }
@@ -1392,6 +1403,8 @@ body::after {
 .heat-val { font: 600 .82rem/1 var(--font-mono); text-align: right; }
 @media (max-width: 520px) { .heat-row { grid-template-columns: 104px minmax(0, 1fr) 46px; gap: 8px; } .heat-name b { font-size: .8rem; white-space: nowrap; } }
 
+.heat-sort { min-width: 200px; }
+.heat-sort select { width: 100%; }
 /* anthocyanin */
 .anth-grid { grid-template-columns: 150px minmax(0, 1fr); align-items: center; }
 @media (max-width: 520px) { .anth-grid { grid-template-columns: 1fr; justify-items: center; } }
@@ -1439,6 +1452,7 @@ body::after {
   .pa-stage { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 4px 18px; align-items: center; }
   .pa-title { grid-column: 1 / -1; }
 }
+.pa-note { font-size: .84rem !important; color: var(--ink-3); }
 /* roots */
 .roots-svg { width: 100%; max-width: 250px; height: auto; }
 .rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }

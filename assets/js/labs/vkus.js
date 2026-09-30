@@ -374,8 +374,9 @@
     const icon = (id, cls = '') => `<svg class="fd ${cls}" viewBox="0 0 64 64" aria-hidden="true">${g(id)}</svg>`;
     // a basil leaf coloured like the variety
     const LEAF = { purple: 'purple', african: 'purple', thai: 'thai', lemon: 'lime', lime: 'lime' };
+    // by a leaf colour of the catalogue (green, deep, purple, thai, lime) or by a chemotype id
     const basil = (variety, s = 1) => {
-      const c = LEAF[variety] || 'green';
+      const c = ['green', 'deep', 'purple', 'thai', 'lime'].includes(variety) ? variety : LEAF[variety] || 'green';
       return `<g transform="scale(${s})"><path d="M0 -4C22 -5 31 -24 30 -44C29 -66 13 -92 0 -104C-13 -92 -29 -66 -30 -44C-31 -24 -22 -5 0 -4Z" fill="var(--lf-${c})"/>` +
         `<path d="M0 -4C1 -40 1 -70 0 -100M0 -24Q12 -28 21 -41M0 -24Q-12 -28 -21 -41M0 -44Q11 -49 18 -62M0 -44Q-11 -49 -18 -62M0 -64Q8 -69 12 -80M0 -64Q-8 -69 -12 -80" stroke="var(--lf-${c}-vein)" stroke-width="2" fill="none" stroke-linecap="round"/>` +
         `<path d="M-4 -14C-19 -21 -24 -40 -21 -56C-18 -72 -9 -86 -2 -95C-7 -76 -10 -46 -4 -14Z" fill="var(--fd-hi)" opacity=".16"/><path d="M0 -4V10" stroke="var(--lf-${c}-vein)" stroke-width="3" stroke-linecap="round"/></g>`;
@@ -570,13 +571,13 @@
     };
     const ENZ = { 'gpp-lin': 'LIS', 'gpp-cin': 'CinS', 'gpp-ger': 'GES', 'ger-cit': 'ADH', 'fpp-car': 'TPS', 'phe-cia': 'PAL', 'cia-mci': 'CCMT', 'chv-est': 'CVOMT', 'con-eug': 'EGS', 'eug-meu': 'EOMT', 'cia-chv': '', 'cia-con': '' };
     const INFO = {
-      lin: ['Линалоол', 'Линалоолсинтаза (LIS) превращает геранилдифосфат в линалоол одним шагом. Её активность — главное отличие европейских сортов.', 'генуэзский, греческий, фиолетовые'],
+      lin: ['Линалоол', 'Линалоолсинтаза (LIS) превращает геранилдифосфат в линалоол одним шагом. Её активность — главное отличие европейских сортов.', 'генуэзский, греческий, фиолетовые, «Пурпурный шар»'],
       cin: ['1,8-Цинеол', 'Цинеолсинтаза (CinS) замыкает геранилдифосфат в бициклический эфир.', 'генуэзский, африканский синий'],
       cit: ['Цитраль', 'Гераниолсинтаза (GES) даёт гераниол, а дегидрогеназы (ADH) окисляют его до альдегидов гераниаля и нераля — вместе это цитраль.', 'лимонный, лаймовый'],
       car: ['β-Кариофиллен', 'Сесквитерпенсинтазы (TPS) сворачивают пятнадцатиуглеродный фарнезилдифосфат в кольца.', 'тулси, лимонный'],
-      est: ['Эстрагол', 'Хавикол-O-метилтрансфераза (CVOMT) пришивает метильную группу к хавиколу. Сильный фермент — анисовый тайский базилик.', 'тайский, фиолетовые'],
-      mci: ['Метилциннамат', 'Метилтрансфераза коричной кислоты (CCMT) превращает её в метиловый эфир с запахом корицы и клубники.', 'коричный'],
-      eug: ['Эвгенол', 'Эвгенолсинтаза (EGS) снимает ацетатную группу с кониферилацетата — получается эвгенол.', 'генуэзский, гвоздичный, тулси'],
+      est: ['Эстрагол', 'Хавикол-O-метилтрансфераза (CVOMT) пришивает метильную группу к хавиколу. Сильный фермент — анисовый тайский базилик.', 'тайский, фиолетовые, «Арарат», «Анисовый восторг»'],
+      mci: ['Метилциннамат', 'Метилтрансфераза коричной кислоты (CCMT) превращает её в метиловый эфир с запахом корицы и клубники.', 'коричный; по аромату — «Карамельный»'],
+      eug: ['Эвгенол', 'Эвгенолсинтаза (EGS) снимает ацетатную группу с кониферилацетата — получается эвгенол.', 'генуэзский, гвоздичный, тулси, «Философ», «Василиск»'],
       meu: ['Метилэвгенол', 'Эвгенол-O-метилтрансфераза (EOMT) метилирует эвгенол. Много её у тулси.', 'тулси']
     };
     const TERP = ['lin', 'cin', 'cit', 'car'], PHEN = ['est', 'mci', 'eug', 'meu'];
@@ -708,6 +709,10 @@
 
   register('chemotype', el => {
     const V = h.CHEMO;
+    // the catalogue's sorts, each under its chemotype (window.BASIL comes from data.js)
+    const SORTS = (window.BASIL && window.BASIL.VARIETIES) || [];
+    const sortsOf = i => SORTS.map((v, k) => [v, k]).filter(([v]) => v.chem === V[i].id);
+    const q2 = t => `«${t}»`;
     el.innerHTML = h.head('Химический отпечаток сорта', 'Кольцо — из чего состоит эфирное масло, паутинка — каким от этого получается запах. Доли — ориентир по опубликованным анализам: у каждого растения они свои и меняются с погодой.') +
       `<div class="chemo-grid">
         <div class="chemo-card">
@@ -718,14 +723,15 @@
           <div class="chemo-info" id="lab-ch-info" aria-live="polite"></div>
         </div>
         <div class="chemo-side">
-          <p class="lab-label">Сорта</p>
-          <div class="chemo-list" id="lab-ch-list" role="group" aria-label="Сорта базилика">${V.map((r, i) => `<button type="button" class="chemo-row" data-i="${i}" aria-pressed="${i === 0}"><span class="chemo-name">${r.name}</span><span class="chemo-bar">${CH_ORDER.filter(k => r.p[k]).map(k => `<i data-m="${k}" style="flex-grow:${r.p[k]};background:var(--m-${k})"></i>`).join('')}<i class="is-rest" style="flex-grow:${Math.max(0, 100 - CH_ORDER.reduce((a, k) => a + (r.p[k] || 0), 0))}"></i></span><b class="chemo-val"></b></button>`).join('')}</div>
+          <p class="lab-label">Химотипы и сорта</p>
+          <div class="chemo-list" id="lab-ch-list" role="group" aria-label="Химотипы и сорта базилика">${V.map((r, i) => `<div class="chemo-group"><button type="button" class="chemo-row" data-i="${i}" aria-pressed="${i === 0}"><span class="chemo-name">${r.name}</span><span class="chemo-bar">${CH_ORDER.filter(k => r.p[k]).map(k => `<i data-m="${k}" style="flex-grow:${r.p[k]};background:var(--m-${k})"></i>`).join('')}<i class="is-rest" style="flex-grow:${Math.max(0, 100 - CH_ORDER.reduce((a, k) => a + (r.p[k] || 0), 0))}"></i></span><b class="chemo-val"></b></button>${sortsOf(i).length ? `<div class="chemo-sorts">${sortsOf(i).map(([v, k]) => `<button type="button" class="chemo-sort lf-${v.leaf}" data-s="${k}" aria-pressed="false"><i></i>${v.name.replace(/, святой базилик$/, '')}</button>`).join('')}</div>` : ''}</div>`).join('')}</div>
           <p class="lab-label">Молекулы</p>
           <div class="chemo-mols" id="lab-ch-mols" role="group" aria-label="Подсветить молекулу">${CH_ORDER.map(k => `<button type="button" class="chip chemo-mol" data-m="${k}" aria-pressed="false"><i style="background:var(--m-${k})"></i>${chShort(k)}</button>`).join('')}</div>
           <p class="lab-foot">зелёные — монотерпены, лиловые и коричные — фенилпропаноиды, золотистые — сесквитерпены; серое — остальные вещества</p>
         </div>
       </div>`;
-    let cur = 0, mol = null;
+    let cur = 0, mol = null, sort = null;
+    const title = () => (sort != null ? SORTS[sort].name : V[cur].name);
     const shares = i => CH_ORDER.map(k => [k, V[i].p[k] || 0]);
 
     /* composition ring: every molecule has its own arc, so switching sorts slides the arcs */
@@ -807,9 +813,15 @@
       if (mol) {
         const M = h.MOLS[mol] || h.EXTRA[mol];
         const best = V.map((x, i) => [i, x.p[mol] || 0]).sort((a, b) => b[1] - a[1])[0];
-        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">Молекула</p><h5>${h.molName(mol)}</h5><p>${h.nb(`Пахнет: ${M.smell}. У сорта «${r.name}» — ${r.p[mol] ? r.p[mol] + ' %' : 'почти нет'}; больше всего — у сорта «${V[best[0]].name}», ${best[1]} %.`)}</p>`;
+        const bestSorts = sortsOf(best[0]).map(([v]) => q2(v.name.replace(/, святой базилик$/, ''))).slice(0, 4);
+        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">Молекула</p><h5>${h.molName(mol)}</h5><p>${h.nb(`Пахнет: ${M.smell}. У сорта ${q2(title())} — ${r.p[mol] ? r.p[mol] + ' %' : 'почти нет'}; больше всего — у химотипа ${q2(V[best[0]].name)}, ${best[1]} %${bestSorts.length ? ': ' + bestSorts.join(', ') : ''}.`)}</p>`;
       } else {
-        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">Почему так пахнет</p><h5>${r.name}</h5><p>${h.nb(r.why)}</p>${cur ? '<p class="chemo-cmp"><i></i>пунктир — генуэзский для сравнения</p>' : ''}`;
+        // where the numbers come from: an analysis of this type, or the sort is placed here by its descent or aroma
+        const s = sort != null ? SORTS[sort] : null;
+        const note = !s ? `Сорта этого химотипа: ${sortsOf(cur).map(([v]) => q2(v.name.replace(/, святой базилик$/, ''))).join(', ') || '—'}.`
+          : s.chemBy === 'analysis' ? (s.name === r.name ? '' : `Состав — по анализам сортов группы ${q2(r.name)}.`)
+          : `Отдельного анализа масла у этого сорта нет: состав показан по химотипу ${q2(r.name)}, к которому его относит ${s.chemBy === 'type' ? 'происхождение' : 'аромат'} — ${s.chemWhy}.`;
+        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">${s ? 'Почему так пахнет' : 'Химотип'}</p><h5>${title()}</h5>${s ? `<p class="chemo-aroma">${h.nb(s.aroma)}</p>` : ''}<p>${h.nb(r.why)}</p>${note ? `<p class="chemo-note">${h.nb(note)}</p>` : ''}${cur ? '<p class="chemo-cmp"><i></i>пунктир — генуэзский для сравнения</p>' : ''}`;
       }
     };
     const list = $('#lab-ch-list', el);
@@ -817,13 +829,20 @@
       list.dataset.m = mol || '';
       $$('.chemo-row', list).forEach(b => {
         const i = +b.dataset.i;
-        b.setAttribute('aria-pressed', String(i === cur));
+        b.setAttribute('aria-pressed', String(i === cur && sort == null));
+        b.classList.toggle('is-cur', i === cur);
         $('.chemo-val', b).textContent = mol ? (V[i].p[mol] ? V[i].p[mol] + ' %' : '—') : '';
       });
+      $$('.chemo-sort', list).forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.s === sort)));
       $$('.chemo-mol', el).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === mol)));
     };
     const update = () => { paintDonut(); tweenTo(chScore(V[cur].p)); info(); paintList(); };
-    list.addEventListener('click', e => { const b = e.target.closest('.chemo-row'); if (b) { cur = +b.dataset.i; update(); } });
+    list.addEventListener('click', e => {
+      const sb = e.target.closest('.chemo-sort');
+      if (sb) { sort = +sb.dataset.s; cur = V.findIndex(g => g.id === SORTS[sort].chem); update(); return; }
+      const b = e.target.closest('.chemo-row');
+      if (b) { cur = +b.dataset.i; sort = null; update(); }
+    });
     $('#lab-ch-mols', el).addEventListener('click', e => { const b = e.target.closest('.chemo-mol'); if (b) { mol = mol === b.dataset.m ? null : b.dataset.m; update(); } });
     // charts rebuild on resize: put the current state back
     if ('ResizeObserver' in window) new ResizeObserver(() => { paintDonut(); drawShape(shown); }).observe(el);
@@ -831,9 +850,10 @@
   });
 
   register('heat', el => {
-    const VAR = [['genovese', 'Генуэзский'], ['thai', 'Тайский'], ['lemon', 'Лимонный'], ['cinnamon', 'Коричный']];
+    // any sort of the catalogue; its oil is that of its chemotype
+    const SORTS = ((window.BASIL && window.BASIL.VARIETIES) || []).filter(x => h.CHEMO.some(g => g.id === x.chem));
     el.innerHTML = h.head('Когда класть базилик', 'Модель открытой кастрюли: скорость потери каждой молекулы пропорциональна давлению её пара, оценённому по правилу Трутона. Внизу — что останется от аромата выбранного сорта.', true) +
-      `<div class="lab-controls lab-row-wrap"><div class="lab-seg-wrap"><span class="lab-label">Сорт</span>${h.chipsHtml('lab-ht-v', 'Сорт', VAR, 'genovese')}</div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
+      `<div class="lab-controls lab-row-wrap"><div class="field lab-field heat-sort"><label for="lab-ht-v">Сорт</label><select id="lab-ht-v">${SORTS.map((x, k) => `<option value="${k}">${x.name.replace(/, святой базилик$/, '')}</option>`).join('')}</select></div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
        <div class="heat-rows" id="lab-ht-rows"></div>
        <ul class="legend">${Object.values(h.FAM).map(f => `<li><i class="fam-dot ${f.cls}"></i>${f.name}</li>`).join('')}<li><i class="fam-dot is-ghost"></i>было в свежем листе</li></ul>` +
       h.readHtml([['Осталось аромата', 'lab-ht-tot'], ['Характер', 'lab-ht-c', 'is-wide']]);
@@ -867,7 +887,7 @@
       }
       set(el, 'lab-ht-c', h.nb(tone.join('; ').replace(/^./, c => c.toUpperCase()) + '.' + (st.m > 5 && st.T >= 80 ? ' Кладите свежий базилик в последние 1–2 минуты или прямо в тарелку.' : '')));
     };
-    h.bindPick(el, 'lab-ht-v', v => { st.v = v; upd(); });
+    $('#lab-ht-v', el).addEventListener('change', e => { st.v = (SORTS[+e.target.value] || {}).chem || 'genovese'; upd(); });
     h.bindPick(el, 'lab-ht-t', v => { st.T = +v; upd(); });
     h.bindRange(el, 'lab-ht-m', v => `${fmt(v)} мин`, v => { st.m = v; upd(); });
     upd();
@@ -928,6 +948,10 @@
 
   register('pairing', el => {
     const V = h.CHEMO, P = h.PAIRS;
+    // every sort of the catalogue; its chemotype decides the numbers
+    const SORTS = ((window.BASIL && window.BASIL.VARIETIES) || []).filter(x => V.some(g => g.id === x.chem));
+    const groupOf = k => Math.max(0, V.findIndex(g => g.id === SORTS[k].chem));
+    const sortName = x => x.name.replace(/, святой базилик$/, '');
     const share = (v, m) => (m === 'hex' ? PA_HEX : V[v].p[m] || 0);
     const bridge = (v, m, w) => w * Math.min(1, Math.sqrt(share(v, m) / 40));
     // no shared molecules: the pair works by contrast (olive oil and cucumber only share a family of green notes)
@@ -941,7 +965,7 @@
 
     el.innerHTML = h.head('Лаборатория сочетаний', 'Выберите свой базилик — продукты выстроятся по силе связи с ним. Нажмите на продукт: мост покажет, какие молекулы их роднят или что работает на контрасте. Сила связи — качественная оценка по долям общих молекул.') +
       `<p class="lab-label">Ваш базилик</p>
-       <div class="pa-varieties" id="lab-pa-v" role="group" aria-label="Сорт базилика">${V.map((v, i) => `<button type="button" class="chip pa-var" data-v="${i}" aria-pressed="${i === 0}"><svg viewBox="-34 -108 68 122" aria-hidden="true">${food.basil(v.id)}</svg>${vShort(v.name)}</button>`).join('')}</div>
+       <div class="pa-varieties" id="lab-pa-v" role="group" aria-label="Сорт базилика">${SORTS.map((x, k) => `<button type="button" class="chip pa-var" data-s="${k}" aria-pressed="${k === 0}"><svg viewBox="-34 -108 68 122" aria-hidden="true">${food.basil(x.leaf)}</svg>${vShort(sortName(x))}</button>`).join('')}</div>
        <p class="lab-label">С чем сочетать</p>
        <div class="pa-foods" id="lab-pa-f" role="group" aria-label="Продукты"></div>
        <div class="pa-stage">
@@ -949,7 +973,7 @@
          <div class="lab-chart pa-chart" id="lab-pa-ch"></div>
          <div class="pa-info" id="lab-pa-info" aria-live="polite"></div>
        </div>`;
-    let v = 0, cur = P[0];
+    let sk = 0, v = groupOf(0), cur = P[0];
     const foods = $('#lab-pa-f', el);
     foods.innerHTML = P.map(f => `<button type="button" class="pa-food" data-id="${f.id}" aria-pressed="${f.id === cur.id}">${food.icon(f.id, 'pa-ico')}<span class="pa-name">${f.name}</span><span class="pa-meter"><i></i></span><span class="pa-word"></span></button>`).join('');
 
@@ -984,7 +1008,7 @@
             s += `<text class="pa-sub" x="${r1(mx)}" y="${r1(y + 27)}" text-anchor="middle">${d.sub}</text>`;
           }
         });
-        s += `<g class="pa-end" transform="translate(${Lx} ${r1(cy + 26)})">${food.basil(V[v].id, narrow ? 0.5 : 0.62)}</g>`;
+        s += `<g class="pa-end" transform="translate(${Lx} ${r1(cy + 26)})">${food.basil(SORTS[sk].leaf, narrow ? 0.5 : 0.62)}</g>`;
         s += `<g class="pa-end" transform="translate(${r1(Rx - (narrow ? 24 : 32))} ${r1(cy - 8 - (narrow ? 24 : 32))}) scale(${narrow ? 0.75 : 1})">${food.g(cur.id)}</g>`;
         return s;
       }
@@ -999,10 +1023,11 @@
     const info = () => {
       const f = cur, x = score(v, f), c = contrast(f);
       const best = V.map((_, i) => [i, score(i, f)]).sort((a, b) => b[1] - a[1])[0];
-      set(el, 'lab-pa-title', `<span>${V[v].name}</span><i>+</i><span>${f.name.toLowerCase()}</span>`);
+      set(el, 'lab-pa-title', `<span>${sortName(SORTS[sk])}</span><i>+</i><span>${f.name.toLowerCase()}</span>`);
       const kicker = f.mols.length ? 'Общие молекулы' : f.kin && f.kin.length ? 'Родство ароматов' : 'Работает контраст';
       $('#lab-pa-info', el).innerHTML = `<p class="lab-kicker">${kicker}</p>
-        <p class="pa-verdict"><b>${word(x, c)}</b>${best[0] !== v ? ` · лучше всего — ${V[best[0]].name.toLowerCase()}` : ' · лучший выбор для этой пары'}</p>
+        <p class="pa-verdict"><b>${word(x, c)}</b>${best[0] !== v ? ` · лучше всего — ${SORTS.filter(y => y.chem === V[best[0]].id).slice(0, 3).map(y => `«${sortName(y)}»`).join(', ')}` : ' · лучший выбор для этой пары'}</p>
+        ${SORTS[sk].chemBy !== 'analysis' ? `<p class="pa-note">${h.nb(`Связь посчитана по химотипу «${V[v].name}»: ${SORTS[sk].chemWhy}.`)}</p>` : ''}
         <p>${h.nb(f.why)}</p>
         <dl class="data-rows"><div><dt>Какой сорт</dt><dd>${f.variety}</dd></div><div><dt>Попробуйте</dt><dd>${f.dish}</dd></div></dl>`;
     };
@@ -1037,7 +1062,8 @@
     $('#lab-pa-v', el).addEventListener('click', e => {
       const b = e.target.closest('.pa-var');
       if (!b) return;
-      v = +b.dataset.v;
+      sk = +b.dataset.s;
+      v = groupOf(sk);
       $$('.pa-var', el).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       order();
       foods.scrollTo({ left: 0, behavior: h.reduce.matches ? 'auto' : 'smooth' });

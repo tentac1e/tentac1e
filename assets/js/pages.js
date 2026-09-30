@@ -580,7 +580,7 @@ window.BASIL_PAGES = {
    "udobreniya": "87eba115",
    "formirovka": "3bf32fed",
    "urozhay": "545d1529",
-   "vkus": "815ed500",
+   "vkus": "a8265ebb",
    "razmnozhenie": "f1a7aef0",
    "problemy": "f30d3098"
   },

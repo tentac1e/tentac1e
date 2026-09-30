@@ -1,6 +1,6 @@
 
   const CHAPTERS = [
-    { id: 'sorta', num: 1, title: 'Сорта', art: 'art-sorta', desc: '18 сортов, подбор под ваши условия, советы по семенам.' },
+    { id: 'sorta', num: 1, title: 'Сорта', art: 'art-sorta', desc: '26 сортов, подбор под ваши условия, советы по семенам.' },
     { id: 'posadka', num: 2, title: 'Посадка', art: 'art-posadka', desc: 'Где растить, посев и рассада, спасение магазинного горшка, грунт.' },
     { id: 'kalendar', num: 3, title: 'Календарь', art: 'art-kalendar', desc: 'Сроки посева, высадки и сбора под ваш климат.' },
     { id: 'uhod', num: 4, title: 'Уход', art: 'art-uhod', desc: 'Свет, полив, тепло, почва и уход по сезонам.' },

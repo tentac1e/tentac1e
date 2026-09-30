@@ -97,8 +97,9 @@
     const icon = (id, cls = '') => `<svg class="fd ${cls}" viewBox="0 0 64 64" aria-hidden="true">${g(id)}</svg>`;
     // a basil leaf coloured like the variety
     const LEAF = { purple: 'purple', african: 'purple', thai: 'thai', lemon: 'lime', lime: 'lime' };
+    // by a leaf colour of the catalogue (green, deep, purple, thai, lime) or by a chemotype id
     const basil = (variety, s = 1) => {
-      const c = LEAF[variety] || 'green';
+      const c = ['green', 'deep', 'purple', 'thai', 'lime'].includes(variety) ? variety : LEAF[variety] || 'green';
       return `<g transform="scale(${s})"><path d="M0 -4C22 -5 31 -24 30 -44C29 -66 13 -92 0 -104C-13 -92 -29 -66 -30 -44C-31 -24 -22 -5 0 -4Z" fill="var(--lf-${c})"/>` +
         `<path d="M0 -4C1 -40 1 -70 0 -100M0 -24Q12 -28 21 -41M0 -24Q-12 -28 -21 -41M0 -44Q11 -49 18 -62M0 -44Q-11 -49 -18 -62M0 -64Q8 -69 12 -80M0 -64Q-8 -69 -12 -80" stroke="var(--lf-${c}-vein)" stroke-width="2" fill="none" stroke-linecap="round"/>` +
         `<path d="M-4 -14C-19 -21 -24 -40 -21 -56C-18 -72 -9 -86 -2 -95C-7 -76 -10 -46 -4 -14Z" fill="var(--fd-hi)" opacity=".16"/><path d="M0 -4V10" stroke="var(--lf-${c}-vein)" stroke-width="3" stroke-linecap="round"/></g>`;

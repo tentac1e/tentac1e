@@ -26,6 +26,10 @@
 
   register('pairing', el => {
     const V = h.CHEMO, P = h.PAIRS;
+    // every sort of the catalogue; its chemotype decides the numbers
+    const SORTS = ((window.BASIL && window.BASIL.VARIETIES) || []).filter(x => V.some(g => g.id === x.chem));
+    const groupOf = k => Math.max(0, V.findIndex(g => g.id === SORTS[k].chem));
+    const sortName = x => x.name.replace(/, святой базилик$/, '');
     const share = (v, m) => (m === 'hex' ? PA_HEX : V[v].p[m] || 0);
     const bridge = (v, m, w) => w * Math.min(1, Math.sqrt(share(v, m) / 40));
     // no shared molecules: the pair works by contrast (olive oil and cucumber only share a family of green notes)
@@ -39,7 +43,7 @@
 
     el.innerHTML = h.head('Лаборатория сочетаний', 'Выберите свой базилик — продукты выстроятся по силе связи с ним. Нажмите на продукт: мост покажет, какие молекулы их роднят или что работает на контрасте. Сила связи — качественная оценка по долям общих молекул.') +
       `<p class="lab-label">Ваш базилик</p>
-       <div class="pa-varieties" id="lab-pa-v" role="group" aria-label="Сорт базилика">${V.map((v, i) => `<button type="button" class="chip pa-var" data-v="${i}" aria-pressed="${i === 0}"><svg viewBox="-34 -108 68 122" aria-hidden="true">${food.basil(v.id)}</svg>${vShort(v.name)}</button>`).join('')}</div>
+       <div class="pa-varieties" id="lab-pa-v" role="group" aria-label="Сорт базилика">${SORTS.map((x, k) => `<button type="button" class="chip pa-var" data-s="${k}" aria-pressed="${k === 0}"><svg viewBox="-34 -108 68 122" aria-hidden="true">${food.basil(x.leaf)}</svg>${vShort(sortName(x))}</button>`).join('')}</div>
        <p class="lab-label">С чем сочетать</p>
        <div class="pa-foods" id="lab-pa-f" role="group" aria-label="Продукты"></div>
        <div class="pa-stage">
@@ -47,7 +51,7 @@
          <div class="lab-chart pa-chart" id="lab-pa-ch"></div>
          <div class="pa-info" id="lab-pa-info" aria-live="polite"></div>
        </div>`;
-    let v = 0, cur = P[0];
+    let sk = 0, v = groupOf(0), cur = P[0];
     const foods = $('#lab-pa-f', el);
     foods.innerHTML = P.map(f => `<button type="button" class="pa-food" data-id="${f.id}" aria-pressed="${f.id === cur.id}">${food.icon(f.id, 'pa-ico')}<span class="pa-name">${f.name}</span><span class="pa-meter"><i></i></span><span class="pa-word"></span></button>`).join('');
 
@@ -82,7 +86,7 @@
             s += `<text class="pa-sub" x="${r1(mx)}" y="${r1(y + 27)}" text-anchor="middle">${d.sub}</text>`;
           }
         });
-        s += `<g class="pa-end" transform="translate(${Lx} ${r1(cy + 26)})">${food.basil(V[v].id, narrow ? 0.5 : 0.62)}</g>`;
+        s += `<g class="pa-end" transform="translate(${Lx} ${r1(cy + 26)})">${food.basil(SORTS[sk].leaf, narrow ? 0.5 : 0.62)}</g>`;
         s += `<g class="pa-end" transform="translate(${r1(Rx - (narrow ? 24 : 32))} ${r1(cy - 8 - (narrow ? 24 : 32))}) scale(${narrow ? 0.75 : 1})">${food.g(cur.id)}</g>`;
         return s;
       }
@@ -97,10 +101,11 @@
     const info = () => {
       const f = cur, x = score(v, f), c = contrast(f);
       const best = V.map((_, i) => [i, score(i, f)]).sort((a, b) => b[1] - a[1])[0];
-      set(el, 'lab-pa-title', `<span>${V[v].name}</span><i>+</i><span>${f.name.toLowerCase()}</span>`);
+      set(el, 'lab-pa-title', `<span>${sortName(SORTS[sk])}</span><i>+</i><span>${f.name.toLowerCase()}</span>`);
       const kicker = f.mols.length ? 'Общие молекулы' : f.kin && f.kin.length ? 'Родство ароматов' : 'Работает контраст';
       $('#lab-pa-info', el).innerHTML = `<p class="lab-kicker">${kicker}</p>
-        <p class="pa-verdict"><b>${word(x, c)}</b>${best[0] !== v ? ` · лучше всего — ${V[best[0]].name.toLowerCase()}` : ' · лучший выбор для этой пары'}</p>
+        <p class="pa-verdict"><b>${word(x, c)}</b>${best[0] !== v ? ` · лучше всего — ${SORTS.filter(y => y.chem === V[best[0]].id).slice(0, 3).map(y => `«${sortName(y)}»`).join(', ')}` : ' · лучший выбор для этой пары'}</p>
+        ${SORTS[sk].chemBy !== 'analysis' ? `<p class="pa-note">${h.nb(`Связь посчитана по химотипу «${V[v].name}»: ${SORTS[sk].chemWhy}.`)}</p>` : ''}
         <p>${h.nb(f.why)}</p>
         <dl class="data-rows"><div><dt>Какой сорт</dt><dd>${f.variety}</dd></div><div><dt>Попробуйте</dt><dd>${f.dish}</dd></div></dl>`;
     };
@@ -135,7 +140,8 @@
     $('#lab-pa-v', el).addEventListener('click', e => {
       const b = e.target.closest('.pa-var');
       if (!b) return;
-      v = +b.dataset.v;
+      sk = +b.dataset.s;
+      v = groupOf(sk);
       $$('.pa-var', el).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       order();
       foods.scrollTo({ left: 0, behavior: h.reduce.matches ? 'auto' : 'smooth' });

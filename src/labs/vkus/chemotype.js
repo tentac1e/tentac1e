@@ -12,6 +12,10 @@
 
   register('chemotype', el => {
     const V = h.CHEMO;
+    // the catalogue's sorts, each under its chemotype (window.BASIL comes from data.js)
+    const SORTS = (window.BASIL && window.BASIL.VARIETIES) || [];
+    const sortsOf = i => SORTS.map((v, k) => [v, k]).filter(([v]) => v.chem === V[i].id);
+    const q2 = t => `«${t}»`;
     el.innerHTML = h.head('Химический отпечаток сорта', 'Кольцо — из чего состоит эфирное масло, паутинка — каким от этого получается запах. Доли — ориентир по опубликованным анализам: у каждого растения они свои и меняются с погодой.') +
       `<div class="chemo-grid">
         <div class="chemo-card">
@@ -22,14 +26,15 @@
           <div class="chemo-info" id="lab-ch-info" aria-live="polite"></div>
         </div>
         <div class="chemo-side">
-          <p class="lab-label">Сорта</p>
-          <div class="chemo-list" id="lab-ch-list" role="group" aria-label="Сорта базилика">${V.map((r, i) => `<button type="button" class="chemo-row" data-i="${i}" aria-pressed="${i === 0}"><span class="chemo-name">${r.name}</span><span class="chemo-bar">${CH_ORDER.filter(k => r.p[k]).map(k => `<i data-m="${k}" style="flex-grow:${r.p[k]};background:var(--m-${k})"></i>`).join('')}<i class="is-rest" style="flex-grow:${Math.max(0, 100 - CH_ORDER.reduce((a, k) => a + (r.p[k] || 0), 0))}"></i></span><b class="chemo-val"></b></button>`).join('')}</div>
+          <p class="lab-label">Химотипы и сорта</p>
+          <div class="chemo-list" id="lab-ch-list" role="group" aria-label="Химотипы и сорта базилика">${V.map((r, i) => `<div class="chemo-group"><button type="button" class="chemo-row" data-i="${i}" aria-pressed="${i === 0}"><span class="chemo-name">${r.name}</span><span class="chemo-bar">${CH_ORDER.filter(k => r.p[k]).map(k => `<i data-m="${k}" style="flex-grow:${r.p[k]};background:var(--m-${k})"></i>`).join('')}<i class="is-rest" style="flex-grow:${Math.max(0, 100 - CH_ORDER.reduce((a, k) => a + (r.p[k] || 0), 0))}"></i></span><b class="chemo-val"></b></button>${sortsOf(i).length ? `<div class="chemo-sorts">${sortsOf(i).map(([v, k]) => `<button type="button" class="chemo-sort lf-${v.leaf}" data-s="${k}" aria-pressed="false"><i></i>${v.name.replace(/, святой базилик$/, '')}</button>`).join('')}</div>` : ''}</div>`).join('')}</div>
           <p class="lab-label">Молекулы</p>
           <div class="chemo-mols" id="lab-ch-mols" role="group" aria-label="Подсветить молекулу">${CH_ORDER.map(k => `<button type="button" class="chip chemo-mol" data-m="${k}" aria-pressed="false"><i style="background:var(--m-${k})"></i>${chShort(k)}</button>`).join('')}</div>
           <p class="lab-foot">зелёные — монотерпены, лиловые и коричные — фенилпропаноиды, золотистые — сесквитерпены; серое — остальные вещества</p>
         </div>
       </div>`;
-    let cur = 0, mol = null;
+    let cur = 0, mol = null, sort = null;
+    const title = () => (sort != null ? SORTS[sort].name : V[cur].name);
     const shares = i => CH_ORDER.map(k => [k, V[i].p[k] || 0]);
 
     /* composition ring: every molecule has its own arc, so switching sorts slides the arcs */
@@ -111,9 +116,15 @@
       if (mol) {
         const M = h.MOLS[mol] || h.EXTRA[mol];
         const best = V.map((x, i) => [i, x.p[mol] || 0]).sort((a, b) => b[1] - a[1])[0];
-        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">Молекула</p><h5>${h.molName(mol)}</h5><p>${h.nb(`Пахнет: ${M.smell}. У сорта «${r.name}» — ${r.p[mol] ? r.p[mol] + ' %' : 'почти нет'}; больше всего — у сорта «${V[best[0]].name}», ${best[1]} %.`)}</p>`;
+        const bestSorts = sortsOf(best[0]).map(([v]) => q2(v.name.replace(/, святой базилик$/, ''))).slice(0, 4);
+        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">Молекула</p><h5>${h.molName(mol)}</h5><p>${h.nb(`Пахнет: ${M.smell}. У сорта ${q2(title())} — ${r.p[mol] ? r.p[mol] + ' %' : 'почти нет'}; больше всего — у химотипа ${q2(V[best[0]].name)}, ${best[1]} %${bestSorts.length ? ': ' + bestSorts.join(', ') : ''}.`)}</p>`;
       } else {
-        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">Почему так пахнет</p><h5>${r.name}</h5><p>${h.nb(r.why)}</p>${cur ? '<p class="chemo-cmp"><i></i>пунктир — генуэзский для сравнения</p>' : ''}`;
+        // where the numbers come from: an analysis of this type, or the sort is placed here by its descent or aroma
+        const s = sort != null ? SORTS[sort] : null;
+        const note = !s ? `Сорта этого химотипа: ${sortsOf(cur).map(([v]) => q2(v.name.replace(/, святой базилик$/, ''))).join(', ') || '—'}.`
+          : s.chemBy === 'analysis' ? (s.name === r.name ? '' : `Состав — по анализам сортов группы ${q2(r.name)}.`)
+          : `Отдельного анализа масла у этого сорта нет: состав показан по химотипу ${q2(r.name)}, к которому его относит ${s.chemBy === 'type' ? 'происхождение' : 'аромат'} — ${s.chemWhy}.`;
+        $('#lab-ch-info', el).innerHTML = `<p class="lab-kicker">${s ? 'Почему так пахнет' : 'Химотип'}</p><h5>${title()}</h5>${s ? `<p class="chemo-aroma">${h.nb(s.aroma)}</p>` : ''}<p>${h.nb(r.why)}</p>${note ? `<p class="chemo-note">${h.nb(note)}</p>` : ''}${cur ? '<p class="chemo-cmp"><i></i>пунктир — генуэзский для сравнения</p>' : ''}`;
       }
     };
     const list = $('#lab-ch-list', el);
@@ -121,13 +132,20 @@
       list.dataset.m = mol || '';
       $$('.chemo-row', list).forEach(b => {
         const i = +b.dataset.i;
-        b.setAttribute('aria-pressed', String(i === cur));
+        b.setAttribute('aria-pressed', String(i === cur && sort == null));
+        b.classList.toggle('is-cur', i === cur);
         $('.chemo-val', b).textContent = mol ? (V[i].p[mol] ? V[i].p[mol] + ' %' : '—') : '';
       });
+      $$('.chemo-sort', list).forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.s === sort)));
       $$('.chemo-mol', el).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.m === mol)));
     };
     const update = () => { paintDonut(); tweenTo(chScore(V[cur].p)); info(); paintList(); };
-    list.addEventListener('click', e => { const b = e.target.closest('.chemo-row'); if (b) { cur = +b.dataset.i; update(); } });
+    list.addEventListener('click', e => {
+      const sb = e.target.closest('.chemo-sort');
+      if (sb) { sort = +sb.dataset.s; cur = V.findIndex(g => g.id === SORTS[sort].chem); update(); return; }
+      const b = e.target.closest('.chemo-row');
+      if (b) { cur = +b.dataset.i; sort = null; update(); }
+    });
     $('#lab-ch-mols', el).addEventListener('click', e => { const b = e.target.closest('.chemo-mol'); if (b) { mol = mol === b.dataset.m ? null : b.dataset.m; update(); } });
     // charts rebuild on resize: put the current state back
     if ('ResizeObserver' in window) new ResizeObserver(() => { paintDonut(); drawShape(shown); }).observe(el);

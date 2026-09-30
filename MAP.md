@@ -195,7 +195,7 @@
 
 **data.js**
 - `src/js/data/00-nav.js` (58 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
-- `src/js/data/01-varieties.js` (83 стр.): VARIETIES, QUIZ
+- `src/js/data/01-varieties.js` (115 стр.): VARIETIES, QUIZ
 - `src/js/data/02-places.js` (71 стр.): PLACES, PRESETS, SOIL_RECIPES
 - `src/js/data/03-nutrients.js` (127 стр.): ELEMENTS, STAGES, DOSE, NPK_PRESETS
 - `src/js/data/04-problems.js` (112 стр.): P_LABEL, DIAG, DISEASES, PESTS, TREATMENTS

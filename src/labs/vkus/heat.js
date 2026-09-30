@@ -1,7 +1,8 @@
   register('heat', el => {
-    const VAR = [['genovese', 'Генуэзский'], ['thai', 'Тайский'], ['lemon', 'Лимонный'], ['cinnamon', 'Коричный']];
+    // any sort of the catalogue; its oil is that of its chemotype
+    const SORTS = ((window.BASIL && window.BASIL.VARIETIES) || []).filter(x => h.CHEMO.some(g => g.id === x.chem));
     el.innerHTML = h.head('Когда класть базилик', 'Модель открытой кастрюли: скорость потери каждой молекулы пропорциональна давлению её пара, оценённому по правилу Трутона. Внизу — что останется от аромата выбранного сорта.', true) +
-      `<div class="lab-controls lab-row-wrap"><div class="lab-seg-wrap"><span class="lab-label">Сорт</span>${h.chipsHtml('lab-ht-v', 'Сорт', VAR, 'genovese')}</div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
+      `<div class="lab-controls lab-row-wrap"><div class="field lab-field heat-sort"><label for="lab-ht-v">Сорт</label><select id="lab-ht-v">${SORTS.map((x, k) => `<option value="${k}">${x.name.replace(/, святой базилик$/, '')}</option>`).join('')}</select></div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
        <div class="heat-rows" id="lab-ht-rows"></div>
        <ul class="legend">${Object.values(h.FAM).map(f => `<li><i class="fam-dot ${f.cls}"></i>${f.name}</li>`).join('')}<li><i class="fam-dot is-ghost"></i>было в свежем листе</li></ul>` +
       h.readHtml([['Осталось аромата', 'lab-ht-tot'], ['Характер', 'lab-ht-c', 'is-wide']]);
@@ -35,7 +36,7 @@
       }
       set(el, 'lab-ht-c', h.nb(tone.join('; ').replace(/^./, c => c.toUpperCase()) + '.' + (st.m > 5 && st.T >= 80 ? ' Кладите свежий базилик в последние 1–2 минуты или прямо в тарелку.' : '')));
     };
-    h.bindPick(el, 'lab-ht-v', v => { st.v = v; upd(); });
+    $('#lab-ht-v', el).addEventListener('change', e => { st.v = (SORTS[+e.target.value] || {}).chem || 'genovese'; upd(); });
     h.bindPick(el, 'lab-ht-t', v => { st.T = +v; upd(); });
     h.bindRange(el, 'lab-ht-m', v => `${fmt(v)} мин`, v => { st.m = v; upd(); });
     upd();
