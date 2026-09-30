@@ -1,0 +1,20 @@
+/* flows */
+.flows-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); }
+@media (max-width: 760px) { .flows-grid { grid-template-columns: 1fr; } }
+.flows-svg .roots path { fill: none; stroke: var(--root); stroke-width: 2.4; stroke-linecap: round; }
+.xylem, .phloem { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 3 9; }
+.xylem { stroke: var(--ser-4); animation: flow-dash 1.3s linear infinite; }
+.phloem { stroke: var(--ser-3); animation: flow-dash 2s linear infinite reverse; }
+.fl-tag { font: 700 12px/1 var(--font-body); fill: var(--danger); }
+.chl-fig { margin: 0; display: grid; gap: 8px; justify-items: center; text-align: center; }
+.chl-fig svg { width: 100%; max-width: 230px; height: auto; }
+.chl-fig figcaption { font-size: .84rem; color: var(--ink-3); }
+.chl-ring path { fill: color-mix(in srgb, var(--leaf-soft) 70%, transparent); stroke: var(--stem); stroke-width: 2.2; stroke-linejoin: round; }
+.chl-ring .chl-bridge { fill: none; stroke-dasharray: 4 4; }
+.chl-bonds path { stroke: var(--stem); stroke-width: 2; }
+.chl-mg { fill: var(--sci-phys); }
+.chl-mg-t { font: 700 12px/1 var(--font-mono); fill: var(--surface); }
+.chl-n circle { fill: var(--surface); stroke: var(--ser-2); stroke-width: 2; }
+.chl-n-t text { font: 700 10px/1 var(--font-mono); fill: var(--ser-2); }
+.chl-tail { fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; }
+

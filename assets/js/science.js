@@ -1,4 +1,4 @@
-/* Гид по базилику — научный слой: развороты «Глубже», данные о молекулах и общие инструменты моделей */
+/* Гид по базилику — научный слой: развороты «Глубже», данные о молекулах и общие инструменты моделей. Файл собирает scripts/build.py из src/js/science/ — правьте там */
 window.BasilScience = (() => {
   'use strict';
 
@@ -474,32 +474,40 @@ window.BasilScience = (() => {
   /* ------------------------------------------------------------------ */
   const labs = {};
   const register = (name, fn) => { labs[name] = fn; };
-  /* the 36 models live in labs.js; a page fetches it only when the first model scrolls near */
+  /* models live in assets/js/labs/<chapter>.js (built from src/labs/<chapter>/); a page fetches
+     its chapter's file only when the first model scrolls near */
   const SELF = document.currentScript && document.currentScript.src;
-  let labsLoad = null;
-  function ensureLabs() {
-    if (Object.keys(labs).length) return Promise.resolve();
-    if (!labsLoad) {
-      labsLoad = new Promise((resolve, reject) => {
+  const loads = {};
+  function ensureLabs(view) {
+    if (!loads[view]) {
+      loads[view] = new Promise((resolve, reject) => {
         const tag = document.createElement('script');
-        const v = window.BASIL_PAGES && window.BASIL_PAGES.v ? '?v=' + window.BASIL_PAGES.v.labs : '';
-        tag.src = (SELF ? SELF.replace(/science\.js(\?.*)?$/, 'labs.js') : 'assets/js/labs.js') + v;
+        const vs = window.BASIL_PAGES && window.BASIL_PAGES.v && window.BASIL_PAGES.v.labs;
+        const v = vs && vs[view] ? '?v=' + vs[view] : '';
+        tag.src = (SELF ? SELF.replace(/science\.js(\?.*)?$/, '') : 'assets/js/') + `labs/${view}.js` + v;
         tag.onload = resolve;
-        tag.onerror = () => { labsLoad = null; reject(new Error('labs.js')); };
+        tag.onerror = () => { loads[view] = null; reject(new Error(`labs/${view}.js`)); };
         document.head.appendChild(tag);
       });
     }
-    return labsLoad;
+    return loads[view];
   }
   let ctx = {};
 
+  const failed = el => { el.innerHTML = '<p class="muted">Модель не загрузилась. Обновите страницу.</p>'; };
   function mount(el) {
     if (el.dataset.ready) return;
-    if (!Object.keys(labs).length) { ensureLabs().then(() => mount(el), () => { el.innerHTML = '<p class="muted">Модель не загрузилась. Обновите страницу.</p>'; }); return; }
     const fn = labs[el.dataset.lab];
-    if (!fn) return;
+    if (!fn) {
+      // not loaded yet: fetch the chapter's models once, then try again
+      const host = el.closest('[data-view]');
+      if (!host || el.dataset.loading) return;
+      el.dataset.loading = '1';
+      ensureLabs(host.dataset.view).then(() => { delete el.dataset.loading; if (labs[el.dataset.lab]) mount(el); else failed(el); }, () => { delete el.dataset.loading; failed(el); });
+      return;
+    }
     el.dataset.ready = '1';
-    try { fn(el, api); } catch (err) { console.error('[basil] lab ' + el.dataset.lab, err); el.innerHTML = '<p class="muted">Модель не загрузилась. Обновите страницу.</p>'; }
+    try { fn(el, api); } catch (err) { console.error('[basil] lab ' + el.dataset.lab, err); failed(el); }
   }
   function mountAll() {
     const tools = $$('.lab-tool[data-lab]');

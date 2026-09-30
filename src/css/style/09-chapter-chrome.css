@@ -1,0 +1,109 @@
+/* ================= chapter chrome ================= */
+.ch-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: clamp(16px, 4vw, 48px);
+  align-items: center;
+  padding-block: clamp(26px, 5vw, 56px) clamp(18px, 3vw, 28px);
+}
+.ch-hero h1 {
+  margin: 12px 0 14px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  line-height: .96;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+.ch-hero h1 em { color: var(--basil); }
+.ch-hero-art { position: relative; display: grid; place-items: center; aspect-ratio: 1; }
+.ch-hero-art .blob {
+  position: absolute;
+  inset: 4%;
+  background: radial-gradient(circle at 35% 30%, var(--surface), var(--leaf-soft) 70%);
+  border: 1px solid var(--line);
+  border-radius: 42% 58% 62% 38% / 45% 40% 60% 55%;
+  box-shadow: var(--shadow-float);
+  animation: morph 14s ease-in-out infinite;
+  will-change: transform;
+}
+/* the blob «breathes» between two outlines: a cross-fade and a turn run on the compositor, no repaint per frame */
+.ch-hero-art .blob::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 58% 42% 45% 55% / 55% 60% 40% 45%;
+  background: inherit;
+  opacity: 0;
+  animation: morph-fade 14s ease-in-out infinite;
+  will-change: opacity;
+}
+.art-float { position: relative; display: grid; place-items: center; width: 78%; height: 78%; animation: bob 9s ease-in-out infinite; will-change: translate; }
+.ch-hero-art .art-float svg { width: 100%; height: 100%; }
+@keyframes morph {
+  0%, 100% { rotate: 0deg; scale: 1; }
+  33% { rotate: 8deg; scale: 1.03; }
+  66% { rotate: -6deg; scale: .98; }
+}
+@keyframes morph-fade { 0%, 100% { opacity: 0; } 33% { opacity: 1; } 66% { opacity: .35; } }
+@media (max-width: 700px) {
+  .ch-hero { grid-template-columns: minmax(0, 1fr) 96px; gap: 14px; align-items: start; padding-top: 22px; }
+  .ch-hero-text { display: contents; }
+  .ch-hero .eyebrow { grid-column: 1; grid-row: 1; align-self: center; }
+  .ch-hero h1 { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: clamp(2.2rem, 10vw, 2.9rem); }
+  .ch-hero .lead { grid-column: 1 / -1; grid-row: 3; font-size: 1rem; }
+  .ch-hero-art { grid-column: 2; grid-row: 1; width: 96px; margin-top: -6px; }
+}
+
+.subnav-wrap {
+  position: sticky;
+  top: var(--sticky-top);
+  z-index: 40;
+  margin: 0 calc(50% - 50vw) clamp(18px, 3vw, 28px);
+  padding: 10px calc(50vw - 50%);
+  background: color-mix(in srgb, var(--bg) 84%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  backdrop-filter: blur(14px) saturate(1.3);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s;
+}
+.subnav-wrap.is-stuck { border-bottom-color: var(--line); }
+.subnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+.subnav::-webkit-scrollbar { display: none; }
+.subnav a {
+  flex-shrink: 0;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color .25s, color .25s, border-color .25s;
+}
+.subnav a:hover { border-color: var(--basil); color: var(--basil-deep); }
+.subnav a[aria-current="true"] { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
+
+.pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: clamp(36px, 5vw, 56px); }
+.pager a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform .45s var(--ease-float), border-color .25s, box-shadow .45s;
+}
+.pager a:hover { color: var(--ink); border-color: var(--basil); transform: translateY(-3px); box-shadow: var(--shadow-sm); }
+.pager a.next { grid-template-columns: minmax(0, 1fr) auto; text-align: right; grid-column: 2; }
+.pager small { display: block; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.pager b { display: block; font-family: var(--font-display); font-size: 1.4rem; line-height: 1.1; }
+.pager svg.pg-art { width: 52px; height: 52px; }
+@media (max-width: 480px) { .pager svg.pg-art { width: 40px; height: 40px; } .pager a { padding: 12px; gap: 8px; } .pager b { font-size: 1.15rem; } }
+

@@ -1,0 +1,17 @@
+/* nitrogen cycle */
+.nc-svg { font-family: var(--font-body); }
+.nc-node rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.4; }
+.nc-root rect { fill: var(--leaf-soft); stroke: var(--stem); }
+.nc-n2 rect, .nc-leach rect { fill: var(--surface-2); stroke-dasharray: 4 3; }
+.nc-t { font: 700 15px/1 var(--font-mono); fill: var(--ink); }
+.nc-s { font: 500 11px/1 var(--font-body); fill: var(--ink-3); }
+.nc-edge { fill: none; stroke: var(--line-strong); stroke-width: 2; }
+.nc-edge.is-off { opacity: .35; stroke-dasharray: 3 5; }
+.nc-edge.is-dash { stroke-dasharray: 5 5; }
+.nc-ah { fill: var(--ink-3); }
+.nc-flow { fill: none; stroke: var(--sci-chem); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1 26; animation: nc-run var(--spd, 3s) linear infinite; animation-delay: var(--dl, 0s); }
+.nc-flow.is-loss { stroke: var(--danger); }
+@keyframes nc-run { to { stroke-dashoffset: -108; } }
+.nc-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-3); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
+.nc-lbl.is-off { opacity: .45; }
+

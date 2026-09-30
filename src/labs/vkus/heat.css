@@ -1,0 +1,13 @@
+/* heat model */
+.heat-rows { display: grid; gap: 8px; margin-top: 8px; }
+.heat-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) 60px; gap: 12px; align-items: center; }
+.heat-name { display: grid; }
+.heat-name b { font-size: .88rem; }
+.heat-name small { font: 500 .68rem/1.2 var(--font-mono); color: var(--ink-3); }
+.heat-bar { position: relative; height: 16px; }
+.heat-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: var(--w); border-radius: 0 8px 8px 0; transition: width .45s var(--ease-float); }
+.heat-ghost { background: var(--ser-muted); }
+.heat-fill.s1 { background: var(--ser-1); } .heat-fill.s2 { background: var(--ser-2); } .heat-fill.s3 { background: var(--ser-3); } .heat-fill.s4 { background: var(--ser-4); }
+.heat-val { font: 600 .82rem/1 var(--font-mono); text-align: right; }
+@media (max-width: 520px) { .heat-row { grid-template-columns: 104px minmax(0, 1fr) 46px; gap: 8px; } .heat-name b { font-size: .8rem; white-space: nowrap; } }
+

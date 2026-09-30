@@ -1,0 +1,11 @@
+/* vpd */
+.vpd-map polygon { stroke: none; }
+.vpd-iso { fill: none; stroke: var(--surface); stroke-width: 1.5; opacity: .8; }
+.vpd-map .z0 { fill: var(--z0); } .vpd-map .z1 { fill: var(--z1); } .vpd-map .z2 { fill: var(--z2); } .vpd-map .z3 { fill: var(--z3); } .vpd-map .z4 { fill: var(--z4); }
+.vpd-dot { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+.vpd-dot-in { fill: var(--ink); }
+.vpd-legend { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; font-size: .82rem; color: var(--ink-2); }
+.vpd-legend i { display: inline-block; width: 14px; height: 14px; margin-right: 8px; border-radius: 4px; vertical-align: -2px; }
+.vpd-legend .z0 { background: var(--z0); } .vpd-legend .z1 { background: var(--z1); } .vpd-legend .z2 { background: var(--z2); } .vpd-legend .z3 { background: var(--z3); } .vpd-legend .z4 { background: var(--z4); }
+.vpd-legend small { font-family: var(--font-mono); color: var(--ink-3); }
+

@@ -1,0 +1,7 @@
+/* anthocyanin */
+.anth-grid { grid-template-columns: 150px minmax(0, 1fr); align-items: center; }
+@media (max-width: 520px) { .anth-grid { grid-template-columns: 1fr; justify-items: center; } }
+.anth-jar { width: 140px; height: auto; }
+.anth-leaf { opacity: .9; }
+.anth-out { margin: 0; font-size: .92rem; color: var(--ink-2); }
+

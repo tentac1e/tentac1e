@@ -1,0 +1,50 @@
+/* molecules */
+.mol-lab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: clamp(16px, 3vw, 30px); align-items: start; }
+@media (max-width: 800px) { .mol-lab { grid-template-columns: 1fr; } }
+.mol-stage {
+  position: relative;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 42%, var(--k-soft), transparent 70%), repeating-radial-gradient(circle at 50% 50%, transparent 0 34px, var(--paper-line-strong) 34px 35px);
+  border: 1px solid var(--line);
+}
+.mol-canvas { display: block; width: 100%; height: 320px; cursor: grab; touch-action: pan-y; }
+.mol-canvas:active { cursor: grabbing; }
+.mol-hint { position: absolute; right: 14px; bottom: 8px; color: var(--ink-3); font-size: 1.15rem; pointer-events: none; }
+.mol-key { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 0; font-size: .8rem; color: var(--ink-2); }
+.mol-key i { display: inline-block; width: 11px; height: 11px; margin-right: 6px; border-radius: 50%; vertical-align: -1px; }
+.mk-c { background: var(--mol-c); } .mk-o { background: var(--mol-o); }
+.mol-card { padding: 18px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+.mol-name { margin: 2px 0 0; font-family: var(--font-display); font-size: 2rem; line-height: 1; }
+.mol-alt { margin: 4px 0 0; color: var(--ink-3); font-style: italic; }
+.mol-formula { margin: 10px 0 12px; font: 500 .95rem/1.3 var(--font-mono); color: var(--k); }
+.mol-card p:last-child { margin: 0; color: var(--ink-2); }
+.mol-chips { margin-top: 16px; }
+.vol-scale { margin-top: 18px; }
+.vol-track { position: relative; height: 96px; border-radius: 16px; background: linear-gradient(90deg, var(--sci-phys-soft), var(--surface-2) 45%, var(--sci-taste-soft)); border: 1px solid var(--line); overflow: hidden; }
+.vol-chip {
+  position: absolute;
+  left: var(--x);
+  top: 10px;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .3s var(--ease-float);
+}
+.vol-chip b { font-size: .74rem; line-height: 1.1; color: var(--ink); }
+.vol-chip small { font: 500 .64rem/1 var(--font-mono); color: var(--ink-3); }
+.vol-chip.s1 { border-color: var(--ser-1); } .vol-chip.s2 { border-color: var(--ser-2); } .vol-chip.s3 { border-color: var(--ser-3); } .vol-chip.s4 { border-color: var(--ser-4); }
+.vol-chip:hover { transform: translateY(-2px); }
+.vol-chip[aria-pressed="true"] { box-shadow: 0 0 0 3px color-mix(in srgb, var(--k) 45%, transparent); }
+.vol-axis { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font: 500 .68rem/1.2 var(--font-mono); color: var(--ink-3); }
+@media (max-width: 640px) {
+  .vol-scale { overflow-x: auto; }
+  .vol-track, .vol-axis { min-width: 600px; }
+}
+

@@ -1,0 +1,39 @@
+/* ================= places ================= */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 10px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  font: 700 .92rem/1.2 var(--font-body);
+  cursor: pointer;
+  transition: background-color .25s, color .25s, transform .35s var(--ease-float), border-color .2s;
+}
+.tab:hover { transform: translateY(-2px); border-color: var(--basil); }
+.tab[aria-selected="true"] { background: var(--basil); color: var(--on-basil); border-color: var(--basil); }
+@media (max-width: 700px) {
+  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -4px; padding: 2px 4px; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex-shrink: 0; }
+}
+.place-panel { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 34px); }
+.place-panel .lead { margin: -6px 0 14px; }
+.params { display: grid; margin: 0; }
+.params div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 14px; padding: 11px 0; border-bottom: 1px dashed var(--line-strong); }
+.params div:first-child { border-top: 1px dashed var(--line-strong); }
+.params dt { font-size: .78rem; font-weight: 700; letter-spacing: .03em; color: var(--ink-3); text-transform: uppercase; padding-top: 2px; }
+.params dd { margin: 0; }
+.place-side { display: grid; gap: 18px; align-content: start; }
+.place-side h4 { display: flex; align-items: center; gap: 8px; }
+@media (max-width: 860px) { .place-panel { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .params div { grid-template-columns: 1fr; gap: 2px; } }
+
+.comp-list { list-style: none; padding: 0; display: grid; gap: 12px; margin: 0; }
+.comp-list li { display: grid; gap: 2px; }
+.comp-list b { font-family: var(--font-display); font-size: 1.22rem; }
+.comp-list span { font-size: .93rem; color: var(--ink-2); }
+

@@ -1,0 +1,29 @@
+/* trichomes */
+.tr-wrap { position: relative; }
+.tr-svg { font-family: var(--font-body); }
+.tr-air { fill: color-mix(in srgb, var(--sci-phys-soft) 55%, transparent); }
+.tr-cut { stroke: var(--oil); stroke-width: 2.5; opacity: .6; }
+.tr-epi { fill: color-mix(in srgb, var(--leaf-soft) 55%, var(--surface)); stroke: color-mix(in srgb, var(--stem) 55%, transparent); stroke-width: 1.2; }
+.tr-pal { fill: color-mix(in srgb, var(--leaf-soft) 80%, var(--leaf) 20%); stroke: color-mix(in srgb, var(--stem) 55%, transparent); stroke-width: 1.2; }
+.tr-chl { fill: var(--pl-a); opacity: .8; }
+.tr-spo { fill: color-mix(in srgb, var(--leaf-soft) 70%, var(--surface)); stroke: color-mix(in srgb, var(--stem) 45%, transparent); stroke-width: 1.2; }
+.tr-stoma ellipse { fill: var(--leaf); stroke: var(--pl-a); stroke-width: 1.4; }
+.tr-vein { fill: color-mix(in srgb, var(--sci-phys) 25%, var(--surface)); stroke: var(--sci-phys); stroke-width: 1.5; }
+.tr-stalk { fill: color-mix(in srgb, var(--leaf-soft) 60%, var(--surface)); stroke: var(--stem); stroke-width: 1.2; }
+.tr-head { fill: var(--leaf); stroke: var(--pl-a); stroke-width: 1.2; }
+.tr-oil { fill: color-mix(in srgb, var(--oil-bright) 70%, transparent); stroke: var(--oil); stroke-width: 1.4; transform-box: fill-box; transform-origin: 50% 100%; transition: transform .4s var(--ease-float), opacity .4s; }
+.tr-gland.is-pel { cursor: pointer; outline: none; }
+.tr-gland.is-pel:hover .tr-oil, .tr-gland.is-pel:focus-visible .tr-oil { transform: scale(1.12); }
+.tr-gland.is-pel:focus-visible .tr-oil { stroke: var(--ink); stroke-width: 2.4; }
+.tr-gland.is-burst .tr-oil { transform: scale(1.6, .35); opacity: .25; }
+.tr-cap { fill: color-mix(in srgb, var(--oil-bright) 45%, var(--leaf)); stroke: var(--pl-a); stroke-width: 1.2; }
+.tr-hair { fill: none; stroke: color-mix(in srgb, var(--stem) 60%, var(--surface)); stroke-width: 4; stroke-linecap: round; }
+.tr-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
+.tr-lbl { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
+.tr-grid { margin-top: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); }
+.tr-top { display: grid; gap: 6px; justify-items: center; text-align: center; }
+.tr-top svg { width: 100%; max-width: 200px; height: auto; }
+.tr-surf { fill: color-mix(in srgb, var(--leaf-soft) 80%, var(--leaf) 20%); }
+.tr-cellline { stroke: color-mix(in srgb, var(--stem) 30%, transparent); stroke-width: 1; fill: none; }
+.tr-dot { fill: color-mix(in srgb, var(--oil-bright) 80%, transparent); stroke: var(--oil); stroke-width: 1.2; }
+

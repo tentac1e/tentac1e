@@ -1,0 +1,104 @@
+/* ================= hero: a living basil in a pot ================= */
+.hero-art { min-height: 540px; }
+.plant-stage {
+  position: relative;
+  width: min(100%, 470px);
+  aspect-ratio: 420 / 540;
+  margin-right: -2%;
+  z-index: 1;
+}
+.hero-plant { width: 100%; height: 100%; overflow: visible; touch-action: pan-y; cursor: grab; }
+.hero-plant:active { cursor: grabbing; }
+.hero-art .passport { z-index: 2; left: -54px; bottom: -7%; width: min(300px, 58%); padding: 13px 16px 10px; }
+.hero-art .passport dl div { grid-template-columns: 56px minmax(0, 1fr); padding: 4px 0; font-size: .8rem; }
+.pot-shadow { fill: var(--pot-shadow); }
+.pot-body { fill: url(#pot-grad); }
+.pot-band { fill: var(--pot-band); }
+.pot-shine { fill: none; stroke: rgba(255, 255, 255, .22); stroke-width: 5; stroke-linecap: round; }
+.pot-rim { fill: var(--pot-rim); }
+.pot-soil { fill: var(--soil-top); }
+.pot-grain circle { fill: var(--soil-grain); }
+.pot-stick { stroke: var(--stick); stroke-width: 4; stroke-linecap: round; }
+.pot-tag rect { fill: var(--tag-bg); stroke: var(--stick); stroke-width: 1.2; }
+.pot-tag text { font: 600 15px/1 var(--font-hand); fill: var(--tag-ink); }
+
+.pl-stem { fill: url(#pl-stem-grad); }
+.pl-stem.is-purple { fill: var(--pl-pa); }
+.pl-stem-hl { fill: none; stroke: var(--pl-hl); stroke-linecap: round; opacity: .7; }
+.pl-scar { fill: var(--pl-scar); }
+#pl-leaf .pl-pet { fill: none; stroke: var(--pl-pet); stroke-width: 3.4; stroke-linecap: round; }
+#pl-leaf .pl-fold { fill: var(--pl-fold); }
+#pl-leaf .pl-shine { fill: var(--pl-shine); }
+#pl-leaf .pl-vein { fill: none; stroke: var(--pl-vein); stroke-width: 1.4; stroke-linecap: round; }
+.pl-leaf { transition: fill .6s; }
+.pl-leaf.is-back { opacity: .92; }
+.pl-leaf.is-sick { fill: var(--pl-sick) !important; }
+
+.aroma-layer { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 3; }
+.aroma-dot {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--oil-bright) 0 30%, transparent 70%);
+  opacity: 0;
+  animation: aroma-rise var(--d) cubic-bezier(.2, .7, .3, 1) forwards;
+}
+.aroma-dot:nth-child(3n+1) { background: radial-gradient(circle, var(--leaf) 0 30%, transparent 70%); }
+.aroma-dot:nth-child(3n+2) { background: radial-gradient(circle, var(--opal) 0 28%, transparent 70%); }
+@keyframes aroma-rise {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(calc(var(--s) * .4)); }
+  12% { opacity: .95; }
+  35% { transform: translate(calc(-50% + var(--dx) * -.3), calc(-50% + var(--dy) * .35)) scale(var(--s)); }
+  70% { opacity: .7; transform: translate(calc(-50% + var(--dx) * .6), calc(-50% + var(--dy) * .72)) scale(calc(var(--s) * 1.3)); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(calc(var(--s) * 1.6)); }
+}
+.aroma-label {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 6px;
+  align-items: center;
+  padding: 6px 12px 6px 8px;
+  border-radius: 999px;
+  background: var(--glass-strong);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-float);
+  white-space: nowrap;
+  animation: label-rise 2.6s var(--ease-float) forwards;
+}
+.aroma-label svg { grid-row: span 2; width: 22px; height: 22px; fill: none; stroke: var(--sci-chem); stroke-width: 1.8; }
+.aroma-label b { font: 700 .82rem/1.1 var(--font-body); color: var(--ink); }
+.aroma-label small { font: 500 .7rem/1.1 var(--font-mono); color: var(--ink-3); }
+@keyframes label-rise {
+  0% { opacity: 0; transform: translate(-50%, -30%) scale(.8); }
+  15% { opacity: 1; transform: translate(-50%, -120%) scale(1); }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -260%) scale(.96); }
+}
+.plant-hint {
+  position: absolute;
+  right: 2%;
+  top: 12%;
+  margin: 0;
+  color: var(--opal);
+  font-size: 1.4rem;
+  rotate: 6deg;
+  pointer-events: none;
+  transition: opacity .8s, translate .8s;
+}
+.plant-hint::before { content: "↙ "; font-family: var(--font-body); }
+.plant-hint.is-used { opacity: 0; translate: 0 -12px; }
+
+@media (max-width: 900px) {
+  .plant-stage { width: 128px; margin: 0; }
+  .hero-art .passport { left: auto; width: auto; }
+  .plant-hint, .pot-tag { display: none; }
+  .hero { grid-template-columns: minmax(0, 1fr) 128px; }
+  .hero-art { width: 128px; min-height: 0; }
+}
+

@@ -1,0 +1,28 @@
+/* ================= harvest ================= */
+.storage { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 12px; }
+.store-card h4 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 2px; }
+.store-card .term { display: inline-block; margin-bottom: 10px; padding: 2px 10px; border-radius: 999px; background: var(--oil-soft); color: var(--oil); font-family: var(--font-mono); font-size: .72rem; font-weight: 500; }
+.store-card p { font-size: .92rem; color: var(--ink-2); }
+.third-bar { display: flex; height: 40px; margin: 6px 0 10px; border-radius: 12px; overflow: hidden; gap: 2px; background: var(--surface); }
+.third-bar span { display: grid; place-items: center; font-size: .8rem; font-weight: 700; }
+.t-cut { flex: 1; background: var(--oil-bright); color: #2A2208; }
+.t-keep { flex: 2; background: var(--basil); color: var(--on-basil); }
+
+.recipe { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 8px 36px 8px 36px; padding: clamp(20px, 3vw, 32px); box-shadow: var(--shadow-float); }
+.recipe h3 { margin-bottom: 2px; }
+.recipe .hand { margin: 0 0 14px; }
+.recipe-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 24px; }
+@media (max-width: 720px) { .recipe-grid { grid-template-columns: 1fr; } }
+.ingredients { list-style: none; padding: 0; display: grid; }
+.ingredients li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px dashed var(--line-strong); font-size: .94rem; }
+.ingredients li span:last-child { font-family: var(--font-mono); font-size: .82rem; color: var(--basil-deep); white-space: nowrap; }
+.recipe ol { padding-left: 1.3em; display: grid; gap: 8px; font-size: .94rem; color: var(--ink-2); }
+.recipe ol li::marker { font-family: var(--font-display); font-weight: 700; color: var(--basil); }
+.recipes-more { display: grid; gap: 16px; margin-top: 16px; }
+
+.germ-tool { display: grid; gap: 12px; }
+.germ-tool h3 { margin: 0; }
+.germ-out { margin: 0; padding: 12px 14px; border-radius: 14px; background: var(--leaf-soft); font-size: .94rem; }
+.germ-out.is-warn { background: var(--oil-soft); }
+.germ-out.is-bad { background: var(--danger-soft); }
+

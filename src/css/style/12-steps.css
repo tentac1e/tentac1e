@@ -1,0 +1,29 @@
+/* ================= steps ================= */
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.step { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 14px; padding: 18px 20px; }
+.step-num { font-family: var(--font-display); font-size: 2.7rem; font-weight: 700; line-height: .9; color: var(--leaf); }
+.step h4 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 4px; }
+.step p { font-size: .95rem; color: var(--ink-2); }
+.step-meta { display: inline-block; margin-bottom: 6px; padding: 2px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
+@media (max-width: 480px) { .step { grid-template-columns: 38px minmax(0, 1fr); padding: 16px; gap: 10px; } .step-num { font-size: 2.2rem; } }
+
+.rescue { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: center; margin-bottom: 20px; }
+.rescue-art { width: 100%; height: auto; overflow: visible; }
+@media (max-width: 760px) { .rescue { grid-template-columns: 1fr; } }
+
+.soil-tool { display: grid; gap: 14px; align-content: start; }
+.soil-tool h3 { margin: 0; }
+.soil-out { display: grid; gap: 12px; }
+.soil-bar { display: flex; height: 54px; border-radius: 14px; overflow: hidden; gap: 2px; background: var(--surface); }
+.soil-bar span { display: grid; place-items: center; min-width: 0; padding: 0 6px; font-size: .74rem; font-weight: 700; text-align: center; line-height: 1.15; overflow: hidden; }
+.mx-a { background: var(--mix-a-bg); color: var(--mix-a-fg); }
+.mx-b { background: var(--mix-b-bg); color: var(--mix-b-fg); }
+.mx-c { background: var(--mix-c-bg); color: var(--mix-c-fg); }
+.mx-d { background: var(--mix-d-bg); color: var(--mix-d-fg); }
+.soil-list { list-style: none; padding: 0; margin: 0; display: grid; }
+.soil-list li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px dashed var(--line-strong); }
+.soil-list li span:first-child { display: flex; align-items: center; gap: 8px; }
+.soil-list li i { width: 12px; height: 12px; border-radius: 3px; }
+.soil-list li b { font-family: var(--font-mono); font-weight: 500; color: var(--basil-deep); }
+.soil-total { font-size: .88rem; color: var(--ink-2); margin: 0; }
+

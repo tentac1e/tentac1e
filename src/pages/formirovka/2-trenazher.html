@@ -1,0 +1,61 @@
+    <div class="panel" data-panel id="formirovka-trenazher" data-title="Тренажёр прищипывания">
+      <p class="panel-lead">Нажимайте на узел (точку между парами листьев), чтобы срезать стебель над ним. Кнопка «Неделя вперёд» выращивает куст. Цель — 8 верхушек без цветения.</p>
+      <div class="pane sim">
+        <div class="sim-stage">
+          <svg id="sim-svg" viewBox="-160 -300 320 370" role="group" aria-label="Растение базилика в горшке. Узлы можно выбрать клавишей Tab и срезать клавишей Enter."></svg>
+          <span class="sim-week" id="sim-week"></span>
+          <span class="sim-help hand" aria-hidden="true">жми на узел ✂</span>
+        </div>
+        <div class="sim-side">
+          <div class="sim-stats">
+            <div class="stat"><span>Верхушек роста</span><b id="sim-tips">1</b></div>
+            <div class="stat"><span>Листьев на кусте</span><b id="sim-leaves">8</b></div>
+            <div class="stat"><span>Собрано листьев</span><b id="sim-harvest">0</b></div>
+            <div class="stat is-aroma" id="sim-aroma-box"><span>Аромат</span><b id="sim-aroma">отличный</b></div>
+          </div>
+          <p class="sim-msg" id="sim-msg" role="status" aria-live="polite"></p>
+          <div class="sim-actions">
+            <button class="btn btn-primary" type="button" id="sim-week-btn"><svg class="ico"><use href="#i-sprout"/></svg>Неделя вперёд</button>
+            <button class="btn btn-ghost" type="button" id="sim-reset"><svg class="ico"><use href="#i-seed"/></svg>Сначала</button>
+          </div>
+          <p class="sim-goal">Правило тренажёра: побег зацветает, если не прищипывать его до 6–8 пар листьев. <b>Срезайте соцветия</b> вместе с парой листьев под ними.</p>
+        </div>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-2n" data-kind="bio" data-short="Геометрия куста">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Геометрия куста: 2ⁿ верхушек</span><span class="deep-sub">Перекрёстные пары листьев и самозатенение</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>У базилика, как у всех яснотковых, стебель четырёхгранный, а листья сидят парами, и каждая следующая пара повёрнута на 90° к предыдущей. В пазухе каждого листа есть почка. Поэтому каждый срез над узлом будит ровно две почки.</p>
+                <p>После n прищипываний у куста 2<sup>n</sup> верхушек: 1, 2, 4, 8, 16. Число молодых листьев растёт так же, а значит, и урожай с каждой срезки.</p>
+                <p>Бесконечно удваивать нельзя. Листья начинают затенять друг друга: нижние получают мало света, тратят больше, чем производят, и желтеют. Экологи меряют это <b>индексом листовой поверхности</b> — сколько квадратных метров листьев приходится на квадратный метр земли. Выше 3–4 нижние слои почти не видят света. Для горшка на подоконнике разумный предел — 8–16 верхушек.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Верхушек после n срезов</span><p>N = 2<sup>n</sup></p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="branch" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Где появится следующий лист</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Положение листьев задаёт сама верхушка. На поверхности меристемы ауксин собирается в точки максимума, и из них вырастают зачатки листьев. Новый максимум появляется подальше от уже существующих, потому что старые зачатки откачивают ауксин из своего окружения.</p>
+                <p>У базилика и других яснотковых так получаются пары листьев, повёрнутые на 90°. У многих других растений тот же механизм даёт спираль с углом около 137,5° — «золотым углом», который видно в семечках подсолнуха.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Reinhardt D. et al. Regulation of phyllotaxis by polar auxin transport. <i>Nature</i>, 2003.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

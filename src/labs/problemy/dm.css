@@ -1,0 +1,10 @@
+/* downy mildew gauge */
+.dm-out { display: grid; gap: 8px; justify-items: center; }
+.dm-gauge { width: 100%; max-width: 280px; height: auto; }
+.dm-gauge path { fill: none; stroke-width: 16; }
+.g-track { stroke: var(--line); }
+.g-low { stroke: var(--z2); } .g-mid { stroke: var(--z3); } .g-high { stroke: var(--z4); }
+.g-needle { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; transition: transform .6s var(--ease-float); }
+.g-hub { fill: var(--ink); }
+.dm-level { margin: 0; }
+

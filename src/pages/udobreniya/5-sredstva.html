@@ -1,0 +1,89 @@
+    <div class="panel" data-panel id="udobreniya-sredstva" data-title="Какие удобрения использовать">
+      <div class="pane npk-tool" id="npk">
+        <div>
+          <h3>Расшифровка NPK</h3>
+          <p class="muted">Введите три числа с упаковки — покажем, какой элемент преобладает и на какой стадии это удобрение уместнее всего.</p>
+          <div class="chips-row" id="npk-presets"></div>
+          <div class="row-3">
+            <div class="field"><label for="npk-n">N, %</label><input type="number" id="npk-n" min="0" max="60" step="0.5" value="16" inputmode="decimal"></div>
+            <div class="field"><label for="npk-p">P₂O₅, %</label><input type="number" id="npk-p" min="0" max="60" step="0.5" value="16" inputmode="decimal"></div>
+            <div class="field"><label for="npk-k">K₂O, %</label><input type="number" id="npk-k" min="0" max="60" step="0.5" value="16" inputmode="decimal"></div>
+          </div>
+        </div>
+        <div class="npk-out" id="npk-out" aria-live="polite"></div>
+      </div>
+      <div class="sub">
+        <div class="sub-head"><h3>Таблица удобрений</h3><p>Дозы — ориентир для базилика. Если на упаковке указано иначе, следуйте инструкции. Для горшков берите половину от дозы для грядки.</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Удобрение</th><th scope="col">Состав, %</th><th scope="col">Для чего</th><th scope="col">Когда</th><th scope="col">Доза</th></tr></thead>
+            <tbody>
+              <tr class="group"><th colspan="5" scope="colgroup">Минеральные</th></tr>
+              <tr><td>Комплексное «для зелени» с микроэлементами</td><td class="comp">N &gt; K &gt; P + микро</td><td>Основной вариант для горшков: всё в одном</td><td>Весь сезон после приживания</td><td class="dose">по инструкции; в горшке ½ дозы</td></tr>
+              <tr><td>Нитроаммофоска (азофоска)</td><td class="comp">N16 · P16 · K16</td><td>Универсальная подкормка и заправка грядки</td><td>Подготовка почвы, рост</td><td class="dose">в почву 20–30 г/м²; раствор 1–1,5 г/л</td></tr>
+              <tr><td>Мочевина (карбамид)</td><td class="comp">N46</td><td>Быстрая помощь при азотном голодании</td><td>Активный рост, после сильной срезки</td><td class="dose">0,5 г/л, не чаще раза в 2 недели</td></tr>
+              <tr><td>Калийная селитра</td><td class="comp">N13 · K46</td><td>Аромат, плотные листья, отрастание после срезок</td><td>Рост и срезки</td><td class="dose">1 г/л</td></tr>
+              <tr><td>Кальциевая селитра</td><td class="comp">N15,5 · Ca19</td><td>Крепкие ткани, профилактика деформации верхушек</td><td>Рост, гидропоника, мягкая вода</td><td class="dose">1 г/л; не смешивать с фосфатами и сульфатами</td></tr>
+              <tr><td>Монокалийфосфат</td><td class="comp">P52 · K34</td><td>Корни рассады, приживание, цветение и семена</td><td>Рассада, пересадка, цветение</td><td class="dose">1 г/л; по листу 0,5 г/л</td></tr>
+              <tr><td>Сульфат калия</td><td class="comp">K50 · S18</td><td>Калий без азота: аромат и финиш сезона</td><td>Срезки, конец сезона</td><td class="dose">1 г/л</td></tr>
+              <tr><td>Сульфат магния</td><td class="comp">MgO16 · S13</td><td>Магний при пожелтении между жилками старых листьев</td><td>Раз в месяц весь сезон</td><td class="dose">2 г/л; по листу 1 г/л</td></tr>
+              <tr><td>Хелат железа</td><td class="comp">Fe (ЭДТА, ДТПА)</td><td>Железо при пожелтении молодых листьев, часто из-за жёсткой воды</td><td>По симптомам</td><td class="dose">по инструкции</td></tr>
+              <tr><td>Суперфосфат двойной</td><td class="comp">P46 + Ca</td><td>Фосфор впрок: растворяется медленно</td><td>До посадки</td><td class="dose">15–20 г/м² в почву</td></tr>
+              <tr class="group"><th colspan="5" scope="colgroup">Органические</th></tr>
+              <tr><td>Биогумус</td><td class="comp">NPK 1–2 + гуматы</td><td>Мягкое питание, структура грунта, микрофлора</td><td>Любая стадия, кроме посева</td><td class="dose">10–20 % объёма грунта; жидкий — по инструкции</td></tr>
+              <tr><td>Компост перепревший</td><td class="comp">NPK ≈ 1</td><td>Заправка грядки, улучшение почвы</td><td>До посадки</td><td class="dose">3–5 кг/м²</td></tr>
+              <tr><td>Настой крапивы</td><td class="comp">N, K, Ca, Fe</td><td>«Зелёное удобрение» для наращивания массы</td><td>Активный рост</td><td class="dose">1:10, раз в 10–14 дней</td></tr>
+              <tr><td>Древесная зола</td><td class="comp">K 5–12 · Ca до 30 · P 1–3</td><td>Калий и кальций, раскисление</td><td>Срезки, конец сезона</td><td class="dose">настой 10 г/л; не вместе с азотными</td></tr>
+              <tr><td>Настой куриного помёта</td><td class="comp">N высокий</td><td>Сильная азотная подкормка</td><td>Только грядка</td><td class="dose">1:20, под корень, раз в 3 недели</td></tr>
+              <tr><td>Гумат калия</td><td class="comp">гуминовые кислоты</td><td>Корнеобразование, снятие стресса</td><td>Пересадка, после холода и жары</td><td class="dose">по инструкции</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Почти весь азот удобрений получают из воздуха процессом Габера — Боша. По оценкам, около половины азота в теле современного человека прошло через такие заводы.</p>
+          <a class="sci-note-link" href="#deep-azot">Глубже: Круговорот азота <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-oksidy" data-kind="chem" data-short="Оксиды на упаковке">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Цифры на упаковке: оксиды вместо элементов</span><span class="deep-sub">Почему в «16-16-16» только 7&nbsp;% фосфора</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Производители по традиции указывают фосфор в пересчёте на оксид P<sub>2</sub>O<sub>5</sub>, а калий — на K<sub>2</sub>O, хотя в пакете нет ни того, ни другого: фосфор там в виде фосфатов, калий — в виде хлорида, сульфата или нитрата. Традиция тянется с XIX века, когда состав удобрений определяли, прокаливая образец и взвешивая оксиды.</p>
+                <p>Чтобы получить чистый элемент, умножьте: <b>P = P<sub>2</sub>O<sub>5</sub> × 0,436</b>, <b>K = K<sub>2</sub>O × 0,830</b>. В нитроаммофоске 16-16-16 элементарного фосфора всего 7&nbsp;%, калия — 13,3&nbsp;%.</p>
+                <p>Азот всегда указывают как элемент, но важна его форма. Нитратный действует сразу. Аммонийный и амидный (мочевина) — через дни или недели, после превращения бактериями.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Молярные массы</span><p>2·31,0 / 141,9 = 0,436<br>2·39,1 / 94,2 = 0,830</p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="oxide" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему удобрение слёживается</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>У каждой соли есть <b>критическая относительная влажность</b>: если воздух влажнее, кристаллы тянут из него воду и расплываются. При 30&nbsp;°C для аммиачной селитры это около 59&nbsp;%, для мочевины — около 73&nbsp;%, для хлорида калия — 84&nbsp;%, а для кальциевой селитры — всего около 47&nbsp;%.</p>
+                <p>Смеси коварнее чистых солей. У смеси мочевины с аммиачной селитрой критическая влажность падает примерно до 18&nbsp;%, то есть она мокнет почти в любой комнате. Поэтому эти два удобрения не смешивают впрок, а открытую пачку кальциевой селитры держат плотно закрытой.</p>
+                <p>Кристаллы, которые намокли и снова высохли, срастаются мостиками — так появляются каменные комки. Состав от этого не меняется: комок можно раскрошить или просто дольше растворять.</p>
+                <div class="eq"><span class="eq-label">Условие слёживания</span><p>влажность воздуха &gt; КОВ соли → соль впитывает воду</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>IFDC, UNIDO. <i>Fertilizer Manual</i>. 3rd ed. Kluwer Academic, 1998.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

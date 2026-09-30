@@ -1,0 +1,32 @@
+/* ================= «Любопытно»: margin notes ================= */
+.sci-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; margin-top: clamp(26px, 4vw, 40px); }
+.sci-note {
+  --k: var(--sci-bio);
+  --k-soft: var(--sci-bio-soft);
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 16px 18px 16px;
+  border-radius: 6px 20px 6px 20px;
+  border: 1px solid color-mix(in srgb, var(--k) 26%, var(--line));
+  background:
+    linear-gradient(var(--paper-line) 1px, transparent 1px) 0 12px / 100% 24px,
+    color-mix(in srgb, var(--k) 7%, var(--surface));
+  box-shadow: var(--shadow-sm);
+  transform: rotate(-.5deg);
+  transition: transform .5s var(--ease-float), box-shadow .5s var(--ease-float);
+}
+.sci-note:nth-child(even) { transform: rotate(.45deg); }
+.sci-note:hover { transform: rotate(0) translateY(-3px); box-shadow: var(--shadow-float); }
+.sci-note::after { content: ""; position: absolute; top: -8px; left: 50%; width: 64px; height: 16px; margin-left: -32px; border-radius: 2px; background: color-mix(in srgb, var(--k) 22%, var(--surface)); opacity: .8; transform: rotate(-2deg); }
+.sci-note[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
+.sci-note[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
+.sci-note[data-kind="taste"] { --k: var(--sci-taste); --k-soft: var(--sci-taste-soft); }
+.sci-note-k { display: inline-flex; align-items: center; gap: 6px; color: var(--k); }
+.sci-note-k .ico { width: 20px; height: 20px; }
+.sci-note-k .hand { font-size: 1.35rem; color: var(--k); }
+.sci-note p { margin: 0; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
+.sci-note-link { justify-self: start; margin-top: 2px; font: 500 .74rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
+.sci-note-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+

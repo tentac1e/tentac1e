@@ -1,0 +1,76 @@
+    <div class="panel" data-panel id="udobreniya-elementy" data-title="Что за что отвечает">
+      <p class="panel-lead">Нажмите на элемент, чтобы узнать его роль, признаки нехватки и избытка и где его взять. Стрелка в углу подсказывает, где искать симптомы: ↓ на старых нижних листьях, ↑ на молодых верхних.</p>
+      <div class="el-layout">
+        <div>
+          <div class="el-grid" id="el-grid" role="group" aria-label="Элементы питания"></div>
+          <ul class="el-legend">
+            <li><b class="c-macro">N</b> макроэлементы</li>
+            <li><b class="c-meso">Ca</b> мезоэлементы</li>
+            <li><b class="c-micro">Fe</b> микроэлементы</li>
+          </ul>
+          <div class="mobility card">
+            <svg viewBox="0 0 120 200" aria-hidden="true">
+              <ellipse cx="60" cy="42" rx="52" ry="38" style="fill: var(--opal-soft)"/>
+              <ellipse cx="60" cy="160" rx="58" ry="40" style="fill: var(--leaf-soft)"/>
+              <path d="M60 198 L60 18" class="mini-stem"/>
+              <g transform="translate(60 176)"><use href="#leaf-shape" class="mini-leaf" style="fill: var(--lf-lime)" transform="rotate(-64) scale(.52)"/><use href="#leaf-shape" class="mini-leaf" style="fill: var(--lf-lime)" transform="rotate(64) scale(.52)"/></g>
+              <g transform="translate(60 140)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-58) scale(.36 .46)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(58) scale(.36 .46)"/></g>
+              <g transform="translate(60 104)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-52) scale(.4)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(52) scale(.4)"/></g>
+              <g transform="translate(60 70)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-44) scale(.26 .32)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(44) scale(.26 .32)"/></g>
+              <g transform="translate(60 44)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-30) scale(.24)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(30) scale(.24)"/></g>
+              <g transform="translate(60 24)"><use href="#leaf-shape" class="mini-leaf" transform="rotate(-12) scale(.14)"/><use href="#leaf-shape" class="mini-leaf" transform="rotate(12) scale(.14)"/></g>
+            </svg>
+            <div>
+              <div class="mob-row mob-top"><b>↑ Ca · Fe · S · B · Mn · Cu</b><span>Неподвижные: растение не может перебросить их из старых листьев, поэтому нехватка видна на верхушке.</span></div>
+              <div class="mob-row mob-bottom"><b>↓ N · P · K · Mg · Mo</b><span>Подвижные: растение забирает их из старых листьев для молодых, поэтому страдают нижние. Цинк — частично подвижен.</span></div>
+            </div>
+          </div>
+        </div>
+        <article class="pane el-detail" id="el-detail" aria-live="polite"></article>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>В каждой молекуле хлорофилла ровно один атом магния — того же, что в английской соли, сульфате магния.</p>
+          <a class="sci-note-link" href="#deep-mobilnost">Глубже: Ксилема и флоэма <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-mobilnost" data-kind="bio" data-short="Ксилема и флоэма">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Почему голод виден в разных местах</span><span class="deep-sub">Ксилема, флоэма и молекула хлорофилла</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>По растению идут два потока. <b>Ксилема</b> несёт воду с растворёнными ионами вверх, к листьям, которые сильнее всего испаряют. <b>Флоэма</b> разносит сахара и аминокислоты туда, где идёт рост, — и вверх, и вниз.</p>
+                <p>Азот, фосфор, калий и магний легко переходят во флоэму. При нехватке растение разбирает старые листья и отправляет эти элементы наверх, к молодым. Поэтому их голод виден снизу.</p>
+                <p>Кальций, бор и железо во флоэму почти не попадают. Они приходят только с потоком испарения и остаются там, где осели. Молодые листья испаряют мало и страдают первыми: верхушки деформируются, молодые листья желтеют. Даже при достаточном кальции в грунте его может не хватать верхушке, если воздух очень влажный и испарение почти остановилось.</p>
+                <p><b>Хлорофилл</b> — плоское порфириновое кольцо с атомом магния в центре, которого держат четыре атома азота. Поэтому нехватка и азота, и магния бьёт по зелёному цвету. При нехватке магния желтеет ткань между жилками: вдоль жилок хлорофилл держится дольше.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>C<sub>55</sub>H<sub>72</sub>MgN<sub>4</sub>O<sub>5</sub></b><span>хлорофилл a: один атом магния и четыре азота в каждой молекуле</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="flows" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему кальций не ходит по флоэме</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Флоэма — живые клетки, и концентрацию кальция в них растение держит очень низкой: кальций служит сигнальным ионом, а вместе с фосфатами сока он выпал бы в осадок. Поэтому весь кальций идёт по ксилеме с потоком испарения и оседает там, где испарение сильнее, — в старых крупных листьях.</p>
+                <p>Отсюда болезни «недостатка кальция» при полном грунте: краевой ожог листьев салата и вершинная гниль томата. Помогает не кальциевая подкормка, а ровный полив и умеренная влажность воздуха.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Marschner P. (ed.) <i>Marschner’s Mineral Nutrition of Higher Plants</i>. 3rd ed. Academic Press, 2012.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

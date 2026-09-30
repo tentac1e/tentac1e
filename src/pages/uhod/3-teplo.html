@@ -1,0 +1,88 @@
+    <div class="panel" data-panel id="uhod-teplo" data-title="Тепло и воздух">
+      <div class="card">
+        <h3>Температурная шкала базилика</h3>
+        <div class="scale" id="temp-scale" role="img" aria-label="Шкала температур от 0 до 40 градусов: ниже 5 — повреждение, 5–12 — рост остановлен, 12–16 — медленный рост, 16–20 — нормально, 20–28 — оптимум, 28–32 — терпимо, выше 32 — стресс и цветение">
+          <div class="scale-bar">
+            <span class="z-dead" style="flex:5">гибель</span>
+            <span class="z-cold" style="flex:7">стоп</span>
+            <span class="z-slow" style="flex:4">медленно</span>
+            <span class="z-ok" style="flex:4">норма</span>
+            <span class="z-best" style="flex:8">оптимум</span>
+            <span class="z-ok" style="flex:4">терпимо</span>
+            <span class="z-hot" style="flex:8">жара</span>
+          </div>
+          <div class="scale-ticks"><span style="left:0%">0°</span><span style="left:12.5%">5°</span><span style="left:30%">12°</span><span style="left:40%">16°</span><span style="left:50%">20°</span><span style="left:70%">28°</span><span style="left:80%">32°</span><span style="left:100%">40°</span></div>
+        </div>
+        <dl class="data-rows scale-notes">
+          <div><dt>Прорастание семян</dt><dd>22–25 °C</dd></div>
+          <div><dt>Рост днём</dt><dd>20–28 °C</dd></div>
+          <div><dt>Ночью</dt><dd>не ниже 16 °C</dd></div>
+          <div><dt>Остановка роста</dt><dd>ниже 12 °C</dd></div>
+          <div><dt>Холодовые повреждения</dt><dd>ниже +5…+10 °C</dd></div>
+          <div><dt>Стресс и раннее цветение</dt><dd>выше 32–35 °C</dd></div>
+        </dl>
+      </div>
+      <div class="sub cols-2">
+        <div class="card">
+          <h3>Воздух и влажность</h3>
+          <p>Оптимальная влажность — 40–60&nbsp;%. Слишком сухо (батарея, кондиционер) — паутинный клещ и сухие края листьев. Слишком сыро и душно — ложная мучнистая роса и серая гниль.</p>
+          <p class="muted">Не опрыскивайте листья: мокрая листва болеет. Влажность повышайте поддоном с мокрым керамзитом.</p>
+        </div>
+        <div class="card">
+          <h3>Опасные места в квартире</h3>
+          <ul class="ticks is-warn">
+            <li>Холодное стекло зимой — листья, прижатые к нему, чернеют.</li>
+            <li>Форточка и кондиционер — сквозняк и перепады температуры.</li>
+            <li>Батарея под подоконником — сухой горячий воздух снизу.</li>
+            <li>Застеклённый балкон в июльский полдень — выше 40&nbsp;°C.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>При нагреве на 10&nbsp;°C большинство реакций в клетке ускоряется примерно вдвое — до тех пор, пока белки не начинают разрушаться.</p>
+          <a class="sci-note-link" href="#deep-fermenty">Глубже: Ферменты и жара <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-fermenty" data-kind="chem" data-short="Ферменты и жара">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Температура и ферменты</span><span class="deep-sub">Правило Q₁₀, рубиско и цена жары</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Почти все процессы в клетке ведут ферменты, и их скорость подчиняется правилу <b>Q<sub>10</sub></b>: при нагреве на 10&nbsp;°C реакция ускоряется примерно вдвое — пока белок не начнёт терять форму.</p>
+                <p>Дыхание растёт с температурой неуклонно, а фотосинтез выходит на максимум около 25–30&nbsp;°C и дальше падает. Одна из причин — фермент <b>рубиско</b>. Он присоединяет CO<sub>2</sub>, но иногда по ошибке хватает O<sub>2</sub>. С нагревом CO<sub>2</sub> растворяется в клетке хуже, чем кислород, и ошибок становится больше. На их исправление — фотодыхание — уходят энергия и уже связанный углерод.</p>
+                <p>Прирост — это разница между фотосинтезом и дыханием. Поэтому в жару выше 32–35&nbsp;°C базилик «стоит»: сахара сгорают почти так же быстро, как образуются. Тёплые ночи вредят по той же причине: ночью фотосинтеза нет, а дыхание идёт.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Правило Q₁₀</span><p>v(T) = v₂₀ · Q₁₀<sup>(T − 20)/10</sup>, Q₁₀ ≈ 2</p></div>
+                <div class="num-note"><b>25–30&nbsp;°C</b><span>максимум фотосинтеза у базилика</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="temp" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Уравнение Аррениуса</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Правило Q₁₀ — упрощение уравнения Аррениуса: скорость реакции растёт экспоненциально с температурой, а крутизну задаёт энергия активации E<sub>a</sub>. Для типичной ферментной реакции с E<sub>a</sub>&nbsp;≈&nbsp;50&nbsp;кДж/моль около 20&nbsp;°C как раз получается Q₁₀&nbsp;≈&nbsp;2.</p>
+                <p>Выше оптимума в игру вступает обратный процесс — белки начинают разворачиваться, и кривая скорости падает. Поэтому у каждого фермента своя температура, при которой он работает быстрее всего.</p>
+                <div class="eq"><span class="eq-label">Аррениус</span><p>k = A · e<sup>−E<sub>a</sub>/RT</sup>, Q₁₀ = e<sup>10·E<sub>a</sub>/(R·T·(T+10))</sup></p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Arrhenius S. Über die Reaktionsgeschwindigkeit bei der Inversion von Rohrzucker durch Säuren. <i>Zeitschrift für physikalische Chemie</i>, 1889.</li>
+                <li>Farquhar G. D., von Caemmerer S., Berry J. A. A biochemical model of photosynthetic CO<sub>2</sub> assimilation in leaves of C<sub>3</sub> species. <i>Planta</i>, 1980.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

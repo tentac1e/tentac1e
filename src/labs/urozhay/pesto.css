@@ -1,0 +1,13 @@
+/* pesto */
+.pesto-out { display: grid; gap: 10px; justify-items: center; }
+.pesto-jar { width: 160px; height: auto; }
+.jar-lid { fill: var(--metal-dark); }
+.jar-glass { fill: color-mix(in srgb, var(--surface-2) 60%, transparent); stroke: var(--glass-edge); stroke-width: 3; }
+#lab-pe-fill, #lab-an-liq { transition: fill .6s ease; }
+.jar-oil { fill: var(--oil-bright); opacity: 0; transition: opacity .4s; }
+.jar-shine { stroke: rgba(255, 255, 255, .45); stroke-width: 5; stroke-linecap: round; fill: none; }
+.pesto-verdict { margin: 0; font-size: .95rem; color: var(--ink-2); text-align: center; }
+.pesto-verdict b { display: block; font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); }
+.pesto-bars { width: 100%; }
+.pesto-notes { margin-top: 16px; font-size: .92rem; }
+

@@ -1,0 +1,12 @@
+/* auxin */
+.auxin-stage .lab-plant { max-width: 340px; }
+.aux-aux { fill: var(--ser-2); }
+.aux-sug { fill: var(--ser-3); }
+.aux-cyt { fill: var(--ser-4); }
+.aux-bud { fill: var(--pl-c); stroke: var(--pl-a); stroke-width: 1.5; }
+.aux-steps { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+.aux-steps li { counter-increment: s; display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 12px; color: var(--ink-3); font-size: .9rem; transition: background-color .4s, color .4s; }
+.aux-steps li::before { content: counter(s); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line-strong); font: 600 .78rem/1 var(--font-mono); }
+.aux-steps li.is-on { background: var(--k-soft); color: var(--ink); font-weight: 600; }
+.aux-steps li.is-on::before { background: var(--k); border-color: var(--k); color: var(--surface); }
+

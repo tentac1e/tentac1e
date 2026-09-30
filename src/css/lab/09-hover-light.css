@@ -1,0 +1,23 @@
+/* ================= hover light & tilt ================= */
+.ch-card, .q-card, .tool, .rule {
+  background-image: radial-gradient(280px circle at var(--mx, -400px) var(--my, -400px), var(--hover-light), transparent 70%);
+}
+.ch-hero-art { transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .6s var(--ease-float); transform-style: preserve-3d; }
+.ch-hero-art .art-float { transform: translateZ(30px); }
+
+/* flavor art */
+.ar-wisp { fill: none; stroke: var(--opal); stroke-width: 2.2; stroke-linecap: round; opacity: .8; }
+.ar-mol { fill: none; stroke: var(--ink-3); stroke-width: 2.4; stroke-linejoin: round; }
+.ar-o { fill: var(--mol-o); }
+.ar-c { fill: var(--mol-c); }
+.ar-oil { fill: var(--oil-bright); }
+
+@media (prefers-reduced-motion: reduce) {
+  .aroma-dot, .aroma-label, .deep-toggle::after, .deep-ico::after, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .lab-tool:empty { animation: none !important; }
+  .germ-anim * { animation: none !important; }
+  .germ-root, .germ-hypo { stroke-dashoffset: 0; }
+  .aroma-label { opacity: 1; transform: translate(-50%, -140%); animation: fade-out 2.4s forwards !important; }
+  .ch-hero-art { transform: none; }
+}
+@keyframes fade-out { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+

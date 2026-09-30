@@ -1,0 +1,56 @@
+    <div class="panel" data-panel id="udobreniya-plan" data-title="План подкормок">
+      <div class="pane plan-tool">
+        <div class="plan-form">
+          <h3>План подкормок на сезон</h3>
+          <p class="muted">Укажите, где растёт базилик и когда вы его посеяли. Составим список подкормок с датами и дозами.</p>
+          <div class="seg" role="group" aria-label="Где растёт">
+            <button type="button" data-plan-mode="pot" aria-pressed="true">Горшок</button>
+            <button type="button" data-plan-mode="garden" aria-pressed="false">Грядка, теплица</button>
+            <button type="button" data-plan-mode="hydro" aria-pressed="false">Гидропоника</button>
+          </div>
+          <div class="field"><label for="plan-date">Дата посева</label><input type="date" id="plan-date"></div>
+          <div class="field"><label for="plan-weeks">Длительность сезона: <b id="plan-weeks-val">20</b>&nbsp;недель</label><input class="range" type="range" id="plan-weeks" min="10" max="30" step="1" value="20"></div>
+          <button class="btn btn-ghost btn-small" type="button" id="plan-copy"><svg class="ico"><use href="#i-copy"/></svg>Копировать план</button>
+        </div>
+        <ol class="plan-list" id="plan-list" aria-live="polite"></ol>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-azot" data-kind="chem" data-short="Круговорот азота">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Круговорот азота в горшке</span><span class="deep-sub">От органики до нитрата: кто работает на базилик</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Корни берут азот в двух формах: аммоний NH<sub>4</sub><sup>+</sup> и нитрат NO<sub>3</sub><sup>−</sup>. В органике азот заперт в белках, и прежде чем растение его получит, его должны переработать микробы.</p>
+                <p><b>Аммонификация:</b> бактерии и грибы разлагают белки до аммония. <b>Нитрификация:</b> бактерии рода <i>Nitrosomonas</i> окисляют аммоний до нитрита, <i>Nitrobacter</i> — нитрит до нитрата. Им нужны кислород и тепло: в холодной и заболоченной почве процесс почти останавливается. Поэтому органика весной в холодной земле «не работает».</p>
+                <p>Нитрат почва не удерживает, и он вымывается поливом. В переувлажнённом грунте без кислорода бактерии-денитрификаторы превращают нитрат в газ N<sub>2</sub>, и азот улетает в воздух.</p>
+                <p>Аммонийные удобрения подкисляют грунт у корней: поглощая NH<sub>4</sub><sup>+</sup>, корень выделяет H<sup>+</sup>. Нитратные слегка подщелачивают. Мочевина месяцами подряд постепенно закисляет горшок.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Нитрификация</span><p>NH<sub>4</sub><sup>+</sup> → NO<sub>2</sub><sup>−</sup> → NO<sub>3</sub><sup>−</sup></p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="ncycle" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Бактерии, которые едят аммиак</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Нитрифицирующих бактерий открыл Сергей Виноградский в 1890-х годах. Они — хемолитоавтотрофы: энергию получают, окисляя аммоний или нитрит, а углерод берут из CO₂, как растения. Энергии такая «еда» даёт мало, поэтому растут они медленно и чувствительны к холоду, кислотности и нехватке кислорода.</p>
+                <p>После пересадки в свежий торфяной грунт этих бактерий почти нет, и аммоний какое-то время не превращается в нитрат. Отчасти поэтому в первые недели лучше работают удобрения с нитратным азотом.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Smil V. <i>Enriching the Earth: Fritz Haber, Carl Bosch, and the Transformation of World Food Production</i>. MIT Press, 2001.</li>
+                <li>Galloway J. N. et al. The nitrogen cascade. <i>BioScience</i>, 2003.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

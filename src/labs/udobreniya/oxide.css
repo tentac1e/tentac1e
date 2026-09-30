@@ -1,0 +1,15 @@
+/* oxides */
+.lab-row { margin-bottom: 12px; }
+.ox-rows { display: grid; gap: 12px; margin-top: 16px; }
+.ox-row { display: grid; grid-template-columns: 110px minmax(0, 1fr) 84px; gap: 12px; align-items: center; }
+.ox-name { display: grid; }
+.ox-name small { font: 500 .7rem/1.2 var(--font-mono); color: var(--ink-3); }
+.ox-bars { display: grid; gap: 4px; }
+.ox-bars i { height: 9px; width: var(--w); border-radius: 0 5px 5px 0; transition: width .4s var(--ease-float); }
+.ox-pack { background: var(--ser-muted); }
+.ox-real.s1 { background: var(--ser-1); } .ox-real.s2 { background: var(--ser-2); } .ox-real.s3 { background: var(--ser-3); }
+.ox-val { display: grid; text-align: right; }
+.ox-val b { font: 600 .95rem/1.1 var(--font-mono); }
+.ox-val small { font: 500 .72rem/1.2 var(--font-mono); color: var(--ink-3); }
+@media (max-width: 460px) { .ox-row { grid-template-columns: 80px minmax(0, 1fr) 70px; gap: 8px; } }
+

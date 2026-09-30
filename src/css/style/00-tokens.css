@@ -1,0 +1,223 @@
+/* Layout: an app-like field guide. Chapters are separate views; long chapters split into
+   sticky sub-tabs. Floating panes drift over a leaf field; leaf-shaped corners mark living cards. */
+:root {
+  /* Palette: basil leaf, purple opal basil, olive-oil gold — the pesto palette */
+  --bg: #EEF4E9;
+  --bg-deep: #E3ECDD;
+  --surface: #FBFDF8;
+  --surface-2: #F1F6EC;
+  --glass: rgba(251, 253, 248, .86);
+  --glass-strong: rgba(251, 253, 248, .95);
+  --ink: #15261A;
+  --ink-2: #42574A;
+  --ink-3: #62756A;
+  --line: #D5E1CF;
+  --line-strong: #B9CDB1;
+  --basil: #2D6932;
+  --basil-deep: #1D4B22;
+  --on-basil: #F5FBF1;
+  --leaf: #6AA83D;
+  --leaf-soft: #DCEECB;
+  --opal: #6C3B79;
+  --opal-soft: #F0E4F3;
+  --oil: #8A660C;
+  --oil-bright: #D4A62A;
+  --oil-soft: #F7EDCC;
+  --danger: #A33A2A;
+  --danger-soft: #F8E1DB;
+
+  /* nutrients — validated categorical trio (light surface) */
+  --n: #3F8F3C;
+  --p: #7C4E9C;
+  --k: #B0851A;
+
+  /* illustration */
+  --stem: #4F8A3C;
+  --hero-leaf-a: #2F6E2F;
+  --hero-leaf-b: #7DBB4C;
+  --hero-vein: #1D4B22;
+  --lf-green: #5FA23F;
+  --lf-green-vein: #2B5E27;
+  --lf-deep: #3F7F34;
+  --lf-deep-vein: #1D4519;
+  --lf-lime: #9BC948;
+  --lf-lime-vein: #557D1C;
+  --lf-purple: #6A3470;
+  --lf-purple-vein: #36143D;
+  --lf-thai: #5B9A3F;
+  --lf-thai-vein: #5A2A63;
+  --lf-sick: #B7BE55;
+  --sim-leaf: #5E9F3E;
+  --sim-vein: #2B5A24;
+  --sim-node: #B98C1C;
+  --sim-flower: #E6D8EE;
+  --soil: #5A4030;
+  --clay: #B97352;
+  --clay-rim: #C98563;
+  --water: #BFE0DA;
+  --glass-tint: rgba(255, 255, 255, .5);
+  --metal: #A9BBAF;
+  --metal-dark: #56695D;
+  --pesto: #5F8F2F;
+  --spot: #8A5A2B;
+  --root: #F2EBDC;
+  --halo-a: rgba(111, 174, 63, .34);
+  --halo-b: rgba(111, 174, 63, .07);
+  --field-1: #6FAE3F;
+  --field-2: #2E6A33;
+  --field-3: #7C4E9C;
+  --field-alpha: .4;
+  --mix-a-bg: #5A4030;
+  --mix-a-fg: #F6EFE7;
+  --mix-b-bg: #E9EBE3;
+  --mix-b-fg: #2A2E25;
+  --mix-c-bg: #3A2A1F;
+  --mix-c-fg: #F6EFE7;
+  --mix-d-bg: #A0724C;
+  --mix-d-fg: #FBF3EA;
+
+  --shadow-rgb: 30 74 36;
+  --shadow-sm: 0 1px 2px rgb(var(--shadow-rgb) / .06), 0 6px 18px -6px rgb(var(--shadow-rgb) / .12);
+  --shadow-float: 0 2px 6px rgb(var(--shadow-rgb) / .05), 0 22px 48px -18px rgb(var(--shadow-rgb) / .28);
+  --shadow-lift: 0 4px 10px rgb(var(--shadow-rgb) / .07), 0 30px 60px -20px rgb(var(--shadow-rgb) / .34);
+
+  /* Type: herbarium serif display, clean grotesk body, mono for numbers, hand for margin notes */
+  --font-display: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+  --font-body: "Manrope", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+
+  --radius-leaf: 30px 6px 30px 6px;
+  --radius: 22px;
+  --radius-sm: 12px;
+  --ease-float: cubic-bezier(.22, .8, .26, 1);
+  --header-h: 64px;
+  --tabbar-h: 0px;
+  --sticky-top: calc(env(safe-area-inset-top, 0px) + var(--header-h));
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1912;
+    --bg-deep: #0B140E;
+    --surface: #16241A;
+    --surface-2: #1B2C20;
+    --glass: rgba(22, 36, 26, .86);
+    --glass-strong: rgba(22, 36, 26, .95);
+    --ink: #E4EEDF;
+    --ink-2: #B3C4AF;
+    --ink-3: #8A9E86;
+    --line: #26392B;
+    --line-strong: #37523D;
+    --basil: #86C46A;
+    --basil-deep: #B4E09A;
+    --on-basil: #0F1912;
+    --leaf: #9AD062;
+    --leaf-soft: #213A22;
+    --opal: #CDA6DB;
+    --opal-soft: #30223A;
+    --oil: #E3C25C;
+    --oil-bright: #E8C65A;
+    --oil-soft: #332C15;
+    --danger: #F29682;
+    --danger-soft: #3A1E19;
+    --n: #529F48;
+    --p: #9C70C2;
+    --k: #B08A24;
+    --stem: #6FA85A;
+    --hero-vein: #173D1B;
+    --hero-leaf-b: #86C45A;
+    --lf-purple: #8E4F96;
+    --lf-purple-vein: #3E1846;
+    --lf-sick: #9DA646;
+    --sim-leaf: #66A945;
+    --sim-vein: #24501F;
+    --sim-node: #E5C35A;
+    --sim-flower: #D9C6E6;
+    --soil: #4A3527;
+    --clay: #A9684A;
+    --clay-rim: #B97656;
+    --water: #2F5A54;
+    --glass-tint: rgba(255, 255, 255, .07);
+    --metal: #6E8577;
+    --metal-dark: #A9BDB0;
+    --pesto: #6FA23A;
+    --spot: #B07A45;
+    --root: #D8CDB5;
+    --halo-a: rgba(111, 174, 63, .2);
+    --halo-b: rgba(111, 174, 63, .04);
+    --field-1: #5E9F3E;
+    --field-2: #3D7A3A;
+    --field-3: #8E5FA8;
+    --field-alpha: .26;
+    --mix-a-bg: #6A4C39;
+    --mix-b-bg: #C9CCC0;
+    --mix-b-fg: #1B1F18;
+    --mix-c-bg: #2E2119;
+    --shadow-rgb: 0 0 0;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0F1912;
+  --bg-deep: #0B140E;
+  --surface: #16241A;
+  --surface-2: #1B2C20;
+  --glass: rgba(22, 36, 26, .86);
+  --glass-strong: rgba(22, 36, 26, .95);
+  --ink: #E4EEDF;
+  --ink-2: #B3C4AF;
+  --ink-3: #8A9E86;
+  --line: #26392B;
+  --line-strong: #37523D;
+  --basil: #86C46A;
+  --basil-deep: #B4E09A;
+  --on-basil: #0F1912;
+  --leaf: #9AD062;
+  --leaf-soft: #213A22;
+  --opal: #CDA6DB;
+  --opal-soft: #30223A;
+  --oil: #E3C25C;
+  --oil-bright: #E8C65A;
+  --oil-soft: #332C15;
+  --danger: #F29682;
+  --danger-soft: #3A1E19;
+  --n: #529F48;
+  --p: #9C70C2;
+  --k: #B08A24;
+  --stem: #6FA85A;
+  --hero-vein: #173D1B;
+  --hero-leaf-b: #86C45A;
+  --lf-purple: #8E4F96;
+  --lf-purple-vein: #3E1846;
+  --lf-sick: #9DA646;
+  --sim-leaf: #66A945;
+  --sim-vein: #24501F;
+  --sim-node: #E5C35A;
+  --sim-flower: #D9C6E6;
+  --soil: #4A3527;
+  --clay: #A9684A;
+  --clay-rim: #B97656;
+  --water: #2F5A54;
+  --glass-tint: rgba(255, 255, 255, .07);
+  --metal: #6E8577;
+  --metal-dark: #A9BDB0;
+  --pesto: #6FA23A;
+  --spot: #B07A45;
+  --root: #D8CDB5;
+  --halo-a: rgba(111, 174, 63, .2);
+  --halo-b: rgba(111, 174, 63, .04);
+  --field-1: #5E9F3E;
+  --field-2: #3D7A3A;
+  --field-3: #8E5FA8;
+  --field-alpha: .26;
+  --mix-a-bg: #6A4C39;
+  --mix-b-bg: #C9CCC0;
+  --mix-b-fg: #1B1F18;
+  --mix-c-bg: #2E2119;
+  --shadow-rgb: 0 0 0;
+  color-scheme: dark;
+}
+

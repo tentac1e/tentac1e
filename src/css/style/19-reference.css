@@ -1,0 +1,35 @@
+/* ================= reference ================= */
+.faq { max-width: 900px; }
+.faq details { border-bottom: 1px solid var(--line-strong); }
+.faq details:first-child { border-top: 1px solid var(--line-strong); }
+.faq summary { position: relative; list-style: none; cursor: pointer; padding: 18px 46px 18px 0; font-family: var(--font-display); font-size: clamp(1.25rem, 2.2vw, 1.55rem); font-weight: 700; line-height: 1.2; transition: color .2s; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { color: var(--basil); }
+.faq summary::after { content: ""; position: absolute; right: 10px; top: 50%; width: 22px; height: 22px; margin-top: -11px; border-radius: 14px 3px 14px 3px; background: var(--leaf-soft); border: 1px solid var(--line-strong); transition: rotate .4s var(--ease-float), background-color .3s; }
+.faq details[open] summary::after { rotate: 90deg; background: var(--basil); }
+.faq-body { padding: 0 0 18px; color: var(--ink-2); max-width: 70ch; }
+
+.gloss-filter { max-width: 420px; margin-bottom: 18px; }
+.glossary { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 10px; margin: 0; }
+.gloss-item { padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.gloss-item dt { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--basil-deep); line-height: 1.15; }
+.gloss-item dd { margin: 4px 0 0; font-size: .92rem; color: var(--ink-2); }
+.gloss-empty { color: var(--ink-3); }
+
+.check-top { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 18px; }
+.check-progress { flex: 1 1 260px; }
+.check-progress .bar { height: 12px; }
+.check-progress .bar i { background: linear-gradient(90deg, var(--leaf), var(--basil)); }
+.check-progress p { margin: 6px 0 0; font-size: .86rem; color: var(--ink-3); }
+.check-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 12px; }
+.check-group h4 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 10px; }
+.check-group ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.check-item { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; align-items: start; padding: 7px 6px; border-radius: 10px; cursor: pointer; font-size: .92rem; transition: background-color .2s; }
+.check-item:hover { background: var(--surface-2); }
+.check-item input { position: absolute; opacity: 0; pointer-events: none; }
+.check-box { display: grid; place-items: center; width: 22px; height: 22px; margin-top: 1px; border-radius: 12px 3px 12px 3px; border: 1.5px solid var(--line-strong); background: var(--surface); color: transparent; transition: background-color .25s, border-color .25s, color .25s; }
+.check-box .ico { width: 15px; height: 15px; stroke-width: 2.6; }
+.check-item input:checked + .check-box { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
+.check-item input:checked ~ span:last-child { color: var(--ink-3); text-decoration: line-through; text-decoration-color: var(--line-strong); }
+.check-item input:focus-visible + .check-box { outline: 3px solid var(--oil-bright); outline-offset: 2px; }
+

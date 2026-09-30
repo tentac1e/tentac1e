@@ -1,0 +1,32 @@
+/* ================= chapter index of deep dives ================= */
+.deep-index { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 18px; }
+.deep-index-label { display: inline-flex; align-items: center; gap: 6px; margin-right: 4px; font: 500 .72rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sci-chem); }
+.deep-index-label .ico { width: 17px; height: 17px; }
+.deep-index-label b { font-weight: 500; color: var(--ink-3); }
+.deep-index a {
+  --k: var(--sci-bio);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px 5px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--k) 38%, var(--line));
+  background: color-mix(in srgb, var(--k) 7%, var(--surface));
+  color: var(--ink-2);
+  font-size: .8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform .3s var(--ease-float), border-color .2s, color .2s;
+}
+.deep-index a .ico { width: 15px; height: 15px; color: var(--k); }
+.deep-index a:hover { color: var(--ink); border-color: var(--k); transform: translateY(-2px); }
+.deep-index a[data-kind="chem"], .deep[data-kind="chem"], .lab-tool[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
+.deep-index a[data-kind="phys"], .deep[data-kind="phys"], .lab-tool[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
+.deep-index a[data-kind="bio"], .deep[data-kind="bio"], .lab-tool[data-kind="bio"] { --k: var(--sci-bio); --k-soft: var(--sci-bio-soft); }
+.deep-index a[data-kind="taste"], .deep[data-kind="taste"], .lab-tool[data-kind="taste"] { --k: var(--sci-taste); --k-soft: var(--sci-taste-soft); }
+@media (max-width: 700px) {
+  .ch-hero .deep-index { grid-column: 1 / -1; grid-row: 4; margin-top: 4px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; margin-inline: -2px; }
+  .ch-hero .deep-index::-webkit-scrollbar { display: none; }
+  .deep-index a, .deep-index-label { flex-shrink: 0; }
+}
+

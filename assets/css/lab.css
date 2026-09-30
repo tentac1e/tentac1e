@@ -1,3 +1,4 @@
+/* Файл собирает scripts/build.py из src/css/lab/ и src/labs/<глава>/<модель>.css — правьте там */
 /* Научный слой: живая сцена, развороты «Глубже» как страницы лабораторного журнала,
    модели и глава «Вкус». Цвет дисциплины: химия — антоциан, физика — вода и свет,
    биология — лист, вкус — оливковое масло. */
@@ -890,49 +891,6 @@ body::after {
 .pesto-bars { width: 100%; }
 .pesto-notes { margin-top: 16px; font-size: .92rem; }
 
-/* roots */
-.roots-svg { width: 100%; max-width: 250px; height: auto; }
-.rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }
-.rt-water { fill: var(--water-fill); }
-.rt-wl { stroke: var(--water-line); stroke-width: 1.5; }
-.rt-stem { fill: none; stroke: var(--stem); stroke-width: 5; stroke-linecap: round; }
-.rt-node { fill: var(--pl-a); }
-.rt-root { fill: none; stroke: var(--root); stroke-width: 2.2; stroke-linecap: round; }
-
-/* seeds */
-.sl-scale { position: relative; height: 34px; margin: 16px 0 26px; border-radius: 10px; background: linear-gradient(90deg, color-mix(in srgb, var(--danger) 18%, var(--surface-2)), var(--surface-2) 25%, var(--band-good)); border: 1px solid var(--line); }
-.sl-scale i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 10px 0 0 10px; background: color-mix(in srgb, var(--k) 45%, transparent); border-right: 3px solid var(--k); transition: width .4s var(--ease-float); }
-.sl-scale span { position: absolute; top: calc(100% + 6px); translate: -50% 0; font: 500 .7rem/1 var(--font-mono); color: var(--ink-3); }
-.sl-scale span:first-of-type { translate: 0 0; }
-.sl-scale span:last-of-type { translate: -100% 0; }
-
-/* pigments */
-.pg-out { display: grid; gap: 10px; justify-items: center; text-align: center; }
-.pg-leaf { width: 190px; height: auto; filter: drop-shadow(0 12px 22px rgb(var(--shadow-rgb) / .25)); }
-.pg-verdict { margin: 0; max-width: 34ch; font-size: .95rem; color: var(--ink-2); }
-
-/* downy mildew gauge */
-.dm-out { display: grid; gap: 8px; justify-items: center; }
-.dm-gauge { width: 100%; max-width: 280px; height: auto; }
-.dm-gauge path { fill: none; stroke-width: 16; }
-.g-track { stroke: var(--line); }
-.g-low { stroke: var(--z2); } .g-mid { stroke: var(--z3); } .g-high { stroke: var(--z4); }
-.g-needle { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; transition: transform .6s var(--ease-float); }
-.g-hub { fill: var(--ink); }
-.dm-level { margin: 0; }
-
-/* ================= flavor chapter ================= */
-.cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-@media (max-width: 900px) { .cols-3 { grid-template-columns: 1fr; } }
-.kitchen-rules { display: grid; gap: 14px; }
-.world { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-@media (max-width: 900px) { .world { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .world { grid-template-columns: 1fr; } }
-.world-card { background-image: radial-gradient(260px circle at var(--mx, -300px) var(--my, -300px), var(--hover-light), transparent 70%); }
-.world-card h4 { font-family: var(--font-display); font-size: 1.35rem; margin: 6px 0; }
-.world-card p { margin: 0; font-size: .92rem; color: var(--ink-2); }
-.world-tag { font: 500 .7rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sci-taste); }
-
 /* trichomes */
 .tr-wrap { position: relative; }
 .tr-svg { font-family: var(--font-body); }
@@ -1092,6 +1050,49 @@ body::after {
 .pair-node .pair-node-s { font-weight: 500; font-size: 11px; fill: var(--ink-2); }
 .pair-info { padding: 16px 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
 .pair-mols { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 8px; font-weight: 600; font-size: .9rem; }
+
+/* roots */
+.roots-svg { width: 100%; max-width: 250px; height: auto; }
+.rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }
+.rt-water { fill: var(--water-fill); }
+.rt-wl { stroke: var(--water-line); stroke-width: 1.5; }
+.rt-stem { fill: none; stroke: var(--stem); stroke-width: 5; stroke-linecap: round; }
+.rt-node { fill: var(--pl-a); }
+.rt-root { fill: none; stroke: var(--root); stroke-width: 2.2; stroke-linecap: round; }
+
+/* seeds */
+.sl-scale { position: relative; height: 34px; margin: 16px 0 26px; border-radius: 10px; background: linear-gradient(90deg, color-mix(in srgb, var(--danger) 18%, var(--surface-2)), var(--surface-2) 25%, var(--band-good)); border: 1px solid var(--line); }
+.sl-scale i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 10px 0 0 10px; background: color-mix(in srgb, var(--k) 45%, transparent); border-right: 3px solid var(--k); transition: width .4s var(--ease-float); }
+.sl-scale span { position: absolute; top: calc(100% + 6px); translate: -50% 0; font: 500 .7rem/1 var(--font-mono); color: var(--ink-3); }
+.sl-scale span:first-of-type { translate: 0 0; }
+.sl-scale span:last-of-type { translate: -100% 0; }
+
+/* pigments */
+.pg-out { display: grid; gap: 10px; justify-items: center; text-align: center; }
+.pg-leaf { width: 190px; height: auto; filter: drop-shadow(0 12px 22px rgb(var(--shadow-rgb) / .25)); }
+.pg-verdict { margin: 0; max-width: 34ch; font-size: .95rem; color: var(--ink-2); }
+
+/* downy mildew gauge */
+.dm-out { display: grid; gap: 8px; justify-items: center; }
+.dm-gauge { width: 100%; max-width: 280px; height: auto; }
+.dm-gauge path { fill: none; stroke-width: 16; }
+.g-track { stroke: var(--line); }
+.g-low { stroke: var(--z2); } .g-mid { stroke: var(--z3); } .g-high { stroke: var(--z4); }
+.g-needle { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; transition: transform .6s var(--ease-float); }
+.g-hub { fill: var(--ink); }
+.dm-level { margin: 0; }
+
+/* ================= flavor chapter ================= */
+.cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .cols-3 { grid-template-columns: 1fr; } }
+.kitchen-rules { display: grid; gap: 14px; }
+.world { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .world { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .world { grid-template-columns: 1fr; } }
+.world-card { background-image: radial-gradient(260px circle at var(--mx, -300px) var(--my, -300px), var(--hover-light), transparent 70%); }
+.world-card h4 { font-family: var(--font-display); font-size: 1.35rem; margin: 6px 0; }
+.world-card p { margin: 0; font-size: .92rem; color: var(--ink-2); }
+.world-tag { font: 500 .7rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sci-taste); }
 
 /* ================= home: science block ================= */
 .science-home {

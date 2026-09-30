@@ -1,0 +1,132 @@
+    <div class="panel" data-panel id="uhod-svet" data-title="Свет">
+      <div class="cols-2">
+        <div class="card">
+          <h3>Сколько света нужно</h3>
+          <dl class="data-rows">
+            <div><dt>Прямое солнце</dt><dd>6–8 ч в день</dd></div>
+            <div><dt>Под лампой</dt><dd>14–16 ч в день</dd></div>
+            <div><dt>Интенсивность</dt><dd>PPFD 200–400 мкмоль/м²·с</dd></div>
+            <div><dt>Дневная сумма</dt><dd>DLI 12–17 моль/м²</dd></div>
+            <div><dt>Лампа</dt><dd>LED, 3000–6500 K, 20–40 см</dd></div>
+          </dl>
+          <p class="muted">Признаки нехватки: длинные междоузлия, мелкие бледные листья, стебель тянется к стеклу, слабый аромат. Избыток за стеклом в жару — светлые обожжённые пятна.</p>
+        </div>
+        <div class="card">
+          <h3>Хватит ли вашего окна</h3>
+          <div class="table-scroll">
+            <table class="mini-table">
+              <thead><tr><th scope="col">Окно</th><th scope="col">Весна–лето</th><th scope="col">Осень–зима</th></tr></thead>
+              <tbody>
+                <tr><td><b>Юг</b></td><td>6–8 ч солнца, хватает; в жару притенять в полдень</td><td>лампа утром и вечером, итого 14–16 ч света</td></tr>
+                <tr><td><b>Восток, запад</b></td><td>3–5 ч солнца: растёт медленнее, вечером желательна лампа</td><td>лампа 10–12 ч</td></tr>
+                <tr><td><b>Север</b></td><td>мало, базилик вытягивается: лампа 8–10 ч</td><td>только лампа 14–16 ч</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="sub pane dli-tool" id="dli">
+        <div class="dli-form">
+          <h3>Калькулятор досветки</h3>
+          <p class="muted">PPFD лампы на нужной высоте обычно указан в характеристиках фитолампы. Если нет — выберите примерный вариант.</p>
+          <div class="chips-row" id="dli-presets">
+            <button class="chip" type="button" data-ppfd="100">Слабая лампа ≈ 100</button>
+            <button class="chip" type="button" data-ppfd="250">Панель 20–30 Вт ≈ 250</button>
+            <button class="chip" type="button" data-ppfd="400">Мощная панель ≈ 400</button>
+          </div>
+          <div class="row-2">
+            <div class="field"><label for="dli-ppfd">PPFD, мкмоль/м²·с</label><input type="number" id="dli-ppfd" min="10" max="1500" step="10" value="250" inputmode="numeric"></div>
+            <div class="field"><label for="dli-hours">Часов в сутки: <b id="dli-hours-val">14</b></label><input type="range" id="dli-hours" min="6" max="20" step="1" value="14" class="range"></div>
+          </div>
+        </div>
+        <div class="dli-out" id="dli-out" aria-live="polite"></div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Люксметр меряет свет «глазами человека», с упором на зелёный. Растение считает фотоны всех цветов, поэтому для фитоламп люксы почти бесполезны.</p>
+          <a class="sci-note-link" href="#deep-fotosintez">Глубже: Фотосинтез <span aria-hidden="true">→</span></a>
+        </aside>
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Летний полдень даёт около 2000&nbsp;мкмоль/м²·с — в 5–10 раз больше, чем хорошая комнатная фитолампа.</p>
+          <a class="sci-note-link" href="#deep-lampa">Глубже: Обратные квадраты <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-fotosintez" data-kind="phys" data-short="Фотосинтез">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Фотосинтез: как свет становится листом</span><span class="deep-sub">Спектр поглощения, фотоны и почему базилик зелёный</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Итог фотосинтеза выглядит просто, но за ним десятки реакций. Энергия света разрывает молекулы воды (отсюда кислород) и заряжает переносчики энергии АТФ и НАДФН. Ими в цикле Кальвина растение «пришивает» CO<sub>2</sub> к сахарам — из них строятся листья, стебли и эфирные масла.</p>
+                <p>Для фотосинтеза важна не мощность лампы в ваттах, а <b>число фотонов</b> в диапазоне 400–700&nbsp;нм (ФАР). Каждый поглощённый фотон возбуждает одну молекулу пигмента, поэтому свет для растений меряют в микромолях фотонов: PPFD — мкмоль/м²·с, а за сутки DLI — моль/м².</p>
+                <p>Хлорофиллы a и b сильнее всего поглощают синий (430–450&nbsp;нм) и красный (640–680&nbsp;нм) свет. Зелёный поглощается хуже: часть отражается, поэтому листья зелёные. Но и зелёный свет работает — он проникает глубже в лист, к нижним слоям клеток. Годится весь диапазон ФАР, поэтому белые светодиоды — хороший выбор для подоконника.</p>
+                <p>С ростом освещённости фотосинтез сначала растёт почти линейно, потом выходит на плато — <b>световое насыщение</b>. Сверх него фотоны превращаются в тепло и стресс, а не в листья.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Итоговое уравнение</span><p>6CO<sub>2</sub> + 6H<sub>2</sub>O + свет → C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> + 6O<sub>2</sub></p></div>
+                <div class="num-note"><b>8–10</b><span>фотонов нужно, чтобы связать одну молекулу CO<sub>2</sub></span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="spectrum" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Z-схема и квантовый выход</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Световые реакции идут через две фотосистемы. Фотосистема II (реакционный центр P680) отнимает электроны у воды, фотосистема I (P700) поднимает их ещё выше по энергии, чтобы восстановить НАДФ⁺. На энергетической диаграмме путь электрона похож на букву Z.</p>
+                <p>Чтобы выделить одну молекулу O₂, нужно передать четыре электрона, и каждый проходит обе фотосистемы — отсюда минимум восемь фотонов. На практике лист связывает около 0,05–0,1 молекулы CO₂ на поглощённый фотон. Кривая Маккри показывает, что красные фотоны работают эффективнее всего, но и зелёные дают около 70&nbsp;% их отдачи.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>McCree K. J. The action spectrum, absorptance and quantum yield of photosynthesis in crop plants. <i>Agricultural Meteorology</i>, 1972.</li>
+                <li>Terashima I. et al. Green light drives leaf photosynthesis more efficiently than red light in strong white light. <i>Plant and Cell Physiology</i>, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-lampa" data-kind="phys" data-short="Обратные квадраты">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Почему лампу нельзя просто поднять повыше</span><span class="deep-sub">Закон обратных квадратов для фитолампы</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Свет точечного источника расходится во все стороны: те же фотоны распределяются по сфере, площадь которой растёт как квадрат расстояния. Поднимите маленькую лампу вдвое выше — на лист придёт вчетверо меньше света.</p>
+                <p>Широкая светодиодная панель вблизи ведёт себя мягче: она похожа на светящуюся плоскость, и освещённость падает медленнее. Но когда расстояние становится больше размера панели, снова работает обратный квадрат.</p>
+                <p>Слишком низко тоже плохо: в центре пятна света избыток, по краям мало, а горячие лампы обжигают листья. Для светодиодов обычно выбирают 20–40&nbsp;см.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Точечный источник</span><p>E = E₀ · (d₀ / d)²</p></div>
+                <div class="eq"><span class="eq-label">Круглая панель радиуса R</span><p>E ∝ R² / (R² + d²)</p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="lamp" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Сколько света даёт ватт</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Эффективность фитолампы измеряют в <b>микромолях фотонов на джоуль</b> (мкмоль/Дж). Лучшие светодиодные панели дают 2,5–3&nbsp;мкмоль/Дж, натриевые лампы — около 1,7–1,9, люминесцентные — 1–1,3.</p>
+                <p>Прикинем: панель на 30&nbsp;Вт с эффективностью 2,5&nbsp;мкмоль/Дж испускает 75&nbsp;мкмоль фотонов в секунду. Если почти весь свет попадает на площадь 50&nbsp;×&nbsp;50&nbsp;см (0,25&nbsp;м²), в среднем выйдет 300&nbsp;мкмоль/м²·с — как раз столько, сколько нужно базилику.</p>
+                <div class="eq"><span class="eq-label">Оценка</span><p>PPFD ≈ P × η / S = 30 × 2,5 / 0,25 = 300</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Thimijan R. W., Heins R. D. Photometric, radiometric, and quantum light units of measure. <i>HortScience</i>, 1983.</li>
+                <li>Both A.-J. et al. Proposed product label for electric lamps used in the plant sciences. <i>HortTechnology</i>, 2017.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

@@ -1,0 +1,6 @@
+/* ph bands */
+.ph-band { fill: var(--ser-1); opacity: .55; transition: opacity .3s; }
+.ph-band.is-low { fill: var(--ser-3); opacity: .75; }
+.ph-sym { font: 700 12px/1 var(--font-mono); fill: var(--ink-2); }
+.ph-sym.is-low { fill: var(--ser-3); }
+

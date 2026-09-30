@@ -1,0 +1,12 @@
+/* ================= flavor chapter ================= */
+.cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .cols-3 { grid-template-columns: 1fr; } }
+.kitchen-rules { display: grid; gap: 14px; }
+.world { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .world { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .world { grid-template-columns: 1fr; } }
+.world-card { background-image: radial-gradient(260px circle at var(--mx, -300px) var(--my, -300px), var(--hover-light), transparent 70%); }
+.world-card h4 { font-family: var(--font-display); font-size: 1.35rem; margin: 6px 0; }
+.world-card p { margin: 0; font-size: .92rem; color: var(--ink-2); }
+.world-tag { font: 500 .7rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sci-taste); }
+

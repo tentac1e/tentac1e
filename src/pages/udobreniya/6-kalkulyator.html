@@ -1,0 +1,86 @@
+    <div class="panel" data-panel id="udobreniya-kalkulyator" data-title="Калькулятор раствора">
+      <div class="pane dose-tool">
+        <form class="dose-form" id="dose-form" novalidate>
+          <h3>Калькулятор раствора</h3>
+          <div class="row-2 wide-first">
+            <div class="field"><label for="dose-fert">Удобрение</label><select id="dose-fert"></select></div>
+            <div class="field"><label for="dose-water">Вода, л</label><input type="number" id="dose-water" min="0.25" max="100" step="0.25" value="2" inputmode="decimal"></div>
+          </div>
+          <fieldset class="field bare">
+            <legend class="label">Сила раствора</legend>
+            <div class="radio-cards">
+              <label><input type="radio" name="dose-strength" id="dose-s-full" value="1">Полная<small>грядка, теплица</small></label>
+              <label><input type="radio" name="dose-strength" id="dose-s-half" value="0.5" checked>Половина<small>горшок, взрослые</small></label>
+              <label><input type="radio" name="dose-strength" id="dose-s-quarter" value="0.25">Четверть<small>рассада, сеянцы</small></label>
+              <label><input type="radio" name="dose-strength" id="dose-s-foliar" value="foliar">По листу<small>опрыскивание</small></label>
+            </div>
+          </fieldset>
+        </form>
+        <output class="dose-out" id="dose-out" for="dose-fert dose-water" aria-live="polite"></output>
+      </div>
+      <div class="sub">
+        <div class="sub-head"><h3>Органические настои своими руками</h3></div>
+        <div class="cols-2">
+          <article class="card recipe-mini">
+            <h4>Настой крапивы</h4>
+            <ol>
+              <li>Заполните ведро или бочку измельчённой крапивой без семян на ½–⅔ объёма.</li>
+              <li>Залейте водой, неплотно накройте и поставьте на солнце.</li>
+              <li>Перемешивайте раз в день. Через 7–14 дней настой перестанет пениться — он готов.</li>
+              <li>Разведите 1:10 для полива под корень, 1:20 — для рассады.</li>
+            </ol>
+            <p class="muted">Запах сильный — держите подальше от окон. Для горшков в квартире лучше жидкий биогумус.</p>
+          </article>
+          <article class="card recipe-mini">
+            <h4>Зольный настой</h4>
+            <ol>
+              <li>Возьмите 100&nbsp;г (около стакана) просеянной древесной золы на 10&nbsp;л воды.</li>
+              <li>Настаивайте сутки, периодически помешивая.</li>
+              <li>Процедите и поливайте по влажному грунту.</li>
+            </ol>
+            <p class="muted">Только зола от дров и растительных остатков — без пластика, угля для розжига и крашеной древесины. Не смешивайте с азотными удобрениями и навозом.</p>
+          </article>
+        </div>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-ec" data-kind="phys" data-short="EC и ppm">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">EC и ppm: как измеряют соли</span><span class="deep-sub">Электропроводность раствора и шкалы TDS-метров</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Чистая вода почти не проводит ток. Растворённая соль распадается на ионы, и раствор начинает проводить электричество — тем лучше, чем больше ионов. Кондуктометр меряет именно это: <b>EC</b> в миллисименсах на сантиметр.</p>
+                <p>TDS-метры показывают «ppm», но на самом деле тоже меряют EC и пересчитывают её по условной шкале: 500 (по NaCl) или 700 (по KCl). Один и тот же раствор с EC 1,4&nbsp;мС/см покажет 700&nbsp;ppm на одном приборе и 980 на другом. Поэтому гидропонщики обмениваются значениями EC.</p>
+                <p>EC показывает сумму ионов, но не состав: раствор поваренной соли может иметь «правильную» EC и быть бесполезным. Проводимость растёт с температурой примерно на 2&nbsp;% на градус, поэтому приборы приводят показания к 25&nbsp;°C.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Шкалы TDS</span><p>ppm₅₀₀ = EC × 500<br>ppm₇₀₀ = EC × 700</p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="ec" data-kind="phys"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Эстафета протонов</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Не все ионы одинаково подвижны. Проводимость зависит от заряда иона и от того, как быстро он движется в воде. Калий и нитрат бегут примерно одинаково, а ион водорода — почти в пять раз быстрее: он не плывёт сам, а передаётся по цепочке молекул воды, как эстафетная палочка. Этот механизм предложил Теодор фон Гроттгус ещё в 1806 году.</p>
+                <p>В крепких растворах ионы мешают друг другу, и проводимость растёт медленнее концентрации. Фридрих Кольрауш в XIX веке вывел для разбавленных растворов закон квадратного корня. Для гидропоники вывод простой: удвоив дозу удобрения, вы получите EC чуть меньше двойной.</p>
+                <p>Удобное правило из почвоведения: сумма катионов в миллиэквивалентах на литр примерно в 10 раз больше EC в мС/см. Раствор с EC 1,5 несёт около 15&nbsp;мг-экв катионов на литр — калия, кальция, магния и аммония вместе.</p>
+                <div class="eq"><span class="eq-label">Закон Кольрауша</span><p>Λ = Λ<sub>0</sub> − K·√c</p></div>
+                <div class="eq"><span class="eq-label">Правило для растворов</span><p>катионы, мг-экв/л ≈ 10 × EC, мС/см</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Kohlrausch F., Holborn L. <i>Das Leitvermögen der Elektrolyte</i>. Teubner, 1898.</li>
+                <li>Agmon N. The Grotthuss mechanism. <i>Chemical Physics Letters</i>, 1995.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

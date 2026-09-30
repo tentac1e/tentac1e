@@ -1,0 +1,77 @@
+    <div class="panel" data-panel id="udobreniya-stadii" data-title="Питание по стадиям роста">
+      <div class="pane">
+        <div class="feed-head">
+          <div>
+            <h3>Кривая питания за сезон</h3>
+            <p class="muted">Относительная потребность в азоте, фосфоре и калии на каждой стадии. Нажмите на стадию на графике или в списке ниже.</p>
+          </div>
+          <ul class="legend legend-lines"><li><i class="k-n"></i>N · азот</li><li><i class="k-p"></i>P · фосфор</li><li><i class="k-k"></i>K · калий</li></ul>
+        </div>
+        <div class="chart-wrap" id="feed-chart-wrap">
+          <svg class="feed-chart" id="feed-chart" viewBox="0 0 720 280" role="img" aria-label="График относительной потребности в азоте, фосфоре и калии по семи стадиям роста"></svg>
+          <div class="chart-tip" id="feed-tip" hidden></div>
+        </div>
+        <div class="stage-track" id="stage-track" role="tablist" aria-label="Стадия роста"></div>
+        <div class="stage-body">
+          <div>
+            <h3 class="stage-title" id="stage-title"></h3>
+            <p class="stage-days" id="stage-days"></p>
+            <div class="npk" id="stage-npk"></div>
+            <div class="ratio"><span>Соотношение N : P : K</span><b id="stage-ratio"></b></div>
+          </div>
+          <div>
+            <dl class="stage-info" id="stage-info"></dl>
+            <ul class="ticks stage-tips" id="stage-tips"></ul>
+          </div>
+        </div>
+        <details class="table-view">
+          <summary>Таблица значений</summary>
+          <div class="table-scroll"><table class="mini-table" id="feed-table"></table></div>
+        </details>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Юстус фон Либих прославился не только законом минимума: его «мясной экстракт» стал предком бульонных кубиков.</p>
+          <a class="sci-note-link" href="#deep-libih">Глубже: Закон минимума <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-libih" data-kind="bio" data-short="Закон минимума">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Закон минимума: бочка Либиха</span><span class="deep-sub">Урожай ограничивает самый дефицитный фактор</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>В XIX веке агрохимики Карл Шпренгель и Юстус фон Либих заметили: урожай ограничен тем ресурсом, которого не хватает сильнее всего. Если одна доска в бочке короче, вода выльется через неё, сколько бы ни нарастили остальные.</p>
+                <p>Для базилика «досками» служат не только элементы питания, но и свет, тепло и вода. Зимой на подоконнике самая короткая доска — свет. Подкормка тогда ничего не даст: азот будет копиться в грунте и в листьях в виде нитратов.</p>
+                <p>Живое растение сложнее бочки: факторы влияют друг на друга, например без калия хуже усваивается азот. Но для диагностики закон минимума работает отлично: сначала найдите самую короткую доску, потом всё остальное.</p>
+              </div>
+              <aside class="deep-aside">
+                <p class="hand margin-note">кормить растение без света — всё равно что доливать воду в бочку с короткой доской</p>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="barrel" data-kind="bio"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">От бочки к кривой Митчерлиха</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>В 1909 году Эйльхард Митчерлих уточнил закон минимума: урожай растёт с дозой удобрения не ступенькой, а плавно, и каждая следующая порция даёт меньше предыдущей. Кривая стремится к пределу, который задают другие факторы.</p>
+                <div class="eq"><span class="eq-label">Закон Митчерлиха</span><p>y = A · (1 − e<sup>−c·x</sup>)</p></div>
+                <p>Практический вывод: последние граммы удобрения самые «дорогие» — они почти не прибавляют урожая, зато копятся в грунте солями.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Liebig J. <i>Die organische Chemie in ihrer Anwendung auf Agricultur und Physiologie</i>, 1840.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

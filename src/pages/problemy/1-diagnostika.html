@@ -1,0 +1,53 @@
+    <div class="panel" data-panel id="problemy-diagnostika" data-title="Диагностика по симптомам">
+      <div class="diag">
+        <div class="diag-groups" id="diag-groups"></div>
+        <div class="pane diag-result" id="diag-result" aria-live="polite"></div>
+      </div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="phys">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Спутники следят за здоровьем полей по тому же принципу, что и вы: здоровый лист иначе отражает свет, особенно невидимый инфракрасный.</p>
+          <a class="sci-note-link" href="#deep-pigmenty">Глубже: Язык цвета <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-pigmenty" data-kind="chem" data-short="Язык цвета">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Язык цвета листа</span><span class="deep-sub">Хлорофиллы, каротиноиды и антоцианы</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Цвет листа — сумма трёх групп пигментов. <b>Хлорофиллы</b> поглощают синий и красный свет и отражают зелёный. <b>Каротиноиды</b>, жёлтые и оранжевые, защищают фотосистему от избытка света; их в листе много, но хлорофилл их маскирует. <b>Антоцианы</b>, красные и фиолетовые, растворены в клеточном соке.</p>
+                <p>Хлороз — пожелтение — это разрушение или недостаточный синтез хлорофилла. Каротиноиды при этом остаются, и лист становится жёлтым. Не хватает азота — желтеет весь старый лист; магния или железа — ткань между жилками.</p>
+                <p>Фиолетовый оттенок у зелёного сорта — накопление антоцианов. Так бывает при нехватке фосфора и в холод: сахара, которые растение не может потратить на рост, уходят на синтез пигмента.</p>
+                <p>Бурые мёртвые участки — некроз: клетки погибли, и их содержимое окислилось.</p>
+              </div>
+              <aside class="deep-aside">
+                <p class="hand margin-note">осенний клён желтеет по той же химии: хлорофилл уходит, каротиноиды остаются</p>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="pigment" data-kind="chem"></div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Красный край и спутники</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Здоровый лист сильно поглощает красный свет, а ближний инфракрасный (около 800&nbsp;нм) почти полностью отражает — его рассеивает губчатая ткань с воздушными полостями. Резкий скачок отражения около 700&nbsp;нм называют «красным краем».</p>
+                <p>Спутники оценивают здоровье полей по индексу NDVI, который сравнивает отражение в ближнем инфракрасном и красном. Больное или обезвоженное растение отражает меньше инфракрасного, и индекс падает — иногда раньше, чем симптомы заметит глаз.</p>
+                <div class="eq"><span class="eq-label">Индекс растительности</span><p>NDVI = (NIR − Red) / (NIR + Red)</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Lichtenthaler H. K. Chlorophylls and carotenoids: pigments of photosynthetic biomembranes. <i>Methods in Enzymology</i>, 1987.</li>
+                <li>Rouse J. W. et al. Monitoring vegetation systems in the Great Plains with ERTS. NASA, 1974.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

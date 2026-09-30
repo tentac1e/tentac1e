@@ -1,0 +1,7 @@
+/* gdd, pesto bars */
+.gdd-bars, .pesto-bars { display: grid; gap: 10px; margin-top: 12px; }
+.gdd-row { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .86rem; color: var(--ink-2); }
+.gdd-row i { height: 12px; width: var(--w); border-radius: 0 6px 6px 0; transition: width .5s var(--ease-float); }
+.gdd-row i.s1 { background: var(--ser-1); } .gdd-row i.s2 { background: var(--ser-2); } .gdd-row i.s3 { background: var(--ser-3); }
+.gdd-row b { font: 600 .84rem/1 var(--font-mono); color: var(--ink); min-width: 4.5em; text-align: right; }
+

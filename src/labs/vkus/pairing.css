@@ -1,0 +1,18 @@
+/* pairing */
+.pair-grid { margin-top: 10px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+@media (max-width: 760px) { .pair-grid { grid-template-columns: 1fr; } }
+.lab-svg path.pair-link { fill: none; stroke-width: 2.4; opacity: .85; }
+.lab-svg .pair-link.s1 { stroke: var(--ser-1); } .pair-link.s2 { stroke: var(--ser-2); } .pair-link.s3 { stroke: var(--ser-3); } .pair-link.s4 { stroke: var(--ser-4); }
+.pair-link.is-kin { stroke-dasharray: 5 5; }
+.pair-dot { opacity: .3; stroke: var(--surface); stroke-width: 2; }
+.pair-dot.s1 { fill: var(--ser-1); } .pair-dot.s2 { fill: var(--ser-2); } .pair-dot.s3 { fill: var(--ser-3); } .pair-dot.s4 { fill: var(--ser-4); }
+.pair-dot.is-hot { opacity: 1; }
+.pair-name { font: 500 12px/1 var(--font-body); fill: var(--ink-3); }
+.pair-name.is-hot { font-weight: 700; fill: var(--ink); }
+.pair-node circle { fill: var(--sci-taste-soft); stroke: var(--sci-taste); stroke-width: 2; }
+.pair-node.is-contrast circle { stroke-dasharray: 5 4; }
+.pair-node text { font: 700 12px/1 var(--font-body); fill: var(--ink); }
+.pair-node .pair-node-s { font-weight: 500; font-size: 11px; fill: var(--ink-2); }
+.pair-info { padding: 16px 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+.pair-mols { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 8px; font-weight: 600; font-size: .9rem; }
+

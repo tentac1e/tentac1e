@@ -1,0 +1,35 @@
+/* ================= ambient background ================= */
+#leaf-field, .aura {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.aura { overflow: hidden; }
+.aura span { position: absolute; border-radius: 50%; animation: drift 26s ease-in-out infinite alternate; }
+.aura span:nth-child(1) { width: 56vmax; height: 56vmax; left: -18vmax; top: -20vmax; background: radial-gradient(circle, var(--halo-a), transparent 65%); }
+.aura span:nth-child(2) { width: 44vmax; height: 44vmax; right: -16vmax; top: 30vh; background: radial-gradient(circle, color-mix(in srgb, var(--opal) 14%, transparent), transparent 65%); animation-duration: 32s; animation-delay: -8s; }
+.aura span:nth-child(3) { width: 40vmax; height: 40vmax; left: 20vw; bottom: -22vmax; background: radial-gradient(circle, color-mix(in srgb, var(--oil-bright) 14%, transparent), transparent 65%); animation-duration: 38s; animation-delay: -14s; }
+@keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(4vw, 3vh, 0) scale(1.08); } }
+/* sky layers: animated by the compositor, the main thread never repaints them */
+.sky-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.sky-beam { position: absolute; inset: 0; animation: sky-sway 44.9s ease-in-out infinite alternate; will-change: transform; }
+.sky-beam canvas { display: block; width: 100%; height: 100%; opacity: .42; animation: sky-breathe 13s ease-in-out infinite alternate; will-change: opacity; }
+.sky-moon { position: absolute; inset: 0; background: radial-gradient(70vmax circle at 86% -5%, var(--sc-moon, rgba(190, 220, 255, .12)), transparent); animation: sky-moon 15.7s ease-in-out infinite alternate; will-change: opacity; }
+@keyframes sky-breathe { from { opacity: .22; } to { opacity: .62; } }
+@keyframes sky-sway { from { transform: translate3d(-1.2vw, 0, 0); } to { transform: translate3d(1.2vw, 0, 0); } }
+@keyframes sky-moon { from { opacity: .7; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .sky-beam, .sky-beam canvas, .sky-moon { animation: none; } }
+.is-off, .is-off *, .is-off::before, .is-off::after, .is-off *::before, .is-off *::after { animation-play-state: paused !important; }
+
+.page { position: relative; z-index: 1; overflow-x: clip; }
+
+.wrap {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+

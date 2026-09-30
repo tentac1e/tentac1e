@@ -1,0 +1,12 @@
+/* osmosis */
+.osm-svg { width: 100%; max-width: 420px; height: auto; }
+.osm-soil { fill: color-mix(in srgb, var(--soil) 18%, var(--surface)); }
+.osm-ion-a { fill: var(--ser-2); opacity: .8; }
+.osm-ion-b { fill: var(--ser-3); opacity: .8; }
+.osm-wall { fill: color-mix(in srgb, var(--leaf-soft) 70%, var(--surface)); stroke: var(--stem); stroke-width: 3; }
+.osm-vac { fill: var(--water-fill); stroke: var(--water-line); stroke-width: 1.5; transition: rx .6s, ry .6s; }
+.osm-nuc { fill: var(--opal); opacity: .6; }
+.osm-flow { stroke: var(--water-line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 5; animation: flow-dash 1s linear infinite; }
+.osm-ah { fill: var(--water-line); }
+@keyframes flow-dash { to { stroke-dashoffset: -22; } }
+

@@ -1,0 +1,295 @@
+/* Научный слой: живая сцена, развороты «Глубже» как страницы лабораторного журнала,
+   модели и глава «Вкус». Цвет дисциплины: химия — антоциан, физика — вода и свет,
+   биология — лист, вкус — оливковое масло. */
+:root {
+  --sci-chem: #6C3B79;
+  --sci-phys: #1F6FA5;
+  --sci-bio: #2D6932;
+  --sci-taste: #8A660C;
+  --sci-chem-soft: #F3E8F6;
+  --sci-phys-soft: #E3EFF7;
+  --sci-bio-soft: #E3EFDB;
+  --sci-taste-soft: #F7EDCC;
+  --paper-line: rgba(45, 105, 50, .075);
+  --paper-line-strong: rgba(45, 105, 50, .13);
+  --hover-light: rgba(111, 174, 63, .13);
+
+  /* chart series — validated categorical order (light surface) */
+  --ser-1: #3F8F3C;
+  --ser-2: #7C4E9C;
+  --ser-3: #B0851A;
+  --ser-4: #1F76AE;
+  --ser-muted: #C9D8C2;
+  --band-good: rgba(111, 174, 63, .13);
+  --band-cold: rgba(31, 118, 174, .1);
+  --tip-bg: #15261A;
+  --tip-ink: #F2F7EE;
+
+  /* living scene */
+  --sc-g1: #3E7F34;
+  --sc-g2: #8CC256;
+  --sc-d1: #2A5F2C;
+  --sc-d2: #5E9E45;
+  --sc-l1: #86B340;
+  --sc-l2: #CFE58A;
+  --sc-p1: #4D2152;
+  --sc-p2: #94549C;
+  --sc-alpha: .46;
+  --sc-ray: rgba(255, 244, 206, .55);
+  --sc-mote: rgba(255, 232, 160, 1);
+  --sc-firefly: rgba(214, 228, 170, 1);
+  --sc-moon: rgba(170, 205, 255, .16);
+  --sc-night: 0;
+
+  /* procedural plant and pot */
+  --pl-a: #2C6A2C;
+  --pl-b: #6DAE45;
+  --pl-c: #AAD56C;
+  --pl-back-a: #1F4F24;
+  --pl-back-b: #3F7A33;
+  --pl-pa: #3E1747;
+  --pl-pb: #8A4C92;
+  --pl-stem-a: #3D7530;
+  --pl-stem-b: #86BC5E;
+  --pl-pet: #4C8A3A;
+  --pl-vein: rgba(236, 250, 220, .48);
+  --pl-fold: rgba(8, 36, 10, .15);
+  --pl-shine: rgba(255, 255, 255, .2);
+  --pl-hl: rgba(235, 252, 215, .6);
+  --pl-scar: #8C6B3E;
+  --pl-sick: #CDBE55;
+  --pot-a: #A95F3E;
+  --pot-b: #D48E66;
+  --pot-rim: #C27752;
+  --pot-band: rgba(80, 30, 10, .12);
+  --soil-top: #4A3426;
+  --soil-grain: #75563F;
+  --pot-shadow: rgba(30, 74, 36, .2);
+  --tag-bg: #FAF3E2;
+  --tag-ink: #4E4128;
+  --stick: #B99A6A;
+
+  /* molecules */
+  --mol-c: #3C4A3F;
+  --mol-c-hi: #A6BAA9;
+  --mol-o: #C2412F;
+  --mol-o-hi: #F5A591;
+  --mol-bond: #7A8B7E;
+  --mol-edge: rgba(0, 0, 0, .22);
+
+  /* model palettes */
+  --z0: #9CC7E0;
+  --z1: #BCDDCB;
+  --z2: #A4D37F;
+  --z3: #EBD284;
+  --z4: #E8A08A;
+  --sun-light: rgba(255, 206, 84, .38);
+  --sun-disc: #F2B632;
+  --water-fill: rgba(80, 150, 205, .38);
+  --water-line: #3F86C0;
+  --wood-a: #B2834F;
+  --wood-b: #D9AE74;
+  --hoop: #6F7F74;
+  --glass-edge: rgba(80, 110, 90, .55);
+  --germ-coat: #2F2A24;
+  --germ-gel: rgba(170, 205, 230, .45);
+
+  /* physical colours — the same in both themes */
+  --ph-1: #C2185B;
+  --ph-2: #CE2A61;
+  --ph-3: #C23F7C;
+  --ph-4: #A9558F;
+  --ph-5: #9A6AA6;
+  --ph-6: #7556A8;
+  --ph-7: #5E55AE;
+  --ph-8: #416DB6;
+  --ph-9: #2E8FA5;
+  --ph-10: #36A07A;
+  --ph-11: #7FAE3F;
+  --ph-12: #C9B237;
+  --pesto-fresh: #3E8E2E;
+  --pesto-olive: #7C7A30;
+  --pesto-brown: #5B472B;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sci-chem: #CDA6DB;
+    --sci-phys: #80C0E4;
+    --sci-bio: #8FCB72;
+    --sci-taste: #E3C25C;
+    --sci-chem-soft: #2E2238;
+    --sci-phys-soft: #14303F;
+    --sci-bio-soft: #1C3520;
+    --sci-taste-soft: #332C15;
+    --paper-line: rgba(180, 224, 154, .055);
+    --paper-line-strong: rgba(180, 224, 154, .1);
+    --hover-light: rgba(150, 210, 110, .09);
+    --ser-1: #529F48;
+    --ser-2: #9C70C2;
+    --ser-3: #B08A24;
+    --ser-4: #4E9CC8;
+    --ser-muted: #2F4A34;
+    --band-good: rgba(134, 196, 106, .1);
+    --band-cold: rgba(78, 156, 200, .12);
+    --tip-bg: #E4EEDF;
+    --tip-ink: #0F1912;
+    --sc-g1: #2E6A2E;
+    --sc-g2: #5E9B42;
+    --sc-d1: #1E4A22;
+    --sc-d2: #3E7A36;
+    --sc-l1: #5F8A2C;
+    --sc-l2: #92B85A;
+    --sc-p1: #3A1840;
+    --sc-p2: #6E3C78;
+    --sc-alpha: .4;
+    --sc-ray: rgba(170, 210, 255, .2);
+    --sc-mote: rgba(214, 228, 170, 1);
+    --sc-firefly: rgba(214, 228, 170, 1);
+    --sc-moon: rgba(150, 190, 255, .13);
+    --sc-night: 1;
+    --pl-a: #2B612B;
+    --pl-b: #69A844;
+    --pl-c: #9DC964;
+    --pl-back-a: #173B1B;
+    --pl-back-b: #2F5E29;
+    --pl-pa: #3A1642;
+    --pl-pb: #8A4E94;
+    --pl-stem-a: #356A2B;
+    --pl-stem-b: #74AA4F;
+    --pl-pet: #4A8638;
+    --pl-vein: rgba(220, 245, 200, .36);
+    --pl-fold: rgba(0, 0, 0, .24);
+    --pl-shine: rgba(255, 255, 255, .12);
+    --pl-hl: rgba(220, 245, 200, .38);
+    --pl-sick: #B2A646;
+    --pot-a: #8E4F34;
+    --pot-b: #B7785A;
+    --pot-rim: #A6664A;
+    --pot-band: rgba(0, 0, 0, .2);
+    --soil-top: #3A281D;
+    --soil-grain: #5E4533;
+    --pot-shadow: rgba(0, 0, 0, .45);
+    --tag-bg: #E9DEC3;
+    --tag-ink: #3A301C;
+    --stick: #9C8258;
+    --mol-c: #8FA592;
+    --mol-c-hi: #E6F0E7;
+    --mol-o: #E0604B;
+    --mol-o-hi: #FFC4B5;
+    --mol-bond: #8EA091;
+    --mol-edge: rgba(0, 0, 0, .45);
+    --z0: #1F4A63;
+    --z1: #234A3B;
+    --z2: #2F5E26;
+    --z3: #5E4D1C;
+    --z4: #62291F;
+    --sun-light: rgba(255, 206, 84, .22);
+    --water-fill: rgba(80, 150, 205, .32);
+    --water-line: #7FB8E0;
+    --wood-a: #8C6538;
+    --wood-b: #B38650;
+    --hoop: #9BAEA2;
+    --glass-edge: rgba(190, 220, 200, .5);
+    --germ-coat: #1A1714;
+    --germ-gel: rgba(130, 180, 220, .35);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --sci-chem: #CDA6DB;
+  --sci-phys: #80C0E4;
+  --sci-bio: #8FCB72;
+  --sci-taste: #E3C25C;
+  --sci-chem-soft: #2E2238;
+  --sci-phys-soft: #14303F;
+  --sci-bio-soft: #1C3520;
+  --sci-taste-soft: #332C15;
+  --paper-line: rgba(180, 224, 154, .055);
+  --paper-line-strong: rgba(180, 224, 154, .1);
+  --hover-light: rgba(150, 210, 110, .09);
+  --ser-1: #529F48;
+  --ser-2: #9C70C2;
+  --ser-3: #B08A24;
+  --ser-4: #4E9CC8;
+  --ser-muted: #2F4A34;
+  --band-good: rgba(134, 196, 106, .1);
+  --band-cold: rgba(78, 156, 200, .12);
+  --tip-bg: #E4EEDF;
+  --tip-ink: #0F1912;
+  --sc-g1: #2E6A2E;
+  --sc-g2: #5E9B42;
+  --sc-d1: #1E4A22;
+  --sc-d2: #3E7A36;
+  --sc-l1: #5F8A2C;
+  --sc-l2: #92B85A;
+  --sc-p1: #3A1840;
+  --sc-p2: #6E3C78;
+  --sc-alpha: .4;
+  --sc-ray: rgba(170, 210, 255, .2);
+  --sc-mote: rgba(214, 228, 170, 1);
+  --sc-firefly: rgba(214, 228, 170, 1);
+  --sc-moon: rgba(150, 190, 255, .13);
+  --sc-night: 1;
+  --pl-a: #2B612B;
+  --pl-b: #69A844;
+  --pl-c: #9DC964;
+  --pl-back-a: #173B1B;
+  --pl-back-b: #2F5E29;
+  --pl-pa: #3A1642;
+  --pl-pb: #8A4E94;
+  --pl-stem-a: #356A2B;
+  --pl-stem-b: #74AA4F;
+  --pl-pet: #4A8638;
+  --pl-vein: rgba(220, 245, 200, .36);
+  --pl-fold: rgba(0, 0, 0, .24);
+  --pl-shine: rgba(255, 255, 255, .12);
+  --pl-hl: rgba(220, 245, 200, .38);
+  --pl-sick: #B2A646;
+  --pot-a: #8E4F34;
+  --pot-b: #B7785A;
+  --pot-rim: #A6664A;
+  --pot-band: rgba(0, 0, 0, .2);
+  --soil-top: #3A281D;
+  --soil-grain: #5E4533;
+  --pot-shadow: rgba(0, 0, 0, .45);
+  --tag-bg: #E9DEC3;
+  --tag-ink: #3A301C;
+  --stick: #9C8258;
+  --mol-c: #8FA592;
+  --mol-c-hi: #E6F0E7;
+  --mol-o: #E0604B;
+  --mol-o-hi: #FFC4B5;
+  --mol-bond: #8EA091;
+  --mol-edge: rgba(0, 0, 0, .45);
+  --z0: #1F4A63;
+  --z1: #234A3B;
+  --z2: #2F5E26;
+  --z3: #5E4D1C;
+  --z4: #62291F;
+  --sun-light: rgba(255, 206, 84, .22);
+  --water-fill: rgba(80, 150, 205, .32);
+  --water-line: #7FB8E0;
+  --wood-a: #8C6538;
+  --wood-b: #B38650;
+  --hoop: #9BAEA2;
+  --glass-edge: rgba(190, 220, 200, .5);
+  --germ-coat: #1A1714;
+  --germ-gel: rgba(130, 180, 220, .35);
+  color-scheme: dark;
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* soft paper grain over the whole page */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+

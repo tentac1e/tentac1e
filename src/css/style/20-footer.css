@@ -1,0 +1,29 @@
+/* ================= footer ================= */
+.footer { padding-block: 36px calc(36px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--glass); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: end; }
+.footer .brand { font-size: 2rem; }
+.footer p { margin: 6px 0 0; font-size: .86rem; color: var(--ink-3); max-width: 60ch; }
+
+.to-top {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--tabbar-h) + 16px);
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 26px 6px 26px 6px;
+  background: var(--basil);
+  color: var(--on-basil);
+  box-shadow: var(--shadow-float);
+  cursor: pointer;
+  opacity: 0;
+  translate: 0 20px;
+  pointer-events: none;
+  transition: opacity .35s, translate .5s var(--ease-float);
+}
+.to-top.is-shown { opacity: 1; translate: 0 0; pointer-events: auto; }
+.to-top:hover { translate: 0 -4px; }
+

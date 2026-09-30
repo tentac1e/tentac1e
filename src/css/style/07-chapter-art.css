@@ -1,0 +1,47 @@
+/* ================= illustrations (chapter art) ================= */
+.ar-paper { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.5; }
+.ar-band { fill: var(--leaf-soft); stroke: var(--line-strong); stroke-width: 1.5; }
+.ar-zig { fill: none; stroke: var(--line-strong); stroke-width: 1.5; stroke-linejoin: round; }
+.ar-line { fill: none; stroke: var(--line-strong); stroke-width: 1.6; stroke-linecap: round; }
+.ar-leaf { fill: var(--sim-leaf); stroke: var(--sim-vein); }
+.ar-leaf-p { fill: var(--lf-purple); stroke: var(--lf-purple-vein); }
+.ar-leaf-l { fill: var(--lf-lime); stroke: var(--lf-lime-vein); }
+.ar-leaf-sick { fill: var(--lf-sick); stroke: var(--lf-lime-vein); }
+.ar-coty { fill: var(--lf-lime); stroke: var(--lf-lime-vein); stroke-width: 1; }
+.ar-seed { fill: var(--soil); }
+.ar-nut { fill: var(--oil-soft); stroke: var(--oil-bright); stroke-width: 1; }
+.ar-stem { fill: none; stroke: var(--stem); stroke-width: 3; stroke-linecap: round; }
+.ar-pot { fill: var(--clay); }
+.ar-rim { fill: var(--clay-rim); }
+.ar-soil { fill: var(--soil); }
+.ar-shine { fill: none; stroke: rgb(255 255 255 / .35); stroke-width: 2.5; stroke-linecap: round; }
+.ar-head { fill: var(--basil); }
+.ar-ring { fill: var(--ink-3); }
+.ar-dotg { fill: var(--line-strong); }
+.ar-hl { fill: none; stroke: var(--oil-bright); stroke-width: 2.5; }
+.ar-hl-dot { fill: var(--oil-bright); }
+.ar-sun { fill: var(--oil-bright); }
+.ar-rays { fill: none; stroke: var(--oil-bright); stroke-width: 2.5; stroke-linecap: round; }
+.ar-can { fill: var(--metal); stroke: var(--metal-dark); stroke-width: 1.5; }
+.ar-can-s { fill: none; stroke: var(--metal-dark); stroke-width: 4.5; stroke-linecap: round; }
+.ar-spout { stroke-width: 6; }
+.ar-water { fill: var(--water); }
+.ar-glass { fill: var(--glass-tint); stroke: var(--metal-dark); stroke-width: 1.8; stroke-linejoin: round; }
+.ar-rim-line { fill: none; stroke: var(--metal-dark); stroke-width: 3; stroke-linecap: round; }
+.ar-liquid { fill: var(--leaf); opacity: .85; }
+.ar-bubble { fill: var(--surface); opacity: .75; }
+.ar-text { font: 600 9px var(--font-mono); fill: var(--ink-3); letter-spacing: .04em; }
+.ar-ghost { opacity: .32; }
+.ar-cut { stroke: var(--danger); stroke-width: 2.2; stroke-dasharray: 4 3; stroke-linecap: round; fill: none; }
+.ar-blade { fill: none; stroke: var(--metal-dark); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.ar-handle { fill: none; stroke: var(--opal); stroke-width: 3.5; }
+.ar-pesto { fill: var(--pesto); }
+.ar-lid { fill: var(--clay); }
+.ar-lid-line { stroke: var(--clay-rim); stroke-width: 1.6; stroke-linecap: round; }
+.ar-root { fill: none; stroke: var(--root); stroke-width: 1.6; stroke-linecap: round; }
+.ar-spot { fill: var(--spot); opacity: .85; }
+.ar-lens { fill: var(--glass-tint); stroke: var(--metal-dark); stroke-width: 5; }
+.ar-lens-h { stroke: var(--metal-dark); stroke-width: 8; stroke-linecap: round; }
+.ar-cover { fill: none; stroke: var(--basil); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.rescue-arrow { fill: none; stroke: var(--opal); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+

@@ -1,0 +1,112 @@
+    <div class="panel" data-panel id="sorta-katalog" data-title="Каталог сортов">
+      <div class="filters" id="variety-filters" role="group" aria-label="Фильтр сортов">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">Все</button>
+        <button class="chip" type="button" data-filter="pesto" aria-pressed="false">Для песто</button>
+        <button class="chip" type="button" data-filter="pot" aria-pressed="false">Для подоконника</button>
+        <button class="chip" type="button" data-filter="purple" aria-pressed="false">Фиолетовые</button>
+        <button class="chip" type="button" data-filter="asian" aria-pressed="false">Азиатская кухня</button>
+        <button class="chip" type="button" data-filter="tea" aria-pressed="false">Чай и десерты</button>
+        <button class="chip" type="button" data-filter="decor" aria-pressed="false">Декоративные</button>
+        <button class="chip" type="button" data-filter="resist" aria-pressed="false">Устойчивые к болезням</button>
+      </div>
+      <p class="count-line"><span id="variety-count" aria-live="polite"></span> · нажмите на карточку, чтобы открыть подробности</p>
+      <div class="var-grid" id="variety-grid"></div>
+      <div class="sci-notes">
+        <aside class="sci-note" data-kind="bio">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Название — от греческого <i>basilikón</i>, «царский». Во многих языках базилик до сих пор «царская трава».</p>
+        </aside>
+        <aside class="sci-note" data-kind="chem">
+          <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
+          <p>Генуэзский базилик с 2005 года защищён в ЕС знаком происхождения DOP: так его охраняют наравне с сырами и винами.</p>
+        </aside>
+      </div>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <details class="deep" id="deep-himotipy" data-kind="chem" data-short="Химотипы">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Почему сорта пахнут по-разному</span><span class="deep-sub">Химотипы и ферменты-переключатели</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">таблица</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Запах базилика складывается из десятков летучих веществ, но основу задают пять-шесть. Их пропорции наследуются, и ботаники делят сорта на <b>химотипы</b>: генуэзский — это линалоол с эвгенолом, тайский — эстрагол, лимонный — цитраль, коричный — метилциннамат, тулси — эвгенол с кариофилленом.</p>
+                <p>Все эти молекулы собирают два конвейера в клетках железистых волосков. <b>Терпеновый</b> строит молекулы из пятиуглеродных «кирпичиков» изопрена: из десятиуглеродного геранилдифосфата получаются линалоол, цинеол и цитраль, из пятнадцатиуглеродного фарнезилдифосфата — кариофиллен и бергамотен. <b>Фенилпропаноидный</b> начинается с аминокислоты фенилаланина и даёт молекулы с бензольным кольцом: эвгенол, эстрагол, метилциннамат.</p>
+                <p>Какой получится аромат, решают ферменты-«стрелочники» на развилках этих конвейеров. Если у сорта активна хавикол-O-метилтрансфераза, она пришивает к хавиколу метильную группу, и получается анисовый эстрагол. Если сильна эвгенолсинтаза — побеждает гвоздика. При скрещивании сортов гены стрелочников перетасовываются, поэтому гибриды иногда пахнут неожиданно.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>C<sub>10</sub></b><span>монотерпены: линалоол, цинеол, цитраль, камфора</span></div>
+                <div class="num-note"><b>C<sub>15</sub></b><span>сесквитерпены: β-кариофиллен, α-бергамотен</span></div>
+                <div class="num-note"><b>C<sub>6</sub>–C<sub>3</sub></b><span>фенилпропаноиды: кольцо и хвост из трёх атомов углерода — эвгенол, эстрагол, метилциннамат</span></div>
+              </aside>
+            </div>
+            <div class="table-scroll lab-table">
+              <table class="mini-table">
+                <thead><tr><th scope="col">Сорт</th><th scope="col">Главный «стрелочник»</th><th scope="col">Молекула</th><th scope="col">Запах</th></tr></thead>
+                <tbody>
+                  <tr><td>Генуэзский</td><td>линалоолсинтаза, эвгенолсинтаза</td><td>линалоол, эвгенол</td><td>цветы и гвоздика</td></tr>
+                  <tr><td>Тайский</td><td>хавикол-O-метилтрансфераза</td><td>эстрагол</td><td>анис, лакрица</td></tr>
+                  <tr><td>Лимонный</td><td>гераниолсинтаза и дегидрогеназы</td><td>цитраль</td><td>лимон</td></tr>
+                  <tr><td>Коричный</td><td>метилтрансфераза коричной кислоты</td><td>метилциннамат</td><td>корица, клубника</td></tr>
+                  <tr><td>Тулси</td><td>эвгенолсинтаза, сесквитерпенсинтазы</td><td>эвгенол, β-кариофиллен</td><td>гвоздика и перец</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="deep-link"><a href="#vkus-himotipy">Химические «отпечатки» всех сортов — в главе «Вкус»</a></p>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Одна аминокислота меняет запах</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Метилтрансферазы базилика переносят метильную группу с универсального донора — S-аденозилметионина — на гидроксил молекулы-субстрата. Хавикол-O-метилтрансфераза (CVOMT) и эвгенол-O-метилтрансфераза (EOMT) похожи почти на 90&nbsp;%. В опытах замена <b>одной аминокислоты</b> в их активном центре переключала фермент с хавикола на эвгенол.</p>
+                <p>Так эволюция и селекция получают новые химотипы: не нужен новый ген, достаточно точечной мутации в старом. Поэтому в одном виде <i>Ocimum basilicum</i> уживаются и анисовые, и гвоздичные сорта.</p>
+                <div class="eq"><span class="eq-label">Реакция метилирования</span><p>хавикол + SAM <span class="eq-enz">CVOMT</span>→ эстрагол + SAH</p></div>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Gang D. R. et al. Characterization of phenylpropene O-methyltransferases from sweet basil. <i>The Plant Cell</i>, 2002.</li>
+                <li>Iijima Y. et al. The biochemical and molecular basis for the divergent patterns in the biosynthesis of terpenes and phenylpropenes in the peltate glands of three cultivars of basil. <i>Plant Physiology</i>, 2004.</li>
+                <li>Simon J. E. et al. Basil: a source of aroma compounds and a popular culinary and ornamental herb. In: <i>Perspectives on New Crops and New Uses</i>. ASHS Press, 1999.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-antociany" data-kind="chem" data-short="Антоцианы">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Откуда фиолетовый цвет</span><span class="deep-sub">Пигмент-солнцезащита, который меняет цвет от кислоты</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Цвет опалового, ереванского и ‘Red Rubin’ дают <b>антоцианы</b> — водорастворимые пигменты из группы флавоноидов. Они растворены в вакуолях клеток кожицы и работают как солнцезащитный фильтр: поглощают часть сине-зелёного и ультрафиолетового света и гасят активные формы кислорода.</p>
+                <p>Синтез антоцианов включает свет: ультрафиолет и синие лучи запускают гены флавоноидного пути. Поэтому в тени фиолетовые сорта зеленеют, а на солнце темнеют. Холодные ночи и нехватка фосфора тоже усиливают окраску — отсюда фиолетовые жилки у голодающего зелёного базилика.</p>
+                <p>Антоциан — природный индикатор кислотности. В кислой среде он красный, в нейтральной фиолетовый, в щелочной синеет и зеленеет. Поэтому уксус, настоянный на фиолетовом базилике, получается рубиновым, а лимонад — розовым.</p>
+                <p>Зелёные пятна и целые зелёные веточки на опаловом базилике — генетическая нестабильность окраски, а не болезнь. Позже выведенный ‘Red Rubin’ отбирали как раз на ровный цвет.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="ph-strip" role="img" aria-label="Цвет антоциана: при pH 2 красный, при pH 5 розово-лиловый, при pH 7 фиолетовый, при pH 9 сине-зелёный, при pH 11 жёлто-зелёный"><span style="--c: var(--ph-2)">2</span><span style="--c: var(--ph-4)">4</span><span style="--c: var(--ph-6)">6</span><span style="--c: var(--ph-7)">7</span><span style="--c: var(--ph-8)">8</span><span style="--c: var(--ph-10)">10</span></div>
+                <p class="aside-cap">Цвет антоцианового настоя по pH. Покрутить шкалу можно в <a href="#vkus-kuhnya">«Физике кухни»</a>.</p>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему фиолетовый базилик не выцветает</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Голый антоциан нестабилен: в нейтральной среде он быстро теряет цвет. У базилика антоцианы <b>ацилированы</b> — к их сахарам пришиты остатки ароматических кислот. Эти «ручки» складываются стопкой с окрашенной частью молекулы и защищают её от воды. Химики называют это внутримолекулярной копигментацией.</p>
+                <p>Цвет сдвигают и соседи по клеточному соку: другие полифенолы (межмолекулярная копигментация) и ионы металлов делают оттенок синее. Поэтому один и тот же пигмент в разных растениях даёт то пурпур, то синеву васильков.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Brouillard R. Chemical structure of anthocyanins. In: <i>Anthocyanins as Food Colors</i>. Academic Press, 1982.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+

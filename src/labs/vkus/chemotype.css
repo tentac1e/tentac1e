@@ -1,0 +1,21 @@
+/* chemotype matrix */
+.chemo { width: 100%; min-width: 620px; border-collapse: collapse; font-size: .84rem; }
+.chemo th, .chemo td { padding: 6px 4px; text-align: center; border-bottom: 1px dashed var(--line); }
+.chemo thead th { height: 92px; vertical-align: bottom; font-weight: 600; color: var(--ink-3); font-size: .74rem; }
+.chemo thead th span { display: inline-block; writing-mode: vertical-rl; rotate: 180deg; white-space: nowrap; }
+.chemo thead th:first-child { text-align: left; }
+.chemo tbody th { text-align: left; }
+.chemo td { position: relative; height: 48px; min-width: 40px; }
+.chemo td small { position: absolute; left: 0; right: 0; bottom: 1px; font: 600 .62rem/1 var(--font-mono); color: var(--ink-3); }
+.bub { display: inline-block; width: var(--s); height: var(--s); border-radius: 50%; vertical-align: middle; opacity: .85; }
+.bub.s1 { background: var(--ser-1); } .bub.s2 { background: var(--ser-2); } .bub.s3 { background: var(--ser-3); }
+.bub-none { color: var(--line-strong); }
+.chemo-row { border: 0; background: none; padding: 6px 8px; border-radius: 10px; font: 700 .86rem/1.2 var(--font-body); color: var(--ink-2); cursor: pointer; text-align: left; white-space: nowrap; }
+.chemo-row:hover { color: var(--ink); }
+.chemo-row[aria-pressed="true"] { background: var(--k); color: var(--surface); }
+.chemo tr.is-sel td { background: color-mix(in srgb, var(--k) 6%, transparent); }
+.chemo-info { margin-top: 14px; padding: 16px; border-radius: 16px; background: var(--k-soft); }
+.chemo-info p { margin: 0 0 8px; }
+.chemo-top { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: .88rem; }
+.chemo-top b { font-family: var(--font-mono); }
+

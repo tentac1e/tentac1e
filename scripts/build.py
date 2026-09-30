@@ -5,11 +5,20 @@
     python3 scripts/build.py --clean --out dist/site   # версия для хостинга: адреса вида /урожай + .htaccess
     python3 scripts/build.py --single PATH             # вся книга одним HTML-файлом (все главы на одной странице)
 
-Исходники:
-    src/layout.html        общий каркас: шапка, спрайт, фон, подвал, поиск, меню
-    src/pages/<глава>.html  содержимое одной главы (<section data-view="…">)
+Исходники (всё, что правится руками, лежит в src/; assets/ целиком собирается из них):
+    src/layout.html                 общий каркас: шапка, спрайт, фон, подвал, поиск, меню
+    src/pages/<глава>/              глава по кускам: _head.html (обложка и вкладки), 1-<вкладка>.html …, _foot.html
+    src/pages/<глава>.html          глава без вкладок (главная, календарь) — одним файлом
+    src/js/<модуль>/_frame.js + NN-*.js   → assets/js/<модуль>.js (app, science, scene, data)
+    src/js/haptics.js               → assets/js/haptics.js как есть
+    src/css/style/NN-*.css          → assets/css/style.css
+    src/css/lab/NN-*.css            → assets/css/lab.css; на месте /*@labs*/ — стили моделей
+    src/labs/_frame.js              общие помощники моделей
+    src/labs/<глава>/<модель>.js    одна модель (register('имя', …)); рядом <модель>.css и, если надо, _shared.js
+                                    → assets/js/labs/<глава>.js: страница грузит модели только своей главы
 
 Что делает сборка:
+    • склеивает скрипты и стили из src/ в assets/ (порядок — по номеру в имени файла);
     • кладёт каждую главу в каркас и пишет index.html, sorta.html, …;
     • переписывает ссылки «#id» на другие главы в «страница.html#id»;
     • ставит постоянные id заголовкам, на которые ведёт поиск;
@@ -218,15 +227,151 @@ def text_of(node):
 
 # ---------------------------------------------------------------- helpers
 def chapters():
-    data = (ROOT / 'assets/js/data.js').read_text(encoding='utf-8')
+    data = (SRC / 'js' / 'data' / '00-nav.js').read_text(encoding='utf-8')
     out = {}
-    for m in re.finditer(r"\{ id: '([a-z]+)', num: (\d+), title: '([^']+)', art: '[^']+', desc: '([^']+)' \}", data):
+    for m in re.finditer(r"\{ id: '([a-z]+)', num: (\d+), title: '([^']+)',[^{}]*? desc: '([^']+)' \}", data):
         out[m.group(1)] = {'num': int(m.group(2)), 'title': m.group(3), 'desc': m.group(4)}
     return out
 
 
 def attr(s):
     return escape(s, quote=True)
+
+
+# ---------------------------------------------------------------- sources → assets
+BANNER = 'Файл собирает scripts/build.py из {src} — правьте там'
+
+
+def numbered(d, ext):
+    """NN-name.ext files of a folder in their number order"""
+    files = [f for f in d.glob('*' + ext) if re.match(r'\d+-', f.name)]
+    return sorted(files, key=lambda f: (int(f.name.split('-', 1)[0]), f.name))
+
+
+def read_page(view):
+    d = SRC / 'pages' / view
+    if not d.is_dir():
+        return (SRC / 'pages' / f'{view}.html').read_text(encoding='utf-8')
+    parts = [d / '_head.html', *numbered(d, '.html'), d / '_foot.html']
+    return ''.join(f.read_text(encoding='utf-8') for f in parts)
+
+
+def page_labs(html):
+    return re.findall(r'data-lab="([a-z0-9]+)"', html)
+
+
+def assemble(src_pages):
+    """write assets/js/*.js, assets/css/*.css and assets/js/labs/<view>.js from src/. Returns lab bundle names."""
+    js, css = ROOT / 'assets' / 'js', ROOT / 'assets' / 'css'
+    js.mkdir(parents=True, exist_ok=True)
+    css.mkdir(parents=True, exist_ok=True)
+
+    def banner(text, src):
+        assert '*/' not in src and '/*' not in src, src
+        # the first line of every frame is its title comment: add where the file comes from
+        first, rest = text.split('\n', 1)
+        if first.startswith('/*') and first.endswith('*/'):
+            return first[:-2].rstrip() + '. ' + BANNER.format(src=src) + ' */\n' + rest
+        return f'/* {BANNER.format(src=src)} */\n' + text
+
+    for mod in ('data', 'scene', 'science', 'app'):
+        d = SRC / 'js' / mod
+        frame = (d / '_frame.js').read_text(encoding='utf-8')
+        body = ''.join(f.read_text(encoding='utf-8') for f in numbered(d, '.js'))
+        assert frame.count('/*@parts*/\n') == 1, mod
+        (js / f'{mod}.js').write_text(banner(frame.replace('/*@parts*/\n', body), f'src/js/{mod}/'), encoding='utf-8')
+    shutil.copyfile(SRC / 'js' / 'haptics.js', js / 'haptics.js')
+
+    style = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'style', '.css'))
+    (css / 'style.css').write_text(banner(style, 'src/css/style/'), encoding='utf-8')
+
+    # models: which page shows which, in page order
+    order = [(v, page_labs(src_pages[v])) for v, _ in PAGES]
+    known = {f.stem for f in (SRC / 'labs').glob('*/*.js') if not f.name.startswith('_')}
+    used = [l for _, labs in order for l in labs]
+    assert len(used) == len(set(used)), 'a model is placed twice'
+    assert set(used) <= known, set(used) - known
+    assert known <= set(used), ('models no page shows', known - set(used))
+
+    lab_css = ''
+    for v, labs in order:
+        for l in labs:
+            f = SRC / 'labs' / v / f'{l}.css'
+            if f.exists():
+                lab_css += f.read_text(encoding='utf-8')
+    lab = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'lab', '.css'))
+    assert lab.count('/*@labs*/\n') == 1
+    (css / 'lab.css').write_text(banner(lab.replace('/*@labs*/\n', lab_css), 'src/css/lab/ и src/labs/<глава>/<модель>.css'), encoding='utf-8')
+
+    frame = (SRC / 'labs' / '_frame.js').read_text(encoding='utf-8')
+    out = js / 'labs'
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir()
+    bundles = []
+    CH = chapters()
+    for v, labs in order:
+        if not labs:
+            continue
+        d = SRC / 'labs' / v
+        parts = ([d / '_shared.js'] if (d / '_shared.js').exists() else []) + [d / f'{l}.js' for l in labs]
+        body = '\n'.join(f.read_text(encoding='utf-8') for f in parts)
+        text = frame.replace('{{chapter}}', CH[v]['title'] if v in CH else v).replace('/*@labs*/\n', body)
+        (out / f'{v}.js').write_text(banner(text, f'src/labs/{v}/'), encoding='utf-8')
+        bundles.append(v)
+    stale = js / 'labs.js'
+    if stale.exists():
+        stale.unlink()
+    return bundles
+
+
+def write_map(src_pages, CH):
+    """MAP.md: where every tab, model, deep dive and script piece lives. Rebuilt on every build."""
+    rel = lambda f: str(f.relative_to(ROOT))
+    out = ['# Карта проекта', '',
+           'Файл собирает `scripts/build.py` при каждой сборке — не правьте руками. Как работать с проектом — в `CLAUDE.md`.', '']
+    out += ['## Главы и вкладки', '']
+    for view, file in PAGES:
+        ch = CH.get(view, {'title': 'Главная', 'num': 0})
+        d = SRC / 'pages' / view
+        url = '/' + SLUG[view]
+        out.append(f"### {ch['title']} — `{url}` (`{file}`)")
+        files = [d / '_head.html', *numbered(d, '.html'), d / '_foot.html'] if d.is_dir() else [SRC / 'pages' / f'{view}.html']
+        rows = []
+        for f in files:
+            html = f.read_text(encoding='utf-8')
+            m = re.search(r'<div class="panel" data-panel id="([^"]+)" data-title="([^"]+)"', html)
+            tab = f"#{TAB[m.group(1)]} — {m.group(2)}" if m else ('обложка, вкладки' if f.name == '_head.html' else 'подвал главы' if f.name == '_foot.html' else 'вся глава')
+            labs = page_labs(html)
+            deeps = re.findall(r'<details class="deep" id="([^"]+)"[^>]*data-short="([^"]+)"', html)
+            extra = []
+            if labs:
+                extra.append('модели: ' + ', '.join(f'`{l}`' for l in labs))
+            if deeps:
+                extra.append('глубже: ' + ', '.join(f'{t} `#{i}`' for i, t in deeps))
+            rows.append(f"- `{rel(f)}` · {tab} · {html.count(chr(10))} стр." + (f"<br>{'; '.join(extra)}" if extra else ''))
+        out += rows + ['']
+    out += ['## Модели (src/labs/)', '', '| модель | глава | заголовок | файлы |', '|---|---|---|---|']
+    for view, _ in PAGES:
+        for lab in page_labs(src_pages[view]):
+            js = SRC / 'labs' / view / f'{lab}.js'
+            t = re.search(r"h\.head\((['\"`])(.+?)\1", js.read_text(encoding='utf-8'))
+            files = [rel(js)] + ([rel(js.with_suffix('.css'))] if js.with_suffix('.css').exists() else [])
+            out.append(f"| `{lab}` | {CH.get(view, {}).get('title', view)} | {t.group(2) if t else ''} | {' · '.join(f'`{x}`' for x in files)} |")
+    out += ['', 'Общие помощники моделей — `src/labs/_frame.js`; инструменты графиков, кнопок и ползунков (`h.chart`, `h.plot`, `h.rangeHtml` …) — `src/js/science/`.', '']
+    out += ['## Скрипты (src/js/)', '']
+    for mod in ('app', 'science', 'scene', 'data'):
+        out.append(f'**{mod}.js**')
+        for f in numbered(SRC / 'js' / mod, '.js'):
+            text = f.read_text(encoding='utf-8')
+            names = re.findall(r'^  (?:function|const) ((?:init|Mol|Plant|render|draw)[A-Za-z]*|[A-Z][A-Z_]{2,})\b', text, re.M)
+            out.append(f"- `{rel(f)}` ({text.count(chr(10))} стр.)" + (': ' + ', '.join(dict.fromkeys(names)) if names else ''))
+        out.append('')
+    out += ['## Стили (src/css/)', '']
+    for mod in ('style', 'lab'):
+        out.append(f'**{mod}.css**: ' + ', '.join(f'`{f.name}`' for f in numbered(SRC / 'css' / mod, '.css')))
+    out.append('')
+    (ROOT / 'MAP.md').write_text('\n'.join(out) + '\n', encoding='utf-8')
 
 
 def main():
@@ -241,8 +386,9 @@ def main():
     LINK = {v: (SLUG[v] or './') for v, _ in PAGES} if clean else dict(FILE)
 
     layout = (SRC / 'layout.html').read_text(encoding='utf-8')
-    src = {v: (SRC / 'pages' / f'{v}.html').read_text(encoding='utf-8') for v, _ in PAGES}
+    src = {v: read_page(v) for v, _ in PAGES}
     CH = chapters()
+    bundles = assemble(src)
 
     # 1. give every searchable heading a stable id, and index the text
     static_entries_panels, static_entries_heads = [], []
@@ -349,7 +495,10 @@ def main():
 
     # 3. generated data files
     if out_dir != ROOT:
-        shutil.copytree(ROOT / 'assets', out_dir / 'assets', dirs_exist_ok=True)
+        # a fresh copy: files removed from assets/ must not linger on the hosting copy
+        if (out_dir / 'assets').exists():
+            shutil.rmtree(out_dir / 'assets')
+        shutil.copytree(ROOT / 'assets', out_dir / 'assets')
         if clean:
             (out_dir / '.htaccess').write_text(htaccess(), encoding='ascii')
     js = out_dir / 'assets' / 'js'
@@ -368,7 +517,7 @@ def main():
     # every asset address carries a short fingerprint of its content (style.css?v=3f2a91c0):
     # after an update browsers fetch the new files instead of mixing them with cached old ones
     ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
-    pages_js['v'] = {'labs': ver(js / 'labs.js'), 'search': ver(js / 'search-index.js')}
+    pages_js['v'] = {'labs': {v: ver(js / 'labs' / f'{v}.js') for v in bundles}, 'search': ver(js / 'search-index.js')}
     (js / 'pages.js').write_text(
         '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
         'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
@@ -397,7 +546,8 @@ def main():
         scripts = '\n'.join(f'<script src="assets/js/{s}" defer></script>' for s in SCRIPTS if not (single and s == 'pages.js'))
         if single:
             scripts = scripts.replace('<script src="assets/js/science.js" defer></script>',
-                                      '<script src="assets/js/science.js" defer></script>\n<script src="assets/js/labs.js" defer></script>')
+                                      '<script src="assets/js/science.js" defer></script>\n'
+                                      + '\n'.join(f'<script src="assets/js/labs/{v}.js" defer></script>' for v in bundles))
         out = out.replace('{{scripts}}', scripts)
         return fingerprint(out)
 
@@ -410,6 +560,7 @@ def main():
         tmp.unlink()
         return
 
+    write_map(src, CH)
     for view, file in PAGES:
         (out_dir / file).write_text(page_html([view], view), encoding='utf-8')
         print(f'{file:18} {len((out_dir / file).read_bytes()) // 1024:4} КБ')

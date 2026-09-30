@@ -1,0 +1,28 @@
+/* ================= views & transitions ================= */
+.js .view:not(.is-active) { display: none; }
+.js .panel:not(.is-active) { display: none; }
+.view { padding-bottom: clamp(40px, 6vw, 72px); }
+main { view-transition-name: main; }
+
+@keyframes vt-out { to { opacity: 0; translate: 0 -10px; } }
+@keyframes vt-in { from { opacity: 0; translate: 0 18px; } }
+/* no cross-document view transition between chapter pages: in Safari the page stays covered by the
+   transition snapshot and ignores taps until it ends, and on long pages on iPhone it may never end */
+::view-transition-old(main) { animation: vt-out .18s ease-in both; }
+::view-transition-new(main) { animation: vt-in .42s var(--ease-float) both; }
+
+.panel.is-entering { animation: panel-in .38s var(--ease-float) both; }
+@keyframes panel-in { from { opacity: .2; translate: 0 14px; } }
+
+/* scroll-driven float-in (content stays visible at rest) */
+@keyframes rise { from { translate: 0 38px; scale: .985; } to { translate: 0 0; scale: 1; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .steps .step, .storage .card, .ref-grid .card, .principles .card, .myths .card, .chapters .ch-card, .tools-grid .tool, .var-grid .variety, .quick .q-card {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+  }
+}
+

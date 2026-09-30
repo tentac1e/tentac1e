@@ -1,0 +1,7 @@
+/* seeds */
+.sl-scale { position: relative; height: 34px; margin: 16px 0 26px; border-radius: 10px; background: linear-gradient(90deg, color-mix(in srgb, var(--danger) 18%, var(--surface-2)), var(--surface-2) 25%, var(--band-good)); border: 1px solid var(--line); }
+.sl-scale i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 10px 0 0 10px; background: color-mix(in srgb, var(--k) 45%, transparent); border-right: 3px solid var(--k); transition: width .4s var(--ease-float); }
+.sl-scale span { position: absolute; top: calc(100% + 6px); translate: -50% 0; font: 500 .7rem/1 var(--font-mono); color: var(--ink-3); }
+.sl-scale span:first-of-type { translate: 0 0; }
+.sl-scale span:last-of-type { translate: -100% 0; }
+

@@ -1,0 +1,9 @@
+/* roots */
+.roots-svg { width: 100%; max-width: 250px; height: auto; }
+.rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }
+.rt-water { fill: var(--water-fill); }
+.rt-wl { stroke: var(--water-line); stroke-width: 1.5; }
+.rt-stem { fill: none; stroke: var(--stem); stroke-width: 5; stroke-linecap: round; }
+.rt-node { fill: var(--pl-a); }
+.rt-root { fill: none; stroke: var(--root); stroke-width: 2.2; stroke-linecap: round; }
+

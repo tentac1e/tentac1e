@@ -1,0 +1,15 @@
+/* barrel */
+.barrel-water { fill: var(--water-fill); }
+.barrel-wave { fill: none; stroke: var(--water-line); stroke-width: 2; }
+.stave { fill: var(--wood-a); stroke: color-mix(in srgb, var(--wood-a) 70%, var(--ink)); stroke-width: 1; cursor: ns-resize; transition: y .35s var(--ease-float), height .35s var(--ease-float); }
+.stave:nth-child(odd) { fill: var(--wood-b); }
+.stave.is-limit { fill: var(--danger); stroke: var(--danger); }
+.stave.is-sel { stroke: var(--ink); stroke-width: 2; }
+.stave-lbl { font: 700 11px/1 var(--font-mono); fill: var(--ink-2); }
+.lab-tool[data-lab="window"] .lab-chart svg { overflow: hidden; }
+.stave-lbl.is-limit { fill: var(--danger); }
+.hoop { fill: var(--hoop); opacity: .85; }
+.barrel-spill { fill: none; stroke: var(--water-line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 5 6; animation: flow-dash .8s linear infinite; }
+.barrel-verdict { margin: 0; font-size: .92rem; color: var(--ink-2); }
+.barrel-verdict b { display: block; margin-bottom: 4px; color: var(--danger); }
+

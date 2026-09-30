@@ -1,0 +1,6 @@
+/* ================= paint isolation =================
+   everything that moves every frame gets its own compositor layer, so the browser repaints
+   only that small piece instead of the whole long page */
+.plant-stage { will-change: transform; }
+.lab-tool:not(.is-off) svg:has(.pl-stems, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .germ-gel) { will-change: transform; }
+

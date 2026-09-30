@@ -1,0 +1,8 @@
+/* shade */
+.rfr { display: grid; gap: 6px; font: 500 .7rem/1.2 var(--font-mono); }
+.rfr i { position: relative; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #B8312A, #6E1F2B); }
+.rfr i::after { content: ""; position: absolute; top: -4px; bottom: -4px; left: var(--p, 50%); width: 4px; margin-left: -2px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--surface); transition: left .4s var(--ease-float); }
+.rfr-r { color: var(--danger); }
+.rfr-fr { color: var(--ink-3); text-align: right; }
+.shade-stage .lab-plant { max-width: 320px; }
+
