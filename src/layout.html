@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="assets/css/lab.css">
 </head>
 <body>
-<script>document.documentElement.classList.add('js');try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>document.documentElement.classList.add('js');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 
 <!-- ================= SVG SPRITE ================= -->
 <svg class="sprite" aria-hidden="true" focusable="false">

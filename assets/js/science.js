@@ -112,9 +112,12 @@ window.BasilScience = (() => {
     if ('ResizeObserver' in window) new ResizeObserver(() => { if (host.clientWidth && host.clientWidth !== W) redraw(); }).observe(host);
     if (o.onPointer) {
       const fire = (e, kind) => { const r = svg.getBoundingClientRect(); o.onPointer(e.clientX - r.left, e.clientY - r.top, W, H, kind); };
-      svg.addEventListener('pointerdown', e => { fire(e, 'set'); });
-      svg.addEventListener('pointermove', e => { fire(e, e.buttons ? 'set' : 'hover'); });
-      svg.addEventListener('pointerleave', e => fire(e, 'leave'));
+      // dragging across a chart ticks like a dial
+      const hap = window.BasilHaptics ? window.BasilHaptics.dragTicker(18) : null;
+      svg.addEventListener('pointerdown', e => { if (hap) hap.start(e.clientX, e.clientY); fire(e, 'set'); });
+      svg.addEventListener('pointermove', e => { if (hap && e.buttons) hap.move(e.clientX, e.clientY); fire(e, e.buttons ? 'set' : 'hover'); });
+      svg.addEventListener('pointerup', () => { if (hap) hap.end(); });
+      svg.addEventListener('pointerleave', e => { if (hap) hap.end(); fire(e, 'leave'); });
       svg.style.cursor = 'crosshair';
     }
     redraw();
@@ -438,9 +441,11 @@ window.BasilScience = (() => {
       draw();
     }
     const wake = () => { if (reduce.matches) { draw(); return; } if (!raf) { last = 0; raf = requestAnimationFrame(frame); } };
-    canvas.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, t: performance.now() }; canvas.setPointerCapture(e.pointerId); });
+    const hap = window.BasilHaptics ? window.BasilHaptics.dragTicker(22) : null;
+    canvas.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, t: performance.now() }; if (hap) hap.start(e.clientX, e.clientY); canvas.setPointerCapture(e.pointerId); });
     canvas.addEventListener('pointermove', e => {
       if (!drag) return;
+      if (hap) hap.move(e.clientX, e.clientY);
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       yaw += dx * 0.012; pitch = clamp(pitch + dy * 0.01, -1.4, 1.4);
       const dt = Math.max(16, performance.now() - drag.t) / 1000;
@@ -579,7 +584,8 @@ window.BasilScience = (() => {
       pop.setAttribute('aria-label', 'Глубина чтения');
       pop.hidden = true;
       pop.innerHTML = `<p class="depth-pop-h">Глубина чтения</p>` + DEPTHS.map(([name, note], i) =>
-        `<button type="button" role="menuitemradio" aria-checked="false" data-depth-pick="${i}"><span class="depth-dots" aria-hidden="true">${'<i></i>'.repeat(i + 1)}</span><span><b>${name}</b><small>${note}</small></span></button>`).join('');
+        `<button type="button" role="menuitemradio" aria-checked="false" data-depth-pick="${i}"><span class="depth-dots" aria-hidden="true">${'<i></i>'.repeat(i + 1)}</span><span><b>${name}</b><small>${note}</small></span></button>`).join('') +
+        (window.BasilHaptics && window.BasilHaptics.supported ? `<button type="button" role="menuitemcheckbox" class="depth-hap" data-haptics aria-checked="${window.BasilHaptics.enabled}"><span class="hap-switch" aria-hidden="true"></span><span><b>Отклик вибрацией</b><small>лёгкие щелчки, когда крутите и переключаете</small></span></button>` : '');
       btn.after(pop);
       btn.setAttribute('aria-haspopup', 'menu');
       btn.setAttribute('aria-controls', 'depth-pop');
@@ -595,20 +601,27 @@ window.BasilScience = (() => {
         pop.hidden = false;
         btn.setAttribute('aria-expanded', 'true');
         const cur = $('[aria-checked="true"]', pop) || $('button', pop);
-        cur.focus();
+        cur.focus({ preventScroll: true });
       };
       btn.addEventListener('click', e => { e.stopPropagation(); if (pop.hidden) openPop(); else close(); });
       pop.addEventListener('click', e => {
+        const hb = e.target.closest('[data-haptics]');
+        if (hb) {
+          const v = !window.BasilHaptics.enabled;
+          window.BasilHaptics.set(v);
+          hb.setAttribute('aria-checked', String(v));
+          return;
+        }
         const b = e.target.closest('[data-depth-pick]');
         if (!b) return;
         const v = +b.dataset.depthPick;
-        store.set(v); setDepth(v, true); close(); btn.focus();
+        store.set(v); setDepth(v, true); close(); btn.focus({ preventScroll: true });
       });
       pop.addEventListener('keydown', e => {
         const items = $$('button', pop), i = items.indexOf(document.activeElement);
-        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
-        if (e.key === 'ArrowUp') { e.preventDefault(); items[(i + items.length - 1) % items.length].focus(); }
-        if (e.key === 'Escape') { close(); btn.focus(); }
+        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus({ preventScroll: true }); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); items[(i + items.length - 1) % items.length].focus({ preventScroll: true }); }
+        if (e.key === 'Escape') { close(); btn.focus({ preventScroll: true }); }
       });
       document.addEventListener('click', e => { if (!pop.hidden && !pop.contains(e.target)) close(); });
       window.addEventListener('hashchange', close);

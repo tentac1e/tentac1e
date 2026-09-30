@@ -58,6 +58,7 @@
   const dayDiff = (a, b) => Math.round((b - a) / 864e5);
   const icon = name => `<svg class="ico" aria-hidden="true"><use href="#i-${name}"/></svg>`;
   const chapterById = id => B.CHAPTERS.find(c => c.id === id);
+  const HAP = window.BasilHaptics || { tick() {}, select() {}, impact() {}, success() {}, supported: false };
 
   /* ---------------- pages: every chapter is its own HTML file ---------------- */
   // BASIL_PAGES comes from scripts/build.py; without it (one-file build) all chapters share one page
@@ -173,6 +174,13 @@
   window.addEventListener('resize', () => { stickyPx = null; });
 
   const homeView = () => views.get('glavnaya') || views.values().next().value;
+  const ENTRY = (() => {
+    let type = 'navigate', resume = false;
+    try { type = (performance.getEntriesByType('navigation')[0] || {}).type || 'navigate'; } catch (e) { /* old browser */ }
+    try { resume = new URLSearchParams(location.search).has('resume'); } catch (e) { /* old browser */ }
+    // pages open at the top: the browser does not put you back where you were, «Продолжить» does
+    return { type, resume, top: resume || type === 'reload' || type === 'back_forward' };
+  })();
   function resolve(raw) {
     let hash = String(raw || '').replace(/^#/, '');
     try { hash = decodeURIComponent(hash); } catch (e) { /* malformed — use as is */ }
@@ -182,7 +190,7 @@
       try { history.replaceState(null, '', '#' + hash); } catch (e) { /* sandboxed */ }
     }
     if (!hash || hash === 'top') return { view: homeView() };
-    if (views.has(hash)) return { view: views.get(hash) };
+    if (views.has(hash)) return { view: views.get(hash), home: true };
     const el = document.getElementById(hash);
     const view = el && el.closest('[data-view]');
     if (view) {
@@ -289,9 +297,11 @@
         currentView = r.view;
       }
       const panel = activatePanel(r.view, r.panel, !changedView);
-      if (!r.panel && panel && !changedView) r.panel = panel;
+      if (!r.panel && panel && !changedView && !r.home) r.panel = panel;
       updateChrome(r.view);
-      scrollAfter(r, changedView);
+      if (opts.top) window.scrollTo(0, 0);
+      else if (r.home && !changedView) window.scrollTo({ top: 0, behavior: smooth() }); // the chapter's own link: back to its top
+      else scrollAfter(r, changedView);
       document.dispatchEvent(new CustomEvent('basil:view', { detail: { id: r.view.dataset.view } }));
     };
     if (changedView && !opts.initial && document.startViewTransition && !reduceMotion.matches) {
@@ -326,7 +336,7 @@
     });
     window.addEventListener('popstate', () => route(location.hash));
     window.addEventListener('hashchange', () => route(location.hash));
-    route(location.hash, { initial: true });
+    route(location.hash, { initial: true, top: ENTRY.top });
   }
 
   /* pager + continue reading */
@@ -344,6 +354,16 @@
         (next ? `<a class="next" href="#${next.id}"><span><small>Глава ${next.num} →</small><b>${next.title}</b></span>${art(next)}</a>` : `<a class="next" href="#glavnaya"><span><small>Готово →</small><b>На главную</b></span>${icon('home')}</a>`);
     });
 
+    // the end of each tab points to the next one; the chapter pager follows the last tab
+    $$('[data-view]').forEach(view => {
+      const panels = $$('[data-panel]', view);
+      panels.forEach((p, i) => {
+        const next = panels[i + 1];
+        if (!next || $('.panel-next', p)) return;
+        p.insertAdjacentHTML('beforeend', `<a class="panel-next" href="#${next.id}"><span><small>Дальше в главе</small><b>${esc(next.dataset.title || '')}</b></span>${icon('arrow-r')}</a>`);
+      });
+    });
+
     const cont = $('#continue');
     const showContinue = () => {
       const last = store.get('basil-last', null);
@@ -352,8 +372,9 @@
       const panel = last.panel && document.getElementById(last.panel);
       const sub = panel ? (panel.dataset.title && $$('[data-panel]', views.get(ch.id)).length > 1 ? panel.dataset.title : '') : last.sub;
       // short tab anchors repeat between chapters, so the chapter comes from the saved view
-      cont.href = panel ? '#' + last.panel : PAGES && last.panel ? PAGES.files[last.view] + '#' + aliasOf(last.panel) : urlFor('#' + ch.id);
-      $('#continue-title').textContent = ch.title + (sub ? ' · ' + sub : '');
+      const pos = readPos(last.view);
+      cont.href = panel ? '#' + last.panel : PAGES ? PAGES.files[last.view] + '?resume=1' + (last.panel ? '#' + aliasOf(last.panel) : '') : urlFor('#' + ch.id);
+      $('#continue-title').textContent = ch.title + (pos && pos.label ? ` · «${pos.label}»` : sub ? ' · ' + sub : '');
       cont.hidden = false;
     };
     showContinue();
@@ -392,6 +413,13 @@
     }
     if (id === 'sheet-chapters') {
       $$('.sheet-link', d).forEach(l => l.classList.toggle('is-current', currentView && l.getAttribute('href') === '#' + currentView.dataset.view));
+      const cur = $('.sheet-link.is-current', d);
+      const panels = currentView ? $$('[data-panel]', currentView) : [];
+      $$('.sheet-tabs', d).forEach(x => x.remove());
+      if (cur && panels.length > 1) {
+        const active = $('[data-panel].is-active', currentView);
+        cur.insertAdjacentHTML('afterend', `<nav class="sheet-tabs chips-row" aria-label="Разделы этой главы">${panels.map(p => { const t = $(`.subnav a[href="#${p.id}"]`, currentView); return `<a class="chip" href="#${p.id}"${p === active ? ' aria-current="true"' : ''}>${esc(t ? t.textContent.trim() : p.dataset.title || '')}</a>`; }).join('')}</nav>`);
+      }
     }
     if (id === 'sheet-search') {
       const input = $('#search-input');
@@ -628,7 +656,7 @@
     ];
     S.Plant(g, spec, {
       leafScale: 0.8, interactive: true, growDur: 2.8, raster: true,
-      onAroma: (x, y) => { S.aroma(layer, x, y); if (hint) hint.classList.add('is-used'); }
+      onAroma: (x, y) => { S.aroma(layer, x, y); HAP.tick(); if (hint) hint.classList.add('is-used'); }
     });
   }
 
@@ -1773,6 +1801,7 @@
     };
 
     const pinch = (id, k) => {
+      HAP.impact();
       const s = byId(id);
       if (!s || s.state === 'cut') return;
       if (k < 2) { say('Слишком низко: под срезом должно остаться минимум 2 пары листьев. Иначе новые побеги будут слабыми, а куст потеряет «фабрику питания».', 'warn'); return; }
@@ -1959,6 +1988,7 @@
       state[b.dataset.id] = b.checked;
       store.set(KEY, state);
       update();
+      if (b.checked && boxes.every(x => x.checked)) setTimeout(() => HAP.success(), 120);
     });
     $('#check-reset').addEventListener('click', () => {
       boxes.forEach(b => { b.checked = false; state[b.dataset.id] = false; });
@@ -2017,6 +2047,116 @@
     });
   }
 
+  /* ================================================================== */
+  /* READING POSITION: pages open at the top; the spot you left is kept  */
+  /* and offered back — on the chapter itself and from «Продолжить» home  */
+  /* ================================================================== */
+  const POS_KEY = 'basil-pos';
+  function readPos(view) {
+    const all = store.get(POS_KEY, {}) || {};
+    const p = all[view];
+    return p && Date.now() - (p.t || 0) < 60 * 864e5 ? p : null;
+  }
+  const absTop = el => el.getBoundingClientRect().top + window.scrollY;
+  const labelOf = el => {
+    const t = el.matches('details.deep') ? $('.deep-title', el) : el.matches('summary') && $('.deeper-t, .rc-title', el) ? $('.deeper-t, .rc-title', el) : el;
+    const s = (t ? t.textContent : '').replace(/\s+/g, ' ').trim();
+    return s.length > 56 ? s.slice(0, 54).trim() + '…' : s;
+  };
+  // the last heading (or deep dive) that has scrolled past the top edge
+  function currentAnchor() {
+    if (!currentView) return null;
+    const scope = $('.panel.is-active', currentView) || currentView;
+    const line = stickyOffset() + 90;
+    let best = null;
+    for (const el of $$('h2[id], h3[id], h4[id], summary[id], details.deep[id], .recipe-card[id]', scope)) {
+      if (!el.getClientRects().length) continue; // inside a closed block
+      if (el.getBoundingClientRect().top <= line) best = el; else break;
+    }
+    return best;
+  }
+  // only the reader's own scrolling moves the bookmark — not the jump to the top on arrival
+  let userMoved = false;
+  ['wheel', 'touchmove', 'keydown'].forEach(ev => window.addEventListener(ev, () => { userMoved = true; }, { passive: true }));
+  function savePos() {
+    if (!currentView || here === 'glavnaya' || !userMoved) return;
+    const all = store.get(POS_KEY, {}) || {};
+    const panel = $('.panel.is-active', currentView);
+    const y = Math.round(window.scrollY);
+    if (y < 400) { delete all[here]; store.set(POS_KEY, all); return; }
+    const a = currentAnchor();
+    all[here] = { panel: panel ? panel.id : null, anchor: a ? a.id : null, off: a ? Math.round(y - absTop(a)) : 0, y, label: a ? labelOf(a) : '', t: Date.now() };
+    store.set(POS_KEY, all);
+  }
+  function resumeTo(pos, behavior = 'auto') {
+    if (!pos) return;
+    const panel = pos.panel && document.getElementById(pos.panel);
+    if (panel && !panel.classList.contains('is-active')) {
+      try { history.replaceState(null, '', '#' + pos.panel); } catch (e) { /* sandboxed */ }
+      route('#' + pos.panel, { top: true });
+    }
+    const el = pos.anchor && document.getElementById(pos.anchor);
+    const place = () => {
+      const t = el ? absTop(el) + pos.off : pos.y;
+      window.scrollTo({ top: Math.max(0, t), behavior });
+    };
+    if (el) for (let box = el.parentElement && el.parentElement.closest('details'); box; box = box.parentElement && box.parentElement.closest('details')) box.open = true;
+    place();
+    // models above the spot mount lazily and push it down: land once more unless the reader moved
+    let touched = false;
+    const stop = () => { touched = true; };
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => window.addEventListener(ev, stop, { once: true, passive: true }));
+    setTimeout(() => { if (!touched) { behavior = 'auto'; place(); } }, 800);
+  }
+  let pill = null;
+  function offerResume(pos) {
+    if (!pos || pos.y < 900 || pill) return;
+    const panel = pos.panel && document.getElementById(pos.panel);
+    const where = pos.label || (panel && panel.dataset.title) || 'место, где вы остановились';
+    pill = document.createElement('div');
+    pill.className = 'resume-pill';
+    pill.setAttribute('role', 'status');
+    pill.innerHTML = `<button type="button" class="resume-go">${icon('arrow-r')}<span><small>Вы остановились здесь</small><b>${esc(where)}</b></span></button><button type="button" class="resume-x" aria-label="Скрыть">${icon('close')}</button>`;
+    document.body.appendChild(pill);
+    requestAnimationFrame(() => pill && pill.classList.add('is-shown'));
+    const hide = () => {
+      if (!pill) return;
+      const el = pill;
+      pill = null;
+      el.classList.remove('is-shown');
+      setTimeout(() => el.remove(), 400);
+      window.removeEventListener('scroll', onScroll);
+    };
+    const y0 = window.scrollY;
+    const onScroll = () => { if (Math.abs(window.scrollY - y0) > 500) hide(); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    $('.resume-go', pill).addEventListener('click', () => { hide(); userMoved = true; resumeTo(pos, smooth()); });
+    $('.resume-x', pill).addEventListener('click', hide);
+    setTimeout(hide, 12000);
+  }
+  function initReadingPos() {
+    if (!PAGES || here === 'glavnaya') return;
+    const pos = readPos(here);
+    if (ENTRY.resume) {
+      try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* sandboxed */ }
+      if (pos) setTimeout(() => { userMoved = true; resumeTo(pos); }, 60);
+    } else if (ENTRY.top || !location.hash) {
+      offerResume(pos);
+    }
+    let t = 0;
+    window.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(savePos, 400); }, { passive: true });
+    window.addEventListener('pagehide', savePos);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
+    // Safari and Chrome keep whole pages in memory for Back: those also open at the top
+    window.addEventListener('pageshow', e => {
+      if (!e.persisted) return;
+      userMoved = false;
+      const p = readPos(here);
+      window.scrollTo(0, 0);
+      offerResume(p);
+    });
+  }
+
   /* links to other chapters point at their pages — also those scripts add later */
   function initLinks() {
     if (!PAGES) return;
@@ -2046,7 +2186,7 @@
   const boot = () => {
     const science = function initScience() { if (window.BasilScience) window.BasilScience.init({ toast }); };
     // content first, decoration after: the animated background and bush start once the chapter is ready
-    const steps = [initTheme, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, initRecipes, science, initSheets, initPagers, initSearch, initScrollChrome, initRouter, initLinks, initPageAction, initHoverLight, initOffscreenPause, initScene];
+    const steps = [initTheme, initHome, initVarieties, initQuiz, initPlaces, initSoil, initCalendar, initDli, initElements, initStages, initPlan, initNpk, initDose, initSim, initGerm, initDiagnostics, initGlossary, initChecklist, initRecipes, science, initSheets, initPagers, initSearch, initScrollChrome, initRouter, initReadingPos, initLinks, initPageAction, initHoverLight, initOffscreenPause, initScene];
     // hand control back to the browser every ~40 ms so taps and scrolling never wait for start-up
     const pause = () => (window.scheduler && typeof window.scheduler.yield === 'function' ? window.scheduler.yield() : new Promise(r => setTimeout(r, 0)));
     (async () => {

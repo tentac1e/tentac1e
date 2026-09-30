@@ -1414,3 +1414,75 @@ body::after {
    only that small piece instead of the whole long page */
 .plant-stage { will-change: transform; }
 .lab-tool:not(.is-off) svg:has(.pl-stems, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .germ-gel) { will-change: transform; }
+
+/* ================= navigation helpers ================= */
+/* «Продолжить с места, где остановились» — offered when a chapter opens at the top */
+.resume-pill {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
+  z-index: 55;
+  display: flex;
+  align-items: stretch;
+  width: min(440px, calc(100vw - 24px));
+  border-radius: 20px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+  transform: translate(-50%, 24px);
+  opacity: 0;
+  transition: transform .45s var(--ease-float), opacity .3s;
+}
+.resume-pill.is-shown { transform: translate(-50%, 0); opacity: 1; }
+@media (max-width: 900px) { .resume-pill { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); } }
+.resume-go { flex: 1; display: flex; align-items: center; gap: 12px; min-width: 0; padding: 11px 6px 11px 14px; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.resume-go .ico { flex-shrink: 0; width: 20px; height: 20px; padding: 7px; box-sizing: content-box; border-radius: 50%; background: var(--basil); color: var(--on-basil); }
+.resume-go span { display: grid; min-width: 0; }
+.resume-go small { font-size: .74rem; color: var(--ink-3); }
+.resume-go b { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: .92rem; line-height: 1.25; }
+.resume-x { flex-shrink: 0; width: 44px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--ink-3); cursor: pointer; }
+.resume-x .ico { width: 16px; height: 16px; }
+.resume-x:hover { color: var(--ink); }
+
+/* end of a tab: the next one */
+.panel-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 520px;
+  margin: clamp(28px, 4vw, 44px) 0 0 auto;
+  padding: 14px 16px 14px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform .35s var(--ease-float), border-color .2s;
+}
+.panel-next span { display: grid; gap: 2px; }
+.panel-next small { font: 500 .7rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.panel-next b { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.1; }
+.panel-next .ico { flex-shrink: 0; width: 22px; height: 22px; padding: 9px; box-sizing: content-box; border-radius: 50%; background: var(--basil); color: var(--on-basil); transition: transform .35s var(--ease-float); }
+.panel-next:hover { border-color: var(--basil); transform: translateY(-2px); color: var(--ink); }
+.panel-next:hover .ico { transform: translateX(3px); }
+
+/* chapters sheet: the current chapter's tabs */
+.sheet-tabs { margin: -2px 0 8px 58px; }
+.sheet-tabs .chip { text-decoration: none; }
+.sheet-tabs .chip[aria-current="true"] { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
+
+/* home: «Продолжить чтение» never wider than the screen */
+.continue { max-width: 100%; }
+.continue b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* haptics switch in the depth menu */
+.depth-pop .depth-hap { margin-top: 6px; border-top: 1px solid var(--line); border-radius: 0 0 14px 14px; }
+.depth-pop .depth-hap[aria-checked] { background: none; }
+.depth-pop .depth-hap:hover, .depth-pop .depth-hap:focus-visible { background: var(--surface-2); }
+.hap-switch { position: relative; justify-self: center; width: 30px; height: 18px; border-radius: 9px; background: var(--line-strong); transition: background-color .2s; }
+.hap-switch::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface); transition: transform .25s var(--ease-float); }
+.depth-hap[aria-checked="true"] .hap-switch { background: var(--basil); }
+.depth-hap[aria-checked="true"] .hap-switch::after { transform: translateX(12px); }
+@media (prefers-reduced-motion: reduce) { .resume-pill, .panel-next, .panel-next .ico { transition: none; } }

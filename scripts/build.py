@@ -114,7 +114,7 @@ def htaccess():
     return '\n'.join(lines) + '\n'
 # ids that scripts create at run time, by prefix
 PREFIXES = {'dis-': 'problemy', 'pest-': 'problemy', 'g-': 'spravka', 'ck-': 'spravka', 'r-': 'urozhay'}
-SCRIPTS = ['data.js', 'pages.js', 'scene.js', 'science.js', 'app.js']
+SCRIPTS = ['haptics.js', 'data.js', 'pages.js', 'scene.js', 'science.js', 'app.js']
 
 SITE_TITLE = 'Гид по базилику'
 SITE_DESC = ('Подробный гид по выращиванию базилика в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, '
