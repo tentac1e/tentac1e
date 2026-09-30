@@ -15,7 +15,8 @@
 .chemo-top i { width: 12px; height: 12px; border-radius: 4px; }
 .chemo-top b { font: 600 .8rem/1 var(--font-mono); color: var(--ink); }
 @media (max-width: 520px) {
-  .chemo-fig:first-child { grid-template-columns: 150px minmax(0, 1fr); align-items: center; }
+  .chemo-fig:first-child { grid-template-columns: 136px minmax(0, 1fr); align-items: center; gap: 10px; }
+  .chemo-top li { font-size: .8rem; gap: 6px; }
 }
 .chemo-web { fill: none; stroke: var(--line); stroke-width: 1; }
 .chemo-web:last-of-type { stroke: var(--line-strong); }

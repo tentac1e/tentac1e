@@ -1,17 +1,25 @@
 /* nitrogen cycle */
-.nc-svg { font-family: var(--font-body); }
+.nc-chart { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
+.nc-air { fill: var(--mic-air); }
+.nc-surface { fill: none; stroke: var(--soil-top); stroke-width: 2.5; opacity: .6; }
+.nc-crumbs circle { fill: var(--soil-grain); opacity: .28; }
+.nc-water { fill: var(--water-fill); opacity: .55; }
+.nc-zone { font: 600 10.5px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; fill: var(--ink-3); }
+.nc-root-draw { fill: none; stroke: var(--root); stroke-width: 3.2; stroke-linecap: round; opacity: .85; }
+.nc-stem { fill: none; stroke: var(--stem); stroke-width: 3; stroke-linecap: round; }
 .nc-node rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.4; }
 .nc-root rect { fill: var(--leaf-soft); stroke: var(--stem); }
 .nc-n2 rect, .nc-leach rect { fill: var(--surface-2); stroke-dasharray: 4 3; }
 .nc-t { font: 700 15px/1 var(--font-mono); fill: var(--ink); }
 .nc-s { font: 500 11px/1 var(--font-body); fill: var(--ink-3); }
-.nc-edge { fill: none; stroke: var(--line-strong); stroke-width: 2; }
-.nc-edge.is-off { opacity: .35; stroke-dasharray: 3 5; }
+.nc-edge { fill: none; stroke: var(--ink-3); stroke-width: 2; opacity: .7; }
+.nc-edge.is-off { opacity: .3; stroke-dasharray: 3 5; }
 .nc-edge.is-dash { stroke-dasharray: 5 5; }
 .nc-ah { fill: var(--ink-3); }
 .nc-flow { fill: none; stroke: var(--sci-chem); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1 26; animation: nc-run var(--spd, 3s) linear infinite; animation-delay: var(--dl, 0s); }
 .nc-flow.is-loss { stroke: var(--danger); }
 @keyframes nc-run { to { stroke-dashoffset: -108; } }
-.nc-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-3); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
-.nc-lbl.is-off { opacity: .45; }
-
+.nc-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.nc-lbl.is-bug { font-style: italic; font-family: var(--font-body); font-weight: 700; }
+.nc-lbl.is-off, .nc-bugs.is-off { opacity: .4; }
+.nc-bugs rect { fill: var(--sci-chem); opacity: .75; }

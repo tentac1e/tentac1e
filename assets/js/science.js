@@ -132,13 +132,16 @@ window.BasilScience = (() => {
     const X = v => r1(p.l + (v - o.x[0]) / (o.x[1] - o.x[0]) * iw);
     const Y = v => r1(p.t + ih - (clamp(v, Math.min(o.y[0], o.y[1]), Math.max(o.y[0], o.y[1])) - o.y[0]) / (o.y[1] - o.y[0]) * ih);
     let s = '';
+    // floating captions (bands, series) are placed at the end so none is clipped or lies on another
+    const floats = [];
+    const float = (cls, x, y, anchor, text, cw, rank) => floats.push({ cls, x, y, anchor, text, rank, w: String(text).replace(/<[^>]+>/g, '').length * cw + 4 });
     (o.hbands || []).forEach(b => {
       s += `<rect class="band ${b.cls || ''}" x="${p.l}" y="${Y(b.y1)}" width="${iw}" height="${r1(Y(b.y0) - Y(b.y1))}"/>`;
-      if (b.label) s += `<text class="band-lbl" x="${p.l + iw - 6}" y="${Y(b.y1) + 13}" text-anchor="end">${b.label}</text>`;
+      if (b.label) float('band-lbl', p.l + iw - 6, Y(b.y1) + 13, 'end', b.label, 6.6, 2);
     });
     (o.vbands || []).forEach(b => {
       s += `<rect class="band ${b.cls || ''}" x="${X(b.x0)}" y="${p.t}" width="${r1(X(b.x1) - X(b.x0))}" height="${ih}"/>`;
-      if (b.label) s += `<text class="band-lbl" x="${r1((X(b.x0) + X(b.x1)) / 2)}" y="${p.t + 13}" text-anchor="middle">${b.label}</text>`;
+      if (b.label) float('band-lbl', r1((X(b.x0) + X(b.x1)) / 2), p.t + 13, 'middle', b.label, 6.6, 1);
     });
     (o.yticks || []).forEach(v => {
       s += `<line class="grid" x1="${p.l}" x2="${p.l + iw}" y1="${Y(v)}" y2="${Y(v)}"/>`;
@@ -159,7 +162,7 @@ window.BasilScience = (() => {
       s += `<path class="line ${se.cls}${se.dash ? ' is-dash' : ''}" d="${d}"/>`;
       if (se.label) {
         const at = se.labelAt != null ? pts.reduce((a, b) => Math.abs(b[0] - se.labelAt) < Math.abs(a[0] - se.labelAt) ? b : a) : pts[pts.length - 1];
-        s += `<text class="series-lbl" x="${X(at[0]) + (se.ldx || 0)}" y="${Y(at[1]) + (se.ldy || -8)}" text-anchor="${se.anchor || 'middle'}">${se.label}</text>`;
+        float('series-lbl', X(at[0]) + (se.ldx || 0), Y(at[1]) + (se.ldy || -8), se.anchor || 'middle', se.label, 7.2, 0);
       }
     });
     if (o.clip) s += '</g>';
@@ -169,6 +172,22 @@ window.BasilScience = (() => {
       (m.dots || []).forEach(dt => { s += `<circle class="dot ${dt.cls}" cx="${X(m.x)}" cy="${Y(dt.y)}" r="5.5"/>`; });
     }
     if (o.hover != null) s += `<line class="hover-line" x1="${X(o.hover)}" x2="${X(o.hover)}" y1="${p.t}" y2="${p.t + ih}"/>`;
+    // place captions: inside the picture, clear of the axis title and of each other
+    const taken = [];
+    if (o.ylab) taken.push([p.l - 7, p.t - 20, p.l - 7 + String(o.ylab).length * 6.6 + 6, p.t - 5]);
+    const hit = b => taken.some(t => b[0] < t[2] && b[2] > t[0] && b[1] < t[3] && b[3] > t[1]);
+    (o.yticks || []).forEach(v => { const t = String((o.fy || String)(v)); taken.push([p.l - 9 - t.length * 6.6, Y(v) - 7, p.l - 5, Y(v) + 6]); });
+    floats.sort((a, b) => a.rank - b.rank).forEach(f => {
+      let x0 = f.anchor === 'end' ? f.x - f.w : f.anchor === 'middle' ? f.x - f.w / 2 : f.x;
+      x0 = clamp(x0, Math.min(p.l + 2, o.w - 2 - f.w), o.w - 2 - f.w);
+      let y = clamp(f.y, 12, o.h - 4);
+      for (const dy of [0, 14, -14, 28, -28, 42]) {
+        const yy = clamp(f.y + dy, 12, o.h - 4);
+        if (!hit([x0, yy - 10, x0 + f.w, yy + 3])) { y = yy; break; }
+      }
+      taken.push([x0, y - 10, x0 + f.w, y + 3]);
+      s += `<text class="${f.cls}" x="${r1(x0 + 2)}" y="${r1(y)}" text-anchor="start">${f.text}</text>`;
+    });
     return { s, X, Y, p, iw, ih, inv: px => o.x[0] + (px - p.l) / iw * (o.x[1] - o.x[0]), invY: py => o.y[0] + (p.t + ih - py) / ih * (o.y[1] - o.y[0]) };
   }
 

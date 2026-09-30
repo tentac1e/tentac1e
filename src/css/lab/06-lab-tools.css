@@ -70,7 +70,7 @@
 .lab-svg .band { fill: transparent; }
 .lab-svg .band.is-good { fill: var(--band-good); }
 .lab-svg .band.is-cold { fill: var(--band-cold); }
-.lab-svg .band-lbl, .band-lbl { font: 600 10.5px/1 var(--font-mono); fill: var(--ink-3); letter-spacing: .04em; }
+.lab-svg .band-lbl, .band-lbl { font: 600 10.5px/1 var(--font-mono); fill: var(--ink-3); letter-spacing: .04em; paint-order: stroke; stroke: var(--surface); stroke-width: 3.5px; stroke-linejoin: round; }
 .lab-svg .line { fill: none; stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
 .lab-svg .line.is-dash { stroke-dasharray: 6 5; }
 .lab-svg .line.is-faint { opacity: .45; }

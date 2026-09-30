@@ -577,10 +577,10 @@ window.BASIL_PAGES = {
    "posadka": "d1c98df9",
    "kalendar": "5aa7c61b",
    "uhod": "e486c224",
-   "udobreniya": "3f24c4d8",
+   "udobreniya": "b95093d2",
    "formirovka": "81c2d3c1",
    "urozhay": "aa4db63d",
-   "vkus": "fea8c70f",
+   "vkus": "b357b89c",
    "razmnozhenie": "c15ac9bf",
    "problemy": "eb11f160"
   },

@@ -1,22 +1,29 @@
-/* pathway */
-.pw-svg { font-family: var(--font-body); }
-.pw-edge { stroke: var(--line-strong); stroke-width: 1.8; transition: stroke .3s; }
+/* pathway: two assembly lines of aroma */
+.pw-pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 10px; }
+.pw-chip { display: inline-flex; align-items: center; gap: 6px; }
+.pw-chip i { width: 10px; height: 10px; border-radius: 50%; }
+.pw-chart { border-radius: 18px; }
+.pw-lane { fill: color-mix(in srgb, var(--m-lin) 6%, transparent); stroke: color-mix(in srgb, var(--m-lin) 22%, transparent); stroke-width: 1; stroke-dasharray: 4 4; }
+.pw-lane.is-phen { fill: color-mix(in srgb, var(--m-est) 6%, transparent); stroke: color-mix(in srgb, var(--m-est) 22%, transparent); }
+.pw-edge { stroke: var(--line-strong); stroke-width: 1.8; }
 .pw-edge.is-hot { stroke: var(--k); stroke-width: 3; }
-.pw-ah { fill: var(--ink-3); }
-.pw-enz { font: 600 10.5px/1 var(--font-mono); fill: var(--ink-3); }
-.pw-enz.is-hot { fill: var(--k); }
+.pw-ah { fill: var(--line-strong); }
+.pw-ah.is-hot { fill: var(--k); }
+.pw-enz { font: 600 10.5px/1 var(--font-mono); fill: var(--ink-3); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
+.pw-enz.is-hot { fill: var(--k); font-weight: 700; }
 .pw-node rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.3; }
 .pw-node text { font: 600 12px/1 var(--font-body); fill: var(--ink-2); }
 .pw-node.is-hot rect { stroke: var(--k); stroke-width: 2; fill: var(--k-soft); }
+.pw-node.is-hot text { fill: var(--ink); }
+.pw-node.is-idle, .pw-end.is-idle { opacity: .42; }
 .pw-end { cursor: pointer; outline: none; }
-.pw-end rect { stroke-width: 1.6; fill: var(--surface); transition: fill .3s; }
-.pw-end.s1 rect { stroke: var(--ser-1); } .pw-end.s2 rect { stroke: var(--ser-2); } .pw-end.s3 rect { stroke: var(--ser-3); }
+.pw-end rect { stroke: var(--mk); stroke-width: 1.8; fill: var(--surface); transition: fill .3s; }
 .pw-end text { font: 700 12.5px/1 var(--font-body); fill: var(--ink); }
-.pw-end.is-sel.s1 rect { fill: var(--ser-1); } .pw-end.is-sel.s2 rect { fill: var(--ser-2); } .pw-end.is-sel.s3 rect { fill: var(--ser-3); }
+.pw-end.is-sel rect { fill: var(--mk); }
 .pw-end.is-sel text { fill: var(--surface); }
 .pw-end:hover rect, .pw-end:focus-visible rect { stroke-width: 3; }
 .pw-zone { font: 600 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; fill: var(--ink-3); }
-.pw-info { margin-top: 14px; padding: 14px 16px; border-radius: 16px; background: var(--k-soft); }
+.pw-info { margin-top: 12px; padding: 14px 16px; border-radius: 16px; background: var(--k-soft); }
 .pw-info h5, .chemo-info h5, .pair-info h5 { margin: 0 0 6px; font-family: var(--font-display); font-size: 1.35rem; }
-.pw-info p { margin: 0 0 6px; }
-
+.pw-info p { margin: 0 0 6px; font-size: .95rem; line-height: 1.55; }
+.pw-sorts { font-size: .85rem !important; color: var(--ink-3); }

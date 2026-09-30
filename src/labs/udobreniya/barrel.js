@@ -36,8 +36,9 @@
       label: 'Бочка из девяти досок-факторов с уровнем воды',
       h: w => clamp(w * 0.7, 250, 330),
       draw(w, hh) {
-        const bw = Math.min(w - PAD * 2, 380), x0 = (w - bw) / 2, top = 28, bottom = hh - 30;
-        const sw = bw / STAVES.length, fs = r1(Math.min(11, sw / 3.3));
+        const bw = Math.min(w - PAD * 2, 380), x0 = (w - bw) / 2, top = 28;
+        const sw = bw / STAVES.length, two = sw < 36, bottom = hh - (two ? 44 : 30);
+        // narrow staves: names in two staggered rows instead of shrinking the letters
         const Y = v => r1(bottom - (bottom - top) * v / 100);
         const min = Math.min(...STAVES.map(s => vals[s[0]]));
         const limit = STAVES.find(s => vals[s[0]] === min)[0];
@@ -48,7 +49,7 @@
           const x = x0 + i * sw;
           const isLim = k === limit, isSel = k === sel;
           s += `<rect class="stave${isLim ? ' is-limit' : ''}${isSel ? ' is-sel' : ''}" x="${r1(x + 1.5)}" y="${Y(vals[k])}" width="${r1(sw - 3)}" height="${r1(bottom - Y(vals[k]))}" rx="3" data-k="${k}"/>`;
-          s += `<text class="stave-lbl${isLim ? ' is-limit' : ''}" x="${r1(x + sw / 2)}" y="${bottom + 16}" text-anchor="middle" style="font-size:${fs}px">${name}</text>`;
+          s += `<text class="stave-lbl${isLim ? ' is-limit' : ''}" x="${r1(x + sw / 2)}" y="${bottom + 16 + (two && i % 2 ? 14 : 0)}" text-anchor="middle">${name}</text>`;
           if (isLim) s += `<path class="barrel-spill" d="M${r1(x + sw / 2)} ${Y(min) - 1} q 8 6 6 20 t -2 ${r1(bottom - Y(min) - 12)}"/>`;
         });
         [0.3, 0.72].forEach(f => { s += `<rect class="hoop" x="${r1(x0 - 3)}" y="${r1(bottom - (bottom - top) * f)}" width="${r1(bw + 6)}" height="6" rx="3"/>`; });
@@ -56,7 +57,7 @@
       },
       onPointer(x, y, w, hh, kind) {
         if (kind !== 'set') return;
-        const bw = Math.min(w - PAD * 2, 380), x0 = (w - bw) / 2, top = 28, bottom = hh - 30;
+        const bw = Math.min(w - PAD * 2, 380), x0 = (w - bw) / 2, top = 28, bottom = hh - (bw / STAVES.length < 36 ? 44 : 30);
         const i = Math.floor((x - x0) / (bw / STAVES.length));
         if (i < 0 || i >= STAVES.length) return;
         const k = STAVES[i][0];

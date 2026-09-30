@@ -1,7 +1,12 @@
 /* EC scale */
-.ec-scale { position: relative; height: 40px; margin-top: 14px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
-.ec-z { position: absolute; top: 4px; bottom: 4px; left: var(--a); width: calc(var(--b) - var(--a)); display: grid; place-items: center; border-radius: 8px; background: var(--band-good); font: 600 .72rem/1 var(--font-mono); color: var(--ink-2); overflow: hidden; white-space: nowrap; }
-.ec-z.is-bad { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
-.ec-mark { position: absolute; top: -6px; bottom: -6px; width: 4px; margin-left: -2px; border-radius: 2px; background: var(--k); box-shadow: 0 0 0 2px var(--surface); transition: left .3s var(--ease-float); }
-.ec-ticks { display: flex; justify-content: space-between; margin: 6px 0 0; font: 500 .7rem/1 var(--font-mono); color: var(--ink-3); }
-
+.ec-chart { margin-top: 10px; }
+.ec-track { fill: var(--surface-2); stroke: var(--line); }
+.ec-zone { fill: var(--band-good); }
+.ec-zone.is-bad { fill: color-mix(in srgb, var(--danger) 16%, transparent); }
+.ec-name { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); }
+.ec-name.is-bad { fill: var(--danger); }
+.ec-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 2; }
+.ec-tick { stroke: var(--ink-3); stroke-width: 1; }
+.ec-needle line { stroke: var(--k); stroke-width: 4; stroke-linecap: round; }
+.ec-needle circle { fill: var(--surface); stroke: var(--k); stroke-width: 2.5; }
+.ec-val { font: 700 12px/1 var(--font-mono); fill: var(--k); }

@@ -39,12 +39,9 @@
 }
 .vol-chip b { font-size: .74rem; line-height: 1.1; color: var(--ink); }
 .vol-chip small { font: 500 .64rem/1 var(--font-mono); color: var(--ink-3); }
-.vol-chip.s1 { border-color: var(--ser-1); } .vol-chip.s2 { border-color: var(--ser-2); } .vol-chip.s3 { border-color: var(--ser-3); } .vol-chip.s4 { border-color: var(--ser-4); }
+.vol-chip { border-color: var(--mc, var(--line-strong)); }
 .vol-chip:hover { transform: translateY(-2px); }
 .vol-chip[aria-pressed="true"] { box-shadow: 0 0 0 3px color-mix(in srgb, var(--k) 45%, transparent); }
 .vol-axis { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font: 500 .68rem/1.2 var(--font-mono); color: var(--ink-3); }
-@media (max-width: 640px) {
-  .vol-scale { overflow-x: auto; }
-  .vol-track, .vol-axis { min-width: 600px; }
-}
+@media (max-width: 640px) { .vol-axis span:nth-child(2) { display: none; } }
 

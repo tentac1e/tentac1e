@@ -165,7 +165,7 @@
 - `src/js/science/00-core.js` (20 стр.)
 - `src/js/science/01-colors.js` (40 стр.)
 - `src/js/science/02-controls.js` (30 стр.)
-- `src/js/science/03-charts.js` (88 стр.)
+- `src/js/science/03-charts.js` (107 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (267 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
 - `src/js/science/06-labs-loader.js` (48 стр.): SELF
