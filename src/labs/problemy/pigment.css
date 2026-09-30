@@ -1,5 +1,5 @@
 /* pigments */
 .pg-out { display: grid; gap: 10px; justify-items: center; text-align: center; }
-.pg-leaf { width: 190px; height: auto; filter: drop-shadow(0 12px 22px rgb(var(--shadow-rgb) / .25)); }
 .pg-verdict { margin: 0; max-width: 34ch; font-size: .95rem; color: var(--ink-2); }
 
+.pg-leaf { width: min(100%, 240px); margin: 0 auto; filter: drop-shadow(0 10px 18px rgb(var(--shadow-rgb) / .18)); }

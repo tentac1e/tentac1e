@@ -46,3 +46,29 @@
     tools.forEach(t => io.observe(t));
   }
 
+  /* illustrations: <span data-ill="painter:variant"> gets its picture from the chapter's model file
+     (the painters register there with illustrate()); drawn when it comes near the screen */
+  const ills = {};
+  const illustrate = (name, fn) => { ills[name] = fn; };
+  function draw(el) {
+    const [name, arg = ''] = el.dataset.ill.split(':');
+    const fn = ills[name];
+    if (!fn) {
+      const host = el.closest('[data-view]');
+      if (!host || el.dataset.loading) return;
+      el.dataset.loading = '1';
+      ensureLabs(host.dataset.view).then(() => { delete el.dataset.loading; if (ills[name]) draw(el); }, () => { delete el.dataset.loading; });
+      return;
+    }
+    try { el.innerHTML = fn(arg, el); el.dataset.drawn = el.dataset.ill; } catch (err) { console.error('[basil] illustration ' + el.dataset.ill, err); }
+  }
+  let illIO = null;
+  // eager: draw now (a gallery the reader sees at once, or a picture replaced on a tap)
+  function paint(root = document, eager = false) {
+    const list = $$('[data-ill]', root).filter(el => el.dataset.drawn !== el.dataset.ill);
+    if (root !== document && root.matches && root.matches('[data-ill]')) list.push(root);
+    if (eager || !('IntersectionObserver' in window)) { list.forEach(draw); return; }
+    if (!illIO) illIO = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { draw(en.target); illIO.unobserve(en.target); } }), { rootMargin: '400px 0px' });
+    list.forEach(el => illIO.observe(el));
+  }
+

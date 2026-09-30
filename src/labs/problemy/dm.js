@@ -1,8 +1,9 @@
+  /* @use micro, ills */
   register('dm', el => {
     el.innerHTML = h.head('Риск ложной мучнистой росы', 'Качественная оценка по трём условиям: ночная влажность для спороношения, мокрые листья для заражения и температура.', true) +
       `<div class="lab-grid">
         <div class="lab-controls">${h.rangeHtml('lab-dm-rh', 'Влажность воздуха ночью', 60, 100, 1, 90)}${h.rangeHtml('lab-dm-w', 'Листья мокрые', 0, 12, 0.5, 4)}${h.rangeHtml('lab-dm-t', 'Температура ночью', 10, 28, 1, 18)}</div>
-        <div class="dm-out"><svg class="dm-gauge" viewBox="0 0 220 130" aria-hidden="true"><path class="g-track" d="M20 115 A90 90 0 0 1 200 115"/><path class="g-low" d="M20 115 A90 90 0 0 1 47.4 51.4"/><path class="g-mid" d="M47.4 51.4 A90 90 0 0 1 145 27.4"/><path class="g-high" d="M145 27.4 A90 90 0 0 1 200 115"/><line class="g-needle" id="lab-dm-n" x1="110" y1="115" x2="110" y2="36"/><circle class="g-hub" cx="110" cy="115" r="7"/></svg><p class="dm-level" id="lab-dm-l"></p></div>
+        <div class="dm-out"><svg class="dm-gauge" viewBox="0 0 220 130" aria-hidden="true"><path class="g-track" d="M20 115 A90 90 0 0 1 200 115"/><path class="g-low" d="M20 115 A90 90 0 0 1 47.4 51.4"/><path class="g-mid" d="M47.4 51.4 A90 90 0 0 1 145 27.4"/><path class="g-high" d="M145 27.4 A90 90 0 0 1 200 115"/><line class="g-needle" id="lab-dm-n" x1="110" y1="115" x2="110" y2="36"/><circle class="g-hub" cx="110" cy="115" r="7"/></svg><p class="dm-level" id="lab-dm-l"></p><div class="dm-leaf" id="lab-dm-leaf" aria-hidden="true"></div><p class="dm-cap" id="lab-dm-cap"></p></div>
       </div>` + h.readHtml([['Что делать', 'lab-dm-v', 'is-wide']]);
     const v = { rh: 90, w: 4, t: 18 };
     const upd = () => {
@@ -11,6 +12,12 @@
       $('#lab-dm-n', el).setAttribute('transform', `rotate(${r1(-90 + risk * 180)} 110 115)`);
       const lvl = risk < 0.25 ? ['Низкий', 'is-low'] : risk < 0.6 ? ['Умеренный', 'is-mid'] : ['Высокий', 'is-high'];
       set(el, 'lab-dm-l', `<span class="zone-pill ${lvl[1]}">${lvl[0]} риск</span>`);
+      // what a leaf would look like in a week of such nights: upper side and the fuzz underneath
+      const k2 = clamp((risk - 0.15) / 0.75, 0, 1);
+      $('#lab-dm-leaf', el).innerHTML = ill.svg(200, 130, `<rect width="200" height="130" rx="14" fill="${ill.F('bg')}"/>` +
+        ill.leaf({ x: 58, y: 122, a: -8, s: 1.02, necro: k2 > 0.05 ? 'angular' : null, k: k2, seed: 6 }) +
+        ill.leaf({ x: 146, y: 122, a: 8, s: 1.02, under: true, fuzz: k2 > 0.05, k: k2, seed: 6 }) + ill.label(58, 16, 'сверху') + ill.label(146, 16, 'снизу'));
+      set(el, 'lab-dm-cap', k2 < 0.05 ? 'Лист чистый: спорам негде прорасти.' : k2 < 0.5 ? 'Через неделю таких ночей: первые жёлтые пятна и налёт снизу.' : 'Через неделю: пятна по всему листу, густой серо-фиолетовый налёт.');
       const tips = [];
       if (v.rh > 85) tips.push('проветривайте ночью или включите вентилятор');
       if (v.w > 2) tips.push('поливайте утром и под корень, чтобы листья успевали высохнуть');

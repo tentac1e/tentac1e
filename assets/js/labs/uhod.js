@@ -1,7 +1,7 @@
 /* Гид по базилику — живые модели главы «Уход». Файл собирает scripts/build.py из src/labs/uhod/ — правьте там */
 (() => {
   'use strict';
-  const { register, api: h } = window.BasilScience;
+  const { register, illustrate, api: h } = window.BasilScience;
   const S = window.BasilScene;
   const { $, $$, clamp, lerp, fmt, fmt0, esc } = h;
   const NS = 'http://www.w3.org/2000/svg';

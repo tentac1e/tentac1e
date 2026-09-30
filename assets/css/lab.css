@@ -95,6 +95,75 @@
   --fd-coco: #7A5534;
   --fd-coco-f: #F8F5EC;
 }
+/* Illustrations of plants, symptoms and pests: physical colours, the same in both themes;
+   only the paper under the picture follows the theme. */
+:root {
+  --ill-bg: #F3F7EC;
+  --ill-bg-2: #E9F0DE;
+  --ill-line: rgba(60, 90, 50, .16);
+  --ill-leaf: #5E9E3F;
+  --ill-leaf-hi: #86BE5C;
+  --ill-leaf-d: #3D7428;
+  --ill-vein: #3A6E27;
+  --ill-under: #9CC47E;
+  --ill-under-vein: #D6E8C2;
+  --ill-yellow: #D8CB45;
+  --ill-yellow-pale: #EAE39A;
+  --ill-lime: #B7C94C;
+  --ill-brown: #8C5B2C;
+  --ill-brown-d: #5B3A1C;
+  --ill-spot: #2F2A22;
+  --ill-water: #40523A;
+  --ill-purple: #6D3F7B;
+  --ill-silver: #E7EEF0;
+  --ill-fuzz: #8E86A2;
+  --ill-mold: #9BA196;
+  --ill-mold-d: #6F766B;
+  --ill-stem: #4E8A36;
+  --ill-stem-d: #2F6423;
+  --ill-flower: #F6F3FA;
+  --ill-flower-d: #D7CCE3;
+  --ill-soil: #6B4A33;
+  --ill-soil-d: #4A3222;
+  --ill-pot: #B8683E;
+  --ill-pot-d: #8E4B28;
+  --ill-pot-hi: #D48E66;
+  --ill-crust: #F1F0EA;
+  --ill-root: #F2EBDC;
+  --ill-root-d: #D8CDB5;
+  --ill-rot: #6A4A2E;
+  --ill-aphid: #7FB548;
+  --ill-aphid-d: #4E7F2A;
+  --ill-mite: #D9C45A;
+  --ill-mite-d: #5A4A20;
+  --ill-white: #FBFCF7;
+  --ill-thrips: #6B5230;
+  --ill-slug: #8C7C62;
+  --ill-slug-d: #5E523E;
+  --ill-slime: rgba(220, 230, 240, .7);
+  --ill-gnat: #2B2A2A;
+  --ill-wing: rgba(190, 205, 215, .55);
+  --ill-larva: #F4EFE6;
+  --ill-eye: #B8322A;
+  --ill-spore: #6E5A86;
+  --ill-hypha: #F3F3EE;
+  --ill-bact: #C98C3A;
+  --ill-hi: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }
+}
+:root[data-theme="dark"] { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }
+
+.ill { display: block; width: 100%; height: auto; }
+.ill-lbl { font: 600 10.5px/1 var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3.5px; stroke-linejoin: round; }
+.ill-scale line { stroke: var(--ink-2); stroke-width: 1.6; }
+.ill-scale text { font: 600 10px/1 var(--font-mono); fill: var(--ink-2); paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3px; }
+/* sizes by how large the picture is shown: symptoms ~130–190 px wide, disease and pest figures ~150 px */
+.ill-s .ill-lbl { font-size: 14px; }
+.ill-l .ill-lbl { font-size: 17px; stroke-width: 4px; }
+.ill-l .ill-scale text { font-size: 15px; }
+.ill-l .ill-scale line { stroke-width: 2.4; }
 /* Micro-anatomy palette: leaf sections and zoomed-in views (trichomes, stomata, disease under the lens).
    Colours of a fresh, unstained section under a light microscope; lignin is shown crimson as after safranin. */
 :root {
@@ -1388,9 +1457,9 @@ body::after {
 
 /* pigments */
 .pg-out { display: grid; gap: 10px; justify-items: center; text-align: center; }
-.pg-leaf { width: 190px; height: auto; filter: drop-shadow(0 12px 22px rgb(var(--shadow-rgb) / .25)); }
 .pg-verdict { margin: 0; max-width: 34ch; font-size: .95rem; color: var(--ink-2); }
 
+.pg-leaf { width: min(100%, 240px); margin: 0 auto; filter: drop-shadow(0 10px 18px rgb(var(--shadow-rgb) / .18)); }
 /* downy mildew gauge */
 .dm-out { display: grid; gap: 8px; justify-items: center; }
 .dm-gauge { width: 100%; max-width: 280px; height: auto; }
@@ -1401,6 +1470,13 @@ body::after {
 .g-hub { fill: var(--ink); }
 .dm-level { margin: 0; }
 
+
+.dm-leaf { width: min(100%, 300px); margin: 12px auto 0; }
+.dm-leaf .ill-lbl { font-size: 10px; }
+.dm-cap { margin: 6px 0 0; font-size: .86rem; color: var(--ink-3); text-align: center; }
+/* aphid colony */
+.ap-grid { display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 14px; align-items: center; }
+@media (max-width: 560px) { .ap-grid { grid-template-columns: 1fr; } .ap-shoot { width: 170px; margin: 0 auto; } }
 /* ================= flavor chapter ================= */
 .cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 900px) { .cols-3 { grid-template-columns: 1fr; } }

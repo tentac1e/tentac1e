@@ -18,10 +18,10 @@ const shots = args.includes('--shots');
 const dark = args.includes('--dark');
 
 // what counts as broken, measured in the page
-function audit(name) {
-  const el = document.querySelector(`.lab-tool[data-lab="${name}"]`);
+function audit(sel) {
+  const el = document.querySelector(sel);
   const box = el.getBoundingClientRect();
-  const out = { ready: !!el.dataset.ready && !el.querySelector(':scope > .muted'), over: [], clipped: [], overlap: [], tiny: [] };
+  const out = { ready: el.matches('[data-ill]') ? !!el.dataset.drawn : !!el.dataset.ready && !el.querySelector(':scope > .muted'), over: [], clipped: [], overlap: [], tiny: [] };
   const scrolls = n => { for (let p = n.parentElement; p && p !== el; p = p.parentElement) { const s = getComputedStyle(p); if (/(auto|scroll)/.test(s.overflowX)) return true; } return false; };
   const shown = n => { for (let p = n; p && p !== el; p = p.parentElement) { const s = getComputedStyle(p); if (s.display === 'none' || s.visibility === 'hidden' || +s.opacity === 0) return false; } return true; };
   const label = n => (n.textContent || n.getAttribute('class') || n.tagName).trim().replace(/\s+/g, ' ').slice(0, 28);
@@ -89,13 +89,26 @@ function audit(name) {
         }, lab);
         await page.waitForFunction(l => !!document.querySelector(`.lab-tool[data-lab="${l}"]`).dataset.ready, lab, { timeout: 8000 }).catch(() => {});
         await page.waitForTimeout(700);
-        const r = await page.evaluate(audit, lab);
+        const r = await page.evaluate(audit, `.lab-tool[data-lab="${lab}"]`);
         const problems = ['over', 'clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 6).join(', ')}${r[k].length > 6 ? ` …+${r[k].length - 6}` : ''}`);
         ok(r.ready && !problems.length, `${mode.padEnd(7)} ${lab.padEnd(12)} ${r.ready ? '' : 'NOT MOUNTED '}${problems.join(' | ')}`);
         if (shots) {
           const el = await page.$(`.lab-tool[data-lab="${lab}"]`);
           await el.screenshot({ path: path.join(OUT, `${mode}${dark ? '-dark' : ''}-${lab}.png`) }).catch(e => console.log('  shot failed', e.message));
         }
+      }
+      // illustrations of the chapter (symptoms, diseases, pests): drawn, captions readable and inside
+      const ills = only.length ? [] : await page.evaluate(() => [...document.querySelectorAll('[data-ill]')].map(e => ({ key: e.dataset.ill, panel: (e.closest('[data-panel]') || {}).id })));
+      const seen = new Set();
+      for (const { key, panel } of ills) {
+        if (seen.has(key)) continue;
+        seen.add(key);
+        await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, panel);
+        await page.evaluate(k => { const e = document.querySelector(`[data-ill="${k}"]`); e.scrollIntoView({ block: 'center' }); window.BasilScience.paint(e, true); }, key);
+        await page.waitForFunction(k => !!document.querySelector(`[data-ill="${k}"]`).dataset.drawn, key, { timeout: 5000 }).catch(() => {});
+        const r = await page.evaluate(audit, `[data-ill="${key}"]`);
+        const problems = ['clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 4).join(', ')}`);
+        ok(r.ready && !problems.length, `${mode.padEnd(7)} ill ${key.padEnd(18)} ${r.ready ? '' : 'NOT DRAWN '}${problems.join(' | ')}`);
       }
     }
     await ctx.close();

@@ -78,14 +78,17 @@ window.BasilHaptics = (() => {
       if (i !== idx) { if (idx !== -1 && touching) play('tick'); idx = i; }
     }, { passive: true });
   }
+  const watched = new WeakSet();
   const initSnaps = () => {
     if (!supported) return;
-    document.querySelectorAll('.facts, .journey, .rules, .tools, #tools-home, .diagram-pinch').forEach(row => {
+    document.querySelectorAll('.facts, .journey, .rules, .tools, #tools-home, .diagram-pinch, .diag-row, .pa-foods').forEach(row => {
       const s = getComputedStyle(row).scrollSnapType || '';
-      if (s && s !== 'none') watchSnap(row);
+      if (s && s !== 'none' && !watched.has(row)) { watched.add(row); watchSnap(row); }
     });
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSnaps); else initSnaps();
+  // rows that the page builds at start-up (symptom gallery, pairing foods) exist only after it is ready
+  document.addEventListener('basil:ready', initSnaps);
 
   // dragging over a chart or turning a model: a tick every `px` pixels of travel
   function dragTicker(px = 18) {

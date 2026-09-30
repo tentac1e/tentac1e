@@ -316,8 +316,9 @@ def assemble(src_pages):
         d = SRC / 'labs' / v
         # a model asks for a shared drawing library with a line «/* @use micro */»; each goes in once
         libs = []
-        for l in labs:
-            for m in re.finditer(r'/\* @use ([a-z, -]+) \*/', (d / f'{l}.js').read_text(encoding='utf-8')):
+        uses = [d / '_shared.js'] if (d / '_shared.js').exists() else []
+        for f in uses + [d / f'{l}.js' for l in labs]:
+            for m in re.finditer(r'/\* @use ([a-z, -]+) \*/', f.read_text(encoding='utf-8')):
                 libs += [x.strip() for x in m.group(1).split(',') if x.strip() not in libs]
         parts = [SRC / 'labs' / '_lib' / f'{x}.js' for x in libs]
         parts += ([d / '_shared.js'] if (d / '_shared.js').exists() else []) + [d / f'{l}.js' for l in labs]
@@ -365,6 +366,18 @@ def write_map(src_pages, CH):
             files = [rel(js)] + ([rel(js.with_suffix('.css'))] if js.with_suffix('.css').exists() else [])
             out.append(f"| `{lab}` | {CH.get(view, {}).get('title', view)} | {t.group(2) if t else ''} | {' · '.join(f'`{x}`' for x in files)} |")
     out += ['', 'Общие помощники моделей — `src/labs/_frame.js`; инструменты графиков, кнопок и ползунков (`h.chart`, `h.plot`, `h.rangeHtml` …) — `src/js/science/`.', '']
+    out += ['## Библиотеки рисунков (src/labs/_lib/)', '',
+            'Модель или `_shared.js` главы подключает библиотеку строкой `/* @use micro, ills */`; сборка кладёт её в файл главы один раз.', '']
+    for f in sorted((SRC / 'labs' / '_lib').glob('*.js')):
+        first = next((l.strip() for l in f.read_text(encoding='utf-8').splitlines() if l.strip()), '')
+        title = re.sub(r'^/\*\s*-*\s*|\s*-*\s*(\*/)?$', '', first)
+        out.append(f"- `{rel(f)}` — {title}")
+    out += ['', 'Иллюстрации на страницах — элементы `data-ill="художник:вариант"`; художники регистрируются через `illustrate()` в `src/labs/<глава>/_shared.js` и рисуются, когда элемент подходит к экрану. Все рисунки главы на одном листе: `node tests/gallery.js <глава>`.', '']
+    for f in sorted((SRC / 'labs').glob('*/_shared.js')):
+        names = re.findall(r"illustrate\('([a-z-]+)'", f.read_text(encoding='utf-8'))
+        if names:
+            out.append(f"- `{rel(f)}`: " + ', '.join(f'`{n}`' for n in names))
+    out.append('')
     out += ['## Скрипты (src/js/)', '']
     for mod in ('app', 'science', 'scene', 'data'):
         out.append(f'**{mod}.js**')
@@ -516,17 +529,19 @@ def main():
         'titles': titles,
         'alias': alias,
     }
-    (js / 'search-index.js').write_text(
-        '/* Гид по базилику — поисковый индекс по тексту глав. Файл создаёт scripts/build.py */\n'
-        'window.BASIL_SEARCH = ' + json.dumps(static_entries_panels + static_entries_heads, ensure_ascii=False, indent=0) + ';\n',
-        encoding='utf-8')
-    # every asset address carries a short fingerprint of its content (style.css?v=3f2a91c0):
-    # after an update browsers fetch the new files instead of mixing them with cached old ones
-    ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
-    pages_js['v'] = {'labs': {v: ver(js / 'labs' / f'{v}.js') for v in bundles}, 'search': ver(js / 'search-index.js')}
-    (js / 'pages.js').write_text(
-        '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
-        'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
+    # the one-file book carries no map or index of its own: the files in assets/ stay those of the site
+    if not single:
+        (js / 'search-index.js').write_text(
+            '/* Гид по базилику — поисковый индекс по тексту глав. Файл создаёт scripts/build.py */\n'
+            'window.BASIL_SEARCH = ' + json.dumps(static_entries_panels + static_entries_heads, ensure_ascii=False, indent=0) + ';\n',
+            encoding='utf-8')
+        # every asset address carries a short fingerprint of its content (style.css?v=3f2a91c0):
+        # after an update browsers fetch the new files instead of mixing them with cached old ones
+        ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
+        pages_js['v'] = {'labs': {v: ver(js / 'labs' / f'{v}.js') for v in bundles}, 'search': ver(js / 'search-index.js')}
+        (js / 'pages.js').write_text(
+            '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
+            'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
 
     def fingerprint(html):
         if single:

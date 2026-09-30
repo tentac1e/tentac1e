@@ -23,7 +23,7 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
       labsTag: !!document.querySelector('script[src*="labs/"]'),
       bad: [...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href')).filter(h => !['#main', '#top'].includes(h) && !document.getElementById(h.slice(1)) && !document.querySelector(`[data-view="${h.slice(1)}"]`)).slice(0, 5)
     }));
-    ok(st.views === 1 && st.active && st.panel && (!st.labsTag || f === 'vkus.html') && !st.bad.length && / — Гид по базилику$|^Гид по базилику$/.test(st.t),
+    ok(st.views === 1 && st.active && st.panel && (!st.labsTag || ['vkus.html', 'problemy.html'].includes(f)) && !st.bad.length && / — Гид по базилику$|^Гид по базилику$/.test(st.t),
       `${f}: «${st.t}» | nav «${st.cur}» | dangling ${JSON.stringify(st.bad)}`);
   }
 

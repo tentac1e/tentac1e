@@ -1,0 +1,69 @@
+/* Illustrations of plants, symptoms and pests: physical colours, the same in both themes;
+   only the paper under the picture follows the theme. */
+:root {
+  --ill-bg: #F3F7EC;
+  --ill-bg-2: #E9F0DE;
+  --ill-line: rgba(60, 90, 50, .16);
+  --ill-leaf: #5E9E3F;
+  --ill-leaf-hi: #86BE5C;
+  --ill-leaf-d: #3D7428;
+  --ill-vein: #3A6E27;
+  --ill-under: #9CC47E;
+  --ill-under-vein: #D6E8C2;
+  --ill-yellow: #D8CB45;
+  --ill-yellow-pale: #EAE39A;
+  --ill-lime: #B7C94C;
+  --ill-brown: #8C5B2C;
+  --ill-brown-d: #5B3A1C;
+  --ill-spot: #2F2A22;
+  --ill-water: #40523A;
+  --ill-purple: #6D3F7B;
+  --ill-silver: #E7EEF0;
+  --ill-fuzz: #8E86A2;
+  --ill-mold: #9BA196;
+  --ill-mold-d: #6F766B;
+  --ill-stem: #4E8A36;
+  --ill-stem-d: #2F6423;
+  --ill-flower: #F6F3FA;
+  --ill-flower-d: #D7CCE3;
+  --ill-soil: #6B4A33;
+  --ill-soil-d: #4A3222;
+  --ill-pot: #B8683E;
+  --ill-pot-d: #8E4B28;
+  --ill-pot-hi: #D48E66;
+  --ill-crust: #F1F0EA;
+  --ill-root: #F2EBDC;
+  --ill-root-d: #D8CDB5;
+  --ill-rot: #6A4A2E;
+  --ill-aphid: #7FB548;
+  --ill-aphid-d: #4E7F2A;
+  --ill-mite: #D9C45A;
+  --ill-mite-d: #5A4A20;
+  --ill-white: #FBFCF7;
+  --ill-thrips: #6B5230;
+  --ill-slug: #8C7C62;
+  --ill-slug-d: #5E523E;
+  --ill-slime: rgba(220, 230, 240, .7);
+  --ill-gnat: #2B2A2A;
+  --ill-wing: rgba(190, 205, 215, .55);
+  --ill-larva: #F4EFE6;
+  --ill-eye: #B8322A;
+  --ill-spore: #6E5A86;
+  --ill-hypha: #F3F3EE;
+  --ill-bact: #C98C3A;
+  --ill-hi: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }
+}
+:root[data-theme="dark"] { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }
+
+.ill { display: block; width: 100%; height: auto; }
+.ill-lbl { font: 600 10.5px/1 var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3.5px; stroke-linejoin: round; }
+.ill-scale line { stroke: var(--ink-2); stroke-width: 1.6; }
+.ill-scale text { font: 600 10px/1 var(--font-mono); fill: var(--ink-2); paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3px; }
+/* sizes by how large the picture is shown: symptoms ~130–190 px wide, disease and pest figures ~150 px */
+.ill-s .ill-lbl { font-size: 14px; }
+.ill-l .ill-lbl { font-size: 17px; stroke-width: 4px; }
+.ill-l .ill-scale text { font-size: 15px; }
+.ill-l .ill-scale line { stroke-width: 2.4; }

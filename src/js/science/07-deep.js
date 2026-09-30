@@ -217,4 +217,5 @@
     initDeep();
     initHomeMolecule();
     mountAll();
+    paint();
   }

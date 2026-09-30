@@ -8,3 +8,7 @@
 .g-hub { fill: var(--ink); }
 .dm-level { margin: 0; }
 
+
+.dm-leaf { width: min(100%, 300px); margin: 12px auto 0; }
+.dm-leaf .ill-lbl { font-size: 10px; }
+.dm-cap { margin: 6px 0 0; font-size: .86rem; color: var(--ink-3); text-align: center; }

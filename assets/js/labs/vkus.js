@@ -1,7 +1,7 @@
 /* Гид по базилику — живые модели главы «Вкус и аромат». Файл собирает scripts/build.py из src/labs/vkus/ — правьте там */
 (() => {
   'use strict';
-  const { register, api: h } = window.BasilScience;
+  const { register, illustrate, api: h } = window.BasilScience;
   const S = window.BasilScene;
   const { $, $$, clamp, lerp, fmt, fmt0, esc } = h;
   const NS = 'http://www.w3.org/2000/svg';
@@ -272,7 +272,7 @@
     };
     const scale = (x, yy, px, text) => `<g class="mic-scale"><line x1="${q(x - px)}" x2="${q(x)}" y1="${q(yy)}" y2="${q(yy)}"/><line x1="${q(x - px)}" x2="${q(x - px)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><line x1="${q(x)}" x2="${q(x)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><text x="${q(x - px / 2)}" y="${q(yy - 7)}" text-anchor="middle">${text}</text></g>`;
 
-    return { rng, cell, dots, lining, section, peltate, capitate, hair, labels, pill, scale };
+    return { rng, smooth, cell, dots, lining, section, peltate, capitate, hair, labels, pill, scale };
   })();
 
   /* ---------------- food: small illustrations of what basil goes with ----------------

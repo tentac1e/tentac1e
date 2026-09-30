@@ -1,0 +1,3 @@
+/* aphid colony */
+.ap-grid { display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 14px; align-items: center; }
+@media (max-width: 560px) { .ap-grid { grid-template-columns: 1fr; } .ap-shoot { width: 170px; margin: 0 auto; } }

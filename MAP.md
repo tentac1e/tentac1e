@@ -129,9 +129,21 @@
 | `seedlife` | Размножение | Срок жизни семян | `src/labs/razmnozhenie/seedlife.js` · `src/labs/razmnozhenie/seedlife.css` |
 | `pigment` | Проблемы | Смешайте пигменты | `src/labs/problemy/pigment.js` · `src/labs/problemy/pigment.css` |
 | `dm` | Проблемы | Риск ложной мучнистой росы | `src/labs/problemy/dm.js` · `src/labs/problemy/dm.css` |
-| `aphid` | Проблемы | Колония из одной тли | `src/labs/problemy/aphid.js` |
+| `aphid` | Проблемы | Колония из одной тли | `src/labs/problemy/aphid.js` · `src/labs/problemy/aphid.css` |
 
 Общие помощники моделей — `src/labs/_frame.js`; инструменты графиков, кнопок и ползунков (`h.chart`, `h.plot`, `h.rangeHtml` …) — `src/js/science/`.
+
+## Библиотеки рисунков (src/labs/_lib/)
+
+Модель или `_shared.js` главы подключает библиотеку строкой `/* @use micro, ills */`; сборка кладёт её в файл главы один раз.
+
+- `src/labs/_lib/food.js` — food: small illustrations of what basil goes with
+- `src/labs/_lib/ills.js` — ills: plants, symptoms and pests for the illustrated guides
+- `src/labs/_lib/micro.js` — micro: drawing a leaf under the microscope
+
+Иллюстрации на страницах — элементы `data-ill="художник:вариант"`; художники регистрируются через `illustrate()` в `src/labs/<глава>/_shared.js` и рисуются, когда элемент подходит к экрану. Все рисунки главы на одном листе: `node tests/gallery.js <глава>`.
+
+- `src/labs/problemy/_shared.js`: `sym`, `dis`, `pest`
 
 ## Скрипты (src/js/)
 
@@ -156,7 +168,7 @@
 - `src/js/app/17-nutrients-dose.js` (52 стр.): FRACTIONS, initDose
 - `src/js/app/18-pinching.js` (196 стр.): initSim
 - `src/js/app/19-seeds.js` (21 стр.): initGerm
-- `src/js/app/20-problems.js` (50 стр.): initDiagnostics
+- `src/js/app/20-problems.js` (59 стр.): initDiagnostics
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
 - `src/js/app/22-reading-pos.js` (133 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
@@ -168,8 +180,8 @@
 - `src/js/science/03-charts.js` (107 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (267 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
-- `src/js/science/06-labs-loader.js` (48 стр.): SELF
-- `src/js/science/07-deep.js` (220 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
+- `src/js/science/06-labs-loader.js` (74 стр.): SELF, draw
+- `src/js/science/07-deep.js` (221 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 
 **scene.js**
 - `src/js/scene/00-core.js` (8 стр.): TAU
@@ -194,5 +206,5 @@
 ## Стили (src/css/)
 
 **style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`
-**lab.css**: `00-aroma.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `02-header.css`, `03-deep-switch.css`, `04-deep-index.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `10-depth.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
+**lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `02-header.css`, `03-deep-switch.css`, `04-deep-index.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `10-depth.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
 
