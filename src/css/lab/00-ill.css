@@ -104,6 +104,9 @@
   --ill-label: #FFF8E2;
   --ill-dark: #34413A;
   --ill-tomato: #D9472F;
+  --ill-skin: #E9BC99;
+  --ill-skin-d: #C38D69;
+  --ill-nail: #F6DDD0;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }

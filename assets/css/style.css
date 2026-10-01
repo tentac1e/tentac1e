@@ -1656,6 +1656,14 @@ main { view-transition-name: main; }
 .season h3 { position: relative; z-index: 1; font-size: 1.8rem; }
 .season .ticks { position: relative; z-index: 1; font-size: .93rem; }
 
+
+/* watering, drawn: when and how, too much and too little, a wick for a week away */
+.water-ills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 4px 0 14px; }
+.water-ills figure { margin: 0; }
+.water-ills figcaption { margin-top: 4px; font-size: .8rem; font-weight: 700; color: var(--ink-3); text-align: center; }
+.water-ill { display: block; aspect-ratio: 180 / 110; border-radius: 14px; overflow: hidden; background: var(--ill-bg); }
+.water-ill .ill { width: 100%; height: 100%; }
+.water-ill.is-single { max-width: 280px; margin: 4px 0 12px; }
 /* ================= fertilizers ================= */
 .principles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: 12px; }
 .principle { padding: 18px 20px; }
@@ -1857,6 +1865,8 @@ main { view-transition-name: main; }
 .diagram-pinch { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
 .diagram-pinch figure { margin: 0; padding: 14px; text-align: center; }
 .diagram-pinch svg { width: 100%; max-width: 170px; height: auto; overflow: visible; }
+.pinch-ill { display: block; width: 100%; max-width: 170px; margin: 0 auto; aspect-ratio: 160 / 200; border-radius: 14px; overflow: hidden; background: var(--ill-bg); }
+.pinch-ill .ill { width: 100%; height: 100%; }
 .diagram-pinch figcaption { font-size: .88rem; color: var(--ink-2); margin-top: 6px; }
 .diagram-pinch figcaption b { display: block; font-family: var(--font-display); font-size: 1.2rem; color: var(--ink); }
 @media (max-width: 640px) {
@@ -1920,6 +1930,9 @@ main { view-transition-name: main; }
 
 /* ================= harvest ================= */
 .storage { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 12px; }
+/* every way to keep basil, drawn at the top of its card */
+.store-ill { display: block; aspect-ratio: 180 / 100; margin: -4px -4px 12px; border-radius: 14px; overflow: hidden; background: var(--ill-bg); }
+.store-ill .ill { width: 100%; height: 100%; }
 .store-card h4 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 2px; }
 .store-card .term { display: inline-block; margin-bottom: 10px; padding: 2px 10px; border-radius: 999px; background: var(--oil-soft); color: var(--oil); font-family: var(--font-mono); font-size: .72rem; font-weight: 500; }
 .store-card p { font-size: .92rem; color: var(--ink-2); }

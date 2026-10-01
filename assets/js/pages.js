@@ -575,16 +575,16 @@ window.BASIL_PAGES = {
  "v": {
   "labs": {
    "sorta": "cb8c20c3",
-   "posadka": "f9ad2d46",
+   "posadka": "72edc014",
    "kalendar": "89a91a01",
-   "uhod": "a06c4ac8",
+   "uhod": "a034e29d",
    "udobreniya": "e501f387",
-   "formirovka": "3bf32fed",
-   "urozhay": "545d1529",
+   "formirovka": "25d75902",
+   "urozhay": "f45248ac",
    "vkus": "a9d57289",
-   "razmnozhenie": "f1a7aef0",
+   "razmnozhenie": "c3fa61c5",
    "problemy": "b381f104"
   },
-  "search": "3da4d432"
+  "search": "a3a859d6"
  }
 };

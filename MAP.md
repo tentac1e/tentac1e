@@ -28,7 +28,7 @@
 ### Уход — `/уход` (`uhod.html`)
 - `src/pages/uhod/_head.html` · обложка, вкладки · 14 стр.
 - `src/pages/uhod/1-svet.html` · #свет — Свет · 132 стр.<br>модели: `spectrum`, `lamp`; глубже: Фотосинтез `#deep-fotosintez`, Обратные квадраты `#deep-lampa`
-- `src/pages/uhod/2-poliv.html` · #полив — Полив · 98 стр.<br>модели: `vpd`; глубже: Путь воды и VPD `#deep-vpd`
+- `src/pages/uhod/2-poliv.html` · #полив — Полив · 101 стр.<br>модели: `vpd`; глубже: Путь воды и VPD `#deep-vpd`
 - `src/pages/uhod/3-teplo.html` · #тепло — Тепло и воздух · 88 стр.<br>модели: `temp`; глубже: Ферменты и жара `#deep-fermenty`
 - `src/pages/uhod/4-pochva.html` · #почва — Почва и pH · 79 стр.<br>модели: `ph`; глубже: pH и доступность `#deep-ph`
 - `src/pages/uhod/5-sezony.html` · #сезоны — Уход по сезонам · 53 стр.<br>модели: `solar`; глубже: Зимний свет `#deep-zima`
@@ -48,7 +48,7 @@
 
 ### Прищипывание — `/прищипывание` (`formirovka.html`)
 - `src/pages/formirovka/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/formirovka/1-osnovy.html` · #основы — Как прищипывать · 133 стр.<br>модели: `auxin`; глубже: Апикальное доминирование `#deep-auksin`
+- `src/pages/formirovka/1-osnovy.html` · #основы — Как прищипывать · 101 стр.<br>модели: `auxin`; глубже: Апикальное доминирование `#deep-auksin`
 - `src/pages/formirovka/2-trenazher.html` · #тренажер — Тренажёр прищипывания · 61 стр.<br>модели: `branch`; глубже: Геометрия куста `#deep-2n`
 - `src/pages/formirovka/3-cvetenie.html` · #цветение — Цветение и омоложение · 70 стр.<br>глубже: Флориген `#deep-florigen`
 - `src/pages/formirovka/_foot.html` · подвал главы · 3 стр.
@@ -144,10 +144,14 @@
 
 Иллюстрации на страницах — элементы `data-ill="художник:вариант"`; художники регистрируются через `illustrate()` в `src/labs/<глава>/_shared.js` и рисуются, когда элемент подходит к экрану. Все рисунки главы на одном листе: `node tests/gallery.js <глава>`.
 
+- `src/labs/formirovka/_shared.js`: `pinch`
 - `src/labs/posadka/_shared.js`: `sow`, `shop`, `place`
 - `src/labs/problemy/_shared.js`: `sym`, `dis`, `pest`
+- `src/labs/razmnozhenie/_shared.js`: `cut`, `seed`
 - `src/labs/sorta/_shared.js`: `sort`, `vtype`
 - `src/labs/udobreniya/_shared.js`: `def`
+- `src/labs/uhod/_shared.js`: `water`
+- `src/labs/urozhay/_shared.js`: `store`
 
 ## Скрипты (src/js/)
 

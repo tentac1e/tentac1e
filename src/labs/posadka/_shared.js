@@ -2,10 +2,7 @@
   /* Pictures of the Planting chapter: the steps of sowing (data-ill="sow:1…9"), of saving a pot of basil
      from the shop (shop:1…7 and shop:hero, the split), and the places to grow it (place:<id>, B.PLACES). */
   const Fp = ill.F, qp = ill.q, R = props;
-  const paperP = (w, hh) => `<rect width="${w}" height="${hh}" rx="14" fill="${Fp('bg')}"/>`;
-  // the table or the ground the things stand on
-  const tableP = (y, w = 120, hh = 120) => `<path d="M0 ${y}H${w}V${hh - 14}Q${w} ${hh} ${w - 14} ${hh}H14Q0 ${hh} 0 ${hh - 14}Z" fill="${Fp('bg-2')}"/>`;
-  const stepP = (body, label, y = 104) => ill.svg(120, 120, paperP(120, 120) + tableP(y) + body, label);
+  const paperP = R.paper, stepP = R.step;
   // a small basil plant of a few leaf pairs, standing on (x, y)
   const young = (x, y, h, pairs, o = {}) => R.sprout(x, y, h, Object.assign({ pairs, s: o.s || 1.25 }, o));
 

@@ -9,6 +9,13 @@
     const P = pts => 'M' + pts.map(p => p.map(q).join(' ')).join('L') + 'Z';
     const shine = (x1, y1, x2, y2, w = 2.4, o = 0.5) => `<path d="M${q(x1)} ${q(y1)}L${q(x2)} ${q(y2)}" stroke="${F('hi')}" stroke-width="${w}" opacity="${o}" stroke-linecap="round"/>`;
 
+    /* ---------- the picture itself ---------- */
+    // paper under the picture (follows the theme) and the table or ground things stand on from y down
+    const paper = (w, h) => `<rect width="${w}" height="${h}" rx="14" fill="${F('bg')}"/>`;
+    const ground = (y, w, h) => `<path d="M0 ${q(y)}H${w}V${h - 14}Q${w} ${h} ${w - 14} ${h}H14Q0 ${h} 0 ${h - 14}Z" fill="${F('bg-2')}"/>`;
+    // a picture of one step: 120 × 120, things standing on y
+    const step = (body, label, y = 104) => ill.svg(120, 120, paper(120, 120) + ground(y, 120, 120) + body, label);
+
     /* ---------- growing ---------- */
     // a seedling cassette seen a little from above: { svg, tops } — tops are the middles of the cells
     function tray(x, y, w = 110, o = {}) {
@@ -45,6 +52,30 @@
       if (pairs) [-1, 1].forEach(sd => { g += ill.leaf({ x: tx, y: ty, a: sd * 22, s: 0.055 * s, seed: 20 + sd, petiole: 1, tone: o.tone }); });
       if (o.cut != null && at[o.cut]) { const [px, py] = at[o.cut]; g += cutMark(px, py - 6 * s, 16); }
       return g;
+    }
+    // a stem with pairs of leaves from (x, y) up. o: pairs, s (scale of the lowest pair), lean, tone, bare (how many
+    // lower nodes have lost their leaves), buds (nodes with buds in the axils), stub (cut just above this node),
+    // shoots ({ node: { len, pairs, a } } — new side shoots from both axils), tip (the growing tip; default on).
+    // Returns { svg, nodes } — nodes from the bottom
+    function shoot(x, y, h = 80, o = {}) {
+      const n = o.pairs || 4, s0 = o.s || 0.3, lean = o.lean || 0, nodes = [];
+      for (let i = 0; i < n; i++) { const t = (i + 0.55) / (n + 0.35); nodes.push([x + lean * t * t, y - h * t]); }
+      const cut = o.stub != null, topX = cut ? nodes[o.stub][0] : x + lean, topY = cut ? nodes[o.stub][1] - 6 : y - h;
+      let g = `<path d="M${q(x)} ${q(y)}Q${q(x + lean * 0.25)} ${q((y + topY) / 2)} ${q(topX)} ${q(topY)}" stroke="${F(o.tone === 'purple' ? 'stem-purple' : 'stem')}" stroke-width="${q(Math.min(4.2, 2.2 + n * 0.3))}" fill="none" stroke-linecap="round"/>`;
+      if (cut) g += `<path d="M${q(topX - 3)} ${q(topY)}h6" stroke="${F('stem-d')}" stroke-width="2.6" stroke-linecap="round"/>`;
+      const lim = cut ? o.stub + 1 : n;
+      for (let i = 0; i < lim; i++) {
+        const [nx, ny] = nodes[i], sc = s0 * (1 - i * (0.45 / n));
+        if (i < (o.bare || 0)) { g += `<path d="M${q(nx - 4)} ${q(ny)}h8" stroke="${F('stem-d')}" stroke-width="1.6" stroke-linecap="round"/>`; continue; }
+        [-1, 1].forEach(sd => { g += ill.leaf({ x: nx, y: ny, a: sd * (62 - i * 5), s: sc, seed: 5 + i * 2 + sd, petiole: 5, tone: o.tone }); });
+        if (o.buds && o.buds.includes(i)) [-1, 1].forEach(sd => { g += `<ellipse cx="${q(nx + sd * 5)}" cy="${q(ny - 6)}" rx="3.4" ry="5" fill="${F('leaf-hi')}" stroke="${F('stem-d')}" stroke-width=".8" transform="rotate(${sd * 24} ${q(nx + sd * 5)} ${q(ny - 6)})"/>`; });
+      }
+      Object.keys(o.shoots || {}).forEach(i => {
+        const sh = o.shoots[i], [nx, ny] = nodes[i];
+        [-1, 1].forEach(sd => { g += `<g transform="rotate(${q(sd * (sh.a || 26))} ${q(nx)} ${q(ny - 3)})">${shoot(nx, ny - 3, sh.len, { pairs: sh.pairs || 1, s: sh.s || s0 * 0.7, tone: o.tone }).svg}</g>`; });
+      });
+      if (!cut && o.tip !== false) [-1, 1].forEach(sd => { g += ill.leaf({ x: x + lean, y: y - h, a: sd * 22, s: s0 * 0.36, seed: 30 + sd, petiole: 2, tone: o.tone }); });
+      return { svg: g, nodes };
     }
     // a plastic cup or a paper one, with soil; plants go in at (x, top of soil) = cupSoil(…)
     const cupSoil = (y, h = 34, o = {}) => y - h * (o.soil == null ? 0.82 : o.soil);
@@ -196,7 +227,7 @@
       g += shine(x - t * 0.62, y - h * 0.88, x - b * 0.7, y - 4, 2.6, 0.55);
       return g;
     }
-    // a jar with a lid; fill: token of the contents, level 0–1; layer: a band of oil on top; bands: salted leaves in layers
+    // a jar with a lid (open: without); fill: token of the contents, level 0–1; layer: a band of oil on top; bands: salted leaves in layers
     function jar(x, y, w = 40, h = 50, o = {}) {
       const t = w / 2, lv = o.level == null ? 0.8 : o.level, yf = y - (h - 8) * lv;
       let g = `<rect x="${q(x - t)}" y="${q(y - h + 6)}" width="${q(w)}" height="${q(h - 6)}" rx="6" fill="${F('glass')}" opacity=".45" stroke="${F('glass-d')}" stroke-width="1.1"/>`;
@@ -204,7 +235,7 @@
       if (o.bands) { const n = o.bands, hh = (y - 3 - yf) / n; for (let i = 0; i < n; i++) g += `<rect x="${q(x - t + 3)}" y="${q(yf + i * hh)}" width="${q(w - 6)}" height="${q(hh * 0.45)}" rx="2" fill="${F('salt')}" opacity=".95"/>`; }
       if (o.layer) g += `<rect x="${q(x - t + 2)}" y="${q(yf - 1)}" width="${q(w - 4)}" height="${q(o.layer)}" fill="${F('oil')}" opacity=".95"/>`;
       if (o.bits) { const rnd = ill.rng(8); for (let i = 0; i < o.bits; i++) g += `<ellipse cx="${q(x - t + 5 + rnd() * (w - 10))}" cy="${q(yf + 4 + rnd() * (y - yf - 9))}" rx="${q(1.6 + rnd() * 1.6)}" ry="1.2" transform="rotate(${q(rnd() * 180)} ${q(x)} ${q(y)})" fill="${F('leaf-deep')}" opacity=".85"/>`; }
-      g += `<rect x="${q(x - t - 1)}" y="${q(y - h)}" width="${q(w + 2)}" height="8" rx="2.5" fill="${F(o.cap || 'metal-d')}"/>`;
+      if (!o.open) g += `<rect x="${q(x - t - 1)}" y="${q(y - h)}" width="${q(w + 2)}" height="8" rx="2.5" fill="${F(o.cap || 'metal-d')}"/>`;
       g += shine(x - t + 5, y - h + 12, x - t + 5, y - 8, 2.4, 0.45);
       return g;
     }
@@ -272,6 +303,7 @@
     // a clear bag loose over leaves, or a paper bag (kind: 'paper')
     function bag(x, y, w = 50, h = 60, o = {}) {
       const t = w / 2;
+      if (o.kind === 'mesh') { let d = ''; for (let i = 1; i < 6; i++) d += `M${q(x - t + i * w / 6)} ${q(y)}V${q(y - h + 6)}`; for (let j = 1; j < 6; j++) d += `M${q(x - t)} ${q(y - j * h / 6)}H${q(x + t)}`; return `<path d="M${q(x - t)} ${q(y)}V${q(y - h + 10)}Q${q(x - t)} ${q(y - h)} ${q(x)} ${q(y - h)}Q${q(x + t)} ${q(y - h)} ${q(x + t)} ${q(y - h + 10)}V${q(y)}Z" fill="${F('film')}" opacity=".5" stroke="${F('frame-d')}" stroke-width="1"/><path d="${d}" stroke="${F('frame-d')}" stroke-width=".5" opacity=".7"/><path d="M${q(x - t)} ${q(y - 3)}H${q(x + t)}" stroke="${F('kraft-d')}" stroke-width="2"/>`; }
       if (o.kind === 'paper') return `<path d="M${q(x - t)} ${q(y)}V${q(y - h + 8)}L${q(x - t + 6)} ${q(y - h)}H${q(x + t - 6)}L${q(x + t)} ${q(y - h + 8)}V${q(y)}Z" fill="${F('kraft')}"/><path d="M${q(x - t + 6)} ${q(y - h)}V${q(y)}M${q(x + t - 6)} ${q(y - h)}V${q(y)}" stroke="${F('kraft-d')}" stroke-width="1" opacity=".6"/><path d="M${q(x - t)} ${q(y - h + 8)}H${q(x + t)}" stroke="${F('kraft-d')}" stroke-width="1.4"/>`;
       return `<path d="M${q(x - t)} ${q(y)}C${q(x - t - 4)} ${q(y - h * 0.6)} ${q(x - t * 0.6)} ${q(y - h)} ${q(x)} ${q(y - h)}C${q(x + t * 0.6)} ${q(y - h)} ${q(x + t + 4)} ${q(y - h * 0.6)} ${q(x + t)} ${q(y)}" fill="${F('film')}" opacity=".55" stroke="${F('glass-d')}" stroke-width="1"/>` + shine(x - t * 0.55, y - h * 0.72, x - t * 0.75, y - h * 0.25, 2.4, 0.6);
     }
@@ -340,6 +372,54 @@
     // drops of water falling or standing
     const drop = (x, y, s = 1) => `<path d="M${q(x)} ${q(y - 5 * s)}c${q(2.5 * s)} ${q(3 * s)} ${q(4 * s)} ${q(5 * s)} ${q(4 * s)} ${q(7 * s)}a${q(4 * s)} ${q(4 * s)} 0 0 1 ${q(-8 * s)} 0c0 ${q(-2 * s)} ${q(1.5 * s)} ${q(-4 * s)} ${q(4 * s)} ${q(-7 * s)}Z" fill="${F('water-c')}" stroke="${F('glass-d')}" stroke-width=".6"/>`;
 
+    /* ---------- seeds and flowers ---------- */
+    // a flower spike going to seed from (x, y) upwards; ripe: the share of whorls from the bottom that are
+    // brown and dry, flowers: the top still blooms (colour), dry: all brown, cut off
+    function seedSpike(x, y, len = 60, o = {}) {
+      const n = Math.max(3, Math.round(len / 9)), [fc, fd] = o.flowers === 'purple' ? ['flower-purple', 'flower-purple-d'] : ['flower', 'flower-d'];
+      let g = `<path d="M${q(x)} ${q(y)}q2 ${q(-len / 2)} 1 ${q(-len)}" stroke="${F(o.dry ? 'stem-d' : 'stem')}" stroke-width="2" fill="none"/>`;
+      for (let i = 0; i < n; i++) {
+        const t = i / n, fy = y - 6 - t * (len - 8), fx = x + 1 + t * 0.6, r = 1 - t * 0.45;
+        const brown = o.dry || t < (o.ripe || 0);
+        [-1, 1].forEach(sd => { g += `<path d="M${q(fx)} ${q(fy)}q${q(sd * 5 * r)} 1 ${q(sd * 6.5 * r)} -4.5q${q(-sd * 2.5)} -2 ${q(-sd * 6.5 * r)} -0.5Z" fill="${F(brown ? 'brown' : 'stem')}" stroke="${F(brown ? 'brown-d' : 'stem-d')}" stroke-width=".5"/>`; });
+        if (!brown && o.flowers && t > 0.55) [-1, 1].forEach(sd => { g += `<path d="M${q(fx)} ${q(fy - 2)}q${q(sd * 6 * r)} -1 ${q(sd * 8 * r)} -6q${q(-sd * 3)} 4 ${q(-sd * 8 * r)} 6Z" fill="${F(fc)}" stroke="${F(fd)}" stroke-width=".6"/>`; });
+      }
+      return g;
+    }
+    // a dry calyx torn open: four black seeds inside; (x, y) — its base
+    function calyx(x, y, s = 1) {
+      return `<g transform="translate(${q(x)} ${q(y)}) scale(${s})"><path d="M0 0C-14 -4 -20 -22 -16 -34L-6 -30L0 -38L6 -30L16 -34C20 -22 14 -4 0 0Z" fill="${F('brown')}" stroke="${F('brown-d')}" stroke-width="1"/>` +
+        [[-6, -20], [5, -21], [-2, -12], [7, -11]].map(([sx, sy], i) => `<ellipse cx="${sx}" cy="${sy}" rx="3.6" ry="2.6" transform="rotate(${i * 40} ${sx} ${sy})" fill="${F('seed')}"/><ellipse cx="${sx - 1}" cy="${sy - 1}" rx="1.2" ry=".7" fill="${F('hi')}" opacity=".3"/>`).join('') + '</g>';
+    }
+    // a honey bee, facing right
+    const bee = (x, y, s = 1) => `<g transform="translate(${q(x)} ${q(y)}) scale(${s})"><ellipse cx="-2" cy="-5" rx="5" ry="3.2" fill="${F('wing')}" stroke="${F('gnat')}" stroke-width=".4" transform="rotate(-25 -2 -5)"/><ellipse cx="3" cy="-5.5" rx="5" ry="3.2" fill="${F('wing')}" stroke="${F('gnat')}" stroke-width=".4" transform="rotate(25 3 -5.5)"/><ellipse cx="0" cy="0" rx="7" ry="4.6" fill="${F('oil')}"/><path d="M-2.6 -4.2V4.2M1.6 -4.4V4.4" stroke="${F('gnat')}" stroke-width="1.8"/><circle cx="7" cy="-.5" r="2.6" fill="${F('gnat')}"/><path d="M-7 0l-3 .6" stroke="${F('gnat')}" stroke-width="1.2"/></g>`;
+
+    /* ---------- the kitchen, more ---------- */
+    // a snowflake: kept frozen
+    function snow(x, y, r = 8) {
+      let d = '';
+      for (let i = 0; i < 6; i++) {
+        const a = i * Math.PI / 3, ux = Math.cos(a), uy = Math.sin(a), bx = x + ux * r * 0.58, by = y + uy * r * 0.58;
+        d += `M${q(x)} ${q(y)}l${q(ux * r)} ${q(uy * r)}`;
+        [-0.75, 0.75].forEach(t => { d += `M${q(bx)} ${q(by)}l${q(Math.cos(a + t) * r * 0.36)} ${q(Math.sin(a + t) * r * 0.36)}`; });
+      }
+      return `<path d="${d}" stroke="${F('glass-d')}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
+    }
+    // the inside of a fridge: two shelves and the door with its shelves on the right; { svg, shelves, door }
+    function fridge(x, y, w = 100, h = 96) {
+      const x0 = x - w / 2, top = y - h, dw = w * 0.24;
+      let g = `<rect x="${q(x0)}" y="${q(top)}" width="${q(w - dw)}" height="${q(h)}" rx="5" fill="${F('frame')}" stroke="${F('frame-d')}" stroke-width="1.2"/>`;
+      const shelves = [top + h * 0.38, top + h * 0.7];
+      shelves.forEach(sy => { g += `<path d="M${q(x0 + 3)} ${q(sy)}H${q(x0 + w - dw - 3)}" stroke="${F('glass-d')}" stroke-width="2.2"/>`; });
+      g += `<rect x="${q(x0 + w - dw + 2)}" y="${q(top - 4)}" width="${q(dw)}" height="${q(h + 8)}" rx="5" fill="${F('frame')}" stroke="${F('frame-d')}" stroke-width="1.2"/>`;
+      const door = [top + h * 0.3, top + h * 0.62, top + h * 0.92];
+      door.forEach(sy => { g += `<rect x="${q(x0 + w - dw + 4)}" y="${q(sy - 8)}" width="${q(dw - 4)}" height="9" rx="2" fill="${F('glass')}" stroke="${F('glass-d')}" stroke-width=".8"/>`; });
+      g += `<rect x="${q(x0 + 6)}" y="${q(top + 5)}" width="${q(w - dw - 12)}" height="5" rx="2" fill="${F('lamp')}" opacity=".8"/>`;
+      return { svg: g, shelves, door, inner: [x0 + 4, x0 + w - dw - 4] };
+    }
+    // a finger pushed into the soil up to (x, y), seen from the side
+    const finger = (x, y, a = 0, s = 1) => `<g transform="translate(${q(x)} ${q(y)}) rotate(${q(a)}) scale(${s})"><path d="M-7.5 -64V-7Q-7.5 0 0 0Q7.5 0 7.5 -7V-64Z" fill="${F('skin')}" stroke="${F('skin-d')}" stroke-width="1"/><path d="M-6 -24q6 2.5 12 0M-6 -42q6 2.5 12 0" stroke="${F('skin-d')}" stroke-width="1" fill="none" opacity=".8"/><path d="M3.2 -3Q6.2 -6 6.2 -13" stroke="${F('nail')}" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>`;
+
     /* ---------- marks that follow the theme ---------- */
     // a curved arrow from (x1, y1) to (x2, y2); bend: how far the curve bows (+ up, − down)
     function arrow(x1, y1, x2, y2, bend = 0) {
@@ -349,5 +429,5 @@
     // a dimension: a line with end ticks between x1 and x2 at y and its text above (or below: under)
     const dim = (x1, x2, y, text, under = false) => `<g class="ill-scale"><path d="M${q(x1)} ${q(y - 4)}V${q(y + 4)}M${q(x2)} ${q(y - 4)}V${q(y + 4)}" fill="none" stroke="currentColor"/><line x1="${q(x1)}" x2="${q(x2)}" y1="${q(y)}" y2="${q(y)}"/><text x="${q((x1 + x2) / 2)}" y="${q(under ? y + 15 : y - 6)}" text-anchor="middle">${text}</text></g>`;
 
-    return { tray, seed, sprout, cup, cupSoil, shopPot, crowd, roots, rootball, sprayer, can, lamp, thermo, lid, scissors, cutMark, knife, lens, bottle, glass, jar, iceTray, bunch, envelope, bowl, mortar, saucepan, bag, window: window_, balcony, bed, greenhouse, tank, tree, sun, moon, drop, arrow, dim };
+    return { paper, ground, step, shoot, tray, seed, sprout, cup, cupSoil, shopPot, crowd, roots, rootball, sprayer, can, lamp, thermo, lid, scissors, cutMark, knife, lens, bottle, glass, jar, iceTray, bunch, envelope, bowl, mortar, saucepan, bag, window: window_, balcony, bed, greenhouse, tank, tree, sun, moon, drop, seedSpike, calyx, bee, snow, fridge, finger, arrow, dim };
   })();
