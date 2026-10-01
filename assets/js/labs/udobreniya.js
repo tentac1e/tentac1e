@@ -1,4 +1,4 @@
-/* Гид по базилику — живые модели главы «Удобрения». Файл собирает scripts/build.py из src/labs/udobreniya/ — правьте там */
+/* Гид по базилику — живые модели главы «Удобрения». Файл собирает scripts/build.py из src/labs/udobreniya/ — правьте там */
 (() => {
   'use strict';
   const { register, illustrate, api: h } = window.BasilScience;
@@ -18,7 +18,7 @@
   { const st = document.createElement('style'); st.dataset.labs = "udobreniya"; st.textContent = "/* osmosis */\n.osm-svg { width: 100%; max-width: 420px; height: auto; }\n.osm-soil { fill: color-mix(in srgb, var(--soil) 18%, var(--surface)); }\n.osm-ion-a { fill: var(--ser-2); opacity: .8; }\n.osm-ion-b { fill: var(--ser-3); opacity: .8; }\n.osm-wall { fill: color-mix(in srgb, var(--leaf-soft) 70%, var(--surface)); stroke: var(--stem); stroke-width: 3; }\n.osm-vac { fill: var(--water-fill); stroke: var(--water-line); stroke-width: 1.5; transition: rx .6s, ry .6s; }\n.osm-nuc { fill: var(--opal); opacity: .6; }\n.osm-flow { stroke: var(--water-line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 5; animation: flow-dash 1s linear infinite; }\n.osm-ah { fill: var(--water-line); }\n@keyframes flow-dash { to { stroke-dashoffset: -22; } }\n\n/* flows */\n.flows-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); }\n@media (max-width: 760px) { .flows-grid { grid-template-columns: 1fr; } }\n.flows-svg .roots path { fill: none; stroke: var(--root); stroke-width: 2.4; stroke-linecap: round; }\n.xylem, .phloem { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 3 9; }\n.xylem { stroke: var(--ser-4); animation: flow-dash 1.3s linear infinite; }\n.phloem { stroke: var(--ser-3); animation: flow-dash 2s linear infinite reverse; }\n.fl-tag { font: 700 12px/1 var(--font-body); fill: var(--danger); }\n.chl-fig { margin: 0; display: grid; gap: 8px; justify-items: center; text-align: center; }\n.chl-fig svg { width: 100%; max-width: 230px; height: auto; }\n.chl-fig figcaption { font-size: .84rem; color: var(--ink-3); }\n.chl-ring path { fill: color-mix(in srgb, var(--leaf-soft) 70%, transparent); stroke: var(--stem); stroke-width: 2.2; stroke-linejoin: round; }\n.chl-ring .chl-bridge { fill: none; stroke-dasharray: 4 4; }\n.chl-bonds path { stroke: var(--stem); stroke-width: 2; }\n.chl-mg { fill: var(--sci-phys); }\n.chl-mg-t { font: 700 12px/1 var(--font-mono); fill: var(--surface); }\n.chl-n circle { fill: var(--surface); stroke: var(--ser-2); stroke-width: 2; }\n.chl-n-t text { font: 700 10px/1 var(--font-mono); fill: var(--ser-2); }\n.chl-tail { fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; }\n\n\n/* the plant is drawn in a 440-wide box that shrinks on a phone: captions are set larger to stay readable */\n.flows-svg .tick { font-size: 16px; }\n/* barrel */\n.barrel-water { fill: var(--water-fill); }\n.barrel-wave { fill: none; stroke: var(--water-line); stroke-width: 2; }\n.stave { fill: var(--wood-a); stroke: color-mix(in srgb, var(--wood-a) 70%, var(--ink)); stroke-width: 1; cursor: ns-resize; transition: y .35s var(--ease-float), height .35s var(--ease-float); }\n.stave:nth-child(odd) { fill: var(--wood-b); }\n.stave.is-limit { fill: var(--danger); stroke: var(--danger); }\n.stave.is-sel { stroke: var(--ink); stroke-width: 2; }\n.stave-lbl { font: 700 11px/1 var(--font-mono); fill: var(--ink-2); }\n.lab-tool[data-lab=\"window\"] .lab-chart svg { overflow: hidden; }\n.stave-lbl.is-limit { fill: var(--danger); }\n.hoop { fill: var(--hoop); opacity: .85; }\n.barrel-spill { fill: none; stroke: var(--water-line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 5 6; animation: flow-dash .8s linear infinite; }\n.barrel-verdict { margin: 0; font-size: .92rem; color: var(--ink-2); }\n.barrel-verdict b { display: block; margin-bottom: 4px; color: var(--danger); }\n\n/* nitrogen cycle */\n.nc-chart { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }\n.nc-air { fill: var(--mic-air); }\n.nc-surface { fill: none; stroke: var(--soil-top); stroke-width: 2.5; opacity: .6; }\n.nc-crumbs circle { fill: var(--soil-grain); opacity: .28; }\n.nc-water { fill: var(--water-fill); opacity: .55; }\n.nc-zone { font: 600 10.5px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; fill: var(--ink-3); }\n.nc-root-draw { fill: none; stroke: var(--root); stroke-width: 3.2; stroke-linecap: round; opacity: .85; }\n.nc-stem { fill: none; stroke: var(--stem); stroke-width: 3; stroke-linecap: round; }\n.nc-node rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.4; }\n.nc-root rect { fill: var(--leaf-soft); stroke: var(--stem); }\n.nc-n2 rect, .nc-leach rect { fill: var(--surface-2); stroke-dasharray: 4 3; }\n.nc-t { font: 700 15px/1 var(--font-mono); fill: var(--ink); }\n.nc-s { font: 500 11px/1 var(--font-body); fill: var(--ink-3); }\n.nc-edge { fill: none; stroke: var(--ink-3); stroke-width: 2; opacity: .7; }\n.nc-edge.is-off { opacity: .3; stroke-dasharray: 3 5; }\n.nc-edge.is-dash { stroke-dasharray: 5 5; }\n.nc-ah { fill: var(--ink-3); }\n.nc-flow { fill: none; stroke: var(--sci-chem); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1 26; animation: nc-run var(--spd, 3s) linear infinite; animation-delay: var(--dl, 0s); }\n.nc-flow.is-loss { stroke: var(--danger); }\n@keyframes nc-run { to { stroke-dashoffset: -108; } }\n.nc-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }\n.nc-lbl.is-bug { font-style: italic; font-family: var(--font-body); font-weight: 700; }\n.nc-lbl.is-off, .nc-bugs.is-off { opacity: .4; }\n.nc-bugs rect { fill: var(--sci-chem); opacity: .75; }\n.nc-plate rect { fill: var(--surface); stroke: color-mix(in srgb, var(--sci-chem) 45%, var(--line-strong)); stroke-width: 1.2; }\n.nc-plate.is-off { opacity: .45; }\n/* oxides */\n.lab-row { margin-bottom: 12px; }\n.ox-rows { display: grid; gap: 12px; margin-top: 16px; }\n.ox-row { display: grid; grid-template-columns: 110px minmax(0, 1fr) 84px; gap: 12px; align-items: center; }\n.ox-name { display: grid; }\n.ox-name small { font: 500 .7rem/1.2 var(--font-mono); color: var(--ink-3); }\n.ox-bars { display: grid; gap: 4px; }\n.ox-bars i { height: 9px; width: var(--w); border-radius: 0 5px 5px 0; transition: width .4s var(--ease-float); }\n.ox-pack { background: var(--ser-muted); }\n.ox-real.s1 { background: var(--ser-1); } .ox-real.s2 { background: var(--ser-2); } .ox-real.s3 { background: var(--ser-3); }\n.ox-val { display: grid; text-align: right; }\n.ox-val b { font: 600 .95rem/1.1 var(--font-mono); }\n.ox-val small { font: 500 .72rem/1.2 var(--font-mono); color: var(--ink-3); }\n@media (max-width: 460px) { .ox-row { grid-template-columns: 80px minmax(0, 1fr) 70px; gap: 8px; } }\n\n/* EC scale */\n.ec-chart { margin-top: 10px; }\n.ec-track { fill: var(--surface-2); stroke: var(--line); }\n.ec-zone { fill: var(--band-good); }\n.ec-zone.is-bad { fill: color-mix(in srgb, var(--danger) 16%, transparent); }\n.ec-name { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); }\n.ec-name.is-bad { fill: var(--danger); }\n.ec-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 2; }\n.ec-tick { stroke: var(--ink-3); stroke-width: 1; }\n.ec-needle line { stroke: var(--k); stroke-width: 4; stroke-linecap: round; }\n.ec-needle circle { fill: var(--surface); stroke: var(--k); stroke-width: 2.5; }\n.ec-val { font: 700 12px/1 var(--font-mono); fill: var(--k); }\n"; document.head.appendChild(st); }
   /* @use ills */
   /* Pictures of the Fertilizers chapter: what the lack of every element looks like (data-ill="def:<symbol>",
-     B.ELEMENTS). The plant shows where the symptom starts — on the old lower leaves when the element moves
+     B.ELEMENTS). The plant shows where the symptom starts — on the old lower leaves when the element moves
      inside the plant, on the young top ones when it does not; next to it, one such leaf close up. */
   const Fd = ill.F, qd = ill.q;
   // old: the two lower pairs; young: the top pair and the growing tip
@@ -55,11 +55,11 @@
   illustrate('def', sym => defPic(sym), () => Object.keys(DEF));
 
   register('osmos', el => {
-    el.innerHTML = h.head('Клетка корня и почвенный раствор', 'Базовая подкормка даёт раствор около 1,2 мС/см. Когда грунт сохнет, соли остаются, а воды меньше.', true) +
+    el.innerHTML = h.head('Клетка корня и почвенный раствор', 'Базовая подкормка даёт раствор около 1,2 мС/см. Когда грунт сохнет, соли остаются, а воды меньше.', true) +
       `<div class="lab-grid">
         <div class="lab-controls">${h.segHtml('lab-osm-d', 'Доза', [['0.5', '½'], ['1', 'Норма'], ['2', '×2'], ['4', '×4']], '1')}${h.segHtml('lab-osm-s', 'Грунт', [['1', 'Влажный'], ['3', 'Подсох'], ['8', 'Сухой']], '1')}</div>
-        <div class="lab-stage"><svg class="osm-svg" id="lab-osm-svg" viewBox="0 0 320 200" role="img" aria-label="Клетка корня в почвенном растворе"></svg></div>
-      </div>` + h.readHtml([['EC у корня', 'lab-osm-ec'], ['Потенциал раствора', 'lab-osm-psi'], ['Клеточный сок', 'lab-osm-root'], ['Вода', 'lab-osm-dir', 'is-wide']]);
+        <div class="lab-stage"><svg class="osm-svg" id="lab-osm-svg" viewBox="0 0 320 200" role="img" aria-label="Клетка корня в почвенном растворе"></svg></div>
+      </div>` + h.readHtml([['EC у корня', 'lab-osm-ec'], ['Потенциал раствора', 'lab-osm-psi'], ['Клеточный сок', 'lab-osm-root'], ['Вода', 'lab-osm-dir', 'is-wide']]);
     let dose = 1, dry = 1;
     const svg = $('#lab-osm-svg', el);
     const ions = Array.from({ length: 90 }, (_, i) => [((i * 53) % 97) / 97 * 300 + 10, ((i * 29) % 89) / 89 * 180 + 10, i % 2]);
@@ -82,7 +82,7 @@
       set(el, 'lab-osm-ec', `${fmt(ec)} мС/см`);
       set(el, 'lab-osm-psi', `${fmt(psi, 2)} МПа`);
       set(el, 'lab-osm-root', `${fmt(root, 1)} МПа`);
-      set(el, 'lab-osm-dir', inflow === 'in' ? 'Входит в корень: раствор слабее клеточного сока.' : inflow === 'stop' ? 'Почти не входит: раствор сравнялся с соком клетки, корень «пьёт» с трудом.' : 'Уходит из корня: клетка теряет тургор, кончики корней обгорают.');
+      set(el, 'lab-osm-dir', inflow === 'in' ? 'Входит в корень: раствор слабее клеточного сока.' : inflow === 'stop' ? 'Почти не входит: раствор сравнялся с соком клетки, корень «пьёт» с трудом.' : 'Уходит из корня: клетка теряет тургор, кончики корней обгорают.');
     };
     h.bindPick(el, 'lab-osm-d', v => { dose = +v; upd(); });
     h.bindPick(el, 'lab-osm-s', v => { dry = +v; upd(); });
@@ -90,10 +90,10 @@
   });
 
   register('flows', el => {
-    el.innerHTML = h.head('Два потока и хлорофилл', 'Синие штрихи — ксилема с водой и ионами, жёлтые — флоэма с сахарами. Выберите группу элементов, чтобы увидеть, где проявится нехватка.') +
+    el.innerHTML = h.head('Два потока и хлорофилл', 'Синие штрихи — ксилема с водой и ионами, жёлтые — флоэма с сахарами. Выберите группу элементов, чтобы увидеть, где проявится нехватка.') +
       `<div class="lab-controls">${h.segHtml('lab-fl-m', 'Элементы', [['mob', 'Подвижные: N, P, K, Mg'], ['imm', 'Неподвижные: Ca, Fe, B']], 'mob')}</div>
        <div class="lab-grid flows-grid">
-        <div class="lab-stage"><svg class="lab-plant flows-svg" viewBox="-220 -300 440 400" role="img" aria-label="Растение с потоками ксилемы и флоэмы"><g id="lab-fl-g"></g>
+        <div class="lab-stage"><svg class="lab-plant flows-svg" viewBox="-220 -300 440 400" role="img" aria-label="Растение с потоками ксилемы и флоэмы"><g id="lab-fl-g"></g>
           <g class="roots"><path d="M0 0 C -6 26 -30 40 -44 70 M0 0 C 4 30 26 46 40 76 M0 0 C 0 40 -8 60 -2 92 M-18 38 C -34 44 -52 44 -66 56 M16 44 C 34 50 48 50 64 62"/></g>
           <line class="soil-line" x1="-200" x2="200" y1="0" y2="0"/>
           <path class="xylem" d="M-3 90 C -4 40 -3 0 -3 -40 S -3 -160 -3 -250"/>
@@ -112,7 +112,7 @@
           <g class="chl-n"><circle cx="110" cy="80" r="8"/><circle cx="140" cy="110" r="8"/><circle cx="110" cy="140" r="8"/><circle cx="80" cy="110" r="8"/></g>
           <g class="chl-n-t"><text x="110" y="84" text-anchor="middle">N</text><text x="140" y="114" text-anchor="middle">N</text><text x="110" y="144" text-anchor="middle">N</text><text x="80" y="114" text-anchor="middle">N</text></g>
           <path class="chl-tail" d="M110 176 C 112 188 100 194 106 204 S 118 214 112 220"/>
-        </svg><figcaption>Хлорофилл: четыре кольца с азотом держат ион магния. Хвост из фитола закрепляет молекулу в мембране.</figcaption></figure>
+        </svg><figcaption>Хлорофилл: четыре кольца с азотом держат ион магния. Хвост из фитола закрепляет молекулу в мембране.</figcaption></figure>
        </div>`;
     const plant = S.Plant($('#lab-fl-g', el), S.basil({ nodes: 7, scale: 2.05, w: 9 }), { grown: true, leafScale: 0.72, sway: 0.5 });
     const upd = v => {
@@ -132,26 +132,26 @@
 
   const STAVES = [['light', 'Свет'], ['heat', 'Тепло'], ['water', 'Вода'], ['N', 'N'], ['P', 'P'], ['K', 'K'], ['Ca', 'Ca'], ['Mg', 'Mg'], ['Fe', 'Fe']];
   const BARREL_PRESETS = {
-    summer: ['Лето на грядке', { light: 95, heat: 90, water: 82, N: 80, P: 85, K: 78, Ca: 90, Mg: 85, Fe: 90 }],
+    summer: ['Лето на грядке', { light: 95, heat: 90, water: 82, N: 80, P: 85, K: 78, Ca: 90, Mg: 85, Fe: 90 }],
     winter: ['Зимний подоконник', { light: 22, heat: 82, water: 85, N: 90, P: 85, K: 80, Ca: 90, Mg: 85, Fe: 85 }],
     overN: ['Перекорм азотом', { light: 85, heat: 85, water: 80, N: 100, P: 70, K: 42, Ca: 78, Mg: 62, Fe: 80 }],
     cold: ['Холодная весна', { light: 72, heat: 28, water: 85, N: 70, P: 60, K: 80, Ca: 85, Mg: 80, Fe: 80 }],
     hard: ['Жёсткая вода', { light: 85, heat: 85, water: 80, N: 80, P: 72, K: 80, Ca: 96, Mg: 78, Fe: 30 }]
   };
   const BARREL_ADVICE = {
-    light: 'Добавьте лампу или переставьте ближе к окну. Подкормки сейчас бесполезны: азот уйдёт в нитраты.',
-    heat: 'Утеплите: в холодном грунте корни почти не берут азот и фосфор, органика не разлагается.',
-    water: 'Наладьте полив: без воды не работают ни корни, ни устьица.',
+    light: 'Добавьте лампу или переставьте ближе к окну. Подкормки сейчас бесполезны: азот уйдёт в нитраты.',
+    heat: 'Утеплите: в холодном грунте корни почти не берут азот и фосфор, органика не разлагается.',
+    water: 'Наладьте полив: без воды не работают ни корни, ни устьица.',
     N: 'Подкормите азотом половинной дозой: листья светлеют снизу.',
-    P: 'Нужен фосфор, особенно в холодном грунте: монокалийфосфат слабым раствором.',
-    K: 'Не хватает калия: калийная селитра или сульфат калия.',
-    Ca: 'Кальций: кальциевая селитра, проверьте испарение и влажность воздуха.',
-    Mg: 'Магний: сульфат магния, раз в месяц.',
-    Fe: 'Железо заблокировано: хелат железа и мягкая вода, проверьте pH.'
+    P: 'Нужен фосфор, особенно в холодном грунте: монокалийфосфат слабым раствором.',
+    K: 'Не хватает калия: калийная селитра или сульфат калия.',
+    Ca: 'Кальций: кальциевая селитра, проверьте испарение и влажность воздуха.',
+    Mg: 'Магний: сульфат магния, раз в месяц.',
+    Fe: 'Железо заблокировано: хелат железа и мягкая вода, проверьте pH.'
   };
 
   register('barrel', el => {
-    el.innerHTML = h.head('Бочка Либиха', 'Вода держится до уровня самой короткой доски. Выберите ситуацию или тяните доски вверх и вниз.') +
+    el.innerHTML = h.head('Бочка Либиха', 'Вода держится до уровня самой короткой доски. Выберите ситуацию или тяните доски вверх и вниз.') +
       `<div class="lab-controls">${h.chipsHtml('lab-bar-p', 'Ситуация', Object.entries(BARREL_PRESETS).map(([k, v]) => [k, v[0]]), 'winter')}</div>
        <div class="lab-grid wide-stage">
         <div class="lab-chart" id="lab-bar-ch"></div>
@@ -165,7 +165,7 @@
     let sel = 'light';
     const PAD = 20;
     const ch = h.chart($('#lab-bar-ch', el), {
-      label: 'Бочка из девяти досок-факторов с уровнем воды',
+      label: 'Бочка из девяти досок-факторов с уровнем воды',
       h: w => clamp(w * 0.7, 250, 330),
       draw(w, hh) {
         const bw = Math.min(w - PAD * 2, 380), x0 = (w - bw) / 2, top = 28;
@@ -211,7 +211,7 @@
   });
 
   register('ncycle', el => {
-    el.innerHTML = h.head('Круговорот азота', 'Точки бегут по стрелкам с той скоростью, с какой работают микробы. Нитрификация ускоряется вдвое на каждые 10 °C и почти стоит в холоде и без кислорода.', true) +
+    el.innerHTML = h.head('Круговорот азота', 'Точки бегут по стрелкам с той скоростью, с какой работают микробы. Нитрификация ускоряется вдвое на каждые 10 °C и почти стоит в холоде и без кислорода.', true) +
       `<div class="lab-controls">${h.rangeHtml('lab-nc-t', 'Температура грунта', 4, 30, 1, 10)}<div class="lab-seg-wrap"><span class="lab-label">Грунт</span><div class="chips-row lab-chips"><button class="chip" type="button" id="lab-nc-w" aria-pressed="false">Переувлажнён</button></div></div></div>
        <div class="lab-chart nc-chart" id="lab-nc-ch"></div>` +
       h.readHtml([['Нитрификация', 'lab-nc-r'], ['Что получает базилик', 'lab-nc-v', 'is-wide']]);
@@ -223,8 +223,8 @@
       no2: ['NO₂⁻', 'нитрит'],
       no3: ['NO₃⁻', 'нитрат'],
       root: ['Корни', 'базилика'],
-      n2: ['N₂', 'в воздух'],
-      leach: ['Вымывание', 'с поливом вглубь']
+      n2: ['N₂', 'в воздух'],
+      leach: ['Вымывание', 'с поливом вглубь']
     };
     const nodeW = k => Math.max(88, N[k][1].length * 6.2 + 18), NH = 44;
     /* every caption stands beside its arrow, never on it; the bacteria sit on plates on their arrows.
@@ -268,7 +268,7 @@
       return { narrow, at, B, E };
     }
     const ch = h.chart($('#lab-nc-ch', el), {
-      label: 'Схема круговорота азота в грунте',
+      label: 'Схема круговорота азота в грунте',
       h: w => (w < 560 ? 540 : 380),
       draw(w, hh) {
         const rnd = (() => { let s = 9; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
@@ -315,8 +315,8 @@
     const upd = () => {
       const q = Math.pow(2, (T - 25) / 10) * (T < 6 ? 0.35 : 1), nit = q * (wet ? 0.15 : 1);
       ch.redraw();
-      set(el, 'lab-nc-r', pct(Math.min(1, nit)) + ' от скорости при 25 °C');
-      set(el, 'lab-nc-v', wet ? 'Без кислорода нитрификация стоит, а нитрат уходит в воздух: азотное голодание при мокром грунте.' : T < 10 ? 'Холодно: органика почти не разлагается. Если нужна подкормка — минеральная, с нитратным азотом.' : T < 18 ? 'Микробы работают вполсилы: органика даёт азот медленно.' : 'Тепло и воздух: органика превращается в нитрат быстро, базилику хватает азота.');
+      set(el, 'lab-nc-r', pct(Math.min(1, nit)) + ' от скорости при 25 °C');
+      set(el, 'lab-nc-v', wet ? 'Без кислорода нитрификация стоит, а нитрат уходит в воздух: азотное голодание при мокром грунте.' : T < 10 ? 'Холодно: органика почти не разлагается. Если нужна подкормка — минеральная, с нитратным азотом.' : T < 18 ? 'Микробы работают вполсилы: органика даёт азот медленно.' : 'Тепло и воздух: органика превращается в нитрат быстро, базилику хватает азота.');
     };
     h.bindRange(el, 'lab-nc-t', v => `${v} °C`, v => { T = v; upd(); });
     const wb = $('#lab-nc-w', el);
@@ -325,7 +325,7 @@
   });
 
   register('oxide', el => {
-    el.innerHTML = h.head('Пересчёт оксидов в элементы', 'Введите числа с упаковки и сколько граммов удобрения вы растворяете.') +
+    el.innerHTML = h.head('Пересчёт оксидов в элементы', 'Введите числа с упаковки и сколько граммов удобрения вы растворяете.') +
       `<div class="row-3 lab-row">
         <div class="field"><label for="lab-ox-n">N, %</label><input type="number" id="lab-ox-n" min="0" max="60" step="0.5" value="16" inputmode="decimal"></div>
         <div class="field"><label for="lab-ox-p">P₂O₅, %</label><input type="number" id="lab-ox-p" min="0" max="60" step="0.5" value="16" inputmode="decimal"></div>
@@ -341,21 +341,21 @@
         <div class="ox-row"><span class="ox-name"><b>${name}</b><small>${lab}</small></span>
           <span class="ox-bars"><i class="ox-pack" style="--w:${onPack / mx * 100}%"></i><i class="ox-real ${c}" style="--w:${real / mx * 100}%"></i></span>
           <span class="ox-val"><b>${fmt(real)} %</b><small>${fmt(g * real / 100, 2)} г</small></span></div>`).join('') +
-        `<p class="lab-foot">Серая полоса — цифра на упаковке, цветная — чистый элемент. В ${fmt(g)} г удобрения: ${fmt(g * n / 100, 2)} г N, ${fmt(g * p * 0.436 / 100, 2)} г P и ${fmt(g * k * 0.83 / 100, 2)} г K.</p>`;
+        `<p class="lab-foot">Серая полоса — цифра на упаковке, цветная — чистый элемент. В ${fmt(g)} г удобрения: ${fmt(g * n / 100, 2)} г N, ${fmt(g * p * 0.436 / 100, 2)} г P и ${fmt(g * k * 0.83 / 100, 2)} г K.</p>`;
     };
     $$('input', el).forEach(i => i.addEventListener('input', upd));
     upd();
   });
 
   register('ec', el => {
-    el.innerHTML = h.head('EC, ppm и осмос', 'Переведите показания кондуктометра в шкалы TDS-метров и посмотрите, куда попадает раствор.') +
+    el.innerHTML = h.head('EC, ppm и осмос', 'Переведите показания кондуктометра в шкалы TDS-метров и посмотрите, куда попадает раствор.') +
       `<div class="lab-controls">${h.rangeHtml('lab-ec-v', 'EC раствора', 0, 3, 0.05, 1.2)}</div>
        <div class="lab-chart ec-chart" id="lab-ec-ch"></div>` +
       h.readHtml([['Шкала 500', 'lab-ec-500'], ['Шкала 700', 'lab-ec-700'], ['Осмотический потенциал', 'lab-ec-psi']]);
-    const ZONES = [[0.4, 0.8, 'сеянцы', ''], [1, 1.6, 'рост и срезки', ''], [1.8, 3, 'риск ожога', 'is-bad']];
+    const ZONES = [[0.4, 0.8, 'сеянцы', ''], [1, 1.6, 'рост и срезки', ''], [1.8, 3, 'риск ожога', 'is-bad']];
     let v = 1.2;
     const ch = h.chart($('#lab-ec-ch', el), {
-      label: 'Шкала электропроводности раствора с зонами для базилика',
+      label: 'Шкала электропроводности раствора с зонами для базилика',
       h: () => 118,
       draw(w) {
         const l = 14, r = w - 14, X = x => r1(l + (r - l) * x / 3), top = 50, bh = 22;
@@ -397,19 +397,19 @@
   const demand = t => 6.1 * Math.pow(2, (t - 20) / 10);
 
   register('o2', el => {
-    el.innerHTML = h.head('Кислород против дыхания корней', 'Растворимость O₂ — справочные данные для пресной воды. Потребность корней — условная, с Q₁₀ = 2: важен не уровень, а момент, когда линии пересекаются.', true) +
+    el.innerHTML = h.head('Кислород против дыхания корней', 'Растворимость O₂ — справочные данные для пресной воды. Потребность корней — условная, с Q₁₀ = 2: важен не уровень, а момент, когда линии пересекаются.', true) +
       `<div class="lab-controls">${h.rangeHtml('lab-o2-t', 'Температура раствора', 10, 35, 0.5, 22)}</div>
        <div class="lab-chart" id="lab-o2-ch"></div>
-       <ul class="legend legend-lines"><li><i class="k-s4"></i>кислород в воде</li><li><i class="k-s3"></i>потребность корней</li></ul>` +
+       <ul class="legend legend-lines"><li><i class="k-s4"></i>кислород в воде</li><li><i class="k-s3"></i>потребность корней</li></ul>` +
       h.readHtml([['Растворено O₂', 'lab-o2-d'], ['Запас', 'lab-o2-m'], ['Вывод', 'lab-o2-v', 'is-wide']]);
     let T = 22, hover = null;
     const ch = h.chart($('#lab-o2-ch', el), {
-      label: 'Растворённый кислород и потребность корней по температуре',
+      label: 'Растворённый кислород и потребность корней по температуре',
       draw(w, hh) {
         const pts = f => { const a = []; for (let t = 10; t <= 35; t += 0.5) a.push([t, f(t)]); return a; };
-        const P = h.plot({ w, h: hh, clip: true, x: [10, 35], y: [2, 14], xticks: [10, 15, 20, 25, 30, 35], yticks: [2, 4, 6, 8, 10, 12, 14], fx: v => v + '°', ylab: 'мг O₂ на литр', xlab: 'температура раствора, °C',
+        const P = h.plot({ w, h: hh, clip: true, x: [10, 35], y: [2, 14], xticks: [10, 15, 20, 25, 30, 35], yticks: [2, 4, 6, 8, 10, 12, 14], fx: v => v + '°', ylab: 'мг O₂ на литр', xlab: 'температура раствора, °C',
           vbands: [{ x0: 18, x1: 22, cls: 'is-good', label: 'норма' }],
-          series: [{ pts: pts(doAt), cls: 's4', label: 'O₂ в воде', labelAt: 13, ldy: -10 }, { pts: pts(demand), cls: 's3', label: 'потребность', labelAt: 31, ldy: -10 }],
+          series: [{ pts: pts(doAt), cls: 's4', label: 'O₂ в воде', labelAt: 13, ldy: -10 }, { pts: pts(demand), cls: 's3', label: 'потребность', labelAt: 31, ldy: -10 }],
           marker: { x: T, dots: [{ y: doAt(T), cls: 's4' }, { y: Math.min(14, demand(T)), cls: 's3' }] }, hover });
         let s = P.s;
         if (hover != null) s += h.tip(P.X(hover), P.p.t + 4, w, [`${fmt(hover)} °C`, `O₂: ${fmt(doAt(hover))} мг/л`, `потребность: ${fmt(demand(hover))}`]);
@@ -427,7 +427,7 @@
       const d = doAt(T), m = d - demand(T);
       set(el, 'lab-o2-d', `${fmt(d)} мг/л`);
       set(el, 'lab-o2-m', m >= 0 ? `+${fmt(m)}` : `−${fmt(-m)}`);
-      set(el, 'lab-o2-v', m > 1.2 ? 'Кислорода с запасом: корни белые и плотные.' : m > 0 ? 'На грани: добавьте аэрацию или охладите раствор.' : 'Корням не хватает кислорода: риск питиума и бурых корней. Охладите раствор до 18–22 °C.');
+      set(el, 'lab-o2-v', m > 1.2 ? 'Кислорода с запасом: корни белые и плотные.' : m > 0 ? 'На грани: добавьте аэрацию или охладите раствор.' : 'Корням не хватает кислорода: риск питиума и бурых корней. Охладите раствор до 18–22 °C.');
       ch.redraw();
     };
     const rng = h.bindRange(el, 'lab-o2-t', v => `${fmt(v)} °C`, v => { T = v; upd(); });

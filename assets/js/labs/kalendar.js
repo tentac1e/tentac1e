@@ -1,4 +1,4 @@
-/* Гид по базилику — живые модели главы «Календарь». Файл собирает scripts/build.py из src/labs/kalendar/ — правьте там */
+/* Гид по базилику — живые модели главы «Календарь». Файл собирает scripts/build.py из src/labs/kalendar/ — правьте там */
 (() => {
   'use strict';
   const { register, illustrate, api: h } = window.BasilScience;
@@ -16,7 +16,7 @@
 
   { const st = document.createElement('style'); st.dataset.labs = "kalendar"; st.textContent = "/* gdd: the bars are shared with the pesto model (src/css/lab/06-lab-tools.css) */\n"; document.head.appendChild(st); }
   register('daylen', el => {
-    el.innerHTML = h.head('Длина дня за год', 'Астрономический расчёт с поправкой на рефракцию. Коснитесь графика, чтобы увидеть любой день.') +
+    el.innerHTML = h.head('Длина дня за год', 'Астрономический расчёт с поправкой на рефракцию. Коснитесь графика, чтобы увидеть любой день.') +
       `<div class="lab-controls">${citiesChips('lab-dl-city', 55.8)}${h.rangeHtml('lab-dl-lat', 'Широта', 40, 70, 0.1, 55.8)}</div>
        <div class="lab-chart" id="lab-dl-ch"></div>` +
       h.readHtml([['Сегодня', 'lab-dl-t'], ['Самый длинный день', 'lab-dl-max'], ['Самый короткий', 'lab-dl-min']]);
@@ -25,7 +25,7 @@
     const series = () => { const a = []; for (let n = 1; n <= 365; n += 2) a.push([n, h.dayLength(lat, n)]); return a; };
     const MSTART = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
     const ch = h.chart($('#lab-dl-ch', el), {
-      label: 'Длина дня по дням года',
+      label: 'Длина дня по дням года',
       draw(w, hh) {
         const P = h.plot({ w, h: hh, x: [1, 365], y: [0, 24], xticks: w > 520 ? MSTART.map(v => v + 14) : [15, 105, 196, 288], fx: v => MONTHS[MSTART.findIndex(s => s + 14 === v)] || MONTHS[Math.floor((v - 1) / 30.5)], yticks: [0, 6, 12, 18, 24], ylab: 'часов',
           hbands: [{ y0: 14, y1: 16, cls: 'is-good', label: 'нужно под лампой' }],
@@ -53,10 +53,10 @@
   });
 
   register('gdd', el => {
-    el.innerHTML = h.head('Сколько ждать урожая', 'Базовая температура 10 °C; при 22 °C первая срезка — примерно через 7 недель. Выше 30 °C модель прибавки не даёт.', true) +
+    el.innerHTML = h.head('Сколько ждать урожая', 'Базовая температура 10 °C; при 22 °C первая срезка — примерно через 7 недель. Выше 30 °C модель прибавки не даёт.', true) +
       `<div class="lab-controls">${h.rangeHtml('lab-gdd-t', 'Средняя температура суток', 12, 32, 0.5, 17)}</div>
        <div class="gdd-bars" id="lab-gdd-bars"></div>` +
-      h.readHtml([['Градусо-дней в сутки', 'lab-gdd-d'], ['До первой срезки', 'lab-gdd-w'], ['По сравнению с 22 °C', 'lab-gdd-r']]);
+      h.readHtml([['Градусо-дней в сутки', 'lab-gdd-d'], ['До первой срезки', 'lab-gdd-w'], ['По сравнению с 22 °C', 'lab-gdd-r']]);
     const weeks = T => T <= 10.5 ? Infinity : 588 / (7 * (Math.min(T, 30) - 10));
     const upd = T => {
       const wk = weeks(T), ref = weeks(22);

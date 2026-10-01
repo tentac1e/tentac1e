@@ -15,7 +15,7 @@
       const total = v * n * 1.1;
       const parts = r.parts.reduce((s, p) => s + p[1], 0);
       out.innerHTML = `
-        <div class="soil-bar" role="img" aria-label="Пропорции смеси">${r.parts.map(p => `<span class="mx-${p[2]}" style="flex:${p[1]}">${p[0]} · ${p[1]}</span>`).join('')}</div>
+        <div class="soil-bar" role="img" aria-label="Пропорции смеси">${r.parts.map(p => `<span class="mx-${p[2]}" style="flex:${p[1]}">${p[0]}<small>${p[1]}\u00a0${plural(p[1], 'часть', 'части', 'частей')}</small></span>`).join('')}</div>
         <ul class="soil-list">${r.parts.map(p => `<li><span><i class="mx-${p[2]}"></i>${p[0]}</span><b>${fmtNum(total * p[1] / parts, 1)}\u00a0л</b></li>`).join('')}</ul>
         <p class="soil-total">Всего ${fmtNum(total, 1)}\u00a0л смеси с запасом 10&nbsp;% на усадку. Керамзит для дренажа — около ${fmtNum(v * n * 0.1, 1)}\u00a0л.</p>
         <p class="muted">${nb(r.note)}</p>`;

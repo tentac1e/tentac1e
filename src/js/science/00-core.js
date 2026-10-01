@@ -10,7 +10,7 @@
   const nf = d => NF[d] || (NF[d] = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: d, minimumFractionDigits: d }));
   const fmt = (v, d = 1) => minus(nf(d).format(Number(v)));
   const fmt0 = v => minus(nf(0).format(Math.round(v)));
-  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1 ').replace(/(\d)–(?=\d)/g, '$1–\u2060').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060');
+  const nb = s => String(s).replace(/([\d¼½¾]) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1 ').replace(/(\d)([–…])(?=[+−]?\d)/g, '$1$2\u2060').replace(/(^|[^а-яёa-z])([а-яё]{1,4}) (?=[+−≈~]?[\d¼½¾])/gi, '$1$2\u00a0').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060').replace(/(\S) — /g, '$1\u00a0— ').replace(/(^|[^а-яёa-z\u00ad-])(в|с|к|у|о|а|и|я|во|со|ко|об|на|за|по|до|от|из|не|ни|но) (?=\S)/gi, '$1$2\u00a0');
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const f1 = v => (Math.round(v * 10) / 10);

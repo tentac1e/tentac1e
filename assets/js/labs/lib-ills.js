@@ -1,4 +1,4 @@
-/* Гид по базилику — библиотека рисунков «ills». Файл собирает scripts/build.py из src/labs/_lib/ills.js — правьте там */
+/* Гид по базилику — библиотека рисунков «ills». Файл собирает scripts/build.py из src/labs/_lib/ills.js — правьте там */
 (() => {
   'use strict';
   const L = window.BasilLibs = window.BasilLibs || {};
@@ -68,7 +68,7 @@
        k (how far it went, 0–1), necro: edge | spots | bact | angular, fuzz, holes, stipple, silver, purple,
        mold, curl, wide, aphids, mites, web, whitefly, thrips, pale, tip (brown dead tip, 0–1);
        the look of a variety: tone (green | deep | purple | lime | thai), ruffle, teeth, bubbly (blistered
-       blade), gloss, hairs; dim (0–1) — darker, for leaves at the back of a bush */
+       blade), gloss, hairs; dim (0–1) — darker, for leaves at the back of a bush */
     function leaf(o = {}) {
       const rnd = micro.rng(o.seed || 3), k = o.k == null ? 1 : o.k;
       const out = outline(o), cid = id('c'), gid = id('g');

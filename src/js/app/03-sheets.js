@@ -131,7 +131,7 @@
   function initSheets() {
     const chList = $('#sheet-chapters-list');
     if (chList) {
-      chList.innerHTML = `<a class="sheet-link" href="#glavnaya"><span class="sl-art">${icon('home')}</span><span><b>Главная</b><small>С чего начать, путь базилика, правила</small></span>${icon('chev-r')}</a>` +
+      chList.innerHTML = `<a class="sheet-link" href="#glavnaya"><span class="sl-art">${icon('home')}</span><span><b>Главная</b><small>С чего начать, путь базилика, правила.</small></span>${icon('chev-r')}</a>` +
         B.CHAPTERS.map(c => `<a class="sheet-link" href="#${c.id}"><span class="sl-art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#${c.art}"/></svg></span><span><b>${c.num}. ${c.title}</b><small>${c.desc}</small></span>${icon('chev-r')}</a>`).join('');
     }
     const tList = $('#sheet-tools-list');

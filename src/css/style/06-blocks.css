@@ -81,7 +81,8 @@
 .data-rows { display: grid; margin: 0 0 14px; }
 .data-rows div { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-bottom: 1px dashed var(--line-strong); font-size: .92rem; }
 .data-rows dt { color: var(--ink-2); }
-.data-rows dd { margin: 0; text-align: right; font-family: var(--font-mono); font-size: .84rem; color: var(--basil-deep); font-weight: 500; }
+/* the name keeps its own width, the value takes the rest: a long value never squeezes its name into a column of words */
+.data-rows dd { flex: 1 1 0; margin: 0; text-align: right; font-family: var(--font-mono); font-size: .84rem; color: var(--basil-deep); font-weight: 500; }
 
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); box-shadow: var(--shadow-sm); }
 .table-wrap table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: .92rem; }

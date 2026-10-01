@@ -60,7 +60,7 @@
        </div>`;
     let v = groupOf(0), cur = P[0];
     const foods = $('#lab-pa-f', el);
-    foods.innerHTML = P.map(f => `<button type="button" class="pa-food" data-id="${f.id}" aria-pressed="${f.id === cur.id}">${food.icon(f.id, 'pa-ico')}<span class="pa-name">${f.name}</span><span class="pa-meter"><i></i></span><span class="pa-word"></span></button>`).join('');
+    foods.innerHTML = P.map(f => `<button type="button" class="pa-food" data-id="${f.id}" aria-pressed="${f.id === cur.id}">${food.icon(f.id, 'pa-ico')}<span class="pa-name">${h.nb(f.name)}</span><span class="pa-meter"><i></i></span><span class="pa-word"></span></button>`).join('');
 
     /* the bridge: basil — molecules (or what works by contrast) — the food */
     const ch = h.chart($('#lab-pa-ch', el), {

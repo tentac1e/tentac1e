@@ -1,4 +1,4 @@
-/* Гид по базилику — библиотека рисунков «micro». Файл собирает scripts/build.py из src/labs/_lib/micro.js — правьте там */
+/* Гид по базилику — библиотека рисунков «micro». Файл собирает scripts/build.py из src/labs/_lib/micro.js — правьте там */
 (() => {
   'use strict';
   const L = window.BasilLibs = window.BasilLibs || {};
@@ -18,7 +18,7 @@
       }
       return d + 'Z';
     };
-    // one cell: p — squareness (2 = ellipse, 5 = rounded box), j — wobble
+    // one cell: p — squareness (2 = ellipse, 5 = rounded box), j — wobble
     function cell(cx, cy, rx, ry, rnd, o = {}) {
       const n = o.n || 10, j = o.j == null ? 0.06 : o.j, p = o.p || 3.2, P = [];
       for (let i = 0; i < n; i++) {

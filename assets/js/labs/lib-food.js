@@ -1,10 +1,10 @@
-/* Гид по базилику — библиотека рисунков «food». Файл собирает scripts/build.py из src/labs/_lib/food.js — правьте там */
+/* Гид по базилику — библиотека рисунков «food». Файл собирает scripts/build.py из src/labs/_lib/food.js — правьте там */
 (() => {
   'use strict';
   const L = window.BasilLibs = window.BasilLibs || {};
   /* ---------------- food: small illustrations of what basil goes with ----------------
-     Every picture lives in a 64×64 box; colours are the --fd-* tokens. food.icon(id) — a ready <svg>,
-     food.g(id) — the same drawing to put inside another SVG. */
+     Every picture lives in a 64×64 box; colours are the --fd-* tokens. food.icon(id) — a ready <svg>,
+     food.g(id) — the same drawing to put inside another SVG. */
   const food = (() => {
     const F = n => `var(--fd-${n})`;
     const hi = (cx, cy, rx, ry, a = -30, o = 0.4) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${F('hi')}" opacity="${o}" transform="rotate(${a} ${cx} ${cy})"/>`;

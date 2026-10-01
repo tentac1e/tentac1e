@@ -1,6 +1,8 @@
 /* ================= calendar ================= */
-.cal-top { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
-.cal-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; flex: 1 1 420px; justify-content: flex-end; }
+/* three labelled fields, their labels on one line: a note under the climate (its cities) only adds below */
+.cal-top { display: flex; flex-wrap: wrap; gap: 16px; align-items: start; justify-content: space-between; }
+.cal-mode .seg { justify-self: start; }
+.cal-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: start; flex: 1 1 420px; justify-content: flex-end; }
 .cal-controls .field { flex: 1 1 200px; max-width: 360px; }
 .cal-body { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(18px, 3vw, 36px); margin: 22px 0; align-items: start; }
 .wheel-fig { margin: 0; position: sticky; top: calc(var(--sticky-top) + 16px); }

@@ -1,4 +1,4 @@
-/* Гид по базилику — живые модели главы «Сорта». Файл собирает scripts/build.py из src/labs/sorta/ — правьте там */
+/* Гид по базилику — живые модели главы «Сорта». Файл собирает scripts/build.py из src/labs/sorta/ — правьте там */
 (() => {
   'use strict';
   const { register, illustrate, api: h } = window.BasilScience;
@@ -17,7 +17,7 @@
   const { micro, ill } = window.BasilLibs;
   /* @use ills */
   /* Pictures of the Varieties chapter: a portrait of every type (data-ill="vtype:<id>") and a sprig of every
-     variety (data-ill="sort:<n>", n — its place in BASIL.VARIETIES), drawn from what the data says about it:
+     variety (data-ill="sort:<n>", n — its place in BASIL.VARIETIES), drawn from what the data says about it:
      leaf colour and form, look of the blade (ruffle, teeth, bubbly, gloss, hairs) and flowers. */
   const VS = (window.BASIL && window.BASIL.VARIETIES) || [];
   const VT = (window.BASIL && window.BASIL.VARIETY_TYPES) || [];

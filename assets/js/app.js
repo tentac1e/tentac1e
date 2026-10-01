@@ -1,4 +1,4 @@
-/* Гид по базилику — навигация и интерактив. Файл собирает scripts/build.py из src/js/app/ — правьте там */
+/* Гид по базилику — навигация и интерактив. Файл собирает scripts/build.py из src/js/app/ — правьте там */
 (() => {
   'use strict';
 
@@ -26,7 +26,7 @@
   };
 
   // number + short word → non-breaking space ("20 °C", "1 г/л", "3 пары")
-  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1\u00a0').replace(/(\d)–(?=\d)/g, '$1–\u2060').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060');
+  const nb = s => String(s).replace(/([\d¼½¾]) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1\u00a0').replace(/(\d)([–…])(?=[+−]?\d)/g, '$1$2\u2060').replace(/(^|[^а-яёa-z])([а-яё]{1,4}) (?=[+−≈~]?[\d¼½¾])/gi, '$1$2\u00a0').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060').replace(/(\S) — /g, '$1\u00a0— ').replace(/(^|[^а-яёa-z\u00ad-])(в|с|к|у|о|а|и|я|во|со|ко|об|на|за|по|до|от|из|не|ни|но) (?=\S)/gi, '$1$2\u00a0');
 
   const plural = (n, one, few, many) => {
     const a = Math.abs(n) % 100, b = a % 10;
@@ -122,7 +122,7 @@
       let ok = false;
       try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
       ta.remove();
-      toast(ok ? 'Скопировано' : 'Не удалось скопировать — выделите текст вручную');
+      toast(ok ? 'Скопировано' : 'Не удалось скопировать — выделите текст вручную');
     }
   }
 
@@ -185,7 +185,7 @@
   })();
   function resolve(raw) {
     let hash = String(raw || '').replace(/^#/, '');
-    try { hash = decodeURIComponent(hash); } catch (e) { /* malformed — use as is */ }
+    try { hash = decodeURIComponent(hash); } catch (e) { /* malformed — use as is */ }
     // an old long tab id on its own page: switch to the short anchor
     if (hash && !document.getElementById(hash) && aliasOf(hash) !== hash && document.getElementById(aliasOf(hash))) {
       hash = aliasOf(hash);
@@ -269,7 +269,7 @@
         if (!box.open) { box.open = true; opened = true; }
       }
       go(() => r.target.scrollIntoView({ block: 'start', behavior }));
-      // models above the target mount lazily and push it down — land again once they settle
+      // models above the target mount lazily and push it down — land again once they settle
       if (opened) {
         const target = r.target;
         const USER = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
@@ -327,7 +327,7 @@
     const h = hash.startsWith('#') ? hash : '#' + hash;
     try {
       if (replace) history.replaceState(null, '', h); else history.pushState(null, '', h);
-    } catch (e) { /* sandboxed history — still route */ }
+    } catch (e) { /* sandboxed history — still route */ }
     route(h);
   }
 
@@ -360,10 +360,11 @@
       const i = list.findIndex(c => c.id === view.dataset.view);
       const prev = list[i - 1];
       const next = list[i + 1];
+      // hy: the title with soft hyphens, for a word too long for half a phone screen
       const art = c => `<svg class="pg-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#${c.art}"/></svg>`;
       pager.innerHTML =
-        (prev ? `<a class="prev" href="#${prev.id}">${art(prev)}<span><small>← Глава ${prev.num}</small><b>${prev.title}</b></span></a>` : `<a class="prev" href="#glavnaya">${icon('home')}<span><small>← Начало</small><b>Главная</b></span></a>`) +
-        (next ? `<a class="next" href="#${next.id}"><span><small>Глава ${next.num} →</small><b>${next.title}</b></span>${art(next)}</a>` : `<a class="next" href="#glavnaya"><span><small>Готово →</small><b>На главную</b></span>${icon('home')}</a>`);
+        (prev ? `<a class="prev" href="#${prev.id}">${art(prev)}<span><small>← Глава ${prev.num}</small><b>${nb(prev.hy || prev.title)}</b></span></a>` : `<a class="prev" href="#glavnaya">${icon('home')}<span><small>← Начало</small><b>Главная</b></span></a>`) +
+        (next ? `<a class="next" href="#${next.id}"><span><small>Глава ${next.num} →</small><b>${nb(next.hy || next.title)}</b></span>${art(next)}</a>` : `<a class="next" href="#glavnaya"><span><small>Готово →</small><b>На главную</b></span>${icon('home')}</a>`);
     });
 
     // the end of each tab points to the next one; the chapter pager follows the last tab
@@ -460,7 +461,7 @@
       d.focus({ preventScroll: true });
     }
   }
-  // the sheet leaves first (down on a phone, fading on a computer), then the dialog closes; now — at once
+  // the sheet leaves first (down on a phone, fading on a computer), then the dialog closes; now — at once
   function closeSheet(d, now) {
     if (!d || !d.open) return;
     if (d.classList.contains('is-closing') && !now) return;
@@ -485,7 +486,7 @@
   }
 
   // a bottom sheet follows the finger: by its head (the grabber and the title) at once; by the list only
-  // when the list is at its very top and the finger goes down — otherwise the list scrolls as usual.
+  // when the list is at its very top and the finger goes down — otherwise the list scrolls as usual.
   // Down it goes 1:1, up a little and with resistance. Let go past 30 % of its height or flick it down,
   // and it closes; short of that it springs back. The page under the sheet never moves.
   function dragSheet(d) {
@@ -558,7 +559,7 @@
   function initSheets() {
     const chList = $('#sheet-chapters-list');
     if (chList) {
-      chList.innerHTML = `<a class="sheet-link" href="#glavnaya"><span class="sl-art">${icon('home')}</span><span><b>Главная</b><small>С чего начать, путь базилика, правила</small></span>${icon('chev-r')}</a>` +
+      chList.innerHTML = `<a class="sheet-link" href="#glavnaya"><span class="sl-art">${icon('home')}</span><span><b>Главная</b><small>С чего начать, путь базилика, правила.</small></span>${icon('chev-r')}</a>` +
         B.CHAPTERS.map(c => `<a class="sheet-link" href="#${c.id}"><span class="sl-art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#${c.art}"/></svg></span><span><b>${c.num}. ${c.title}</b><small>${c.desc}</small></span>${icon('chev-r')}</a>`).join('');
     }
     const tList = $('#sheet-tools-list');
@@ -584,14 +585,14 @@
     });
   }
   /* ================================================================== */
-  /* SEARCH: words — stems, the keyboard layout, typos, synonyms         */
+  /* SEARCH: words — stems, the keyboard layout, typos, synonyms         */
   /* ================================================================== */
   const norm = s => String(s).toLowerCase().replace(/ё/g, 'е');
   // a letter or a digit of a word (after norm)
   const isWordChar = c => (c >= 'а' && c <= 'я') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
 
   // Snowball's Russian stemmer, made careful for search: an ending comes off only when a stem of three
-  // letters or more is left — four for the gerund rule, or «полив» would turn into «пол»
+  // letters or more is left — four for the gerund rule, or «полив» would turn into «пол»
   const stemRu = (() => {
     const PERF = /(?:([ая])(?:вшись|вши|в)|ившись|ывшись|ивши|ывши|ив|ыв)$/;
     const REFL = /(?:ся|сь)$/;
@@ -625,7 +626,7 @@
     };
   })();
 
-  // what a query word is looked for as: the stem, cut a little further for search — the verb endings
+  // what a query word is looked for as: the stem, cut a little further for search — the verb endings
   // Snowball leaves («желтеют» → «желт»), the vowel before a verb ending («поливать» → «полив»),
   // and for «горшок», «черенок» also the stem without the fleeting vowel («горшк-», «черенк-»)
   // words that do not change (or must not be cut: «песто» is not «пёстрый»)
@@ -910,7 +911,7 @@
     if (!hits) return null;
     if (words.length > 1 && phrase) { if (e.nt.includes(phrase)) s += 8; else if (e.nx.includes(phrase)) s += 4; }
     if (where.length > 1 && Math.max(...where) - Math.min(...where) < 90) s += 2.5;
-    // a name typed in full leads to that very place («план подкормок» — the tab, not a heading inside it)
+    // a name typed in full leads to that very place («план подкормок» — the tab, not a heading inside it)
     if ((phrase && e.nt === phrase) || (searchWhole && e.nw === searchWhole)) s += 12;
     else {
       if (phrase && e.nt.startsWith(phrase)) s += 3;
@@ -1023,7 +1024,7 @@
     }, reduceMotion.matches ? 50 : 450);
   }
 
-  // a phone: the panel stands where the visible area is — under the status bar, down to the keyboard,
+  // a phone: the panel stands where the visible area is — under the status bar, down to the keyboard,
   // and it stays there when the keyboard opens or the page under it would move
   const searchVV = window.visualViewport;
   function fitSearchPanel() {
@@ -1684,9 +1685,9 @@
       const total = v * n * 1.1;
       const parts = r.parts.reduce((s, p) => s + p[1], 0);
       out.innerHTML = `
-        <div class="soil-bar" role="img" aria-label="Пропорции смеси">${r.parts.map(p => `<span class="mx-${p[2]}" style="flex:${p[1]}">${p[0]} · ${p[1]}</span>`).join('')}</div>
+        <div class="soil-bar" role="img" aria-label="Пропорции смеси">${r.parts.map(p => `<span class="mx-${p[2]}" style="flex:${p[1]}">${p[0]}<small>${p[1]}\u00a0${plural(p[1], 'часть', 'части', 'частей')}</small></span>`).join('')}</div>
         <ul class="soil-list">${r.parts.map(p => `<li><span><i class="mx-${p[2]}"></i>${p[0]}</span><b>${fmtNum(total * p[1] / parts, 1)}\u00a0л</b></li>`).join('')}</ul>
-        <p class="soil-total">Всего ${fmtNum(total, 1)}\u00a0л смеси с запасом 10&nbsp;% на усадку. Керамзит для дренажа — около ${fmtNum(v * n * 0.1, 1)}\u00a0л.</p>
+        <p class="soil-total">Всего ${fmtNum(total, 1)}\u00a0л смеси с запасом 10&nbsp;% на усадку. Керамзит для дренажа — около ${fmtNum(v * n * 0.1, 1)}\u00a0л.</p>
         <p class="muted">${nb(r.note)}</p>`;
     };
     [sel, vol, cnt].forEach(el => el.addEventListener('input', render));
@@ -1754,11 +1755,11 @@
         events: [
           { a: addDays(LF, -56), b: addDays(LF, -42), icon: 'seed', key: true, title: 'Посев на рассаду', text: 'За 6–8 недель до последнего заморозка. Заделка 0,5 см, мини-парник при 22–25 °C.' },
           { a: addDays(S, 5), b: addDays(S, 10), icon: 'sprout', title: 'Всходы', text: 'Сразу снимите укрытие, свет 14–16 ч, температура 20–22 °C.' },
-          { a: addDays(S, 14), b: addDays(S, 21), icon: 'pot', title: 'Пикировка', text: 'При 1–2 парах настоящих листьев — в стаканы по 200–300 мл.' },
+          { a: addDays(S, 14), b: addDays(S, 21), icon: 'pot', title: 'Пикировка', text: 'При 1–2 парах настоящих листьев — в стаканы по 200–300 мл.' },
           { a: addDays(S, 24), b: addDays(S, 28), icon: 'flask', title: 'Первая подкормка', text: 'Комплексное удобрение для рассады в ¼ дозы.' },
-          { a: addDays(S, 35), b: addDays(S, 42), icon: 'scissors', title: 'Прищипывание рассады', text: 'При 3–4 парах листьев — над 2-й или 3-й парой.' },
+          { a: addDays(S, 35), b: addDays(S, 42), icon: 'scissors', title: 'Прищипывание рассады', text: 'При 3–4 парах листьев — над 2-й или 3-й парой.' },
           { a: addDays(T, -10), b: addDays(T, -1), icon: 'wind', title: 'Закаливание', text: 'Выносите на улицу, начиная с 1–2 часов в тени.' },
-          { a: addDays(LF, 10), b: addDays(LF, 21), icon: 'garden', key: true, title: 'Высадка в грунт', text: 'Когда ночи теплее +10 °C, а почва прогрелась до +15 °C. В теплицу — на 1–2 недели раньше.' },
+          { a: addDays(LF, 10), b: addDays(LF, 21), icon: 'garden', key: true, title: 'Высадка в грунт', text: 'Когда ночи теплее +10 °C, а почва прогрелась до +15 °C. В теплицу — на 1–2 недели раньше.' },
           { a: addDays(T, 10), b: addDays(T, 14), icon: 'flask', title: 'Подкормка после приживания', text: 'Монокалийфосфат или комплексное удобрение, половинная доза.' },
           { a: addDays(T, 21), b: addDays(T, 28), icon: 'leaf', key: true, title: 'Первый урожай', text: 'Срезайте верхушки над парой листьев, не больше трети куста.' },
           { a: addDays(T, 28), b: addDays(AF, -21), icon: 'scissors', title: 'Регулярные срезки', text: 'Каждые 1–2 недели. Удаляйте бутоны, подкармливайте после срезки.' },
@@ -1785,8 +1786,8 @@
           { a: S, icon: 'seed', key: true, title: 'Посев', text: '2–3 семени в горшок, заделка 0,5 см, под крышку при 22–25 °C.' },
           { a: addDays(S, 5), b: addDays(S, 10), icon: 'sprout', title: 'Всходы', text: 'Сразу под лампу или на самое светлое окно, 14–16 ч света.' },
           { a: addDays(S, 14), b: addDays(S, 21), icon: 'pot', title: 'Прореживание', text: 'Оставьте одно сильное растение на горшок 1,5–2 л или три на 3–5 л.' },
-          { a: addDays(S, 24), b: addDays(S, 28), icon: 'flask', title: 'Первая подкормка', text: 'Комплексное удобрение в ¼ дозы, дальше — раз в 10–14 дней.' },
-          { a: addDays(S, 35), b: addDays(S, 45), icon: 'scissors', key: true, title: 'Первое прищипывание', text: 'При 3–4 парах листьев — над 2-й или 3-й парой.' },
+          { a: addDays(S, 24), b: addDays(S, 28), icon: 'flask', title: 'Первая подкормка', text: 'Комплексное удобрение в ¼ дозы, дальше — раз в 10–14 дней.' },
+          { a: addDays(S, 35), b: addDays(S, 45), icon: 'scissors', key: true, title: 'Первое прищипывание', text: 'При 3–4 парах листьев — над 2-й или 3-й парой.' },
           { a: addDays(S, 35), b: addDays(S, 42), icon: 'seed', title: 'Подсев новой партии', text: 'Для непрерывного урожая сейте новый горшок каждые 4–6 недель.' },
           { a: addDays(S, 50), b: addDays(S, 60), icon: 'leaf', key: true, title: 'Первый урожай', text: 'Срезайте верхушки над парой листьев, не больше трети куста.' },
           { a: addDays(S, 60), b: addDays(S, 110), icon: 'scissors', title: 'Регулярные срезки', text: 'Каждые 1–2 недели. Подкормка после срезки, промывка грунта раз в месяц.' },
@@ -2015,7 +2016,7 @@
     const series = [['n', 'N', 'Азот', 'N'], ['p', 'P', 'Фосфор', 'P'], ['k', 'K', 'Калий', 'K']];
     let sel = 3;
 
-    track.innerHTML = S.map((s, i) => `<button class="stage-btn" type="button" role="tab" aria-selected="false" data-i="${i}">${miniPlant(s.plant)}<span>${i + 1}. ${s.short}</span></button>`).join('');
+    track.innerHTML = S.map((s, i) => `<button class="stage-btn" type="button" role="tab" aria-selected="false" data-i="${i}">${miniPlant(s.plant)}<span><i>${i + 1}</i>${s.short}</span></button>`).join('');
     const btns = $$('.stage-btn', track);
     npk.innerHTML = series.map(([c, s, n]) => `<div class="npk-row"><span class="lbl"><i class="k-${c}"></i>${s} · ${n}</span><span class="bar"><i class="k-${c}" id="bar-${c}"></i></span><span class="lvl" id="lvl-${c}"></span></div>`).join('');
     const table = $('#feed-table');
@@ -2146,7 +2147,7 @@
         return { out, end };
       }
       push(24, 'Первая подкормка', 'Комплексное удобрение для рассады, ¼ дозы с упаковки.', 'p');
-      push(38, 'Вторая подкормка', 'Монокалийфосфат 0,3–0,5 г/л или комплексное ⅓ дозы — для корней.', 'p');
+      push(38, 'Вторая подкормка', 'Монокалийфосфат 0,3–0,5 г/л или комплексное ⅓ дозы — для корней.', 'p');
       const cycle = mode === 'pot'
         ? [['Подкормка для зелени', 'Комплексное удобрение «для зелени», ½ дозы.', 'n'], ['Подкормка для аромата', 'Калийная селитра 0,5 г/л.', 'k'], ['Органика', 'Жидкий биогумус по инструкции.', 'o']]
         : [['Подкормка для зелени', 'Нитроаммофоска 1–1,5 г/л или настой крапивы 1:10.', 'n'], ['Подкормка для аромата', 'Калийная селитра 1 г/л.', 'k'], ['Органика', 'Биогумус или настой крапивы 1:10.', 'o']];
@@ -2166,9 +2167,9 @@
         k += 1;
       }
       for (let d = mode === 'pot' ? 60 : 96; d <= total - 16; d += 30) {
-        push(d + 3, mode === 'pot' ? 'Промывка и магний' : 'Магний по листу', mode === 'pot' ? 'Пролейте горшок чистой водой в объёме 2–3 горшков, через день — сульфат магния 1 г/л.' : 'Сульфат магния 1 г/л, опрыскивание вечером.', 'o');
+        push(d + 3, mode === 'pot' ? 'Промывка и магний' : 'Магний по листу', mode === 'pot' ? 'Пролейте горшок чистой водой в объёме 2–3 горшков, через день — сульфат магния 1 г/л.' : 'Сульфат магния 1 г/л, опрыскивание вечером.', 'o');
       }
-      push(total - 14, 'Финишная подкормка без азота', mode === 'pot' ? 'Сульфат калия 0,5 г/л — для аромата перед финальным сбором.' : 'Сульфат калия 1 г/л или зольный настой.', 'k');
+      push(total - 14, 'Финишная подкормка без азота', mode === 'pot' ? 'Сульфат калия 0,5 г/л — для аромата перед финальным сбором.' : 'Сульфат калия 1 г/л или зольный настой.', 'k');
       push(total, 'Финальный сбор', 'Срежьте всё для заготовок или укорените черенки для нового цикла.', 'o');
       out.sort((a, b) => a.date - b.date);
       return { out, end };
@@ -2243,7 +2244,7 @@
         <p class="npk-kind">${kind}</p>
         <p>${nb(text)}</p>
         <div><span class="muted">Ближе всего к стадиям:</span><div class="npk-match">${ranked.map((r, j) => `<span class="badge${j === 0 ? ' is-best' : ''}">${r.i + 1}. ${B.STAGES[r.i].short}</span>`).join('')}</div></div>
-        <p class="muted">Фосфор и калий на упаковке указаны в пересчёте на оксиды P₂O₅ и K₂O — так принято, сравнивать удобрения удобно именно по этим числам.</p>`;
+        <p class="muted">Фосфор и калий на упаковке указаны в пересчёте на оксиды P₂O₅ и K₂O — так принято, сравнивать удобрения удобно именно по этим числам.</p>`;
     };
     presets.addEventListener('click', e => {
       const c = e.target.closest('.chip');
@@ -2271,7 +2272,7 @@
     return whole ? (sym ? `${whole}\u00a0${sym}` : `${whole}`) : sym;
   }
   function spoonText(tsp) {
-    if (tsp < 0.09) return 'на кончике ложки — лучше взвесить';
+    if (tsp < 0.09) return 'на кончике ложки — лучше взвесить';
     if (tsp >= 3) return `≈ ${spoonFraction(tsp / 3)}\u00a0ст.\u00a0л.`;
     return `≈ ${spoonFraction(tsp)}\u00a0ч.\u00a0л.`;
   }
@@ -2431,7 +2432,7 @@
     const checkGoal = () => {
       if (!goalShown && tipsCount() >= 8 && !stems.some(s => s.state === 'flower')) {
         goalShown = true;
-        say('Готово: 8 верхушек роста — это уже настоящий куст! Дальше просто срезайте верхушки на урожай каждые 1–2 недели и не давайте ему цвести.', 'good');
+        say('Готово: 8 верхушек роста — это уже настоящий куст! Дальше просто срезайте верхушки на урожай каждые 1–2 недели и не давайте ему цвести.', 'good');
       }
     };
 
@@ -2440,7 +2441,7 @@
       const s = byId(id);
       if (!s || s.state === 'cut') return;
       if (k < 2) { say('Слишком низко: под срезом должно остаться минимум 2 пары листьев. Иначе новые побеги будут слабыми, а куст потеряет «фабрику питания».', 'warn'); return; }
-      if (s.state === 'grow' && s.nodes < 3) { say('Рано: пусть побег наберёт хотя бы 3 пары листьев — тогда срез даст крепкие ветки.', 'warn'); return; }
+      if (s.state === 'grow' && s.nodes < 3) { say('Рано: пусть побег наберёт хотя бы 3 пары листьев — тогда срез даст крепкие ветки.', 'warn'); return; }
       const before = leafCount();
       const wasFlower = s.state === 'flower';
       let removed = 2 * (s.nodes - k);
@@ -2456,12 +2457,12 @@
       if (s.depth < MAX_DEPTH) {
         s.state = 'cut';
         stems.push({ id: ++uid, parent: s.id, at: k, side: -1, depth: s.depth + 1, nodes: 0, state: 'grow' }, { id: ++uid, parent: s.id, at: k, side: 1, depth: s.depth + 1, nodes: 0, state: 'grow' });
-        text = `Срез над ${k}-й парой. ${wasFlower ? 'Соцветие удалено. ' : ''}${got}Из пазух под срезом пойдут 2 новых побега — нажмите «Неделя вперёд».`;
+        text = `Срез над ${k}-й парой. ${wasFlower ? 'Соцветие удалено. ' : ''}${got}Из пазух под срезом пойдут 2 новых побега — нажмите «Неделя вперёд».`;
       } else {
         s.state = 'grow';
         text = `${wasFlower ? 'Соцветие удалено. ' : ''}${got}Куст уже густой: дальше в тренажёре ветвление не рисуем, срезки идут в урожай.`;
       }
-      if (before > 0 && removed > before / 3) { text += ' Но это больше трети куста — растению понадобится время на восстановление.'; tone = 'warn'; }
+      if (before > 0 && removed > before / 3) { text += ' Но это больше трети куста — растению понадобится время на восстановление.'; tone = 'warn'; }
       say(text, tone);
       render();
       checkGoal();
@@ -2476,9 +2477,9 @@
       });
       const flowering = stems.filter(s => s.state === 'flower').length;
       const ready = stems.filter(s => s.state === 'grow' && s.depth < MAX_DEPTH && s.nodes >= 4).length;
-      if (bloomed.length) say(`Зацвело побегов: ${bloomed.length}. Срежьте соцветия вместе с парой листьев под ними — нажмите на узел чуть ниже цветка.`, 'bad');
-      else if (flowering) say('Куст цветёт — листья грубеют и горчат. Срежьте соцветия!', 'bad');
-      else if (ready) say(`Готово к прищипыванию: ${ready} ${plural(ready, 'побег', 'побега', 'побегов')} с 4 парами листьев. Срезайте над 2–3-й парой — пульсирующая точка подскажет.`, 'info');
+      if (bloomed.length) say(`Зацвело побегов: ${bloomed.length}. Срежьте соцветия вместе с парой листьев под ними — нажмите на узел чуть ниже цветка.`, 'bad');
+      else if (flowering) say('Куст цветёт — листья грубеют и горчат. Срежьте соцветия!', 'bad');
+      else if (ready) say(`Готово к прищипыванию: ${ready} ${plural(ready, 'побег', 'побега', 'побегов')} с 4 парами листьев. Срезайте над 2–3-й парой — пульсирующая точка подскажет.`, 'info');
       else say('Куст растёт, новые побеги набирают листья.', 'info');
       render();
       checkGoal();
@@ -2487,7 +2488,7 @@
     const reset = () => {
       uid = 0; week = 5; harvested = 0; goalShown = false; seen = new Set();
       stems = [{ id: ++uid, parent: null, at: 0, side: 0, depth: 0, nodes: 4, state: 'grow' }];
-      say('Пятая неделя после всходов: у стебля 4 пары настоящих листьев. Самое время для первого прищипывания — срежьте над 2-й или 3-й парой.', 'info');
+      say('Пятая неделя после всходов: у стебля 4 пары настоящих листьев. Самое время для первого прищипывания — срежьте над 2-й или 3-й парой.', 'info');
       render();
     };
 
@@ -2515,9 +2516,9 @@
       const v = +r.value;
       $('#germ-val').textContent = String(v);
       let text, cls = '';
-      if (v >= 8) text = `Всхожесть ${v * 10}\u00a0% — отличные семена. Сейте как обычно, по 2–3 в ячейку.`;
-      else if (v >= 5) { text = `Всхожесть ${v * 10}\u00a0% — средняя. Сейте гуще, по 3–4 семени в ячейку.`; cls = 'is-warn'; }
-      else { text = `Всхожесть ${v * 10}\u00a0% — слабая. Лучше купить свежие семена, а ценный сорт сеять очень густо.`; cls = 'is-bad'; }
+      if (v >= 8) text = `Всхожесть ${v * 10}\u00a0% — отличные семена. Сейте как обычно, по 2–3 в ячейку.`;
+      else if (v >= 5) { text = `Всхожесть ${v * 10}\u00a0% — средняя. Сейте гуще, по 3–4 семени в ячейку.`; cls = 'is-warn'; }
+      else { text = `Всхожесть ${v * 10}\u00a0% — слабая. Лучше купить свежие семена, а ценный сорт сеять очень густо.`; cls = 'is-bad'; }
       out.textContent = text;
       out.className = 'germ-out' + (cls ? ' ' + cls : '');
     };
@@ -2623,7 +2624,7 @@
     const update = () => {
       const done = boxes.filter(b => b.checked).length;
       bar.style.width = `${Math.round(done / boxes.length * 100)}%`;
-      count.textContent = done === boxes.length ? `Все ${boxes.length} шагов выполнены — отличный сезон!` : `Выполнено ${done} из ${boxes.length}`;
+      count.textContent = done === boxes.length ? `Все ${boxes.length} шагов выполнены — отличный сезон!` : `Выполнено ${done} из ${boxes.length}`;
     };
     wrap.addEventListener('change', e => {
       const b = e.target;
@@ -2743,7 +2744,7 @@
       box.innerHTML = `<div class="g-empty card">
         <span class="g-pic g-pic-big" data-leaf="green">${miniPlant('harvest')}</span>
         <div><h2 id="moy-h">Мой <em>базилик</em></h2>
-        <p>Добавьте свой куст — гид подскажет, что делать с ним на этой неделе: когда прищипнуть, подкормить и срезать.</p>
+        <p>Добавьте свой куст — гид подскажет, что делать с ним на этой неделе: когда прищипнуть, подкормить и срезать.</p>
         <div class="g-starts">${B.GARDEN.starts.filter(s => s.id !== 'seedling').map(s => `<button class="chip" type="button" data-garden-add="${s.id}">${icon(s.id === 'seed' ? 'seed' : s.id === 'shop' ? 'bag' : 'cup')}${s.id === 'shop' ? 'Купил горшок в магазине' : s.id === 'cutting' ? 'Укоренил черенок' : s.name}</button>`).join('')}</div>
         <p class="g-keep"><button type="button" class="g-link" data-garden-import>Загрузить копию</button></p></div>
       </div>`;
@@ -2774,7 +2775,7 @@
       <div class="field"><label for="g-variety">Сорт</label><select id="g-variety">${varietyOptions(p.variety)}</select></div>
       <div class="field"><span class="label" id="g-start-l">С чего начали</span>${seg('start', G.starts, p.start)}</div>
       <div class="field"><span class="label" id="g-place-l">Где растёт</span>${seg('place', G.places, p.place)}</div>
-      <div class="field" id="g-preset-f"${p.place === 'home' ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><small class="field-note" id="g-cities">Например, ${esc(B.PRESETS.find(x => x.id === (p.preset || 'temperate')).cities)}</small></div>
+      <div class="field" id="g-preset-f"${p.place === 'home' ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><small class="field-note" id="g-cities">Например, ${esc(B.PRESETS.find(x => x.id === (p.preset || 'temperate')).cities)}</small></div>
       <div class="field"><label for="g-date" id="g-date-l">${startDef.date}</label><input type="date" id="g-date" value="${p.date || toISO(today())}" max="${toISO(addDays(today(), 60))}"></div>
       <div class="g-form-a"><button class="btn btn-primary btn-small" type="submit">${icon('check')}Сохранить</button><button class="btn btn-ghost btn-small" type="button" data-g-cancel>Отмена</button></div>
     </form>`;
@@ -2803,7 +2804,7 @@
           <input type="text" id="g-log-t" maxlength="120" placeholder="Заметка, если нужна" aria-label="Заметка">
           <button class="btn btn-ghost btn-small" type="submit">Записать</button>
         </form>
-        ${log.length ? `<ul class="g-log">${log.map(e => `<li><span class="g-log-d">${fd(e.date)}</span><span>${what(e)}</span><button class="g-log-x" type="button" data-log-del="${e.i}" aria-label="Удалить запись">${icon('close')}</button></li>`).join('')}</ul>` : '<p class="muted g-log-empty">Записей пока нет: отмечайте «Сделано» и «Полил» — гид будет считать от них.</p>'}
+        ${log.length ? `<ul class="g-log">${log.map(e => `<li><span class="g-log-d">${fd(e.date)}</span><span>${what(e)}</span><button class="g-log-x" type="button" data-log-del="${e.i}" aria-label="Удалить запись">${icon('close')}</button></li>`).join('')}</ul>` : '<p class="muted g-log-empty">Записей пока нет: отмечайте «Сделано» и «Полил» — гид будет считать от них.</p>'}
       </section>
       <p class="g-del-row"><button class="g-link g-del" type="button" data-g-del>Удалить куст</button></p>
     </div>`;
@@ -2974,7 +2975,7 @@
         gardenSave(s);
         renderGardenSheet();
         HAP.success();
-        if (!$('#garden-home')) toast('Куст добавлен — его дела на неделю теперь на главной');
+        if (!$('#garden-home')) toast('Куст добавлен — его дела на неделю теперь на главной');
       } else if (e.target.id === 'g-log-form') {
         e.preventDefault();
         const { s, p } = findPlant(gardenOpen && gardenOpen.id);
@@ -3009,8 +3010,8 @@
   const later = (a, b) => (!a ? b : !b ? a : a > b ? a : b);
   const daysWord = n => `${n} ${plural(n, 'день', 'дня', 'дней')}`;
 
-  // everything the guide asks of one bush. Steps once — from sowing to the first harvest, and the season
-  // of a bush outdoors — and the ones that come again: feeding, cutting, buds, flushing the pot, fresh water
+  // everything the guide asks of one bush. Steps once — from sowing to the first harvest, and the season
+  // of a bush outdoors — and the ones that come again: feeding, cutting, buds, flushing the pot, fresh water
   // for a cutting, the lamp in winter. A step is done when the diary says so; a note of its kind
   // («Подкормил») closes it too. What was over before the diary began is not asked for
   function plantTasks(p, day) {
@@ -3119,7 +3120,7 @@
   const lastNote = (p, k) => (p.log || []).reduce((m, e) => { const d = e.k === k && fromISO(e.d); return d && (!m || d > m) ? d : m; }, null);
   /* ================================================================== */
   /* READING POSITION: pages open at the top; the spot you left is kept  */
-  /* and offered back — on the chapter itself and from «Продолжить» home  */
+  /* and offered back — on the chapter itself and from «Продолжить» home  */
   /* ================================================================== */
   const POS_KEY = 'basil-pos';
   function readPos(view) {
@@ -3145,7 +3146,7 @@
     }
     return best;
   }
-  // only the reader's own scrolling moves the bookmark — not the jump to the top on arrival
+  // only the reader's own scrolling moves the bookmark — not the jump to the top on arrival
   let userMoved = false;
   ['wheel', 'touchmove', 'keydown'].forEach(ev => window.addEventListener(ev, () => { userMoved = true; }, { passive: true }));
   function savePos() {
@@ -3228,7 +3229,7 @@
     });
   }
 
-  /* links to other chapters point at their pages — also those scripts add later */
+  /* links to other chapters point at their pages — also those scripts add later */
   function initLinks() {
     if (!PAGES) return;
     fixLinks(document.body);

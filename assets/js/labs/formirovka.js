@@ -1,4 +1,4 @@
-/* Гид по базилику — живые модели главы «Прищипывание». Файл собирает scripts/build.py из src/labs/formirovka/ — правьте там */
+/* Гид по базилику — живые модели главы «Прищипывание». Файл собирает scripts/build.py из src/labs/formirovka/ — правьте там */
 (() => {
   'use strict';
   const { register, illustrate, api: h } = window.BasilScience;
@@ -26,33 +26,33 @@
     1: () => {
       const s = Rf.shoot(80, 180, 152, { pairs: 4, s: 0.42, buds: [1] });
       const [nx, ny] = s.nodes[1];
-      return pinchP(s.svg + Rf.cutMark(nx, ny - 8, 34) + Rf.scissors(nx + 32, ny - 8, 196, 1, 0.8) + ill.label(nx + 34, ny - 24, 'срез', 'start'), 'Побег с четырьмя парами листьев; срез над второй парой');
+      return pinchP(s.svg + Rf.cutMark(nx, ny - 8, 34) + Rf.scissors(nx + 32, ny - 8, 196, 1, 0.8) + ill.label(nx + 34, ny - 24, 'срез', 'start'), 'Побег с четырьмя парами листьев; срез над второй парой');
     },
     // a week on: a short stub over the second pair, and both buds have started
     2: () => {
       const s = Rf.shoot(80, 180, 152, { pairs: 4, s: 0.42, stub: 1, shoots: { 1: { len: 22, pairs: 1, s: 0.16, a: 22 } } });
       const [nx, ny] = s.nodes[1];
-      return pinchP(s.svg + Rf.arrow(36, 58, nx - 8, ny - 18, -10) + ill.label(10, 32, 'почки', 'start') + ill.label(10, 49, 'проснулись', 'start'), 'Через неделю из пазух второй пары пошли два побега');
+      return pinchP(s.svg + Rf.arrow(36, 58, nx - 8, ny - 18, -10) + ill.label(10, 32, 'почки', 'start') + ill.label(10, 49, 'проснулись', 'start'), 'Через неделю из пазух второй пары пошли два побега');
     },
     // two or three weeks: two tops instead of one
     3: () => {
       const s = Rf.shoot(80, 180, 152, { pairs: 4, s: 0.42, stub: 1, shoots: { 1: { len: 84, pairs: 3, s: 0.3, a: 24 } } });
-      return pinchP(s.svg, 'Через две-три недели — две верхушки вместо одной');
+      return pinchP(s.svg, 'Через две-три недели — две верхушки вместо одной');
     }
   };
   illustrate('pinch', n => (PINCH[n] || PINCH[1])(), Object.keys(PINCH));
 
   register('auxin', el => {
-    el.innerHTML = h.head('Что происходит после среза', 'Фиолетовые точки — ауксин, жёлтые — сахар, голубые — цитокинины из корней. Нажмите «Прищипнуть» и смотрите, как просыпаются почки.') +
+    el.innerHTML = h.head('Что происходит после среза', 'Фиолетовые точки — ауксин, жёлтые — сахар, голубые — цитокинины из корней. Нажмите «Прищипнуть» и смотрите, как просыпаются почки.') +
       `<div class="lab-grid wide-stage">
-        <div class="lab-stage auxin-stage"><svg class="lab-plant" viewBox="-160 -330 320 350" role="img" aria-label="Стебель базилика с потоками гормонов"><line class="soil-line" x1="-160" x2="160" y1="2" y2="2"/><g id="lab-aux-g"></g><g class="fx" id="lab-aux-fx"></g></svg></div>
+        <div class="lab-stage auxin-stage"><svg class="lab-plant" viewBox="-160 -330 320 350" role="img" aria-label="Стебель базилика с потоками гормонов"><line class="soil-line" x1="-160" x2="160" y1="2" y2="2"/><g id="lab-aux-g"></g><g class="fx" id="lab-aux-fx"></g></svg></div>
         <div class="lab-controls">
           <div class="lab-actions"><button class="btn btn-primary btn-small" type="button" id="lab-aux-cut">${h.icon('scissors')}Прищипнуть</button><button class="btn btn-ghost btn-small" type="button" id="lab-aux-reset">Сначала</button></div>
           <ol class="aux-steps" id="lab-aux-steps">
-            <li class="is-on">Верхушка шлёт ауксин вниз — почки спят</li>
+            <li class="is-on">Верхушка шлёт ауксин вниз — почки спят</li>
             <li>Срез: источник ауксина исчез</li>
-            <li>Через часы: к почкам устремился сахар</li>
-            <li>Сутки: из корней поднимаются цитокинины</li>
+            <li>Через часы: к почкам устремился сахар</li>
+            <li>Сутки: из корней поднимаются цитокинины</li>
             <li>Неделя: две почки стали побегами</li>
           </ol>
         </div>
@@ -117,11 +117,11 @@
   });
 
   register('branch', el => {
-    el.innerHTML = h.head('Куст после n прищипываний', 'Каждый срез над узлом будит две почки. Сдвиньте ползунок — новые побеги вырастут на глазах.') +
+    el.innerHTML = h.head('Куст после n прищипываний', 'Каждый срез над узлом будит две почки. Сдвиньте ползунок — новые побеги вырастут на глазах.') +
       `<div class="lab-grid wide-stage">
         <div class="lab-stage"><svg class="lab-plant" viewBox="-250 -350 500 370" role="img" aria-label="Куст базилика после нескольких прищипываний"><line class="soil-line" x1="-250" x2="250" y1="2" y2="2"/><g id="lab-br-g"></g></svg></div>
         <div class="lab-controls">${h.rangeHtml('lab-br-n', 'Прищипываний', 0, 4, 1, 2)}</div>
-      </div>` + h.readHtml([['Верхушек', 'lab-br-t'], ['Листьев на кусте', 'lab-br-l'], ['Возраст куста', 'lab-br-w']]);
+      </div>` + h.readHtml([['Верхушек', 'lab-br-t'], ['Листьев на кусте', 'lab-br-l'], ['Возраст куста', 'lab-br-w']]);
     const SC = [2.1, 1.85, 1.62, 1.42, 1.24];
     const spec = n => S.bush(n, { scale: SC[n], leaf: 1 });
     const plant = S.Plant($('#lab-br-g', el), spec(2), { grown: true, leafScale: 0.6, sway: 0.8, growDur: 1.8 });

@@ -1,4 +1,4 @@
-/* Гид по базилику — живые модели главы «Урожай». Файл собирает scripts/build.py из src/labs/urozhay/ — правьте там */
+/* Гид по базилику — живые модели главы «Урожай». Файл собирает scripts/build.py из src/labs/urozhay/ — правьте там */
 (() => {
   'use strict';
   const { register, illustrate, api: h } = window.BasilScience;
@@ -17,7 +17,7 @@
   const { micro, ill, props } = window.BasilLibs;
   { const st = document.createElement('style'); st.dataset.labs = "urozhay"; st.textContent = "/* pesto: the jar is shared with the anthocyanin model, the bars with gdd (src/css/lab/06-lab-tools.css) */\n.pesto-out { display: grid; gap: 10px; justify-items: center; }\n.pesto-jar { width: 160px; height: auto; }\n.pesto-verdict { margin: 0; font-size: .95rem; color: var(--ink-2); text-align: center; }\n.pesto-verdict b { display: block; font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); }\n.pesto-bars { width: 100%; }\n.pesto-notes { margin-top: 16px; font-size: .92rem; }\n\n"; document.head.appendChild(st); }
   /* @use props */
-  /* Pictures of the Harvest chapter: the eight ways to keep basil (data-ill="store:<kind>") — a bouquet in
+  /* Pictures of the Harvest chapter: the eight ways to keep basil (data-ill="store:<kind>") — a bouquet in
      water, the fridge, frozen in oil, blanched, dried, salt, oil, pesto. */
   const Fu = ill.F, qu = ill.q, Ru = props;
   const W = 180, H = 100;
@@ -36,7 +36,7 @@
       let g = Ru.glass(90, 88, 40, 50, { level: 0.62, inside: under });
       stems.forEach((dx, i) => { g += cutSprig(90 + dx * 0.9, 56, 26 + (i % 2) * 6, dx * 1.6, 0.22, { seed: i * 5 }); });
       g += Ru.bag(90, 60, 92, 50);
-      return storeP(g, 'Пучок базилика в стакане воды под свободным пакетом');
+      return storeP(g, 'Пучок базилика в стакане воды под свободным пакетом');
     },
     fridge: () => {
       const f = Ru.fridge(90, 90, 120, 82);
@@ -45,40 +45,40 @@
       g += `<rect x="40" y="${qu(f.shelves[0] - 14)}" width="54" height="13" rx="6" fill="${Fu('paper')}" stroke="${Fu('paper-d')}" stroke-width="1"/>` + ill.leaf({ x: 92, y: f.shelves[0] - 7, a: 80, s: 0.16, seed: 4 }) + ill.leaf({ x: 92, y: f.shelves[0] - 8, a: 110, s: 0.13, seed: 5 });
       g += `<rect x="36" y="${qu(f.shelves[0] - 17)}" width="64" height="17" rx="7" fill="${Fu('film')}" opacity=".5" stroke="${Fu('glass-d')}" stroke-width=".8"/>`;
       g += Ru.thermo(58, f.shelves[1] - 2, 22, 0.55);
-      return storeP(g, 'Листья в сухом полотенце и пакете на полке холодильника');
+      return storeP(g, 'Листья в сухом полотенце и пакете на полке холодильника');
     },
     freeze: () => {
       let g = Ru.iceTray(80, 84, 110) + Ru.snow(156, 26, 11);
       // one cube already out
       g += `<rect x="140" y="62" width="20" height="20" rx="4" fill="${Fu('oil')}" stroke="${Fu('glass-d')}" stroke-width="1"/><ellipse cx="147" cy="70" rx="3" ry="1.6" fill="${Fu('leaf-deep')}"/><ellipse cx="153" cy="75" rx="2.6" ry="1.4" fill="${Fu('leaf-deep')}"/>`;
-      return storeP(g, 'Формочка для льда с кубиками из базилика в масле');
+      return storeP(g, 'Формочка для льда с кубиками из базилика в масле');
     },
     blanch: () => {
       let g = Ru.saucepan(48, 88, 56, { steam: true }) + ill.leaf({ x: 48, y: 52, a: 170, s: 0.2, seed: 3 });
       g += Ru.arrow(84, 52, 110, 52, 10) + ill.label(97, 34, '3–5 с');
       g += Ru.bowl(140, 88, 64) + [126, 140, 152].map((x, i) => `<rect x="${x - 6}" y="${60 - (i % 2) * 2}" width="12" height="10" rx="2" fill="${Fu('ice')}" stroke="${Fu('glass-d')}" stroke-width="1" transform="rotate(${(i - 1) * 14} ${x} 65)"/>`).join('') + ill.leaf({ x: 142, y: 70, a: 70, s: 0.18, seed: 6 });
-      return storeP(g, 'Листья на секунды в кипяток, затем в ледяную воду');
+      return storeP(g, 'Листья на секунды в кипяток, затем в ледяную воду');
     },
     dry: () => {
       let g = `<path d="M10 14H170" stroke="${Fu('wood-d')}" stroke-width="3" stroke-linecap="round"/>`;
       g += Ru.bunch(38, 18, 0.95, { dry: true, seed: 3 }) + Ru.bunch(84, 18, 0.85, { dry: true, seed: 8 });
       g += Ru.thermo(156, 86, 34, 0.75) + ill.label(174, 40, '30–35 °C', 'end');
-      return storeP(g, 'Пучки сушатся вниз листьями в тени');
+      return storeP(g, 'Пучки сушатся вниз листьями в тени');
     },
     salt: () => {
       let g = Ru.jar(70, 88, 46, 64, { fill: 'leaf-deep', level: 0.82, bands: 4 }) + ill.label(124, 50, '1 : 4', 'start');
       g += `<path d="M104 86C108 70 136 70 148 86Z" fill="${Fu('salt')}" stroke="${Fu('frame-d')}" stroke-width="1"/>` + [0, 1, 2, 3, 4].map(i => `<rect x="${112 + i * 7}" y="${80 - (i % 2) * 3}" width="3" height="3" fill="${Fu('frame-d')}" opacity=".45"/>`).join('');
-      return storeP(g, 'Банка: слои соли и листьев базилика');
+      return storeP(g, 'Банка: слои соли и листьев базилика');
     },
     oil: () => {
       let g = Ru.bottle(70, 88, 34, 70, { fill: 'oil', label: false });
       g += ill.leaf({ x: 64, y: 82, a: -10, s: 0.2, seed: 3, tone: 'deep' }) + ill.leaf({ x: 74, y: 76, a: 20, s: 0.18, seed: 4, tone: 'deep' });
       g += Ru.snow(132, 48, 15);
-      return storeP(g, 'Масло с базиликом держат только в холоде');
+      return storeP(g, 'Масло с базиликом держат только в холоде');
     },
     pesto: () => {
       let g = Ru.jar(62, 88, 46, 58, { fill: 'pesto', level: 0.78, layer: 5 }) + Ru.mortar(132, 88, 56);
-      return storeP(g, 'Банка песто под слоем масла и ступка');
+      return storeP(g, 'Банка песто под слоем масла и ступка');
     }
   };
   illustrate('store', k => (STORE[k] || STORE.bouquet)(), Object.keys(STORE));
@@ -88,15 +88,15 @@
     const emit = T => Math.exp(10.6 * (1 - 471 / (T + 273.15)));
     const EMAX = emit(27);
     const turg = hr => hr < 7 || hr > 21 ? 1 : 1 - 0.42 * Math.pow(Math.sin(Math.PI * (hr - 7) / 14), 1.5);
-    el.innerHTML = h.head('Летний день глазами листа', 'Температура листа — типичный ясный июльский день. Испарение линалоола считается по правилу Трутона, тургор — упрощённо.', true) +
+    el.innerHTML = h.head('Летний день глазами листа', 'Температура листа — типичный ясный июльский день. Испарение линалоола считается по правилу Трутона, тургор — упрощённо.', true) +
       `<div class="lab-controls">${h.rangeHtml('lab-di-h', 'Время', 0, 23.5, 0.5, 7)}</div>
        <div class="lab-chart" id="lab-di-ch"></div>
        <ul class="legend legend-lines"><li><i class="k-s3"></i>аромат улетает</li><li><i class="k-s4"></i>тургор листа</li></ul>` +
-      h.readHtml([['Температура листа', 'lab-di-t'], ['Испарение аромата, от пика', 'lab-di-e'], ['Тургор', 'lab-di-g'], ['Совет', 'lab-di-v', 'is-wide']]);
+      h.readHtml([['Температура листа', 'lab-di-t'], ['Испарение аромата, от пика', 'lab-di-e'], ['Тургор', 'lab-di-g'], ['Совет', 'lab-di-v', 'is-wide']]);
     let H = 7, hover = null;
     const hh2 = v => `${Math.floor(v)}:${v % 1 ? '30' : '00'}`;
     const ch = h.chart($('#lab-di-ch', el), {
-      label: 'Потери аромата и тургор листа в течение суток',
+      label: 'Потери аромата и тургор листа в течение суток',
       draw(w, hh) {
         const pts = f => { const a = []; for (let x = 0; x <= 24; x += 0.25) a.push([x, f(x)]); return a; };
         const P = h.plot({ w, h: hh, x: [0, 24], y: [0, 105], xticks: [0, 6, 12, 18, 24], yticks: [0, 50, 100], fx: v => v + ':00', fy: v => v + '%',
@@ -118,7 +118,7 @@
     const upd = () => {
       const T = Tleaf(H), e = emit(T) / EMAX, g = turg(H);
       set(el, 'lab-di-t', `${fmt(T)} °C`); set(el, 'lab-di-e', pct(e)); set(el, 'lab-di-g', pct(g));
-      set(el, 'lab-di-v', H >= 6 && H <= 10 ? 'Хорошее время: листья упругие, аромат ещё не «выкипает».' : H > 10 && H < 18 ? 'Жарко: листья вялые, летучие вещества уходят быстрее всего. Отложите сбор.' : H >= 18 && H < 21 ? 'Вечером можно, но листья ещё не восстановили воду после дня.' : 'Ночью листья полны воды, но на них может быть роса — собирайте, когда она высохнет.');
+      set(el, 'lab-di-v', H >= 6 && H <= 10 ? 'Хорошее время: листья упругие, аромат ещё не «выкипает».' : H > 10 && H < 18 ? 'Жарко: листья вялые, летучие вещества уходят быстрее всего. Отложите сбор.' : H >= 18 && H < 21 ? 'Вечером можно, но листья ещё не восстановили воду после дня.' : 'Ночью листья полны воды, но на них может быть роса — собирайте, когда она высохнет.');
       ch.redraw();
     };
     const rng = h.bindRange(el, 'lab-di-h', v => hh2(v), v => { H = v; upd(); });
@@ -129,12 +129,12 @@
   const storeAt = t => { for (let i = 0; i < STORE_PTS.length - 1; i++) if (t <= STORE_PTS[i + 1][0]) return lerp(STORE_PTS[i][1], STORE_PTS[i + 1][1], (t - STORE_PTS[i][0]) / (STORE_PTS[i + 1][0] - STORE_PTS[i][0])); return 4; };
 
   register('storage', el => {
-    el.innerHTML = h.head('Сколько живёт срезанный базилик', 'Ориентир для стеблей в воде под свободным пакетом, упрощено по опытам хранения: ниже 10 °C срок режет холодовое повреждение, выше 18 °C — старение листа.', true) +
+    el.innerHTML = h.head('Сколько живёт срезанный базилик', 'Ориентир для стеблей в воде под свободным пакетом, упрощено по опытам хранения: ниже 10 °C срок режет холодовое повреждение, выше 18 °C — старение листа.', true) +
       `<div class="lab-controls">${h.rangeHtml('lab-st-t', 'Температура хранения', 2, 25, 1, 4)}</div>
-       <div class="lab-chart" id="lab-st-ch"></div>` + h.readHtml([['До заметной порчи', 'lab-st-d'], ['Что происходит', 'lab-st-v', 'is-wide']]);
+       <div class="lab-chart" id="lab-st-ch"></div>` + h.readHtml([['До заметной порчи', 'lab-st-d'], ['Что происходит', 'lab-st-v', 'is-wide']]);
     let T = 4;
     const ch = h.chart($('#lab-st-ch', el), {
-      label: 'Срок хранения срезанного базилика в зависимости от температуры',
+      label: 'Срок хранения срезанного базилика в зависимости от температуры',
       draw(w, hh) {
         const pts = []; for (let t = 2; t <= 25; t += 0.5) pts.push([t, storeAt(t)]);
         const P = h.plot({ w, h: hh, x: [2, 25], y: [0, 10], xticks: [2, 5, 10, 15, 20, 25], yticks: [0, 5, 10], fx: v => v + '°', ylab: 'дней',
@@ -146,7 +146,7 @@
     });
     const upd = () => {
       set(el, 'lab-st-d', `≈ ${fmt(storeAt(T))} дн.`);
-      set(el, 'lab-st-v', T < 10 ? 'Мембраны клеток «застывают», полифенолоксидаза встречается с полифенолами — появляются чёрные пятна.' : T <= 16 ? 'Мембраны жидкие, дыхание медленное: лист живёт дольше всего.' : 'Тепло: лист быстро тратит запасы, желтеет и вянет.');
+      set(el, 'lab-st-v', T < 10 ? 'Мембраны клеток «застывают», полифенолоксидаза встречается с полифенолами — появляются чёрные пятна.' : T <= 16 ? 'Мембраны жидкие, дыхание медленное: лист живёт дольше всего.' : 'Тепло: лист быстро тратит запасы, желтеет и вянет.');
       ch.redraw();
     };
     const rng = h.bindRange(el, 'lab-st-t', v => `${v} °C`, v => { T = v; upd(); });
@@ -154,11 +154,11 @@
   });
 
   register('pesto', el => {
-    el.innerHTML = h.head('Песто-лаборатория', 'Качественная модель двух процессов: ферментативного потемнения и оливкования хлорофилла. Соберите свой рецепт и посмотрите цвет через сутки.', true) +
+    el.innerHTML = h.head('Песто-лаборатория', 'Качественная модель двух процессов: ферментативного потемнения и оливкования хлорофилла. Соберите свой рецепт и посмотрите цвет через сутки.', true) +
       `<div class="lab-grid">
         <div class="lab-controls">
           ${h.segHtml('lab-pe-m', 'Чем растираем', [['mortar', 'Ступка'], ['blender', 'Блендер']], 'blender')}
-          <div class="lab-seg-wrap"><span class="lab-label">Добавки и приёмы</span><div class="chips-row lab-chips" id="lab-pe-x">
+          <div class="lab-seg-wrap"><span class="lab-label">Добавки и приёмы</span><div class="chips-row lab-chips" id="lab-pe-x">
             <button class="chip" type="button" data-x="blanch" aria-pressed="false">Бланшировать 10 с</button>
             <button class="chip" type="button" data-x="vitc" aria-pressed="false">Щепотка аскорбинки</button>
             <button class="chip" type="button" data-x="lemon" aria-pressed="false">Лимонный сок</button>
@@ -199,12 +199,12 @@
       $('#lab-pe-v', el).innerHTML = `<b>${score < 0.15 ? 'Изумрудное' : score < 0.35 ? 'Слегка потускнело' : score < 0.6 ? (O > E ? 'Оливковое' : 'Потемнело') : (O > E ? 'Оливково-бурое' : 'Бурое')}</b> через ${st.t} ч`;
       $('#lab-pe-bars', el).innerHTML = [['Ферментативное потемнение', E, 's3'], ['Оливкование хлорофилла', O, 's2']].map(([n, v, c]) => `<div class="gdd-row"><span>${n}</span><i class="${c}" style="--w:${clamp(v, 0.02, 1) * 100}%"></i><b>${pct(v)}</b></div>`).join('');
       const notes = [];
-      notes.push(st.m === 'blender' ? 'Блендер греет и взбивает с воздухом — потемнение ускоряется. Охладите чашу и работайте импульсами.' : 'Ступка не греет массу и почти не вбивает воздух.');
-      if (X.has('blanch')) notes.push('Бланширование разрушило полифенолоксидазу — главный виновник потемнения выключен. Аромат при этом чуть слабее.');
-      if (X.has('vitc')) notes.push('Аскорбиновая кислота восстанавливает хиноны обратно, пока сама не израсходуется.');
-      if (X.has('lemon')) notes.push('Кислота лимона немного тормозит фермент, но ускоряет оливкование: ион магния уходит из хлорофилла.');
+      notes.push(st.m === 'blender' ? 'Блендер греет и взбивает с воздухом — потемнение ускоряется. Охладите чашу и работайте импульсами.' : 'Ступка не греет массу и почти не вбивает воздух.');
+      if (X.has('blanch')) notes.push('Бланширование разрушило полифенолоксидазу — главный виновник потемнения выключен. Аромат при этом чуть слабее.');
+      if (X.has('vitc')) notes.push('Аскорбиновая кислота восстанавливает хиноны обратно, пока сама не израсходуется.');
+      if (X.has('lemon')) notes.push('Кислота лимона немного тормозит фермент, но ускоряет оливкование: ион магния уходит из хлорофилла.');
       if (X.has('oil')) notes.push('Слой масла отрезает кислород сверху.');
-      notes.push(st.s === 'fridge' ? 'Холод замедляет обе реакции примерно втрое.' : 'При комнатной температуре реакции идут быстро — песто лучше съесть сразу.');
+      notes.push(st.s === 'fridge' ? 'Холод замедляет обе реакции примерно втрое.' : 'При комнатной температуре реакции идут быстро — песто лучше съесть сразу.');
       $('#lab-pe-notes', el).innerHTML = notes.map(n => `<li>${h.nb(n)}</li>`).join('');
     };
     h.bindPick(el, 'lab-pe-m', v => { st.m = v; upd(); });

@@ -21,10 +21,13 @@
 .mix { margin-top: 6px; }
 .mix-bar { display: flex; height: 52px; border-radius: 14px; overflow: hidden; margin: 10px 0 8px; gap: 2px; }
 .mix-bar span { display: grid; place-items: center; padding: 0 8px; font-size: .76rem; font-weight: 700; text-align: center; line-height: 1.15; }
+/* a part: its name, and under it how many parts */
+.mix-bar span, .soil-bar span { align-content: center; }
+.mix-bar span small, .soil-bar span small { display: block; margin-top: 2px; font-size: .9em; font-weight: 500; color: inherit; opacity: .85; }
 .mix-bar .m-a { background: var(--mix-a-bg); color: var(--mix-a-fg); }
 .mix-bar .m-b { background: var(--mix-b-bg); color: var(--mix-b-fg); }
 .mix-bar .m-c { background: var(--mix-c-bg); color: var(--mix-c-fg); }
-.mix small { font-size: .84rem; color: var(--ink-3); }
+.mix > small { font-size: .84rem; color: var(--ink-3); }
 
 .dli-tool { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 32px); align-items: center; }
 .dli-form h3 { margin-bottom: 6px; }
@@ -57,3 +60,4 @@
 .water-ill { display: block; aspect-ratio: 180 / 110; border-radius: 14px; overflow: hidden; background: var(--ill-bg); }
 .water-ill .ill { width: 100%; height: 100%; }
 .water-ill.is-single { max-width: 280px; margin: 4px 0 12px; }
+@media (max-width: 640px) { .water-ill.is-single { max-width: none; } }

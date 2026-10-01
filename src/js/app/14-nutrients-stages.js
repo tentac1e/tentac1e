@@ -12,7 +12,7 @@
     const series = [['n', 'N', 'Азот', 'N'], ['p', 'P', 'Фосфор', 'P'], ['k', 'K', 'Калий', 'K']];
     let sel = 3;
 
-    track.innerHTML = S.map((s, i) => `<button class="stage-btn" type="button" role="tab" aria-selected="false" data-i="${i}">${miniPlant(s.plant)}<span>${i + 1}. ${s.short}</span></button>`).join('');
+    track.innerHTML = S.map((s, i) => `<button class="stage-btn" type="button" role="tab" aria-selected="false" data-i="${i}">${miniPlant(s.plant)}<span><i>${i + 1}</i>${s.short}</span></button>`).join('');
     const btns = $$('.stage-btn', track);
     npk.innerHTML = series.map(([c, s, n]) => `<div class="npk-row"><span class="lbl"><i class="k-${c}"></i>${s} · ${n}</span><span class="bar"><i class="k-${c}" id="bar-${c}"></i></span><span class="lvl" id="lvl-${c}"></span></div>`).join('');
     const table = $('#feed-table');

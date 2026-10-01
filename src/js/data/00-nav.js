@@ -5,10 +5,10 @@
     { id: 'kalendar', num: 3, title: 'Календарь', art: 'art-kalendar', desc: 'Сроки посева, высадки и сбора под ваш климат.' },
     { id: 'uhod', num: 4, title: 'Уход', art: 'art-uhod', desc: 'Свет, полив, тепло, почва и уход по сезонам.' },
     { id: 'udobreniya', num: 5, title: 'Удобрения', art: 'art-udobreniya', desc: 'Элементы питания, подкормки по стадиям, план и калькуляторы.' },
-    { id: 'formirovka', num: 6, title: 'Прищипывание', short: 'Прищипка', art: 'art-formirovka', desc: 'Как сделать из стебля густой куст. С тренажёром.' },
+    { id: 'formirovka', num: 6, title: 'Прищипывание', hy: 'При\u00adщи\u00adпы\u00adва\u00adние', short: 'Прищипка', art: 'art-formirovka', desc: 'Как сделать из стебля густой куст. С тренажёром.' },
     { id: 'urozhay', num: 7, title: 'Урожай', art: 'art-urozhay', desc: 'Сбор, хранение, заготовки и книга из 17 рецептов.' },
     { id: 'vkus', num: 8, title: 'Вкус и аромат', short: 'Вкус', art: 'art-vkus', desc: 'Химия аромата, 3D-молекулы, физика кухни и лаборатория сочетаний.' },
-    { id: 'razmnozhenie', num: 9, title: 'Размножение', art: 'art-razmnozhenie', desc: 'Черенки, свои семена и тест на всхожесть.' },
+    { id: 'razmnozhenie', num: 9, title: 'Размножение', hy: 'Раз\u00adмно\u00adже\u00adние', art: 'art-razmnozhenie', desc: 'Черенки, свои семена и тест на всхожесть.' },
     { id: 'problemy', num: 10, title: 'Проблемы', art: 'art-problemy', desc: 'Диагностика по симптомам, болезни, вредители, профилактика.' },
     { id: 'spravka', num: 11, title: 'Справка', art: 'art-spravka', desc: 'Частые вопросы, словарь терминов, чек-лист сезона.' }
   ];

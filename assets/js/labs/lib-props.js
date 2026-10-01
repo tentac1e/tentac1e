@@ -1,12 +1,12 @@
-/* Гид по базилику — библиотека рисунков «props». Файл собирает scripts/build.py из src/labs/_lib/props.js — правьте там */
+/* Гид по базилику — библиотека рисунков «props». Файл собирает scripts/build.py из src/labs/_lib/props.js — правьте там */
 (() => {
   'use strict';
   const L = window.BasilLibs = window.BasilLibs || {};
   const { micro, ill } = L;
   /* ---------------- props: things for the step-by-step pictures ----------------
      Trays and cups, a seedling at any age, glass and water, tools, a lamp, a window, a balcony box, a bed,
-     a greenhouse, a hydroponic tank, jars, bags and bottles. Each stands on (x, y) — the middle of its
-     bottom — unless said otherwise, and returns SVG markup. Colours are the --ill-* tokens; arrows and
+     a greenhouse, a hydroponic tank, jars, bags and bottles. Each stands on (x, y) — the middle of its
+     bottom — unless said otherwise, and returns SVG markup. Colours are the --ill-* tokens; arrows and
      dimension lines follow the theme (.ill-arrow, .ill-scale in 00-ill.css). */
   /* @use ills */
   const props = (() => {
@@ -159,7 +159,7 @@
       if (st) { const sx = x + dir * 39 * s, sy = y - 31 * s; g += `<path d="M${q(sx)} ${q(sy)}q${q(dir * 6)} ${q(st * 0.3)} ${q(dir * 8)} ${q(st)}" stroke="${F('water-c')}" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".9"/>`; }
       return g;
     }
-    // a hanging LED lamp and its light; (x, y) — the middle of the lamp
+    // a hanging LED lamp and its light; (x, y) — the middle of the lamp
     function lamp(x, y, w = 70, o = {}) {
       const reach = o.reach || 60, x0 = x - w / 2, x1 = x + w / 2, gid = ill.id('lmp');
       let g = `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${F('light')}" stop-opacity=".8"/><stop offset="1" stop-color="${F('light')}" stop-opacity="0"/></linearGradient></defs>`;
@@ -186,7 +186,7 @@
     }
 
     /* ---------- tools ---------- */
-    // garden snips with their pivot at (x, y), blades towards angle a (degrees, 0 — to the right)
+    // garden snips with their pivot at (x, y), blades towards angle a (degrees, 0 — to the right)
     function scissors(x, y, a = 0, s = 1, open = 1) {
       const o = 5 * open;
       let g = `<path d="M-14 -${q(o + 3)}Q-3 -${q(o + 2)} 0 0M-14 ${q(o + 3)}Q-3 ${q(o + 2)} 0 0" stroke="${F('grip')}" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;
@@ -314,7 +314,7 @@
     }
 
     /* ---------- places ---------- */
-    // a window seen from the room: (x, y) — the middle of the sill; o: radiator under it, curtain (light tulle), sun
+    // a window seen from the room: (x, y) — the middle of the sill; o: radiator under it, curtain (light tulle), sun
     function window_(x, y, w = 120, h = 100, o = {}) {
       const x0 = x - w / 2, top = y - h, gid = ill.id('sky');
       let g = `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${F('sky')}"/><stop offset="1" stop-color="${F('sky-2')}"/></linearGradient></defs>`;
@@ -343,7 +343,7 @@
       if (o.mulch) { let d = ''; for (let i = 0; i < (x1 - x0) / 3; i++) { const sx = x0 + 6 + rnd() * (x1 - x0 - 12), sy = y - 1 + rnd() * 4; d += `M${q(sx)} ${q(sy)}l${q(5 + rnd() * 4)} ${q((rnd() - 0.5) * 3)}`; } g += `<path d="${d}" stroke="${F('straw')}" stroke-width="1.6" stroke-linecap="round"/>`; }
       return g;
     }
-    // a small greenhouse: arched frame and clear walls, door open for air; (x, y) — the middle of its floor
+    // a small greenhouse: arched frame and clear walls, door open for air; (x, y) — the middle of its floor
     function greenhouse(x, y, w = 150, h = 100, o = {}) {
       const t = w / 2;
       const arch = `M${q(x - t)} ${q(y)}V${q(y - h * 0.55)}Q${q(x - t)} ${q(y - h)} ${q(x)} ${q(y - h)}Q${q(x + t)} ${q(y - h)} ${q(x + t)} ${q(y - h * 0.55)}V${q(y)}`;
@@ -391,7 +391,7 @@
       }
       return g;
     }
-    // a dry calyx torn open: four black seeds inside; (x, y) — its base
+    // a dry calyx torn open: four black seeds inside; (x, y) — its base
     function calyx(x, y, s = 1) {
       return `<g transform="translate(${q(x)} ${q(y)}) scale(${s})"><path d="M0 0C-14 -4 -20 -22 -16 -34L-6 -30L0 -38L6 -30L16 -34C20 -22 14 -4 0 0Z" fill="${F('brown')}" stroke="${F('brown-d')}" stroke-width="1"/>` +
         [[-6, -20], [5, -21], [-2, -12], [7, -11]].map(([sx, sy], i) => `<ellipse cx="${sx}" cy="${sy}" rx="3.6" ry="2.6" transform="rotate(${i * 40} ${sx} ${sy})" fill="${F('seed')}"/><ellipse cx="${sx - 1}" cy="${sy - 1}" rx="1.2" ry=".7" fill="${F('hi')}" opacity=".3"/>`).join('') + '</g>';

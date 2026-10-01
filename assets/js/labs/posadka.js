@@ -1,4 +1,4 @@
-/* Гид по базилику — живые модели главы «Посадка». Файл собирает scripts/build.py из src/labs/posadka/ — правьте там */
+/* Гид по базилику — живые модели главы «Посадка». Файл собирает scripts/build.py из src/labs/posadka/ — правьте там */
 (() => {
   'use strict';
   const { register, illustrate, api: h } = window.BasilScience;
@@ -29,7 +29,7 @@
     1: () => {
       const t = R.tray(46, 102, 76, { cells: 3, perlite: true, wet: true });
       return stepP(R.bag(98, 102, 34, 46, { kind: 'paper' }) + `<ellipse cx="98" cy="57" rx="14" ry="3" fill="${Fp('soil-d')}"/>` + t.svg +
-        [36, 46, 56].map(x => `<path d="M${x} 78q-4 -6 0 -12q4 -6 0 -12" stroke="${Fp('glass-d')}" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>`).join(''), 'Кассета с лёгким грунтом и перлитом');
+        [36, 46, 56].map(x => `<path d="M${x} 78q-4 -6 0 -12q4 -6 0 -12" stroke="${Fp('glass-d')}" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>`).join(''), 'Кассета с лёгким грунтом и перлитом');
     },
     2: () => {
       // a cell cut open: the seed lies half a centimetre under the surface
@@ -41,11 +41,11 @@
       g += `<g class="ill-scale"><path d="M${x0 - 7} ${top}V${top + 9}M${x0 - 11} ${top}H${x0 - 3}M${x0 - 11} ${top + 9}H${x0 - 3}" fill="none" stroke="currentColor" stroke-width="1.6"/></g>`;
       g += ill.label(x0 - 6, top - 8, '0,5 см', 'start');
       g += R.sprayer(98, 102, 0.95, { dir: -1 });
-      return stepP(g, 'Семена под тонким слоем грунта и распылитель');
+      return stepP(g, 'Семена под тонким слоем грунта и распылитель');
     },
     3: () => {
       const t = R.tray(52, 104, 84, { cells: 3, wet: true });
-      return stepP(t.svg + t.tops.map(([x, y]) => R.seed(x - 4, y, 20, true) + R.seed(x + 5, y + 1, -40, true)).join('') + R.lid(52, 98, 88, 40) + R.thermo(106, 102, 44, 0.7) + ill.label(112, 24, '22–25 °C', 'end'), 'Кассета под прозрачной крышкой и термометр');
+      return stepP(t.svg + t.tops.map(([x, y]) => R.seed(x - 4, y, 20, true) + R.seed(x + 5, y + 1, -40, true)).join('') + R.lid(52, 98, 88, 40) + R.thermo(106, 102, 44, 0.7) + ill.label(112, 24, '22–25 °C', 'end'), 'Кассета под прозрачной крышкой и термометр');
     },
     4: () => {
       const t = R.tray(60, 104, 92, { cells: 3, wet: true });
@@ -57,13 +57,13 @@
       return stepP(t.svg + t.tops.map(([x, y]) => R.sprout(x, y, 18, { pairs: 1, s: 1 })).join('') +
         // the lifted seedling with its roots, on its way to a cup of its own
         R.roots(56, 54, 14, 5, { seed: 3, spread: 0.6 }) + R.sprout(56, 54, 20, { pairs: 1, s: 1 }) + R.arrow(46, 30, 84, 40, 12) +
-        R.cup(94, 104, 34, 46, { roots: true }) + R.sprout(94, ys + 1, 12, { pairs: 1, s: 1 }), 'Сеянец пересаживают в свой стакан, заглубляя до семядолей');
+        R.cup(94, 104, 34, 46, { roots: true }) + R.sprout(94, ys + 1, 12, { pairs: 1, s: 1 }), 'Сеянец пересаживают в свой стакан, заглубляя до семядолей');
     },
     6: () => {
       let g = `<rect x="10" y="96" width="100" height="9" rx="3" fill="${Fp('plastic-hi')}"/><rect x="13" y="96" width="94" height="4" rx="1.5" fill="${Fp('water-c')}"/>`;
       [28, 60, 92].forEach((x, i) => { const ys = R.cupSoil(98, 38); g += R.cup(x, 98, 26, 38) + young(x, ys, 30 + i * 2, 2, { s: 1.15, lean: 3 }); });
       g += `<path d="M24 24A12 6 0 1 0 40 20" class="ill-arrow"/><path class="ill-arrow-head" d="M40 20l-6 -3l1 6z"/>`;
-      return stepP(g, 'Стаканы с рассадой в поддоне с водой: полив снизу');
+      return stepP(g, 'Стаканы с рассадой в поддоне с водой: полив снизу');
     },
     7: () => {
       const ys = R.cupSoil(104, 40);
@@ -73,13 +73,13 @@
       let g = R.sun(100, 20, 9) + R.tree(30, 98, 0.95) + `<ellipse cx="34" cy="100" rx="30" ry="5" fill="${Fp('dark')}" opacity=".18"/>`;
       [44, 66].forEach((x, i) => { const ys = R.cupSoil(100, 26); g += R.cup(x, 100, 18, 26, { paper: true }) + young(x, ys, 24 + i * 3, 2, { s: 0.95 }); });
       g += ill.label(112, 52, '1–2 ч', 'end');
-      return stepP(g, 'Рассада на улице в тени дерева', 100);
+      return stepP(g, 'Рассада на улице в тени дерева', 100);
     },
     9: () => {
       let g = R.bed(4, 116, 92, { mulch: true });
       [30, 88].forEach((x, i) => { g += young(x, 93, 48 + i * 4, 3, { s: 1.15 }); });
       g += R.dim(30, 88, 22, '25–30 см');
-      return stepP(g, 'Рассада на грядке через 25–30 см, полита и замульчирована', 94);
+      return stepP(g, 'Рассада на грядке через 25–30 см, полита и замульчирована', 94);
     }
   };
   illustrate('sow', n => (SOW[n] || SOW[1])(), Object.keys(SOW));
@@ -91,34 +91,34 @@
       let g = R.shopPot(66, 136, 76, 50) + R.crowd(66, 86, 66, 18, { h: 58, pale: true, seed: 4 });
       g += R.arrow(126, 92, 182, 92, 16) + ill.label(154, 56, 'разделить');
       [222, 276, 330].forEach((x, i) => { g += ill.pot(x, 112, 44, 26) + R.crowd(x, 105, 20, 4, { h: 46, seed: 7 + i }); });
-      return ill.svg(360, 150, paperP(360, 150) + `<path data-bg d="M0 136H360V136Q360 150 346 150H14Q0 150 0 136Z" fill="${Fp('bg-2')}"/>` + g, 'Магазинный горшок с десятками сеянцев делят на три-четыре горшка');
+      return ill.svg(360, 150, paperP(360, 150) + `<path data-bg d="M0 136H360V136Q360 150 346 150H14Q0 150 0 136Z" fill="${Fp('bg-2')}"/>` + g, 'Магазинный горшок с десятками сеянцев делят на три-четыре горшка');
     },
     1: () => {
       const inner = ill.leaf({ x: 6, y: 34, a: 6, s: 0.62, under: true, aphids: 6, seed: 5 });
-      return stepP(R.shopPot(42, 104, 54, 36) + R.crowd(42, 68, 46, 12, { h: 40, seed: 3 }) + R.lens(88, 46, 24, inner, 130), 'Под лупой — нижняя сторона листа с тлёй');
+      return stepP(R.shopPot(42, 104, 54, 36) + R.crowd(42, 68, 46, 12, { h: 40, seed: 3 }) + R.lens(88, 46, 24, inner, 130), 'Под лупой — нижняя сторона листа с тлёй');
     },
-    2: () => stepP([22, 60, 98].map(x => ill.pot(x, 82, 32, 22, { wet: true })).join('') + [22, 60, 98].map(x => R.drop(x, 112, 0.7)).join(''), 'Три горшка с влажным грунтом: лишняя вода уходит через отверстия'),
+    2: () => stepP([22, 60, 98].map(x => ill.pot(x, 82, 32, 22, { wet: true })).join('') + [22, 60, 98].map(x => R.drop(x, 112, 0.7)).join(''), 'Три горшка с влажным грунтом: лишняя вода уходит через отверстия'),
     3: () => {
       let g = R.rootball(56, 100, 84, 40, { split: 3, seed: 6 });
       [24, 56, 88].forEach((x, i) => { g += R.crowd(x, 62 + (i % 2 ? 3 : -2), 18, 4, { h: 34, seed: 9 + i }); });
       g += R.knife(76, 22, 120, 0.7);
-      return stepP(g, 'Ком корней разломан на три части');
+      return stepP(g, 'Ком корней разломан на три части');
     },
     4: () => {
       let g = `<ellipse cx="50" cy="104" rx="34" ry="5" fill="${Fp('plastic-hi')}"/><ellipse cx="50" cy="103" rx="28" ry="3" fill="${Fp('water-c')}"/>` + ill.pot(50, 76, 46, 26, { wet: true }) + R.crowd(50, 70, 20, 4, { h: 40, seed: 5 });
       g += R.can(98, 46, 0.6, { dir: -1, stream: 18 });
-      return stepP(g, 'Посаженный куст полит до стока воды в поддон', 106);
+      return stepP(g, 'Посаженный куст полит до стока воды в поддон', 106);
     },
     5: () => {
       let g = R.window(56, 84, 84, 70, { curtain: true, sun: true });
       g += ill.pot(42, 84, 26, 16) + R.crowd(42, 78, 12, 3, { h: 30, seed: 4 }) + R.thermo(106, 100, 40, 0.55) + ill.label(114, 114, '20–24 °C', 'end');
-      return stepP(g, 'Горшок на окне за лёгкой занавеской, в полутени', 92);
+      return stepP(g, 'Горшок на окне за лёгкой занавеской, в полутени', 92);
     },
     6: () => stepP(ill.pot(46, 82, 40, 24) + young(46, 75, 60, 3, { s: 1.3, cut: 1 }) + R.scissors(72, 22, 200, 0.85, 0.8) + R.bowl(96, 104, 34) + ill.leaf({ x: 96, y: 86, a: 70, s: 0.16, seed: 4 }) + ill.leaf({ x: 92, y: 88, a: -50, s: 0.14, seed: 5 }), 'Верхушки срезают над второй-третьей парой листьев'),
     7: () => {
       let g = R.bottle(24, 102, 22, 54, { fill: 'box' }) + `<path d="M44 74h22l-3 22h-16z" fill="${Fp('glass')}" stroke="${Fp('glass-d')}" stroke-width="1"/><path d="M45.6 85h18.8l-1.5 11h-15.8z" fill="${Fp('box')}" opacity=".85"/>`;
       g += ill.pot(92, 80, 40, 24) + R.crowd(92, 73, 18, 4, { h: 40, seed: 8 }) + ill.label(56, 114, '½ дозы');
-      return stepP(g, 'Половинная доза удобрения в мерном колпачке');
+      return stepP(g, 'Половинная доза удобрения в мерном колпачке');
     }
   };
   illustrate('shop', n => (SHOP[n] || SHOP[1])(), Object.keys(SHOP));
@@ -138,7 +138,7 @@
       let g = R.sun(282, 26, 12) + R.balcony(20, 300, 128, { box: [60, 200] });
       [84, 130, 176].forEach((x, i) => { g += basilBush(x, 64, 48, { leaf: 0.26, seed: 5 + i }); });
       g += ill.pot(250, 126, 46, 30) + basilBush(250, 120, 58, { seed: 9 }) + [0, 1, 2].map(i => `<path d="M${14 + i * 6} ${40 + i * 12}q20 -6 40 0" stroke="${Fp('glass-d')}" stroke-width="1.6" fill="none" opacity=".7" stroke-linecap="round"/>`).join('');
-      return placeP(g, 'Балкон: ящик с кустами на перилах и ветер', 132);
+      return placeP(g, 'Балкон: ящик с кустами на перилах и ветер', 132);
     },
     garden: () => {
       let g = R.sun(290, 26, 13) + R.bed(14, 306, 122, { mulch: true, depth: 20 });
@@ -155,19 +155,19 @@
     hydro: () => {
       let g = R.lamp(160, 18, 200, { reach: 80 }) + R.tank(160, 136, 180, 50, { pots: [-0.6, 0, 0.6] });
       [-0.6, 0, 0.6].forEach((k, i) => { g += basilBush(160 + k * 90, 82, 50, { leaf: 0.27, seed: 4 + i }); });
-      return placeP(g, 'Гидропоника: корни в растворе, сверху лампа', 136);
+      return placeP(g, 'Гидропоника: корни в растворе, сверху лампа', 136);
     }
   };
   illustrate('place', id => (PLACE[id] || PLACE.sill)(), Object.keys(PLACE));
 
   register('window', el => {
-    el.innerHTML = h.head('Солнце в полдень', 'Выберите город и месяц. Разрез показывает, как полуденные лучи входят в окно, выходящее на юг.') +
+    el.innerHTML = h.head('Солнце в полдень', 'Выберите город и месяц. Разрез показывает, как полуденные лучи входят в окно, выходящее на юг.') +
       `<div class="lab-controls">${citiesChips('lab-win-city', 55.8)}${h.rangeHtml('lab-win-m', 'Месяц', 1, 12, 1, 12)}</div>
        <div class="lab-chart" id="lab-win-ch"></div>` +
-      h.readHtml([['Высота солнца', 'lab-win-h'], ['Длина дня', 'lab-win-d'], ['Поток на горизонталь', 'lab-win-e'], ['Пятно света на полу', 'lab-win-p']]);
+      h.readHtml([['Высота солнца', 'lab-win-h'], ['Длина дня', 'lab-win-d'], ['Поток на горизонталь', 'lab-win-e'], ['Пятно света на полу', 'lab-win-p']]);
     let lat = 55.8, m = 12;
     const ch = h.chart($('#lab-win-ch', el), {
-      label: 'Разрез окна с полуденными лучами солнца',
+      label: 'Разрез окна с полуденными лучами солнца',
       h: w => clamp(w * 0.46, 220, 300),
       draw(w, hh) {
         const n = h.DOY21[m - 1];
@@ -192,7 +192,7 @@
           const tag = `${fmt0(alt)}°`, tw = tag.length * 7 + 12;
           s += `<rect class="win-tag" x="${r1(sx - tw / 2)}" y="${r1(sy + 18)}" width="${r1(tw)}" height="17" rx="8.5"/><text class="tick" x="${r1(sx)}" y="${r1(sy + 30)}" text-anchor="middle">${tag}</text>`;
         } else {
-          s += `<text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6)}" text-anchor="middle">солнце</text><text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6) + 15}" text-anchor="middle">не встаёт</text>`;
+          s += `<text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6)}" text-anchor="middle">солнце</text><text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6) + 15}" text-anchor="middle">не встаёт</text>`;
         }
         s += `<rect class="win-wall" x="${wallX - 10}" y="${Y(3)}" width="10" height="${r1(0.8 * sc)}"/>`;
         s += `<rect class="win-wall" x="${wallX - 10}" y="${Y(0.85)}" width="10" height="${r1(0.85 * sc)}"/>`;
@@ -211,12 +211,12 @@
       const alt = h.noonSun(lat, n);
       set(el, 'lab-win-h', alt > 0 ? `${fmt0(alt)}°` : 'ниже горизонта');
       set(el, 'lab-win-d', `${fmt(h.dayLength(lat, n))} ч`);
-      set(el, 'lab-win-e', alt > 0 ? `${fmt0(Math.sin(alt * Math.PI / 180) * 100)} % от солнца в зените` : '0');
+      set(el, 'lab-win-e', alt > 0 ? `${fmt0(Math.sin(alt * Math.PI / 180) * 100)} % от солнца в зените` : '0');
       if (alt <= 0) set(el, 'lab-win-p', 'нет');
       else {
         const t = Math.tan(alt * Math.PI / 180);
         const a = 0.85 / t, b = 2.2 / t;
-        set(el, 'lab-win-p', a > 4.2 ? 'лучи уходят дальше 4 м' : `${fmt(a)}–${b > 4.2 ? '4+' : fmt(b)} м от стены`);
+        set(el, 'lab-win-p', a > 4.2 ? 'лучи уходят дальше 4 м' : `${fmt(a)}–${b > 4.2 ? '4+' : fmt(b)} м от стены`);
       }
       ch.redraw();
     };
@@ -247,11 +247,11 @@
         </div>
         <div class="lab-chart" id="lab-germ-ch"></div>
       </div>` +
-      h.readHtml([['Корешок проклюнется', 'lab-germ-r'], ['Всходы над землёй', 'lab-germ-e'], ['Скорость от максимума', 'lab-germ-v']]);
+      h.readHtml([['Корешок проклюнется', 'lab-germ-r'], ['Всходы над землёй', 'lab-germ-e'], ['Скорость от максимума', 'lab-germ-v']]);
     let T = 24, hover = null;
     const pts = f => { const a = []; for (let t = 11; t <= 41.5; t += 0.25) { const d = f(t); if (d <= 30) a.push([t, d]); } return a; };
     const ch = h.chart($('#lab-germ-ch', el), {
-      label: 'Дни до прорастания в зависимости от температуры',
+      label: 'Дни до прорастания в зависимости от температуры',
       draw(w, hh) {
         const P = h.plot({ w, h: hh, x: [8, 40], y: [0, 30], xticks: [10, 15, 20, 25, 30, 35, 40], yticks: [0, 10, 20, 30], fx: v => v + '°', ylab: 'дней', xlab: 'температура грунта, °C',
           vbands: [{ x0: 22, x1: 25, cls: 'is-good', label: 'совет гида' }],
@@ -261,7 +261,7 @@
         let s = P.s;
         if (hover != null) {
           const d = days(hover);
-          s += h.tip(P.X(hover), P.p.t + 4, w, [`${fmt(hover)} °C`, isFinite(d) ? `корешок ${fmt(d)} дн.` : 'не прорастёт', isFinite(d) ? `всходы ${fmt(d * 1.8)} дн.` : '']);
+          s += h.tip(P.X(hover), P.p.t + 4, w, [`${fmt(hover)} °C`, isFinite(d) ? `корешок ${fmt(d)} дн.` : 'не прорастёт', isFinite(d) ? `всходы ${fmt(d * 1.8)} дн.` : '']);
         }
         return s;
       },
@@ -276,12 +276,12 @@
     const upd = () => {
       const d = days(T);
       const ok = isFinite(d) && d < 60;
-      set(el, 'lab-germ-r', ok ? `через ${fmt(d)} дн.` : 'не прорастёт');
+      set(el, 'lab-germ-r', ok ? `через ${fmt(d)} дн.` : 'не прорастёт');
       set(el, 'lab-germ-e', ok ? `через ${fmt(d * 1.8)} дн.` : '—');
       set(el, 'lab-germ-v', ok ? pct((th / 19.5) / d) : '0');
       anim.classList.toggle('is-stopped', !ok || h.reduce.matches);
       anim.style.setProperty('--dur', `${clamp(ok ? d * 0.9 : 6, 2.6, 14)}s`);
-      set(el, 'lab-germ-phase', !ok ? (T <= Tb ? 'Слишком холодно: ферменты почти стоят, семя лежит сухим.' : 'Слишком жарко: белки зародыша повреждаются.') : 'Набухание → пробуждение ферментов → корешок → петля стебелька и семядоли');
+      set(el, 'lab-germ-phase', !ok ? (T <= Tb ? 'Слишком холодно: ферменты почти стоят, семя лежит сухим.' : 'Слишком жарко: белки зародыша повреждаются.') : 'Набухание → пробуждение ферментов → корешок → петля стебелька и семядоли');
       ch.redraw();
     };
     const rng = h.bindRange(el, 'lab-germ-t', v => `${fmt(v)} °C`, v => { T = v; upd(); });
@@ -289,9 +289,9 @@
   });
 
   register('shade', el => {
-    el.innerHTML = h.head('Тень соседей', 'Чем больше сеянцев в горшке, тем меньше красного и больше дальнего красного света доходит до каждого. Модель показывает реакцию одного сеянца.', true) +
+    el.innerHTML = h.head('Тень соседей', 'Чем больше сеянцев в горшке, тем меньше красного и больше дальнего красного света доходит до каждого. Модель показывает реакцию одного сеянца.', true) +
       `<div class="lab-grid">
-        <div class="lab-controls">${h.rangeHtml('lab-shade-n', 'Сеянцев в горшке', 1, 30, 1, 20)}
+        <div class="lab-controls">${h.rangeHtml('lab-shade-n', 'Сеянцев в горшке', 1, 30, 1, 20)}
           <div class="rfr" aria-hidden="true"><span class="rfr-r">красный 660&nbsp;нм</span><i id="lab-shade-bar"></i><span class="rfr-fr">дальний красный 730&nbsp;нм</span></div>
         </div>
         <div class="lab-stage shade-stage"><svg class="lab-plant" viewBox="-130 -290 260 310" aria-label="Сеянец базилика среди соседей" role="img"><g id="lab-shade-ghosts" class="ghosts"></g><line class="soil-line" x1="-130" x2="130" y1="2" y2="2"/><g id="lab-shade-g"></g></svg></div>
@@ -323,8 +323,8 @@
   });
 
   register('perched', el => {
-    const SUBS = [['peat', 'Торф', 5], ['univ', 'Универсальный', 4], ['perl', 'С перлитом', 2.2], ['coco', 'Кокос', 3.5]];
-    el.innerHTML = h.head('Где стоит вода в горшке', 'Высота насыщенного слоя задаётся порами грунта. Меняйте горшок, грунт и слой керамзита.', true) +
+    const SUBS = [['peat', 'Торф', 5], ['univ', 'Универсальный', 4], ['perl', 'С перлитом', 2.2], ['coco', 'Кокос', 3.5]];
+    el.innerHTML = h.head('Где стоит вода в горшке', 'Высота насыщенного слоя задаётся порами грунта. Меняйте горшок, грунт и слой керамзита.', true) +
       `<div class="lab-grid">
         <div class="lab-controls">${h.rangeHtml('lab-per-h', 'Высота горшка', 8, 30, 1, 14)}<div class="lab-seg-wrap"><span class="lab-label">Грунт</span>${h.chipsHtml('lab-per-s', 'Грунт', SUBS.map(s => [s[0], s[1]]), 'univ')}</div>
           <div class="lab-seg-wrap"><span class="lab-label">Дренаж</span><div class="chips-row lab-chips"><button class="chip" type="button" id="lab-per-d" aria-pressed="false">Слой керамзита 3&nbsp;см</button></div></div>
@@ -335,7 +335,7 @@
     let H = 14, sub = 'univ', drain = false;
     const pwt = () => SUBS.find(s => s[0] === sub)[2];
     const ch = h.chart($('#lab-per-ch', el), {
-      label: 'Разрез горшка с насыщенным водой слоем',
+      label: 'Разрез горшка с насыщенным водой слоем',
       h: w => clamp(w * 0.66, 260, 400),
       draw(w, hh) {
         const sc = Math.min((hh - 34) / 31, (w - 150) / 22);
@@ -360,7 +360,7 @@
         s += `<rect class="per-rim" x="${r1(cx - topW / 2 - 6)}" y="${r1(Y(H) - 6)}" width="${r1(topW + 12)}" height="10" rx="3"/>`;
         const lx = r1(cx + topW / 2 + 16);
         const lab = (y, txt, cls) => `<line class="per-lead" x1="${r1(xAt(y, 1) + 4)}" x2="${lx - 4}" y1="${Y(y)}" y2="${Y(y)}"/><text class="tick ${cls || ''}" x="${lx}" y="${Y(y) + 4}">${txt}</text>`;
-        s += lab(d + sat + (H - 0.6 - d - sat) / 2, 'воздух и вода');
+        s += lab(d + sat + (H - 0.6 - d - sat) / 2, 'воздух и вода');
         s += lab(d + sat / 2, `вода ${fmt(sat)} см`, 'is-water');
         if (drain) s += lab(d / 2, 'керамзит сухой');
         s += `<text class="tick" x="${r1(cx)}" y="${hh - 2}" text-anchor="middle">${H} см</text>`;
@@ -371,7 +371,7 @@
       const d = drain ? Math.min(3, H - 2) : 0;
       const soil = H - 0.6 - d;
       const sat = Math.min(pwt(), soil);
-      set(el, 'lab-per-z', `${fmt(sat)} см${drain ? ', поднят на 3 см' : ''}`);
+      set(el, 'lab-per-z', `${fmt(sat)} см${drain ? ', поднят на 3 см' : ''}`);
       set(el, 'lab-per-p', pct(sat / soil));
       set(el, 'lab-per-a', `верхние ${fmt(Math.max(0, soil - sat))} см`);
       ch.redraw();

@@ -11,9 +11,12 @@
 
     <div class="pane cal-tool" id="kalendar-tool">
       <div class="cal-top">
-        <div class="seg" role="group" aria-label="Где выращиваете">
-          <button type="button" id="cal-mode-garden" data-mode="garden" aria-pressed="true">Грядка или теплица</button>
-          <button type="button" id="cal-mode-home" data-mode="home" aria-pressed="false">Дом и подоконник</button>
+        <div class="field cal-mode">
+          <span class="label" id="cal-mode-l">Где выращиваете</span>
+          <div class="seg" role="group" aria-labelledby="cal-mode-l">
+            <button type="button" id="cal-mode-garden" data-mode="garden" aria-pressed="true">Грядка или теплица</button>
+            <button type="button" id="cal-mode-home" data-mode="home" aria-pressed="false">Дом и подоконник</button>
+          </div>
         </div>
         <div class="cal-controls">
           <div class="field" id="cal-preset-field">

@@ -1,4 +1,4 @@
-/* Гид по базилику — живая сцена: общий ветер, фон оранжереи и растения. Файл собирает scripts/build.py из src/js/scene/ — правьте там */
+/* Гид по базилику — живая сцена: общий ветер, фон оранжереи и растения. Файл собирает scripts/build.py из src/js/scene/ — правьте там */
 window.BasilScene = (() => {
   'use strict';
 
@@ -23,7 +23,7 @@ window.BasilScene = (() => {
   }
 
   /* the reader's attention: animations run smoothly while something happens (a touch, the mouse, scrolling,
-     a key), calm down to a slow rate a few seconds after it stops and sleep after a while — no frames at all,
+     a key), calm down to a slow rate a few seconds after it stops and sleep after a while — no frames at all,
      the CSS sky stands still. The first touch, scroll or key wakes everything where it stopped.
      Tests set window.BASIL_CALM = [calm ms, sleep ms] before the page starts */
   const CALM = Array.isArray(window.BASIL_CALM) ? window.BASIL_CALM : [8000, 40000];
@@ -74,7 +74,7 @@ window.BasilScene = (() => {
   }
 
   /* one animation loop on that budget: a frame per display refresh while active, by a timer when calm
-     (no wake-ups 60 times a second for 15 frames), none while asleep — it starts again by itself.
+     (no wake-ups 60 times a second for 15 frames), none while asleep — it starts again by itself.
      frame(ts) calls loop.next() to ask for the next one */
   function loop(frame) {
     let raf = 0, tm = 0, on = false;
@@ -201,7 +201,7 @@ window.BasilScene = (() => {
     return c;
   }
 
-  /* blur by rendering small and scaling up — works in every browser */
+  /* blur by rendering small and scaling up — works in every browser */
   function sprite(draw, w, h, k) {
     const small = makeCanvas(w * k, h * k);
     const g = small.getContext('2d');
@@ -271,7 +271,7 @@ window.BasilScene = (() => {
       flyGlow = radial(pal.fly, 64, 0.06);
     }
 
-    /* sky: light beams by day, moon glow by night — composited CSS layers, not per-frame canvas work */
+    /* sky: light beams by day, moon glow by night — composited CSS layers, not per-frame canvas work */
     const sky = document.createElement('div');
     sky.className = 'sky-layer';
     sky.setAttribute('aria-hidden', 'true');

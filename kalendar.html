@@ -36,8 +36,8 @@
 @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin-ext.woff2?v=1f62546f) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin.woff2?v=b4295101) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 </style>
-<link rel="stylesheet" href="assets/css/style.css?v=2ea577e9">
-<link rel="stylesheet" href="assets/css/lab.css?v=782c4418">
+<link rel="stylesheet" href="assets/css/style.css?v=5a05f3a7">
+<link rel="stylesheet" href="assets/css/lab.css?v=216e4507">
 </head>
 <body>
 <script>document.documentElement.classList.add('js');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
@@ -273,7 +273,7 @@
 
 <div class="page">
 
-<a class="skip" href="#main">К содержанию</a>
+<a class="skip" href="#main">К содержанию</a>
 
 <header class="topbar">
   <div class="topbar-inner">
@@ -314,16 +314,19 @@
       <div class="ch-hero-text">
         <p class="eyebrow">Глава 3</p>
         <h1>Календарь посадки <em>под ваш климат</em></h1>
-        <p class="lead">Базилик сажают не по календарю, а по погоде. Для грядки и теплицы укажите среднюю дату последнего весеннего заморозка, для дома — дату посева. Мы посчитаем все сроки сезона.</p>
+        <p class="lead">Базилик сажают не по календарю, а по погоде. Для грядки и теплицы укажите среднюю дату последнего весеннего заморозка, для дома — дату посева. Мы посчитаем все сроки сезона.</p>
       </div>
       <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-kalendar"/></svg></span></div>
     </header>
 
     <div class="pane cal-tool" id="kalendar-tool">
       <div class="cal-top">
-        <div class="seg" role="group" aria-label="Где выращиваете">
-          <button type="button" id="cal-mode-garden" data-mode="garden" aria-pressed="true">Грядка или теплица</button>
-          <button type="button" id="cal-mode-home" data-mode="home" aria-pressed="false">Дом и подоконник</button>
+        <div class="field cal-mode">
+          <span class="label" id="cal-mode-l">Где выращиваете</span>
+          <div class="seg" role="group" aria-labelledby="cal-mode-l">
+            <button type="button" id="cal-mode-garden" data-mode="garden" aria-pressed="true">Грядка или теплица</button>
+            <button type="button" id="cal-mode-home" data-mode="home" aria-pressed="false">Дом и подоконник</button>
+          </div>
         </div>
         <div class="cal-controls">
           <div class="field" id="cal-preset-field">
@@ -352,19 +355,19 @@
       </div>
       <div class="callout is-warn">
         <svg class="ico"><use href="#i-snow"/></svg>
-        <p>Даты в пресетах усреднены. Высаживайте, когда ночи 7–⁠10 дней подряд теплее +10&nbsp;°C, а почва на глубине 10&nbsp;см прогрелась до +15&nbsp;°C. При угрозе похолодания укройте посадки нетканым материалом.</p>
+        <p>Даты в пресетах усреднены. Высаживайте, когда ночи 7–⁠10 дней подряд теплее +10&nbsp;°C, а почва на глубине 10&nbsp;см прогрелась до +15&nbsp;°C. При угрозе похолодания укройте посадки нетканым материалом.</p>
       </div>
     </div>
     <div class="sci-notes">
       <aside class="sci-note" data-kind="phys">
         <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
-        <p>Самый длинный день в Москве — 17,6 часа, в Петербурге — 18,8, а в Мурманске летом около двух месяцев солнце не заходит вовсе.</p>
+        <p>Самый длинный день в Москве — 17,6 часа, в Петербурге — 18,8, а в Мурманске летом около двух месяцев солнце не заходит вовсе.</p>
         <a class="sci-note-link" href="#deep-fotoperiod">Глубже: Длина дня <span aria-hidden="true">→</span></a>
       </aside>
       <aside class="sci-note" data-kind="bio">
         <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
-        <p>Базилик родом из тропиков Азии и Африки. У него нет механизмов закаливания к холоду, как у капусты или шпината.</p>
-        <a class="sci-note-link" href="#deep-zamorozok">Глубже: Холод и лёд <span aria-hidden="true">→</span></a>
+        <p>Базилик родом из тропиков Азии и Африки. У него нет механизмов закаливания к холоду, как у капусты или шпината.</p>
+        <a class="sci-note-link" href="#deep-zamorozok">Глубже: Холод и лёд <span aria-hidden="true">→</span></a>
       </aside>
     </div>
     <div class="deep-zone">
@@ -372,16 +375,16 @@
       <details class="deep" id="deep-fotoperiod" data-kind="bio" data-short="Длина дня">
         <summary><span class="deep-sum">
           <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
-          <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Как растение считает дни</span><span class="deep-sub">Фитохром, длина ночи и цветение</span></span>
+          <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Как растение считает дни</span><span class="deep-sub">Фитохром, длина ночи и цветение</span></span>
           <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
         </span></summary>
         <div class="deep-body">
           <div class="deep-grid">
             <div class="deep-text">
-              <p>Растение не видит календарь, но измеряет длину ночи. Днём красный свет переводит фитохром в активную форму, в темноте он постепенно возвращается в неактивную. По тому, сколько активного фитохрома осталось к утру, и по внутренним часам растение понимает, длинной ли была ночь.</p>
-              <p>У базилика цветение ускоряют длинный день, жара и возраст куста; насколько сильно — зависит от сорта. Поэтому в июне прищипывать приходится чаще, а в холодную пасмурную весну рассада может долго не торопиться.</p>
-              <p>Когда условия подходят, листья начинают производить белок-флориген FT. По флоэме он добирается до верхушки и переключает её с листьев на цветки — подробнее в главе <a href="formirovka.html#deep-florigen">о прищипывании</a>.</p>
-              <p>Длину дня на любой широте можно вычислить точно: она зависит от склонения солнца в этот день и от широты места. Выберите город, чтобы увидеть, как меняется день за год.</p>
+              <p>Растение не видит календарь, но измеряет длину ночи. Днём красный свет переводит фитохром в активную форму, в темноте он постепенно возвращается в неактивную. По тому, сколько активного фитохрома осталось к утру, и по внутренним часам растение понимает, длинной ли была ночь.</p>
+              <p>У базилика цветение ускоряют длинный день, жара и возраст куста; насколько сильно — зависит от сорта. Поэтому в июне прищипывать приходится чаще, а в холодную пасмурную весну рассада может долго не торопиться.</p>
+              <p>Когда условия подходят, листья начинают производить белок-флориген FT. По флоэме он добирается до верхушки и переключает её с листьев на цветки — подробнее в главе <a href="formirovka.html#deep-florigen">о прищипывании</a>.</p>
+              <p>Длину дня на любой широте можно вычислить точно: она зависит от склонения солнца в этот день и от широты места. Выберите город, чтобы увидеть, как меняется день за год.</p>
             </div>
             <aside class="deep-aside">
               <div class="eq"><span class="eq-label">Полуденный угол</span><p>cos ω₀ = (sin(−0,83°) − sin φ · sin δ) / (cos φ · cos δ)</p></div>
@@ -392,8 +395,8 @@
           <details class="deeper">
             <summary id="deep-fotoperiod-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Модель внешнего совпадения</span><span class="deeper-plus" aria-hidden="true"></span></summary>
             <div class="deeper-body">
-              <p>У модельного растения арабидопсиса механизм изучен лучше всего. Внутренние часы включают ген <i>CONSTANS</i> к вечеру. Белок CO стабилен только на свету: в короткий день к вечеру уже темно, и он разрушается. В длинный день вечерний пик совпадает со светом, белок накапливается и включает ген флоригена <i>FT</i>.</p>
-              <p>Получается, что растение измеряет не длину дня как таковую, а совпадение внутреннего ритма со светом. Поэтому ночная вспышка света может «обмануть» растение и сработать как длинный день.</p>
+              <p>У модельного растения арабидопсиса механизм изучен лучше всего. Внутренние часы включают ген <i>CONSTANS</i> к вечеру. Белок CO стабилен только на свету: в короткий день к вечеру уже темно, и он разрушается. В длинный день вечерний пик совпадает со светом, белок накапливается и включает ген флоригена <i>FT</i>.</p>
+              <p>Получается, что растение измеряет не длину дня как таковую, а совпадение внутреннего ритма со светом. Поэтому ночная вспышка света может «обмануть» растение и сработать как длинный день.</p>
             </div>
           </details>
           <div class="deep-src">
@@ -407,27 +410,27 @@
       <details class="deep" id="deep-zamorozok" data-kind="phys" data-short="Холод и лёд">
         <summary><span class="deep-sum">
           <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
-          <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Почему холод убивает базилик</span><span class="deep-sub">Радиационный заморозок, лёд в межклетниках и холодовой шок</span></span>
+          <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Почему холод убивает базилик</span><span class="deep-sub">Радиационный заморозок, лёд в межклетниках и холодовой шок</span></span>
           <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
         </span></summary>
         <div class="deep-body">
           <div class="deep-grid">
             <div class="deep-text">
-              <p>В ясную тихую ночь земля и листья отдают тепло в небо инфракрасным излучением, а облаков, которые вернули бы часть его назад, нет. Поверхность листа остывает сильнее воздуха на высоте метеобудки, поэтому на грядке бывает заморозок при прогнозе +1…+3&nbsp;°C. Холодный воздух тяжелее и стекает в низины.</p>
-              <p>Ниже нуля лёд сначала образуется в межклетниках. Вода вытягивается из клеток к кристаллам, клетки обезвоживаются, мембраны рвутся. После оттаивания лист тёмный и мокрый, как варёный. У холодостойких растений есть антифризные белки и сахара; у тропического базилика их нет.</p>
-              <p>Базилик страдает и без мороза. Ниже +10&nbsp;°C мембраны его клеток переходят из жидкого состояния в гелеобразное, как масло в холодильнике. Встроенные в них белки-насосы работают хуже, клетки теряют ионы, накапливаются активные формы кислорода. Через день-два появляются тёмные пятна — <b>холодовое повреждение</b>.</p>
-              <p>Нетканое укрытие задерживает часть инфракрасного излучения и даёт 1–⁠3&nbsp;°C запаса. Полив накануне тоже помогает: влажная почва лучше запасает и проводит тепло.</p>
+              <p>В ясную тихую ночь земля и листья отдают тепло в небо инфракрасным излучением, а облаков, которые вернули бы часть его назад, нет. Поверхность листа остывает сильнее воздуха на высоте метеобудки, поэтому на грядке бывает заморозок при прогнозе +1…⁠+3&nbsp;°C. Холодный воздух тяжелее и стекает в низины.</p>
+              <p>Ниже нуля лёд сначала образуется в межклетниках. Вода вытягивается из клеток к кристаллам, клетки обезвоживаются, мембраны рвутся. После оттаивания лист тёмный и мокрый, как варёный. У холодостойких растений есть антифризные белки и сахара; у тропического базилика их нет.</p>
+              <p>Базилик страдает и без мороза. Ниже +10&nbsp;°C мембраны его клеток переходят из жидкого состояния в гелеобразное, как масло в холодильнике. Встроенные в них белки-насосы работают хуже, клетки теряют ионы, накапливаются активные формы кислорода. Через день-два появляются тёмные пятна — <b>холодовое повреждение</b>.</p>
+              <p>Нетканое укрытие задерживает часть инфракрасного излучения и даёт 1–⁠3&nbsp;°C запаса. Полив накануне тоже помогает: влажная почва лучше запасает и проводит тепло.</p>
             </div>
             <aside class="deep-aside">
               <div class="num-note"><b>&lt; +10&nbsp;°C</b><span>мембраны базилика начинают «застывать»</span></div>
-              <div class="num-note"><b>1–⁠3&nbsp;°C</b><span>запас, который даёт нетканое укрытие в ясную ночь</span></div>
+              <div class="num-note"><b>1–⁠3&nbsp;°C</b><span>запас, который даёт нетканое укрытие в ясную ночь</span></div>
             </aside>
           </div>
           <details class="deeper">
-            <summary id="deep-zamorozok-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Переохлаждение и бактерии-льдообразователи</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+            <summary id="deep-zamorozok-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Переохлаждение и бактерии-льдообразователи</span><span class="deeper-plus" aria-hidden="true"></span></summary>
             <div class="deeper-body">
-              <p>Чистая вода в тканях может переохлаждаться до −2…−5&nbsp;°C, не замерзая: кристаллу льда нужен «зародыш». На листьях таким зародышем часто служат бактерии, например некоторые штаммы <i>Pseudomonas syringae</i>. Их белок на поверхности клетки выстраивает молекулы воды в решётку льда уже около −2&nbsp;°C.</p>
-              <p>Поэтому один и тот же лёгкий заморозок одно растение переживает, а соседнее — нет. Такие бактерии используют и на искусственном снегу.</p>
+              <p>Чистая вода в тканях может переохлаждаться до −2…⁠−5&nbsp;°C, не замерзая: кристаллу льда нужен «зародыш». На листьях таким зародышем часто служат бактерии, например некоторые штаммы <i>Pseudomonas syringae</i>. Их белок на поверхности клетки выстраивает молекулы воды в решётку льда уже около −2&nbsp;°C.</p>
+              <p>Поэтому один и тот же лёгкий заморозок одно растение переживает, а соседнее — нет. Такие бактерии используют и на искусственном снегу.</p>
             </div>
           </details>
           <div class="deep-src">
@@ -442,26 +445,26 @@
       <details class="deep" id="deep-gradusodni" data-kind="bio" data-short="Градусо-дни">
         <summary><span class="deep-sum">
           <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
-          <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Термальное время: почему в прохладное лето базилик стоит</span><span class="deep-sub">Сумма тепла вместо календаря</span></span>
+          <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Термальное время: почему в прохладное лето базилик стоит</span><span class="deep-sub">Сумма тепла вместо календаря</span></span>
           <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
         </span></summary>
         <div class="deep-body">
           <div class="deep-grid">
             <div class="deep-text">
-              <p>Развитие растения — цепочка ферментных реакций, и их скорость зависит от температуры. Агрономы упрощают это так: каждый день растение набирает столько <b>градусо-дней</b>, на сколько средняя суточная температура выше базовой. Для базилика базовая около 10&nbsp;°C.</p>
-              <p>День со средней температурой 22&nbsp;°C даёт 12 градусо-дней, день с 15&nbsp;°C — только 5. Значит, в прохладное лето до первого урожая пройдёт в два-три раза больше календарных дней. Выше 30&nbsp;°C прибавка прекращается: ферменты работают на пределе, растение тратит силы на защиту от жары.</p>
+              <p>Развитие растения — цепочка ферментных реакций, и их скорость зависит от температуры. Агрономы упрощают это так: каждый день растение набирает столько <b>градусо-дней</b>, на сколько средняя суточная температура выше базовой. Для базилика базовая около 10&nbsp;°C.</p>
+              <p>День со средней температурой 22&nbsp;°C даёт 12 градусо-дней, день с 15&nbsp;°C — только 5. Значит, в прохладное лето до первого урожая пройдёт в два-три раза больше календарных дней. Выше 30&nbsp;°C прибавка прекращается: ферменты работают на пределе, растение тратит силы на защиту от жары.</p>
             </div>
             <aside class="deep-aside">
-              <div class="eq"><span class="eq-label">Градусо-дни за сутки</span><p>GDD = T<sub>сред</sub> − 10&nbsp;°C</p></div>
+              <div class="eq"><span class="eq-label">Градусо-дни за сутки</span><p>GDD = T<sub>сред</sub> − 10&nbsp;°C</p></div>
             </aside>
           </div>
           <div class="lab-tool" data-lab="gdd" data-kind="bio"></div>
           <details class="deeper">
             <summary id="deep-gradusodni-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Кривая вместо прямой</span><span class="deeper-plus" aria-hidden="true"></span></summary>
             <div class="deeper-body">
-              <p>Считать тепло, а не дни, предложил в 1735 году Рене Антуан Реомюр — тот самый, чьей шкалой термометра пользовались в России XIX века. Он заметил, что сумма средних температур от посева до созревания у одной культуры из года в год почти постоянна.</p>
-              <p>Линейная модель — упрощение. На деле скорость развития растёт с температурой по кривой: медленно у базовой температуры, почти линейно в середине и резко падает выше оптимума. Современные модели описывают это «бета-функцией» с тремя кардинальными точками: минимумом, оптимумом и максимумом.</p>
-              <p>Важен и суточный ход. Если днём 34&nbsp;°C, а ночью 10&nbsp;°C, средняя получается 22&nbsp;°C, но полезного тепла меньше: жаркие часы выше оптимума почти ничего не добавляют, а холодные ниже базы не добавляют вовсе. Поэтому точные расчёты ведут по часам, а не по суткам.</p>
+              <p>Считать тепло, а не дни, предложил в 1735 году Рене Антуан Реомюр — тот самый, чьей шкалой термометра пользовались в России XIX века. Он заметил, что сумма средних температур от посева до созревания у одной культуры из года в год почти постоянна.</p>
+              <p>Линейная модель — упрощение. На деле скорость развития растёт с температурой по кривой: медленно у базовой температуры, почти линейно в середине и резко падает выше оптимума. Современные модели описывают это «бета-функцией» с тремя кардинальными точками: минимумом, оптимумом и максимумом.</p>
+              <p>Важен и суточный ход. Если днём 34&nbsp;°C, а ночью 10&nbsp;°C, средняя получается 22&nbsp;°C, но полезного тепла меньше: жаркие часы выше оптимума почти ничего не добавляют, а холодные ниже базы не добавляют вовсе. Поэтому точные расчёты ведут по часам, а не по суткам.</p>
               <div class="eq"><span class="eq-label">Кардинальные температуры базилика (ориентир)</span><p>T<sub>min</sub> ≈ 10&nbsp;°C · T<sub>opt</sub> ≈ 25–⁠28&nbsp;°C · T<sub>max</sub> ≈ 35–⁠40&nbsp;°C</p></div>
             </div>
           </details>
@@ -485,9 +488,9 @@
   <div class="wrap footer-inner">
     <div>
       <a class="brand" href="index.html">Базилик</a>
-      <p>Дозы и сроки в гиде — ориентиры для средних условий. Инструкция производителя удобрения всегда в приоритете, а погода важнее календаря.</p>
+      <p>Дозы и сроки в гиде — ориентиры для средних условий. Инструкция производителя удобрения всегда в приоритете, а погода важнее календаря.</p>
     </div>
-    <p class="hand">Растите с удовольствием и ешьте песто ✿</p>
+    <p class="hand">Растите с удовольствием и ешьте песто ✿</p>
   </div>
 </footer>
 
@@ -547,10 +550,10 @@
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
 <script src="assets/js/haptics.js?v=8488e836" defer></script>
-<script src="assets/js/data.js?v=3020ad0c" defer></script>
-<script src="assets/js/pages.js?v=66e256a9" defer></script>
-<script src="assets/js/scene.js?v=82c1b091" defer></script>
-<script src="assets/js/science.js?v=c5ecffe8" defer></script>
-<script src="assets/js/app.js?v=1752bce4" defer></script>
+<script src="assets/js/data.js?v=53ae7e0a" defer></script>
+<script src="assets/js/pages.js?v=be7846f5" defer></script>
+<script src="assets/js/scene.js?v=58a1cb65" defer></script>
+<script src="assets/js/science.js?v=b85f0997" defer></script>
+<script src="assets/js/app.js?v=98f52f21" defer></script>
 </body>
 </html>

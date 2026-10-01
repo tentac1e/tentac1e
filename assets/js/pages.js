@@ -30,6 +30,7 @@ window.BASIL_PAGES = {
   "cal-legend": "kalendar",
   "cal-mode-garden": "kalendar",
   "cal-mode-home": "kalendar",
+  "cal-mode-l": "kalendar",
   "cal-preset": "kalendar",
   "cal-preset-field": "kalendar",
   "cal-season": "kalendar",
@@ -578,22 +579,22 @@ window.BASIL_PAGES = {
  },
  "v": {
   "labs": {
-   "sorta": "58700991",
-   "posadka": "68cc4e3d",
-   "kalendar": "c0e39965",
-   "uhod": "8a9e6b91",
-   "udobreniya": "e08e0d23",
-   "formirovka": "69e9f31a",
-   "urozhay": "0a8774ee",
-   "vkus": "d370f027",
-   "razmnozhenie": "ad1d9e3d",
-   "problemy": "a8367070"
+   "sorta": "c21915d9",
+   "posadka": "e3bc13e5",
+   "kalendar": "b25ac3f7",
+   "uhod": "aff9a258",
+   "udobreniya": "6587c4c5",
+   "formirovka": "a3f0c1c8",
+   "urozhay": "53944379",
+   "vkus": "af3e085c",
+   "razmnozhenie": "1ae52fd4",
+   "problemy": "b23a05a1"
   },
   "lib": {
-   "micro": "674edf0a",
-   "ills": "f733c56f",
-   "props": "ea0f3c5e",
-   "food": "9bdffc59"
+   "micro": "bbc6c98e",
+   "ills": "63c3803f",
+   "props": "7e4b2fa8",
+   "food": "9ecfd30b"
   },
   "deps": {
    "sorta": [
@@ -639,6 +640,6 @@ window.BASIL_PAGES = {
     "ills"
    ]
   },
-  "search": "a1e7abb8"
+  "search": "53900c3e"
  }
 };

@@ -203,10 +203,11 @@
       const i = list.findIndex(c => c.id === view.dataset.view);
       const prev = list[i - 1];
       const next = list[i + 1];
+      // hy: the title with soft hyphens, for a word too long for half a phone screen
       const art = c => `<svg class="pg-art" viewBox="0 0 120 120" aria-hidden="true"><use href="#${c.art}"/></svg>`;
       pager.innerHTML =
-        (prev ? `<a class="prev" href="#${prev.id}">${art(prev)}<span><small>← Глава ${prev.num}</small><b>${prev.title}</b></span></a>` : `<a class="prev" href="#glavnaya">${icon('home')}<span><small>← Начало</small><b>Главная</b></span></a>`) +
-        (next ? `<a class="next" href="#${next.id}"><span><small>Глава ${next.num} →</small><b>${next.title}</b></span>${art(next)}</a>` : `<a class="next" href="#glavnaya"><span><small>Готово →</small><b>На главную</b></span>${icon('home')}</a>`);
+        (prev ? `<a class="prev" href="#${prev.id}">${art(prev)}<span><small>← Глава ${prev.num}</small><b>${nb(prev.hy || prev.title)}</b></span></a>` : `<a class="prev" href="#glavnaya">${icon('home')}<span><small>← Начало</small><b>Главная</b></span></a>`) +
+        (next ? `<a class="next" href="#${next.id}"><span><small>Глава ${next.num} →</small><b>${nb(next.hy || next.title)}</b></span>${art(next)}</a>` : `<a class="next" href="#glavnaya"><span><small>Готово →</small><b>На главную</b></span>${icon('home')}</a>`);
     });
 
     // the end of each tab points to the next one; the chapter pager follows the last tab

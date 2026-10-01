@@ -62,6 +62,10 @@ function taps(min) {
     const cx = r.left + Math.min(r.width / 2, 12), cy = (r.top + r.bottom) / 2;
     const mine = (x, y) => { const h = document.elementFromPoint(x, y); return h && (h === e || e.contains(h)); };
     if (!mine(cx, cy)) return; // covered by something else: not this check's business
+    // the page's own chrome (header, tab row, bottom bar) floats over whatever scrolls under it: a zone that
+    // reaches under it is measured at another scroll position
+    const chrome = (x, y) => { const h = document.elementFromPoint(x, y); return h && h.closest('.topbar, .subnav-wrap, .tabbar, .to-top, .toast'); };
+    if (chrome(cx, r.top - 24) || chrome(cx, r.bottom + 24)) { seen.delete(kind); return; }
     let up = 0, down = 0;
     while (up < 24 && mine(cx, r.top - up - 1)) up++;
     while (down < 24 && mine(cx, r.bottom + down + 1)) down++;

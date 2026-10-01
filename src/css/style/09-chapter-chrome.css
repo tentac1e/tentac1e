@@ -106,5 +106,5 @@
 .pager small { display: block; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
 .pager b { display: block; font-family: var(--font-display); font-size: 1.4rem; line-height: 1.1; }
 .pager svg.pg-art { width: 52px; height: 52px; }
-@media (max-width: 480px) { .pager svg.pg-art { width: 40px; height: 40px; } .pager a { padding: 12px; gap: 8px; } .pager b { font-size: 1.15rem; } }
+@media (max-width: 480px) { .pager svg.pg-art { width: 40px; height: 40px; } .pager a { padding: 12px; gap: 8px; } .pager b { font-size: 1.15rem; hyphens: auto; overflow-wrap: anywhere; } }
 

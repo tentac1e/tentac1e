@@ -291,6 +291,20 @@ def chapters():
     return out
 
 
+# a one- or two-letter preposition, conjunction or particle: it goes to the next line with the word after it
+SHORT_WORD = r'(?<![а-яёa-z\u00ad-])(в|с|к|у|о|а|и|я|во|со|ко|об|на|за|по|до|от|из|не|ни|но)'
+
+
+def tie_js(text, words=False):
+    """the text the scripts write keeps a dash with the word before it, as typeset does for the pages. A spaced «—» is
+    never code, only words in strings and comments, and nothing compares strings by it. words: also a one-letter word
+    with the next one — for models and drawings, whose Russian strings are only shown (the search's are compared)"""
+    text = re.sub(r'(?<=[а-яёa-z0-9»)%°…]) — ', '\u00a0— ', text, flags=re.I)
+    if words:
+        text = re.sub(SHORT_WORD + r' (?=[а-яё«(\d])', '\\1\u00a0', text, flags=re.I)
+    return text
+
+
 def label_tables(html):
     """tables with a head: every body cell gets data-label — its column's name — so that on a phone, where the rows of
     a wide table (.table-wrap) or of a .mini-table.stack turn into cards (06-blocks.css), a cell can say which column
@@ -315,7 +329,9 @@ def label_tables(html):
 
 def typeset(html):
     """a number and the short word after it stay on one line («7–10 дней», «0,5 г/л», «3 пары»), and a range does not
-    break after its dash («2–3», a word joiner after «–»), nor a unit after its slash («мкмоль/м²·с»): the same rule as
+    break after its dash («2–3», «+5…+10», a word joiner after the sign), nor a unit after its slash («мкмоль/м²·с»),
+    a short word stays with the number after it («выше 32», «до 20 см»), a short preposition or conjunction with the word after
+    it («и аромат», «за раз»), and a dash with the word before it: the same rule as
     nb() in src/js/app/00-core.js, for the text of the pages — not inside tags, scripts or styles"""
     out, skip = [], False
     for part in re.split(r'(<[^>]*>)', html):
@@ -327,13 +343,18 @@ def typeset(html):
                 skip = False
             out.append(part)
         else:
+            if not skip and part.startswith(' — ') and out and re.match(r'</(b|i|a|em|strong|span|code|sup|sub)>', out[-1]):
+                part = '\u00a0' + part[1:]  # «<b>слово</b> — …»: the dash stays with the word too
             out.append(part if skip else tie(part))
     return ''.join(out)
 
 
 def tie(text):
-    text = re.sub(r'(\d) (?=[^\s\d–—<&-]{1,6}(?=[\s,.;:)!?/<]|$))', '\\1\u00a0', text)  # 7 дней
-    text = re.sub(r'(\d)–(?=\d)', '\\1–\u2060', text)  # 2–3
+    text = re.sub(r'([\d¼½¾]) (?=[^\s\d–—<&-]{1,6}(?=[\s,.;:)!?/<]|$))', '\\1\u00a0', text)  # 7 дней, ¼ дозы
+    text = re.sub(r'(\d)([–…])(?=[+−]?\d)', '\\1\\2\u2060', text)  # 2–3, +5…+10
+    text = re.sub(r'(?<![а-яёa-z])([а-яё]{1,4}) (?=[+−≈~]?[\d¼½¾])', '\\1\u00a0', text, flags=re.I)  # выше 32, в ¼
+    text = re.sub(r'(?<=[^\s>]) — ', '\u00a0— ', text)  # a line never starts with a dash
+    text = re.sub(SHORT_WORD + r' (?=\S)', '\\1\u00a0', text, flags=re.I)  # «и аромат», «за раз»
     return re.sub(r'(?<=[а-яё²³])/(?=[а-яё])', '/\u2060', text, flags=re.I)  # мкмоль/м²·с
 
 
@@ -382,7 +403,7 @@ def assemble(src_pages):
         frame = (d / '_frame.js').read_text(encoding='utf-8')
         body = ''.join(f.read_text(encoding='utf-8') for f in numbered(d, '.js'))
         assert frame.count('/*@parts*/\n') == 1, mod
-        (js / f'{mod}.js').write_text(banner(frame.replace('/*@parts*/\n', body), f'src/js/{mod}/'), encoding='utf-8')
+        (js / f'{mod}.js').write_text(tie_js(banner(frame.replace('/*@parts*/\n', body), f'src/js/{mod}/')), encoding='utf-8')
     shutil.copyfile(SRC / 'js' / 'haptics.js', js / 'haptics.js')
     fonts = ROOT / 'assets' / 'fonts'
     if fonts.exists():
@@ -455,7 +476,7 @@ def assemble(src_pages):
                     + (f'  const {{ {", ".join(lib_name(m) for m in mine)} }} = L;\n' if mine else '')
                     + lib_src(x).read_text(encoding='utf-8')
                     + f'  L.{lib_name(x)} = {lib_name(x)};\n}})();\n')
-            (out / f'lib-{x}.js').write_text(banner(text, f'src/labs/_lib/{x}.js'), encoding='utf-8')
+            (out / f'lib-{x}.js').write_text(tie_js(banner(text, f'src/labs/_lib/{x}.js'), words=True), encoding='utf-8')
             written.append(x)
         head = (f'  const {{ {", ".join(lib_name(x) for x in libs)} }} = window.BasilLibs;\n' if libs else '')
         if lab_css[v]:
@@ -463,7 +484,7 @@ def assemble(src_pages):
                      + json.dumps(lab_css[v], ensure_ascii=False) + '; document.head.appendChild(st); }\n')
         body = head + '\n'.join(f.read_text(encoding='utf-8') for f in shared + [d / f'{l}.js' for l in labs])
         text = frame.replace('{{chapter}}', CH[v]['title'] if v in CH else v).replace('/*@labs*/\n', body)
-        (out / f'{v}.js').write_text(banner(text, f'src/labs/{v}/'), encoding='utf-8')
+        (out / f'{v}.js').write_text(tie_js(banner(text, f'src/labs/{v}/'), words=True), encoding='utf-8')
         bundles.append(v)
         deps[v] = libs
     stale = js / 'labs.js'
@@ -544,7 +565,7 @@ def main():
     clean = '--clean' in sys.argv
     LINK = {v: (SLUG[v] or './') for v, _ in PAGES} if clean else dict(FILE)
 
-    layout = (SRC / 'layout.html').read_text(encoding='utf-8')
+    layout = typeset((SRC / 'layout.html').read_text(encoding='utf-8'))  # the frame's own text: footer, sheets, search
     src = {v: read_page(v) for v, _ in PAGES}
     CH = chapters()
     bundles, lib_deps, libs = assemble(src)

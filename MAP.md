@@ -23,7 +23,7 @@
 - `src/pages/posadka/_foot.html` · подвал главы · 3 стр.
 
 ### Календарь — `/календарь` (`kalendar.html`)
-- `src/pages/kalendar.html` · вся глава · 170 стр.<br>модели: `daylen`, `gdd`; глубже: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
+- `src/pages/kalendar.html` · вся глава · 173 стр.<br>модели: `daylen`, `gdd`; глубже: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
 
 ### Уход — `/уход` (`uhod.html`)
 - `src/pages/uhod/_head.html` · обложка, вкладки · 14 стр.
@@ -158,7 +158,7 @@
 **app.js**
 - `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (270 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/02-router.js` (271 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-sheets.js` (158 стр.): initSheets
 - `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
