@@ -20,7 +20,7 @@
   }
   const blade = L => ({ tone: L.tone, wide: L.wide, ruffle: L.ruffle, teeth: L.teeth, bubbly: L.bubbly, gloss: L.gloss, hairs: L.hairs });
   const stemOf = L => (L.tone === 'purple' || L.tone === 'thai' ? 'stem-purple' : 'stem');
-  const paper = (w, hh) => `<rect width="${w}" height="${hh}" rx="14" fill="${Fs('bg')}"/>`;
+  const paper = (w, hh) => `<rect data-bg width="${w}" height="${hh}" rx="14" fill="${Fs('bg')}"/>`;
 
   // the cut tip of a shoot: three pairs of leaves, then the growing tip or a flower spike
   function sprig(L, x, y, hgt, s) {

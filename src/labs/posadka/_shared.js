@@ -71,9 +71,9 @@
     hero: () => {
       // one crowded pot → three roomy ones
       let g = R.shopPot(66, 136, 76, 50) + R.crowd(66, 86, 66, 18, { h: 58, pale: true, seed: 4 });
-      g += R.arrow(126, 92, 182, 92, 16) + ill.label(154, 64, 'разделить');
+      g += R.arrow(126, 92, 182, 92, 16) + ill.label(154, 56, 'разделить');
       [222, 276, 330].forEach((x, i) => { g += ill.pot(x, 112, 44, 26) + R.crowd(x, 105, 20, 4, { h: 46, seed: 7 + i }); });
-      return ill.svg(360, 150, paperP(360, 150) + `<path d="M0 136H360V136Q360 150 346 150H14Q0 150 0 136Z" fill="${Fp('bg-2')}"/>` + g, 'Магазинный горшок с десятками сеянцев делят на три-четыре горшка');
+      return ill.svg(360, 150, paperP(360, 150) + `<path data-bg d="M0 136H360V136Q360 150 346 150H14Q0 150 0 136Z" fill="${Fp('bg-2')}"/>` + g, 'Магазинный горшок с десятками сеянцев делят на три-четыре горшка');
     },
     1: () => {
       const inner = ill.leaf({ x: 6, y: 34, a: 6, s: 0.62, under: true, aphids: 6, seed: 5 });
@@ -107,7 +107,7 @@
 
   /* ---------- places ---------- */
   const W = 320, H = 150;
-  const placeP = (body, label, ground = 132) => ill.svg(W, H, paperP(W, H) + `<path d="M0 ${ground}H${W}V${H - 14}Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 ${H - 14}Z" fill="${Fp('bg-2')}"/>` + body, label);
+  const placeP = (body, label, ground = 132) => ill.svg(W, H, paperP(W, H) + `<path data-bg d="M0 ${ground}H${W}V${H - 14}Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 ${H - 14}Z" fill="${Fp('bg-2')}"/>` + body, label);
   const basilBush = (x, y, h = 60, o = {}) => ill.bush(Object.assign({ x, y, h, nodes: 3, leaf: 0.3, spread: 0.9, seed: 4 }, o));
   const tomato = (x, y, h = 110) => {
     let g = `<path d="M${x + 8} ${y}V${y - h}" stroke="${Fp('wood')}" stroke-width="3"/><path d="M${x} ${y}Q${x + 6} ${y - h * 0.35} ${x - 2} ${y - h * 0.6}T${x + 4} ${y - h}" stroke="${Fp('stem')}" stroke-width="3" fill="none"/>`;
@@ -115,7 +115,7 @@
     return g;
   };
   const PLACE = {
-    sill: () => placeP(R.window(150, 102, 170, 92, { sun: true, rays: true, radiator: true }) + ill.pot(118, 102, 40, 26) + basilBush(118, 96, 56) + ill.pot(178, 102, 34, 22) + ill.ballBush({ x: 178, y: 96, r: 26, n: 46, leaf: 0.14, tone: 'deep', seed: 3 }) + R.lamp(270, 34, 60, { reach: 50 }) + ill.label(270, 112, 'досветка'), 'Подоконник: южное окно, батарея под ним, зимой лампа', 148),
+    sill: () => placeP(R.window(138, 102, 148, 92, { sun: true, rays: true, radiator: true }) + ill.pot(110, 102, 40, 26) + basilBush(110, 96, 56) + ill.pot(166, 102, 34, 22) + ill.ballBush({ x: 166, y: 96, r: 26, n: 46, leaf: 0.14, tone: 'deep', seed: 3 }) + R.lamp(282, 34, 56, { reach: 50 }) + ill.label(314, 104, 'досветка', 'end'), 'Подоконник: южное окно, батарея под ним, зимой лампа', 148),
     balcony: () => {
       let g = R.sun(282, 26, 12) + R.balcony(20, 300, 128, { box: [60, 200] });
       [84, 130, 176].forEach((x, i) => { g += basilBush(x, 64, 48, { leaf: 0.26, seed: 5 + i }); });

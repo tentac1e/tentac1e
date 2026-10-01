@@ -23,3 +23,5 @@
 .nc-lbl.is-bug { font-style: italic; font-family: var(--font-body); font-weight: 700; }
 .nc-lbl.is-off, .nc-bugs.is-off { opacity: .4; }
 .nc-bugs rect { fill: var(--sci-chem); opacity: .75; }
+.nc-plate rect { fill: var(--surface); stroke: color-mix(in srgb, var(--sci-chem) 45%, var(--line-strong)); stroke-width: 1.2; }
+.nc-plate.is-off { opacity: .45; }

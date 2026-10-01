@@ -7,7 +7,7 @@
           <line class="soil-line" x1="-200" x2="200" y1="0" y2="0"/>
           <path class="xylem" d="M-3 90 C -4 40 -3 0 -3 -40 S -3 -160 -3 -250"/>
           <path class="phloem" d="M3 -250 C 3 -160 3 -60 3 0 S 4 50 5 90"/>
-          <text class="tick" x="-14" y="60" text-anchor="end">ксилема ↑</text><text class="tick" x="14" y="44">флоэма ↕</text>
+          <text class="tick" x="-12" y="94" text-anchor="end">ксилема ↑</text><text class="tick" x="12" y="94">флоэма ↕</text>
           <text class="tick fl-tag" id="lab-fl-tag" x="214" y="-250" text-anchor="end"></text>
         </svg></div>
         <figure class="chl-fig"><svg viewBox="0 0 220 220" role="img" aria-label="Схема молекулы хлорофилла: четыре пиррольных кольца вокруг иона магния">

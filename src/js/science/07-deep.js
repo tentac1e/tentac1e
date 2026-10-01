@@ -216,6 +216,10 @@
     ctx = context || {};
     initDeep();
     initHomeMolecule();
-    mountAll();
-    paint();
+    // models and pictures are looked for once the page stands where it opens: a link to a block far down
+    // jumps there first (the router's first «basil:view»), and the ones above it are not built for nothing
+    let started = false;
+    const start = () => { if (started) return; started = true; mountAll(); paint(); };
+    document.addEventListener('basil:view', start, { once: true });
+    setTimeout(start, 2000);
   }

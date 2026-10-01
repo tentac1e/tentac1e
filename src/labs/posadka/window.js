@@ -27,7 +27,8 @@
           }
           const sx = clamp(wallX - Math.cos(rad) * wallX * 0.72, 18, wallX - 20), sy = clamp(Y(1.5) - Math.tan(rad) * (wallX - sx), 18, floorY - 18);
           s += `<circle class="win-sun" cx="${r1(sx)}" cy="${r1(sy)}" r="13"/>`;
-          s += `<text class="tick" x="${r1(sx)}" y="${r1(sy + 30)}" text-anchor="middle">${fmt0(alt)}°</text>`;
+          const tag = `${fmt0(alt)}°`, tw = tag.length * 7 + 12;
+          s += `<rect class="win-tag" x="${r1(sx - tw / 2)}" y="${r1(sy + 18)}" width="${r1(tw)}" height="17" rx="8.5"/><text class="tick" x="${r1(sx)}" y="${r1(sy + 30)}" text-anchor="middle">${tag}</text>`;
         } else {
           s += `<text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6)}" text-anchor="middle">солнце</text><text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6) + 15}" text-anchor="middle">не встаёт</text>`;
         }

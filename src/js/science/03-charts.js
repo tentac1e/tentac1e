@@ -1,6 +1,25 @@
   /* ------------------------------------------------------------------ */
   /* charts drawn at real pixel size, redrawn when the box resizes       */
   /* ------------------------------------------------------------------ */
+  // a caption on its own plate (<g data-fit="padding"><rect/><text/></g>): the plate takes the width of the
+  // text as drawn — a guess from the number of letters is off for wide letters and for the real font
+  function fitLabels(root) {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll('g[data-fit]').forEach(g => {
+      const r = g.querySelector('rect');
+      let l = Infinity, rt = -Infinity;
+      g.querySelectorAll('text').forEach(t => {
+        let b;
+        try { b = t.getBBox(); } catch (e) { return; }
+        if (b.width) { l = Math.min(l, b.x); rt = Math.max(rt, b.x + b.width); }
+      });
+      if (!r || !isFinite(l)) return;
+      const pad = +g.dataset.fit || 7;
+      r.setAttribute('x', (l - pad).toFixed(1));
+      r.setAttribute('width', (rt - l + pad * 2).toFixed(1));
+    });
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitLabels(document));
   function chart(host, o) {
     const svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('class', 'lab-svg');
@@ -15,6 +34,7 @@
       svg.setAttribute('width', W);
       svg.setAttribute('height', H);
       svg.innerHTML = o.draw(W, H);
+      fitLabels(svg);
     };
     if ('ResizeObserver' in window) new ResizeObserver(() => { if (host.clientWidth && host.clientWidth !== W) redraw(); }).observe(host);
     if (o.onPointer) {
@@ -61,10 +81,13 @@
     const Yr = v => r1(p.t + ih - (v - o.y[0]) / (o.y[1] - o.y[0]) * ih);
     const YS = o.clip ? Yr : Y;
     if (o.clip) { const id = 'lab-clip-' + (++clipN); s += `<clipPath id="${id}"><rect x="${p.l}" y="${p.t - 2}" width="${iw}" height="${ih + 4}"/></clipPath><g clip-path="url(#${id})">`; }
+    // what the captions keep clear of: every line of the series, the marker line and its dots
+    const segs = [], spots = [];
     (o.series || []).forEach(se => {
       const pts = se.pts.filter(pt => isFinite(pt[1]));
       if (!pts.length) return;
       const d = pts.map((pt, i) => `${i ? 'L' : 'M'}${X(pt[0])} ${YS(pt[1])}`).join(' ');
+      for (let i = 1; i < pts.length; i++) segs.push([X(pts[i - 1][0]), YS(pts[i - 1][1]), X(pts[i][0]), YS(pts[i][1])]);
       if (se.area) s += `<path class="area ${se.cls}" d="${d} L${X(pts[pts.length - 1][0])} ${p.t + ih} L${X(pts[0][0])} ${p.t + ih} Z"/>`;
       s += `<path class="line ${se.cls}${se.dash ? ' is-dash' : ''}" d="${d}"/>`;
       if (se.label) {
@@ -76,7 +99,8 @@
     if (o.marker) {
       const m = o.marker;
       s += `<line class="marker" x1="${X(m.x)}" x2="${X(m.x)}" y1="${p.t}" y2="${p.t + ih}"/>`;
-      (m.dots || []).forEach(dt => { s += `<circle class="dot ${dt.cls}" cx="${X(m.x)}" cy="${Y(dt.y)}" r="5.5"/>`; });
+      segs.push([X(m.x), p.t, X(m.x), p.t + ih]);
+      (m.dots || []).forEach(dt => { s += `<circle class="dot ${dt.cls}" cx="${X(m.x)}" cy="${Y(dt.y)}" r="5.5"/>`; spots.push([X(m.x) - 7, Y(dt.y) - 7, X(m.x) + 7, Y(dt.y) + 7]); });
     }
     if (o.hover != null) s += `<line class="hover-line" x1="${X(o.hover)}" x2="${X(o.hover)}" y1="${p.t}" y2="${p.t + ih}"/>`;
     // place captions: inside the picture, clear of the axis title and of each other
@@ -84,16 +108,34 @@
     if (o.ylab) taken.push([p.l - 7, p.t - 20, p.l - 7 + String(o.ylab).length * 6.6 + 6, p.t - 5]);
     const hit = b => taken.some(t => b[0] < t[2] && b[2] > t[0] && b[1] < t[3] && b[3] > t[1]);
     (o.yticks || []).forEach(v => { const t = String((o.fy || String)(v)); taken.push([p.l - 9 - t.length * 6.6, Y(v) - 7, p.l - 5, Y(v) + 6]); });
-    floats.sort((a, b) => a.rank - b.rank).forEach(f => {
-      let x0 = f.anchor === 'end' ? f.x - f.w : f.anchor === 'middle' ? f.x - f.w / 2 : f.x;
-      x0 = clamp(x0, Math.min(p.l + 2, o.w - 2 - f.w), o.w - 2 - f.w);
-      let y = clamp(f.y, 12, o.h - 4);
-      for (const dy of [0, 14, -14, 28, -28, 42]) {
-        const yy = clamp(f.y + dy, 12, o.h - 4);
-        if (!hit([x0, yy - 10, x0 + f.w, yy + 3])) { y = yy; break; }
+    // a line crosses a caption's box (Liang–Barsky clipping of the segment)
+    const crosses = ([x1, y1, x2, y2], [l, t, r, b]) => {
+      let t0 = 0, t1 = 1;
+      const dx = x2 - x1, dy = y2 - y1, P = [-dx, dx, -dy, dy], Q = [x1 - l, r - x1, y1 - t, b - y1];
+      for (let i = 0; i < 4; i++) {
+        if (P[i] === 0) { if (Q[i] < 0) return false; continue; }
+        const u = Q[i] / P[i];
+        if (P[i] < 0) { if (u > t1) return false; if (u > t0) t0 = u; } else { if (u < t0) return false; if (u < t1) t1 = u; }
       }
-      taken.push([x0, y - 10, x0 + f.w, y + 3]);
-      s += `<text class="${f.cls}" x="${r1(x0 + 2)}" y="${r1(y)}" text-anchor="start">${f.text}</text>`;
+      return true;
+    };
+    const lines = b => segs.reduce((n, sg) => n + (crosses(sg, b) ? 1 : 0), 0) + spots.filter(t => b[0] < t[2] && b[2] > t[0] && b[1] < t[3] && b[3] > t[1]).length;
+    floats.sort((a, b) => a.rank - b.rank).forEach(f => {
+      const base = f.anchor === 'end' ? f.x - f.w : f.anchor === 'middle' ? f.x - f.w / 2 : f.x;
+      const lo = Math.min(p.l + 2, o.w - 2 - f.w), hi = o.w - 2 - f.w;
+      // the nearest place that is clear of other captions and of the lines; failing that, the one with fewest crossings
+      let best = null;
+      for (const dx of [0, -0.5, 0.5, -1, 1]) {
+        for (const dy of [0, 14, -14, 28, -28, 42, -42]) {
+          const x0 = clamp(base + dx * f.w, lo, hi), yy = clamp(f.y + dy, 12, o.h - 4), box = [x0, yy - 10, x0 + f.w, yy + 3];
+          if (hit(box)) continue;
+          const cost = lines(box) * 100 + Math.abs(dy) / 14 + Math.abs(dx) * 3;
+          if (!best || cost < best.cost) best = { x0, y: yy, cost };
+        }
+      }
+      if (!best) best = { x0: clamp(base, lo, hi), y: clamp(f.y, 12, o.h - 4) };
+      taken.push([best.x0, best.y - 10, best.x0 + f.w, best.y + 3]);
+      s += `<text class="${f.cls}" x="${r1(best.x0 + 2)}" y="${r1(best.y)}" text-anchor="start">${f.text}</text>`;
     });
     return { s, X, Y, p, iw, ih, inv: px => o.x[0] + (px - p.l) / iw * (o.x[1] - o.x[0]), invY: py => o.y[0] + (p.t + ih - py) / ih * (o.y[1] - o.y[0]) };
   }

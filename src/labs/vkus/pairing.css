@@ -30,6 +30,7 @@
 .pa-node { stroke-width: 6; stroke-opacity: .25; paint-order: stroke; }
 .pa-node.is-faint { fill-opacity: .15; stroke-dasharray: 3 3; stroke-opacity: .8; stroke-width: 1.5; }
 .pa-lever { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.2; }
+.pa-tag rect { fill: var(--surface); opacity: .94; }
 .pa-mol { font: 700 12px/1 var(--font-body); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
 .pa-sub { font: 500 10.5px/1 var(--font-mono); fill: var(--ink-3); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
 .pa-info { padding: 12px 14px; border-radius: 14px; background: var(--k-soft); }

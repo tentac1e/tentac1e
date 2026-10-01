@@ -5,7 +5,7 @@
 ## Главы и вкладки
 
 ### Главная — `/` (`index.html`)
-- `src/pages/glavnaya.html` · вся глава · 173 стр.
+- `src/pages/glavnaya.html` · вся глава · 176 стр.
 
 ### Сорта — `/сорта` (`sorta.html`)
 - `src/pages/sorta/_head.html` · обложка, вкладки · 14 стр.
@@ -158,7 +158,7 @@
 **app.js**
 - `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (249 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/02-router.js` (268 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-sheets.js` (55 стр.): initSheets
 - `src/js/app/04-search.js` (179 стр.): initSearch
 - `src/js/app/05-scene.js` (161 стр.): initScene, initHoverLight, initOffscreenPause, initLeafField
@@ -178,18 +178,18 @@
 - `src/js/app/19-seeds.js` (21 стр.): initGerm
 - `src/js/app/20-problems.js` (58 стр.): initDiagnostics
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
-- `src/js/app/22-reading-pos.js` (133 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/22-reading-pos.js` (134 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
 
 **science.js**
 - `src/js/science/00-core.js` (20 стр.)
 - `src/js/science/01-colors.js` (40 стр.)
 - `src/js/science/02-controls.js` (30 стр.)
-- `src/js/science/03-charts.js` (107 стр.)
+- `src/js/science/03-charts.js` (149 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (267 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
 - `src/js/science/06-labs-loader.js` (78 стр.): SELF, draw
-- `src/js/science/07-deep.js` (221 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
+- `src/js/science/07-deep.js` (225 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 
 **scene.js**
 - `src/js/scene/00-core.js` (8 стр.): TAU

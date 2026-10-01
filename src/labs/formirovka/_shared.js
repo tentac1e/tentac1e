@@ -8,7 +8,7 @@
     1: () => {
       const s = Rf.shoot(80, 180, 152, { pairs: 4, s: 0.42, buds: [1] });
       const [nx, ny] = s.nodes[1];
-      return pinchP(s.svg + Rf.cutMark(nx, ny - 8, 34) + Rf.scissors(nx + 32, ny - 8, 196, 1, 0.8) + ill.label(nx + 30, ny + 16, 'срез', 'start'), 'Побег с четырьмя парами листьев; срез над второй парой');
+      return pinchP(s.svg + Rf.cutMark(nx, ny - 8, 34) + Rf.scissors(nx + 32, ny - 8, 196, 1, 0.8) + ill.label(nx + 34, ny - 24, 'срез', 'start'), 'Побег с четырьмя парами листьев; срез над второй парой');
     },
     // a week on: a short stub over the second pair, and both buds have started
     2: () => {

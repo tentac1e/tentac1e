@@ -3,7 +3,7 @@
      water, the fridge, frozen in oil, blanched, dried, salt, oil, pesto. */
   const Fu = ill.F, qu = ill.q, Ru = props;
   const W = 180, H = 100;
-  const storeP = (body, label) => ill.svg(W, H, `<rect width="${W}" height="${H}" rx="14" fill="${Fu('bg')}"/><path d="M0 88H${W}V86Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 86Z" fill="${Fu('bg-2')}"/>` + body, label);
+  const storeP = (body, label) => ill.svg(W, H, `<rect data-bg width="${W}" height="${H}" rx="14" fill="${Fu('bg')}"/><path data-bg d="M0 88H${W}V86Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 86Z" fill="${Fu('bg-2')}"/>` + body, label);
   // a cut sprig: a stem with pairs of leaves; tone and look as in ills.leaf
   function cutSprig(x, y, len, a = 0, s = 0.26, o = {}) {
     const r = a * Math.PI / 180, ex = x + Math.sin(r) * len, ey = y - Math.cos(r) * len;

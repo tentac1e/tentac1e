@@ -64,7 +64,7 @@
       ensureLabs(host.dataset.view).then(() => { delete el.dataset.loading; if (ills[name]) draw(el); }, () => { delete el.dataset.loading; });
       return;
     }
-    try { el.innerHTML = fn(arg, el); el.dataset.drawn = el.dataset.ill; } catch (err) { console.error('[basil] illustration ' + el.dataset.ill, err); }
+    try { el.innerHTML = fn(arg, el); el.dataset.drawn = el.dataset.ill; fitLabels(el); } catch (err) { console.error('[basil] illustration ' + el.dataset.ill, err); }
   }
   let illIO = null;
   // eager: draw now (a gallery the reader sees at once, or a picture replaced on a tap)

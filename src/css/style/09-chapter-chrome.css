@@ -67,7 +67,8 @@
   border-bottom: 1px solid transparent;
   transition: border-color .3s;
 }
-.subnav-wrap.is-stuck { border-bottom-color: var(--line); }
+/* stuck over the text: dense enough that the lines scrolling under it do not show through */
+.subnav-wrap.is-stuck { border-bottom-color: var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); }
 .subnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
 .subnav::-webkit-scrollbar { display: none; }
 .subnav a {

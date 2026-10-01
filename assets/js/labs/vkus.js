@@ -247,7 +247,7 @@
 
     /* captions on soft pills that never overlap: items [{x, y, text, to: [x, y]}] placed in rows */
     function labels(items, w, rows, o = {}) {
-      const cw = o.cw || 6.9, pad = 7, used = rows.map(() => []);
+      const cw = o.cw || 7.4, pad = 7, used = rows.map(() => []);
       let s = '';
       items.forEach(it => {
         const tw = it.text.length * cw + pad * 2;
@@ -262,13 +262,13 @@
           const sx = side ? (it.to[0] < cx ? cx - tw / 2 : cx + tw / 2) : cx, sy = side ? ry : ry + (it.to[1] > ry ? 9 : -9);
           s += `<path class="mic-lead" d="M${q(sx)} ${q(sy)}L${q(it.to[0])} ${q(it.to[1])}"/>`;
         }
-        s += `<g class="mic-label"${it.t ? ` data-for="${it.t}"` : ''}><rect class="mic-lbl-bg" x="${q(cx - tw / 2)}" y="${q(ry - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(cx)}" y="${q(ry + 4)}" text-anchor="middle">${it.text}</text></g>`;
+        s += `<g class="mic-label" data-fit="${pad}"${it.t ? ` data-for="${it.t}"` : ''}><rect class="mic-lbl-bg" x="${q(cx - tw / 2)}" y="${q(ry - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(cx)}" y="${q(ry + 4)}" text-anchor="middle">${it.text}</text></g>`;
       });
       return s;
     }
     const pill = (x, yy, text, o = {}) => {
-      const tw = text.length * (o.cw || 6.9) + 14;
-      return `<g class="mic-label${o.cls ? ' ' + o.cls : ''}"${o.t ? ` data-for="${o.t}"` : ''}><rect class="mic-lbl-bg" x="${q(x)}" y="${q(yy - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(x + 7)}" y="${q(yy + 4)}">${text}</text></g>`;
+      const tw = text.length * (o.cw || 7.4) + 14;
+      return `<g class="mic-label${o.cls ? ' ' + o.cls : ''}" data-fit="7"${o.t ? ` data-for="${o.t}"` : ''}><rect class="mic-lbl-bg" x="${q(x)}" y="${q(yy - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(x + 7)}" y="${q(yy + 4)}">${text}</text></g>`;
     };
     const scale = (x, yy, px, text) => `<g class="mic-scale"><line x1="${q(x - px)}" x2="${q(x)}" y1="${q(yy)}" y2="${q(yy)}"/><line x1="${q(x - px)}" x2="${q(x - px)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><line x1="${q(x)}" x2="${q(x)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><text x="${q(x - px / 2)}" y="${q(yy - 7)}" text-anchor="middle">${text}</text></g>`;
 
@@ -591,7 +591,10 @@
     const tw = (t, big) => t.length * (big ? 8.1 : 7.6) + 20;
     const arrow = (x1, y1, x2, y2, hot, enz, side = 1) => {
       let s = `<line class="pw-edge${hot ? ' is-hot' : ''}" x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(x2)}" y2="${r1(y2)}" marker-end="url(#lab-pw-ah${hot ? '-hot' : ''})"/>`;
-      if (enz) s += `<text class="pw-enz${hot ? ' is-hot' : ''}" x="${r1((x1 + x2) / 2 + side * 7)}" y="${r1((y1 + y2) / 2 + 4)}" text-anchor="${side > 0 ? 'start' : 'end'}">${enz}</text>`;
+      if (enz) {
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, ew = enz.length * 7 + 10;
+        s += `<g class="pw-tag${hot ? ' is-hot' : ''}" data-fit="5"><rect x="${r1(mx - ew / 2)}" y="${r1(my - 8)}" width="${r1(ew)}" height="16" rx="8"/><text class="pw-enz${hot ? ' is-hot' : ''}" x="${r1(mx)}" y="${r1(my + 4)}" text-anchor="middle">${enz}</text></g>`;
+      }
       return s;
     };
     const ch = h.chart($('#lab-pw-ch', el), {
@@ -653,7 +656,7 @@
   register('molecules', el => {
     const ids = Object.keys(h.MOLS).sort((a, b) => h.MOLS[a].bp - h.MOLS[b].bp);
     el.innerHTML = `<div class="mol-lab">
-      <div class="mol-view"><div class="mol-stage"><canvas class="mol-canvas" id="lab-mol-cv" role="img" aria-label="Трёхмерная модель молекулы"></canvas><span class="mol-hint hand" aria-hidden="true">покрутите</span></div>
+      <div class="mol-view"><div class="mol-stage"><canvas class="mol-canvas" id="lab-mol-cv" role="img" aria-label="Трёхмерная модель молекулы"></canvas><span class="mol-hint hand" aria-hidden="true" data-on-picture>покрутите</span></div>
         <p class="mol-key"><span><i class="mk-c"></i>углерод</span><span><i class="mk-o"></i>кислород</span><span class="muted">водороды скрыты</span></p></div>
       <div class="mol-card" id="lab-mol-card" aria-live="polite"></div>
     </div>
@@ -1005,7 +1008,7 @@
         const levers = PA_LEVERS[cur.id] || [];
         const nodes = mols.map(m => ({ m, a: bridge(v, m, 1), b: W[m] })).concat(levers.map(([t, s]) => ({ lever: t, sub: s })));
         const n = nodes.length, gap = Math.min(78, (hh - 40) / Math.max(1, n));
-        let s = '';
+        let s = '', top = '';
         nodes.forEach((d, i) => {
           const y = cy + (i - (n - 1) / 2) * gap;
           const col = d.m ? `var(--m-${d.m})` : 'var(--ink-3)';
@@ -1013,17 +1016,23 @@
           const faint = d.m && d.a < 0.18;
           s += `<path class="pa-rib${d.lever || faint ? ' is-dash' : ''}" pathLength="1" d="M${Lx + (narrow ? 10 : 14)} ${r1(cy - 8)}C${r1((Lx + mx) / 2)} ${r1(cy - 8)} ${r1((Lx + mx) / 2)} ${r1(y)} ${r1(mx - 24)} ${r1(y)}" stroke="${col}" stroke-width="${r1(wa)}"/>`;
           s += `<path class="pa-rib${d.lever ? ' is-dash' : ''}" pathLength="1" d="M${r1(mx + 24)} ${r1(y)}C${r1((mx + Rx) / 2)} ${r1(y)} ${r1((mx + Rx) / 2)} ${r1(cy - 8)} ${Rx - (narrow ? 16 : 22)} ${r1(cy - 8)}" stroke="${col}" stroke-width="${r1(wb)}"/>`;
+          // the molecule and what it is, above every ribbon: the ribbons of the others pass under its plate
           if (d.m) {
             const r = 9 + 9 * Math.max(d.a, 0.15);
-            s += `<circle class="pa-node${faint ? ' is-faint' : ''}" cx="${r1(mx)}" cy="${r1(y)}" r="${r1(r)}" fill="${col}" stroke="${col}"/>`;
-            s += `<text class="pa-mol" x="${r1(mx)}" y="${r1(y + r + 13)}" text-anchor="middle">${d.m === 'hex' ? 'зелёные альдегиды' : h.molName(d.m).replace(/^1,8-|^α-|^β-/, '').toLowerCase()}</text>`;
-            s += `<text class="pa-sub" x="${r1(mx)}" y="${r1(y + r + 25)}" text-anchor="middle">${d.m === 'hex' ? 'при разрезе листа' : faint ? 'в этом сорте почти нет' : `${share(v, d.m)} % масла`}</text>`;
+            const name = d.m === 'hex' ? 'зелёные альдегиды' : h.molName(d.m).replace(/^1,8-|^α-|^β-/, '').toLowerCase();
+            const sub2 = d.m === 'hex' ? 'при разрезе листа' : faint ? 'в этом сорте почти нет' : `${share(v, d.m)} % масла`;
+            const tw = Math.max(name.length * 7.2, sub2.length * 6.4) + 16;
+            top += `<circle class="pa-node${faint ? ' is-faint' : ''}" cx="${r1(mx)}" cy="${r1(y)}" r="${r1(r)}" fill="${col}" stroke="${col}"/>`;
+            // above the nodes over the point where the ribbons meet, below the others: outside the fan of ribbons
+            const up = y < cy - 8, ty = up ? y - r - 30 : y + r + 1;
+            top += `<g class="pa-tag" data-fit="7"><rect x="${r1(mx - tw / 2)}" y="${r1(ty)}" width="${r1(tw)}" height="29" rx="9"/><text class="pa-mol" x="${r1(mx)}" y="${r1(ty + 13)}" text-anchor="middle">${name}</text><text class="pa-sub" x="${r1(mx)}" y="${r1(ty + 25)}" text-anchor="middle">${sub2}</text></g>`;
           } else {
             const tw = d.lever.length * 7.4 + 22;
-            s += `<rect class="pa-lever" x="${r1(mx - tw / 2)}" y="${r1(y - 13)}" width="${r1(tw)}" height="26" rx="13"/><text class="pa-mol" x="${r1(mx)}" y="${r1(y + 4.5)}" text-anchor="middle">${d.lever}</text>`;
-            s += `<text class="pa-sub" x="${r1(mx)}" y="${r1(y + 27)}" text-anchor="middle">${d.sub}</text>`;
+            top += `<rect class="pa-lever" x="${r1(mx - tw / 2)}" y="${r1(y - 13)}" width="${r1(tw)}" height="26" rx="13"/><text class="pa-mol" x="${r1(mx)}" y="${r1(y + 4.5)}" text-anchor="middle">${d.lever}</text>`;
+            top += `<g class="pa-tag" data-fit="7"><rect x="${r1(mx - 60)}" y="${r1(y + 16)}" width="120" height="15" rx="7"/><text class="pa-sub" x="${r1(mx)}" y="${r1(y + 27)}" text-anchor="middle">${d.sub}</text></g>`;
           }
         });
+        s += top;
         s += `<g class="pa-end" transform="translate(${Lx} ${r1(cy + 26)})">${food.basil(SORTS[sk].leaf, narrow ? 0.5 : 0.62)}</g>`;
         s += `<g class="pa-end" transform="translate(${r1(Rx - (narrow ? 24 : 32))} ${r1(cy - 8 - (narrow ? 24 : 32))}) scale(${narrow ? 0.75 : 1})">${food.g(cur.id)}</g>`;
         return s;

@@ -4,7 +4,7 @@
      "dis:<n>-plant|zoom", "pest:<n>-plant|zoom". */
   const I = ill, Fi = I.F, qi = I.q;
   const W0 = 160, H0 = 140;
-  const bg = (w = W0, hh = H0) => `<rect width="${w}" height="${hh}" rx="14" fill="${Fi('bg')}"/>`;
+  const bg = (w = W0, hh = H0) => `<rect data-bg width="${w}" height="${hh}" rx="14" fill="${Fi('bg')}"/>`;
   const ground = (y, w = W0, wet = false) => `<path d="M0 ${y}H${w}V${H0}H0Z" fill="${Fi(wet ? 'soil-d' : 'soil')}" opacity=".85"/><path d="M0 ${y}${Array.from({ length: 9 }, (_, i) => `L${i * 20} ${qi(y + Math.sin(i * 1.9) * 1.5)}`).join('')}L${w} ${y}" stroke="${Fi('soil-d')}" stroke-width="2" fill="none"/>`;
   const sun = (x, y, r = 11) => `<g opacity=".95"><circle cx="${x}" cy="${y}" r="${r}" fill="${Fi('yellow')}"/>${Array.from({ length: 8 }, (_, i) => { const a = i * Math.PI / 4; return `<path d="M${qi(x + Math.cos(a) * (r + 3))} ${qi(y + Math.sin(a) * (r + 3))}L${qi(x + Math.cos(a) * (r + 8))} ${qi(y + Math.sin(a) * (r + 8))}" stroke="${Fi('yellow')}" stroke-width="2.2" stroke-linecap="round"/>`; }).join('')}</g>`;
   const drop = (x, y, s = 1) => `<path d="M${x} ${y}c${2.5 * s} ${3 * s} ${4 * s} ${5 * s} ${4 * s} ${7 * s}a${4 * s} ${4 * s} 0 0 1 ${-8 * s} 0c0 ${-2 * s} ${1.5 * s} ${-4 * s} ${4 * s} ${-7 * s}Z" fill="${Fi('water')}" opacity=".35"/>`;
@@ -40,8 +40,9 @@
   /* ---------- close-ups ---------- */
   // Peronospora: branched sporangiophores leave through the stomata underneath
   function downyZoom() {
-    const w = 240, hh = 196;
-    const sec = micro.section(w, { top: 14, epi: 14, pal: [30], spo: 40, lo: 12, veins: [], stomata: [70, 170], seed: 21 });
+    // the frame it is shown in is 240 × 170: the section is drawn thinner so the spores fit under it
+    const w = 240, hh = 170;
+    const sec = micro.section(w, { top: 26, epi: 14, pal: [26], spo: 32, lo: 10, veins: [], stomata: [70, 170], seed: 21 });
     const y = sec.y, rnd = micro.rng(9);
     let s = `<g class="ill-micro">${sec.svg}</g>`;
     // hyphae between the cells
@@ -157,7 +158,7 @@
   function aphidBig() {
     const w = 240, hh = 170;
     let s = I.aphid(92, 90, 8, 8) + I.aphid(176, 108, -20, 3.4) + I.aphid(186, 64, 40, 3.8, true);
-    s += I.label(190, 22, 'крылатая') + I.label(176, 146, 'личинка') + I.scale(58, 20, 44, '1 мм');
+    s += I.label(190, 22, 'крылатая') + I.label(176, 158, 'личинка') + I.scale(58, 20, 44, '1 мм');
     return I.svg(w, hh, bg(w, hh) + s, 'Тля крупно: бескрылая самка, личинка и крылатая особь');
   }
   function miteBig() {
@@ -171,7 +172,7 @@
   function whiteflyBig() {
     const w = 240, hh = 170;
     let s = I.whitefly(100, 84, -8, 8.5) + [[188, 70], [206, 96], [180, 110]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="7" ry="4.6" fill="${Fi('yellow-pale')}" stroke="${Fi('mold')}" stroke-width=".7" opacity=".9"/>`).join('');
-    s += I.label(194, 140, 'личинки') + I.scale(58, 20, 44, '1 мм');
+    s += I.label(196, 152, 'личинки') + I.scale(58, 20, 44, '1 мм');
     return I.svg(w, hh, bg(w, hh) + s, 'Белокрылка крупно и её плоские личинки');
   }
   function thripsBig() {

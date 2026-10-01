@@ -49,7 +49,8 @@
     const el = pos.anchor && document.getElementById(pos.anchor);
     const place = () => {
       const t = el ? absTop(el) + pos.off : pos.y;
-      window.scrollTo({ top: Math.max(0, t), behavior });
+      const to = () => window.scrollTo({ top: Math.max(0, t), behavior });
+      if (behavior === 'auto') jump(to); else to();
     };
     if (el) for (let box = el.parentElement && el.parentElement.closest('details'); box; box = box.parentElement && box.parentElement.closest('details')) box.open = true;
     place();

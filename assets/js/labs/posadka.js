@@ -247,7 +247,7 @@
 
     /* captions on soft pills that never overlap: items [{x, y, text, to: [x, y]}] placed in rows */
     function labels(items, w, rows, o = {}) {
-      const cw = o.cw || 6.9, pad = 7, used = rows.map(() => []);
+      const cw = o.cw || 7.4, pad = 7, used = rows.map(() => []);
       let s = '';
       items.forEach(it => {
         const tw = it.text.length * cw + pad * 2;
@@ -262,13 +262,13 @@
           const sx = side ? (it.to[0] < cx ? cx - tw / 2 : cx + tw / 2) : cx, sy = side ? ry : ry + (it.to[1] > ry ? 9 : -9);
           s += `<path class="mic-lead" d="M${q(sx)} ${q(sy)}L${q(it.to[0])} ${q(it.to[1])}"/>`;
         }
-        s += `<g class="mic-label"${it.t ? ` data-for="${it.t}"` : ''}><rect class="mic-lbl-bg" x="${q(cx - tw / 2)}" y="${q(ry - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(cx)}" y="${q(ry + 4)}" text-anchor="middle">${it.text}</text></g>`;
+        s += `<g class="mic-label" data-fit="${pad}"${it.t ? ` data-for="${it.t}"` : ''}><rect class="mic-lbl-bg" x="${q(cx - tw / 2)}" y="${q(ry - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(cx)}" y="${q(ry + 4)}" text-anchor="middle">${it.text}</text></g>`;
       });
       return s;
     }
     const pill = (x, yy, text, o = {}) => {
-      const tw = text.length * (o.cw || 6.9) + 14;
-      return `<g class="mic-label${o.cls ? ' ' + o.cls : ''}"${o.t ? ` data-for="${o.t}"` : ''}><rect class="mic-lbl-bg" x="${q(x)}" y="${q(yy - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(x + 7)}" y="${q(yy + 4)}">${text}</text></g>`;
+      const tw = text.length * (o.cw || 7.4) + 14;
+      return `<g class="mic-label${o.cls ? ' ' + o.cls : ''}" data-fit="7"${o.t ? ` data-for="${o.t}"` : ''}><rect class="mic-lbl-bg" x="${q(x)}" y="${q(yy - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(x + 7)}" y="${q(yy + 4)}">${text}</text></g>`;
     };
     const scale = (x, yy, px, text) => `<g class="mic-scale"><line x1="${q(x - px)}" x2="${q(x)}" y1="${q(yy)}" y2="${q(yy)}"/><line x1="${q(x - px)}" x2="${q(x - px)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><line x1="${q(x)}" x2="${q(x)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><text x="${q(x - px / 2)}" y="${q(yy - 7)}" text-anchor="middle">${text}</text></g>`;
 
@@ -646,8 +646,8 @@
 
     /* ---------- the picture itself ---------- */
     // paper under the picture (follows the theme) and the table or ground things stand on from y down
-    const paper = (w, h) => `<rect width="${w}" height="${h}" rx="14" fill="${F('bg')}"/>`;
-    const ground = (y, w, h) => `<path d="M0 ${q(y)}H${w}V${h - 14}Q${w} ${h} ${w - 14} ${h}H14Q0 ${h} 0 ${h - 14}Z" fill="${F('bg-2')}"/>`;
+    const paper = (w, h) => `<rect data-bg width="${w}" height="${h}" rx="14" fill="${F('bg')}"/>`;
+    const ground = (y, w, h) => `<path data-bg d="M0 ${q(y)}H${w}V${h - 14}Q${w} ${h} ${w - 14} ${h}H14Q0 ${h} 0 ${h - 14}Z" fill="${F('bg-2')}"/>`;
     // a picture of one step: 120 × 120, things standing on y
     const step = (body, label, y = 104) => ill.svg(120, 120, paper(120, 120) + ground(y, 120, 120) + body, label);
 
@@ -1140,9 +1140,9 @@
     hero: () => {
       // one crowded pot → three roomy ones
       let g = R.shopPot(66, 136, 76, 50) + R.crowd(66, 86, 66, 18, { h: 58, pale: true, seed: 4 });
-      g += R.arrow(126, 92, 182, 92, 16) + ill.label(154, 64, 'разделить');
+      g += R.arrow(126, 92, 182, 92, 16) + ill.label(154, 56, 'разделить');
       [222, 276, 330].forEach((x, i) => { g += ill.pot(x, 112, 44, 26) + R.crowd(x, 105, 20, 4, { h: 46, seed: 7 + i }); });
-      return ill.svg(360, 150, paperP(360, 150) + `<path d="M0 136H360V136Q360 150 346 150H14Q0 150 0 136Z" fill="${Fp('bg-2')}"/>` + g, 'Магазинный горшок с десятками сеянцев делят на три-четыре горшка');
+      return ill.svg(360, 150, paperP(360, 150) + `<path data-bg d="M0 136H360V136Q360 150 346 150H14Q0 150 0 136Z" fill="${Fp('bg-2')}"/>` + g, 'Магазинный горшок с десятками сеянцев делят на три-четыре горшка');
     },
     1: () => {
       const inner = ill.leaf({ x: 6, y: 34, a: 6, s: 0.62, under: true, aphids: 6, seed: 5 });
@@ -1176,7 +1176,7 @@
 
   /* ---------- places ---------- */
   const W = 320, H = 150;
-  const placeP = (body, label, ground = 132) => ill.svg(W, H, paperP(W, H) + `<path d="M0 ${ground}H${W}V${H - 14}Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 ${H - 14}Z" fill="${Fp('bg-2')}"/>` + body, label);
+  const placeP = (body, label, ground = 132) => ill.svg(W, H, paperP(W, H) + `<path data-bg d="M0 ${ground}H${W}V${H - 14}Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 ${H - 14}Z" fill="${Fp('bg-2')}"/>` + body, label);
   const basilBush = (x, y, h = 60, o = {}) => ill.bush(Object.assign({ x, y, h, nodes: 3, leaf: 0.3, spread: 0.9, seed: 4 }, o));
   const tomato = (x, y, h = 110) => {
     let g = `<path d="M${x + 8} ${y}V${y - h}" stroke="${Fp('wood')}" stroke-width="3"/><path d="M${x} ${y}Q${x + 6} ${y - h * 0.35} ${x - 2} ${y - h * 0.6}T${x + 4} ${y - h}" stroke="${Fp('stem')}" stroke-width="3" fill="none"/>`;
@@ -1184,7 +1184,7 @@
     return g;
   };
   const PLACE = {
-    sill: () => placeP(R.window(150, 102, 170, 92, { sun: true, rays: true, radiator: true }) + ill.pot(118, 102, 40, 26) + basilBush(118, 96, 56) + ill.pot(178, 102, 34, 22) + ill.ballBush({ x: 178, y: 96, r: 26, n: 46, leaf: 0.14, tone: 'deep', seed: 3 }) + R.lamp(270, 34, 60, { reach: 50 }) + ill.label(270, 112, 'досветка'), 'Подоконник: южное окно, батарея под ним, зимой лампа', 148),
+    sill: () => placeP(R.window(138, 102, 148, 92, { sun: true, rays: true, radiator: true }) + ill.pot(110, 102, 40, 26) + basilBush(110, 96, 56) + ill.pot(166, 102, 34, 22) + ill.ballBush({ x: 166, y: 96, r: 26, n: 46, leaf: 0.14, tone: 'deep', seed: 3 }) + R.lamp(282, 34, 56, { reach: 50 }) + ill.label(314, 104, 'досветка', 'end'), 'Подоконник: южное окно, батарея под ним, зимой лампа', 148),
     balcony: () => {
       let g = R.sun(282, 26, 12) + R.balcony(20, 300, 128, { box: [60, 200] });
       [84, 130, 176].forEach((x, i) => { g += basilBush(x, 64, 48, { leaf: 0.26, seed: 5 + i }); });
@@ -1240,7 +1240,8 @@
           }
           const sx = clamp(wallX - Math.cos(rad) * wallX * 0.72, 18, wallX - 20), sy = clamp(Y(1.5) - Math.tan(rad) * (wallX - sx), 18, floorY - 18);
           s += `<circle class="win-sun" cx="${r1(sx)}" cy="${r1(sy)}" r="13"/>`;
-          s += `<text class="tick" x="${r1(sx)}" y="${r1(sy + 30)}" text-anchor="middle">${fmt0(alt)}°</text>`;
+          const tag = `${fmt0(alt)}°`, tw = tag.length * 7 + 12;
+          s += `<rect class="win-tag" x="${r1(sx - tw / 2)}" y="${r1(sy + 18)}" width="${r1(tw)}" height="17" rx="8.5"/><text class="tick" x="${r1(sx)}" y="${r1(sy + 30)}" text-anchor="middle">${tag}</text>`;
         } else {
           s += `<text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6)}" text-anchor="middle">солнце</text><text class="band-lbl" x="${r1(wallX / 2)}" y="${Y(1.6) + 15}" text-anchor="middle">не встаёт</text>`;
         }

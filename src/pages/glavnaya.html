@@ -22,25 +22,28 @@
             <rect class="pot-rim" x="-86" y="-6" width="172" height="22" rx="7"/>
             <ellipse class="pot-soil" cx="0" cy="-3" rx="78" ry="7"/>
             <g class="pot-grain"><circle cx="-46" cy="-3" r="2.2"/><circle cx="-26" cy="-6" r="1.6"/><circle cx="30" cy="-2" r="2"/><circle cx="54" cy="-5" r="1.5"/><circle cx="10" cy="-7" r="1.3"/><circle cx="-10" cy="-1" r="1.8"/></g>
-            <g class="pot-tag" transform="translate(58 -34) rotate(9)"><path class="pot-stick" d="M0 -8 L0 40"/><rect x="-26" y="-30" width="52" height="26" rx="4"/><text x="0" y="-12" text-anchor="middle">Genovese</text></g>
+            <g class="pot-tag" data-fit="6" transform="translate(58 -34) rotate(9)"><path class="pot-stick" d="M0 -8 L0 40"/><rect x="-26" y="-30" width="52" height="26" rx="4"/><text x="0" y="-12" text-anchor="middle">Genovese</text></g>
           </g>
           <g id="hero-plant-g"></g>
         </svg>
         <div class="aroma-layer" id="aroma-layer" aria-hidden="true"></div>
-        <p class="plant-hint hand" id="plant-hint" aria-hidden="true">потрите листик</p>
+        <p class="plant-hint hand" id="plant-hint" aria-hidden="true" data-on-picture>потрите листик</p>
       </div>
-      <aside class="passport" aria-label="Паспорт растения">
-        <p class="passport-kicker">Паспорт растения</p>
-        <p class="passport-name">Ocimum basilicum L.</p>
-        <dl>
-          <div><dt>Тепло</dt><dd>20–28&nbsp;°C, ночью не ниже 16&nbsp;°C</dd></div>
-          <div><dt>Холод</dt><dd>ниже +10&nbsp;°C рост стоп, при +5&nbsp;°C чернеет</dd></div>
-          <div><dt>Свет</dt><dd>6–8&nbsp;ч солнца или 14–16&nbsp;ч под лампой</dd></div>
-          <div><dt>Почва</dt><dd>рыхлая, pH 6,0–7,0</dd></div>
-          <div><dt>Полив</dt><dd>когда подсохли верхние 1–2&nbsp;см</dd></div>
-        </dl>
-      </aside>
     </div>
+  </div>
+
+  <div class="wrap">
+    <aside class="passport" aria-label="Паспорт растения">
+      <p class="passport-kicker">Паспорт растения</p>
+      <p class="passport-name">Ocimum basilicum L.</p>
+      <dl>
+        <div><dt>Тепло</dt><dd>20–28&nbsp;°C, ночью не ниже 16&nbsp;°C</dd></div>
+        <div><dt>Холод</dt><dd>ниже +10&nbsp;°C рост стоп, при +5&nbsp;°C чернеет</dd></div>
+        <div><dt>Свет</dt><dd>6–8&nbsp;ч солнца или 14–16&nbsp;ч под лампой</dd></div>
+        <div><dt>Почва</dt><dd>рыхлая, pH 6,0–7,0</dd></div>
+        <div><dt>Полив</dt><dd>когда подсохли верхние 1–2&nbsp;см</dd></div>
+      </dl>
+    </aside>
   </div>
 
   <div class="wrap">
@@ -99,7 +102,7 @@
         </div>
       </div>
       <figure class="sh-mol">
-        <div class="mol-stage"><canvas class="mol-canvas" id="home-molecule" role="img" aria-label="Трёхмерная модель молекулы аромата базилика"></canvas><span class="mol-hint hand" aria-hidden="true">покрутите</span></div>
+        <div class="mol-stage"><canvas class="mol-canvas" id="home-molecule" role="img" aria-label="Трёхмерная модель молекулы аромата базилика"></canvas><span class="mol-hint hand" aria-hidden="true" data-on-picture>покрутите</span></div>
         <figcaption><b id="home-mol-name">Линалоол</b><span id="home-mol-note">C₁₀H₁₈O · цветочная нота генуэзского базилика</span></figcaption>
         <div class="chips-row" id="home-mol-chips" role="group" aria-label="Выбор молекулы"></div>
       </figure>

@@ -247,7 +247,7 @@
 
     /* captions on soft pills that never overlap: items [{x, y, text, to: [x, y]}] placed in rows */
     function labels(items, w, rows, o = {}) {
-      const cw = o.cw || 6.9, pad = 7, used = rows.map(() => []);
+      const cw = o.cw || 7.4, pad = 7, used = rows.map(() => []);
       let s = '';
       items.forEach(it => {
         const tw = it.text.length * cw + pad * 2;
@@ -262,13 +262,13 @@
           const sx = side ? (it.to[0] < cx ? cx - tw / 2 : cx + tw / 2) : cx, sy = side ? ry : ry + (it.to[1] > ry ? 9 : -9);
           s += `<path class="mic-lead" d="M${q(sx)} ${q(sy)}L${q(it.to[0])} ${q(it.to[1])}"/>`;
         }
-        s += `<g class="mic-label"${it.t ? ` data-for="${it.t}"` : ''}><rect class="mic-lbl-bg" x="${q(cx - tw / 2)}" y="${q(ry - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(cx)}" y="${q(ry + 4)}" text-anchor="middle">${it.text}</text></g>`;
+        s += `<g class="mic-label" data-fit="${pad}"${it.t ? ` data-for="${it.t}"` : ''}><rect class="mic-lbl-bg" x="${q(cx - tw / 2)}" y="${q(ry - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(cx)}" y="${q(ry + 4)}" text-anchor="middle">${it.text}</text></g>`;
       });
       return s;
     }
     const pill = (x, yy, text, o = {}) => {
-      const tw = text.length * (o.cw || 6.9) + 14;
-      return `<g class="mic-label${o.cls ? ' ' + o.cls : ''}"${o.t ? ` data-for="${o.t}"` : ''}><rect class="mic-lbl-bg" x="${q(x)}" y="${q(yy - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(x + 7)}" y="${q(yy + 4)}">${text}</text></g>`;
+      const tw = text.length * (o.cw || 7.4) + 14;
+      return `<g class="mic-label${o.cls ? ' ' + o.cls : ''}" data-fit="7"${o.t ? ` data-for="${o.t}"` : ''}><rect class="mic-lbl-bg" x="${q(x)}" y="${q(yy - 9)}" width="${q(tw)}" height="18" rx="9"/><text class="mic-lbl" x="${q(x + 7)}" y="${q(yy + 4)}">${text}</text></g>`;
     };
     const scale = (x, yy, px, text) => `<g class="mic-scale"><line x1="${q(x - px)}" x2="${q(x)}" y1="${q(yy)}" y2="${q(yy)}"/><line x1="${q(x - px)}" x2="${q(x - px)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><line x1="${q(x)}" x2="${q(x)}" y1="${q(yy - 4)}" y2="${q(yy + 4)}"/><text x="${q(x - px / 2)}" y="${q(yy - 7)}" text-anchor="middle">${text}</text></g>`;
 
@@ -646,8 +646,8 @@
 
     /* ---------- the picture itself ---------- */
     // paper under the picture (follows the theme) and the table or ground things stand on from y down
-    const paper = (w, h) => `<rect width="${w}" height="${h}" rx="14" fill="${F('bg')}"/>`;
-    const ground = (y, w, h) => `<path d="M0 ${q(y)}H${w}V${h - 14}Q${w} ${h} ${w - 14} ${h}H14Q0 ${h} 0 ${h - 14}Z" fill="${F('bg-2')}"/>`;
+    const paper = (w, h) => `<rect data-bg width="${w}" height="${h}" rx="14" fill="${F('bg')}"/>`;
+    const ground = (y, w, h) => `<path data-bg d="M0 ${q(y)}H${w}V${h - 14}Q${w} ${h} ${w - 14} ${h}H14Q0 ${h} 0 ${h - 14}Z" fill="${F('bg-2')}"/>`;
     // a picture of one step: 120 × 120, things standing on y
     const step = (body, label, y = 104) => ill.svg(120, 120, paper(120, 120) + ground(y, 120, 120) + body, label);
 
@@ -1072,7 +1072,7 @@
      water, the fridge, frozen in oil, blanched, dried, salt, oil, pesto. */
   const Fu = ill.F, qu = ill.q, Ru = props;
   const W = 180, H = 100;
-  const storeP = (body, label) => ill.svg(W, H, `<rect width="${W}" height="${H}" rx="14" fill="${Fu('bg')}"/><path d="M0 88H${W}V86Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 86Z" fill="${Fu('bg-2')}"/>` + body, label);
+  const storeP = (body, label) => ill.svg(W, H, `<rect data-bg width="${W}" height="${H}" rx="14" fill="${Fu('bg')}"/><path data-bg d="M0 88H${W}V86Q${W} ${H} ${W - 14} ${H}H14Q0 ${H} 0 86Z" fill="${Fu('bg-2')}"/>` + body, label);
   // a cut sprig: a stem with pairs of leaves; tone and look as in ills.leaf
   function cutSprig(x, y, len, a = 0, s = 0.26, o = {}) {
     const r = a * Math.PI / 180, ex = x + Math.sin(r) * len, ey = y - Math.cos(r) * len;

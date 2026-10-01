@@ -11,8 +11,8 @@
 
     /* ---------- the picture itself ---------- */
     // paper under the picture (follows the theme) and the table or ground things stand on from y down
-    const paper = (w, h) => `<rect width="${w}" height="${h}" rx="14" fill="${F('bg')}"/>`;
-    const ground = (y, w, h) => `<path d="M0 ${q(y)}H${w}V${h - 14}Q${w} ${h} ${w - 14} ${h}H14Q0 ${h} 0 ${h - 14}Z" fill="${F('bg-2')}"/>`;
+    const paper = (w, h) => `<rect data-bg width="${w}" height="${h}" rx="14" fill="${F('bg')}"/>`;
+    const ground = (y, w, h) => `<path data-bg d="M0 ${q(y)}H${w}V${h - 14}Q${w} ${h} ${w - 14} ${h}H14Q0 ${h} 0 ${h - 14}Z" fill="${F('bg-2')}"/>`;
     // a picture of one step: 120 × 120, things standing on y
     const step = (body, label, y = 104) => ill.svg(120, 120, paper(120, 120) + ground(y, 120, 120) + body, label);
 

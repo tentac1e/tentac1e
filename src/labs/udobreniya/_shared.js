@@ -22,7 +22,7 @@
   const WORD = { old: 'старый лист', young: 'молодой лист', top: 'верхушка' };
   function defPic(sym) {
     const d = DEF[sym] || DEF.N, w = 260, hh = 140, base = 116, H = d.small ? 58 : 72, n = 4;
-    let g = `<rect width="${w}" height="${hh}" rx="14" fill="${Fd('bg')}"/><path d="M0 128H${w}V126Q${w} ${hh} ${w - 14} ${hh}H14Q0 ${hh} 0 126Z" fill="${Fd('bg-2')}"/>`;
+    let g = `<rect data-bg width="${w}" height="${hh}" rx="14" fill="${Fd('bg')}"/><path data-bg d="M0 128H${w}V126Q${w} ${hh} ${w - 14} ${hh}H14Q0 ${hh} 0 126Z" fill="${Fd('bg-2')}"/>`;
     g += ill.pot(66, 124, 56, 20);
     g += ill.plant({ x: 66, y: base + 2, h: H, nodes: n, leafScale: d.rosette ? 0.82 : 0.78, seed: 5, leaf: d.plant });
     // where it starts: a dashed ring on the plant and a line to the close-up

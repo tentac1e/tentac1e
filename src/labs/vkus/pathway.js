@@ -31,7 +31,10 @@
     const tw = (t, big) => t.length * (big ? 8.1 : 7.6) + 20;
     const arrow = (x1, y1, x2, y2, hot, enz, side = 1) => {
       let s = `<line class="pw-edge${hot ? ' is-hot' : ''}" x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(x2)}" y2="${r1(y2)}" marker-end="url(#lab-pw-ah${hot ? '-hot' : ''})"/>`;
-      if (enz) s += `<text class="pw-enz${hot ? ' is-hot' : ''}" x="${r1((x1 + x2) / 2 + side * 7)}" y="${r1((y1 + y2) / 2 + 4)}" text-anchor="${side > 0 ? 'start' : 'end'}">${enz}</text>`;
+      if (enz) {
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, ew = enz.length * 7 + 10;
+        s += `<g class="pw-tag${hot ? ' is-hot' : ''}" data-fit="5"><rect x="${r1(mx - ew / 2)}" y="${r1(my - 8)}" width="${r1(ew)}" height="16" rx="8"/><text class="pw-enz${hot ? ' is-hot' : ''}" x="${r1(mx)}" y="${r1(my + 4)}" text-anchor="middle">${enz}</text></g>`;
+      }
       return s;
     };
     const ch = h.chart($('#lab-pw-ch', el), {

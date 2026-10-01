@@ -595,6 +595,11 @@ select, input[type="date"], input[type="number"], input[type="search"] {
   min-height: 46px;
 }
 select:hover, input:hover { border-color: var(--basil); }
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari: the date field keeps its own width and centred value unless it drops the native look */
+  input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
+  input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
+}
 
 .row-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .row-2.wide-first { grid-template-columns: minmax(0, 1fr) 130px; }
@@ -925,27 +930,34 @@ main { view-transition-name: main; }
 @keyframes sway-all { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
 @keyframes leaf-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3.5deg); } }
 
+/* the plant's passport: a band under the hero, its facts in a row (two columns on a phone) */
 .passport {
-  position: absolute;
-  left: -12px;
-  bottom: 2%;
-  width: min(262px, 52%);
-  padding: 16px 18px 14px;
+  display: grid;
+  grid-template-columns: minmax(170px, 210px) minmax(0, 1fr);
+  grid-template-areas: "k d" "n d";
+  gap: 2px 28px;
+  align-items: center;
+  margin: 0 0 clamp(18px, 3vw, 30px);
+  padding: 16px clamp(16px, 2.4vw, 24px);
   background: var(--glass-strong);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid var(--line-strong);
-  border-radius: 6px 28px 6px 28px;
+  border-radius: 8px 28px 8px 28px;
   box-shadow: var(--shadow-float);
-  rotate: -2.5deg;
-  animation: bob 11s ease-in-out infinite reverse;
 }
-.passport-kicker { margin: 0; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
-.passport-name { margin: 2px 0 10px; font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--basil-deep); }
-.passport dl { display: grid; margin: 0; }
-.passport dl div { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 8px; padding: 5px 0; border-top: 1px dashed var(--line-strong); font-size: .84rem; line-height: 1.35; }
-.passport dt { font-weight: 700; color: var(--ink-3); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.passport-kicker { grid-area: k; align-self: end; margin: 0; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+.passport-name { grid-area: n; align-self: start; margin: 2px 0 0; font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--basil-deep); }
+.passport dl { grid-area: d; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 16px; margin: 0; }
+.passport dl div { padding: 2px 0 2px 14px; border-left: 1px dashed var(--line-strong); font-size: .84rem; line-height: 1.35; }
+.passport dt { font-weight: 700; color: var(--ink-3); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
 .passport dd { margin: 0; }
+@media (max-width: 1060px) { .passport { grid-template-columns: 1fr; grid-template-areas: "k" "n" "d"; } .passport dl { margin-top: 10px; } }
+@media (max-width: 720px) {
+  .passport dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; }
+  .passport dl div { padding: 7px 0; border-left: 0; border-top: 1px dashed var(--line-strong); }
+  .passport dl div:last-child { grid-column: 1 / -1; }
+}
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: minmax(0, 1fr) 92px; column-gap: 12px; }
@@ -955,7 +967,7 @@ main { view-transition-name: main; }
   .hero-art { grid-column: 2; grid-row: 2; min-height: 0; width: 92px; align-self: center; }
   .hero .lead, .hero-actions, .continue { grid-column: 1 / -1; }
   .hero-actions { margin-top: 20px; }
-  .hero-art .halo, .passport { display: none; }
+  .hero-art .halo { display: none; }
   .sprig { width: 100%; }
 }
 
@@ -1037,7 +1049,7 @@ main { view-transition-name: main; }
 .season-note { margin: 0; font-size: .86rem; color: var(--ink-3); }
 @media (max-width: 560px) {
   .season-tip { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; }
-  .season-mark svg { width: 64px; height: 64px; }
+  .season-mark .art-float, .season-mark svg { width: 64px; height: 64px; }
 }
 
 .chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
@@ -1243,7 +1255,8 @@ main { view-transition-name: main; }
   border-bottom: 1px solid transparent;
   transition: border-color .3s;
 }
-.subnav-wrap.is-stuck { border-bottom-color: var(--line); }
+/* stuck over the text: dense enough that the lines scrolling under it do not show through */
+.subnav-wrap.is-stuck { border-bottom-color: var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); }
 .subnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
 .subnav::-webkit-scrollbar { display: none; }
 .subnav a {
@@ -1963,6 +1976,7 @@ main { view-transition-name: main; }
 .diag { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(18px, 3vw, 30px); align-items: start; }
 @media (max-width: 940px) { .diag { grid-template-columns: 1fr; } }
 .diag-groups { display: grid; gap: 18px; min-width: 0; }
+.diag-group { min-width: 0; }
 .diag-group h4 { font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
 /* symptom gallery: a swipeable row on a phone, a grid on a wide screen */
 .diag-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
@@ -2000,6 +2014,7 @@ main { view-transition-name: main; }
 .ref-ills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: -4px -4px 14px; }
 .ref-ills figure { margin: 0; display: grid; gap: 4px; }
 .ref-ill { display: block; aspect-ratio: 240 / 170; border-radius: 14px; overflow: hidden; background: var(--ill-bg); box-shadow: 0 0 0 1px var(--line); }
+.ref-ill .ill { width: 100%; height: 100%; }
 .ref-ills figcaption { font: 600 .74rem/1.25 var(--font-body); color: var(--ink-3); text-align: center; padding: 0 2px; }
 .ref-card h4 { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 2px; }
 .ref-card .latin { display: block; margin-bottom: 10px; font-family: var(--font-display); font-style: italic; color: var(--ink-3); }
@@ -2055,10 +2070,10 @@ main { view-transition-name: main; }
   z-index: 40;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border: 0;
-  border-radius: 26px 6px 26px 6px;
+  border-radius: 24px 6px 24px 6px;
   background: var(--basil);
   color: var(--on-basil);
   box-shadow: var(--shadow-float);

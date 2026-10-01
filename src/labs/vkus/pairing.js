@@ -74,7 +74,7 @@
         const levers = PA_LEVERS[cur.id] || [];
         const nodes = mols.map(m => ({ m, a: bridge(v, m, 1), b: W[m] })).concat(levers.map(([t, s]) => ({ lever: t, sub: s })));
         const n = nodes.length, gap = Math.min(78, (hh - 40) / Math.max(1, n));
-        let s = '';
+        let s = '', top = '';
         nodes.forEach((d, i) => {
           const y = cy + (i - (n - 1) / 2) * gap;
           const col = d.m ? `var(--m-${d.m})` : 'var(--ink-3)';
@@ -82,17 +82,23 @@
           const faint = d.m && d.a < 0.18;
           s += `<path class="pa-rib${d.lever || faint ? ' is-dash' : ''}" pathLength="1" d="M${Lx + (narrow ? 10 : 14)} ${r1(cy - 8)}C${r1((Lx + mx) / 2)} ${r1(cy - 8)} ${r1((Lx + mx) / 2)} ${r1(y)} ${r1(mx - 24)} ${r1(y)}" stroke="${col}" stroke-width="${r1(wa)}"/>`;
           s += `<path class="pa-rib${d.lever ? ' is-dash' : ''}" pathLength="1" d="M${r1(mx + 24)} ${r1(y)}C${r1((mx + Rx) / 2)} ${r1(y)} ${r1((mx + Rx) / 2)} ${r1(cy - 8)} ${Rx - (narrow ? 16 : 22)} ${r1(cy - 8)}" stroke="${col}" stroke-width="${r1(wb)}"/>`;
+          // the molecule and what it is, above every ribbon: the ribbons of the others pass under its plate
           if (d.m) {
             const r = 9 + 9 * Math.max(d.a, 0.15);
-            s += `<circle class="pa-node${faint ? ' is-faint' : ''}" cx="${r1(mx)}" cy="${r1(y)}" r="${r1(r)}" fill="${col}" stroke="${col}"/>`;
-            s += `<text class="pa-mol" x="${r1(mx)}" y="${r1(y + r + 13)}" text-anchor="middle">${d.m === 'hex' ? 'зелёные альдегиды' : h.molName(d.m).replace(/^1,8-|^α-|^β-/, '').toLowerCase()}</text>`;
-            s += `<text class="pa-sub" x="${r1(mx)}" y="${r1(y + r + 25)}" text-anchor="middle">${d.m === 'hex' ? 'при разрезе листа' : faint ? 'в этом сорте почти нет' : `${share(v, d.m)} % масла`}</text>`;
+            const name = d.m === 'hex' ? 'зелёные альдегиды' : h.molName(d.m).replace(/^1,8-|^α-|^β-/, '').toLowerCase();
+            const sub2 = d.m === 'hex' ? 'при разрезе листа' : faint ? 'в этом сорте почти нет' : `${share(v, d.m)} % масла`;
+            const tw = Math.max(name.length * 7.2, sub2.length * 6.4) + 16;
+            top += `<circle class="pa-node${faint ? ' is-faint' : ''}" cx="${r1(mx)}" cy="${r1(y)}" r="${r1(r)}" fill="${col}" stroke="${col}"/>`;
+            // above the nodes over the point where the ribbons meet, below the others: outside the fan of ribbons
+            const up = y < cy - 8, ty = up ? y - r - 30 : y + r + 1;
+            top += `<g class="pa-tag" data-fit="7"><rect x="${r1(mx - tw / 2)}" y="${r1(ty)}" width="${r1(tw)}" height="29" rx="9"/><text class="pa-mol" x="${r1(mx)}" y="${r1(ty + 13)}" text-anchor="middle">${name}</text><text class="pa-sub" x="${r1(mx)}" y="${r1(ty + 25)}" text-anchor="middle">${sub2}</text></g>`;
           } else {
             const tw = d.lever.length * 7.4 + 22;
-            s += `<rect class="pa-lever" x="${r1(mx - tw / 2)}" y="${r1(y - 13)}" width="${r1(tw)}" height="26" rx="13"/><text class="pa-mol" x="${r1(mx)}" y="${r1(y + 4.5)}" text-anchor="middle">${d.lever}</text>`;
-            s += `<text class="pa-sub" x="${r1(mx)}" y="${r1(y + 27)}" text-anchor="middle">${d.sub}</text>`;
+            top += `<rect class="pa-lever" x="${r1(mx - tw / 2)}" y="${r1(y - 13)}" width="${r1(tw)}" height="26" rx="13"/><text class="pa-mol" x="${r1(mx)}" y="${r1(y + 4.5)}" text-anchor="middle">${d.lever}</text>`;
+            top += `<g class="pa-tag" data-fit="7"><rect x="${r1(mx - 60)}" y="${r1(y + 16)}" width="120" height="15" rx="7"/><text class="pa-sub" x="${r1(mx)}" y="${r1(y + 27)}" text-anchor="middle">${d.sub}</text></g>`;
           }
         });
+        s += top;
         s += `<g class="pa-end" transform="translate(${Lx} ${r1(cy + 26)})">${food.basil(SORTS[sk].leaf, narrow ? 0.5 : 0.62)}</g>`;
         s += `<g class="pa-end" transform="translate(${r1(Rx - (narrow ? 24 : 32))} ${r1(cy - 8 - (narrow ? 24 : 32))}) scale(${narrow ? 0.75 : 1})">${food.g(cur.id)}</g>`;
         return s;

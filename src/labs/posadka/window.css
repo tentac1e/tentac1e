@@ -9,3 +9,4 @@
 .win-pot { fill: var(--clay); }
 .win-leaf { fill: var(--leaf); }
 
+.win-tag { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }

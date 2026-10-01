@@ -45,27 +45,34 @@
 @keyframes sway-all { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
 @keyframes leaf-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3.5deg); } }
 
+/* the plant's passport: a band under the hero, its facts in a row (two columns on a phone) */
 .passport {
-  position: absolute;
-  left: -12px;
-  bottom: 2%;
-  width: min(262px, 52%);
-  padding: 16px 18px 14px;
+  display: grid;
+  grid-template-columns: minmax(170px, 210px) minmax(0, 1fr);
+  grid-template-areas: "k d" "n d";
+  gap: 2px 28px;
+  align-items: center;
+  margin: 0 0 clamp(18px, 3vw, 30px);
+  padding: 16px clamp(16px, 2.4vw, 24px);
   background: var(--glass-strong);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid var(--line-strong);
-  border-radius: 6px 28px 6px 28px;
+  border-radius: 8px 28px 8px 28px;
   box-shadow: var(--shadow-float);
-  rotate: -2.5deg;
-  animation: bob 11s ease-in-out infinite reverse;
 }
-.passport-kicker { margin: 0; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
-.passport-name { margin: 2px 0 10px; font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--basil-deep); }
-.passport dl { display: grid; margin: 0; }
-.passport dl div { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 8px; padding: 5px 0; border-top: 1px dashed var(--line-strong); font-size: .84rem; line-height: 1.35; }
-.passport dt { font-weight: 700; color: var(--ink-3); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.passport-kicker { grid-area: k; align-self: end; margin: 0; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+.passport-name { grid-area: n; align-self: start; margin: 2px 0 0; font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--basil-deep); }
+.passport dl { grid-area: d; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 16px; margin: 0; }
+.passport dl div { padding: 2px 0 2px 14px; border-left: 1px dashed var(--line-strong); font-size: .84rem; line-height: 1.35; }
+.passport dt { font-weight: 700; color: var(--ink-3); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
 .passport dd { margin: 0; }
+@media (max-width: 1060px) { .passport { grid-template-columns: 1fr; grid-template-areas: "k" "n" "d"; } .passport dl { margin-top: 10px; } }
+@media (max-width: 720px) {
+  .passport dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; }
+  .passport dl div { padding: 7px 0; border-left: 0; border-top: 1px dashed var(--line-strong); }
+  .passport dl div:last-child { grid-column: 1 / -1; }
+}
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: minmax(0, 1fr) 92px; column-gap: 12px; }
@@ -75,7 +82,7 @@
   .hero-art { grid-column: 2; grid-row: 2; min-height: 0; width: 92px; align-self: center; }
   .hero .lead, .hero-actions, .continue { grid-column: 1 / -1; }
   .hero-actions { margin-top: 20px; }
-  .hero-art .halo, .passport { display: none; }
+  .hero-art .halo { display: none; }
   .sprig { width: 100%; }
 }
 
@@ -157,7 +164,7 @@
 .season-note { margin: 0; font-size: .86rem; color: var(--ink-3); }
 @media (max-width: 560px) {
   .season-tip { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; }
-  .season-mark svg { width: 64px; height: 64px; }
+  .season-mark .art-float, .season-mark svg { width: 64px; height: 64px; }
 }
 
 .chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }

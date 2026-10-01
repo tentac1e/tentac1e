@@ -27,10 +27,10 @@
       return Rr.step(Rr.glass(60, 104, 44, 56, { level: 0.72, inside: c.svg }), 'Черенок в стакане: нижние узлы под водой');
     },
     4: () => {
-      const c = cutting(44, 98, 84, { bare: 2, s: 0.26 });
-      const under = Rr.roots(44, c.nodes[0][1], 14, 6, { seed: 4 }) + Rr.roots(44, c.nodes[1][1], 10, 4, { seed: 7 }) + c.svg;
-      let g = Rr.glass(44, 104, 44, 56, { level: 0.72, inside: under });
-      g += Rr.drop(98, 40, 1.5) + ill.label(116, 76, '2–3 дня', 'end');
+      const c = cutting(40, 98, 84, { bare: 2, s: 0.26 });
+      const under = Rr.roots(40, c.nodes[0][1], 14, 6, { seed: 4 }) + Rr.roots(40, c.nodes[1][1], 10, 4, { seed: 7 }) + c.svg;
+      let g = Rr.glass(40, 104, 44, 56, { level: 0.72, inside: under });
+      g += Rr.drop(98, 34, 1.5) + ill.label(117, 62, '2–3 дня', 'end');
       return Rr.step(g, 'Белые корешки на узлах в воде; воду меняют каждые 2–3 дня');
     },
     5: () => {

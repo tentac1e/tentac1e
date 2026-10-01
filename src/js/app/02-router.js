@@ -94,8 +94,16 @@
     document.title = title;
   }
 
+  // «auto» follows the page's smooth scroll-behavior (01-base.css): a jump on arrival has to say instant
+  // itself, or the page glides down from the top and builds every model it passes on the way
+  const jump = fn => {
+    const st = document.documentElement.style, was = st.scrollBehavior;
+    st.scrollBehavior = 'auto';
+    try { fn(); } finally { st.scrollBehavior = was; }
+  };
   function scrollAfter(r, changedView) {
     const behavior = changedView ? 'auto' : smooth();
+    const go = fn => (changedView ? jump(fn) : fn());
     if (r.target) {
       const rc = r.target.closest('.recipe-card');
       if (rc && rc.hidden) { const all = $('.rb-filter [data-cat="all"]'); if (all) all.click(); }
@@ -103,7 +111,7 @@
       for (let box = r.target.closest('details'); box; box = box.parentElement && box.parentElement.closest('details')) {
         if (!box.open) { box.open = true; opened = true; }
       }
-      r.target.scrollIntoView({ block: 'start', behavior });
+      go(() => r.target.scrollIntoView({ block: 'start', behavior }));
       // models above the target mount lazily and push it down — land again once they settle
       if (opened) {
         const target = r.target;
@@ -122,10 +130,10 @@
     const wrap = $('.subnav-wrap', r.view);
     if (r.panel && wrap) {
       const top = wrap.getBoundingClientRect().top + window.scrollY - stickyOffset();
-      if (changedView || window.scrollY > top) window.scrollTo({ top: Math.max(0, top), behavior });
+      if (changedView || window.scrollY > top) go(() => window.scrollTo({ top: Math.max(0, top), behavior }));
       return;
     }
-    if (changedView) window.scrollTo({ top: 0, behavior: 'auto' });
+    if (changedView) jump(() => window.scrollTo({ top: 0, behavior: 'auto' }));
   }
 
   function route(hash, opts = {}) {
@@ -144,7 +152,7 @@
       const panel = activatePanel(r.view, r.panel, !changedView);
       if (!r.panel && panel && !changedView && !r.home) r.panel = panel;
       updateChrome(r.view);
-      if (opts.top) window.scrollTo(0, 0);
+      if (opts.top) jump(() => window.scrollTo(0, 0));
       else if (r.home && !changedView) window.scrollTo({ top: 0, behavior: smooth() }); // the chapter's own link: back to its top
       else scrollAfter(r, changedView);
       document.dispatchEvent(new CustomEvent('basil:view', { detail: { id: r.view.dataset.view } }));
@@ -230,13 +238,24 @@
   function initScrollChrome() {
     const bar = $('#progress-bar');
     const toTop = $('#to-top');
-    let ticking = false;
+    let ticking = false, lastY = window.scrollY, idle = 0;
     const update = () => {
       ticking = false;
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const p = max > 0 ? clamp(window.scrollY / max, 0, 1) : 0;
       if (bar) bar.style.transform = `scaleX(${p})`;
-      if (toTop) toTop.classList.toggle('is-shown', window.scrollY > 900);
+      if (toTop) {
+        // «Наверх» shows when the reader scrolls back up far from the top and hides while reading on,
+        // so it does not sit on the text being read
+        const y = window.scrollY, dy = y - lastY;
+        if (y < window.innerHeight * 1.5 || dy > 4) { toTop.classList.remove('is-shown'); clearTimeout(idle); }
+        else if (dy < -4) {
+          toTop.classList.add('is-shown');
+          clearTimeout(idle);
+          idle = setTimeout(() => toTop.classList.remove('is-shown'), 3200);
+        }
+        lastY = y;
+      }
       const wrap = currentView && $('.subnav-wrap', currentView);
       if (wrap) wrap.classList.toggle('is-stuck', wrap.getBoundingClientRect().top <= stickyOffset() + 1 && window.scrollY > 40);
     };

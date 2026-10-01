@@ -62,6 +62,11 @@ select, input[type="date"], input[type="number"], input[type="search"] {
   min-height: 46px;
 }
 select:hover, input:hover { border-color: var(--basil); }
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari: the date field keeps its own width and centred value unless it drops the native look */
+  input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
+  input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
+}
 
 .row-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .row-2.wide-first { grid-template-columns: minmax(0, 1fr) 130px; }
