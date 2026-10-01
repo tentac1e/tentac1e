@@ -115,6 +115,25 @@ const { playwright, server, ok, done } = require('./lib');
   await page.tap('#sheet-chapters [data-close]');
   await page.waitForTimeout(500);
   ok(!(await sheet()).open, 'closes with ×');
+  // search on a phone: a panel at the top of the visible area, down to the keyboard; it stays put
+  // while the page under it is scrolled
+  const panel = () => page.evaluate(() => { const d = document.getElementById('sheet-search'); const r = d.getBoundingClientRect(); return { open: d.open, top: Math.round(r.top), bottom: Math.round(r.bottom), vh: Math.round(visualViewport.height), focus: document.activeElement && document.activeElement.id, y: Math.round(scrollY) }; });
+  await page.tap('.tabbar [data-open="sheet-search"]');
+  await page.waitForTimeout(500);
+  const p0 = await panel();
+  const vs = page.viewportSize();
+  await page.setViewportSize({ width: vs.width, height: Math.round(vs.height / 2) });
+  await page.waitForTimeout(300);
+  const p1 = await panel();
+  await page.evaluate(() => window.scrollBy(0, 600));
+  await page.waitForTimeout(300);
+  const p2 = await panel();
+  await page.setViewportSize(vs);
+  await page.waitForTimeout(300);
+  ok(p0.open && p0.top === 0 && p0.bottom === p0.vh && p0.focus === 'search-input' && p1.top === 0 && p1.bottom === p1.vh && p2.top === 0 && p2.bottom === p2.vh, 'search panel follows the visible area ' + JSON.stringify([p0, p1, p2]));
+  await page.tap('#sheet-search .search-cancel');
+  await page.waitForTimeout(400);
+  ok(!(await panel()).open, '«Отмена» closes search');
   // haptics: taps and sliders
   const v0 = await page.evaluate(() => window.__vib);
   await page.tap('.subnav a[href="#калькулятор"]');

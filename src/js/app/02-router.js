@@ -155,6 +155,7 @@
       if (opts.top) jump(() => window.scrollTo(0, 0));
       else if (r.home && !changedView) window.scrollTo({ top: 0, behavior: smooth() }); // the chapter's own link: back to its top
       else scrollAfter(r, changedView);
+      flashFound();
       document.dispatchEvent(new CustomEvent('basil:view', { detail: { id: r.view.dataset.view } }));
     };
     if (changedView && !opts.initial && document.startViewTransition && !reduceMotion.matches) {

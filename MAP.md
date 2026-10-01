@@ -158,9 +158,10 @@
 **app.js**
 - `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (268 стр.): ENTRY, initRouter, initPagers, initScrollChrome
-- `src/js/app/03-sheets.js` (157 стр.): initSheets
-- `src/js/app/04-search.js` (179 стр.): initSearch
+- `src/js/app/02-router.js` (269 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/03-sheets.js` (158 стр.): initSheets
+- `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
+- `src/js/app/04-search.js` (425 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
 - `src/js/app/05-scene.js` (161 стр.): initScene, initHoverLight, initOffscreenPause, initLeafField
 - `src/js/app/06-mini-plants.js` (32 стр.)
 - `src/js/app/07-home.js` (36 стр.): initHome

@@ -585,6 +585,6 @@ window.BASIL_PAGES = {
    "razmnozhenie": "0f4e77a4",
    "problemy": "c167094e"
   },
-  "search": "a3a859d6"
+  "search": "a13341e7"
  }
 };

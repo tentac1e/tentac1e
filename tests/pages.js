@@ -87,6 +87,37 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
   const dp = await page.evaluate(() => { const d = document.querySelector('#deep-ec .deeper'); return { deeper: d.open, deep: d.closest('details.deep').open, top: Math.round(document.getElementById('deep-ec-glubzhe').getBoundingClientRect().top) }; });
   ok(dp.deeper && dp.deep && dp.top > 0 && dp.top < 400, 'landed in «Ещё глубже» ' + JSON.stringify(dp));
 
+  ok(await page.evaluate(() => !!document.querySelector('#deep-ec .deeper.is-found')), 'the place found lights up');
+
+  // search understands word forms, the Latin keyboard, typos and synonyms; results come in groups
+  await page.goto(fileUrl('uhod.html'), { waitUntil: 'load' });
+  await page.keyboard.press('/');
+  await page.waitForTimeout(400);
+  const find = async q => {
+    await page.fill('#search-input', q);
+    await page.waitForTimeout(250);
+    return page.evaluate(() => ({
+      titles: [...document.querySelectorAll('.sr-item b')].map(b => b.textContent.trim()),
+      marks: [...document.querySelectorAll('.sr-item mark')].map(m => m.textContent.toLowerCase()),
+      groups: [...document.querySelectorAll('.sr-gh span:first-child')].map(g => g.textContent),
+      note: (document.querySelector('.sr-note') || {}).textContent || ''
+    }));
+  };
+  const yl = await find('желтые листья');
+  ok(yl.titles.includes('Желтеют нижние листья') && yl.marks.includes('желтеют') && yl.groups.includes('Проблемы и симптомы') && yl.groups.includes('Разделы'), 'word forms: «желтые листья» finds «желтеют» ' + JSON.stringify(yl.groups));
+  const lv = await find('листьев');
+  ok(lv.marks.includes('листья') && lv.marks.includes('листьев'), 'one stem, many forms: «листьев» marks «листья»');
+  const kb = await find('gjkbd');
+  ok(/«полив»/.test(kb.note) && kb.titles.includes('Полив'), 'Latin keyboard: «gjkbd» → «полив» ' + kb.note);
+  const ty = await find('пикеровка');
+  ok(/«пикировка»/.test(ty.note) && ty.titles.some(t => /^Пикировка/.test(t)), 'typo: «пикеровка» → «пикировка» ' + ty.note);
+  const sy = await find('фитолампа');
+  ok(sy.marks.some(m => m.startsWith('досветк')), 'synonym: «фитолампа» finds «досветка»');
+  const mo = await page.evaluate(() => { const b = document.querySelector('.sr-more'); if (!b) return null; const n = document.querySelectorAll('.sr-item').length; b.click(); return [n, document.querySelectorAll('.sr-item').length]; });
+  ok(mo && mo[1] > mo[0], '«Ещё» opens the rest of a group ' + JSON.stringify(mo));
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+
   // search action on another page: element card opens
   await page.goto(fileUrl('index.html'), { waitUntil: 'load' });
   await page.keyboard.press('/');

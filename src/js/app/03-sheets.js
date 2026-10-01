@@ -9,6 +9,7 @@
     // opened again while it was still leaving
     if (d.classList.contains('is-closing')) { clearTimeout(d._closing); d.classList.remove('is-closing'); }
     if (!d.open) {
+      if (id === 'sheet-search') fitSearchPanel();
       if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
     }
     if (id === 'sheet-chapters') {

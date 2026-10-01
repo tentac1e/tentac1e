@@ -22,6 +22,9 @@ src/pages/<глава>/_foot.html      подвал главы (пейджер)
 src/pages/glavnaya.html, kalendar.html   главы без вкладок — одним файлом
 src/js/<модуль>/_frame.js + NN-*.js      → assets/js/<модуль>.js  (app — интерфейс, science — развороты и
                                           инструменты моделей, scene — фон и живой куст, data — данные)
+src/js/app/04-search-words.js     поиск: основы слов, раскладка, опечатки, синонимы; 04-search.js — указатель, порядок, вид.
+                                  Текст глав для поиска пишет сборка (assets/js/search-index.js): весь, каждый кусок один раз —
+                                  у раздела под ближайшим заголовком
 src/js/haptics.js                 тактильный отклик → assets/js/haptics.js
 src/css/style/NN-*.css            → assets/css/style.css
 src/css/lab/NN-*.css              → assets/css/lab.css (на месте /*@labs*/ — стили всех моделей)

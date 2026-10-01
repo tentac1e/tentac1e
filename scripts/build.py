@@ -92,6 +92,18 @@ def htaccess():
         'AddDefaultCharset UTF-8',
         'AddCharset UTF-8 .html .css .js',
         '',
+        '# compressed transfer: the pages, styles, scripts and the search index shrink four- to fivefold',
+        '<IfModule mod_deflate.c>',
+        '  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/x-javascript',
+        '</IfModule>',
+        '# every style and script address carries a fingerprint of its content (?v=...): kept for a year',
+        '<IfModule mod_expires.c>',
+        '  ExpiresActive On',
+        '  ExpiresByType text/css "access plus 1 year"',
+        '  ExpiresByType text/javascript "access plus 1 year"',
+        '  ExpiresByType application/javascript "access plus 1 year"',
+        '</IfModule>',
+        '',
         'RewriteEngine On',
         'RewriteBase /',
         '',
@@ -221,6 +233,41 @@ def text_of(node):
     if node is None:
         return ''
     parts = [n.text for n in node.iter() if n.tag == '#text'] if node.tag != '#text' else [node.text]
+    s = re.sub(r'\s+', ' ', ' '.join(parts))
+    return re.sub(r'\s([.,;:!?)»])', r'\1', s).strip()
+
+
+HEADS = ('h3', 'h4', 'summary')
+
+
+def section_of(head):
+    """what a heading titles: its box (a card, a step, a details…) when it is the box's first heading,
+    otherwise itself and the siblings after it up to the next heading"""
+    box = head.closest(BOX)
+    if box is not None and next((n for n in box.iter() if n.tag in HEADS), None) is head:
+        return [box]
+    sib = [c for c in head.parent.children if c.tag != '#text' or c.text.strip()]
+    out = [head]
+    for c in sib[sib.index(head) + 1:]:
+        if c.tag in HEADS or (c.tag != '#text' and any(x.tag in HEADS for x in c.iter())):
+            break
+        out.append(c)
+    return out
+
+
+def text_own(node, skip):
+    """the text of a node without the blocks in skip (ids of nodes that are indexed on their own)"""
+    parts = [node.text] if node.tag == '#text' else []
+
+    def walk(n):
+        for c in n.children:
+            if id(c) in skip:
+                continue
+            if c.tag == '#text':
+                parts.append(c.text)
+            else:
+                walk(c)
+    walk(node)
     s = re.sub(r'\s+', ' ', ' '.join(parts))
     return re.sub(r'\s([.,;:!?)»])', r'\1', s).strip()
 
@@ -428,6 +475,7 @@ def main():
         dom = Builder(html).root
         ch = CH.get(view)
         inserts = []
+        page_entries = []  # (entry, the nodes that hold its text, an extra node read first, its heading)
         n = 0
         for node in dom.iter():
             if node.tag == '#text':
@@ -437,8 +485,8 @@ def main():
             if node.matches('[data-panel]') and ch:
                 titles[node.attrs['id']] = f"{ch['title']} · {node.attrs.get('data-title', '')}"
             if node.matches('[data-panel]'):
-                static_entries_panels.append({'title': node.attrs.get('data-title', ''), 'sub': ch['title'] if ch else '',
-                                              'text': text_of(node)[:400], 'page': view, 'hash': node.attrs['id'], 'icon': 'list'})
+                page_entries.append(({'title': node.attrs.get('data-title', ''), 'sub': ch['title'] if ch else '',
+                                      'page': view, 'hash': node.attrs['id'], 'icon': 'list'}, [node], None, None))
             if node.matches('.lab-tool') and 'data-lab' in node.attrs:
                 stats['labs'] += 1
             if node.tag == 'details' and 'deep' in node.classes:
@@ -458,23 +506,30 @@ def main():
                 if 'id' not in node.attrs:
                     inserts.append((node.pos, hid))
                 t = node.find('.deeper-t')
-                static_entries_heads.append({'title': text_of(t), 'sub': 'Ещё глубже · ' + (host.attrs.get('data-short') if host is not None else where),
-                                             'text': text_of(node.next_element())[:420], 'page': view, 'hash': hid, 'icon': 'hex'})
+                page_entries.append(({'title': text_of(t), 'sub': 'Ещё глубже · ' + (host.attrs.get('data-short') if host is not None else where),
+                                      'page': view, 'hash': hid, 'icon': 'hex'}, [node.next_element()], None, None))
                 continue
             if node.tag == 'summary' and 'deep' in parent.classes:
-                static_entries_heads.append({'title': text_of(node.find('.deep-title')), 'sub': 'Глубже · ' + where,
-                                             'text': (text_of(node.find('.deep-sub')) + ' ' + text_of(parent.find('.deep-body')))[:420],
-                                             'page': view, 'hash': parent.attrs['id'], 'icon': 'hex'})
+                page_entries.append(({'title': text_of(node.find('.deep-title')), 'sub': 'Глубже · ' + where,
+                                      'page': view, 'hash': parent.attrs['id'], 'icon': 'hex'}, [parent.find('.deep-body')], node.find('.deep-sub'), None))
                 continue
             hid = node.attrs.get('id')
             if not hid:
                 n += 1
                 hid = f'{view}-h{n}'
                 inserts.append((node.pos, hid))
-            box = node.closest(BOX) or node.parent
-            static_entries_heads.append({'title': text_of(node), 'sub': where + (' · Глубже' if node.closest(['.deep']) else ''),
-                                         'text': text_of(box)[:360], 'page': view, 'hash': hid,
-                                         'icon': 'info' if node.tag == 'summary' else 'leaf'})
+            deep = node.closest(['.deep'])
+            page_entries.append(({'title': text_of(node), 'sub': where + (' · Глубже' + (': ' + deep.attrs['data-short'] if deep is not None and deep.attrs.get('data-short') else '') if deep is not None else ''),
+                                  'page': view, 'hash': hid, 'icon': 'info' if node.tag == 'summary' else 'leaf'}, section_of(node), None, node))
+        # every piece of text goes to one entry: the one whose section holds it most closely
+        # (a heading's own section is left out of the tab, the deep dive or the card around it)
+        owned = {id(n) for _, nodes, _, _ in page_entries for n in nodes}
+        for e, nodes, extra, head in page_entries:
+            # the heading itself is the entry's title, not its text
+            skip = (owned - {id(n) for n in nodes}) | ({id(head)} if head is not None else set())
+            text = ' '.join(t for t in [text_of(extra) if extra is not None else ''] + [text_own(n, skip) for n in nodes if n is not head] if t)
+            e['text'] = text
+            (static_entries_panels if e['icon'] == 'list' else static_entries_heads).append(e)
         for pos, hid in sorted(inserts, reverse=True):
             m = re.match(r'<[a-z0-9]+', html[pos:])
             assert m, (view, html[pos:pos + 40])
