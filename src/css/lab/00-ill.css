@@ -67,6 +67,43 @@
   --ill-flower-purple-d: #6C4590;
   --ill-flower-pink: #E9B9D6;
   --ill-flower-pink-d: #BE7FA6;
+  /* things in the step pictures */
+  --ill-plastic: #2F3B34;
+  --ill-plastic-hi: #4B5B51;
+  --ill-perlite: #F3F3EC;
+  --ill-seed: #2A221D;
+  --ill-gel: rgba(214, 228, 236, .85);
+  --ill-glass: #D6EAF1;
+  --ill-glass-d: #8AAEBB;
+  --ill-water-c: #B6DCEA;
+  --ill-metal: #CDD4D6;
+  --ill-metal-d: #66747A;
+  --ill-grip: #D9573B;
+  --ill-cut: #D8433A;
+  --ill-lamp: #FFF7CF;
+  --ill-light: #FFE680;
+  --ill-paper: #F4EDDD;
+  --ill-paper-d: #D3C4A4;
+  --ill-kraft: #CDA877;
+  --ill-kraft-d: #9C7A4E;
+  --ill-wood: #C08E5A;
+  --ill-wood-d: #84592F;
+  --ill-sky: #BFE0F1;
+  --ill-sky-2: #E8F5FA;
+  --ill-frame: #F2F4F1;
+  --ill-frame-d: #B4BEB8;
+  --ill-radiator: #E4E7E3;
+  --ill-oil: #E4C24E;
+  --ill-pesto: #5E8C2D;
+  --ill-salt: #FBFBF7;
+  --ill-ice: #E4F2F8;
+  --ill-straw: #D8C089;
+  --ill-film: #E6F1F5;
+  --ill-box: #7E9C70;
+  --ill-box-d: #5B7850;
+  --ill-label: #FFF8E2;
+  --ill-dark: #34413A;
+  --ill-tomato: #D9472F;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }
@@ -82,3 +119,6 @@
 .ill-l .ill-lbl { font-size: 17px; stroke-width: 4px; }
 .ill-l .ill-scale text { font-size: 15px; }
 .ill-l .ill-scale line { stroke-width: 2.4; }
+/* arrows in the step pictures follow the theme, like the captions */
+.ill-arrow { fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; }
+.ill-arrow-head { fill: var(--ink-3); }

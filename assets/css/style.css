@@ -1488,7 +1488,12 @@ main { view-transition-name: main; }
   .tabs::-webkit-scrollbar { display: none; }
   .tab { flex-shrink: 0; }
 }
-.place-panel { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 34px); }
+.place-panel { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-areas: "main pic" "main side"; grid-template-rows: auto 1fr; gap: 18px clamp(18px, 3vw, 34px); }
+.place-main { grid-area: main; }
+.place-side { grid-area: side; }
+/* the place itself: a picture over the tips */
+.place-ill { grid-area: pic; display: block; aspect-ratio: 320 / 150; border-radius: 18px; overflow: hidden; background: var(--ill-bg); }
+.place-ill .ill { width: 100%; height: 100%; }
 .place-panel .lead { margin: -6px 0 14px; }
 .params { display: grid; margin: 0; }
 .params div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 14px; padding: 11px 0; border-bottom: 1px dashed var(--line-strong); }
@@ -1497,7 +1502,7 @@ main { view-transition-name: main; }
 .params dd { margin: 0; }
 .place-side { display: grid; gap: 18px; align-content: start; }
 .place-side h4 { display: flex; align-items: center; gap: 8px; }
-@media (max-width: 860px) { .place-panel { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .place-panel { grid-template-columns: 1fr; grid-template-areas: "pic" "main" "side"; grid-template-rows: auto; } }
 @media (max-width: 520px) { .params div { grid-template-columns: 1fr; gap: 2px; } }
 
 .comp-list { list-style: none; padding: 0; display: grid; gap: 12px; margin: 0; }
@@ -1513,9 +1518,23 @@ main { view-transition-name: main; }
 .step p { font-size: .95rem; color: var(--ink-2); }
 .step-meta { display: inline-block; margin-bottom: 6px; padding: 2px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
 @media (max-width: 480px) { .step { grid-template-columns: 38px minmax(0, 1fr); padding: 16px; gap: 10px; } .step-num { font-size: 2.2rem; } }
+/* a picture of the step: on a phone the paragraph flows around it; wider, it is a column of its own
+   on the right, as tall as the step (the heading stays above the picture on a phone, so it sits before <p>) */
+.step > div { display: flow-root; }
+.step-ill { display: block; float: right; width: 120px; aspect-ratio: 1; margin: 2px 0 8px 16px; border-radius: 16px; overflow: hidden; background: var(--ill-bg); }
+.step-ill .ill { width: 100%; height: 100%; }
+.step-ill .ill-lbl, .step-ill .ill-scale text { font-size: 12.5px; }
+@media (min-width: 481px) {
+  .step > div:has(> .step-ill) { display: grid; grid-template-columns: minmax(0, 1fr) 120px; column-gap: 18px; align-content: start; }
+  .step > div:has(> .step-ill) > * { grid-column: 1; }
+  .step > div:has(> .step-ill) > .step-meta { justify-self: start; }
+  .step > div:has(> .step-ill) > .step-ill { grid-column: 2; grid-row: 1 / span 4; float: none; margin: 0; }
+}
+@media (max-width: 480px) { .step-ill { width: 96px; margin: 2px 0 6px 10px; border-radius: 14px; } }
 
 .rescue { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: center; margin-bottom: 20px; }
-.rescue-art { width: 100%; height: auto; overflow: visible; }
+.rescue-art { display: block; width: 100%; aspect-ratio: 360 / 150; border-radius: 18px; overflow: hidden; background: var(--ill-bg); }
+.rescue-art .ill { width: 100%; height: 100%; }
 @media (max-width: 760px) { .rescue { grid-template-columns: 1fr; } }
 
 .soil-tool { display: grid; gap: 14px; align-content: start; }

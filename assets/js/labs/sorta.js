@@ -282,8 +282,11 @@
   const ill = (() => {
     const q = v => Math.round(v * 10) / 10;
     const F = n => `var(--ill-${n})`;
+    // ids of clip paths and gradients: every chapter file carries its own copy of the library, and the
+    // one-file book loads them all on one page, so each copy marks its ids with a tag of its own
     let uid = 0;
-    const id = p => `ill-${p}${++uid}`;
+    const tag = Math.random().toString(36).slice(2, 6);
+    const id = p => `ill-${tag}${p}${++uid}`;
     const HW = s => (s <= 0 || s >= 1 ? 0 : 78.7 * Math.pow(s, 0.55) * Math.pow(1 - s, 0.9));
     const Ys = s => -4 - s * 100;
     const inside = (rnd, a = 0.12, b = 0.9, k = 0.78) => { const s = a + rnd() * (b - a); return [(rnd() * 2 - 1) * HW(s) * k, Ys(s), s]; };
@@ -627,7 +630,7 @@
     const scale = (x, y, px, text) => `<g class="ill-scale"><path d="M${q(x - px)} ${q(y - 3)}V${q(y + 3)}M${q(x - px)} ${q(y)}H${q(x)}M${q(x)} ${q(y - 3)}V${q(y + 3)}" fill="none" stroke="currentColor"/><line x1="${q(x - px)}" x2="${q(x)}" y1="${q(y)}" y2="${q(y)}"/><text x="${q(x - px / 2)}" y="${q(y - 6)}" text-anchor="middle">${text}</text></g>`;
     // wide pictures are shown small (two in a row): their captions are set larger in CSS (.ill-l)
     const svg = (w, hgt, body, label2) => `<svg class="ill ${w >= 200 ? 'ill-l' : 'ill-s'}" viewBox="0 0 ${w} ${hgt}" role="img"${label2 ? ` aria-label="${label2}"` : ' aria-hidden="true"'}>${body}</svg>`;
-    return { F, q, rng: micro.rng, HW, Ys, leaf, plant, bush, ballBush, spike, pot, seedling, aphid, mite, whitefly, thrips, web, label, scale, svg, mix };
+    return { F, q, id, rng: micro.rng, HW, Ys, leaf, plant, bush, ballBush, spike, pot, seedling, aphid, mite, whitefly, thrips, web, label, scale, svg, mix };
   })();
 
   /* @use ills */

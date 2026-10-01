@@ -18,7 +18,7 @@
 - `src/pages/posadka/_head.html` · обложка, вкладки · 14 стр.
 - `src/pages/posadka/1-mesto.html` · #место — Где растить · 83 стр.<br>модели: `window`; глубже: Солнце в окне `#deep-okno`
 - `src/pages/posadka/2-posev.html` · #посев — Посев и рассада · 97 стр.<br>модели: `germ`; глубже: Прорастание `#deep-prorastanie`
-- `src/pages/posadka/3-magazin.html` · #магазин — Базилик из магазина · 111 стр.<br>модели: `shade`; глубже: Теснота и тень `#deep-ten`
+- `src/pages/posadka/3-magazin.html` · #магазин — Базилик из магазина · 77 стр.<br>модели: `shade`; глубже: Теснота и тень `#deep-ten`
 - `src/pages/posadka/4-gorshok.html` · #горшок — Горшок и грунт · 104 стр.<br>модели: `perched`; глубже: Подвешенная вода `#deep-voda-v-gorshke`
 - `src/pages/posadka/_foot.html` · подвал главы · 3 стр.
 
@@ -140,9 +140,11 @@
 - `src/labs/_lib/food.js` — food: small illustrations of what basil goes with
 - `src/labs/_lib/ills.js` — ills: plants, symptoms and pests for the illustrated guides
 - `src/labs/_lib/micro.js` — micro: drawing a leaf under the microscope
+- `src/labs/_lib/props.js` — props: things for the step-by-step pictures
 
 Иллюстрации на страницах — элементы `data-ill="художник:вариант"`; художники регистрируются через `illustrate()` в `src/labs/<глава>/_shared.js` и рисуются, когда элемент подходит к экрану. Все рисунки главы на одном листе: `node tests/gallery.js <глава>`.
 
+- `src/labs/posadka/_shared.js`: `sow`, `shop`, `place`
 - `src/labs/problemy/_shared.js`: `sym`, `dis`, `pest`
 - `src/labs/sorta/_shared.js`: `sort`, `vtype`
 
@@ -158,7 +160,7 @@
 - `src/js/app/06-mini-plants.js` (32 стр.)
 - `src/js/app/07-home.js` (36 стр.): initHome
 - `src/js/app/08-varieties.js` (250 стр.): EASY, initVarieties, initQuiz
-- `src/js/app/09-places.js` (41 стр.): initPlaces
+- `src/js/app/09-places.js` (43 стр.): initPlaces
 - `src/js/app/10-soil.js` (26 стр.): initSoil
 - `src/js/app/11-calendar.js` (215 стр.): initCalendar
 - `src/js/app/12-light.js` (39 стр.): initDli

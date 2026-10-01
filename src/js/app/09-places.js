@@ -12,7 +12,8 @@
       tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
       panel.setAttribute('aria-labelledby', `tab-${p.id}`);
       panel.innerHTML = `
-        <div>
+        <span class="place-ill" data-ill="place:${p.id}"></span>
+        <div class="place-main">
           <h3>${p.name}</h3>
           <p class="lead">${nb(p.lead)}</p>
           <dl class="params">${p.params.map(([k, v]) => `<div><dt>${k}</dt><dd>${nb(v)}</dd></div>`).join('')}</dl>
@@ -21,6 +22,7 @@
           <div><h4>${icon('check')}Советы</h4><ul class="ticks">${p.tips.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
           <div><h4>${icon('alert')}Подводные камни</h4><ul class="ticks is-warn">${p.risks.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
         </div>`;
+      paintIll(panel, true);
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => render(i)));
     list.addEventListener('keydown', e => {

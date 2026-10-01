@@ -20,7 +20,12 @@
   .tabs::-webkit-scrollbar { display: none; }
   .tab { flex-shrink: 0; }
 }
-.place-panel { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 34px); }
+.place-panel { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-areas: "main pic" "main side"; grid-template-rows: auto 1fr; gap: 18px clamp(18px, 3vw, 34px); }
+.place-main { grid-area: main; }
+.place-side { grid-area: side; }
+/* the place itself: a picture over the tips */
+.place-ill { grid-area: pic; display: block; aspect-ratio: 320 / 150; border-radius: 18px; overflow: hidden; background: var(--ill-bg); }
+.place-ill .ill { width: 100%; height: 100%; }
 .place-panel .lead { margin: -6px 0 14px; }
 .params { display: grid; margin: 0; }
 .params div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 14px; padding: 11px 0; border-bottom: 1px dashed var(--line-strong); }
@@ -29,7 +34,7 @@
 .params dd { margin: 0; }
 .place-side { display: grid; gap: 18px; align-content: start; }
 .place-side h4 { display: flex; align-items: center; gap: 8px; }
-@media (max-width: 860px) { .place-panel { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .place-panel { grid-template-columns: 1fr; grid-template-areas: "pic" "main" "side"; grid-template-rows: auto; } }
 @media (max-width: 520px) { .params div { grid-template-columns: 1fr; gap: 2px; } }
 
 .comp-list { list-style: none; padding: 0; display: grid; gap: 12px; margin: 0; }
