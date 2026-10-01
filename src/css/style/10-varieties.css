@@ -7,7 +7,75 @@
   .filters .chip { flex-shrink: 0; }
 }
 
-.var-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+/* types: a card with the typical bush and approximate values; its varieties open under its row */
+.vtypes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); gap: 12px; }
+.vtype {
+  position: relative;
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  grid-template-areas: "pic head" "pic desc" "pic specs" "foot foot";
+  grid-template-rows: auto auto 1fr auto;
+  column-gap: 16px;
+  padding: 14px 16px 12px 14px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform .5s var(--ease-float), box-shadow .5s var(--ease-float), border-color .3s;
+}
+.vtype:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: var(--line-strong); }
+.vtype.is-open { border-color: var(--basil); box-shadow: inset 0 0 0 1px var(--basil), var(--shadow-sm); transform: none; }
+.vt-pic { grid-area: pic; display: block; align-self: start; aspect-ratio: 160 / 150; border-radius: 16px; overflow: hidden; background: var(--ill-bg); }
+.vt-pic .ill { width: 100%; height: 100%; }
+.vtype:hover .vt-pic .ill { animation: leaf-sway 2.6s ease-in-out infinite; transform-origin: 50% 90%; }
+.vt-head { grid-area: head; }
+.vt-name { margin: 0; font-family: var(--font-display); font-size: 1.42rem; line-height: 1.08; }
+.vt-toggle { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+/* the whole card answers the tap */
+.vt-toggle::after { content: ''; position: absolute; inset: 0; border-radius: 22px; }
+.vt-toggle:focus-visible { outline: none; }
+.vt-toggle:focus-visible::after { outline: 2px solid var(--basil); outline-offset: 2px; }
+.vt-meta { display: block; margin-top: 4px; font-size: .8rem; font-weight: 700; color: var(--ink-3); }
+.vt-meta .vt-n { color: var(--basil-deep); }
+.vt-meta .meter { margin-left: 2px; }
+.vt-meta .meter i { width: 12px; height: 5px; }
+.vt-desc { grid-area: desc; margin: 8px 0 10px; font-size: .9rem; line-height: 1.45; color: var(--ink-2); }
+.vt-specs { grid-area: specs; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; margin: 0; align-self: start; }
+.vt-specs div { padding: 6px 0; border-top: 1px dashed var(--line-strong); }
+.vt-specs .vt-wide { grid-column: 1 / -1; }
+.vt-specs dt { font-size: .66rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.vt-specs dd { margin: 1px 0 0; font-size: .88rem; line-height: 1.3; }
+.vt-foot { grid-area: foot; display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.vt-leaves { display: flex; flex-wrap: wrap; gap: 2px; min-width: 0; }
+.vt-leaves svg { width: 15px; height: 22px; overflow: visible; }
+.vt-more { margin-left: auto; font-size: .82rem; font-weight: 700; color: var(--basil-deep); }
+.vt-chev { width: 18px; height: 18px; color: var(--basil-deep); fill: none; stroke: currentColor; stroke-width: 2.2; transform: rotate(90deg); transition: transform .35s var(--ease-float); }
+.vtype.is-open .vt-chev { transform: rotate(-90deg); }
+@media (max-width: 560px) {
+  .vtype { grid-template-columns: 96px minmax(0, 1fr); grid-template-areas: "pic head" "desc desc" "specs specs" "foot foot"; grid-template-rows: auto; column-gap: 14px; padding: 12px 14px 10px 12px; }
+  .vt-head { align-self: center; }
+  .vt-name { font-size: 1.3rem; }
+}
+
+/* the varieties of an open type: a full-width shelf under the row, with a notch pointing at its card */
+.vt-panel { grid-column: 1 / -1; position: relative; margin: 2px 0 6px; padding: 14px; border-radius: 22px; background: var(--surface-2); border: 1px solid var(--line-strong); }
+.vt-panel::before { content: ''; position: absolute; top: -8px; left: calc(var(--ax, 50%) - 8px); width: 14px; height: 14px; background: var(--surface-2); border-left: 1px solid var(--line-strong); border-top: 1px solid var(--line-strong); transform: rotate(45deg); }
+.vt-panel:not([hidden]) { animation: vt-in .4s var(--ease-float) both; }
+@keyframes vt-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .vt-panel:not([hidden]) { animation: none; } }
+.vt-panel-h { margin: 0 0 10px; font-size: .84rem; color: var(--ink-3); }
+.vt-panel-h b { color: var(--ink); }
+.vt-sorts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(310px, 100%), 1fr)); gap: 10px; }
+.vt-sorts .variety { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 10px 12px 10px 10px; border-radius: 18px; }
+.vt-sorts .v-leaf { width: 64px; height: 70px; }
+.vt-sorts .v-name { font-size: 1.22rem; }
+.vt-sorts .v-latin { font-size: .9rem; }
+.v-aroma { display: block; margin-top: 3px; font-size: .82rem; line-height: 1.3; color: var(--ink-2); }
+
+/* a variety's own picture once it is drawn: fills its box */
+.v-leaf[data-drawn] { overflow: hidden; background: var(--ill-bg); }
+.v-leaf[data-drawn] .ill { width: 100%; height: 100%; }
+.vd-type { display: block; margin-top: 4px; font-size: .78rem; font-weight: 700; letter-spacing: .04em; color: var(--basil-deep); }
 .variety {
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr);

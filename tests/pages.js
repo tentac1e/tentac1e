@@ -21,11 +21,45 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
       cur: (document.querySelector('#nav a[aria-current="page"]') || {}).textContent || '',
       panel: !!document.querySelector('.panel.is-active') || !document.querySelector('.panel'),
       labsTag: !!document.querySelector('script[src*="labs/"]'),
+      // a chapter's model file may load at once only for a model or a picture near the first screen
+      near: [...document.querySelectorAll('.panel.is-active .lab-tool, .panel.is-active [data-ill], [data-view]:not(:has(.panel)) .lab-tool, [data-view]:not(:has(.panel)) [data-ill]')].some(e => { const r = e.getBoundingClientRect(); return r.width && r.top < innerHeight + 400; }),
       bad: [...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href')).filter(h => !['#main', '#top'].includes(h) && !document.getElementById(h.slice(1)) && !document.querySelector(`[data-view="${h.slice(1)}"]`)).slice(0, 5)
     }));
-    ok(st.views === 1 && st.active && st.panel && (!st.labsTag || ['vkus.html', 'problemy.html'].includes(f)) && !st.bad.length && / — Гид по базилику$|^Гид по базилику$/.test(st.t),
-      `${f}: «${st.t}» | nav «${st.cur}» | dangling ${JSON.stringify(st.bad)}`);
+    ok(st.views === 1 && st.active && st.panel && (!st.labsTag || st.near) && !st.bad.length && / — Гид по базилику$|^Гид по базилику$/.test(st.t),
+      `${f}: «${st.t}» | nav «${st.cur}» | dangling ${JSON.stringify(st.bad)}${st.labsTag && !st.near ? ' | models loaded with nothing near' : ''}`);
   }
+
+  // the catalogue: every variety in exactly one type, a tap opens a type under its row, a filter keeps the matches
+  await page.goto(fileUrl('sorta.html'), { waitUntil: 'load' });
+  await page.waitForTimeout(600);
+  const types = await page.evaluate(() => {
+    const B = window.BASIL;
+    return {
+      lost: B.VARIETIES.filter(v => B.VARIETY_TYPES.filter(t => t.id === v.type).length !== 1).map(v => v.name),
+      empty: B.VARIETY_TYPES.filter(t => !B.VARIETIES.some(v => v.type === t.id)).map(t => t.id),
+      cards: document.querySelectorAll('#variety-grid .vtype').length, types: B.VARIETY_TYPES.length,
+      rows: document.querySelectorAll('#variety-grid .variety').length, total: B.VARIETIES.length
+    };
+  });
+  ok(!types.lost.length && !types.empty.length && types.cards === types.types && types.rows === types.total, 'variety types ' + JSON.stringify(types));
+  await page.click('.vtype[data-t="purple"] .vt-toggle');
+  await page.waitForTimeout(500);
+  const opened = await page.evaluate(() => {
+    const p = document.getElementById('vt-p-purple'), c = document.querySelector('.vtype[data-t="purple"]');
+    return { shown: !p.hidden, below: p.getBoundingClientRect().top >= c.getBoundingClientRect().bottom - 1, drawn: [...p.querySelectorAll('[data-ill]')].every(e => e.dataset.drawn), open: [...document.querySelectorAll('.vt-panel')].filter(x => !x.hidden).length, exp: c.querySelector('.vt-toggle').getAttribute('aria-expanded') };
+  });
+  ok(opened.shown && opened.below && opened.drawn && opened.open === 1 && opened.exp === 'true', 'a type opens under its row ' + JSON.stringify(opened));
+  await page.click('.vtype[data-t="genovese"] .vt-toggle');
+  await page.waitForTimeout(300);
+  ok(await page.evaluate(() => document.getElementById('vt-p-purple').hidden && !document.getElementById('vt-p-genovese').hidden), 'one type open at a time');
+  await page.click('#variety-filters [data-filter="purple"]');
+  await page.waitForTimeout(400);
+  const fl = await page.evaluate(() => ({
+    want: window.BASIL.VARIETIES.filter(v => v.tags.includes('purple')).map(v => v.name).sort().join(','),
+    got: [...document.querySelectorAll('#variety-grid .variety')].filter(e => e.offsetParent).map(e => e.querySelector('.v-name').textContent).sort().join(','),
+    count: document.getElementById('variety-count').textContent
+  }));
+  ok(fl.want === fl.got && /из 26/.test(fl.count), 'filter shows the matching varieties ' + JSON.stringify(fl));
 
   await page.goto(fileUrl('index.html#udobreniya-plan'), { waitUntil: 'load' });
   await page.waitForTimeout(700);

@@ -278,6 +278,7 @@
   /* ---------------- ills: plants, symptoms and pests for the illustrated guides ----------------
      A leaf is drawn in its own box: base at (0, 0), tip at (0, −104), about 64 wide; symptoms are
      layers clipped to its outline. Everything returns SVG markup; colours are the --ill-* tokens. */
+  /* @use micro */
   const ill = (() => {
     const q = v => Math.round(v * 10) / 10;
     const F = n => `var(--ill-${n})`;
@@ -288,15 +289,31 @@
     const inside = (rnd, a = 0.12, b = 0.9, k = 0.78) => { const s = a + rnd() * (b - a); return [(rnd() * 2 - 1) * HW(s) * k, Ys(s), s]; };
     const mix = (a, b, t) => `color-mix(in srgb, ${F(a)} ${Math.round(t * 100)}%, ${F(b)})`;
 
+    // ruffle: a frilly wavy margin; teeth: a toothed one. Both calm down at the base and the tip
     function outline(o) {
-      const n = 30, R = [], L = [], w = o.wide || 1, curl = o.curl || 0;
+      const rf = o.ruffle || 0, th = o.teeth || 0;
+      const n = rf || th ? 72 : 30, R = [], L = [], w = o.wide || 1, curl = o.curl || 0;
+      const edge = (s, i, ph) => {
+        const hw = HW(s) * w;
+        if (!hw || (!rf && !th)) return hw;
+        const env = Math.sin(Math.PI * Math.min(1, s * 1.12));
+        return Math.max(0.5, hw + (rf * 5.6 * Math.sin(i / n * Math.PI * 14 + ph) * (0.7 + 0.3 * Math.sin(i * 0.9 + ph)) + th * 1.6 * ((i + (ph ? 1 : 0)) % 2 ? 1 : -1)) * env);
+      };
       for (let i = 0; i <= n; i++) {
-        const s = 0.015 + 0.985 * i / n, hw = HW(s) * w;
-        R.push([hw * (1 - curl * 0.55), Ys(s)]);
-        L.push([-hw, Ys(s)]);
+        const s = 0.015 + 0.985 * i / n;
+        R.push([edge(s, i, 0) * (1 - curl * 0.55), Ys(s)]);
+        L.push([-edge(s, i, 1.7), Ys(s)]);
       }
       return micro.smooth(R.concat(L.reverse()));
     }
+    // leaf colours of the varieties: [blade, veins, margin, petiole]
+    const TONE = {
+      green: ['leaf', 'vein', 'leaf-d', 'stem'],
+      deep: ['leaf-deep', 'vein-deep', 'leaf-deep-d', 'stem'],
+      purple: ['leaf-purple', 'vein-purple', 'leaf-purple-d', 'stem-purple'],
+      lime: ['leaf-lime', 'vein-lime', 'leaf-lime-d', 'stem'],
+      thai: ['leaf', 'vein', 'leaf-d', 'stem-purple']
+    };
     // secondary veins: [s, side] → path; ends are where the vein meets the margin
     const SEC = [0.13, 0.26, 0.39, 0.52, 0.65, 0.78];
     const veinEnd = (s, side, w = 1) => [side * HW(Math.min(0.97, s + 0.13)) * 0.86 * w, Ys(s + 0.13)];
@@ -318,11 +335,14 @@
 
     /* one leaf. o: x, y, a (degrees), s (scale), seed, under (lower side), chl: uniform | interveinal | mottle,
        k (how far it went, 0–1), necro: edge | spots | bact | angular, fuzz, holes, stipple, silver, purple,
-       mold, curl, wide, aphids, mites, web, whitefly, thrips, pale */
+       mold, curl, wide, aphids, mites, web, whitefly, thrips, pale, tip (brown dead tip, 0–1);
+       the look of a variety: tone (green | deep | purple | lime | thai), ruffle, teeth, bubbly (blistered
+       blade), gloss, hairs; dim (0–1) — darker, for leaves at the back of a bush */
     function leaf(o = {}) {
       const rnd = micro.rng(o.seed || 3), k = o.k == null ? 1 : o.k;
       const out = outline(o), cid = id('c'), gid = id('g');
-      const green = o.under ? 'under' : 'leaf';
+      const tone = TONE[o.tone] || TONE.green;
+      const green = o.under ? 'under' : tone[0];
       let fill = F(green);
       if (o.chl === 'uniform') fill = mix('yellow', green, 0.25 + 0.7 * k);
       if (o.chl === 'interveinal') fill = mix('yellow-pale', green, 0.55 + 0.4 * k);
@@ -333,6 +353,22 @@
       let top = '';
       if (o.chl === 'mottle') for (let i = 0; i < 9; i++) { const [x, y] = inside(rnd); body += `<path d="${micro.cell(x, y, 5 + rnd() * 6, 4 + rnd() * 5, rnd, { p: 2.2, j: 0.25, n: 8 })}" fill="${F('yellow-pale')}" opacity=".7"/>`; }
       if (o.purple) body += `<path d="${out}" fill="${F('purple')}" opacity="${q(0.3 + 0.4 * o.purple)}"/><path d="M-40 0H40V-40H-40Z" fill="${F('purple')}" opacity="${q(0.2 * o.purple)}"/>`;
+      if (o.tip) {
+        // the tip dies first: brown, with a yellow rim towards the living part
+        const s0 = 1 - 0.3 * o.tip, y0 = Ys(s0), y1 = Ys(s0 + 0.07);
+        body += `<path d="M-40 ${q(y0 + 7)}Q0 ${q(y0 - 5)} 40 ${q(y0 + 7)}V-120H-40Z" fill="${F('yellow')}" opacity=".85"/><path d="M-40 ${q(y1 + 4)}Q-10 ${q(y1 - 6)} 8 ${q(y1 - 1)}T40 ${q(y1 + 2)}V-120H-40Z" fill="${F('brown')}"/>`;
+      }
+      if (o.ruffle || o.bubbly) {
+        // a blistered blade: little domes between the veins catch the light
+        let hl = '', sh = '';
+        const nb = 6 + Math.round(12 * Math.max(o.ruffle || 0, o.bubbly || 0));
+        for (let i = 0; i < nb; i++) {
+          const [x, y] = inside(rnd, 0.14, 0.86, 0.72), r = 3.5 + rnd() * 4;
+          hl += `M${q(x - r)} ${q(y)}Q${q(x)} ${q(y - r)} ${q(x + r)} ${q(y)}`;
+          sh += `M${q(x - r)} ${q(y + 1.3)}Q${q(x)} ${q(y + r * 0.6)} ${q(x + r)} ${q(y + 1.3)}`;
+        }
+        body += `<path d="${sh}" fill="none" stroke="${F('spot')}" stroke-width="1.7" opacity=".16" stroke-linecap="round"/><path d="${hl}" fill="none" stroke="${F('hi')}" stroke-width="1.5" opacity=".3" stroke-linecap="round"/>`;
+      }
       if (o.necro === 'angular' || o.fuzz) {
         // patches bounded by veins: yellow on top, grey-violet down underneath
         const bays = o.bays || [[1, 1], [2, -1], [3, 1], [2, 1], [4, -1]];
@@ -387,7 +423,9 @@
       const vd = veins(o);
       if (o.chl === 'interveinal') body += `<path d="${vd}" fill="none" stroke="${F(green)}" stroke-width="${q(7 - 3 * k)}" stroke-linecap="round" opacity=".95"/>`;
       body += `<path d="${out}" fill="url(#${gid})"/>`;
-      const vc = o.under ? 'under-vein' : o.purple ? 'purple' : 'vein';
+      if (o.gloss) body += `<path d="M-6 -16C-22 -30 -24 -62 -8 -86C-14 -60 -12 -36 -6 -16Z" fill="${F('hi')}" opacity="${q(0.28 * o.gloss)}"/>`;
+      if (o.dim) body += `<path d="${out}" fill="${F('spot')}" opacity="${q(0.42 * o.dim)}"/>`;
+      const vc = o.under ? 'under-vein' : o.purple ? 'purple' : tone[1];
       body += `<path d="${vd}" fill="none" stroke="${F(vc)}" stroke-width="${o.under ? 1.8 : 1.3}" stroke-linecap="round" opacity="${o.under ? 0.95 : 0.7}"/>`;
       // holes are cut out; their rims turn brown
       let mask = '', rims = '';
@@ -406,7 +444,13 @@
         defs += `<mask id="${mid}" maskUnits="userSpaceOnUse" x="-60" y="-120" width="120" height="140"><rect x="-60" y="-120" width="120" height="140" fill="#fff"/>${hs}</mask>`;
         mask = ` mask="url(#${mid})"`;
       }
-      let edge = `<path d="${out}" fill="none" stroke="${F(o.under ? 'leaf' : 'leaf-d')}" stroke-width="1.1" opacity=".8"/>`;
+      let edge = `<path d="${out}" fill="none" stroke="${F(o.under ? 'leaf' : tone[2])}" stroke-width="1.1" opacity=".8"/>`;
+      if (o.hairs) {
+        // a downy leaf (tulsi): short pale hairs stand out of the margin
+        let d = '';
+        for (let i = 2; i < 30; i++) { const s2 = i / 31, x = HW(s2) * (o.wide || 1), y = Ys(s2); [-1, 1].forEach(sd => { d += `M${q(sd * x)} ${q(y)}l${q(sd * 2.6)} ${q(-1.4 - rnd())}`; }); }
+        edge += `<path d="${d}" stroke="${F('white')}" stroke-width=".8" stroke-linecap="round" opacity=".75"/>`;
+      }
       if (o.curl) {
         // the rolled edge: a band of the paler underside with a fold line inside it
         const Rp = [], In = [];
@@ -423,7 +467,7 @@
       if (o.mites) for (let i = 0; i < o.mites; i++) { const [x, y] = inside(rnd, 0.2, 0.8, 0.7); bugs += mite(x, y, rnd() * 360, 0.35); }
       if (o.whitefly) for (let i = 0; i < o.whitefly; i++) { const [x, y] = inside(rnd, 0.15, 0.8, 0.7); bugs += whitefly(x, y, rnd() * 60 - 30, 0.45); }
       if (o.thrips) for (let i = 0; i < o.thrips; i++) { const [x, y] = inside(rnd, 0.2, 0.8, 0.6); bugs += thrips(x, y, rnd() * 360, 0.5); }
-      const pet = `<path d="M0 -3V${o.petiole == null ? 16 : o.petiole}" stroke="${F(o.purple ? 'purple' : 'stem')}" stroke-width="2.6" stroke-linecap="round"/>`;
+      const pet = `<path d="M0 -3V${o.petiole == null ? 16 : o.petiole}" stroke="${F(o.purple ? 'purple' : tone[3])}" stroke-width="2.6" stroke-linecap="round"/>`;
       return `<g transform="translate(${q(o.x || 0)} ${q(o.y || 0)}) rotate(${q(o.a || 0)}) scale(${o.s || 1})">${defs}${pet}<g${mask}><g clip-path="url(#${cid})">${body}</g>${top}${edge}${rims}</g>${bugs}</g>`;
     }
 
@@ -465,7 +509,21 @@
       return `<path d="${d}" fill="none" stroke="${F('white')}" stroke-width=".55" opacity=".9"/>`;
     }
 
-    /* a basil plant standing on (x, y). o: h, nodes, droop, lean, leggy, bolt, leaf(i, n, side) → leaf options */
+    // flower colours: white (sweet basil), purple (Thai, tulsi), pink (purple sorts, African blue)
+    const FLOWER = { white: ['flower', 'flower-d'], purple: ['flower-purple', 'flower-purple-d'], pink: ['flower-pink', 'flower-pink-d'] };
+    // a flower spike going up from (x, y): whorls of small two-lipped flowers, smaller towards the top
+    function spike(x, y, len = 62, o = {}) {
+      const [fc, fd] = FLOWER[o.flowers] || FLOWER.white, n = Math.max(3, Math.round(len / 10.5));
+      let g = `<path d="M${q(x)} ${q(y)}q2 ${q(-len / 2)} 1 ${q(-len)}" stroke="${F(o.stemColor || 'stem')}" stroke-width="${o.thin ? 1.8 : 2.6}" fill="none"/>`;
+      for (let i = 0; i < n; i++) {
+        const fy = y - 10 - i * (len - 10) / n, fx = x + 1 + i * 0.2, r = (1 - i * 0.6 / n) * (o.thin ? 0.75 : 1);
+        [-1, 1].forEach(sd => { g += `<path d="M${q(fx)} ${q(fy)}q${q(sd * 6 * r)} -1 ${q(sd * 8 * r)} -6q${q(-sd * 3)} 4 ${q(-sd * 8 * r)} 6Z" fill="${F(fc)}" stroke="${F(fd)}" stroke-width=".6"/>`; });
+        g += `<ellipse cx="${q(fx)}" cy="${q(fy + 2)}" rx="${q(5 * r)}" ry="2" fill="${F(o.bracts || 'stem')}" opacity=".75"/>`;
+      }
+      return g;
+    }
+    /* a basil plant standing on (x, y). o: h, nodes, droop, lean, leggy, bolt, leaf(i, n, side) → leaf options,
+       tone (leaf colour of the variety), flowers (colour of the spike), stemColor */
     function plant(o = {}) {
       const H = o.h || 150, n = o.nodes || 4, rnd = micro.rng(o.seed || 5);
       const lean = o.lean || 0;
@@ -478,16 +536,7 @@
       for (let i = 0; i < n; i++) { yy += H * w[i] / tot; const t = yy / H; pts.push([lean * t * t * 30 + dr * t * t * t * 22, -yy + dr * t * t * t * 16]); }
       const stem = `M0 0Q${q(lean * 6 + dr * 4)} ${q(-H * 0.5)} ${q(pts[n - 1][0])} ${q(pts[n - 1][1])}`;
       let g = '';
-      if (o.bolt) {
-        // flower spike: whorls of small two-lipped flowers
-        const top = [pts[n - 1][0], -H];
-        g += `<path d="M${q(top[0])} ${q(top[1])}q2 -30 1 -62" stroke="${F('stem')}" stroke-width="2.6" fill="none"/>`;
-        for (let i = 0; i < 6; i++) {
-          const fy = top[1] - 10 - i * 10, fx = top[0] + 1 + i * 0.2, r = 1 - i * 0.1;
-          [-1, 1].forEach(sd => { g += `<path d="M${q(fx)} ${q(fy)}q${q(sd * 6 * r)} -1 ${q(sd * 8 * r)} -6q${q(-sd * 3)} 4 ${q(-sd * 8 * r)} 6Z" fill="${F('flower')}" stroke="${F('flower-d')}" stroke-width=".6"/>`; });
-          g += `<ellipse cx="${q(fx)}" cy="${q(fy + 2)}" rx="${q(5 * r)}" ry="2" fill="${F('stem')}" opacity=".7"/>`;
-        }
-      }
+      if (o.bolt) g += spike(pts[n - 1][0], -H, 62, { flowers: o.flowers, stemColor: o.stemColor, bracts: o.stemColor });
       g += `<path d="${stem}" stroke="${F(o.stemColor || 'stem')}" stroke-width="${o.leggy ? 2.6 : 3.6}" fill="none" stroke-linecap="round"/>`;
       pts.forEach(([px, py], i) => {
         const size = (o.leggy ? 0.36 : 0.62 - i * 0.09) * (o.leafScale || 1);
@@ -495,12 +544,63 @@
           const extra = o.leaf ? o.leaf(i, n, side) || {} : {};
           const droop = dr * (1 - i * 0.08);
           const a = side * (58 - i * 6 + droop * 100 + (rnd() - 0.5) * 8);
-          g += leaf(Object.assign({ x: px, y: py, a, s: size, seed: 11 + i * 3 + (side > 0 ? 1 : 0), petiole: 12 }, dr > 0.4 ? { wide: 0.82 } : {}, extra));
+          g += leaf(Object.assign({ x: px, y: py, a, s: size, seed: 11 + i * 3 + (side > 0 ? 1 : 0), petiole: 12, tone: o.tone }, dr > 0.4 ? { wide: 0.82 } : {}, extra));
         });
       });
       // the growing tip
       const [tx, ty] = pts[n - 1];
-      if (!o.bolt) [-1, 1].forEach(side => { g += leaf(Object.assign({ x: tx, y: ty, a: side * 24 + dr * 110, s: 0.2, seed: 40 + side, petiole: 4 }, o.leaf ? o.leaf(n, n, side) || {} : {})); });
+      if (!o.bolt) [-1, 1].forEach(side => { g += leaf(Object.assign({ x: tx, y: ty, a: side * 24 + dr * 110, s: 0.2, seed: 40 + side, petiole: 4, tone: o.tone }, o.leaf ? o.leaf(n, n, side) || {} : {})); });
+      return `<g transform="translate(${q(o.x || 0)} ${q(o.y || 0)})">${g}</g>`;
+    }
+    /* a pinched bush from the side: a main stem and a side shoot from every node, a pair of leaves on each
+       node, flower spikes on the shoot tops if it blooms. o: x, y, h, nodes, leaf (leaf scale), spread,
+       look of the variety (tone, wide, ruffle, teeth, bubbly, gloss, hairs), flowers, stemColor, seed */
+    function bush(o = {}) {
+      const H = o.h || 110, n = o.nodes || 3, rnd = micro.rng(o.seed || 9), L = o.leaf || 0.4, spread = o.spread == null ? 1 : o.spread;
+      const look = { tone: o.tone, wide: o.wide, ruffle: o.ruffle, teeth: o.teeth, bubbly: o.bubbly, gloss: o.gloss, hairs: o.hairs };
+      const stemC = o.stemColor || (o.tone === 'purple' || o.tone === 'thai' ? 'stem-purple' : 'stem');
+      const shoots = [];
+      for (let i = 0; i < n - 1; i++) {
+        const y = -H * (0.16 + i * 0.22);
+        [-1, 1].forEach(sd => shoots.push({ x: 0, y, a: sd * (50 - i * 10 + rnd() * 8) * spread, len: H * (0.66 - i * 0.12), s: L * (0.92 - i * 0.1), pairs: Math.max(2, n - i), dim: i === 0 ? 0.3 : 0.15 }));
+      }
+      shoots.push({ x: 0, y: 0, a: (rnd() - 0.5) * 6, len: H, s: L, pairs: n + 1, dim: 0 });
+      let g = '';
+      shoots.forEach((sh, k) => {
+        const r = sh.a * Math.PI / 180;
+        // the shoot leaves the stem at its angle and turns up towards the light
+        const P0 = [sh.x, sh.y], P1 = [sh.x + Math.sin(r) * sh.len * 0.6, sh.y - Math.cos(r) * sh.len * 0.6], P2 = [sh.x + Math.sin(r) * sh.len * 0.72, sh.y - sh.len * 0.9];
+        const at = t => [(1 - t) * (1 - t) * P0[0] + 2 * t * (1 - t) * P1[0] + t * t * P2[0], (1 - t) * (1 - t) * P0[1] + 2 * t * (1 - t) * P1[1] + t * t * P2[1]];
+        const dir = t => { const dx = 2 * (1 - t) * (P1[0] - P0[0]) + 2 * t * (P2[0] - P1[0]), dy = 2 * (1 - t) * (P1[1] - P0[1]) + 2 * t * (P2[1] - P1[1]); return Math.atan2(dx, -dy) * 180 / Math.PI; };
+        g += `<path d="M${q(P0[0])} ${q(P0[1])}Q${q(P1[0])} ${q(P1[1])} ${q(P2[0])} ${q(P2[1])}" stroke="${F(stemC)}" stroke-width="${q(sh.dim ? 2.2 : 3.2)}" fill="none" stroke-linecap="round"/>`;
+        for (let j = 0; j < sh.pairs; j++) {
+          const t = 0.3 + 0.62 * j / Math.max(1, sh.pairs - 1), [px, py] = at(t), d = dir(t), size = sh.s * (1 - 0.42 * t);
+          [-1, 1].forEach(side => { g += leaf(Object.assign({ x: px, y: py, a: d + side * (56 + (rnd() - 0.5) * 14), s: size, seed: 7 + k * 11 + j * 3 + side, petiole: 8, dim: sh.dim }, look)); });
+        }
+        if (o.flowers) g += spike(P2[0], P2[1], sh.dim ? 30 : 40, { flowers: o.flowers, stemColor: stemC, bracts: stemC, thin: true });
+        else [-1, 1].forEach(side => { g += leaf(Object.assign({ x: P2[0], y: P2[1], a: dir(1) + side * 26, s: sh.s * 0.34, seed: 50 + k + side, petiole: 3, dim: sh.dim }, look)); });
+      });
+      return `<g transform="translate(${q(o.x || 0)} ${q(o.y || 0)})">${g}</g>`;
+    }
+    /* a small-leaved bush that grows into a ball by itself (the Greek bush basils): a dome of little leaves
+       on short stems. o: x, y, r (radius), n (leaves), leaf (leaf scale), tone, wide, teeth, seed */
+    function ballBush(o = {}) {
+      const R = o.r || 40, rnd = micro.rng(o.seed || 7), n = o.n || 70, sL = o.leaf || 0.17, len = 104 * sL;
+      const look = { tone: o.tone, wide: o.wide || 0.95, teeth: o.teeth };
+      const stemC = o.tone === 'purple' ? 'stem-purple' : 'stem';
+      const cy = -R * 0.9;
+      let g = `<path d="M0 0V${q(cy * 0.5)}M0 ${q(cy * 0.2)}Q${q(-R * 0.2)} ${q(cy * 0.4)} ${q(-R * 0.36)} ${q(cy * 0.72)}M0 ${q(cy * 0.28)}Q${q(R * 0.2)} ${q(cy * 0.46)} ${q(R * 0.38)} ${q(cy * 0.76)}" stroke="${F(stemC)}" stroke-width="2.6" stroke-linecap="round" fill="none"/>`;
+      const items = [];
+      for (let i = 0; items.length < n && i < n * 4; i++) {
+        // the middle of every leaf falls anywhere in the ball but its bottom, where the stems come in;
+        // leaves at the rim point outwards, the ones in the middle face us and point up
+        const phi = rnd() * Math.PI * 2, rr = Math.sqrt(rnd()), rho = (R - len * 0.5) * rr;
+        if (rr > 0.45 && Math.sin(phi) < -0.55) continue;
+        const out = rr > 0.4 ? 90 - phi * 180 / Math.PI + (rnd() - 0.5) * 40 : (rnd() - 0.5) * 120;
+        const a = out * Math.PI / 180, x = Math.cos(phi) * rho - Math.sin(a) * len * 0.5, y = cy - Math.sin(phi) * rho * 0.92 + Math.cos(a) * len * 0.5;
+        items.push({ x, y, a: out, depth: Math.min(1, rnd() * 0.7 + 0.45 * (1 - rr)), s: sL * (0.8 + 0.4 * rnd()), seed: 100 + i });
+      }
+      items.sort((a, b) => a.depth - b.depth).forEach(it => { g += leaf(Object.assign({ x: it.x, y: it.y, a: it.a, s: it.s, seed: it.seed, petiole: 4, dim: q(0.55 * (1 - it.depth)) }, look)); });
       return `<g transform="translate(${q(o.x || 0)} ${q(o.y || 0)})">${g}</g>`;
     }
     function pot(x, y, w = 70, hgt = 52, o = {}) {
@@ -527,7 +627,7 @@
     const scale = (x, y, px, text) => `<g class="ill-scale"><path d="M${q(x - px)} ${q(y - 3)}V${q(y + 3)}M${q(x - px)} ${q(y)}H${q(x)}M${q(x)} ${q(y - 3)}V${q(y + 3)}" fill="none" stroke="currentColor"/><line x1="${q(x - px)}" x2="${q(x)}" y1="${q(y)}" y2="${q(y)}"/><text x="${q(x - px / 2)}" y="${q(y - 6)}" text-anchor="middle">${text}</text></g>`;
     // wide pictures are shown small (two in a row): their captions are set larger in CSS (.ill-l)
     const svg = (w, hgt, body, label2) => `<svg class="ill ${w >= 200 ? 'ill-l' : 'ill-s'}" viewBox="0 0 ${w} ${hgt}" role="img"${label2 ? ` aria-label="${label2}"` : ' aria-hidden="true"'}>${body}</svg>`;
-    return { F, q, rng: micro.rng, HW, Ys, leaf, plant, pot, seedling, aphid, mite, whitefly, thrips, web, label, scale, svg, mix };
+    return { F, q, rng: micro.rng, HW, Ys, leaf, plant, bush, ballBush, spike, pot, seedling, aphid, mite, whitefly, thrips, web, label, scale, svg, mix };
   })();
 
   /* @use micro, ills */

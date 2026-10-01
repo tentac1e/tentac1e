@@ -18,7 +18,7 @@ main { view-transition-name: main; }
 @keyframes rise { from { translate: 0 38px; scale: .985; } to { translate: 0 0; scale: 1; } }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .steps .step, .storage .card, .ref-grid .card, .principles .card, .myths .card, .chapters .ch-card, .tools-grid .tool, .var-grid .variety, .quick .q-card {
+    .steps .step, .storage .card, .ref-grid .card, .principles .card, .myths .card, .chapters .ch-card, .tools-grid .tool, .vtypes .vtype, .quick .q-card {
       animation: rise linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 45%;

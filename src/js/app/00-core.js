@@ -56,6 +56,8 @@
   const icon = name => `<svg class="ico" aria-hidden="true"><use href="#i-${name}"/></svg>`;
   const chapterById = id => B.CHAPTERS.find(c => c.id === id);
   const HAP = window.BasilHaptics || { tick() {}, select() {}, impact() {}, success() {}, supported: false };
+  // pictures (data-ill) come from the chapter's model file: drawn when they near the screen, or at once (eager)
+  const paintIll = (root, eager) => { if (window.BasilScience && window.BasilScience.paint) window.BasilScience.paint(root, eager); };
 
   /* ---------------- pages: every chapter is its own HTML file ---------------- */
   // BASIL_PAGES comes from scripts/build.py; without it (one-file build) all chapters share one page

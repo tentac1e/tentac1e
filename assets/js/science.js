@@ -536,9 +536,13 @@ window.BasilScience = (() => {
   }
 
   /* illustrations: <span data-ill="painter:variant"> gets its picture from the chapter's model file
-     (the painters register there with illustrate()); drawn when it comes near the screen */
+     (the painters register there with illustrate()); drawn when it comes near the screen.
+     A painter may list its variants (an array or a function returning one): the tests and the
+     gallery then draw the ones a page shows only after a tap */
   const ills = {};
-  const illustrate = (name, fn) => { ills[name] = fn; };
+  const illKeys = {};
+  const illustrate = (name, fn, keys) => { ills[name] = fn; if (keys) illKeys[name] = keys; };
+  const variants = () => Object.keys(illKeys).reduce((o, n) => { o[n] = (typeof illKeys[n] === 'function' ? illKeys[n]() : illKeys[n]).map(String); return o; }, {});
   function draw(el) {
     const [name, arg = ''] = el.dataset.ill.split(':');
     const fn = ills[name];
@@ -783,5 +787,5 @@ window.BasilScience = (() => {
     paint();
   }
 
-  return { init, register, illustrate, paint, api, MOLS, CHEMO, PAIRS, KIND };
+  return { init, register, illustrate, paint, variants, api, MOLS, CHEMO, PAIRS, KIND };
 })();

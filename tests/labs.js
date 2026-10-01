@@ -77,7 +77,8 @@ function audit(sel) {
       await page.waitForTimeout(500);
       const labs = await page.evaluate(() => [...document.querySelectorAll('.lab-tool[data-lab]')].map(l => ({ lab: l.dataset.lab, panel: (l.closest('[data-panel]') || {}).id })));
       const mine = labs.filter(l => !only.length || only.includes(l.lab));
-      if (!mine.length) continue;
+      const pictures = !only.length && await page.evaluate(() => !!document.querySelector('[data-ill]'));
+      if (!mine.length && !pictures) continue;
       await page.addStyleTag({ content: '.tabbar,.to-top,.resume-pill,.topbar{visibility:hidden!important}' });
       for (const { lab, panel } of mine) {
         await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, panel);
@@ -109,6 +110,30 @@ function audit(sel) {
         const r = await page.evaluate(audit, `[data-ill="${key}"]`);
         const problems = ['clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 4).join(', ')}`);
         ok(r.ready && !problems.length, `${mode.padEnd(7)} ill ${key.padEnd(18)} ${r.ready ? '' : 'NOT DRAWN '}${problems.join(' | ')}`);
+      }
+      // variants a page draws only after a tap (illustrate(name, fn, variants)): each in turn in the
+      // first visible picture of its painter, at the size the page shows it
+      const vars = only.length ? {} : await page.evaluate(() => window.BasilScience.variants());
+      for (const name of Object.keys(vars)) {
+        const slot = await page.evaluate(n => {
+          const e = [...document.querySelectorAll('[data-ill]')].find(x => x.dataset.ill.split(':')[0] === n && x.getClientRects().length);
+          if (!e) return null;
+          e.id = e.id || 'ill-slot-' + n;
+          return { id: e.id, key: e.dataset.ill, panel: (e.closest('[data-panel]') || {}).id };
+        }, name);
+        if (!slot) continue;
+        await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, slot.panel);
+        for (const v of vars[name]) {
+          const key = name + ':' + v;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          await page.evaluate(([id, k]) => { const e = document.getElementById(id); e.dataset.ill = k; e.scrollIntoView({ block: 'center' }); window.BasilScience.paint(e, true); }, [slot.id, key]);
+          await page.waitForFunction(([id, k]) => document.getElementById(id).dataset.drawn === k, [slot.id, key], { timeout: 5000 }).catch(() => {});
+          const r = await page.evaluate(audit, '#' + slot.id);
+          const problems = ['clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 4).join(', ')}`);
+          ok(r.ready && !problems.length, `${mode.padEnd(7)} ill ${key.padEnd(18)} ${r.ready ? '' : 'NOT DRAWN '}${problems.join(' | ')}`);
+        }
+        await page.evaluate(([id, k]) => { const e = document.getElementById(id); e.dataset.ill = k; window.BasilScience.paint(e, true); }, [slot.id, slot.key]);
       }
     }
     await ctx.close();

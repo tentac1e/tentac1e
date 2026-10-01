@@ -3,7 +3,6 @@
   /* ================================================================== */
   let selectSymptom = () => {};
   // pictures come from the chapter's model file (src/labs/problemy/_shared.js), drawn by BasilScience
-  const paintIll = (root, eager) => { if (window.BasilScience && window.BasilScience.paint) window.BasilScience.paint(root, eager); };
   function initDiagnostics() {
     const groups = $('#diag-groups');
     const result = $('#diag-result');

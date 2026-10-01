@@ -144,11 +144,12 @@
 Иллюстрации на страницах — элементы `data-ill="художник:вариант"`; художники регистрируются через `illustrate()` в `src/labs/<глава>/_shared.js` и рисуются, когда элемент подходит к экрану. Все рисунки главы на одном листе: `node tests/gallery.js <глава>`.
 
 - `src/labs/problemy/_shared.js`: `sym`, `dis`, `pest`
+- `src/labs/sorta/_shared.js`: `sort`, `vtype`
 
 ## Скрипты (src/js/)
 
 **app.js**
-- `src/js/app/00-core.js` (123 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
+- `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
 - `src/js/app/01-theme.js` (29 стр.): initTheme
 - `src/js/app/02-router.js` (249 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-sheets.js` (55 стр.): initSheets
@@ -156,7 +157,7 @@
 - `src/js/app/05-scene.js` (161 стр.): initScene, initHoverLight, initOffscreenPause, initLeafField
 - `src/js/app/06-mini-plants.js` (32 стр.)
 - `src/js/app/07-home.js` (36 стр.): initHome
-- `src/js/app/08-varieties.js` (140 стр.): initVarieties, initQuiz
+- `src/js/app/08-varieties.js` (250 стр.): EASY, initVarieties, initQuiz
 - `src/js/app/09-places.js` (41 стр.): initPlaces
 - `src/js/app/10-soil.js` (26 стр.): initSoil
 - `src/js/app/11-calendar.js` (215 стр.): initCalendar
@@ -168,7 +169,7 @@
 - `src/js/app/17-nutrients-dose.js` (52 стр.): FRACTIONS, initDose
 - `src/js/app/18-pinching.js` (196 стр.): initSim
 - `src/js/app/19-seeds.js` (21 стр.): initGerm
-- `src/js/app/20-problems.js` (59 стр.): initDiagnostics
+- `src/js/app/20-problems.js` (58 стр.): initDiagnostics
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
 - `src/js/app/22-reading-pos.js` (133 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
@@ -180,7 +181,7 @@
 - `src/js/science/03-charts.js` (107 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (267 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
-- `src/js/science/06-labs-loader.js` (74 стр.): SELF, draw
+- `src/js/science/06-labs-loader.js` (78 стр.): SELF, draw
 - `src/js/science/07-deep.js` (221 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 
 **scene.js**
@@ -195,7 +196,7 @@
 
 **data.js**
 - `src/js/data/00-nav.js` (58 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
-- `src/js/data/01-varieties.js` (115 стр.): VARIETIES, QUIZ
+- `src/js/data/01-varieties.js` (146 стр.): VARIETIES, VARIETY_TYPES, QUIZ
 - `src/js/data/02-places.js` (71 стр.): PLACES, PRESETS, SOIL_RECIPES
 - `src/js/data/03-nutrients.js` (127 стр.): ELEMENTS, STAGES, DOSE, NPK_PRESETS
 - `src/js/data/04-problems.js` (112 стр.): P_LABEL, DIAG, DISEASES, PESTS, TREATMENTS

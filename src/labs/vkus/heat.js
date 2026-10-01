@@ -1,8 +1,17 @@
   register('heat', el => {
     // any sort of the catalogue; its oil is that of its chemotype
     const SORTS = ((window.BASIL && window.BASIL.VARIETIES) || []).filter(x => h.CHEMO.some(g => g.id === x.chem));
+    // the list keeps the catalogue's types: a group per type, its varieties inside
+    const TYPES = (window.BASIL && window.BASIL.VARIETY_TYPES) || [];
+    const opt = (x, k) => `<option value="${k}">${x.name.replace(/, святой базилик$/, '')}</option>`;
+    const sortOptions = () => {
+      const pairs = SORTS.map((x, k) => [x, k]);
+      const groups = TYPES.map(t => [t, pairs.filter(([x]) => x.type === t.id)]).filter(([, list]) => list.length);
+      const rest = pairs.filter(([x]) => !TYPES.some(t => t.id === x.type));
+      return groups.map(([t, list]) => `<optgroup label="${t.name}">${list.map(([x, k]) => opt(x, k)).join('')}</optgroup>`).join('') + rest.map(([x, k]) => opt(x, k)).join('');
+    };
     el.innerHTML = h.head('Когда класть базилик', 'Модель открытой кастрюли: скорость потери каждой молекулы пропорциональна давлению её пара, оценённому по правилу Трутона. Внизу — что останется от аромата выбранного сорта.', true) +
-      `<div class="lab-controls lab-row-wrap"><div class="field lab-field heat-sort"><label for="lab-ht-v">Сорт</label><select id="lab-ht-v">${SORTS.map((x, k) => `<option value="${k}">${x.name.replace(/, святой базилик$/, '')}</option>`).join('')}</select></div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
+      `<div class="lab-controls lab-row-wrap"><div class="field lab-field heat-sort"><label for="lab-ht-v">Сорт</label><select id="lab-ht-v">${sortOptions()}</select></div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
        <div class="heat-rows" id="lab-ht-rows"></div>
        <ul class="legend">${Object.values(h.FAM).map(f => `<li><i class="fam-dot ${f.cls}"></i>${f.name}</li>`).join('')}<li><i class="fam-dot is-ghost"></i>было в свежем листе</li></ul>` +
       h.readHtml([['Осталось аромата', 'lab-ht-tot'], ['Характер', 'lab-ht-c', 'is-wide']]);

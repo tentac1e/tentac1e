@@ -852,8 +852,17 @@
   register('heat', el => {
     // any sort of the catalogue; its oil is that of its chemotype
     const SORTS = ((window.BASIL && window.BASIL.VARIETIES) || []).filter(x => h.CHEMO.some(g => g.id === x.chem));
+    // the list keeps the catalogue's types: a group per type, its varieties inside
+    const TYPES = (window.BASIL && window.BASIL.VARIETY_TYPES) || [];
+    const opt = (x, k) => `<option value="${k}">${x.name.replace(/, святой базилик$/, '')}</option>`;
+    const sortOptions = () => {
+      const pairs = SORTS.map((x, k) => [x, k]);
+      const groups = TYPES.map(t => [t, pairs.filter(([x]) => x.type === t.id)]).filter(([, list]) => list.length);
+      const rest = pairs.filter(([x]) => !TYPES.some(t => t.id === x.type));
+      return groups.map(([t, list]) => `<optgroup label="${t.name}">${list.map(([x, k]) => opt(x, k)).join('')}</optgroup>`).join('') + rest.map(([x, k]) => opt(x, k)).join('');
+    };
     el.innerHTML = h.head('Когда класть базилик', 'Модель открытой кастрюли: скорость потери каждой молекулы пропорциональна давлению её пара, оценённому по правилу Трутона. Внизу — что останется от аромата выбранного сорта.', true) +
-      `<div class="lab-controls lab-row-wrap"><div class="field lab-field heat-sort"><label for="lab-ht-v">Сорт</label><select id="lab-ht-v">${SORTS.map((x, k) => `<option value="${k}">${x.name.replace(/, святой базилик$/, '')}</option>`).join('')}</select></div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
+      `<div class="lab-controls lab-row-wrap"><div class="field lab-field heat-sort"><label for="lab-ht-v">Сорт</label><select id="lab-ht-v">${sortOptions()}</select></div>${h.segHtml('lab-ht-t', 'Нагрев', [['60', '60 °C'], ['80', '80 °C'], ['100', 'Кипение']], '100')}${h.rangeHtml('lab-ht-m', 'Время на огне', 0, 30, 0.5, 10)}</div>
        <div class="heat-rows" id="lab-ht-rows"></div>
        <ul class="legend">${Object.values(h.FAM).map(f => `<li><i class="fam-dot ${f.cls}"></i>${f.name}</li>`).join('')}<li><i class="fam-dot is-ghost"></i>было в свежем листе</li></ul>` +
       h.readHtml([['Осталось аромата', 'lab-ht-tot'], ['Характер', 'lab-ht-c', 'is-wide']]);
@@ -962,10 +971,17 @@
     };
     const word = (x, c) => c ? (x >= 0.8 ? 'отличный контраст' : x >= 0.55 ? 'хороший контраст' : 'спорно') : x >= 0.6 ? 'сильная связь' : x >= 0.35 ? 'заметная связь' : x >= 0.15 ? 'слабая связь' : 'почти нет';
     const vShort = n => n.replace('Африканский синий', 'Африк. синий');
+    // the basil is chosen in two steps: its type (as in the catalogue), then a variety of that type
+    const TYPES = ((window.BASIL && window.BASIL.VARIETY_TYPES) || []).filter(t => SORTS.some(x => x.type === t.id));
+    let sk = 0, ty = SORTS[0] && SORTS[0].type;
+    const leafIco = x => `<svg viewBox="-34 -108 68 122" aria-hidden="true">${food.basil(x.leaf)}</svg>`;
+    const typeChips = () => TYPES.map(t => { const first = SORTS.find(x => x.type === t.id); return `<button type="button" class="chip pa-type" data-t="${t.id}" aria-pressed="${t.id === ty}">${leafIco(first)}${t.short}<small>${SORTS.filter(x => x.type === t.id).length}</small></button>`; }).join('');
+    const sortChips = () => SORTS.map((x, k) => [x, k]).filter(([x]) => !TYPES.length || x.type === ty).map(([x, k]) => `<button type="button" class="chip pa-var" data-s="${k}" aria-pressed="${k === sk}">${leafIco(x)}${vShort(sortName(x))}</button>`).join('');
 
     el.innerHTML = h.head('Лаборатория сочетаний', 'Выберите свой базилик — продукты выстроятся по силе связи с ним. Нажмите на продукт: мост покажет, какие молекулы их роднят или что работает на контрасте. Сила связи — качественная оценка по долям общих молекул.') +
       `<p class="lab-label">Ваш базилик</p>
-       <div class="pa-varieties" id="lab-pa-v" role="group" aria-label="Сорт базилика">${SORTS.map((x, k) => `<button type="button" class="chip pa-var" data-s="${k}" aria-pressed="${k === 0}"><svg viewBox="-34 -108 68 122" aria-hidden="true">${food.basil(x.leaf)}</svg>${vShort(sortName(x))}</button>`).join('')}</div>
+       ${TYPES.length ? `<div class="pa-types" id="lab-pa-t" role="group" aria-label="Тип базилика">${typeChips()}</div>` : ''}
+       <div class="pa-varieties" id="lab-pa-v" role="group" aria-label="Сорт базилика">${sortChips()}</div>
        <p class="lab-label">С чем сочетать</p>
        <div class="pa-foods" id="lab-pa-f" role="group" aria-label="Продукты"></div>
        <div class="pa-stage">
@@ -973,7 +989,7 @@
          <div class="lab-chart pa-chart" id="lab-pa-ch"></div>
          <div class="pa-info" id="lab-pa-info" aria-live="polite"></div>
        </div>`;
-    let sk = 0, v = groupOf(0), cur = P[0];
+    let v = groupOf(0), cur = P[0];
     const foods = $('#lab-pa-f', el);
     foods.innerHTML = P.map(f => `<button type="button" class="pa-food" data-id="${f.id}" aria-pressed="${f.id === cur.id}">${food.icon(f.id, 'pa-ico')}<span class="pa-name">${f.name}</span><span class="pa-meter"><i></i></span><span class="pa-word"></span></button>`).join('');
 
@@ -1059,15 +1075,26 @@
       info();
     };
     foods.addEventListener('click', e => { const b = e.target.closest('.pa-food'); if (!b) return; cur = P.find(p => p.id === b.dataset.id); pick(); });
-    $('#lab-pa-v', el).addEventListener('click', e => {
-      const b = e.target.closest('.pa-var');
-      if (!b) return;
-      sk = +b.dataset.s;
+    const choose = k => {
+      sk = k;
       v = groupOf(sk);
-      $$('.pa-var', el).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      $$('.pa-var', el).forEach(x => x.setAttribute('aria-pressed', String(+x.dataset.s === sk)));
       order();
       foods.scrollTo({ left: 0, behavior: h.reduce.matches ? 'auto' : 'smooth' });
       pick();
+    };
+    $('#lab-pa-v', el).addEventListener('click', e => { const b = e.target.closest('.pa-var'); if (b) choose(+b.dataset.s); });
+    // a type: its varieties take the second row, the first of them is chosen
+    if (TYPES.length) $('#lab-pa-t', el).addEventListener('click', e => {
+      const b = e.target.closest('.pa-type');
+      if (!b || b.dataset.t === ty) return;
+      ty = b.dataset.t;
+      $$('.pa-type', el).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      const row = $('#lab-pa-v', el);
+      sk = SORTS.findIndex(x => x.type === ty);
+      row.innerHTML = sortChips();
+      row.scrollTo({ left: 0 });
+      choose(sk);
     });
     order();
     pick();

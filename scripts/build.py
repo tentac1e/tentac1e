@@ -310,18 +310,28 @@ def assemble(src_pages):
     out.mkdir()
     bundles = []
     CH = chapters()
+    # a model asks for a shared drawing library with a line «/* @use micro */»; a library may ask for
+    # another one the same way. Each goes in once, after the ones it needs
+    uses_of = lambda f: [x.strip() for m in re.finditer(r'/\* @use ([a-z, -]+) \*/', f.read_text(encoding='utf-8')) for x in m.group(1).split(',') if x.strip()]
+
+    def need(name, libs):
+        if name in libs:
+            return
+        for dep in uses_of(SRC / 'labs' / '_lib' / f'{name}.js'):
+            need(dep, libs)
+        libs.append(name)
+
     for v, labs in order:
-        if not labs:
-            continue
         d = SRC / 'labs' / v
-        # a model asks for a shared drawing library with a line «/* @use micro */»; each goes in once
+        shared = [d / '_shared.js'] if (d / '_shared.js').exists() else []
+        # a chapter gets its file when it has models or pictures (_shared.js)
+        if not labs and not shared:
+            continue
         libs = []
-        uses = [d / '_shared.js'] if (d / '_shared.js').exists() else []
-        for f in uses + [d / f'{l}.js' for l in labs]:
-            for m in re.finditer(r'/\* @use ([a-z, -]+) \*/', f.read_text(encoding='utf-8')):
-                libs += [x.strip() for x in m.group(1).split(',') if x.strip() not in libs]
-        parts = [SRC / 'labs' / '_lib' / f'{x}.js' for x in libs]
-        parts += ([d / '_shared.js'] if (d / '_shared.js').exists() else []) + [d / f'{l}.js' for l in labs]
+        for f in shared + [d / f'{l}.js' for l in labs]:
+            for x in uses_of(f):
+                need(x, libs)
+        parts = [SRC / 'labs' / '_lib' / f'{x}.js' for x in libs] + shared + [d / f'{l}.js' for l in labs]
         body = '\n'.join(f.read_text(encoding='utf-8') for f in parts)
         text = frame.replace('{{chapter}}', CH[v]['title'] if v in CH else v).replace('/*@labs*/\n', body)
         (out / f'{v}.js').write_text(banner(text, f'src/labs/{v}/'), encoding='utf-8')

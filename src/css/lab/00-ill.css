@@ -52,6 +52,21 @@
   --ill-hypha: #F3F3EE;
   --ill-bact: #C98C3A;
   --ill-hi: #FFFFFF;
+  /* leaves and flowers of the varieties */
+  --ill-leaf-deep: #3F7A31;
+  --ill-leaf-deep-d: #24521C;
+  --ill-vein-deep: #23501C;
+  --ill-leaf-purple: #5B2C63;
+  --ill-leaf-purple-d: #3A173F;
+  --ill-vein-purple: #2E1033;
+  --ill-stem-purple: #6B3772;
+  --ill-leaf-lime: #A3C452;
+  --ill-leaf-lime-d: #6E8E2C;
+  --ill-vein-lime: #6A8A2A;
+  --ill-flower-purple: #9B6FBF;
+  --ill-flower-purple-d: #6C4590;
+  --ill-flower-pink: #E9B9D6;
+  --ill-flower-pink-d: #BE7FA6;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }

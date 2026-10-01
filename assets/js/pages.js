@@ -574,16 +574,17 @@ window.BASIL_PAGES = {
  },
  "v": {
   "labs": {
+   "sorta": "e8dcd670",
    "posadka": "3ca76e24",
    "kalendar": "89a91a01",
    "uhod": "a06c4ac8",
    "udobreniya": "87eba115",
    "formirovka": "3bf32fed",
    "urozhay": "545d1529",
-   "vkus": "a8265ebb",
+   "vkus": "a9d57289",
    "razmnozhenie": "f1a7aef0",
-   "problemy": "f30d3098"
+   "problemy": "d4d8a759"
   },
-  "search": "31720564"
+  "search": "467b94d4"
  }
 };
