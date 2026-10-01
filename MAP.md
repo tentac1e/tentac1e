@@ -190,18 +190,18 @@
 - `src/js/science/02-controls.js` (30 стр.)
 - `src/js/science/03-charts.js` (149 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
-- `src/js/science/05-molecules.js` (267 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
-- `src/js/science/06-labs-loader.js` (78 стр.): SELF, draw
+- `src/js/science/05-molecules.js` (270 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
+- `src/js/science/06-labs-loader.js` (110 стр.): SELF, draw, drawDue
 - `src/js/science/07-deep.js` (225 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 
 **scene.js**
 - `src/js/scene/00-core.js` (8 стр.): TAU
-- `src/js/scene/01-budget.js` (22 стр.)
+- `src/js/scene/01-budget.js` (84 стр.): CALM, CALM_FPS
 - `src/js/scene/02-noise.js` (22 стр.)
 - `src/js/scene/03-wind.js` (22 стр.)
-- `src/js/scene/04-background.js` (497 стр.): SPR_L, initBackground
+- `src/js/scene/04-background.js` (499 стр.): SPR_L, initBackground
 - `src/js/scene/05-plant.js` (49 стр.)
-- `src/js/scene/06-plant-bitmaps.js` (352 стр.): LEAF_D, LEAF_BOX, LEAF_FILLS, Plant
+- `src/js/scene/06-plant-bitmaps.js` (360 стр.): LEAF_D, LEAF_BOX, LEAF_FILLS, Plant
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
 
 **data.js**

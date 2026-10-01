@@ -1128,6 +1128,8 @@
     function frame(ts) {
       raf = 0;
       if (!visible) return;
+      const C = window.BasilScene && window.BasilScene.calm;
+      if (C && C.state === 'sleep') { C.onWake(wake); return; }
       const t = ts / 1000;
       const since = t0 ? t - t0 : 0;
       if (stage === 1 && since > 1.2) { stage = 2; setStep(2); }

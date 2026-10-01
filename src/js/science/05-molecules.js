@@ -226,10 +226,13 @@
         }
       }
     }
-    const ready = window.BasilScene && window.BasilScene.gate ? window.BasilScene.gate(60, 30) : () => true;
+    const SC = window.BasilScene;
+    const ready = SC && SC.gate ? SC.gate(60, 30) : () => true;
     function frame(ts) {
       raf = 0;
       if (!visible || document.hidden) return;
+      // the page is left alone: the molecule stops turning until the reader comes back
+      if (SC && SC.calm && SC.calm.state === 'sleep' && !drag) { SC.calm.onWake(wake); return; }
       raf = requestAnimationFrame(frame);
       if (!drag && !ready(ts)) return;
       const t = ts / 1000, dt = Math.min(0.05, t - (last || t));

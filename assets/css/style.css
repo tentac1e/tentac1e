@@ -364,6 +364,9 @@ h4 { margin: 0 0 .35em; font-size: 1.04rem; font-weight: 700; line-height: 1.3; 
 @keyframes sky-moon { from { opacity: .7; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .sky-beam, .sky-beam canvas, .sky-moon { animation: none; } }
 .is-off, .is-off *, .is-off::before, .is-off::after, .is-off *::before, .is-off *::after { animation-play-state: paused !important; }
+/* the page left alone for a while (scene/01-budget.js): the sky, the floating pictures and every other
+   endless animation stand still until the next touch, scroll or key */
+.is-asleep *, .is-asleep *::before, .is-asleep *::after { animation-play-state: paused !important; }
 
 .page { position: relative; z-index: 1; overflow-x: clip; }
 

@@ -21,16 +21,78 @@ window.BasilScene = (() => {
     perf.low = true;
     perf.listeners.forEach(fn => fn());
   }
+
+  /* the reader's attention: animations run smoothly while something happens (a touch, the mouse, scrolling,
+     a key), calm down to a slow rate a few seconds after it stops and sleep after a while — no frames at all,
+     the CSS sky stands still. The first touch, scroll or key wakes everything where it stopped.
+     Tests set window.BASIL_CALM = [calm ms, sleep ms] before the page starts */
+  const CALM = Array.isArray(window.BASIL_CALM) ? window.BASIL_CALM : [8000, 40000];
+  const CALM_FPS = 15;
+  const act = { state: 'active', last: performance.now(), timer: 0, wakers: new Set() };
+  const html = document.documentElement;
+  function setState(s) {
+    if (act.state === s) return;
+    act.state = s;
+    html.classList.toggle('is-calm', s !== 'active');
+    html.classList.toggle('is-asleep', s === 'sleep');
+    if (s !== 'sleep') {
+      const list = [...act.wakers];
+      act.wakers.clear();
+      list.forEach(fn => { try { fn(); } catch (e) { /* one loop failing must not stop the others */ } });
+    }
+    document.dispatchEvent(new CustomEvent('basil:calm', { detail: { state: s } }));
+  }
+  function check() {
+    act.timer = 0;
+    const idle = performance.now() - act.last;
+    if (idle >= CALM[1]) { setState('sleep'); return; }
+    if (idle >= CALM[0]) setState('calm');
+    act.timer = setTimeout(check, (idle >= CALM[0] ? CALM[1] : CALM[0]) - idle + 30);
+  }
+  function poke() {
+    act.last = performance.now();
+    if (act.state !== 'active') setState('active');
+    if (!act.timer) act.timer = setTimeout(check, CALM[0] + 30);
+  }
+  ['pointerdown', 'pointermove', 'wheel', 'touchstart', 'keydown', 'scroll'].forEach(ev => window.addEventListener(ev, poke, { passive: true, capture: true }));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) poke(); });
+  act.timer = setTimeout(check, CALM[0] + 30);
+  // a loop that has stopped for the night: called once on the next wake
+  const onWake = fn => { if (act.state === 'sleep') act.wakers.add(fn); else fn(); };
+
   function gate(hi = 60, lo = 30) {
     let prev = -1e9;
     return ts => {
-      const fps = perf.low ? lo : hi;
-      if (ts - prev < 1000 / fps - 3) return false;
+      if (act.state === 'sleep') return false;
+      let fps = perf.low ? lo : hi;
+      if (act.state === 'calm') fps = Math.min(fps, CALM_FPS);
+      // a timer-paced calm frame may come a little early: three quarters of the interval is enough
+      if (ts - prev < 1000 / fps * (act.state === 'calm' ? 0.75 : 1) - 3) return false;
       prev = ts;
       return true;
     };
   }
 
+  /* one animation loop on that budget: a frame per display refresh while active, by a timer when calm
+     (no wake-ups 60 times a second for 15 frames), none while asleep — it starts again by itself.
+     frame(ts) calls loop.next() to ask for the next one */
+  function loop(frame) {
+    let raf = 0, tm = 0, on = false;
+    const run = ts => { raf = 0; if (on) frame(ts); };
+    const next = () => {
+      if (!on || raf || tm) return;
+      if (act.state === 'sleep') { act.wakers.add(next); return; }
+      if (act.state === 'calm') tm = setTimeout(() => { tm = 0; if (on) raf = requestAnimationFrame(run); }, 1000 / CALM_FPS - 12);
+      else raf = requestAnimationFrame(run);
+    };
+    return {
+      start() { on = true; next(); },
+      stop() { on = false; cancelAnimationFrame(raf); clearTimeout(tm); raf = tm = 0; act.wakers.delete(next); },
+      next,
+      get on() { return on; }
+    };
+  }
+  const calm = { get state() { return act.state; }, poke, onWake, loop };
   /* ------------------------------------------------------------------ */
   /* value noise (seeded, so the scene looks the same on every visit)   */
   /* ------------------------------------------------------------------ */
@@ -157,7 +219,7 @@ window.BasilScene = (() => {
   function initBackground(canvas) {
     if (!canvas || !canvas.getContext) return null;
     const ctx = canvas.getContext('2d');
-    let W = 0, H = 0, dpr = 1, raf = 0, last = 0;
+    let W = 0, H = 0, dpr = 1, last = 0;
     let pal = null, sprites = [], sheens = [], glow = null, flyGlow = null, beams = [];
     let leaves = [], motes = [], flies = [], sparks = [];
     const ptr = { x: -9999, y: -9999, vx: 0, vy: 0, seen: 0 };
@@ -476,13 +538,15 @@ window.BasilScene = (() => {
 
     const ready = gate(60, 30);
     let prevTs = 0, ema = 16.7, warm = 0;
+    const L = loop(frame);
     function frame(ts) {
-      raf = requestAnimationFrame(frame);
-      // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps
-      if (prevTs) {
-        const iv = Math.min(100, ts - prevTs);
+      L.next();
+      // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps.
+      // Only while active: calm frames are slow on purpose, and a pause is not a missed frame
+      const iv = ts - prevTs;
+      if (prevTs && iv < 150 && calm.state === 'active') {
         if (warm < 90) warm++;
-        else { ema += (iv - ema) * 0.05; if (ema > 24) setLow(); }
+        else { ema += (Math.min(100, iv) - ema) * 0.05; if (ema > 24) setLow(); }
       }
       prevTs = ts;
       if (!ready(ts)) return;
@@ -498,11 +562,11 @@ window.BasilScene = (() => {
     perf.listeners.push(() => { resize(); });
 
     function start() {
-      cancelAnimationFrame(raf);
+      L.stop();
       if (reduce.matches) { render(now(), 0); return; }
       last = performance.now() / 1000;
       prevTs = 0;
-      raf = requestAnimationFrame(frame);
+      L.start();
     }
 
     function burst(x, y) {
@@ -567,7 +631,7 @@ window.BasilScene = (() => {
       populate();
       if (reduce.matches) render(now(), 0);
     });
-    document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else start(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) L.stop(); else start(); });
     if (reduce.addEventListener) reduce.addEventListener('change', start);
     return { burst };
   }
@@ -668,7 +732,9 @@ window.BasilScene = (() => {
     const base = { x: o.x || 0, y: o.y || 0 };
     const growDur = o.growDur || 2.4;
     let shoots = [];
-    let raf = 0, last = 0, visible = true, running = false;
+    let last = 0, visible = true, running = false;
+    // the breeze on the plant: 1 while the reader does something, dies down to 0 when the page is left alone
+    let breeze = 1;
     const ptr = { x: -9999, y: -9999, speed: 0, down: false, lastAroma: 0 };
     let bitmaps = null;
     // o.raster: swap vector leaves for bitmaps once they are drawn (and again after a theme change)
@@ -805,14 +871,16 @@ window.BasilScene = (() => {
     }
 
     function draw(t, dt) {
-      const w = o.static || reduce.matches ? 0 : wind(t, base.x);
+      if (dt > 0) breeze += ((calm.state === 'active' ? 1 : 0) - breeze) * Math.min(1, dt * 1.5);
+      const b = o.static || reduce.matches ? 0 : breeze;
+      const w = b ? wind(t, base.x) * b : 0;
       for (const s of shoots) {
         if (!s.started && s.parent && s.parent.grow * (s.parent.spec.internodes.length + 1.5) > s.at + 2) s.started = true;
         if (s.started && s.grow < 1 && dt > 0) s.grow = Math.min(1, s.grow + dt / (growDur * (s.parent ? 0.8 : 1)));
         if (!s.started) s.grow = 0;
         s.sv += (-38 * s.sw - 5 * s.sv) * dt;
         s.sw += s.sv * dt;
-        s.bend = (w * 0.07 + Math.sin(t * 1.3 + s.spec.id.length) * 0.012) * s.spec.flex * (o.sway || 1) + s.sw;
+        s.bend = (w * 0.07 + Math.sin(t * 1.3 + s.spec.id.length) * 0.012 * b) * s.spec.flex * (o.sway || 1) + s.sw;
       }
       for (const s of shoots) {
         if (!s.parent) layout(s, base, 0);
@@ -835,7 +903,7 @@ window.BasilScene = (() => {
           if (!p || e <= 0.02) { if (lf._vis !== false) { lf._vis = false; lf.el.style.display = 'none'; } continue; }
           if (lf._vis !== true) { lf._vis = true; lf.el.style.display = ''; }
           const g = Math.pow(Math.max(0, (e - 0.25) / 0.75), 0.8);
-          const flutter = Math.sin(t * 2.2 + lf.ph) * 2.2 * (1 + Math.abs(w)) + w * 7;
+          const flutter = Math.sin(t * 2.2 + lf.ph) * 2.2 * b * (1 + Math.abs(w)) + w * 7;
           if (dt > 0) {
             lf.v += (-60 * lf.a - 7 * lf.v) * dt;
             lf.a += lf.v * dt;
@@ -893,14 +961,16 @@ window.BasilScene = (() => {
       return best;
     }
 
-    // growth and touch get up to 60 fps; gentle idle swaying needs no more than 30
-    const fast = gate(60, 30), calm = gate(30, 30);
+    // growth and touch get up to 60 fps; the slow sway in the breeze looks the same at 20
+    const fast = gate(60, 30), slow = gate(20, 20);
+    // nothing moves any more: no growth, no touch, the breeze has died down, every leaf at rest
+    const settled = () => breeze < 0.01 && ptr.x < -9000 && shoots.every(sh => sh.grow >= 1 && Math.abs(sh.sv) < 0.01 && Math.abs(sh.sw) < 0.003 && sh.leaves.every(lf => Math.abs(lf.v) < 0.4 && Math.abs(lf.a) < 0.15));
+    const L = loop(frame);
     function frame(ts) {
-      raf = 0;
-      if (!visible || document.hidden) { running = false; return; }
-      raf = requestAnimationFrame(frame);
+      if (!visible || document.hidden) { running = false; L.stop(); return; }
+      L.next();
       const active = ptr.x > -9000 || ptr.speed > 2 || shoots.some(sh => sh.grow < 1 || Math.abs(sh.sv) > 0.02);
-      if (!(active ? fast(ts) : calm(ts))) return;
+      if (!(active ? fast(ts) : slow(ts))) return;
       const t = ts / 1000;
       let dt = t - last;
       last = t;
@@ -908,13 +978,15 @@ window.BasilScene = (() => {
       pushFromPointer();
       ptr.speed *= 0.85;
       draw(t, Math.max(0, dt));
+      // the plant stands still: no frames until the reader comes back
+      if (calm.state !== 'active' && settled()) { L.stop(); running = false; calm.onWake(wake); }
     }
     function wake() {
       if (reduce.matches || o.static) { draw(now(), 0); return; }
-      if (raf) return;
+      if (L.on) return;
       running = true;
       last = performance.now() / 1000;
-      raf = requestAnimationFrame(frame);
+      L.start();
     }
 
     const toLocal = e => {
@@ -1015,5 +1087,5 @@ window.BasilScene = (() => {
     if (opts.onNote) opts.onNote(name, note);
   }
 
-  return { wind, gust, noise3, initBackground, Plant, basil, bush, aroma, reduce, gate, perf };
+  return { wind, gust, noise3, initBackground, Plant, basil, bush, aroma, reduce, gate, perf, calm, loop };
 })();

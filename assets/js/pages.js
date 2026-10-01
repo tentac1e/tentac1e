@@ -582,7 +582,7 @@ window.BASIL_PAGES = {
    "kalendar": "89a91a01",
    "uhod": "2811de83",
    "udobreniya": "e3cdb57b",
-   "formirovka": "cfad0b16",
+   "formirovka": "b0a1cc4f",
    "urozhay": "d2268890",
    "vkus": "04324c77",
    "razmnozhenie": "0f4e77a4",

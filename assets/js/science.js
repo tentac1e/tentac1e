@@ -490,10 +490,13 @@ window.BasilScience = (() => {
         }
       }
     }
-    const ready = window.BasilScene && window.BasilScene.gate ? window.BasilScene.gate(60, 30) : () => true;
+    const SC = window.BasilScene;
+    const ready = SC && SC.gate ? SC.gate(60, 30) : () => true;
     function frame(ts) {
       raf = 0;
       if (!visible || document.hidden) return;
+      // the page is left alone: the molecule stops turning until the reader comes back
+      if (SC && SC.calm && SC.calm.state === 'sleep' && !drag) { SC.calm.onWake(wake); return; }
       raf = requestAnimationFrame(frame);
       if (!drag && !ready(ts)) return;
       const t = ts / 1000, dt = Math.min(0.05, t - (last || t));
@@ -556,6 +559,36 @@ window.BasilScience = (() => {
   let ctx = {};
 
   const failed = el => { el.innerHTML = '<p class="muted">Модель не загрузилась. Обновите страницу.</p>'; };
+
+  /* what comes near the screen is built a piece at a time: up to ~8 ms of work per turn, the nearest to the
+     middle of the screen first — scrolling and taps never wait for a whole row of pictures and models */
+  const work = [];
+  let working = false;
+  const pause = () => (window.scheduler && typeof window.scheduler.yield === 'function' ? window.scheduler.yield() : new Promise(r => setTimeout(r, 0)));
+  // top: where the element stands on the page (an observer entry gives it without measuring again);
+  // the order is decided by those numbers alone — measuring between drawings would lay the page out each time
+  function later(el, fn, top) {
+    if (el._queued) return;
+    el._queued = fn;
+    el._top = top != null ? top : el.getBoundingClientRect().top + scrollY;
+    work.push(el);
+    // never in the task that asked: an observer callback or a script that just loaded ends first
+    if (!working) { working = true; pause().then(drain); }
+  }
+  async function drain() {
+    while (work.length) {
+      const mid = scrollY + innerHeight / 2;
+      if (work.length > 1) work.sort((a, b) => Math.abs(a._top - mid) - Math.abs(b._top - mid));
+      const t0 = performance.now();
+      while (work.length && performance.now() - t0 < 8) {
+        const el = work.shift(), fn = el._queued;
+        el._queued = null;
+        try { fn(el); } catch (err) { console.error('[basil]', err); }
+      }
+      if (work.length) await pause();
+    }
+    working = false;
+  }
   function mount(el) {
     if (el.dataset.ready) return;
     const fn = labs[el.dataset.lab];
@@ -564,7 +597,7 @@ window.BasilScience = (() => {
       const host = el.closest('[data-view]');
       if (!host || el.dataset.loading) return;
       el.dataset.loading = '1';
-      ensureLabs(host.dataset.view).then(() => { delete el.dataset.loading; if (labs[el.dataset.lab]) mount(el); else failed(el); }, () => { delete el.dataset.loading; failed(el); });
+      ensureLabs(host.dataset.view).then(() => { delete el.dataset.loading; if (labs[el.dataset.lab]) later(el, mount, el._top); else failed(el); }, () => { delete el.dataset.loading; failed(el); });
       return;
     }
     el.dataset.ready = '1';
@@ -573,7 +606,7 @@ window.BasilScience = (() => {
   function mountAll() {
     const tools = $$('.lab-tool[data-lab]');
     if (!('IntersectionObserver' in window)) { tools.forEach(mount); return; }
-    const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { mount(en.target); io.unobserve(en.target); } }), { rootMargin: '200px 0px' });
+    const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { later(en.target, mount, en.boundingClientRect.top + scrollY); io.unobserve(en.target); } }), { rootMargin: '200px 0px' });
     tools.forEach(t => io.observe(t));
   }
 
@@ -592,18 +625,20 @@ window.BasilScience = (() => {
       const host = el.closest('[data-view]');
       if (!host || el.dataset.loading) return;
       el.dataset.loading = '1';
-      ensureLabs(host.dataset.view).then(() => { delete el.dataset.loading; if (ills[name]) draw(el); }, () => { delete el.dataset.loading; });
+      ensureLabs(host.dataset.view).then(() => { delete el.dataset.loading; if (ills[name]) later(el, drawDue, el._top); }, () => { delete el.dataset.loading; });
       return;
     }
     try { el.innerHTML = fn(arg, el); el.dataset.drawn = el.dataset.ill; fitLabels(el); } catch (err) { console.error('[basil] illustration ' + el.dataset.ill, err); }
   }
+  // from the queue: drawn only if nothing drew it in the meantime (a tap, an eager paint)
+  const drawDue = el => { if (el.isConnected && el.dataset.drawn !== el.dataset.ill) draw(el); };
   let illIO = null;
   // eager: draw now (a gallery the reader sees at once, or a picture replaced on a tap)
   function paint(root = document, eager = false) {
     const list = $$('[data-ill]', root).filter(el => el.dataset.drawn !== el.dataset.ill);
     if (root !== document && root.matches && root.matches('[data-ill]')) list.push(root);
     if (eager || !('IntersectionObserver' in window)) { list.forEach(draw); return; }
-    if (!illIO) illIO = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { draw(en.target); illIO.unobserve(en.target); } }), { rootMargin: '400px 0px' });
+    if (!illIO) illIO = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { later(en.target, drawDue, en.boundingClientRect.top + scrollY); illIO.unobserve(en.target); } }), { rootMargin: '400px 0px' });
     list.forEach(el => illIO.observe(el));
   }
 

@@ -80,7 +80,7 @@
   function initBackground(canvas) {
     if (!canvas || !canvas.getContext) return null;
     const ctx = canvas.getContext('2d');
-    let W = 0, H = 0, dpr = 1, raf = 0, last = 0;
+    let W = 0, H = 0, dpr = 1, last = 0;
     let pal = null, sprites = [], sheens = [], glow = null, flyGlow = null, beams = [];
     let leaves = [], motes = [], flies = [], sparks = [];
     const ptr = { x: -9999, y: -9999, vx: 0, vy: 0, seen: 0 };
@@ -399,13 +399,15 @@
 
     const ready = gate(60, 30);
     let prevTs = 0, ema = 16.7, warm = 0;
+    const L = loop(frame);
     function frame(ts) {
-      raf = requestAnimationFrame(frame);
-      // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps
-      if (prevTs) {
-        const iv = Math.min(100, ts - prevTs);
+      L.next();
+      // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps.
+      // Only while active: calm frames are slow on purpose, and a pause is not a missed frame
+      const iv = ts - prevTs;
+      if (prevTs && iv < 150 && calm.state === 'active') {
         if (warm < 90) warm++;
-        else { ema += (iv - ema) * 0.05; if (ema > 24) setLow(); }
+        else { ema += (Math.min(100, iv) - ema) * 0.05; if (ema > 24) setLow(); }
       }
       prevTs = ts;
       if (!ready(ts)) return;
@@ -421,11 +423,11 @@
     perf.listeners.push(() => { resize(); });
 
     function start() {
-      cancelAnimationFrame(raf);
+      L.stop();
       if (reduce.matches) { render(now(), 0); return; }
       last = performance.now() / 1000;
       prevTs = 0;
-      raf = requestAnimationFrame(frame);
+      L.start();
     }
 
     function burst(x, y) {
@@ -490,7 +492,7 @@
       populate();
       if (reduce.matches) render(now(), 0);
     });
-    document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else start(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) L.stop(); else start(); });
     if (reduce.addEventListener) reduce.addEventListener('change', start);
     return { burst };
   }
