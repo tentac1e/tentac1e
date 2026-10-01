@@ -309,15 +309,15 @@
 <button class="to-top" id="to-top" type="button" aria-label="Наверх"><svg class="ico"><use href="#i-arrow-up"/></svg></button>
 
 <!-- sheets -->
-<dialog class="sheet" id="sheet-chapters" aria-labelledby="sheet-chapters-h">
+<dialog class="sheet" id="sheet-chapters" aria-labelledby="sheet-chapters-h" tabindex="-1">
+  <div class="sheet-top"><span class="sheet-grab" aria-hidden="true"></span><div class="sheet-head"><h2 id="sheet-chapters-h">Главы</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div></div>
   <div class="sheet-inner">
-    <div class="sheet-head"><h2 id="sheet-chapters-h">Главы</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
     <nav class="sheet-list" id="sheet-chapters-list" aria-label="Главы"></nav>
   </div>
 </dialog>
-<dialog class="sheet" id="sheet-tools" aria-labelledby="sheet-tools-h">
+<dialog class="sheet" id="sheet-tools" aria-labelledby="sheet-tools-h" tabindex="-1">
+  <div class="sheet-top"><span class="sheet-grab" aria-hidden="true"></span><div class="sheet-head"><h2 id="sheet-tools-h">Инструменты</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div></div>
   <div class="sheet-inner">
-    <div class="sheet-head"><h2 id="sheet-tools-h">Инструменты</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
     <nav class="sheet-list" id="sheet-tools-list" aria-label="Инструменты"></nav>
   </div>
 </dialog>
@@ -331,9 +331,9 @@
     <div class="search-results" id="search-results" role="listbox" aria-label="Результаты поиска"></div>
   </div>
 </dialog>
-<dialog class="sheet sheet-variety" id="sheet-variety" aria-labelledby="variety-h">
+<dialog class="sheet sheet-variety" id="sheet-variety" aria-labelledby="variety-h" tabindex="-1">
+  <div class="sheet-top sheet-top-bare"><span></span><span class="sheet-grab" aria-hidden="true"></span><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
   <div class="sheet-inner">
-    <div class="sheet-head"><span></span><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
     <div id="variety-detail"></div>
   </div>
 </dialog>

@@ -67,6 +67,54 @@ const { playwright, server, ok, done } = require('./lib');
   await page.tap('.sheet-tabs .chip:nth-child(4)');
   await page.waitForTimeout(800);
   ok(await page.evaluate(() => document.querySelector('.panel.is-active').id === 'план' && !document.getElementById('sheet-chapters').open), 'sheet tab chip → ' + path());
+  // a sheet follows the finger: by its grabber, by the list when the list is at its top; short of a third
+  // it springs back, past it or on a flick it closes; the page under it never moves
+  const cdp = await ctx.newCDPSession(page);
+  let clock = 0;
+  const send = (type, pts) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts, timestamp: clock });
+  // the finger at its own pace: the event clock steps `ms` per move however slow the machine is
+  const drag = async (x, y0, y1, steps = 8, ms = 40) => { clock = Date.now() / 1000; await send('touchStart', [{ x, y: y0 }]); for (let i = 1; i <= steps; i++) { clock += ms / 1000; await send('touchMove', [{ x, y: y0 + (y1 - y0) * i / steps }]); } };
+  // let go after holding still, or at once (a flick keeps its speed)
+  const lift = async (held = true) => { clock = held ? Math.max(clock + 0.5, Date.now() / 1000) : clock + 0.016; await send('touchEnd', []); };
+  const sheet = () => page.evaluate(() => { const d = document.getElementById('sheet-chapters'); const r = d.getBoundingClientRect(); return { open: d.open, top: Math.round(r.top), h: Math.round(r.height), fade: +getComputedStyle(d, '::backdrop').opacity, list: Math.round(d.querySelector('.sheet-inner').scrollTop), focus: document.activeElement === d, y: Math.round(scrollY) }; });
+  const openCh = async () => { await page.tap('.tabbar [data-open="sheet-chapters"]'); await page.waitForTimeout(600); return sheet(); };
+  const s0 = await openCh();
+  const grab = await page.evaluate(() => { const r = document.querySelector('#sheet-chapters .sheet-grab').getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; });
+  await drag(grab[0], grab[1], grab[1] + 100);
+  const s1 = await sheet();
+  await lift();
+  await page.waitForTimeout(450);
+  const s2 = await sheet();
+  ok(s0.open && s0.focus && Math.abs(s1.top - s0.top - 100) <= 2 && s1.fade < 0.9 && s2.open && s2.top === s0.top, 'sheet follows the grabber, springs back ' + JSON.stringify([s0, s1, s2]));
+  await page.evaluate(() => { document.querySelector('#sheet-chapters .sheet-inner').scrollTop = 300; });
+  await drag(200, s0.top + 300, s0.top + 450, 10);
+  await lift();
+  await page.waitForTimeout(400);
+  const s3 = await sheet();
+  await page.evaluate(() => { document.querySelector('#sheet-chapters .sheet-inner').scrollTop = 0; });
+  await drag(200, s0.top + 300, s0.top + 420, 8);
+  const s4 = await sheet();
+  await lift();
+  await page.waitForTimeout(450);
+  ok(s3.open && s3.top === s0.top && s3.list < 300 && s4.top > s0.top + 60, 'the list scrolls, at its top the sheet goes ' + JSON.stringify([s3, s4]));
+  await drag(grab[0], grab[1], grab[1] + s0.h * 0.45, 10);
+  await lift();
+  await page.waitForTimeout(500);
+  const s5 = await sheet();
+  await openCh();
+  await drag(grab[0], grab[1], grab[1] + 60, 4, 12);
+  await lift(false);
+  await page.waitForTimeout(500);
+  const s6 = await sheet();
+  await openCh();
+  await drag(200, 40, 300, 8);
+  await lift();
+  await page.waitForTimeout(300);
+  const s7 = await sheet();
+  ok(!s5.open && !s6.open && s7.open && s7.y === s0.y, 'closes past a third and on a flick; the backdrop does not scroll the page ' + JSON.stringify([s5.open, s6.open, s7]));
+  await page.tap('#sheet-chapters [data-close]');
+  await page.waitForTimeout(500);
+  ok(!(await sheet()).open, 'closes with ×');
   // haptics: taps and sliders
   const v0 = await page.evaluate(() => window.__vib);
   await page.tap('.subnav a[href="#калькулятор"]');

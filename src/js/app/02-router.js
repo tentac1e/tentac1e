@@ -184,7 +184,7 @@
       if (!u.startsWith('#')) { location.href = u; return; }
       hash = u;
       const dlg = a.closest('dialog');
-      if (dlg && dlg.open) dlg.close();
+      if (dlg && dlg.open) closeSheet(dlg);
       navigate(hash, { replace: !!a.closest('.subnav') });
     });
     window.addEventListener('popstate', () => route(location.hash));
