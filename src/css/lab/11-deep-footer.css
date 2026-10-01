@@ -14,6 +14,7 @@
   cursor: pointer;
   transition: background-color .2s, color .2s, transform .35s var(--ease-float);
 }
+@media (pointer: coarse) { .deep-close { min-height: 40px; } }
 .deep-close:hover { background: var(--k); color: var(--surface); transform: translateY(-2px); }
 
 .deeper {

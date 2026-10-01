@@ -23,7 +23,7 @@
   };
 
   // number + short word → non-breaking space ("20 °C", "1 г/л", "3 пары")
-  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1\u00a0');
+  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1\u00a0').replace(/(\d)–(?=\d)/g, '$1–\u2060').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060');
 
   const plural = (n, one, few, many) => {
     const a = Math.abs(n) % 100, b = a % 10;

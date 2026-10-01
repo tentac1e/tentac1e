@@ -54,5 +54,5 @@
     const pg = $('#pest-grid');
     if (pg) { pg.innerHTML = B.PESTS.map((d, i) => card(d, i, 'pest')).join(''); paintIll(pg); }
     const tt = $('#treat-table');
-    if (tt) tt.innerHTML = `<thead><tr><th scope="col">Средство</th><th scope="col">От чего</th><th scope="col">Как работает</th></tr></thead><tbody>${B.TREATMENTS.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td>${b}</td><td>${nb(c)}</td></tr>`).join('')}</tbody>`;
+    if (tt) tt.innerHTML = `<thead><tr><th scope="col">Средство</th><th scope="col">От чего</th><th scope="col">Как работает</th></tr></thead><tbody>${B.TREATMENTS.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td data-label="От чего">${b}</td><td data-label="Как работает">${nb(c)}</td></tr>`).join('')}</tbody>`;
   }

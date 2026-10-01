@@ -13,7 +13,7 @@ window.BasilScience = (() => {
   const nf = d => NF[d] || (NF[d] = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: d, minimumFractionDigits: d }));
   const fmt = (v, d = 1) => minus(nf(d).format(Number(v)));
   const fmt0 = v => minus(nf(0).format(Math.round(v)));
-  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1 ');
+  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1 ').replace(/(\d)–(?=\d)/g, '$1–\u2060').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060');
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const f1 = v => (Math.round(v * 10) / 10);
@@ -112,7 +112,11 @@ window.BasilScience = (() => {
       r.setAttribute('width', (rt - l + pad * 2).toFixed(1));
     });
   }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitLabels(document));
+  // and again whenever a font arrives: a caption drawn before its font came is narrower than it ends up
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => fitLabels(document));
+    if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => fitLabels(document));
+  }
   function chart(host, o) {
     const svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('class', 'lab-svg');
@@ -175,7 +179,7 @@ window.BasilScience = (() => {
     const YS = o.clip ? Yr : Y;
     if (o.clip) { const id = 'lab-clip-' + (++clipN); s += `<clipPath id="${id}"><rect x="${p.l}" y="${p.t - 2}" width="${iw}" height="${ih + 4}"/></clipPath><g clip-path="url(#${id})">`; }
     // what the captions keep clear of: every line of the series, the marker line and its dots
-    const segs = [], spots = [];
+    const segs = [[p.l, p.t + ih, p.l + iw, p.t + ih]], spots = []; // the axis is a line to keep clear of too
     (o.series || []).forEach(se => {
       const pts = se.pts.filter(pt => isFinite(pt[1]));
       if (!pts.length) return;
@@ -542,19 +546,26 @@ window.BasilScience = (() => {
      its chapter's file only when the first model scrolls near */
   const SELF = document.currentScript && document.currentScript.src;
   const loads = {};
-  function ensureLabs(view) {
-    if (!loads[view]) {
-      loads[view] = new Promise((resolve, reject) => {
+  // one script, once: assets/js/<path> with the fingerprint of its content
+  function script(key, path, v) {
+    if (!loads[key]) {
+      loads[key] = new Promise((resolve, reject) => {
         const tag = document.createElement('script');
-        const vs = window.BASIL_PAGES && window.BASIL_PAGES.v && window.BASIL_PAGES.v.labs;
-        const v = vs && vs[view] ? '?v=' + vs[view] : '';
-        tag.src = (SELF ? SELF.replace(/science\.js(\?.*)?$/, '') : 'assets/js/') + `labs/${view}.js` + v;
+        tag.src = (SELF ? SELF.replace(/science\.js(\?.*)?$/, '') : 'assets/js/') + path + (v ? '?v=' + v : '');
         tag.onload = resolve;
-        tag.onerror = () => { loads[view] = null; reject(new Error(`labs/${view}.js`)); };
+        tag.onerror = () => { loads[key] = null; reject(new Error(path)); };
         document.head.appendChild(tag);
       });
     }
-    return loads[view];
+    return loads[key];
+  }
+  // a chapter's models: the drawing libraries it needs first (kept in the cache from chapter to chapter),
+  // in their order, then the chapter's own file
+  function ensureLabs(view) {
+    const V = window.BASIL_PAGES && window.BASIL_PAGES.v;
+    const libs = (V && V.deps && V.deps[view]) || [];
+    return libs.reduce((p, x) => p.then(() => script('lib-' + x, `labs/lib-${x}.js`, V && V.lib && V.lib[x])), Promise.resolve())
+      .then(() => script(view, `labs/${view}.js`, V && V.labs && V.labs[view]));
   }
   let ctx = {};
 

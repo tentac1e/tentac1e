@@ -63,7 +63,7 @@
       tips.forEach(([x, yy, a]) => { g += `<ellipse cx="${qi(x + Math.sin(a) * 4)}" cy="${qi(yy + Math.cos(a) * 4)}" rx="2.8" ry="3.8" transform="rotate(${qi(-a * 180 / Math.PI)} ${qi(x + Math.sin(a) * 4)} ${qi(yy + Math.cos(a) * 4)})" fill="${Fi('spore')}" opacity=".9"/>`; });
       s += g;
     });
-    s += I.scale(w - 10, 18, 44, '50 мкм');
+    s += I.scale(w - 20, 22, 44, '50 мкм');
     return I.svg(w, hh, bg(w, hh) + s, 'Под микроскопом: спороносцы ложной мучнистой росы выходят из устьиц нижней стороны листа');
   }
   // Botrytis: tall conidiophores with bunches of spores, like grapes
@@ -79,7 +79,7 @@
         for (let c = 0; c < 7; c++) s += `<circle cx="${qi(bx + (rnd() - 0.5) * 9)}" cy="${qi(by + (rnd() - 0.5) * 8)}" r="${qi(2 + rnd())}" fill="${Fi('mold')}" stroke="${Fi('mold-d')}" stroke-width=".5"/>`;
       }
     }
-    s += I.scale(w - 10, 20, 44, '50 мкм');
+    s += I.scale(w - 20, 22, 44, '50 мкм');
     return I.svg(w, hh, bg(w, hh) + s, 'Под микроскопом: спороношение серой гнили — грозди спор на ветвистых ножках');
   }
   // Fusarium: the vessel ring of the stem turns brown
@@ -129,7 +129,7 @@
       s += `<rect x="${qi(x - 5)}" y="${qi(y - 1.8)}" width="10" height="3.6" rx="1.8" transform="rotate(${qi(t)} ${qi(x)} ${qi(y)})" fill="${Fi('bact')}"/>`;
       if (i % 3 === 0) s += `<path d="M${qi(x + 5)} ${qi(y)}q4 2 7 0" stroke="${Fi('bact')}" stroke-width=".6" fill="none" transform="rotate(${qi(t)} ${qi(x)} ${qi(y)})"/>`;
     }
-    s += I.scale(w - 10, 20, 44, '5 мкм');
+    s += I.scale(w - 20, 22, 44, '5 мкм');
     return I.svg(w, hh, bg(w, hh) + s, 'Под микроскопом: палочковидные бактерии в капле воды');
   }
   const DIS = [

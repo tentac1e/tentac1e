@@ -7,13 +7,37 @@
 <meta name="description" content="Черенки, свои семена и тест на всхожесть. Глава 9 гида по выращиванию базилика.">
 <meta name="theme-color" content="#2D6932">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30 C 16 22 16 16 16 10' stroke='%232D6932' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z' fill='%236AA83D' stroke='%231D4B22' stroke-width='1.6'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="assets/css/style.css?v=a9094f6e">
-<link rel="stylesheet" href="assets/css/lab.css?v=3aed4b07">
+<style>
+/* Шрифты сайта: файлы в src/fonts/, собирает scripts/fonts.py */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic-ext.woff2?v=ea9ad85a) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic.woff2?v=afe89756) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin-ext.woff2?v=5b59be73) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin.woff2?v=8a01467a) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic-ext.woff2?v=ad99a4c1) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic.woff2?v=4f12a1a0) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-vietnamese.woff2?v=e3000ed8) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin-ext.woff2?v=a3b94a5a) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin.woff2?v=52ea38a7) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic-ext.woff2?v=c18dbd11) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic.woff2?v=ac78c6c2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-vietnamese.woff2?v=8a92de9f) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin-ext.woff2?v=a9e49ee5) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin.woff2?v=74db058f) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic-ext.woff2?v=feae5721) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic.woff2?v=9d8db2e8) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-greek.woff2?v=bcedb9e2) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-vietnamese.woff2?v=326a88b4) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin-ext.woff2?v=06ad3600) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin.woff2?v=4f27206c) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic-ext.woff2?v=5d8e0798) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic.woff2?v=d8fc94bf) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-greek.woff2?v=1cb6f3ca) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-vietnamese.woff2?v=89cd8db6) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin-ext.woff2?v=1f62546f) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin.woff2?v=b4295101) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+</style>
+<link rel="stylesheet" href="assets/css/style.css?v=2ea577e9">
+<link rel="stylesheet" href="assets/css/lab.css?v=782c4418">
 </head>
 <body>
 <script>document.documentElement.classList.add('js');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
@@ -290,7 +314,7 @@
       <div class="ch-hero-text">
         <p class="eyebrow">Глава 9</p>
         <h1>Черенки и свои <em>семена</em></h1>
-        <p class="lead">Черенок укореняется в стакане воды за 1–2 недели и через месяц даёт урожай. А свои семена позволяют каждый год сажать любимый сорт бесплатно.</p>
+        <p class="lead">Черенок укореняется в стакане воды за 1–⁠2 недели и через месяц даёт урожай. А свои семена позволяют каждый год сажать любимый сорт бесплатно.</p>
       </div>
       <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-razmnozhenie"/></svg></span></div>
     </header>
@@ -302,16 +326,16 @@
       <p class="g-invite"><button class="btn btn-ghost btn-small" type="button" data-garden-add="cutting"><svg class="ico"><use href="#i-sprout"/></svg>Поставил черенок — добавить в «Мой базилик»</button><span>Гид напомнит, когда прищипнуть, подкормить и срезать.</span></p>
       <div class="two-col">
         <ol class="steps">
-          <li class="step card"><span class="step-num">1</span><div><h4 id="razmnozhenie-h1">Выберите побег</h4><span class="step-ill" data-ill="cut:1" aria-hidden="true"></span><p>Здоровая верхушка длиной 8–12&nbsp;см с 3–4 парами листьев, без бутонов. Срежьте чуть ниже узла.</p></div></li>
+          <li class="step card"><span class="step-num">1</span><div><h4 id="razmnozhenie-h1">Выберите побег</h4><span class="step-ill" data-ill="cut:1" aria-hidden="true"></span><p>Здоровая верхушка длиной 8–⁠12&nbsp;см с 3–⁠4 парами листьев, без бутонов. Срежьте чуть ниже узла.</p></div></li>
           <li class="step card"><span class="step-num">2</span><div><h4 id="razmnozhenie-h2">Уберите нижние листья</h4><span class="step-ill" data-ill="cut:2" aria-hidden="true"></span><p>Оборвите листья с нижней трети черенка: в воде они сгниют. Крупные верхние листья можно укоротить наполовину.</p></div></li>
-          <li class="step card"><span class="step-num">3</span><div><h4 id="razmnozhenie-h3">Поставьте в воду</h4><span class="step-ill" data-ill="cut:3" aria-hidden="true"></span><p>Вода комнатной температуры, 1–2 нижних узла под водой. Место светлое, но без прямого солнца.</p></div></li>
-          <li class="step card"><span class="step-num">4</span><div><h4 id="razmnozhenie-h4">Меняйте воду</h4><span class="step-ill" data-ill="cut:4" aria-hidden="true"></span><p>Каждые 2–3 дня. Белые корешки появятся через 5–14 дней.</p></div></li>
-          <li class="step card"><span class="step-num">5</span><div><h4 id="razmnozhenie-h5">Посадите в грунт</h4><span class="step-ill" data-ill="cut:5" aria-hidden="true"></span><p>Когда корни отрастут на 2–5&nbsp;см. Первые 3–4 дня притеняйте и накрывайте пакетом, чтобы черенок не вял.</p></div></li>
+          <li class="step card"><span class="step-num">3</span><div><h4 id="razmnozhenie-h3">Поставьте в воду</h4><span class="step-ill" data-ill="cut:3" aria-hidden="true"></span><p>Вода комнатной температуры, 1–⁠2 нижних узла под водой. Место светлое, но без прямого солнца.</p></div></li>
+          <li class="step card"><span class="step-num">4</span><div><h4 id="razmnozhenie-h4">Меняйте воду</h4><span class="step-ill" data-ill="cut:4" aria-hidden="true"></span><p>Каждые 2–⁠3 дня. Белые корешки появятся через 5–⁠14 дней.</p></div></li>
+          <li class="step card"><span class="step-num">5</span><div><h4 id="razmnozhenie-h5">Посадите в грунт</h4><span class="step-ill" data-ill="cut:5" aria-hidden="true"></span><p>Когда корни отрастут на 2–⁠5&nbsp;см. Первые 3–⁠4 дня притеняйте и накрывайте пакетом, чтобы черенок не вял.</p></div></li>
         </ol>
         <aside class="sticky-side">
           <div class="card">
             <h3 id="razmnozhenie-h6">Зимовка через черенки</h3>
-            <p>В конце августа или в сентябре укорените 3–5 черенков с уличных кустов. К зиме на подоконнике будут молодые растения. Взрослый куст с грядки переносит переезд плохо.</p>
+            <p>В конце августа или в сентябре укорените 3–⁠5 черенков с уличных кустов. К зиме на подоконнике будут молодые растения. Взрослый куст с грядки переносит переезд плохо.</p>
           </div>
           <div class="card">
             <h3 id="razmnozhenie-h7">Можно сразу в грунт</h3>
@@ -347,7 +371,7 @@
                 <p>Корни, выросшие в воде, отличаются от почвенных: они тоньше, с меньшим числом корневых волосков и приспособлены брать кислород из воды. После посадки в грунт им нужно несколько дней на перестройку — отсюда совет притенять черенок и накрывать его пакетом.</p>
               </div>
               <aside class="deep-aside">
-                <div class="num-note"><b>5–14 дней</b><span>до появления корешков в воде при комнатной температуре</span></div>
+                <div class="num-note"><b>5–⁠14 дней</b><span>до появления корешков в воде при комнатной температуре</span></div>
               </aside>
             </div>
             <div class="lab-tool" data-lab="roots" data-kind="bio"></div>
@@ -372,20 +396,20 @@
     <div class="panel" data-panel id="семена" data-title="Свои семена">
       <div class="two-col">
         <ol class="steps">
-          <li class="step card"><span class="step-num">1</span><div><h4 id="razmnozhenie-h8">Выберите куст</h4><span class="step-ill" data-ill="seed:1" aria-hidden="true"></span><p>1–2 самых здоровых и ароматных растения сортового (не F1) базилика. Дайте им зацвести.</p></div></li>
+          <li class="step card"><span class="step-num">1</span><div><h4 id="razmnozhenie-h8">Выберите куст</h4><span class="step-ill" data-ill="seed:1" aria-hidden="true"></span><p>1–⁠2 самых здоровых и ароматных растения сортового (не F1) базилика. Дайте им зацвести.</p></div></li>
           <li class="step card"><span class="step-num">2</span><div><h4 id="razmnozhenie-h9">Позаботьтесь о чистоте сорта</h4><span class="step-ill" data-ill="seed:2" aria-hidden="true"></span><p>Базилик опыляют насекомые, и разные сорта переопыляются. Для чистых семян пусть в сезон цветёт один сорт или разнесите сорта подальше друг от друга.</p></div></li>
-          <li class="step card"><span class="step-num">3</span><div><h4 id="razmnozhenie-h10">Дождитесь созревания</h4><span class="step-ill" data-ill="seed:3" aria-hidden="true"></span><p>Через 4–6 недель после начала цветения нижние чашечки соцветия буреют и подсыхают, семена внутри становятся чёрными.</p></div></li>
-          <li class="step card"><span class="step-num">4</span><div><h4 id="razmnozhenie-h11">Срежьте и досушите</h4><span class="step-ill" data-ill="seed:4" aria-hidden="true"></span><p>В сухой день срежьте кисти и досушите 1–2 недели в бумажном пакете в тени.</p></div></li>
+          <li class="step card"><span class="step-num">3</span><div><h4 id="razmnozhenie-h10">Дождитесь созревания</h4><span class="step-ill" data-ill="seed:3" aria-hidden="true"></span><p>Через 4–⁠6 недель после начала цветения нижние чашечки соцветия буреют и подсыхают, семена внутри становятся чёрными.</p></div></li>
+          <li class="step card"><span class="step-num">4</span><div><h4 id="razmnozhenie-h11">Срежьте и досушите</h4><span class="step-ill" data-ill="seed:4" aria-hidden="true"></span><p>В сухой день срежьте кисти и досушите 1–⁠2 недели в бумажном пакете в тени.</p></div></li>
           <li class="step card"><span class="step-num">5</span><div><h4 id="razmnozhenie-h12">Обмолотите</h4><span class="step-ill" data-ill="seed:5" aria-hidden="true"></span><p>Разотрите кисти между ладонями над миской и отвейте лёгкий мусор, осторожно подув или через сито.</p></div></li>
-          <li class="step card"><span class="step-num">6</span><div><h4 id="razmnozhenie-h13">Храните</h4><span class="step-ill" data-ill="seed:6" aria-hidden="true"></span><p>В бумажном конверте в сухом прохладном месте. Подпишите сорт и год: всхожесть сохранится 4–5 лет.</p></div></li>
+          <li class="step card"><span class="step-num">6</span><div><h4 id="razmnozhenie-h13">Храните</h4><span class="step-ill" data-ill="seed:6" aria-hidden="true"></span><p>В бумажном конверте в сухом прохладном месте. Подпишите сорт и год: всхожесть сохранится 4–⁠5 лет.</p></div></li>
         </ol>
         <aside class="sticky-side">
           <div class="pane germ-tool">
             <h3 id="razmnozhenie-h14">Тест на всхожесть</h3>
             <ol class="plain-ol">
-              <li>Разложите 10 семян на влажное бумажное полотенце.</li>
-              <li>Сверните и уберите в пакет, держите при 22–25&nbsp;°C.</li>
-              <li>Через 5–7 дней посчитайте проросшие.</li>
+              <li>Разложите 10 семян на влажное бумажное полотенце.</li>
+              <li>Сверните и уберите в пакет, держите при 22–⁠25&nbsp;°C.</li>
+              <li>Через 5–⁠7 дней посчитайте проросшие.</li>
             </ol>
             <div class="field"><label for="germ-count">Проросло из 10: <b id="germ-val">8</b></label><input class="range" type="range" id="germ-count" min="0" max="10" step="1" value="8"></div>
             <p class="germ-out" id="germ-out" aria-live="polite"></p>
@@ -404,7 +428,7 @@
         <details class="deep" id="deep-genetika" data-kind="bio" data-short="Генетика семян">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Генетика своих семян</span><span class="deep-sub">Перекрёстное опыление, F1 и расщепление признаков</span></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Генетика своих семян</span><span class="deep-sub">Перекрёстное опыление, F1 и расщепление признаков</span></span>
             <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
           </span></summary>
           <div class="deep-body">
@@ -412,7 +436,7 @@
               <div class="deep-text">
                 <p>Цветок базилика обоеполый и может опылиться своей пыльцой, но пчёлы и шмели охотно переносят пыльцу между кустами. Если рядом цветут разные сорта, семена окажутся гибридами. Семеноводы-любители разносят сорта на десятки метров (ориентир — около 50&nbsp;м) или надевают на соцветия мешочки из тонкой ткани.</p>
                 <p>Сортовые семена повторяют сорт, потому что его долго отбирали на однородность. Гибрид F1 получают из двух разных родительских линий, и все его растения одинаковы. Но в следующем поколении гены родителей перекомбинируются: из одного пакета вырастают кусты разной высоты, окраски и запаха.</p>
-                <p>Базилик генетически сложнее гороха Менделя. У большинства сортов 48 хромосом, и многие гены присутствуют в нескольких копиях. Поэтому расщепление признаков у него пестрее простого «3 к 1».</p>
+                <p>Базилик генетически сложнее гороха Менделя. У большинства сортов 48 хромосом, и многие гены присутствуют в нескольких копиях. Поэтому расщепление признаков у него пестрее простого «3 к 1».</p>
               </div>
               <aside class="deep-aside">
                 <div class="num-note"><b>2n = 48</b><span>число хромосом у большинства сортов базилика душистого</span></div>
@@ -444,7 +468,7 @@
             <div class="deep-grid">
               <div class="deep-text">
                 <p>Семя — живой организм в анабиозе. Даже сухим в нём медленно идут химические реакции: окисляются липиды мембран, повреждается ДНК, разрушаются ферменты. Их скорость зависит от температуры и влажности семян.</p>
-                <p>Семеновод Джеймс Харрингтон вывел простые правила: каждое снижение влажности семян на 1&nbsp;% (в диапазоне 5–14&nbsp;%) и каждое снижение температуры хранения на 5&nbsp;°C (в диапазоне 0–50&nbsp;°C) примерно удваивают срок их жизни. И ещё одно: сумма температуры в градусах Фаренгейта и относительной влажности воздуха в процентах не должна превышать 100.</p>
+                <p>Семеновод Джеймс Харрингтон вывел простые правила: каждое снижение влажности семян на 1&nbsp;% (в диапазоне 5–⁠14&nbsp;%) и каждое снижение температуры хранения на 5&nbsp;°C (в диапазоне 0–⁠50&nbsp;°C) примерно удваивают срок их жизни. И ещё одно: сумма температуры в градусах Фаренгейта и относительной влажности воздуха в процентах не должна превышать 100.</p>
                 <p>Поэтому бумажный конверт в сухом шкафу — хорошо, а закрытая банка с силикагелем в холодильнике — ещё лучше. Холодную банку не открывайте сразу: на холодных семенах конденсируется влага.</p>
               </div>
               <aside class="deep-aside">
@@ -541,10 +565,10 @@
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
 <script src="assets/js/haptics.js?v=8488e836" defer></script>
-<script src="assets/js/data.js?v=44aaf208" defer></script>
-<script src="assets/js/pages.js?v=4301a387" defer></script>
+<script src="assets/js/data.js?v=3020ad0c" defer></script>
+<script src="assets/js/pages.js?v=66e256a9" defer></script>
 <script src="assets/js/scene.js?v=82c1b091" defer></script>
-<script src="assets/js/science.js?v=d98efc6e" defer></script>
-<script src="assets/js/app.js?v=bbd14ecd" defer></script>
+<script src="assets/js/science.js?v=c5ecffe8" defer></script>
+<script src="assets/js/app.js?v=1752bce4" defer></script>
 </body>
 </html>

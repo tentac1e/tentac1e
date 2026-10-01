@@ -23,6 +23,7 @@ window.BASIL_PAGES = {
  },
  "ids": {
   "aroma-layer": "glavnaya",
+  "cal-cities": "kalendar",
   "cal-copy": "kalendar",
   "cal-date": "kalendar",
   "cal-date-label": "kalendar",
@@ -577,16 +578,66 @@ window.BASIL_PAGES = {
  },
  "v": {
   "labs": {
-   "sorta": "6f32c45a",
-   "posadka": "b530f441",
-   "kalendar": "89a91a01",
-   "uhod": "2811de83",
-   "udobreniya": "e3cdb57b",
-   "formirovka": "b0a1cc4f",
-   "urozhay": "d2268890",
-   "vkus": "04324c77",
-   "razmnozhenie": "0f4e77a4",
-   "problemy": "c167094e"
+   "sorta": "58700991",
+   "posadka": "68cc4e3d",
+   "kalendar": "c0e39965",
+   "uhod": "8a9e6b91",
+   "udobreniya": "e08e0d23",
+   "formirovka": "69e9f31a",
+   "urozhay": "0a8774ee",
+   "vkus": "d370f027",
+   "razmnozhenie": "ad1d9e3d",
+   "problemy": "a8367070"
+  },
+  "lib": {
+   "micro": "674edf0a",
+   "ills": "f733c56f",
+   "props": "ea0f3c5e",
+   "food": "9bdffc59"
+  },
+  "deps": {
+   "sorta": [
+    "micro",
+    "ills"
+   ],
+   "posadka": [
+    "micro",
+    "ills",
+    "props"
+   ],
+   "kalendar": [],
+   "uhod": [
+    "micro",
+    "ills",
+    "props"
+   ],
+   "udobreniya": [
+    "micro",
+    "ills"
+   ],
+   "formirovka": [
+    "micro",
+    "ills",
+    "props"
+   ],
+   "urozhay": [
+    "micro",
+    "ills",
+    "props"
+   ],
+   "vkus": [
+    "micro",
+    "food"
+   ],
+   "razmnozhenie": [
+    "micro",
+    "ills",
+    "props"
+   ],
+   "problemy": [
+    "micro",
+    "ills"
+   ]
   },
   "search": "a1e7abb8"
  }

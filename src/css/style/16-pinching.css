@@ -9,7 +9,7 @@
 .diagram-pinch figcaption { font-size: .88rem; color: var(--ink-2); margin-top: 6px; }
 .diagram-pinch figcaption b { display: block; font-family: var(--font-display); font-size: 1.2rem; color: var(--ink); }
 @media (max-width: 640px) {
-  .diagram-pinch { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(-1 * clamp(16px, 4vw, 40px)); padding: 2px clamp(16px, 4vw, 40px) 8px; }
+  .diagram-pinch { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: clamp(16px, 4vw, 40px); scrollbar-width: none; margin-inline: calc(-1 * clamp(16px, 4vw, 40px)); padding: 2px clamp(16px, 4vw, 40px) 8px; }
   .diagram-pinch::-webkit-scrollbar { display: none; }
   .diagram-pinch figure { flex: 0 0 72%; scroll-snap-align: center; }
 }
@@ -43,6 +43,7 @@
 .s-rim { fill: var(--clay-rim); }
 .s-node { cursor: pointer; outline: none; }
 .s-node .hit { fill: transparent; }
+@media (pointer: coarse) { .s-node .hit { r: 19px; } }
 .s-node .dot { fill: var(--sim-node); stroke: var(--surface); stroke-width: 1.5; transition: r .2s; }
 .s-node .cut { stroke: var(--danger); stroke-width: 2.4; stroke-dasharray: 4 3; stroke-linecap: round; opacity: 0; transition: opacity .15s; }
 .s-node:hover .cut, .s-node:focus-visible .cut { opacity: 1; }

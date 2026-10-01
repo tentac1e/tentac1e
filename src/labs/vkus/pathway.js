@@ -27,7 +27,7 @@
        <div class="lab-chart pw-chart" id="lab-pw-ch"></div>
        <div class="pw-info" id="lab-pw-info" aria-live="polite"></div>`;
     let sel = 'eug';
-    const pill = (x, y, w, text, cls, k, mk) => `<g class="${cls}"${mk ? ` style="--mk:var(--m-${mk})"` : ''}${k ? ` data-k="${k}" tabindex="0" role="button" aria-label="${text}"` : ''}><rect x="${r1(x - w / 2)}" y="${y - 15}" width="${r1(w)}" height="30" rx="${k ? 10 : 15}"/><text x="${r1(x)}" y="${y + 4.5}" text-anchor="middle">${text}</text></g>`;
+    const pill = (x, y, w, text, cls, k, mk) => `<g class="${cls}"${mk ? ` style="--mk:var(--m-${mk})"` : ''}${k ? ` data-k="${k}" tabindex="0" role="button" aria-label="${text}"` : ''}>${k ? `<rect class="pw-hit" x="${r1(x - w / 2)}" y="${y - 21}" width="${r1(w)}" height="42"/>` : ''}<rect x="${r1(x - w / 2)}" y="${y - 15}" width="${r1(w)}" height="30" rx="${k ? 10 : 15}"/><text x="${r1(x)}" y="${y + 4.5}" text-anchor="middle">${text}</text></g>`;
     const tw = (t, big) => t.length * (big ? 8.1 : 7.6) + 20;
     const arrow = (x1, y1, x2, y2, hot, enz, side = 1) => {
       let s = `<line class="pw-edge${hot ? ' is-hot' : ''}" x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(x2)}" y2="${r1(y2)}" marker-end="url(#lab-pw-ah${hot ? '-hot' : ''})"/>`;

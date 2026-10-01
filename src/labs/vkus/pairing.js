@@ -90,8 +90,8 @@
             const tw = Math.max(name.length * 7.2, sub2.length * 6.4) + 16;
             top += `<circle class="pa-node${faint ? ' is-faint' : ''}" cx="${r1(mx)}" cy="${r1(y)}" r="${r1(r)}" fill="${col}" stroke="${col}"/>`;
             // above the nodes over the point where the ribbons meet, below the others: outside the fan of ribbons
-            const up = y < cy - 8, ty = up ? y - r - 30 : y + r + 1;
-            top += `<g class="pa-tag" data-fit="7"><rect x="${r1(mx - tw / 2)}" y="${r1(ty)}" width="${r1(tw)}" height="29" rx="9"/><text class="pa-mol" x="${r1(mx)}" y="${r1(ty + 13)}" text-anchor="middle">${name}</text><text class="pa-sub" x="${r1(mx)}" y="${r1(ty + 25)}" text-anchor="middle">${sub2}</text></g>`;
+            const up = y < cy - 8, ty = up ? y - r - 34 : y + r + 1;
+            top += `<g class="pa-tag" data-fit="7"><rect x="${r1(mx - tw / 2)}" y="${r1(ty)}" width="${r1(tw)}" height="33" rx="9"/><text class="pa-mol" x="${r1(mx)}" y="${r1(ty + 14)}" text-anchor="middle">${name}</text><text class="pa-sub" x="${r1(mx)}" y="${r1(ty + 28)}" text-anchor="middle">${sub2}</text></g>`;
           } else {
             const tw = d.lever.length * 7.4 + 22;
             top += `<rect class="pa-lever" x="${r1(mx - tw / 2)}" y="${r1(y - 13)}" width="${r1(tw)}" height="26" rx="13"/><text class="pa-mol" x="${r1(mx)}" y="${r1(y + 4.5)}" text-anchor="middle">${d.lever}</text>`;

@@ -16,7 +16,7 @@
     const btns = $$('.stage-btn', track);
     npk.innerHTML = series.map(([c, s, n]) => `<div class="npk-row"><span class="lbl"><i class="k-${c}"></i>${s} · ${n}</span><span class="bar"><i class="k-${c}" id="bar-${c}"></i></span><span class="lvl" id="lvl-${c}"></span></div>`).join('');
     const table = $('#feed-table');
-    if (table) table.innerHTML = `<thead><tr><th scope="col">Стадия</th><th scope="col">N</th><th scope="col">P</th><th scope="col">K</th><th scope="col">N : P : K</th></tr></thead><tbody>${S.map((s, i) => `<tr><td>${i + 1}. ${s.name}</td><td class="num">${s.N}</td><td class="num">${s.P}</td><td class="num">${s.K}</td><td class="num">${s.ratio}</td></tr>`).join('')}</tbody>`;
+    if (table) table.innerHTML = `<thead><tr><th scope="col">Стадия</th><th scope="col">N</th><th scope="col">P</th><th scope="col">K</th><th scope="col">N : P : K</th></tr></thead><tbody>${S.map((s, i) => `<tr><td>${i + 1}. ${s.name}</td><td class="num">${s.N}</td><td class="num">${s.P}</td><td class="num">${s.K}</td><td class="num npk-ratio">${s.ratio}</td></tr>`).join('')}</tbody>`;
     const lvl = v => (v === 0 ? 'не нужно' : v < 30 ? 'низкая' : v < 60 ? 'средняя' : 'высокая');
 
     let geom = null;
@@ -33,7 +33,8 @@
       svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
       let out = '';
       const step = pw / (S.length - 1);
-      out += `<rect class="fc-band" x="${x(sel) - step * 0.42}" y="${m.t - 6}" width="${step * 0.84}" height="${ph + 12}" rx="12"/>`;
+      // the selected stage's column ends just under the axis, clear of the stage numbers below it
+      out += `<rect class="fc-band" x="${x(sel) - step * 0.42}" y="${m.t - 6}" width="${step * 0.84}" height="${ph + 9}" rx="12"/>`;
       [0, 25, 50, 75, 100].forEach(v => {
         out += `<line class="fc-grid" x1="${m.l}" x2="${w - m.r}" y1="${y(v)}" y2="${y(v)}"/>`;
         out += `<text class="fc-axis" x="${m.l - 8}" y="${y(v)}" text-anchor="end" dominant-baseline="middle">${v}</text>`;
@@ -53,7 +54,7 @@
         out += `<circle class="fc-dot f-${c}" cx="${x(sel)}" cy="${y(S[sel][key])}" r="5"/>`;
       });
       S.forEach((s, i) => {
-        out += `<text class="fc-xlabel${i === sel ? ' is-sel' : ''}" x="${x(i)}" y="${h - (narrow ? 10 : 16)}" text-anchor="middle">${narrow ? i + 1 : s.short}</text>`;
+        out += `<text class="fc-xlabel${i === sel ? ' is-sel' : ''}" x="${x(i)}" y="${h - (narrow ? 8 : 16)}" text-anchor="middle">${narrow ? i + 1 : s.short}</text>`;
       });
       out += `<line class="fc-cross" id="fc-cross" x1="0" x2="0" y1="${m.t}" y2="${m.t + ph}" visibility="hidden"/>`;
       S.forEach((s, i) => {

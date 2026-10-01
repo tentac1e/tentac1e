@@ -23,6 +23,7 @@
     const wheel = $('#cal-wheel');
     const tip = $('#wheel-tip');
     const legend = $('#cal-legend');
+    const cities = $('#cal-cities');
     const timeline = $('#cal-timeline');
     const modeBtns = $$('[data-mode]');
 
@@ -176,6 +177,9 @@
     const render = () => {
       const isGarden = mode === 'garden';
       presetField.hidden = !isGarden;
+      const pr = B.PRESETS.find(x => x.id === preset);
+      cities.textContent = pr && pr.cities ? 'Например, ' + pr.cities : '';
+      cities.hidden = !cities.textContent;
       dateLabel.textContent = isGarden ? 'Последний весенний заморозок' : 'Дата посева';
       let base = isGarden ? gardenDate : homeDate;
       if (!base) base = isGarden ? presetLF(preset) : now;

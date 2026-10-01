@@ -19,7 +19,11 @@
       r.setAttribute('width', (rt - l + pad * 2).toFixed(1));
     });
   }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitLabels(document));
+  // and again whenever a font arrives: a caption drawn before its font came is narrower than it ends up
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => fitLabels(document));
+    if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => fitLabels(document));
+  }
   function chart(host, o) {
     const svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('class', 'lab-svg');
@@ -82,7 +86,7 @@
     const YS = o.clip ? Yr : Y;
     if (o.clip) { const id = 'lab-clip-' + (++clipN); s += `<clipPath id="${id}"><rect x="${p.l}" y="${p.t - 2}" width="${iw}" height="${ih + 4}"/></clipPath><g clip-path="url(#${id})">`; }
     // what the captions keep clear of: every line of the series, the marker line and its dots
-    const segs = [], spots = [];
+    const segs = [[p.l, p.t + ih, p.l + iw, p.t + ih]], spots = []; // the axis is a line to keep clear of too
     (o.series || []).forEach(se => {
       const pts = se.pts.filter(pt => isFinite(pt[1]));
       if (!pts.length) return;

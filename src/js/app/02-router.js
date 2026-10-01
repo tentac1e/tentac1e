@@ -142,7 +142,8 @@
       if (opts.initial) location.replace(r.external); else location.href = r.external;
       return;
     }
-    $$('dialog.sheet[open]').forEach(d => closeSheet(d));
+    // a sheet opened while the page was still starting stays open: the first route is not a navigation
+    if (!opts.initial) $$('dialog.sheet[open]').forEach(d => closeSheet(d));
     const changedView = r.view !== currentView;
     const apply = () => {
       if (changedView) {

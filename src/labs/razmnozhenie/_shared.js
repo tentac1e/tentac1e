@@ -11,7 +11,7 @@
       const [nx, ny] = sh.nodes[2];
       let g = ill.pot(46, 104, 50, 20) + sh.svg + Rr.cutMark(nx, ny + 6, 22) + Rr.scissors(nx + 22, ny + 6, 196, 0.85, 0.8);
       const my = qr((ny + 18) / 2);
-      g += `<g class="ill-scale"><path d="M98 ${qr(ny + 6)}V12M94 ${qr(ny + 6)}H102M94 12H102" fill="none" stroke="currentColor" stroke-width="1.6"/></g><text class="ill-lbl" x="110" y="${my}" text-anchor="middle" transform="rotate(-90 110 ${my})">8–12 см</text>`;
+      g += `<g class="ill-scale"><path d="M98 ${qr(ny + 6)}V12M94 ${qr(ny + 6)}H102M94 12H102" fill="none" stroke="currentColor" stroke-width="1.6"/></g><text class="ill-lbl" x="114" y="${my}" text-anchor="middle" transform="rotate(-90 114 ${my})">8–12 см</text>`;
       return Rr.step(g, 'Верхушку срезают чуть ниже узла');
     },
     2: () => {

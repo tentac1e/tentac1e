@@ -145,7 +145,9 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
   await page.evaluate(() => { document.querySelector('.panel.is-active .lab-tool').scrollIntoView(); });
   await page.waitForTimeout(1200);
   const after = await page.evaluate(() => ({ tags: [...document.querySelectorAll('script[src*="labs/"]')].map(s => s.getAttribute('src').replace(/^.*\/js\//, '')), mounted: document.querySelectorAll('.lab-tool[data-ready]').length }));
-  ok(before === 0 && after.tags.length === 1 && /^labs\/vkus\.js\?v=[0-9a-f]{8}$/.test(after.tags[0]) && after.mounted > 0, 'chapter models load on demand ' + JSON.stringify(after));
+  // the chapter's own file and the drawing libraries it lists, each once, fingerprinted
+  const want = await page.evaluate(() => window.BASIL_PAGES.v.deps.vkus.map(x => 'lib-' + x).concat('vkus'));
+  ok(before === 0 && after.tags.length === want.length && after.tags.every((t, i) => new RegExp('^labs/' + want[i] + '\\.js\\?v=[0-9a-f]{8}$').test(t)) && after.mounted > 0, 'chapter models load on demand ' + JSON.stringify(after));
 
   // reading depth carries over
   await page.goto(fileUrl('sorta.html'), { waitUntil: 'load' });

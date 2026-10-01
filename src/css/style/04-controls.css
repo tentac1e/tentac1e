@@ -36,6 +36,14 @@
 .chip:hover { border-color: var(--basil); color: var(--basil-deep); transform: translateY(-2px); }
 .chip[aria-pressed="true"] { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
 .chips-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+/* touch screens: a finger needs about 40 px. Buttons and chips grow to it; links set in text keep their look
+   and answer in an invisible zone around them */
+@media (pointer: coarse) {
+  .chip { min-height: 36px; }
+  .btn-small { min-height: 40px; }
+  .g-link, .table-view summary { position: relative; }
+  .g-link::after, .table-view summary::after { content: ""; position: absolute; inset: -9px -6px; }
+}
 
 .field { display: grid; gap: 6px; min-width: 0; }
 .field > label, .field > .label, .field legend.label {
@@ -46,6 +54,7 @@
   color: var(--ink-3);
 }
 .field label b { color: var(--basil-deep); font-family: var(--font-mono); font-weight: 500; text-transform: none; letter-spacing: 0; }
+.field-note { font-size: .8rem; line-height: 1.35; color: var(--ink-3); }
 .field.bare { border: 0; padding: 0; margin: 0; }
 .field.bare legend { padding: 0; margin-bottom: 6px; }
 

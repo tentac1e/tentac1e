@@ -56,6 +56,7 @@
 .chemo-sorts { display: flex; flex-wrap: wrap; gap: 4px 6px; padding: 0 8px 6px 18px; }
 .chemo-sort { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px 3px 6px; border-radius: 999px; border: 1px solid var(--line); background: none; font: 600 .74rem/1.2 var(--font-body); color: var(--ink-2); cursor: pointer; transition: border-color .2s, background .2s; }
 .chemo-sort:hover { border-color: var(--line-strong); }
+@media (pointer: coarse) { .chemo-sort { min-height: 36px; padding-inline: 10px 12px; } .chemo-sorts { gap: 6px; } .chemo-row { min-height: 40px; } }
 .chemo-sort[aria-pressed="true"] { background: var(--k); border-color: var(--k); color: var(--surface); }
 .chemo-sort i { width: 9px; height: 12px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--lf-green); }
 .chemo-sort.lf-deep i { background: var(--lf-deep); } .chemo-sort.lf-purple i { background: var(--lf-purple); } .chemo-sort.lf-thai i { background: var(--lf-thai); } .chemo-sort.lf-lime i { background: var(--lf-lime); }

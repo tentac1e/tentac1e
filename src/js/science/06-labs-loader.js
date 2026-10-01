@@ -8,19 +8,26 @@
      its chapter's file only when the first model scrolls near */
   const SELF = document.currentScript && document.currentScript.src;
   const loads = {};
-  function ensureLabs(view) {
-    if (!loads[view]) {
-      loads[view] = new Promise((resolve, reject) => {
+  // one script, once: assets/js/<path> with the fingerprint of its content
+  function script(key, path, v) {
+    if (!loads[key]) {
+      loads[key] = new Promise((resolve, reject) => {
         const tag = document.createElement('script');
-        const vs = window.BASIL_PAGES && window.BASIL_PAGES.v && window.BASIL_PAGES.v.labs;
-        const v = vs && vs[view] ? '?v=' + vs[view] : '';
-        tag.src = (SELF ? SELF.replace(/science\.js(\?.*)?$/, '') : 'assets/js/') + `labs/${view}.js` + v;
+        tag.src = (SELF ? SELF.replace(/science\.js(\?.*)?$/, '') : 'assets/js/') + path + (v ? '?v=' + v : '');
         tag.onload = resolve;
-        tag.onerror = () => { loads[view] = null; reject(new Error(`labs/${view}.js`)); };
+        tag.onerror = () => { loads[key] = null; reject(new Error(path)); };
         document.head.appendChild(tag);
       });
     }
-    return loads[view];
+    return loads[key];
+  }
+  // a chapter's models: the drawing libraries it needs first (kept in the cache from chapter to chapter),
+  // in their order, then the chapter's own file
+  function ensureLabs(view) {
+    const V = window.BASIL_PAGES && window.BASIL_PAGES.v;
+    const libs = (V && V.deps && V.deps[view]) || [];
+    return libs.reduce((p, x) => p.then(() => script('lib-' + x, `labs/lib-${x}.js`, V && V.lib && V.lib[x])), Promise.resolve())
+      .then(() => script(view, `labs/${view}.js`, V && V.labs && V.labs[view]));
   }
   let ctx = {};
 

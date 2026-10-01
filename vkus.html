@@ -7,13 +7,37 @@
 <meta name="description" content="Химия аромата, 3D-молекулы, физика кухни и лаборатория сочетаний. Глава 8 гида по выращиванию базилика.">
 <meta name="theme-color" content="#2D6932">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30 C 16 22 16 16 16 10' stroke='%232D6932' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z' fill='%236AA83D' stroke='%231D4B22' stroke-width='1.6'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="assets/css/style.css?v=a9094f6e">
-<link rel="stylesheet" href="assets/css/lab.css?v=3aed4b07">
+<style>
+/* Шрифты сайта: файлы в src/fonts/, собирает scripts/fonts.py */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic-ext.woff2?v=ea9ad85a) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic.woff2?v=afe89756) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin-ext.woff2?v=5b59be73) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin.woff2?v=8a01467a) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic-ext.woff2?v=ad99a4c1) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic.woff2?v=4f12a1a0) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-vietnamese.woff2?v=e3000ed8) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin-ext.woff2?v=a3b94a5a) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin.woff2?v=52ea38a7) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic-ext.woff2?v=c18dbd11) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic.woff2?v=ac78c6c2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-vietnamese.woff2?v=8a92de9f) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin-ext.woff2?v=a9e49ee5) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin.woff2?v=74db058f) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic-ext.woff2?v=feae5721) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic.woff2?v=9d8db2e8) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-greek.woff2?v=bcedb9e2) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-vietnamese.woff2?v=326a88b4) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin-ext.woff2?v=06ad3600) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin.woff2?v=4f27206c) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic-ext.woff2?v=5d8e0798) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic.woff2?v=d8fc94bf) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-greek.woff2?v=1cb6f3ca) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-vietnamese.woff2?v=89cd8db6) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin-ext.woff2?v=1f62546f) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin.woff2?v=b4295101) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+</style>
+<link rel="stylesheet" href="assets/css/style.css?v=2ea577e9">
+<link rel="stylesheet" href="assets/css/lab.css?v=782c4418">
 </head>
 <body>
 <script>document.documentElement.classList.add('js');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
@@ -389,20 +413,20 @@
           <div class="deep-body">
             <div class="deep-grid">
               <div class="deep-text">
-                <p>У человека около 400 типов работающих обонятельных рецепторов. Каждый откликается на целое семейство похожих молекул, а каждая молекула возбуждает сразу несколько рецепторов. Мозг читает не один сигнал, а комбинацию, как аккорд. Так 400 «клавиш» дают узнать тысячи запахов.</p>
+                <p>У человека около 400 типов работающих обонятельных рецепторов. Каждый откликается на целое семейство похожих молекул, а каждая молекула возбуждает сразу несколько рецепторов. Мозг читает не один сигнал, а комбинацию, как аккорд. Так 400 «клавиш» дают узнать тысячи запахов.</p>
                 <p>Поэтому смесь пахнет не как сумма запахов. Линалоол сам по себе — лаванда, эвгенол — гвоздика, а вместе с каплей эстрагола и цинеола они складываются в новый образ — «базилик».</p>
                 <p>Нос различает даже зеркальных двойников одной молекулы. Два варианта линалоола пахнут по-разному: один ближе к лаванде и дереву, другой слаще и цветочнее. Самый известный пример — карвон: одна его форма пахнет мятой, другая — тмином.</p>
                 <p>Во рту аромат раскрывается сильнее, чем в воздухе: тепло и пережёвывание выпускают молекулы из клеток и масла, и выдох несёт их к рецепторам. Это <b>ретроназальное обоняние</b> — главная часть того, что мы называем вкусом.</p>
               </div>
               <aside class="deep-aside">
                 <div class="num-note"><b>≈ 400</b><span>типов обонятельных рецепторов у человека</span></div>
-                <div class="num-note"><b>5 вкусов</b><span>различает язык: сладкий, солёный, кислый, горький и умами — остальное делает нос</span></div>
+                <div class="num-note"><b>5 вкусов</b><span>различает язык: сладкий, солёный, кислый, горький и умами — остальное делает нос</span></div>
               </aside>
             </div>
             <details class="deeper">
               <summary id="deep-nos-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Нобелевская премия за обоняние</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
-                <p>В 1991 году Линда Бак и Ричард Аксель нашли семейство генов обонятельных рецепторов — самое большое семейство генов у млекопитающих. В 2004 году за это открытие они получили Нобелевскую премию. Рецепторы относятся к белкам, связанным с G-белками: молекула запаха меняет их форму, и в нейроне запускается электрический сигнал.</p>
+                <p>В 1991 году Линда Бак и Ричард Аксель нашли семейство генов обонятельных рецепторов — самое большое семейство генов у млекопитающих. В 2004 году за это открытие они получили Нобелевскую премию. Рецепторы относятся к белкам, связанным с G-белками: молекула запаха меняет их форму, и в нейроне запускается электрический сигнал.</p>
                 <p>Каждый обонятельный нейрон несёт рецептор одного типа, а все нейроны одного типа сходятся в один «клубочек» обонятельной луковицы. Мозг получает карту активированных клубочков — это и есть код запаха.</p>
               </div>
             </details>
@@ -447,7 +471,7 @@
             <details class="deeper">
               <summary id="deep-himotip-sreda-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Как молекулы аромата считают</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
-                <p>Состав эфирного масла определяют газовой хроматографией. Каплю масла испаряют и прогоняют током гелия через тонкую колонку длиной 30–60&nbsp;м. Молекулы по-разному «липнут» к её покрытию и выходят в разное время: лёгкий цинеол — раньше, тяжёлый эвгенол — позже.</p>
+                <p>Состав эфирного масла определяют газовой хроматографией. Каплю масла испаряют и прогоняют током гелия через тонкую колонку длиной 30–⁠60&nbsp;м. Молекулы по-разному «липнут» к её покрытию и выходят в разное время: лёгкий цинеол — раньше, тяжёлый эвгенол — позже.</p>
                 <p>На выходе стоит масс-спектрометр. Он разбивает каждую молекулу на осколки, и их узор служит отпечатком пальца: сравнивая его с библиотекой, химик узнаёт вещество, а по площади пика — его долю.</p>
                 <p>Отсюда оговорка про проценты: обычно это доли площади пиков, а не массы. Разные вещества дают разный сигнал, а способ получения масла тоже меняет картину: при долгой перегонке с паром часть молекул разрушается или не успевает отогнаться.</p>
                 <div class="eq"><span class="eq-label">Индекс удерживания Ковача</span><p>I = 100·[n + (lg t<sub>x</sub> − lg t<sub>n</sub>) / (lg t<sub>n+1</sub> − lg t<sub>n</sub>)]</p></div>
@@ -487,7 +511,7 @@
       </div>
       <div class="callout is-warn sub">
         <svg class="ico"><use href="#i-alert"/></svg>
-        <p><b>Масло с зеленью и ботулизм.</b> Споры <i>Clostridium botulinum</i> бывают на любой зелени. В масле без доступа воздуха, без кислоты и при комнатной температуре они могут прорасти и выделить токсин без запаха и вкуса. Храните масла с базиликом и чесноком в холодильнике и используйте за 4–5 дней или замораживайте.</p>
+        <p><b>Масло с зеленью и ботулизм.</b> Споры <i>Clostridium botulinum</i> бывают на любой зелени. В масле без доступа воздуха, без кислоты и при комнатной температуре они могут прорасти и выделить токсин без запаха и вкуса. Храните масла с базиликом и чесноком в холодильнике и используйте за 4–⁠5 дней или замораживайте.</p>
       </div>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
@@ -501,19 +525,19 @@
             <div class="deep-grid">
               <div class="deep-text">
                 <p>Каждая ароматная молекула испаряется со своей скоростью. Её определяет давление насыщенного пара, а его можно оценить по температуре кипения. По <b>правилу Трутона</b> энтропия испарения у большинства жидкостей примерно одинакова, около 88&nbsp;Дж/(моль·К). Отсюда простое следствие: чем выше температура кипения, тем ниже давление пара при той же температуре кастрюли.</p>
-                <p>Модель выше считает именно так. «Зелёный» гексеналь кипит при 126&nbsp;°C и улетает за минуты. Цинеол (176&nbsp;°C) и линалоол (198&nbsp;°C) исчезают за 10–15 минут кипения. Эвгенол (254&nbsp;°C) и метилциннамат (262&nbsp;°C) держатся дольше. Поэтому в долго томящемся соусе остаётся тёплая гвоздичная нота, а свежая цветочная — пропадает.</p>
+                <p>Модель выше считает именно так. «Зелёный» гексеналь кипит при 126&nbsp;°C и улетает за минуты. Цинеол (176&nbsp;°C) и линалоол (198&nbsp;°C) исчезают за 10–⁠15 минут кипения. Эвгенол (254&nbsp;°C) и метилциннамат (262&nbsp;°C) держатся дольше. Поэтому в долго томящемся соусе остаётся тёплая гвоздичная нота, а свежая цветочная — пропадает.</p>
                 <p>Лист на сковороде не нагревается выше 100&nbsp;°C, пока в нём есть вода: вся энергия уходит на её испарение. Но в раскалённом масле лист высыхает за секунды — и его аромат выгорает. Базилик жарят только ради хрусткой текстуры, как во фритюре для украшения.</p>
                 <p>В жире летучесть ниже, чем в воде: молекулы «прячутся» в масле. Сливочные и масляные соусы дольше держат аромат базилика, чем бульоны.</p>
               </div>
               <aside class="deep-aside">
-                <div class="eq"><span class="eq-label">Правило Трутона</span><p>ΔH<sub>исп</sub> ≈ 88 · T<sub>кип</sub>&nbsp;Дж/моль</p></div>
-                <div class="eq"><span class="eq-label">Давление пара при T</span><p>ln(P / 1&nbsp;атм) ≈ 10,6 · (1 − T<sub>кип</sub> / T)</p></div>
+                <div class="eq"><span class="eq-label">Правило Трутона</span><p>ΔH<sub>исп</sub> ≈ 88 · T<sub>кип</sub>&nbsp;Дж/⁠моль</p></div>
+                <div class="eq"><span class="eq-label">Давление пара при T</span><p>ln(P / 1&nbsp;атм) ≈ 10,6 · (1 − T<sub>кип</sub> / T)</p></div>
               </aside>
             </div>
             <details class="deeper">
               <summary id="deep-letuchest-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Масло или вода: коэффициент logP</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
-                <p>Насколько молекула предпочитает жир воде, показывает логарифм коэффициента распределения октанол/вода, logP. Для линалоола он около 3, для эстрагола — около 3,5, для эвгенола — около 2,3. Значение 3 означает, что в жирной фазе молекул примерно в тысячу раз больше, чем в водной.</p>
+                <p>Насколько молекула предпочитает жир воде, показывает логарифм коэффициента распределения октанол/⁠вода, logP. Для линалоола он около 3, для эстрагола — около 3,5, для эвгенола — около 2,3. Значение 3 означает, что в жирной фазе молекул примерно в тысячу раз больше, чем в водной.</p>
                 <p>Поэтому в сливочном соусе или масле аромат базилика держится дольше: молекулы сидят в жире и медленно выходят в воздух. А в бульоне они быстро поднимаются к поверхности и улетают с паром.</p>
               </div>
             </details>
@@ -554,11 +578,11 @@
             <div class="deep-grid">
               <div class="deep-text">
                 <p>Популярная гипотеза пищевых пар говорит: продукты сочетаются, если у них есть общие ароматические молекулы. Базилик и клубника делят линалоол и метилциннамат, базилик и томат — линалоол и «зелёный» гексеналь.</p>
-                <p>В 2011 году исследователи сложных сетей Ён-Ёль Ан, Альберт-Ласло Барабаши и их коллеги проверили гипотезу на 56&nbsp;тысячах рецептов. Оказалось, что в западноевропейской и североамериканской кухнях продукты действительно чаще делят молекулы. А в восточноазиатских кухнях всё наоборот: там чаще сочетают продукты с непохожими ароматами.</p>
+                <p>В 2011 году исследователи сложных сетей Ён-Ёль Ан, Альберт-Ласло Барабаши и их коллеги проверили гипотезу на 56&nbsp;тысячах рецептов. Оказалось, что в западноевропейской и североамериканской кухнях продукты действительно чаще делят молекулы. А в восточноазиатских кухнях всё наоборот: там чаще сочетают продукты с непохожими ароматами.</p>
                 <p>Значит, общие молекулы — один из способов построить сочетание, но не закон. Второй способ — <b>контраст</b>: жирное и свежее, сладкое и острое, кислое и пряное. Тайская кухня соединяет анисовый базилик с чили, лаймом и рыбным соусом именно по принципу контраста.</p>
               </div>
               <aside class="deep-aside">
-                <div class="num-note"><b>56&nbsp;498</b><span>рецептов из разных кухонь мира в исследовании «сети ароматов» 2011 года</span></div>
+                <div class="num-note"><b>56&nbsp;498</b><span>рецептов из разных кухонь мира в исследовании «сети ароматов» 2011 года</span></div>
               </aside>
             </div>
             <details class="deeper">
@@ -650,10 +674,10 @@
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
 <script src="assets/js/haptics.js?v=8488e836" defer></script>
-<script src="assets/js/data.js?v=44aaf208" defer></script>
-<script src="assets/js/pages.js?v=4301a387" defer></script>
+<script src="assets/js/data.js?v=3020ad0c" defer></script>
+<script src="assets/js/pages.js?v=66e256a9" defer></script>
 <script src="assets/js/scene.js?v=82c1b091" defer></script>
-<script src="assets/js/science.js?v=d98efc6e" defer></script>
-<script src="assets/js/app.js?v=bbd14ecd" defer></script>
+<script src="assets/js/science.js?v=c5ecffe8" defer></script>
+<script src="assets/js/app.js?v=1752bce4" defer></script>
 </body>
 </html>

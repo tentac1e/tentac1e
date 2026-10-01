@@ -19,6 +19,8 @@
 .pw-node.is-hot text { fill: var(--ink); }
 .pw-node.is-idle, .pw-end.is-idle { opacity: .42; }
 .pw-end { cursor: pointer; outline: none; }
+/* a finger finds a molecule in a zone a little taller than its pill */
+g.pw-end rect.pw-hit { fill: transparent; stroke: none; }
 .pw-end rect { stroke: var(--mk); stroke-width: 1.8; fill: var(--surface); transition: fill .3s; }
 .pw-end text { font: 700 12.5px/1 var(--font-body); fill: var(--ink); }
 .pw-end.is-sel rect { fill: var(--mk); }

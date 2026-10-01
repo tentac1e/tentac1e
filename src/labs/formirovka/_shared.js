@@ -14,7 +14,7 @@
     2: () => {
       const s = Rf.shoot(80, 180, 152, { pairs: 4, s: 0.42, stub: 1, shoots: { 1: { len: 22, pairs: 1, s: 0.16, a: 22 } } });
       const [nx, ny] = s.nodes[1];
-      return pinchP(s.svg + Rf.arrow(36, 58, nx - 8, ny - 18, -10) + ill.label(10, 40, 'почки', 'start') + ill.label(10, 54, 'проснулись', 'start'), 'Через неделю из пазух второй пары пошли два побега');
+      return pinchP(s.svg + Rf.arrow(36, 58, nx - 8, ny - 18, -10) + ill.label(10, 32, 'почки', 'start') + ill.label(10, 49, 'проснулись', 'start'), 'Через неделю из пазух второй пары пошли два побега');
     },
     // two or three weeks: two tops instead of one
     3: () => {

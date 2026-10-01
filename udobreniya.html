@@ -7,13 +7,37 @@
 <meta name="description" content="Элементы питания, подкормки по стадиям, план и калькуляторы. Глава 5 гида по выращиванию базилика.">
 <meta name="theme-color" content="#2D6932">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30 C 16 22 16 16 16 10' stroke='%232D6932' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z' fill='%236AA83D' stroke='%231D4B22' stroke-width='1.6'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="assets/css/style.css?v=a9094f6e">
-<link rel="stylesheet" href="assets/css/lab.css?v=3aed4b07">
+<style>
+/* Шрифты сайта: файлы в src/fonts/, собирает scripts/fonts.py */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic-ext.woff2?v=ea9ad85a) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic.woff2?v=afe89756) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin-ext.woff2?v=5b59be73) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin.woff2?v=8a01467a) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic-ext.woff2?v=ad99a4c1) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic.woff2?v=4f12a1a0) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-vietnamese.woff2?v=e3000ed8) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin-ext.woff2?v=a3b94a5a) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin.woff2?v=52ea38a7) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic-ext.woff2?v=c18dbd11) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic.woff2?v=ac78c6c2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-vietnamese.woff2?v=8a92de9f) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin-ext.woff2?v=a9e49ee5) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin.woff2?v=74db058f) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic-ext.woff2?v=feae5721) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic.woff2?v=9d8db2e8) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-greek.woff2?v=bcedb9e2) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-vietnamese.woff2?v=326a88b4) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin-ext.woff2?v=06ad3600) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin.woff2?v=4f27206c) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic-ext.woff2?v=5d8e0798) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic.woff2?v=d8fc94bf) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-greek.woff2?v=1cb6f3ca) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-vietnamese.woff2?v=89cd8db6) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin-ext.woff2?v=1f62546f) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin.woff2?v=b4295101) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+</style>
+<link rel="stylesheet" href="assets/css/style.css?v=2ea577e9">
+<link rel="stylesheet" href="assets/css/lab.css?v=782c4418">
 </head>
 <body>
 <script>document.documentElement.classList.add('js');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
@@ -300,14 +324,14 @@
 
     <div class="panel is-active" data-panel id="основы" data-title="Правила подкормки">
       <div class="principles">
-        <article class="card principle"><h4 id="udobreniya-h1"><svg class="ico"><use href="#i-drop"/></svg>Только по влажному грунту</h4><p>Сначала обычный полив, через 20–30 минут — раствор. По сухому грунту соли обжигают корни.</p></article>
-        <article class="card principle"><h4 id="udobreniya-h2"><svg class="ico"><use href="#i-pot"/></svg>Свежий грунт кормит сам</h4><p>В покупных смесях есть стартовые удобрения на 3–4 недели. В это время подкормки не нужны.</p></article>
-        <article class="card principle"><h4 id="udobreniya-h3"><svg class="ico"><use href="#i-flask"/></svg>Чаще, но слабее</h4><p>В горшке — половина дозы с упаковки раз в 7–14 дней. На грядке — полная доза раз в 2–3 недели.</p></article>
+        <article class="card principle"><h4 id="udobreniya-h1"><svg class="ico"><use href="#i-drop"/></svg>Только по влажному грунту</h4><p>Сначала обычный полив, через 20–⁠30 минут — раствор. По сухому грунту соли обжигают корни.</p></article>
+        <article class="card principle"><h4 id="udobreniya-h2"><svg class="ico"><use href="#i-pot"/></svg>Свежий грунт кормит сам</h4><p>В покупных смесях есть стартовые удобрения на 3–⁠4 недели. В это время подкормки не нужны.</p></article>
+        <article class="card principle"><h4 id="udobreniya-h3"><svg class="ico"><use href="#i-flask"/></svg>Чаще, но слабее</h4><p>В горшке — половина дозы с упаковки раз в 7–⁠14 дней. На грядке — полная доза раз в 2–⁠3 недели.</p></article>
         <article class="card principle"><h4 id="udobreniya-h4"><svg class="ico"><use href="#i-alert"/></svg>Больных не кормят</h4><p>Корни, ослабленные переливом, засухой или холодом, удобрение не усвоят. Сначала устраните причину.</p></article>
-        <article class="card principle"><h4 id="udobreniya-h5"><svg class="ico"><use href="#i-leaf"/></svg>Азот с оглядкой</h4><p>Прекращайте азотные подкормки за 2 недели до сбора на заготовки: больше аромата, меньше нитратов.</p></article>
+        <article class="card principle"><h4 id="udobreniya-h5"><svg class="ico"><use href="#i-leaf"/></svg>Азот с оглядкой</h4><p>Прекращайте азотные подкормки за 2 недели до сбора на заготовки: больше аромата, меньше нитратов.</p></article>
         <article class="card principle"><h4 id="udobreniya-h6"><svg class="ico"><use href="#i-sun"/></svg>По листу вдвое слабее</h4><p>Опрыскивайте вечером или в пасмурную погоду. Это экспресс-помощь, а не основное питание.</p></article>
-        <article class="card principle"><h4 id="udobreniya-h7"><svg class="ico"><use href="#i-wind"/></svg>Промывайте грунт</h4><p>Раз в месяц пролейте горшок чистой водой в объёме 2–3 горшков, чтобы вымыть накопившиеся соли.</p></article>
-        <article class="card principle"><h4 id="udobreniya-h8"><svg class="ico"><use href="#i-thermo"/></svg>В холод кормить бесполезно</h4><p>При грунте холоднее 12–14&nbsp;°C корни почти не берут азот и фосфор. Сначала утеплите.</p></article>
+        <article class="card principle"><h4 id="udobreniya-h7"><svg class="ico"><use href="#i-wind"/></svg>Промывайте грунт</h4><p>Раз в месяц пролейте горшок чистой водой в объёме 2–⁠3 горшков, чтобы вымыть накопившиеся соли.</p></article>
+        <article class="card principle"><h4 id="udobreniya-h8"><svg class="ico"><use href="#i-thermo"/></svg>В холод кормить бесполезно</h4><p>При грунте холоднее 12–⁠14&nbsp;°C корни почти не берут азот и фосфор. Сначала утеплите.</p></article>
       </div>
       <div class="sub cols-2">
         <article class="card">
@@ -327,7 +351,7 @@
             <li>Крупные тёмные мягкие листья без аромата</li>
             <li>Рост остановился после «усиленного» кормления</li>
           </ul>
-          <p class="muted"><b>Что делать:</b> пролить горшок чистой водой в объёме 3 горшков, 2–3 недели не кормить, дальше — половинные дозы.</p>
+          <p class="muted"><b>Что делать:</b> пролить горшок чистой водой в объёме 3 горшков, 2–⁠3 недели не кормить, дальше — половинные дозы.</p>
         </article>
       </div>
       <div class="sci-notes">
@@ -348,12 +372,12 @@
             <div class="deep-grid">
               <div class="deep-text">
                 <p>Вода проходит через мембрану туда, где растворённых частиц больше, — это <b>осмос</b>. В клетках корня растворено много сахаров и ионов, поэтому обычно вода из грунта сама втягивается внутрь.</p>
-                <p>Любое минеральное удобрение — соль, которая в воде распадается на ионы. Чем крепче почвенный раствор, тем ниже его осмотический потенциал. Удобная оценка: каждый 1&nbsp;мС/см электропроводности снижает потенциал примерно на 0,036&nbsp;МПа.</p>
+                <p>Любое минеральное удобрение — соль, которая в воде распадается на ионы. Чем крепче почвенный раствор, тем ниже его осмотический потенциал. Удобная оценка: каждый 1&nbsp;мС/⁠см электропроводности снижает потенциал примерно на 0,036&nbsp;МПа.</p>
                 <p>Опасна не сама подкормка, а концентрация у корня. Когда грунт подсыхает, воды становится меньше, а солей столько же — раствор крепчает в разы. Если он догонит клеточный сок корня (около −0,5…−1&nbsp;МПа), вода перестанет входить в корень, а в крайнем случае пойдёт обратно: клетки теряют тургор, кончики корней отмирают. Это и есть «ожог».</p>
                 <p>Отсюда правила главы: кормить по влажному грунту, половинными дозами и раз в месяц промывать горшок.</p>
               </div>
               <aside class="deep-aside">
-                <div class="eq"><span class="eq-label">Оценка</span><p>Ψ<sub>осм</sub> ≈ −0,036 · EC&nbsp;МПа</p></div>
+                <div class="eq"><span class="eq-label">Оценка</span><p>Ψ<sub>осм</sub> ≈ −0,036 · EC&nbsp;МПа</p></div>
                 <div class="num-note"><b>−0,5…−1&nbsp;МПа</b><span>потенциал клеточного сока корня</span></div>
               </aside>
             </div>
@@ -361,9 +385,9 @@
             <details class="deeper">
               <summary id="deep-osmos-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Уравнение Вант-Гоффа</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
-                <p>Осмотический потенциал раствора можно оценить по концентрации частиц. Для раствора калийной селитры 10&nbsp;ммоль/л (каждая формульная единица распадается на два иона) при 20&nbsp;°C получается около −0,05&nbsp;МПа. Раствор в 20 раз крепче уже сравнялся бы с клеточным соком корня.</p>
+                <p>Осмотический потенциал раствора можно оценить по концентрации частиц. Для раствора калийной селитры 10&nbsp;ммоль/⁠л (каждая формульная единица распадается на два иона) при 20&nbsp;°C получается около −0,05&nbsp;МПа. Раствор в 20 раз крепче уже сравнялся бы с клеточным соком корня.</p>
                 <div class="eq"><span class="eq-label">Вант-Гофф</span><p>Ψ<sub>s</sub> = −i · C · R · T</p></div>
-                <p>Здесь i — число частиц на формульную единицу, C — концентрация в моль/м³, R — газовая постоянная, T — температура в кельвинах.</p>
+                <p>Здесь i — число частиц на формульную единицу, C — концентрация в моль/⁠м³, R — газовая постоянная, T — температура в кельвинах.</p>
               </div>
             </details>
             <div class="deep-src">
@@ -514,8 +538,8 @@
             <details class="deeper">
               <summary id="deep-libih-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">От бочки к кривой Митчерлиха</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
-                <p>В 1909 году Эйльхард Митчерлих уточнил закон минимума: урожай растёт с дозой удобрения не ступенькой, а плавно, и каждая следующая порция даёт меньше предыдущей. Кривая стремится к пределу, который задают другие факторы.</p>
-                <div class="eq"><span class="eq-label">Закон Митчерлиха</span><p>y = A · (1 − e<sup>−c·x</sup>)</p></div>
+                <p>В 1909 году Эйльхард Митчерлих уточнил закон минимума: урожай растёт с дозой удобрения не ступенькой, а плавно, и каждая следующая порция даёт меньше предыдущей. Кривая стремится к пределу, который задают другие факторы.</p>
+                <div class="eq"><span class="eq-label">Закон Митчерлиха</span><p>y = A · (1 − e<sup>−c·x</sup>)</p></div>
                 <p>Практический вывод: последние граммы удобрения самые «дорогие» — они почти не прибавляют урожая, зато копятся в грунте солями.</p>
               </div>
             </details>
@@ -607,23 +631,23 @@
             <thead><tr><th scope="col">Удобрение</th><th scope="col">Состав, %</th><th scope="col">Для чего</th><th scope="col">Когда</th><th scope="col">Доза</th></tr></thead>
             <tbody>
               <tr class="group"><th colspan="5" scope="colgroup">Минеральные</th></tr>
-              <tr><td>Комплексное «для зелени» с микроэлементами</td><td class="comp">N &gt; K &gt; P + микро</td><td>Основной вариант для горшков: всё в одном</td><td>Весь сезон после приживания</td><td class="dose">по инструкции; в горшке ½ дозы</td></tr>
-              <tr><td>Нитроаммофоска (азофоска)</td><td class="comp">N16 · P16 · K16</td><td>Универсальная подкормка и заправка грядки</td><td>Подготовка почвы, рост</td><td class="dose">в почву 20–30 г/м²; раствор 1–1,5 г/л</td></tr>
-              <tr><td>Мочевина (карбамид)</td><td class="comp">N46</td><td>Быстрая помощь при азотном голодании</td><td>Активный рост, после сильной срезки</td><td class="dose">0,5 г/л, не чаще раза в 2 недели</td></tr>
-              <tr><td>Калийная селитра</td><td class="comp">N13 · K46</td><td>Аромат, плотные листья, отрастание после срезок</td><td>Рост и срезки</td><td class="dose">1 г/л</td></tr>
-              <tr><td>Кальциевая селитра</td><td class="comp">N15,5 · Ca19</td><td>Крепкие ткани, профилактика деформации верхушек</td><td>Рост, гидропоника, мягкая вода</td><td class="dose">1 г/л; не смешивать с фосфатами и сульфатами</td></tr>
-              <tr><td>Монокалийфосфат</td><td class="comp">P52 · K34</td><td>Корни рассады, приживание, цветение и семена</td><td>Рассада, пересадка, цветение</td><td class="dose">1 г/л; по листу 0,5 г/л</td></tr>
-              <tr><td>Сульфат калия</td><td class="comp">K50 · S18</td><td>Калий без азота: аромат и финиш сезона</td><td>Срезки, конец сезона</td><td class="dose">1 г/л</td></tr>
-              <tr><td>Сульфат магния</td><td class="comp">MgO16 · S13</td><td>Магний при пожелтении между жилками старых листьев</td><td>Раз в месяц весь сезон</td><td class="dose">2 г/л; по листу 1 г/л</td></tr>
-              <tr><td>Хелат железа</td><td class="comp">Fe (ЭДТА, ДТПА)</td><td>Железо при пожелтении молодых листьев, часто из-за жёсткой воды</td><td>По симптомам</td><td class="dose">по инструкции</td></tr>
-              <tr><td>Суперфосфат двойной</td><td class="comp">P46 + Ca</td><td>Фосфор впрок: растворяется медленно</td><td>До посадки</td><td class="dose">15–20 г/м² в почву</td></tr>
+              <tr><td data-label="Удобрение">Комплексное «для зелени» с микроэлементами</td><td data-label="Состав, %" class="comp">N &gt; K &gt; P + микро</td><td data-label="Для чего">Основной вариант для горшков: всё в одном</td><td data-label="Когда">Весь сезон после приживания</td><td data-label="Доза" class="dose">по инструкции; в горшке ½ дозы</td></tr>
+              <tr><td data-label="Удобрение">Нитроаммофоска (азофоска)</td><td data-label="Состав, %" class="comp">N16 · P16 · K16</td><td data-label="Для чего">Универсальная подкормка и заправка грядки</td><td data-label="Когда">Подготовка почвы, рост</td><td data-label="Доза" class="dose">в почву 20–⁠30 г/⁠м²; раствор 1–⁠1,5 г/⁠л</td></tr>
+              <tr><td data-label="Удобрение">Мочевина (карбамид)</td><td data-label="Состав, %" class="comp">N46</td><td data-label="Для чего">Быстрая помощь при азотном голодании</td><td data-label="Когда">Активный рост, после сильной срезки</td><td data-label="Доза" class="dose">0,5 г/⁠л, не чаще раза в 2 недели</td></tr>
+              <tr><td data-label="Удобрение">Калийная селитра</td><td data-label="Состав, %" class="comp">N13 · K46</td><td data-label="Для чего">Аромат, плотные листья, отрастание после срезок</td><td data-label="Когда">Рост и срезки</td><td data-label="Доза" class="dose">1 г/⁠л</td></tr>
+              <tr><td data-label="Удобрение">Кальциевая селитра</td><td data-label="Состав, %" class="comp">N15,5 · Ca19</td><td data-label="Для чего">Крепкие ткани, профилактика деформации верхушек</td><td data-label="Когда">Рост, гидропоника, мягкая вода</td><td data-label="Доза" class="dose">1 г/⁠л; не смешивать с фосфатами и сульфатами</td></tr>
+              <tr><td data-label="Удобрение">Монокалийфосфат</td><td data-label="Состав, %" class="comp">P52 · K34</td><td data-label="Для чего">Корни рассады, приживание, цветение и семена</td><td data-label="Когда">Рассада, пересадка, цветение</td><td data-label="Доза" class="dose">1 г/⁠л; по листу 0,5 г/⁠л</td></tr>
+              <tr><td data-label="Удобрение">Сульфат калия</td><td data-label="Состав, %" class="comp">K50 · S18</td><td data-label="Для чего">Калий без азота: аромат и финиш сезона</td><td data-label="Когда">Срезки, конец сезона</td><td data-label="Доза" class="dose">1 г/⁠л</td></tr>
+              <tr><td data-label="Удобрение">Сульфат магния</td><td data-label="Состав, %" class="comp">MgO16 · S13</td><td data-label="Для чего">Магний при пожелтении между жилками старых листьев</td><td data-label="Когда">Раз в месяц весь сезон</td><td data-label="Доза" class="dose">2 г/⁠л; по листу 1 г/⁠л</td></tr>
+              <tr><td data-label="Удобрение">Хелат железа</td><td data-label="Состав, %" class="comp">Fe (ЭДТА, ДТПА)</td><td data-label="Для чего">Железо при пожелтении молодых листьев, часто из-за жёсткой воды</td><td data-label="Когда">По симптомам</td><td data-label="Доза" class="dose">по инструкции</td></tr>
+              <tr><td data-label="Удобрение">Суперфосфат двойной</td><td data-label="Состав, %" class="comp">P46 + Ca</td><td data-label="Для чего">Фосфор впрок: растворяется медленно</td><td data-label="Когда">До посадки</td><td data-label="Доза" class="dose">15–⁠20 г/⁠м² в почву</td></tr>
               <tr class="group"><th colspan="5" scope="colgroup">Органические</th></tr>
-              <tr><td>Биогумус</td><td class="comp">NPK 1–2 + гуматы</td><td>Мягкое питание, структура грунта, микрофлора</td><td>Любая стадия, кроме посева</td><td class="dose">10–20 % объёма грунта; жидкий — по инструкции</td></tr>
-              <tr><td>Компост перепревший</td><td class="comp">NPK ≈ 1</td><td>Заправка грядки, улучшение почвы</td><td>До посадки</td><td class="dose">3–5 кг/м²</td></tr>
-              <tr><td>Настой крапивы</td><td class="comp">N, K, Ca, Fe</td><td>«Зелёное удобрение» для наращивания массы</td><td>Активный рост</td><td class="dose">1:10, раз в 10–14 дней</td></tr>
-              <tr><td>Древесная зола</td><td class="comp">K 5–12 · Ca до 30 · P 1–3</td><td>Калий и кальций, раскисление</td><td>Срезки, конец сезона</td><td class="dose">настой 10 г/л; не вместе с азотными</td></tr>
-              <tr><td>Настой куриного помёта</td><td class="comp">N высокий</td><td>Сильная азотная подкормка</td><td>Только грядка</td><td class="dose">1:20, под корень, раз в 3 недели</td></tr>
-              <tr><td>Гумат калия</td><td class="comp">гуминовые кислоты</td><td>Корнеобразование, снятие стресса</td><td>Пересадка, после холода и жары</td><td class="dose">по инструкции</td></tr>
+              <tr><td data-label="Удобрение">Биогумус</td><td data-label="Состав, %" class="comp">NPK 1–⁠2 + гуматы</td><td data-label="Для чего">Мягкое питание, структура грунта, микрофлора</td><td data-label="Когда">Любая стадия, кроме посева</td><td data-label="Доза" class="dose">10–⁠20 % объёма грунта; жидкий — по инструкции</td></tr>
+              <tr><td data-label="Удобрение">Компост перепревший</td><td data-label="Состав, %" class="comp">NPK ≈ 1</td><td data-label="Для чего">Заправка грядки, улучшение почвы</td><td data-label="Когда">До посадки</td><td data-label="Доза" class="dose">3–⁠5 кг/⁠м²</td></tr>
+              <tr><td data-label="Удобрение">Настой крапивы</td><td data-label="Состав, %" class="comp">N, K, Ca, Fe</td><td data-label="Для чего">«Зелёное удобрение» для наращивания массы</td><td data-label="Когда">Активный рост</td><td data-label="Доза" class="dose">1:10, раз в 10–⁠14 дней</td></tr>
+              <tr><td data-label="Удобрение">Древесная зола</td><td data-label="Состав, %" class="comp">K 5–⁠12 · Ca до 30 · P 1–⁠3</td><td data-label="Для чего">Калий и кальций, раскисление</td><td data-label="Когда">Срезки, конец сезона</td><td data-label="Доза" class="dose">настой 10 г/⁠л; не вместе с азотными</td></tr>
+              <tr><td data-label="Удобрение">Настой куриного помёта</td><td data-label="Состав, %" class="comp">N высокий</td><td data-label="Для чего">Сильная азотная подкормка</td><td data-label="Когда">Только грядка</td><td data-label="Доза" class="dose">1:20, под корень, раз в 3 недели</td></tr>
+              <tr><td data-label="Удобрение">Гумат калия</td><td data-label="Состав, %" class="comp">гуминовые кислоты</td><td data-label="Для чего">Корнеобразование, снятие стресса</td><td data-label="Когда">Пересадка, после холода и жары</td><td data-label="Доза" class="dose">по инструкции</td></tr>
             </tbody>
           </table>
         </div>
@@ -651,7 +675,7 @@
                 <p>Азот всегда указывают как элемент, но важна его форма. Нитратный действует сразу. Аммонийный и амидный (мочевина) — через дни или недели, после превращения бактериями.</p>
               </div>
               <aside class="deep-aside">
-                <div class="eq"><span class="eq-label">Молярные массы</span><p>2·31,0 / 141,9 = 0,436<br>2·39,1 / 94,2 = 0,830</p></div>
+                <div class="eq"><span class="eq-label">Молярные массы</span><p>2·31,0 / 141,9 = 0,436<br>2·39,1 / 94,2 = 0,830</p></div>
               </aside>
             </div>
             <div class="lab-tool" data-lab="oxide" data-kind="chem"></div>
@@ -703,8 +727,8 @@
             <ol>
               <li>Заполните ведро или бочку измельчённой крапивой без семян на ½–⅔ объёма.</li>
               <li>Залейте водой, неплотно накройте и поставьте на солнце.</li>
-              <li>Перемешивайте раз в день. Через 7–14 дней настой перестанет пениться — он готов.</li>
-              <li>Разведите 1:10 для полива под корень, 1:20 — для рассады.</li>
+              <li>Перемешивайте раз в день. Через 7–⁠14 дней настой перестанет пениться — он готов.</li>
+              <li>Разведите 1:10 для полива под корень, 1:20 — для рассады.</li>
             </ol>
             <p class="muted">Запах сильный — держите подальше от окон. Для горшков в квартире лучше жидкий биогумус.</p>
           </article>
@@ -731,7 +755,7 @@
             <div class="deep-grid">
               <div class="deep-text">
                 <p>Чистая вода почти не проводит ток. Растворённая соль распадается на ионы, и раствор начинает проводить электричество — тем лучше, чем больше ионов. Кондуктометр меряет именно это: <b>EC</b> в миллисименсах на сантиметр.</p>
-                <p>TDS-метры показывают «ppm», но на самом деле тоже меряют EC и пересчитывают её по условной шкале: 500 (по NaCl) или 700 (по KCl). Один и тот же раствор с EC 1,4&nbsp;мС/см покажет 700&nbsp;ppm на одном приборе и 980 на другом. Поэтому гидропонщики обмениваются значениями EC.</p>
+                <p>TDS-метры показывают «ppm», но на самом деле тоже меряют EC и пересчитывают её по условной шкале: 500 (по NaCl) или 700 (по KCl). Один и тот же раствор с EC 1,4&nbsp;мС/⁠см покажет 700&nbsp;ppm на одном приборе и 980 на другом. Поэтому гидропонщики обмениваются значениями EC.</p>
                 <p>EC показывает сумму ионов, но не состав: раствор поваренной соли может иметь «правильную» EC и быть бесполезным. Проводимость растёт с температурой примерно на 2&nbsp;% на градус, поэтому приборы приводят показания к 25&nbsp;°C.</p>
               </div>
               <aside class="deep-aside">
@@ -742,11 +766,11 @@
             <details class="deeper">
               <summary id="deep-ec-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Эстафета протонов</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
-                <p>Не все ионы одинаково подвижны. Проводимость зависит от заряда иона и от того, как быстро он движется в воде. Калий и нитрат бегут примерно одинаково, а ион водорода — почти в пять раз быстрее: он не плывёт сам, а передаётся по цепочке молекул воды, как эстафетная палочка. Этот механизм предложил Теодор фон Гроттгус ещё в 1806 году.</p>
+                <p>Не все ионы одинаково подвижны. Проводимость зависит от заряда иона и от того, как быстро он движется в воде. Калий и нитрат бегут примерно одинаково, а ион водорода — почти в пять раз быстрее: он не плывёт сам, а передаётся по цепочке молекул воды, как эстафетная палочка. Этот механизм предложил Теодор фон Гроттгус ещё в 1806 году.</p>
                 <p>В крепких растворах ионы мешают друг другу, и проводимость растёт медленнее концентрации. Фридрих Кольрауш в XIX веке вывел для разбавленных растворов закон квадратного корня. Для гидропоники вывод простой: удвоив дозу удобрения, вы получите EC чуть меньше двойной.</p>
-                <p>Удобное правило из почвоведения: сумма катионов в миллиэквивалентах на литр примерно в 10 раз больше EC в мС/см. Раствор с EC 1,5 несёт около 15&nbsp;мг-экв катионов на литр — калия, кальция, магния и аммония вместе.</p>
+                <p>Удобное правило из почвоведения: сумма катионов в миллиэквивалентах на литр примерно в 10 раз больше EC в мС/⁠см. Раствор с EC 1,5 несёт около 15&nbsp;мг-экв катионов на литр — калия, кальция, магния и аммония вместе.</p>
                 <div class="eq"><span class="eq-label">Закон Кольрауша</span><p>Λ = Λ<sub>0</sub> − K·√c</p></div>
-                <div class="eq"><span class="eq-label">Правило для растворов</span><p>катионы, мг-экв/л ≈ 10 × EC, мС/см</p></div>
+                <div class="eq"><span class="eq-label">Правило для растворов</span><p>катионы, мг-экв/⁠л ≈ 10 × EC, мС/⁠см</p></div>
               </div>
             </details>
             <div class="deep-src">
@@ -764,23 +788,23 @@
     <div class="panel" data-panel id="гидропоника" data-title="Гидропоника: EC и pH">
       <p class="panel-lead">В гидропонике всё питание — в растворе, поэтому концентрацию контролируют кондуктометром (EC) и pH-метром. Используйте удобрения для гидропоники: почвенные не содержат всего набора элементов.</p>
       <div class="card table-scroll">
-        <table class="mini-table">
-          <thead><tr><th scope="col">Стадия</th><th scope="col">EC, <span class="unit">мС/см</span></th><th scope="col"><span class="unit">pH</span></th><th scope="col">Комментарий</th></tr></thead>
+        <table class="mini-table stack">
+          <thead><tr><th scope="col">Стадия</th><th scope="col">EC, <span class="unit">мС/⁠см</span></th><th scope="col"><span class="unit">pH</span></th><th scope="col">Комментарий</th></tr></thead>
           <tbody>
-            <tr><td>Сеянцы, 1–2 пары листьев</td><td class="num">0,4–0,8</td><td class="num">5,8–6,2</td><td>Слабый раствор, корни ещё нежные</td></tr>
-            <tr><td>Активный рост</td><td class="num">1,0–1,4</td><td class="num">5,5–6,5</td><td>Повышайте постепенно, на 0,1–0,2 в неделю</td></tr>
-            <tr><td>Регулярные срезки</td><td class="num">1,2–1,6</td><td class="num">5,5–6,5</td><td>Выше 1,8–2,0 — риск ожога корней и горечи</td></tr>
+            <tr><td data-label="Стадия">Сеянцы, 1–⁠2 пары листьев</td><td data-label="EC, мС/⁠см" class="num">0,4–⁠0,8</td><td data-label="pH" class="num">5,8–⁠6,2</td><td data-label="Комментарий">Слабый раствор, корни ещё нежные</td></tr>
+            <tr><td data-label="Стадия">Активный рост</td><td data-label="EC, мС/⁠см" class="num">1,0–⁠1,4</td><td data-label="pH" class="num">5,5–⁠6,5</td><td data-label="Комментарий">Повышайте постепенно, на 0,1–⁠0,2 в неделю</td></tr>
+            <tr><td data-label="Стадия">Регулярные срезки</td><td data-label="EC, мС/⁠см" class="num">1,2–⁠1,6</td><td data-label="pH" class="num">5,5–⁠6,5</td><td data-label="Комментарий">Выше 1,8–⁠2,0 — риск ожога корней и горечи</td></tr>
           </tbody>
         </table>
-        <p class="table-note"><b>Температура раствора на всех стадиях — 18–22&nbsp;°C.</b> Выше 24&nbsp;°C в воде мало кислорода: корни задыхаются и начинают гнить.</p>
+        <p class="table-note"><b>Температура раствора на всех стадиях — 18–⁠22&nbsp;°C.</b> Выше 24&nbsp;°C в воде мало кислорода: корни задыхаются и начинают гнить.</p>
       </div>
       <div class="sub cols-2">
         <article class="card">
           <h3 id="udobreniya-h22">Метод Кратки для начинающих</h3>
           <ol class="plain-ol">
-            <li>Банка 1–3&nbsp;л, закрытая от света (покрасьте или оберните).</li>
+            <li>Банка 1–⁠3&nbsp;л, закрытая от света (покрасьте или оберните).</li>
             <li>Крышка с отверстием под сетчатый стаканчик с минватой или керамзитом.</li>
-            <li>Раствор EC 1,0–1,2 и pH 5,8–6,2, корни наполовину в растворе.</li>
+            <li>Раствор EC 1,0–⁠1,2 и pH 5,8–⁠6,2, корни наполовину в растворе.</li>
             <li>Не доливайте до верха: по мере роста уровень снижается, и у корней появляется воздух.</li>
           </ol>
         </article>
@@ -797,7 +821,7 @@
       <div class="sci-notes">
         <aside class="sci-note" data-kind="bio">
           <span class="sci-note-k"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span class="hand">Любопытно</span></span>
-          <p>Первый опыт гидропоники описал англичанин Джон Вудворд в 1699 году: он растил мяту в воде из разных источников и сравнивал прирост.</p>
+          <p>Первый опыт гидропоники описал англичанин Джон Вудворд в 1699 году: он растил мяту в воде из разных источников и сравнивал прирост.</p>
           <a class="sci-note-link" href="#deep-kislorod">Глубже: Кислород и хелаты <span aria-hidden="true">→</span></a>
         </aside>
       </div>
@@ -814,10 +838,10 @@
               <div class="deep-text">
                 <p>Корни дышат: энергия на поглощение ионов берётся из дыхания, а для него нужен кислород. В гидропонике он есть только растворённый в воде.</p>
                 <p>Растворимость газов падает с ростом температуры: при 15&nbsp;°C в литре воды около 10&nbsp;мг O<sub>2</sub>, при 25&nbsp;°C — около 8,3&nbsp;мг, при 30&nbsp;°C — 7,6&nbsp;мг. А дыхание корней с нагревом ускоряется. Ножницы смыкаются: в тёплом растворе кислорода не хватает, и корни становятся лёгкой добычей гнилей вроде питиума.</p>
-                <p>Железо при pH выше 6,5 быстро выпадает в осадок гидроксидом. <b>Хелат</b> — молекула-клешня, которая держит ион железа растворённым. У каждой клешни свой рабочий диапазон: ЭДТА — примерно до pH 6,5, ДТПА — до 7,5, ЭДДГА — до 9 и выше.</p>
+                <p>Железо при pH выше 6,5 быстро выпадает в осадок гидроксидом. <b>Хелат</b> — молекула-клешня, которая держит ион железа растворённым. У каждой клешни свой рабочий диапазон: ЭДТА — примерно до pH 6,5, ДТПА — до 7,5, ЭДДГА — до 9 и выше.</p>
               </div>
               <aside class="deep-aside">
-                <div class="num-note"><b>9,1 → 7,6</b><span>мг O<sub>2</sub> на литр при нагреве воды с 20 до 30&nbsp;°C</span></div>
+                <div class="num-note"><b>9,1 → 7,6</b><span>мг O<sub>2</sub> на литр при нагреве воды с 20 до 30&nbsp;°C</span></div>
                 <div class="chel" role="img" aria-label="Рабочий диапазон хелатов железа: ЭДТА до pH 6,5, ДТПА до 7,5, ЭДДГА до 9 и выше">
                   <div><span>ЭДТА</span><i style="--w: 50%"></i></div>
                   <div><span>ДТПА</span><i style="--w: 70%"></i></div>
@@ -867,7 +891,7 @@
             <div class="deep-grid">
               <div class="deep-text">
                 <p><b>Скорлупа</b> — карбонат кальция CaCO<sub>3</sub>. В чистой воде он почти нерастворим, около 0,013&nbsp;г на литр; растворяет его кислота. В нейтральном грунте кусочки скорлупы лежат годами. Работает только мелкий порошок и только в кислом грунте — как медленный раскислитель.</p>
-                <p><b>Зола</b> — смесь карбонатов калия и кальция и оксидов. Её вытяжка сильно щелочная, pH 10–12. Калий из неё доступен, но зола резко поднимает pH, а вместе с аммонийными удобрениями выгоняет азот в воздух аммиаком. Поэтому золу не смешивают с азотными подкормками.</p>
+                <p><b>Зола</b> — смесь карбонатов калия и кальция и оксидов. Её вытяжка сильно щелочная, pH 10–⁠12. Калий из неё доступен, но зола резко поднимает pH, а вместе с аммонийными удобрениями выгоняет азот в воздух аммиаком. Поэтому золу не смешивают с азотными подкормками.</p>
                 <p><b>Дрожжи</b> — живые грибки. В грунте они быстро гибнут или питаются органикой, временно забирая азот себе. «Гормона роста» в заметном для растения количестве они не дают.</p>
                 <p><b>Сахар</b> в грунте — корм для бактерий. Размножаясь, они связывают азот почвы, и растению его достаётся меньше.</p>
                 <p><b>Кофейная гуща</b> после заварки почти нейтральна и содержит около 2&nbsp;% азота в органической форме. Как любая органика, она отдаёт азот только после разложения микробами.</p>
@@ -968,10 +992,10 @@
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
 <script src="assets/js/haptics.js?v=8488e836" defer></script>
-<script src="assets/js/data.js?v=44aaf208" defer></script>
-<script src="assets/js/pages.js?v=4301a387" defer></script>
+<script src="assets/js/data.js?v=3020ad0c" defer></script>
+<script src="assets/js/pages.js?v=66e256a9" defer></script>
 <script src="assets/js/scene.js?v=82c1b091" defer></script>
-<script src="assets/js/science.js?v=d98efc6e" defer></script>
-<script src="assets/js/app.js?v=bbd14ecd" defer></script>
+<script src="assets/js/science.js?v=c5ecffe8" defer></script>
+<script src="assets/js/app.js?v=1752bce4" defer></script>
 </body>
 </html>

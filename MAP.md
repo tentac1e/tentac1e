@@ -23,7 +23,7 @@
 - `src/pages/posadka/_foot.html` · подвал главы · 3 стр.
 
 ### Календарь — `/календарь` (`kalendar.html`)
-- `src/pages/kalendar.html` · вся глава · 169 стр.<br>модели: `daylen`, `gdd`; глубже: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
+- `src/pages/kalendar.html` · вся глава · 170 стр.<br>модели: `daylen`, `gdd`; глубже: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
 
 ### Уход — `/уход` (`uhod.html`)
 - `src/pages/uhod/_head.html` · обложка, вкладки · 14 стр.
@@ -158,7 +158,7 @@
 **app.js**
 - `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (269 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/02-router.js` (270 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-sheets.js` (158 стр.): initSheets
 - `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
@@ -168,10 +168,10 @@
 - `src/js/app/08-varieties.js` (250 стр.): EASY, initVarieties, initQuiz
 - `src/js/app/09-places.js` (43 стр.): initPlaces
 - `src/js/app/10-soil.js` (26 стр.): initSoil
-- `src/js/app/11-calendar.js` (222 стр.): initCalendar
+- `src/js/app/11-calendar.js` (226 стр.): initCalendar
 - `src/js/app/12-light.js` (39 стр.): initDli
 - `src/js/app/13-nutrients-elements.js` (43 стр.): GROUP_NAME, MOB, initElements
-- `src/js/app/14-nutrients-stages.js` (118 стр.): initStages
+- `src/js/app/14-nutrients-stages.js` (119 стр.): initStages
 - `src/js/app/15-nutrients-plan.js` (87 стр.): initPlan
 - `src/js/app/16-nutrients-npk.js` (49 стр.): initNpk
 - `src/js/app/17-nutrients-dose.js` (52 стр.): FRACTIONS, initDose
@@ -179,7 +179,7 @@
 - `src/js/app/19-seeds.js` (21 стр.): initGerm
 - `src/js/app/20-problems.js` (58 стр.): initDiagnostics
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
-- `src/js/app/22-garden-view.js` (298 стр.): WEEKDAY, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
+- `src/js/app/22-garden-view.js` (299 стр.): WEEKDAY, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
 - `src/js/app/22-garden.js` (128 стр.): GARDEN_KEY
 - `src/js/app/22-reading-pos.js` (134 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
@@ -188,10 +188,10 @@
 - `src/js/science/00-core.js` (20 стр.)
 - `src/js/science/01-colors.js` (40 стр.)
 - `src/js/science/02-controls.js` (30 стр.)
-- `src/js/science/03-charts.js` (149 стр.)
+- `src/js/science/03-charts.js` (153 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (270 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
-- `src/js/science/06-labs-loader.js` (110 стр.): SELF, draw, drawDue
+- `src/js/science/06-labs-loader.js` (117 стр.): SELF, draw, drawDue
 - `src/js/science/07-deep.js` (225 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 
 **scene.js**

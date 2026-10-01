@@ -91,6 +91,7 @@ def htaccess():
         '',
         'AddDefaultCharset UTF-8',
         'AddCharset UTF-8 .html .css .js',
+        'AddType font/woff2 .woff2',
         '',
         '# compressed transfer: the pages, styles, scripts and the search index shrink four- to fivefold',
         '# (Apache 2.4 takes AddOutputFilterByType from mod_filter: without it the line is skipped, not an error)',
@@ -99,12 +100,13 @@ def htaccess():
         '  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/x-javascript',
         '</IfModule>',
         '</IfModule>',
-        '# every style and script address carries a fingerprint of its content (?v=...): kept for a year',
+        '# every style, script and font address carries a fingerprint of its content (?v=...): kept for a year',
         '<IfModule mod_expires.c>',
         '  ExpiresActive On',
         '  ExpiresByType text/css "access plus 1 year"',
         '  ExpiresByType text/javascript "access plus 1 year"',
         '  ExpiresByType application/javascript "access plus 1 year"',
+        '  ExpiresByType font/woff2 "access plus 1 year"',
         '</IfModule>',
         '',
         'RewriteEngine On',
@@ -139,6 +141,11 @@ def htaccess():
 # ids that scripts create at run time, by prefix
 PREFIXES = {'dis-': 'problemy', 'pest-': 'problemy', 'g-': 'spravka', 'ck-': 'spravka', 'r-': 'urozhay'}
 SCRIPTS = ['haptics.js', 'data.js', 'pages.js', 'scene.js', 'science.js', 'app.js']
+
+# the one-file book has no assets folder: it keeps loading its fonts from Google, as the site did before
+GOOGLE_FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>'
+# the text font is asked for at once, before the stylesheet finds it: it is on every line of every page
+PRELOAD_FONTS = ['manrope-normal-cyrillic.woff2', 'manrope-normal-latin.woff2']
 
 SITE_TITLE = 'Гид по базилику'
 SITE_DESC = ('Подробный гид по выращиванию базилика в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, '
@@ -284,6 +291,52 @@ def chapters():
     return out
 
 
+def label_tables(html):
+    """tables with a head: every body cell gets data-label — its column's name — so that on a phone, where the rows of
+    a wide table (.table-wrap) or of a .mini-table.stack turn into cards (06-blocks.css), a cell can say which column
+    it is from"""
+    def one(m):
+        heads = []
+        for a, h in re.findall(r'<th([^>]*)>(.*?)</th>', m.group(2), re.S):
+            span = re.search(r'colspan="(\d+)"', a)
+            heads += [re.sub(r'<[^>]+>', '', h).strip()] * (int(span.group(1)) if span else 1)
+        def row(r):
+            k = 0
+            def cell(c):
+                nonlocal k
+                name = heads[k] if k < len(heads) else ''
+                span = re.search(r'colspan="(\d+)"', c.group(2))
+                k += int(span.group(1)) if span else 1
+                return f'<td data-label="{attr(name)}"{c.group(2)}>' if c.group(1) == 'td' and name else c.group(0)
+            return re.sub(r'<(td|th)((?:\s[^>]*)?)>', cell, r.group(0))
+        return m.group(1) + m.group(2) + re.sub(r'<tr(?![^>]*class="group")[^>]*>.*?</tr>', row, m.group(3), flags=re.S)
+    return re.sub(r'(<table[^>]*>)(\s*<thead>.*?</thead>)(.*?</table>)', one, html, flags=re.S)
+
+
+def typeset(html):
+    """a number and the short word after it stay on one line («7–10 дней», «0,5 г/л», «3 пары»), and a range does not
+    break after its dash («2–3», a word joiner after «–»), nor a unit after its slash («мкмоль/м²·с»): the same rule as
+    nb() in src/js/app/00-core.js, for the text of the pages — not inside tags, scripts or styles"""
+    out, skip = [], False
+    for part in re.split(r'(<[^>]*>)', html):
+        if part.startswith('<'):
+            low = part[:8].lower()
+            if low.startswith(('<script', '<style')):
+                skip = True
+            elif low.startswith(('</script', '</style')):
+                skip = False
+            out.append(part)
+        else:
+            out.append(part if skip else tie(part))
+    return ''.join(out)
+
+
+def tie(text):
+    text = re.sub(r'(\d) (?=[^\s\d–—<&-]{1,6}(?=[\s,.;:)!?/<]|$))', '\\1\u00a0', text)  # 7 дней
+    text = re.sub(r'(\d)–(?=\d)', '\\1–\u2060', text)  # 2–3
+    return re.sub(r'(?<=[а-яё²³])/(?=[а-яё])', '/\u2060', text, flags=re.I)  # мкмоль/м²·с
+
+
 def attr(s):
     return escape(s, quote=True)
 
@@ -331,6 +384,12 @@ def assemble(src_pages):
         assert frame.count('/*@parts*/\n') == 1, mod
         (js / f'{mod}.js').write_text(banner(frame.replace('/*@parts*/\n', body), f'src/js/{mod}/'), encoding='utf-8')
     shutil.copyfile(SRC / 'js' / 'haptics.js', js / 'haptics.js')
+    fonts = ROOT / 'assets' / 'fonts'
+    if fonts.exists():
+        shutil.rmtree(fonts)
+    fonts.mkdir()
+    for f in sorted((SRC / 'fonts').glob('*.woff2')):
+        shutil.copyfile(f, fonts / f.name)
 
     style = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'style', '.css'))
     (css / 'style.css').write_text(banner(style, 'src/css/style/'), encoding='utf-8')
@@ -343,15 +402,14 @@ def assemble(src_pages):
     assert set(used) <= known, set(used) - known
     assert known <= set(used), ('models no page shows', known - set(used))
 
-    lab_css = ''
+    # the styles of the models go with the models: into their chapter's file, put on the page when it runs
+    # (a model appears only after that). lab.css keeps what every page needs
+    lab_css = {}
     for v, labs in order:
-        for l in labs:
-            f = SRC / 'labs' / v / f'{l}.css'
-            if f.exists():
-                lab_css += f.read_text(encoding='utf-8')
+        lab_css[v] = ''.join((SRC / 'labs' / v / f'{l}.css').read_text(encoding='utf-8') for l in labs if (SRC / 'labs' / v / f'{l}.css').exists())
     lab = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'lab', '.css'))
     assert lab.count('/*@labs*/\n') == 1
-    (css / 'lab.css').write_text(banner(lab.replace('/*@labs*/\n', lab_css), 'src/css/lab/ и src/labs/<глава>/<модель>.css'), encoding='utf-8')
+    (css / 'lab.css').write_text(banner(lab.replace('/*@labs*/\n', ''), 'src/css/lab/'), encoding='utf-8')
 
     frame = (SRC / 'labs' / '_frame.js').read_text(encoding='utf-8')
     out = js / 'labs'
@@ -361,16 +419,21 @@ def assemble(src_pages):
     bundles = []
     CH = chapters()
     # a model asks for a shared drawing library with a line «/* @use micro */»; a library may ask for
-    # another one the same way. Each goes in once, after the ones it needs
+    # another one the same way. Each library is a file of its own (labs/lib-<name>.js), loaded once and kept
+    # in the cache from chapter to chapter; a chapter lists the ones it needs, in the order they go
     uses_of = lambda f: [x.strip() for m in re.finditer(r'/\* @use ([a-z, -]+) \*/', f.read_text(encoding='utf-8')) for x in m.group(1).split(',') if x.strip()]
+    lib_src = lambda name: SRC / 'labs' / '_lib' / f'{name}.js'
+    # the name a library goes by in the code: «const ill = (() => …» in ills.js
+    lib_name = lambda name: re.search(r'^  const ([a-zA-Z]+) = \(\(\) => \{', lib_src(name).read_text(encoding='utf-8'), re.M).group(1)
 
     def need(name, libs):
         if name in libs:
             return
-        for dep in uses_of(SRC / 'labs' / '_lib' / f'{name}.js'):
+        for dep in uses_of(lib_src(name)):
             need(dep, libs)
         libs.append(name)
 
+    deps, written = {}, []
     for v, labs in order:
         d = SRC / 'labs' / v
         shared = [d / '_shared.js'] if (d / '_shared.js').exists() else []
@@ -381,15 +444,32 @@ def assemble(src_pages):
         for f in shared + [d / f'{l}.js' for l in labs]:
             for x in uses_of(f):
                 need(x, libs)
-        parts = [SRC / 'labs' / '_lib' / f'{x}.js' for x in libs] + shared + [d / f'{l}.js' for l in labs]
-        body = '\n'.join(f.read_text(encoding='utf-8') for f in parts)
+        for x in libs:
+            if x in written:
+                continue
+            mine = []
+            for dep in uses_of(lib_src(x)):
+                need(dep, mine)
+            text = (f'/* Гид по базилику — библиотека рисунков «{x}» */\n(() => {{\n  \'use strict\';\n'
+                    f'  const L = window.BasilLibs = window.BasilLibs || {{}};\n'
+                    + (f'  const {{ {", ".join(lib_name(m) for m in mine)} }} = L;\n' if mine else '')
+                    + lib_src(x).read_text(encoding='utf-8')
+                    + f'  L.{lib_name(x)} = {lib_name(x)};\n}})();\n')
+            (out / f'lib-{x}.js').write_text(banner(text, f'src/labs/_lib/{x}.js'), encoding='utf-8')
+            written.append(x)
+        head = (f'  const {{ {", ".join(lib_name(x) for x in libs)} }} = window.BasilLibs;\n' if libs else '')
+        if lab_css[v]:
+            head += ("  { const st = document.createElement('style'); st.dataset.labs = " + json.dumps(v) + '; st.textContent = '
+                     + json.dumps(lab_css[v], ensure_ascii=False) + '; document.head.appendChild(st); }\n')
+        body = head + '\n'.join(f.read_text(encoding='utf-8') for f in shared + [d / f'{l}.js' for l in labs])
         text = frame.replace('{{chapter}}', CH[v]['title'] if v in CH else v).replace('/*@labs*/\n', body)
         (out / f'{v}.js').write_text(banner(text, f'src/labs/{v}/'), encoding='utf-8')
         bundles.append(v)
+        deps[v] = libs
     stale = js / 'labs.js'
     if stale.exists():
         stale.unlink()
-    return bundles
+    return bundles, deps, written
 
 
 def write_map(src_pages, CH):
@@ -467,7 +547,7 @@ def main():
     layout = (SRC / 'layout.html').read_text(encoding='utf-8')
     src = {v: read_page(v) for v, _ in PAGES}
     CH = chapters()
-    bundles = assemble(src)
+    bundles, lib_deps, libs = assemble(src)
 
     # 1. give every searchable heading a stable id, and index the text
     static_entries_panels, static_entries_heads = [], []
@@ -606,10 +686,23 @@ def main():
         # every asset address carries a short fingerprint of its content (style.css?v=3f2a91c0):
         # after an update browsers fetch the new files instead of mixing them with cached old ones
         ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
-        pages_js['v'] = {'labs': {v: ver(js / 'labs' / f'{v}.js') for v in bundles}, 'search': ver(js / 'search-index.js')}
+        pages_js['v'] = {'labs': {v: ver(js / 'labs' / f'{v}.js') for v in bundles}, 'lib': {x: ver(js / 'labs' / f'lib-{x}.js') for x in libs},
+                         'deps': lib_deps, 'search': ver(js / 'search-index.js')}
         (js / 'pages.js').write_text(
             '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
             'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
+
+    # the fonts' rules go into the <head> of every page, with the files' fingerprints like every other asset
+    font_head = ''
+    if not single:
+        fv = lambda n: hashlib.sha1((out_dir / 'assets' / 'fonts' / n).read_bytes()).hexdigest()[:8]
+        rules = (SRC / 'fonts' / 'fonts.css').read_text(encoding='utf-8')
+        rules = re.sub(r'url\(fonts/([a-z0-9-]+\.woff2)\)', lambda m: f'url(assets/fonts/{m.group(1)}?v={fv(m.group(1))})', rules)
+        # asked for at once on the hosting copy only: a page opened from disk has no origin, and a font fetched
+        # ahead that way is refused — the page would fall back to the system font
+        if clean:
+            font_head = '\n'.join(f'<link rel="preload" href="assets/fonts/{n}?v={fv(n)}" as="font" type="font/woff2" crossorigin>' for n in PRELOAD_FONTS) + '\n'
+        font_head += '<style>\n' + rules + '</style>'
 
     def fingerprint(html):
         if single:
@@ -618,7 +711,7 @@ def main():
 
     # 4. pages
     def page_html(views, here):
-        content = '\n'.join(src[v] for v in views)
+        content = label_tables(typeset('\n'.join(src[v] for v in views)))
         if not single:
             content = content.replace('<section class="view', '<section class="view is-active', 1)
             # first panel is visible straight from the HTML, before any script runs
@@ -636,8 +729,10 @@ def main():
         if single:
             scripts = scripts.replace('<script src="assets/js/science.js" defer></script>',
                                       '<script src="assets/js/science.js" defer></script>\n'
-                                      + '\n'.join(f'<script src="assets/js/labs/{v}.js" defer></script>' for v in bundles))
+                                      + '\n'.join([f'<script src="assets/js/labs/lib-{x}.js" defer></script>' for x in libs]
+                                                   + [f'<script src="assets/js/labs/{v}.js" defer></script>' for v in bundles]))
         out = out.replace('{{scripts}}', scripts)
+        out = out.replace('{{fonts}}', GOOGLE_FONTS if single else font_head)
         return fingerprint(out)
 
     if single:

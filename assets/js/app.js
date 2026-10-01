@@ -26,7 +26,7 @@
   };
 
   // number + short word → non-breaking space ("20 °C", "1 г/л", "3 пары")
-  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1\u00a0');
+  const nb = s => String(s).replace(/(\d) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1\u00a0').replace(/(\d)–(?=\d)/g, '$1–\u2060').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060');
 
   const plural = (n, one, few, many) => {
     const a = Math.abs(n) % 100, b = a % 10;
@@ -299,7 +299,8 @@
       if (opts.initial) location.replace(r.external); else location.href = r.external;
       return;
     }
-    $$('dialog.sheet[open]').forEach(d => closeSheet(d));
+    // a sheet opened while the page was still starting stays open: the first route is not a navigation
+    if (!opts.initial) $$('dialog.sheet[open]').forEach(d => closeSheet(d));
     const changedView = r.view !== currentView;
     const apply = () => {
       if (changedView) {
@@ -1717,6 +1718,7 @@
     const wheel = $('#cal-wheel');
     const tip = $('#wheel-tip');
     const legend = $('#cal-legend');
+    const cities = $('#cal-cities');
     const timeline = $('#cal-timeline');
     const modeBtns = $$('[data-mode]');
 
@@ -1870,6 +1872,9 @@
     const render = () => {
       const isGarden = mode === 'garden';
       presetField.hidden = !isGarden;
+      const pr = B.PRESETS.find(x => x.id === preset);
+      cities.textContent = pr && pr.cities ? 'Например, ' + pr.cities : '';
+      cities.hidden = !cities.textContent;
       dateLabel.textContent = isGarden ? 'Последний весенний заморозок' : 'Дата посева';
       let base = isGarden ? gardenDate : homeDate;
       if (!base) base = isGarden ? presetLF(preset) : now;
@@ -2014,7 +2019,7 @@
     const btns = $$('.stage-btn', track);
     npk.innerHTML = series.map(([c, s, n]) => `<div class="npk-row"><span class="lbl"><i class="k-${c}"></i>${s} · ${n}</span><span class="bar"><i class="k-${c}" id="bar-${c}"></i></span><span class="lvl" id="lvl-${c}"></span></div>`).join('');
     const table = $('#feed-table');
-    if (table) table.innerHTML = `<thead><tr><th scope="col">Стадия</th><th scope="col">N</th><th scope="col">P</th><th scope="col">K</th><th scope="col">N : P : K</th></tr></thead><tbody>${S.map((s, i) => `<tr><td>${i + 1}. ${s.name}</td><td class="num">${s.N}</td><td class="num">${s.P}</td><td class="num">${s.K}</td><td class="num">${s.ratio}</td></tr>`).join('')}</tbody>`;
+    if (table) table.innerHTML = `<thead><tr><th scope="col">Стадия</th><th scope="col">N</th><th scope="col">P</th><th scope="col">K</th><th scope="col">N : P : K</th></tr></thead><tbody>${S.map((s, i) => `<tr><td>${i + 1}. ${s.name}</td><td class="num">${s.N}</td><td class="num">${s.P}</td><td class="num">${s.K}</td><td class="num npk-ratio">${s.ratio}</td></tr>`).join('')}</tbody>`;
     const lvl = v => (v === 0 ? 'не нужно' : v < 30 ? 'низкая' : v < 60 ? 'средняя' : 'высокая');
 
     let geom = null;
@@ -2031,7 +2036,8 @@
       svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
       let out = '';
       const step = pw / (S.length - 1);
-      out += `<rect class="fc-band" x="${x(sel) - step * 0.42}" y="${m.t - 6}" width="${step * 0.84}" height="${ph + 12}" rx="12"/>`;
+      // the selected stage's column ends just under the axis, clear of the stage numbers below it
+      out += `<rect class="fc-band" x="${x(sel) - step * 0.42}" y="${m.t - 6}" width="${step * 0.84}" height="${ph + 9}" rx="12"/>`;
       [0, 25, 50, 75, 100].forEach(v => {
         out += `<line class="fc-grid" x1="${m.l}" x2="${w - m.r}" y1="${y(v)}" y2="${y(v)}"/>`;
         out += `<text class="fc-axis" x="${m.l - 8}" y="${y(v)}" text-anchor="end" dominant-baseline="middle">${v}</text>`;
@@ -2051,7 +2057,7 @@
         out += `<circle class="fc-dot f-${c}" cx="${x(sel)}" cy="${y(S[sel][key])}" r="5"/>`;
       });
       S.forEach((s, i) => {
-        out += `<text class="fc-xlabel${i === sel ? ' is-sel' : ''}" x="${x(i)}" y="${h - (narrow ? 10 : 16)}" text-anchor="middle">${narrow ? i + 1 : s.short}</text>`;
+        out += `<text class="fc-xlabel${i === sel ? ' is-sel' : ''}" x="${x(i)}" y="${h - (narrow ? 8 : 16)}" text-anchor="middle">${narrow ? i + 1 : s.short}</text>`;
       });
       out += `<line class="fc-cross" id="fc-cross" x1="0" x2="0" y1="${m.t}" y2="${m.t + ph}" visibility="hidden"/>`;
       S.forEach((s, i) => {
@@ -2575,7 +2581,7 @@
     const pg = $('#pest-grid');
     if (pg) { pg.innerHTML = B.PESTS.map((d, i) => card(d, i, 'pest')).join(''); paintIll(pg); }
     const tt = $('#treat-table');
-    if (tt) tt.innerHTML = `<thead><tr><th scope="col">Средство</th><th scope="col">От чего</th><th scope="col">Как работает</th></tr></thead><tbody>${B.TREATMENTS.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td>${b}</td><td>${nb(c)}</td></tr>`).join('')}</tbody>`;
+    if (tt) tt.innerHTML = `<thead><tr><th scope="col">Средство</th><th scope="col">От чего</th><th scope="col">Как работает</th></tr></thead><tbody>${B.TREATMENTS.map(([a, b, c]) => `<tr><td><b>${a}</b></td><td data-label="От чего">${b}</td><td data-label="Как работает">${nb(c)}</td></tr>`).join('')}</tbody>`;
   }
   /* ================================================================== */
   /* REFERENCE: glossary, checklist                                      */
@@ -2768,7 +2774,7 @@
       <div class="field"><label for="g-variety">Сорт</label><select id="g-variety">${varietyOptions(p.variety)}</select></div>
       <div class="field"><span class="label" id="g-start-l">С чего начали</span>${seg('start', G.starts, p.start)}</div>
       <div class="field"><span class="label" id="g-place-l">Где растёт</span>${seg('place', G.places, p.place)}</div>
-      <div class="field" id="g-preset-f"${p.place === 'home' ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>
+      <div class="field" id="g-preset-f"${p.place === 'home' ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><small class="field-note" id="g-cities">Например, ${esc(B.PRESETS.find(x => x.id === (p.preset || 'temperate')).cities)}</small></div>
       <div class="field"><label for="g-date" id="g-date-l">${startDef.date}</label><input type="date" id="g-date" value="${p.date || toISO(today())}" max="${toISO(addDays(today(), 60))}"></div>
       <div class="g-form-a"><button class="btn btn-primary btn-small" type="submit">${icon('check')}Сохранить</button><button class="btn btn-ghost btn-small" type="button" data-g-cancel>Отмена</button></div>
     </form>`;
@@ -2945,6 +2951,7 @@
     });
     document.addEventListener('change', e => {
       if (e.target.id === 'g-log-k') $('#g-log-g').hidden = e.target.value !== 'cut';
+      if (e.target.id === 'g-preset') $('#g-cities').textContent = 'Например, ' + B.PRESETS.find(x => x.id === e.target.value).cities;
     });
     document.addEventListener('submit', e => {
       if (e.target.id === 'g-form') {

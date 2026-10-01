@@ -1,4 +1,4 @@
-/* Файл собирает scripts/build.py из src/css/lab/ и src/labs/<глава>/<модель>.css — правьте там */
+/* Файл собирает scripts/build.py из src/css/lab/ — правьте там */
 /* Aroma molecules: one colour each, grouped by family — monoterpenes green and teal,
    phenylpropanoids plum and cinnamon, sesquiterpenes gold, green-leaf aldehydes blue. */
 :root {
@@ -994,6 +994,7 @@ body::after {
 .lab-field { gap: 2px; }
 .lab-label { display: block; margin-bottom: 6px; font-size: .76rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .lab-seg .button, .lab-seg button { padding: 8px 13px; font-size: .84rem; }
+@media (pointer: coarse) { .lab-seg .button, .lab-seg button { min-height: 38px; } }
 .lab-chips { margin: 0; }
 .lab-chips .chip { padding: .42em .9em; font-size: .82rem; }
 .lab-tool .chip[aria-pressed="true"], .lab-tool .seg button[aria-pressed="true"] { background: var(--k); border-color: var(--k); color: var(--surface); }
@@ -1079,275 +1080,9 @@ body::after {
 .ghosts path { fill: none; stroke: var(--pl-back-b); stroke-width: 3; opacity: .35; }
 .ghosts ellipse { fill: var(--pl-back-b); opacity: .28; }
 
-/* window */
-.win-room { fill: color-mix(in srgb, var(--surface-2) 70%, transparent); }
-.win-light { fill: var(--sun-light); }
-.win-ray { stroke: var(--sun-disc); stroke-width: 1.3; opacity: .45; stroke-dasharray: 5 6; }
-.win-sun { fill: var(--sun-disc); filter: drop-shadow(0 0 10px var(--sun-disc)); }
-.win-wall { fill: var(--line-strong); }
-.win-glass { fill: var(--sci-phys); opacity: .45; }
-.win-sill { fill: var(--ink-3); opacity: .6; }
-.win-pot { fill: var(--clay); }
-.win-leaf { fill: var(--leaf); }
-
-.win-tag { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }
-/* germination */
-.germ-fig { margin: 0; display: grid; gap: 6px; }
-.germ-anim { width: 100%; max-width: 280px; height: auto; border-radius: 16px; background: color-mix(in srgb, var(--sci-phys-soft) 70%, transparent); }
-.germ-soil { fill: var(--soil); opacity: .85; }
-.germ-coat { fill: var(--germ-coat); }
-.germ-gel { fill: var(--germ-gel); stroke: color-mix(in srgb, var(--sci-phys) 40%, transparent); stroke-width: 1; transform-origin: 0 0; }
-.germ-root { fill: none; stroke: var(--root); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 40; stroke-dashoffset: 40; }
-.germ-hypo { fill: none; stroke: var(--stem); stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 60; stroke-dashoffset: 60; }
-.germ-coty ellipse { fill: var(--leaf); transform-origin: 0 0; }
-.germ-coty { transform-box: fill-box; }
-.germ-anim .germ-gel { animation: g-gel var(--dur, 6s) var(--ease-float) infinite; }
-.germ-anim .germ-root { animation: g-root var(--dur, 6s) ease-out infinite; }
-.germ-anim .germ-hypo { animation: g-hypo var(--dur, 6s) ease-out infinite; }
-.germ-anim .germ-coty { animation: g-coty var(--dur, 6s) var(--ease-float) infinite; }
-@keyframes g-gel { 0%, 8% { scale: .3; opacity: 0; } 25%, 88% { scale: 1; opacity: 1; } 100% { scale: 1; opacity: 0; } }
-@keyframes g-root { 0%, 30% { stroke-dashoffset: 40; } 55%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes g-hypo { 0%, 50% { stroke-dashoffset: 60; } 75%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes g-coty { 0%, 70% { opacity: 0; scale: .2; } 82%, 92% { opacity: 1; scale: 1; } 100% { opacity: 0; } }
-.germ-anim.is-stopped * { animation: none !important; }
-.germ-anim.is-stopped .germ-gel { opacity: 0; }
-.germ-phase { margin: 0; font-size: .84rem; color: var(--ink-3); }
-
-/* shade */
-.rfr { display: grid; gap: 6px; font: 500 .7rem/1.2 var(--font-mono); }
-.rfr i { position: relative; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #B8312A, #6E1F2B); }
-.rfr i::after { content: ""; position: absolute; top: -4px; bottom: -4px; left: var(--p, 50%); width: 4px; margin-left: -2px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--surface); transition: left .4s var(--ease-float); }
-.rfr-r { color: var(--danger); }
-.rfr-fr { color: var(--ink-3); text-align: right; }
-.shade-stage .lab-plant { max-width: 320px; }
-
-/* perched water */
-.per-soil { fill: var(--soil); opacity: .78; }
-.per-drain { fill: color-mix(in srgb, var(--clay) 25%, var(--surface)); }
-.per-pebble { fill: var(--clay); opacity: .8; }
-.per-water { fill: var(--water-fill); }
-.per-wave { fill: none; stroke: var(--water-line); stroke-width: 2; }
-.per-pot { fill: none; stroke: var(--clay); stroke-width: 5; stroke-linejoin: round; }
-.per-rim { fill: var(--clay-rim); }
-.per-lead { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 2 3; }
-.tick.is-water { fill: var(--water-line); font-weight: 700; }
-
-/* gdd, pesto bars */
-.gdd-bars, .pesto-bars { display: grid; gap: 10px; margin-top: 12px; }
-.gdd-row { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .86rem; color: var(--ink-2); }
-.gdd-row i { height: 12px; width: var(--w); border-radius: 0 6px 6px 0; transition: width .5s var(--ease-float); }
-.gdd-row i.s1 { background: var(--ser-1); } .gdd-row i.s2 { background: var(--ser-2); } .gdd-row i.s3 { background: var(--ser-3); }
-.gdd-row b { font: 600 .84rem/1 var(--font-mono); color: var(--ink); min-width: 4.5em; text-align: right; }
-
-/* vpd */
-.vpd-map polygon { stroke: none; }
-.vpd-iso { fill: none; stroke: var(--surface); stroke-width: 1.5; opacity: .8; }
-.vpd-map .z0 { fill: var(--z0); } .vpd-map .z1 { fill: var(--z1); } .vpd-map .z2 { fill: var(--z2); } .vpd-map .z3 { fill: var(--z3); } .vpd-map .z4 { fill: var(--z4); }
-.vpd-dot { fill: none; stroke: var(--ink); stroke-width: 2.5; }
-.vpd-dot-in { fill: var(--ink); }
-.vpd-legend { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; font-size: .82rem; color: var(--ink-2); }
-.vpd-legend i { display: inline-block; width: 14px; height: 14px; margin-right: 8px; border-radius: 4px; vertical-align: -2px; }
-.vpd-legend .z0 { background: var(--z0); } .vpd-legend .z1 { background: var(--z1); } .vpd-legend .z2 { background: var(--z2); } .vpd-legend .z3 { background: var(--z3); } .vpd-legend .z4 { background: var(--z4); }
-.vpd-legend small { font-family: var(--font-mono); color: var(--ink-3); }
-
-/* ph bands */
-.ph-band { fill: var(--ser-1); opacity: .55; transition: opacity .3s; }
-.ph-band.is-low { fill: var(--ser-3); opacity: .75; }
-.ph-sym { font: 700 12px/1 var(--font-mono); fill: var(--ink-2); }
-.ph-sym.is-low { fill: var(--ser-3); }
-
-/* osmosis */
-.osm-svg { width: 100%; max-width: 420px; height: auto; }
-.osm-soil { fill: color-mix(in srgb, var(--soil) 18%, var(--surface)); }
-.osm-ion-a { fill: var(--ser-2); opacity: .8; }
-.osm-ion-b { fill: var(--ser-3); opacity: .8; }
-.osm-wall { fill: color-mix(in srgb, var(--leaf-soft) 70%, var(--surface)); stroke: var(--stem); stroke-width: 3; }
-.osm-vac { fill: var(--water-fill); stroke: var(--water-line); stroke-width: 1.5; transition: rx .6s, ry .6s; }
-.osm-nuc { fill: var(--opal); opacity: .6; }
-.osm-flow { stroke: var(--water-line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 5; animation: flow-dash 1s linear infinite; }
-.osm-ah { fill: var(--water-line); }
-@keyframes flow-dash { to { stroke-dashoffset: -22; } }
-
-/* flows */
-.flows-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); }
-@media (max-width: 760px) { .flows-grid { grid-template-columns: 1fr; } }
-.flows-svg .roots path { fill: none; stroke: var(--root); stroke-width: 2.4; stroke-linecap: round; }
-.xylem, .phloem { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 3 9; }
-.xylem { stroke: var(--ser-4); animation: flow-dash 1.3s linear infinite; }
-.phloem { stroke: var(--ser-3); animation: flow-dash 2s linear infinite reverse; }
-.fl-tag { font: 700 12px/1 var(--font-body); fill: var(--danger); }
-.chl-fig { margin: 0; display: grid; gap: 8px; justify-items: center; text-align: center; }
-.chl-fig svg { width: 100%; max-width: 230px; height: auto; }
-.chl-fig figcaption { font-size: .84rem; color: var(--ink-3); }
-.chl-ring path { fill: color-mix(in srgb, var(--leaf-soft) 70%, transparent); stroke: var(--stem); stroke-width: 2.2; stroke-linejoin: round; }
-.chl-ring .chl-bridge { fill: none; stroke-dasharray: 4 4; }
-.chl-bonds path { stroke: var(--stem); stroke-width: 2; }
-.chl-mg { fill: var(--sci-phys); }
-.chl-mg-t { font: 700 12px/1 var(--font-mono); fill: var(--surface); }
-.chl-n circle { fill: var(--surface); stroke: var(--ser-2); stroke-width: 2; }
-.chl-n-t text { font: 700 10px/1 var(--font-mono); fill: var(--ser-2); }
-.chl-tail { fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; }
-
-
-/* the plant is drawn in a 440-wide box that shrinks on a phone: captions are set larger to stay readable */
-.flows-svg .tick { font-size: 16px; }
-/* barrel */
-.barrel-water { fill: var(--water-fill); }
-.barrel-wave { fill: none; stroke: var(--water-line); stroke-width: 2; }
-.stave { fill: var(--wood-a); stroke: color-mix(in srgb, var(--wood-a) 70%, var(--ink)); stroke-width: 1; cursor: ns-resize; transition: y .35s var(--ease-float), height .35s var(--ease-float); }
-.stave:nth-child(odd) { fill: var(--wood-b); }
-.stave.is-limit { fill: var(--danger); stroke: var(--danger); }
-.stave.is-sel { stroke: var(--ink); stroke-width: 2; }
-.stave-lbl { font: 700 11px/1 var(--font-mono); fill: var(--ink-2); }
-.lab-tool[data-lab="window"] .lab-chart svg { overflow: hidden; }
-.stave-lbl.is-limit { fill: var(--danger); }
-.hoop { fill: var(--hoop); opacity: .85; }
-.barrel-spill { fill: none; stroke: var(--water-line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 5 6; animation: flow-dash .8s linear infinite; }
-.barrel-verdict { margin: 0; font-size: .92rem; color: var(--ink-2); }
-.barrel-verdict b { display: block; margin-bottom: 4px; color: var(--danger); }
-
-/* nitrogen cycle */
-.nc-chart { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
-.nc-air { fill: var(--mic-air); }
-.nc-surface { fill: none; stroke: var(--soil-top); stroke-width: 2.5; opacity: .6; }
-.nc-crumbs circle { fill: var(--soil-grain); opacity: .28; }
-.nc-water { fill: var(--water-fill); opacity: .55; }
-.nc-zone { font: 600 10.5px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; fill: var(--ink-3); }
-.nc-root-draw { fill: none; stroke: var(--root); stroke-width: 3.2; stroke-linecap: round; opacity: .85; }
-.nc-stem { fill: none; stroke: var(--stem); stroke-width: 3; stroke-linecap: round; }
-.nc-node rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.4; }
-.nc-root rect { fill: var(--leaf-soft); stroke: var(--stem); }
-.nc-n2 rect, .nc-leach rect { fill: var(--surface-2); stroke-dasharray: 4 3; }
-.nc-t { font: 700 15px/1 var(--font-mono); fill: var(--ink); }
-.nc-s { font: 500 11px/1 var(--font-body); fill: var(--ink-3); }
-.nc-edge { fill: none; stroke: var(--ink-3); stroke-width: 2; opacity: .7; }
-.nc-edge.is-off { opacity: .3; stroke-dasharray: 3 5; }
-.nc-edge.is-dash { stroke-dasharray: 5 5; }
-.nc-ah { fill: var(--ink-3); }
-.nc-flow { fill: none; stroke: var(--sci-chem); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1 26; animation: nc-run var(--spd, 3s) linear infinite; animation-delay: var(--dl, 0s); }
-.nc-flow.is-loss { stroke: var(--danger); }
-@keyframes nc-run { to { stroke-dashoffset: -108; } }
-.nc-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
-.nc-lbl.is-bug { font-style: italic; font-family: var(--font-body); font-weight: 700; }
-.nc-lbl.is-off, .nc-bugs.is-off { opacity: .4; }
-.nc-bugs rect { fill: var(--sci-chem); opacity: .75; }
-.nc-plate rect { fill: var(--surface); stroke: color-mix(in srgb, var(--sci-chem) 45%, var(--line-strong)); stroke-width: 1.2; }
-.nc-plate.is-off { opacity: .45; }
-/* oxides */
-.lab-row { margin-bottom: 12px; }
-.ox-rows { display: grid; gap: 12px; margin-top: 16px; }
-.ox-row { display: grid; grid-template-columns: 110px minmax(0, 1fr) 84px; gap: 12px; align-items: center; }
-.ox-name { display: grid; }
-.ox-name small { font: 500 .7rem/1.2 var(--font-mono); color: var(--ink-3); }
-.ox-bars { display: grid; gap: 4px; }
-.ox-bars i { height: 9px; width: var(--w); border-radius: 0 5px 5px 0; transition: width .4s var(--ease-float); }
-.ox-pack { background: var(--ser-muted); }
-.ox-real.s1 { background: var(--ser-1); } .ox-real.s2 { background: var(--ser-2); } .ox-real.s3 { background: var(--ser-3); }
-.ox-val { display: grid; text-align: right; }
-.ox-val b { font: 600 .95rem/1.1 var(--font-mono); }
-.ox-val small { font: 500 .72rem/1.2 var(--font-mono); color: var(--ink-3); }
-@media (max-width: 460px) { .ox-row { grid-template-columns: 80px minmax(0, 1fr) 70px; gap: 8px; } }
-
-/* EC scale */
-.ec-chart { margin-top: 10px; }
-.ec-track { fill: var(--surface-2); stroke: var(--line); }
-.ec-zone { fill: var(--band-good); }
-.ec-zone.is-bad { fill: color-mix(in srgb, var(--danger) 16%, transparent); }
-.ec-name { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); }
-.ec-name.is-bad { fill: var(--danger); }
-.ec-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 2; }
-.ec-tick { stroke: var(--ink-3); stroke-width: 1; }
-.ec-needle line { stroke: var(--k); stroke-width: 4; stroke-linecap: round; }
-.ec-needle circle { fill: var(--surface); stroke: var(--k); stroke-width: 2.5; }
-.ec-val { font: 700 12px/1 var(--font-mono); fill: var(--k); }
-/* auxin */
-.auxin-stage .lab-plant { max-width: 340px; }
-.aux-aux { fill: var(--ser-2); }
-.aux-sug { fill: var(--ser-3); }
-.aux-cyt { fill: var(--ser-4); }
-.aux-bud { fill: var(--pl-c); stroke: var(--pl-a); stroke-width: 1.5; }
-.aux-steps { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
-.aux-steps li { counter-increment: s; display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 12px; color: var(--ink-3); font-size: .9rem; transition: background-color .4s, color .4s; }
-.aux-steps li::before { content: counter(s); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line-strong); font: 600 .78rem/1 var(--font-mono); }
-.aux-steps li.is-on { background: var(--k-soft); color: var(--ink); font-weight: 600; }
-.aux-steps li.is-on::before { background: var(--k); border-color: var(--k); color: var(--surface); }
-
-/* pesto */
-.pesto-out { display: grid; gap: 10px; justify-items: center; }
-.pesto-jar { width: 160px; height: auto; }
-.jar-lid { fill: var(--metal-dark); }
-.jar-glass { fill: color-mix(in srgb, var(--surface-2) 60%, transparent); stroke: var(--glass-edge); stroke-width: 3; }
-#lab-pe-fill, #lab-an-liq { transition: fill .6s ease; }
-.jar-oil { fill: var(--oil-bright); opacity: 0; transition: opacity .4s; }
-.jar-shine { stroke: rgba(255, 255, 255, .45); stroke-width: 5; stroke-linecap: round; fill: none; }
-.pesto-verdict { margin: 0; font-size: .95rem; color: var(--ink-2); text-align: center; }
-.pesto-verdict b { display: block; font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); }
-.pesto-bars { width: 100%; }
-.pesto-notes { margin-top: 16px; font-size: .92rem; }
-
-/* trichomes */
-.tr-controls { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 18px; }
-.tr-controls .lab-actions { margin: 0; }
-.tr-wrap { position: relative; margin-top: 12px; }
-.tr-chart { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--mic-air); }
-.tr-svg { display: block; font-family: var(--font-body); }
-.tr-svg .mic-t { cursor: pointer; }
-.tr-pel { outline: none; }
-.tr-pel:focus-visible .mic-dome-cut { stroke: var(--ink); stroke-width: 2.6; }
-@media (hover: hover) { .tr-pel:not(.is-burst):hover .mic-dome { transform: scale(1.06); } }
-.tr-light-note { margin: 8px 2px 0; }
-.tr-info { margin-top: 12px; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); min-height: 7.5em; }
-.tr-info h5 { font-family: var(--font-display); font-size: 1.3rem; margin: 2px 0 6px; }
-.tr-info p { margin: 0; color: var(--ink-2); font-size: .95rem; line-height: 1.55; }
-.tr-controls .lab-seg button { white-space: nowrap; }
-.tr-info .tr-size { margin-top: 8px; font: 500 .78rem/1.4 var(--font-mono); color: var(--ink-3); }
-.tr-grid { margin-top: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); align-items: center; }
-.tr-top { display: grid; gap: 6px; justify-items: center; text-align: center; }
-.tr-top svg { width: 100%; max-width: 220px; height: auto; border-radius: 16px; box-shadow: 0 0 0 1px var(--line); }
-.tr-surf { fill: var(--mic-epi-2); }
-.tr-wall { fill: none; stroke: var(--mic-wall-soft); stroke-width: 1.2; }
-.tr-sto ellipse { fill: var(--mic-guard); stroke: var(--mic-wall); stroke-width: .8; }
-.tr-sto path { stroke: var(--mic-wall); stroke-width: 1; }
-.tr-capdot { fill: var(--mic-sec-2); stroke: var(--mic-oil); stroke-width: 1; }
-.tr-pelrim { fill: var(--mic-sec); stroke: var(--mic-wall-soft); stroke-width: 1; }
-.tr-pelx { stroke: var(--mic-oil-deep); stroke-width: .7; opacity: .45; }
-.tr-pelhi { fill: var(--mic-oil-hi); opacity: .8; }
-.tr-hairtop { fill: none; stroke: var(--mic-wall); stroke-width: 2.6; stroke-linecap: round; opacity: .55; }
-@media (max-width: 560px) { .tr-grid { grid-template-columns: 1fr; } }
-/* pathway: two assembly lines of aroma */
-.pw-pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 10px; }
-.pw-chip { display: inline-flex; align-items: center; gap: 6px; }
-.pw-chip i { width: 10px; height: 10px; border-radius: 50%; }
-.pw-chart { border-radius: 18px; }
-.pw-lane { fill: color-mix(in srgb, var(--m-lin) 6%, transparent); stroke: color-mix(in srgb, var(--m-lin) 22%, transparent); stroke-width: 1; stroke-dasharray: 4 4; }
-.pw-lane.is-phen { fill: color-mix(in srgb, var(--m-est) 6%, transparent); stroke: color-mix(in srgb, var(--m-est) 22%, transparent); }
-.pw-edge { stroke: var(--line-strong); stroke-width: 1.8; }
-.pw-edge.is-hot { stroke: var(--k); stroke-width: 3; }
-.pw-ah { fill: var(--line-strong); }
-.pw-ah.is-hot { fill: var(--k); }
-.pw-enz { font: 600 10.5px/1 var(--font-mono); fill: var(--ink-3); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
-.pw-enz.is-hot { fill: var(--k); font-weight: 700; }
-.pw-tag rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }
-.pw-tag.is-hot rect { stroke: var(--k); }
-.pw-node rect { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.3; }
-.pw-node text { font: 600 12px/1 var(--font-body); fill: var(--ink-2); }
-.pw-node.is-hot rect { stroke: var(--k); stroke-width: 2; fill: var(--k-soft); }
-.pw-node.is-hot text { fill: var(--ink); }
-.pw-node.is-idle, .pw-end.is-idle { opacity: .42; }
-.pw-end { cursor: pointer; outline: none; }
-.pw-end rect { stroke: var(--mk); stroke-width: 1.8; fill: var(--surface); transition: fill .3s; }
-.pw-end text { font: 700 12.5px/1 var(--font-body); fill: var(--ink); }
-.pw-end.is-sel rect { fill: var(--mk); }
-.pw-end.is-sel text { fill: var(--surface); }
-.pw-end:hover rect, .pw-end:focus-visible rect { stroke-width: 3; }
-.pw-zone { font: 600 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; fill: var(--ink-3); }
-.pw-info { margin-top: 12px; padding: 14px 16px; border-radius: 16px; background: var(--k-soft); }
-.pw-info h5, .chemo-info h5, .pair-info h5 { margin: 0 0 6px; font-family: var(--font-display); font-size: 1.35rem; }
-.pw-info p { margin: 0 0 6px; font-size: .95rem; line-height: 1.55; }
-.pw-sorts { font-size: .85rem !important; color: var(--ink-3); }
-/* molecules */
-.mol-lab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: clamp(16px, 3vw, 30px); align-items: start; }
-@media (max-width: 800px) { .mol-lab { grid-template-columns: 1fr; } }
+/* drawn on more than one page: the bars of gdd (Календарь) and pesto (Урожай), the jar of pesto and anthocyanin
+   (Вкус), the molecule stage of the Flavor chapter and of the home page. Every other model brings its styles in its
+   chapter's file */
 .mol-stage {
   position: relative;
   border-radius: 20px;
@@ -1357,211 +1092,17 @@ body::after {
 .mol-canvas { display: block; width: 100%; height: 320px; cursor: grab; touch-action: pan-y; }
 .mol-canvas:active { cursor: grabbing; }
 .mol-hint { position: absolute; right: 14px; bottom: 8px; color: var(--ink-3); font-size: 1.15rem; pointer-events: none; }
-.mol-key { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 0; font-size: .8rem; color: var(--ink-2); }
-.mol-key i { display: inline-block; width: 11px; height: 11px; margin-right: 6px; border-radius: 50%; vertical-align: -1px; }
-.mk-c { background: var(--mol-c); } .mk-o { background: var(--mol-o); }
-.mol-card { padding: 18px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
-.mol-name { margin: 2px 0 0; font-family: var(--font-display); font-size: 2rem; line-height: 1; }
-.mol-alt { margin: 4px 0 0; color: var(--ink-3); font-style: italic; }
-.mol-formula { margin: 10px 0 12px; font: 500 .95rem/1.3 var(--font-mono); color: var(--k); }
-.mol-card p:last-child { margin: 0; color: var(--ink-2); }
-.mol-chips { margin-top: 16px; }
-.vol-scale { margin-top: 18px; }
-.vol-track { position: relative; height: 96px; border-radius: 16px; background: linear-gradient(90deg, var(--sci-phys-soft), var(--surface-2) 45%, var(--sci-taste-soft)); border: 1px solid var(--line); overflow: hidden; }
-.vol-chip {
-  position: absolute;
-  left: var(--x);
-  top: 10px;
-  translate: -50% 0;
-  display: grid;
-  justify-items: center;
-  gap: 1px;
-  padding: 4px 8px;
-  border-radius: 10px;
-  border: 1.5px solid var(--line-strong);
-  background: var(--surface);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: transform .3s var(--ease-float);
-}
-.vol-chip b { font-size: .74rem; line-height: 1.1; color: var(--ink); }
-.vol-chip small { font: 500 .64rem/1 var(--font-mono); color: var(--ink-3); }
-.vol-chip { border-color: var(--mc, var(--line-strong)); }
-.vol-chip:hover { transform: translateY(-2px); }
-.vol-chip[aria-pressed="true"] { box-shadow: 0 0 0 3px color-mix(in srgb, var(--k) 45%, transparent); }
-.vol-axis { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font: 500 .68rem/1.2 var(--font-mono); color: var(--ink-3); }
-@media (max-width: 640px) { .vol-axis span:nth-child(2) { display: none; } }
+.gdd-bars, .pesto-bars { display: grid; gap: 10px; margin-top: 12px; }
+.gdd-row { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .86rem; color: var(--ink-2); }
+.gdd-row i { height: 12px; width: var(--w); border-radius: 0 6px 6px 0; transition: width .5s var(--ease-float); }
+.gdd-row i.s1 { background: var(--ser-1); } .gdd-row i.s2 { background: var(--ser-2); } .gdd-row i.s3 { background: var(--ser-3); }
+.gdd-row b { font: 600 .84rem/1 var(--font-mono); color: var(--ink); min-width: 4.5em; text-align: right; }
+.jar-lid { fill: var(--metal-dark); }
+.jar-glass { fill: color-mix(in srgb, var(--surface-2) 60%, transparent); stroke: var(--glass-edge); stroke-width: 3; }
+#lab-pe-fill, #lab-an-liq { transition: fill .6s ease; }
+.jar-oil { fill: var(--oil-bright); opacity: 0; transition: opacity .4s; }
+.jar-shine { stroke: rgba(255, 255, 255, .45); stroke-width: 5; stroke-linecap: round; fill: none; }
 
-/* chemotype: composition ring, character web, sorts as stacked bars */
-.chemo-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 18px; margin-top: 14px; align-items: start; }
-@media (max-width: 860px) { .chemo-grid { grid-template-columns: 1fr; } }
-.chemo-card { padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
-.chemo-figs { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.25fr); gap: 8px; align-items: center; }
-@media (max-width: 520px) { .chemo-figs { grid-template-columns: 1fr; } }
-.chemo-fig { display: grid; gap: 6px; }
-.chemo-ring-bg { fill: none; stroke: var(--m-rest); opacity: .6; }
-.chemo-seg { fill: none; transition: stroke-dasharray .6s var(--ease-float), stroke-dashoffset .6s var(--ease-float), opacity .3s; }
-.chemo-seg.is-dim { opacity: .18; }
-.chemo-c1 { font: 700 22px/1 var(--font-display); fill: var(--ink); }
-.chemo-c2 { font: 600 12.5px/1 var(--font-body); fill: var(--ink-2); }
-.chemo-top { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-.chemo-top li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: .86rem; color: var(--ink-2); }
-.chemo-top i { width: 12px; height: 12px; border-radius: 4px; }
-.chemo-top b { font: 600 .8rem/1 var(--font-mono); color: var(--ink); }
-@media (max-width: 520px) {
-  .chemo-fig:first-child { grid-template-columns: 136px minmax(0, 1fr); align-items: center; gap: 10px; }
-  .chemo-top li { font-size: .8rem; gap: 6px; }
-}
-.chemo-web { fill: none; stroke: var(--line); stroke-width: 1; }
-.chemo-web:last-of-type { stroke: var(--line-strong); }
-.chemo-axis { stroke: var(--line); stroke-width: 1; }
-.chemo-ax { font: 600 11.5px/1 var(--font-body); fill: var(--ink-2); }
-.chemo-shape { fill: color-mix(in srgb, var(--k) 22%, transparent); stroke: var(--k); stroke-width: 2.2; stroke-linejoin: round; }
-.chemo-ref { fill: none; stroke: var(--ink-3); stroke-width: 1.4; stroke-dasharray: 4 4; }
-.chemo-pt { fill: var(--surface); stroke: var(--k); stroke-width: 2; }
-.chemo-info { margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: var(--k-soft); }
-.chemo-info h5 { font-family: var(--font-display); font-size: 1.3rem; margin: 2px 0 6px; }
-.chemo-info p { margin: 0; font-size: .95rem; line-height: 1.55; }
-.chemo-cmp { margin-top: 8px !important; display: flex; align-items: center; gap: 8px; font-size: .82rem !important; color: var(--ink-3); }
-.chemo-cmp i { width: 22px; border-top: 1.6px dashed var(--ink-3); }
-.chemo-side .lab-label { display: block; margin: 0 0 8px; }
-.chemo-side .lab-label + .chemo-mols { margin-bottom: 8px; }
-.chemo-list { display: grid; gap: 4px; margin-bottom: 16px; }
-.chemo-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 42px; gap: 10px; align-items: center; padding: 7px 8px; border: 1px solid transparent; border-radius: 12px; background: none; font: inherit; color: var(--ink-2); cursor: pointer; text-align: left; transition: background .2s, border-color .2s; }
-.chemo-row:hover { background: var(--surface-2); }
-.chemo-row[aria-pressed="true"] { background: var(--surface); border-color: var(--k); color: var(--ink); }
-.chemo-name { font: 700 .86rem/1.15 var(--font-body); }
-.chemo-bar { display: flex; height: 16px; border-radius: 6px; overflow: hidden; gap: 1.5px; background: var(--m-rest); }
-.chemo-bar i { display: block; min-width: 0; transition: opacity .25s; }
-.chemo-bar i.is-rest { background: var(--m-rest); }
-.chemo-val { font: 600 .78rem/1 var(--font-mono); color: var(--ink); text-align: right; }
-.chemo-list[data-m]:not([data-m=""]) .chemo-bar i { opacity: .16; }
-.chemo-list[data-m="lin"] .chemo-bar i[data-m="lin"], .chemo-list[data-m="cin"] .chemo-bar i[data-m="cin"], .chemo-list[data-m="cit"] .chemo-bar i[data-m="cit"],
-.chemo-list[data-m="cam"] .chemo-bar i[data-m="cam"], .chemo-list[data-m="est"] .chemo-bar i[data-m="est"], .chemo-list[data-m="meu"] .chemo-bar i[data-m="meu"],
-.chemo-list[data-m="eug"] .chemo-bar i[data-m="eug"], .chemo-list[data-m="mci"] .chemo-bar i[data-m="mci"], .chemo-list[data-m="car"] .chemo-bar i[data-m="car"],
-.chemo-list[data-m="ber"] .chemo-bar i[data-m="ber"] { opacity: 1; }
-.chemo-mols { display: flex; flex-wrap: wrap; gap: 6px; }
-.chemo-mol { display: inline-flex; align-items: center; gap: 6px; }
-.chemo-mol i { width: 10px; height: 10px; border-radius: 50%; }
-.chemo-mol[aria-pressed="true"] i { box-shadow: 0 0 0 2px var(--surface); }
-/* the catalogue's sorts under their chemotype */
-.chemo-group { display: grid; gap: 4px; }
-.chemo-row.is-cur:not([aria-pressed="true"]) { border-color: var(--line-strong); background: var(--surface); }
-.chemo-sorts { display: flex; flex-wrap: wrap; gap: 4px 6px; padding: 0 8px 6px 18px; }
-.chemo-sort { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px 3px 6px; border-radius: 999px; border: 1px solid var(--line); background: none; font: 600 .74rem/1.2 var(--font-body); color: var(--ink-2); cursor: pointer; transition: border-color .2s, background .2s; }
-.chemo-sort:hover { border-color: var(--line-strong); }
-.chemo-sort[aria-pressed="true"] { background: var(--k); border-color: var(--k); color: var(--surface); }
-.chemo-sort i { width: 9px; height: 12px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--lf-green); }
-.chemo-sort.lf-deep i { background: var(--lf-deep); } .chemo-sort.lf-purple i { background: var(--lf-purple); } .chemo-sort.lf-thai i { background: var(--lf-thai); } .chemo-sort.lf-lime i { background: var(--lf-lime); }
-.chemo-aroma { font-weight: 600; color: var(--ink) !important; margin-bottom: 4px !important; }
-.chemo-note { margin-top: 8px !important; font-size: .84rem !important; color: var(--ink-3); }
-/* heat model */
-.heat-rows { display: grid; gap: 8px; margin-top: 8px; }
-.heat-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) 60px; gap: 12px; align-items: center; }
-.heat-name { display: grid; }
-.heat-name b { font-size: .88rem; }
-.heat-name small { font: 500 .68rem/1.2 var(--font-mono); color: var(--ink-3); }
-.heat-bar { position: relative; height: 16px; }
-.heat-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: var(--w); border-radius: 0 8px 8px 0; transition: width .45s var(--ease-float); }
-.heat-ghost { background: var(--ser-muted); }
-.heat-fill.s1 { background: var(--ser-1); } .heat-fill.s2 { background: var(--ser-2); } .heat-fill.s3 { background: var(--ser-3); } .heat-fill.s4 { background: var(--ser-4); }
-.heat-val { font: 600 .82rem/1 var(--font-mono); text-align: right; }
-@media (max-width: 520px) { .heat-row { grid-template-columns: 104px minmax(0, 1fr) 46px; gap: 8px; } .heat-name b { font-size: .8rem; white-space: nowrap; } }
-
-.heat-sort { min-width: 200px; }
-.heat-sort select { width: 100%; }
-/* anthocyanin */
-.anth-grid { grid-template-columns: 150px minmax(0, 1fr); align-items: center; }
-@media (max-width: 520px) { .anth-grid { grid-template-columns: 1fr; justify-items: center; } }
-.anth-jar { width: 140px; height: auto; }
-.anth-leaf { opacity: .9; }
-.anth-out { margin: 0; font-size: .92rem; color: var(--ink-2); }
-
-/* pairing lab: your basil → foods ranked → the bridge of shared molecules */
-.pa-types, .pa-varieties, .pa-foods { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity; padding: 2px 2px 10px; margin: 0 -2px 6px; scrollbar-width: thin; }
-.pa-type, .pa-var { flex: none; display: inline-flex; align-items: center; gap: 6px; scroll-snap-align: start; }
-.pa-type svg, .pa-var svg { width: 14px; height: 24px; }
-.pa-type small { margin-left: 2px; font-size: .72rem; font-weight: 700; color: var(--ink-3); }
-.pa-type[aria-pressed="true"] small { color: inherit; opacity: .75; }
-/* the varieties of the chosen type sit on a shelf under the types */
-.pa-varieties { margin-top: -2px; padding: 8px 8px 10px; border-radius: 16px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); }
-.pa-var { font-size: .84rem; }
-.pa-foods { gap: 10px; }
-.pa-food { flex: none; width: 112px; scroll-snap-align: start; display: grid; justify-items: center; gap: 4px; padding: 10px 8px 9px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); font: inherit; color: var(--ink-2); cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .2s; }
-.pa-food:hover { border-color: var(--line-strong); }
-.pa-food[aria-pressed="true"] { border-color: var(--k); box-shadow: 0 0 0 2px color-mix(in srgb, var(--k) 30%, transparent); color: var(--ink); }
-.pa-ico { width: 52px; height: 52px; }
-.pa-name { font: 700 .8rem/1.15 var(--font-body); text-align: center; min-height: 2.3em; display: grid; place-items: center; }
-.pa-meter { width: 100%; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); }
-.pa-meter i { display: block; height: 100%; width: calc(var(--v, 0) * 100%); background: var(--k); border-radius: 3px; transition: width .5s var(--ease-float); }
-.pa-food.is-contrast .pa-meter i { background: repeating-linear-gradient(90deg, var(--ink-3) 0 6px, transparent 6px 9px); }
-.pa-word { font: 500 .68rem/1.1 var(--font-mono); color: var(--ink-3); text-align: center; }
-.pa-food.is-contrast + .pa-food:not(.is-contrast), .pa-food:not(.is-contrast) + .pa-food.is-contrast { margin-left: 14px; }
-.pa-stage { margin-top: 6px; padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
-.pa-title { margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font: 600 1.25rem/1.2 var(--font-display); color: var(--ink); }
-.pa-title i { font-style: normal; color: var(--k); }
-.pa-chart { margin: 0 -6px; }
-.pa-rib { fill: none; opacity: .55; stroke-linecap: round; stroke-dasharray: 1 0; }
-.pa-rib.is-dash { stroke-dasharray: .035 .025; opacity: .7; }
-.pa-rib.is-in { animation: pa-draw .7s var(--ease-float) both; animation-delay: inherit; }
-.pa-rib.is-dash.is-in { animation: none; }
-@keyframes pa-draw { from { stroke-dasharray: 0 1; } to { stroke-dasharray: 1 0; } }
-.pa-node { stroke-width: 6; stroke-opacity: .25; paint-order: stroke; }
-.pa-node.is-faint { fill-opacity: .15; stroke-dasharray: 3 3; stroke-opacity: .8; stroke-width: 1.5; }
-.pa-lever { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.2; }
-.pa-tag rect { fill: var(--surface); opacity: .94; }
-.pa-mol { font: 700 12px/1 var(--font-body); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
-.pa-sub { font: 500 10.5px/1 var(--font-mono); fill: var(--ink-3); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
-.pa-info { padding: 12px 14px; border-radius: 14px; background: var(--k-soft); }
-.pa-info p { margin: 0 0 8px; font-size: .95rem; line-height: 1.55; }
-.pa-verdict { font-size: .9rem !important; color: var(--ink-2); }
-.pa-verdict b { color: var(--ink); }
-@media (min-width: 900px) {
-  .pa-foods, .pa-types, .pa-varieties { flex-wrap: wrap; overflow: visible; }
-  .pa-food { width: calc((100% - 50px) / 6); }
-  .pa-food.is-contrast + .pa-food:not(.is-contrast), .pa-food:not(.is-contrast) + .pa-food.is-contrast { margin-left: 0; }
-  .pa-stage { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 4px 18px; align-items: center; }
-  .pa-title { grid-column: 1 / -1; }
-}
-.pa-note { font-size: .84rem !important; color: var(--ink-3); }
-/* roots */
-.roots-svg { width: 100%; max-width: 250px; height: auto; }
-.rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }
-.rt-water { fill: var(--water-fill); }
-.rt-wl { stroke: var(--water-line); stroke-width: 1.5; }
-.rt-stem { fill: none; stroke: var(--stem); stroke-width: 5; stroke-linecap: round; }
-.rt-node { fill: var(--pl-a); }
-.rt-root { fill: none; stroke: var(--root); stroke-width: 2.2; stroke-linecap: round; }
-
-/* seeds */
-.sl-scale { position: relative; height: 34px; margin: 16px 0 26px; border-radius: 10px; background: linear-gradient(90deg, color-mix(in srgb, var(--danger) 18%, var(--surface-2)), var(--surface-2) 25%, var(--band-good)); border: 1px solid var(--line); }
-.sl-scale i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 10px 0 0 10px; background: color-mix(in srgb, var(--k) 45%, transparent); border-right: 3px solid var(--k); transition: width .4s var(--ease-float); }
-.sl-scale span { position: absolute; top: calc(100% + 6px); translate: -50% 0; font: 500 .7rem/1 var(--font-mono); color: var(--ink-3); }
-.sl-scale span:first-of-type { translate: 0 0; }
-.sl-scale span:last-of-type { translate: -100% 0; }
-
-/* pigments */
-.pg-out { display: grid; gap: 10px; justify-items: center; text-align: center; }
-.pg-verdict { margin: 0; max-width: 34ch; font-size: .95rem; color: var(--ink-2); }
-
-.pg-leaf { width: min(100%, 240px); margin: 0 auto; filter: drop-shadow(0 10px 18px rgb(var(--shadow-rgb) / .18)); }
-/* downy mildew gauge */
-.dm-out { display: grid; gap: 8px; justify-items: center; }
-.dm-gauge { width: 100%; max-width: 280px; height: auto; }
-.dm-gauge path { fill: none; stroke-width: 16; }
-.g-track { stroke: var(--line); }
-.g-low { stroke: var(--z2); } .g-mid { stroke: var(--z3); } .g-high { stroke: var(--z4); }
-.g-needle { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; transition: transform .6s var(--ease-float); }
-.g-hub { fill: var(--ink); }
-.dm-level { margin: 0; }
-
-
-.dm-leaf { width: min(100%, 300px); margin: 12px auto 0; }
-.dm-leaf .ill-lbl { font-size: 10px; }
-.dm-cap { margin: 6px 0 0; font-size: .86rem; color: var(--ink-3); text-align: center; }
-/* aphid colony */
-.ap-grid { display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 14px; align-items: center; }
-@media (max-width: 560px) { .ap-grid { grid-template-columns: 1fr; } .ap-shoot { width: 170px; margin: 0 auto; } }
 /* ================= flavor chapter ================= */
 .cols-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 900px) { .cols-3 { grid-template-columns: 1fr; } }
@@ -1729,6 +1270,7 @@ body::after {
   cursor: pointer;
   transition: background-color .2s, color .2s, transform .35s var(--ease-float);
 }
+@media (pointer: coarse) { .deep-close { min-height: 40px; } }
 .deep-close:hover { background: var(--k); color: var(--surface); transform: translateY(-2px); }
 
 .deeper {
@@ -1806,6 +1348,8 @@ body::after {
 .sci-note p { margin: 0; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
 .sci-note-link { justify-self: start; margin-top: 2px; font: 500 .74rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
 .sci-note-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+/* a finger finds the small link in a zone of about 40 px */
+@media (pointer: coarse) { .sci-note-link { position: relative; } .sci-note-link::after { content: ""; position: absolute; inset: -12px -6px; } }
 
 /* ================= recipe book ================= */
 .rb-intro { max-width: 62ch; }

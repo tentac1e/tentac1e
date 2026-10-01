@@ -27,6 +27,7 @@
 .lab-field { gap: 2px; }
 .lab-label { display: block; margin-bottom: 6px; font-size: .76rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .lab-seg .button, .lab-seg button { padding: 8px 13px; font-size: .84rem; }
+@media (pointer: coarse) { .lab-seg .button, .lab-seg button { min-height: 38px; } }
 .lab-chips { margin: 0; }
 .lab-chips .chip { padding: .42em .9em; font-size: .82rem; }
 .lab-tool .chip[aria-pressed="true"], .lab-tool .seg button[aria-pressed="true"] { background: var(--k); border-color: var(--k); color: var(--surface); }
@@ -111,5 +112,28 @@
 .soil-line { stroke: var(--soil); stroke-width: 3; stroke-linecap: round; opacity: .55; }
 .ghosts path { fill: none; stroke: var(--pl-back-b); stroke-width: 3; opacity: .35; }
 .ghosts ellipse { fill: var(--pl-back-b); opacity: .28; }
+
+/* drawn on more than one page: the bars of gdd (Календарь) and pesto (Урожай), the jar of pesto and anthocyanin
+   (Вкус), the molecule stage of the Flavor chapter and of the home page. Every other model brings its styles in its
+   chapter's file */
+.mol-stage {
+  position: relative;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 42%, var(--k-soft), transparent 70%), repeating-radial-gradient(circle at 50% 50%, transparent 0 34px, var(--paper-line-strong) 34px 35px);
+  border: 1px solid var(--line);
+}
+.mol-canvas { display: block; width: 100%; height: 320px; cursor: grab; touch-action: pan-y; }
+.mol-canvas:active { cursor: grabbing; }
+.mol-hint { position: absolute; right: 14px; bottom: 8px; color: var(--ink-3); font-size: 1.15rem; pointer-events: none; }
+.gdd-bars, .pesto-bars { display: grid; gap: 10px; margin-top: 12px; }
+.gdd-row { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .86rem; color: var(--ink-2); }
+.gdd-row i { height: 12px; width: var(--w); border-radius: 0 6px 6px 0; transition: width .5s var(--ease-float); }
+.gdd-row i.s1 { background: var(--ser-1); } .gdd-row i.s2 { background: var(--ser-2); } .gdd-row i.s3 { background: var(--ser-3); }
+.gdd-row b { font: 600 .84rem/1 var(--font-mono); color: var(--ink); min-width: 4.5em; text-align: right; }
+.jar-lid { fill: var(--metal-dark); }
+.jar-glass { fill: color-mix(in srgb, var(--surface-2) 60%, transparent); stroke: var(--glass-edge); stroke-width: 3; }
+#lab-pe-fill, #lab-an-liq { transition: fill .6s ease; }
+.jar-oil { fill: var(--oil-bright); opacity: 0; transition: opacity .4s; }
+.jar-shine { stroke: rgba(255, 255, 255, .45); stroke-width: 5; stroke-linecap: round; fill: none; }
 
 /*@labs*/
