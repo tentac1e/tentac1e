@@ -42,7 +42,7 @@
       </dl>
       <p><b>Для чего:</b> ${v.use}</p>
       <div class="callout"><svg class="ico"><use href="#i-leaf"/></svg><p><b>Особенности ухода.</b> ${nb(v.care)}</p></div>
-      <div class="hero-actions"><a class="btn btn-primary btn-small" href="#posadka-posev">${icon('seed')}Как посеять</a><a class="btn btn-ghost btn-small" href="#sorta-podbor">${icon('list')}Подобрать сорт</a></div>`;
+      <div class="hero-actions"><button class="btn btn-primary btn-small" type="button" data-garden-add="seed" data-variety="${esc(v.name)}">${icon('sprout')}Растёт у меня</button><a class="btn btn-ghost btn-small" href="#posadka-posev">${icon('seed')}Как посеять</a><a class="btn btn-ghost btn-small" href="#sorta-podbor">${icon('list')}Подобрать сорт</a></div>`;
     paintIll(box, true);
     showVarietyType(i);
     openSheet('sheet-variety');

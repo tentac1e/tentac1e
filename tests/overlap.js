@@ -152,7 +152,9 @@ async function check(ctx, mode, f, errs) {
   return out;
 }
 
-(async () => {
+// other checks measure their own pages with the same audit: require('./overlap').audit
+module.exports = { audit };
+if (require.main === module) (async () => {
   const { chromium, devices } = playwright();
   const browser = await chromium.launch();
   const errs = [];

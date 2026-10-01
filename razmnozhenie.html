@@ -12,7 +12,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
-<link rel="stylesheet" href="assets/css/style.css?v=947433b4">
+<link rel="stylesheet" href="assets/css/style.css?v=cc0764d3">
 <link rel="stylesheet" href="assets/css/lab.css?v=3aed4b07">
 </head>
 <body>
@@ -299,6 +299,7 @@
     </nav></div>
 
     <div class="panel is-active" data-panel id="черенки" data-title="Черенкование">
+      <p class="g-invite"><button class="btn btn-ghost btn-small" type="button" data-garden-add="cutting"><svg class="ico"><use href="#i-sprout"/></svg>Поставил черенок — добавить в «Мой базилик»</button><span>Гид напомнит, когда прищипнуть, подкормить и срезать.</span></p>
       <div class="two-col">
         <ol class="steps">
           <li class="step card"><span class="step-num">1</span><div><h4 id="razmnozhenie-h1">Выберите побег</h4><span class="step-ill" data-ill="cut:1" aria-hidden="true"></span><p>Здоровая верхушка длиной 8–12&nbsp;см с 3–4 парами листьев, без бутонов. Срежьте чуть ниже узла.</p></div></li>
@@ -522,6 +523,12 @@
     <div class="search-results" id="search-results" role="listbox" aria-label="Результаты поиска"></div>
   </div>
 </dialog>
+<dialog class="sheet sheet-garden" id="sheet-garden" aria-labelledby="sheet-garden-h" tabindex="-1">
+  <div class="sheet-top"><span class="sheet-grab" aria-hidden="true"></span><div class="sheet-head"><h2 id="sheet-garden-h">Мой куст</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div></div>
+  <div class="sheet-inner">
+    <div id="garden-detail"></div>
+  </div>
+</dialog>
 <dialog class="sheet sheet-variety" id="sheet-variety" aria-labelledby="variety-h" tabindex="-1">
   <div class="sheet-top sheet-top-bare"><span></span><span class="sheet-grab" aria-hidden="true"></span><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
   <div class="sheet-inner">
@@ -534,10 +541,10 @@
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
 <script src="assets/js/haptics.js?v=8488e836" defer></script>
-<script src="assets/js/data.js?v=d912ec6b" defer></script>
-<script src="assets/js/pages.js?v=7079907f" defer></script>
+<script src="assets/js/data.js?v=44aaf208" defer></script>
+<script src="assets/js/pages.js?v=25358142" defer></script>
 <script src="assets/js/scene.js?v=a7be99cd" defer></script>
 <script src="assets/js/science.js?v=9e6227d1" defer></script>
-<script src="assets/js/app.js?v=c7da1998" defer></script>
+<script src="assets/js/app.js?v=bbd14ecd" defer></script>
 </body>
 </html>

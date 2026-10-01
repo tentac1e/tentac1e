@@ -1,0 +1,153 @@
+/* ================= «Мой базилик»: свои кусты и дела на неделю ================= */
+.garden-home { scroll-margin-top: calc(var(--sticky-top) + 12px); }
+.g-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; align-items: start; }
+.g-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.g-top { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.g-pic { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 18px 18px 18px 6px; background: var(--leaf-soft); }
+.g-pic svg { width: 46px; height: 52px; }
+.g-pic-big { width: 92px; height: 92px; border-radius: 30px 30px 30px 10px; }
+.g-pic-big svg { width: 72px; height: 82px; }
+/* the leaves take the colour of the variety */
+.g-pic[data-leaf="green"] .mini-leaf { fill: var(--lf-green); stroke: var(--lf-green-vein); }
+.g-pic[data-leaf="deep"] .mini-leaf { fill: var(--lf-deep); stroke: var(--lf-deep-vein); }
+.g-pic[data-leaf="lime"] .mini-leaf { fill: var(--lf-lime); stroke: var(--lf-lime-vein); }
+.g-pic[data-leaf="purple"] .mini-leaf { fill: var(--lf-purple); stroke: var(--lf-purple-vein); }
+.g-pic[data-leaf="thai"] .mini-leaf { fill: var(--lf-thai); stroke: var(--lf-thai-vein); }
+.g-id { min-width: 0; }
+.g-id h3 { margin: 0; font-family: var(--font-display); font-size: 1.45rem; line-height: 1.1; overflow-wrap: anywhere; }
+.g-id p { margin: 3px 0 0; font-size: .82rem; color: var(--ink-3); line-height: 1.35; }
+.g-open { padding: 0; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: .2em; }
+.g-open:hover { color: var(--basil-deep); text-decoration-color: var(--basil); }
+
+.g-tasks { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.g-task {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border-left: 4px solid var(--leaf);
+}
+.g-task.is-late { border-left-color: var(--danger); background: var(--danger-soft); }
+.g-task.is-now { border-left-color: var(--oil-bright); }
+.g-task-t { min-width: 0; }
+.g-task-t b { display: block; font-size: .95rem; line-height: 1.25; }
+.g-task-t small { display: block; margin-top: 1px; font: 600 .74rem/1.3 var(--font-body); color: var(--ink-3); }
+.g-task.is-late small { color: var(--danger); }
+.g-task-t p { margin: 4px 0 0; font-size: .84rem; line-height: 1.4; color: var(--ink-2); }
+/* below the text: how to do it, and «done» */
+.g-task-a { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.g-how { font-size: .82rem; font-weight: 600; }
+.g-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--basil);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--basil-deep);
+  font: 700 .8rem/1 var(--font-body);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.g-done:hover { background: var(--basil); color: var(--on-basil); }
+.g-done .ico { width: 15px; height: 15px; }
+.g-common { margin-bottom: 14px; }
+.g-free, .g-next, .g-water { margin: 0; font-size: .86rem; color: var(--ink-2); line-height: 1.4; }
+.g-next { color: var(--ink-3); }
+.g-water { font-size: .8rem; color: var(--ink-3); }
+.g-notes { display: flex; flex-wrap: wrap; gap: 6px; }
+.g-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font: 600 .8rem/1 var(--font-body);
+  cursor: pointer;
+}
+.g-note:hover { border-color: var(--basil); color: var(--basil-deep); }
+.g-note .ico { width: 15px; height: 15px; color: var(--basil); }
+
+.g-foot { display: grid; gap: 10px; justify-items: start; margin-top: 16px; }
+.g-keep { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 0; font-size: .8rem; color: var(--ink-3); line-height: 1.4; }
+.g-keep span { flex: 1 1 260px; }
+.g-link { padding: 4px 0; border: 0; background: none; color: var(--basil); font: 600 .84rem/1.2 var(--font-body); text-decoration: underline; text-underline-offset: .18em; cursor: pointer; }
+
+.g-empty { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 18px; align-items: center; }
+.g-empty h2 { margin-bottom: 6px; }
+.g-empty p { margin: 0 0 10px; color: var(--ink-2); max-width: 36em; }
+.g-starts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.g-starts .chip { display: inline-flex; align-items: center; gap: 6px; }
+.g-starts .chip .ico { width: 16px; height: 16px; }
+@media (max-width: 480px) {
+  .g-empty { grid-template-columns: 1fr; justify-items: start; }
+  .g-pic-big { width: 72px; height: 72px; }
+  .g-pic-big svg { width: 56px; height: 64px; }
+}
+
+/* on the tabs about starting a bush: «add it to My basil» */
+.g-invite { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 18px; font-size: .86rem; color: var(--ink-3); }
+
+/* the sheet of one bush */
+.g-sheet { display: grid; gap: 18px; }
+.g-sheet .g-top { grid-template-columns: 58px minmax(0, 1fr) auto; }
+.g-sec h4 { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0 0 10px; font: 700 .72rem/1.2 var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+.g-sec h4 small { font-size: .78rem; letter-spacing: 0; text-transform: none; color: var(--basil-deep); }
+.g-sec > .g-tasks + .g-next, .g-sec > .g-free + .g-next { margin-top: 8px; }
+.g-sec .g-notes { margin-top: 10px; }
+.g-sec .g-water { margin-top: 6px; }
+.g-plan { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.g-step { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 12px; padding: 7px 0; border-bottom: 1px dashed var(--line-strong); font-size: .88rem; }
+.g-step-d { font-family: var(--font-mono); font-size: .76rem; color: var(--ink-3); padding-top: 2px; }
+.g-step-t small { margin-left: 8px; font: 600 .72rem/1 var(--font-body); color: var(--ink-3); }
+.g-step.is-done .g-step-t { color: var(--ink-3); text-decoration: line-through; text-decoration-color: var(--line-strong); }
+.g-step.is-done .g-step-t small { color: var(--basil-deep); }
+.g-step.is-before .g-step-t, .g-step.is-missed .g-step-t { color: var(--ink-3); }
+.g-step.is-late .g-step-t small { color: var(--danger); }
+.g-step.is-now .g-step-t { font-weight: 700; }
+.g-log-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; margin-bottom: 10px; }
+.g-log-form input[type="text"], .g-form input[type="text"] {
+  font: 500 1rem/1.2 var(--font-body);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 11px 12px;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+}
+.g-log-form input[type="text"] { grid-column: 1 / -1; }
+.g-log-form .btn { grid-column: 1 / -1; justify-self: start; }
+.g-log { display: grid; margin: 0; padding: 0; list-style: none; }
+.g-log li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr) 32px; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: .88rem; }
+.g-log-d { font-family: var(--font-mono); font-size: .76rem; color: var(--ink-3); }
+.g-log-x { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ink-3); cursor: pointer; }
+.g-log-x:hover { background: var(--surface-2); color: var(--danger); }
+.g-log-x .ico { width: 14px; height: 14px; }
+.g-log-empty { margin: 0; font-size: .86rem; }
+.g-del-row { margin: 0; }
+.g-del { color: var(--danger); }
+.g-form { display: grid; gap: 14px; }
+/* the choices of the form in even columns: four as 2 × 2, three in a row */
+.g-form .g-seg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; border-radius: 18px; }
+.g-form .g-seg-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g-form .g-seg button { border-radius: 14px; padding-inline: 8px; }
+@media (min-width: 561px) { .g-form .g-seg-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.g-form-a { display: flex; flex-wrap: wrap; gap: 8px; }

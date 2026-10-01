@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.." || exit 1
 python3 scripts/build.py > /dev/null || exit 1
 python3 scripts/build.py --clean --out dist/site > /dev/null || exit 1
 status=0
-for t in ${*:-pages clean nav labs overlap single}; do
+for t in ${*:-pages clean nav labs overlap garden single}; do
   echo "== $t"
   node "tests/$t.js" > tests/out.log 2>&1 || status=1
   grep -v '^PASS' tests/out.log

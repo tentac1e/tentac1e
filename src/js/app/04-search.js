@@ -84,7 +84,7 @@
   let searchVocab = null;
   function buildSearchIndex() {
     const idx = [];
-    const add = e => { e.kind = e.kind || 'sec'; e.nt = norm(e.title); e.nx = norm(e.text || ''); idx.push(e); };
+    const add = e => { e.kind = e.kind || 'sec'; e.nt = norm(e.title); e.nw = e.nt.replace(/[^a-zа-я0-9]+/g, ' ').trim(); e.nx = norm(e.text || ''); idx.push(e); };
     B.CHAPTERS.forEach(c => add({ title: c.title, sub: `Глава ${c.num}`, text: c.desc, hash: c.id, icon: 'book' }));
     B.TOOLS.forEach(t => add({ title: t.title, sub: 'Инструмент', text: t.desc, hash: t.hash, icon: t.icon }));
     // the whole text of every chapter, indexed at build time (assets/js/search-index.js)
@@ -192,7 +192,7 @@
     if (words.length > 1 && phrase) { if (e.nt.includes(phrase)) s += 8; else if (e.nx.includes(phrase)) s += 4; }
     if (where.length > 1 && Math.max(...where) - Math.min(...where) < 90) s += 2.5;
     // a name typed in full leads to that very place («план подкормок» — the tab, not a heading inside it)
-    if (phrase && e.nt === phrase) s += 12;
+    if ((phrase && e.nt === phrase) || (searchWhole && e.nw === searchWhole)) s += 12;
     else {
       if (phrase && e.nt.startsWith(phrase)) s += 3;
       if (e.icon === 'list') s -= 1.5;
@@ -218,8 +218,11 @@
   }
   // the results for what was typed; when nothing has all the words: the Latin keyboard, typos fixed,
   // and failing that the places that have some of the words
+  // the query word for word, little words included: «мой базилик» is the name of a place
+  let searchWhole = '';
   function runSearch(raw, exact) {
     const q = norm(raw).replace(/\s+/g, ' ').trim();
+    searchWhole = q.replace(/[^a-zа-я0-9]+/g, ' ').trim();
     const typing = !/\s$/.test(raw);
     const words = parseQuery(q, typing);
     const phraseOf = ws => ws.map(x => x.w).join(' ');

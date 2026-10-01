@@ -73,7 +73,8 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
   });
   ok(kinds.shown.split(',').includes(String(kinds.labs)) && kinds.shown.split(',').includes(String(kinds.deep)), 'home science counters ' + JSON.stringify(kinds));
   const hrefs = await page.evaluate(() => ({ tools: [...document.querySelectorAll('#tools-home a')].slice(0, 3).map(a => a.getAttribute('href')), ch: [...document.querySelectorAll('#chapters a')].slice(0, 2).map(a => a.getAttribute('href')) }));
-  ok(hrefs.tools.every(h => /\.html/.test(h)) && hrefs.ch.every(h => /\.html$/.test(h)), 'home links point to pages ' + JSON.stringify(hrefs));
+  // «Мой базилик» lives on the home page itself; the other tools are on their chapters' pages
+  ok(hrefs.tools.every(h => /\.html/.test(h) || h === '#moy') && hrefs.tools.some(h => /\.html/.test(h)) && hrefs.ch.every(h => /\.html$/.test(h)), 'home links point to pages ' + JSON.stringify(hrefs));
 
   // search from home into «Ещё глубже» on another page
   await page.keyboard.press('/');

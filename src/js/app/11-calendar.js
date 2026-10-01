@@ -1,6 +1,18 @@
   /* ================================================================== */
   /* CALENDAR (wheel + timeline)                                         */
   /* ================================================================== */
+  // the first autumn frost after the last spring one (lf): from the climate, or estimated from how late spring is
+  function autumnFrostOf(lf, p) {
+    if (p && p.af) return new Date(lf.getFullYear(), p.af[0] - 1, p.af[1]);
+    const doy = dayDiff(new Date(lf.getFullYear(), 0, 1), lf);
+    return addDays(lf, clamp(Math.round(300 - 2 * (doy - 60)), 90, 230));
+  }
+  // the frosts of a year in a climate (B.PRESETS); the calendar and «Мой базилик» count the season from them
+  function seasonFrosts(id, year) {
+    const p = B.PRESETS.find(x => x.id === id && x.lf) || B.PRESETS.find(x => x.id === 'temperate');
+    const lf = new Date(year, p.lf[0] - 1, p.lf[1]);
+    return { lf, af: autumnFrostOf(lf, p) };
+  }
   function initCalendar() {
     const presetSel = $('#cal-preset');
     const dateIn = $('#cal-date');
@@ -29,12 +41,7 @@
       if (addDays(d, -42) < now) d = new Date(now.getFullYear() + 1, p.lf[0] - 1, p.lf[1]);
       return d;
     };
-    const autumnFrost = (lf, id) => {
-      const p = B.PRESETS.find(x => x.id === id);
-      if (p && p.af) return new Date(lf.getFullYear(), p.af[0] - 1, p.af[1]);
-      const doy = dayDiff(new Date(lf.getFullYear(), 0, 1), lf);
-      return addDays(lf, clamp(Math.round(300 - 2 * (doy - 60)), 90, 230));
-    };
+    const autumnFrost = (lf, id) => autumnFrostOf(lf, B.PRESETS.find(x => x.id === id));
     const rel = (a, b) => {
       const end = b || a;
       if (end < now) return 'прошло';

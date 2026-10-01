@@ -13,10 +13,13 @@
 }
 .hero h1 em { display: block; margin-top: .22em; font-size: .34em; line-height: 1.1; letter-spacing: 0; color: var(--opal); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+/* «Продолжить чтение» over the chapter it leads to, the arrow beside both: a long title wraps, not over the arrow */
 .continue {
-  display: inline-flex;
+  display: inline-grid;
+  grid-template-columns: minmax(0, auto) 18px;
   align-items: center;
-  gap: 10px;
+  gap: 1px 12px;
+  max-width: 100%;
   margin-top: 18px;
   padding: 10px 16px;
   border-radius: 16px;
@@ -26,9 +29,9 @@
   font-size: .92rem;
   transition: transform .35s var(--ease-float);
 }
-.continue span { color: var(--ink-3); }
-.continue b { color: var(--opal); }
-.continue .ico { width: 18px; height: 18px; color: var(--opal); }
+.continue span { grid-column: 1; font-size: .8rem; color: var(--ink-3); }
+.continue b { grid-column: 1; color: var(--opal); overflow-wrap: anywhere; }
+.continue .ico { grid-column: 2; grid-row: 1 / span 2; width: 18px; height: 18px; color: var(--opal); }
 .continue:hover { transform: translateX(4px); color: var(--ink); }
 
 .hero-art { position: relative; display: grid; place-items: center end; min-height: 520px; }

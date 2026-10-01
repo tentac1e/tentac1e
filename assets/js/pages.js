@@ -162,6 +162,7 @@ window.BASIL_PAGES = {
   "formirovka-h6": "formirovka",
   "formirovka-osnovy": "formirovka",
   "formirovka-trenazher": "formirovka",
+  "garden-home": "glavnaya",
   "germ-count": "razmnozhenie",
   "germ-out": "razmnozhenie",
   "germ-val": "razmnozhenie",
@@ -188,6 +189,8 @@ window.BASIL_PAGES = {
   "journey-h": "glavnaya",
   "kalendar": "kalendar",
   "kalendar-tool": "kalendar",
+  "moy": "glavnaya",
+  "moy-h": "glavnaya",
   "nauka": "glavnaya",
   "nauka-h": "glavnaya",
   "npk": "udobreniya",
@@ -585,6 +588,6 @@ window.BASIL_PAGES = {
    "razmnozhenie": "0f4e77a4",
    "problemy": "c167094e"
   },
-  "search": "a13341e7"
+  "search": "a1e7abb8"
  }
 };
