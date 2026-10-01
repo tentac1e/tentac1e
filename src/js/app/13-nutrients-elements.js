@@ -29,10 +29,12 @@
           <div><h3>${e.name}</h3><div class="el-badges"><span class="badge">${GROUP_NAME[e.group]}</span><span class="badge">${MOB[e.mob].arrow} ${MOB[e.mob].text}</span></div></div>
         </header>
         <div class="el-section"><h4>За что отвечает</h4><p>${nb(e.role)}</p></div>
-        <div class="el-section is-def"><h4>Признаки нехватки</h4><p>${nb(e.def)}</p></div>
+        <div class="el-section is-def"><h4>Признаки нехватки</h4><span class="el-ill" data-ill="def:${e.sym}"></span><p>${nb(e.def)}</p></div>
         <div class="el-section is-exc"><h4>Признаки избытка</h4><p>${nb(e.exc)}</p></div>
         <div class="el-section"><h4>Где взять</h4><p><b>Минеральные:</b> ${nb(e.mineral)}.<br><b>Органические:</b> ${nb(e.organic)}.</p></div>
         <div class="el-section"><h4>Когда важнее всего</h4><p>${nb(e.when)}</p></div>`;
+      // at start the tab may be closed: the picture waits until it is seen; after a tap it is drawn at once
+      paintIll(detail, !!scroll);
       if (scroll && window.matchMedia('(max-width: 940px)').matches) detail.scrollIntoView({ block: 'start', behavior: smooth() });
     };
     tiles.forEach((t, i) => t.addEventListener('click', () => selectElement(i, true)));

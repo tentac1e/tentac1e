@@ -1126,7 +1126,7 @@
     if (!list || !panel) return;
     list.innerHTML = B.PLACES.map((p, i) => `<button class="tab" type="button" role="tab" id="tab-${p.id}" aria-controls="place-panel" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${icon(p.icon)}${p.name}</button>`).join('');
     const tabs = $$('.tab', list);
-    const render = i => {
+    const render = (i, now) => {
       const p = B.PLACES[i];
       tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
       panel.setAttribute('aria-labelledby', `tab-${p.id}`);
@@ -1141,9 +1141,9 @@
           <div><h4>${icon('check')}Советы</h4><ul class="ticks">${p.tips.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
           <div><h4>${icon('alert')}Подводные камни</h4><ul class="ticks is-warn">${p.risks.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
         </div>`;
-      paintIll(panel, true);
+      paintIll(panel, !!now);
     };
-    tabs.forEach((t, i) => t.addEventListener('click', () => render(i)));
+    tabs.forEach((t, i) => t.addEventListener('click', () => render(i, true)));
     list.addEventListener('keydown', e => {
       const i = tabs.indexOf(document.activeElement);
       if (i < 0) return;
@@ -1155,7 +1155,7 @@
       if (j === null) return;
       e.preventDefault();
       tabs[j].focus();
-      render(j);
+      render(j, true);
     });
     render(0);
   }
@@ -1471,10 +1471,12 @@
           <div><h3>${e.name}</h3><div class="el-badges"><span class="badge">${GROUP_NAME[e.group]}</span><span class="badge">${MOB[e.mob].arrow} ${MOB[e.mob].text}</span></div></div>
         </header>
         <div class="el-section"><h4>За что отвечает</h4><p>${nb(e.role)}</p></div>
-        <div class="el-section is-def"><h4>Признаки нехватки</h4><p>${nb(e.def)}</p></div>
+        <div class="el-section is-def"><h4>Признаки нехватки</h4><span class="el-ill" data-ill="def:${e.sym}"></span><p>${nb(e.def)}</p></div>
         <div class="el-section is-exc"><h4>Признаки избытка</h4><p>${nb(e.exc)}</p></div>
         <div class="el-section"><h4>Где взять</h4><p><b>Минеральные:</b> ${nb(e.mineral)}.<br><b>Органические:</b> ${nb(e.organic)}.</p></div>
         <div class="el-section"><h4>Когда важнее всего</h4><p>${nb(e.when)}</p></div>`;
+      // at start the tab may be closed: the picture waits until it is seen; after a tap it is drawn at once
+      paintIll(detail, !!scroll);
       if (scroll && window.matchMedia('(max-width: 940px)').matches) detail.scrollIntoView({ block: 'start', behavior: smooth() });
     };
     tiles.forEach((t, i) => t.addEventListener('click', () => selectElement(i, true)));

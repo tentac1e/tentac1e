@@ -578,7 +578,7 @@ window.BASIL_PAGES = {
    "posadka": "f9ad2d46",
    "kalendar": "89a91a01",
    "uhod": "a06c4ac8",
-   "udobreniya": "87eba115",
+   "udobreniya": "e501f387",
    "formirovka": "3bf32fed",
    "urozhay": "545d1529",
    "vkus": "a9d57289",

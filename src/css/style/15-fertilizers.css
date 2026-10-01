@@ -51,6 +51,10 @@
 .el-section p { margin: 0; font-size: .95rem; }
 .el-section.is-def h4 { color: var(--oil); }
 .el-section.is-exc h4 { color: var(--danger); }
+/* what the lack looks like: the plant with the symptom where it starts, and the leaf close up */
+.el-ill { display: block; max-width: 420px; aspect-ratio: 260 / 140; margin: 6px 0 10px; border-radius: 16px; overflow: hidden; background: var(--ill-bg); }
+.el-ill .ill { width: 100%; height: 100%; }
+.el-ill .ill .ill-lbl { font-size: 14px; }
 .mobility { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 18px; align-items: center; margin-top: 16px; }
 .mobility svg { width: 120px; height: 200px; overflow: visible; }
 .mob-row { padding: 12px 14px; border-radius: 16px; }

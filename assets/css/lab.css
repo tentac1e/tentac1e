@@ -219,6 +219,8 @@
 /* arrows in the step pictures follow the theme, like the captions */
 .ill-arrow { fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; }
 .ill-arrow-head { fill: var(--ink-3); }
+/* a dashed ring around the part of a plant a picture talks about, and its line to the close-up */
+.ill-zone { fill: none; stroke: var(--ink-3); stroke-width: 1.4; stroke-dasharray: 4 3; }
 /* Micro-anatomy palette: leaf sections and zoomed-in views (trichomes, stomata, disease under the lens).
    Colours of a fresh, unstained section under a light microscope; lignin is shown crimson as after safranin. */
 :root {

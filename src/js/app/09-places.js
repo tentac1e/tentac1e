@@ -7,7 +7,7 @@
     if (!list || !panel) return;
     list.innerHTML = B.PLACES.map((p, i) => `<button class="tab" type="button" role="tab" id="tab-${p.id}" aria-controls="place-panel" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${icon(p.icon)}${p.name}</button>`).join('');
     const tabs = $$('.tab', list);
-    const render = i => {
+    const render = (i, now) => {
       const p = B.PLACES[i];
       tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
       panel.setAttribute('aria-labelledby', `tab-${p.id}`);
@@ -22,9 +22,9 @@
           <div><h4>${icon('check')}Советы</h4><ul class="ticks">${p.tips.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
           <div><h4>${icon('alert')}Подводные камни</h4><ul class="ticks is-warn">${p.risks.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
         </div>`;
-      paintIll(panel, true);
+      paintIll(panel, !!now);
     };
-    tabs.forEach((t, i) => t.addEventListener('click', () => render(i)));
+    tabs.forEach((t, i) => t.addEventListener('click', () => render(i, true)));
     list.addEventListener('keydown', e => {
       const i = tabs.indexOf(document.activeElement);
       if (i < 0) return;
@@ -36,7 +36,7 @@
       if (j === null) return;
       e.preventDefault();
       tabs[j].focus();
-      render(j);
+      render(j, true);
     });
     render(0);
   }

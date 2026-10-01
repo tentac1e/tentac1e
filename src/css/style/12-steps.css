@@ -11,7 +11,7 @@
 .step > div { display: flow-root; }
 .step-ill { display: block; float: right; width: 120px; aspect-ratio: 1; margin: 2px 0 8px 16px; border-radius: 16px; overflow: hidden; background: var(--ill-bg); }
 .step-ill .ill { width: 100%; height: 100%; }
-.step-ill .ill-lbl, .step-ill .ill-scale text { font-size: 12.5px; }
+.step-ill .ill .ill-lbl, .step-ill .ill .ill-scale text { font-size: 12.5px; }
 @media (min-width: 481px) {
   .step > div:has(> .step-ill) { display: grid; grid-template-columns: minmax(0, 1fr) 120px; column-gap: 18px; align-content: start; }
   .step > div:has(> .step-ill) > * { grid-column: 1; }

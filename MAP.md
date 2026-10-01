@@ -147,6 +147,7 @@
 - `src/labs/posadka/_shared.js`: `sow`, `shop`, `place`
 - `src/labs/problemy/_shared.js`: `sym`, `dis`, `pest`
 - `src/labs/sorta/_shared.js`: `sort`, `vtype`
+- `src/labs/udobreniya/_shared.js`: `def`
 
 ## Скрипты (src/js/)
 
@@ -164,7 +165,7 @@
 - `src/js/app/10-soil.js` (26 стр.): initSoil
 - `src/js/app/11-calendar.js` (215 стр.): initCalendar
 - `src/js/app/12-light.js` (39 стр.): initDli
-- `src/js/app/13-nutrients-elements.js` (41 стр.): GROUP_NAME, MOB, initElements
+- `src/js/app/13-nutrients-elements.js` (43 стр.): GROUP_NAME, MOB, initElements
 - `src/js/app/14-nutrients-stages.js` (118 стр.): initStages
 - `src/js/app/15-nutrients-plan.js` (87 стр.): initPlan
 - `src/js/app/16-nutrients-npk.js` (49 стр.): initNpk

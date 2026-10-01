@@ -1523,7 +1523,7 @@ main { view-transition-name: main; }
 .step > div { display: flow-root; }
 .step-ill { display: block; float: right; width: 120px; aspect-ratio: 1; margin: 2px 0 8px 16px; border-radius: 16px; overflow: hidden; background: var(--ill-bg); }
 .step-ill .ill { width: 100%; height: 100%; }
-.step-ill .ill-lbl, .step-ill .ill-scale text { font-size: 12.5px; }
+.step-ill .ill .ill-lbl, .step-ill .ill .ill-scale text { font-size: 12.5px; }
 @media (min-width: 481px) {
   .step > div:has(> .step-ill) { display: grid; grid-template-columns: minmax(0, 1fr) 120px; column-gap: 18px; align-content: start; }
   .step > div:has(> .step-ill) > * { grid-column: 1; }
@@ -1709,6 +1709,10 @@ main { view-transition-name: main; }
 .el-section p { margin: 0; font-size: .95rem; }
 .el-section.is-def h4 { color: var(--oil); }
 .el-section.is-exc h4 { color: var(--danger); }
+/* what the lack looks like: the plant with the symptom where it starts, and the leaf close up */
+.el-ill { display: block; max-width: 420px; aspect-ratio: 260 / 140; margin: 6px 0 10px; border-radius: 16px; overflow: hidden; background: var(--ill-bg); }
+.el-ill .ill { width: 100%; height: 100%; }
+.el-ill .ill .ill-lbl { font-size: 14px; }
 .mobility { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 18px; align-items: center; margin-top: 16px; }
 .mobility svg { width: 120px; height: 200px; overflow: visible; }
 .mob-row { padding: 12px 14px; border-radius: 16px; }
