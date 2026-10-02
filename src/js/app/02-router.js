@@ -82,9 +82,14 @@
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     $$('.tab-item[data-tab="home"]').forEach(a => a.classList.toggle('is-active', id === 'glavnaya'));
+    $$('[data-garden-link]').forEach(a => { a.classList.toggle('is-active', id === 'moy'); if (id === 'moy') a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     const ch = chapterById(id);
     let title = 'Гид по базилику';
-    if (ch) {
+    // «Мой базилик» is not a chapter: its title, but not a place to «continue reading» from
+    if (id === 'moy') {
+      const panel = document.getElementById(lastPanel.get(id) || '');
+      title = 'Мой базилик' + (panel && panel.dataset.title && $$('[data-panel]', view).length > 1 ? ' · ' + panel.dataset.title : '') + ' — Гид по базилику';
+    } else if (ch) {
       const panelId = lastPanel.get(id);
       const panel = panelId && document.getElementById(panelId);
       const sub = panel && panel.dataset.title;

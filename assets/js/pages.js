@@ -12,7 +12,8 @@ window.BASIL_PAGES = {
   "vkus": "vkus.html",
   "razmnozhenie": "razmnozhenie.html",
   "problemy": "problemy.html",
-  "spravka": "spravka.html"
+  "spravka": "spravka.html",
+  "moy": "moy.html"
  },
  "prefixes": {
   "dis-": "problemy",
@@ -165,6 +166,7 @@ window.BASIL_PAGES = {
   "formirovka-osnovy": "formirovka",
   "formirovka-trenazher": "formirovka",
   "garden-home": "glavnaya",
+  "garden-page": "moy",
   "germ-count": "razmnozhenie",
   "germ-out": "razmnozhenie",
   "germ-val": "razmnozhenie",
@@ -191,8 +193,11 @@ window.BASIL_PAGES = {
   "journey-h": "glavnaya",
   "kalendar": "kalendar",
   "kalendar-tool": "kalendar",
-  "moy": "glavnaya",
+  "moy": "moy",
   "moy-h": "glavnaya",
+  "moy-h1": "moy",
+  "moy-home": "glavnaya",
+  "moy-kusty": "moy",
   "nauka": "glavnaya",
   "nauka-h": "glavnaya",
   "npk": "udobreniya",
@@ -533,7 +538,8 @@ window.BASIL_PAGES = {
   "spravka-voprosy": "Справка · Частые вопросы",
   "deep-cifry": "Глубже: Базилик в цифрах",
   "spravka-slovar": "Справка · Словарь",
-  "spravka-chek-list": "Справка · Чек-лист сезона"
+  "spravka-chek-list": "Справка · Чек-лист сезона",
+  "moy-kusty": "Мой базилик · Кусты"
  },
  "alias": {
   "sorta-katalog": "каталог",
@@ -575,7 +581,8 @@ window.BASIL_PAGES = {
   "problemy-profilaktika": "профилактика",
   "spravka-voprosy": "вопросы",
   "spravka-slovar": "словарь",
-  "spravka-chek-list": "чек-лист"
+  "spravka-chek-list": "чек-лист",
+  "moy-kusty": "кусты"
  },
  "v": {
   "labs": {
@@ -640,6 +647,6 @@ window.BASIL_PAGES = {
     "ills"
    ]
   },
-  "search": "53900c3e"
+  "search": "58357e8f"
  }
 };

@@ -90,6 +90,11 @@
 - `src/pages/spravka/3-chek-list.html` · #чек-лист — Чек-лист сезона · 11 стр.
 - `src/pages/spravka/_foot.html` · подвал главы · 3 стр.
 
+### Мой базилик — `/мой-базилик` (`moy.html`)
+- `src/pages/moy/_head.html` · обложка, вкладки · 14 стр.
+- `src/pages/moy/1-kusty.html` · #кусты — Кусты · 8 стр.
+- `src/pages/moy/_foot.html` · подвал главы · 3 стр.
+
 ## Модели (src/labs/)
 
 | модель | глава | заголовок | файлы |
@@ -158,7 +163,7 @@
 **app.js**
 - `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (271 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/02-router.js` (276 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-sheets.js` (158 стр.): initSheets
 - `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
@@ -179,7 +184,7 @@
 - `src/js/app/19-seeds.js` (21 стр.): initGerm
 - `src/js/app/20-problems.js` (59 стр.): initDiagnostics
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
-- `src/js/app/22-garden-view.js` (299 стр.): WEEKDAY, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
+- `src/js/app/22-garden-view.js` (322 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
 - `src/js/app/22-garden.js` (128 стр.): GARDEN_KEY
 - `src/js/app/22-reading-pos.js` (134 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)

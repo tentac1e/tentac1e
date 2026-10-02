@@ -52,12 +52,16 @@ PAGES = [
     ('razmnozhenie', 'razmnozhenie.html'),
     ('problemy', 'problemy.html'),
     ('spravka', 'spravka.html'),
+    ('moy', 'moy.html'),
 ]
 FILE = dict(PAGES)
 # addresses on the hosting: ocimum.ru/урожай. Files stay Latin (urozhay.html) — safe for any file manager
 SLUG = {'glavnaya': '', 'sorta': 'сорта', 'posadka': 'посадка', 'kalendar': 'календарь', 'uhod': 'уход',
         'udobreniya': 'удобрения', 'formirovka': 'прищипывание', 'urozhay': 'урожай', 'vkus': 'вкус',
-        'razmnozhenie': 'размножение', 'problemy': 'проблемы', 'spravka': 'справка'}
+        'razmnozhenie': 'размножение', 'problemy': 'проблемы', 'spravka': 'справка', 'moy': 'мой-базилик'}
+# a page that is not a numbered chapter: its title and description for the <head>, the search and the map
+PAGE_META = {'moy': {'num': None, 'title': 'Мой базилик',
+                     'desc': 'Ваши кусты и их дела на неделю, погода глазами листа и домашние опыты о том, как живёт растение.'}}
 
 # short Russian anchors for chapter tabs: /удобрения#план instead of #udobreniya-plan.
 # Sources, data and old bookmarks keep the long ids — the build and the router translate them.
@@ -73,6 +77,7 @@ TAB = {
     'razmnozhenie-cherenki': 'черенки', 'razmnozhenie-semena': 'семена',
     'problemy-diagnostika': 'диагностика', 'problemy-bolezni': 'болезни', 'problemy-vrediteli': 'вредители', 'problemy-profilaktika': 'профилактика',
     'spravka-voprosy': 'вопросы', 'spravka-slovar': 'словарь', 'spravka-chek-list': 'чек-лист',
+    'moy-kusty': 'кусты',
 }
 
 
@@ -290,6 +295,7 @@ def chapters():
     out = {}
     for m in re.finditer(r"\{ id: '([a-z]+)', num: (\d+), title: '([^']+)',[^{}]*? desc: '([^']+)' \}", data):
         out[m.group(1)] = {'num': int(m.group(2)), 'title': m.group(3), 'desc': m.group(4)}
+    out.update(PAGE_META)
     return out
 
 
@@ -770,7 +776,7 @@ def main():
             content = re.sub(r'(<div class="panel)(" data-panel)', r'\1 is-active\2', content, count=1)
         ch = CH.get(here)
         title = f"{ch['title']} — {SITE_TITLE}" if ch and not single else SITE_TITLE
-        desc = f"{ch['desc']} Глава {ch['num']} гида по выращиванию базилика." if ch and not single else SITE_DESC
+        desc = (f"{ch['desc']} Глава {ch['num']} гида по выращиванию базилика." if ch['num'] else ch['desc']) if ch and not single else SITE_DESC
         out = layout.replace('{{content}}', content)
         out = out.replace('{{title}}', escape(title)).replace('{{description}}', attr(desc))
         out = rewrite_links(out, here)

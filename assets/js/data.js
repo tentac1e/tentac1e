@@ -17,7 +17,7 @@ window.BASIL = (() => {
   ];
 
   const TOOLS = [
-    { title: 'Мой базилик', hash: 'moy', icon: 'sprout', desc: 'Свои кусты и что с ними делать на этой неделе' },
+    { title: 'Мой базилик', hash: 'moy', icon: 'sprout', desc: 'Свои кусты, их дела на неделю, погода и опыты' },
     { title: 'Подбор сорта', hash: 'sorta-podbor', icon: 'seed', desc: '4 вопроса — 3 подходящих сорта' },
     { title: 'Калькулятор грунта', hash: 'posadka-gorshok', icon: 'pot', desc: 'Сколько литров каждого компонента' },
     { title: 'Календарь посадки', hash: 'kalendar', icon: 'cal', desc: 'Даты посева, высадки и сбора' },

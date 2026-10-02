@@ -42,7 +42,7 @@
 @font-face{font-family:'JetBrains Mono Fallback';font-style:normal;src:local('Courier New'), local('Courier'), local('Liberation Mono'), local('Roboto Mono');size-adjust:99.98%;ascent-override:102.02%;descent-override:30.00%;line-gap-override:0.00%}
 @font-face{font-family:'Caveat Fallback';font-style:normal;src:local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Roboto');size-adjust:72.65%;ascent-override:132.15%;descent-override:41.30%;line-gap-override:0.00%}
 </style>
-<link rel="stylesheet" href="assets/css/style.css?v=2fbfe512">
+<link rel="stylesheet" href="assets/css/style.css?v=d7a6079a">
 <link rel="stylesheet" href="assets/css/lab.css?v=9eb59f84">
 </head>
 <body>
@@ -265,6 +265,21 @@
     <path class="ar-oil" d="M88 64 c-6 8 -10 13 -10 18 a10 10 0 0 0 20 0 c0 -5 -4 -10 -10 -18z"/>
     <path class="ar-shine" d="M84 80 a5 5 0 0 0 3 5"/>
   </symbol>
+  <symbol id="art-moy" viewBox="0 0 120 120">
+    <circle class="ar-sun" cx="94" cy="24" r="10"/>
+    <path class="ar-rays" d="M94 7 v4 M94 37 v4 M77 24 h4 M107 24 h4 M82 12 l2.8 2.8 M103.2 33.2 l2.8 2.8 M82 36 l2.8 -2.8 M103.2 14.8 l2.8 -2.8"/>
+    <path class="ar-stem" d="M48 76 V38 M48 64 C 42 59 36 56 29 55 M48 56 C 54 51 60 48 67 47"/>
+    <g transform="translate(48 40)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-34) scale(.42)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(34) scale(.42)"/></g>
+    <g transform="translate(29 55)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-72) scale(.34)"/></g>
+    <g transform="translate(67 47)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(68) scale(.34)"/></g>
+    <path class="ar-pot" d="M24 80 L72 80 L65 108 L31 108 Z"/>
+    <rect class="ar-rim" x="20" y="74" width="56" height="10" rx="3"/>
+    <ellipse class="ar-soil" cx="48" cy="76" rx="25" ry="3"/>
+    <path class="ar-shine" d="M29 89 L32 104"/>
+    <path class="ar-lens-h" d="M100 96 L108 104"/>
+    <circle class="ar-lens" cx="91" cy="86" r="12"/>
+    <g transform="translate(91 91)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-8) scale(.22)"/></g>
+  </symbol>
   <symbol id="art-spravka" viewBox="0 0 120 120">
     <path class="ar-cover" d="M12 40 V100 C 30 95 48 95 60 104 C 72 95 90 95 108 100 V40"/>
     <path class="ar-paper" d="M60 42 C 48 34 30 34 18 38 V96 C 30 92 48 92 60 100 Z"/>
@@ -300,6 +315,7 @@
       <a data-nav="problemy" href="problemy.html">Проблемы</a>
       <a data-nav="spravka" aria-current="page" class="is-active" href="#spravka">Справка</a>
     </nav>
+    <a class="icon-btn garden-btn" href="moy.html" data-garden-link aria-label="Мой базилик"><svg class="ico"><use href="#i-sprout"/></svg><b class="garden-badge" hidden></b></a>
     <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
       <svg class="ico"><use href="#i-search"/></svg><span>Поиск</span><kbd>/</kbd>
     </button>
@@ -434,6 +450,7 @@
 <!-- mobile tab bar -->
 <nav class="tabbar" aria-label="Навигация">
   <a class="tab-item" href="index.html" data-tab="home"><svg class="ico"><use href="#i-home"/></svg><span>Главная</span></a>
+  <a class="tab-item" href="moy.html" data-tab="moy" data-garden-link aria-label="Мой базилик"><svg class="ico"><use href="#i-sprout"/></svg><span>Мои кусты</span><b class="garden-badge" hidden></b></a>
   <button class="tab-item" type="button" data-open="sheet-chapters"><svg class="ico"><use href="#i-book"/></svg><span>Главы</span></button>
   <button class="tab-item" type="button" data-open="sheet-tools"><svg class="ico"><use href="#i-tools"/></svg><span>Инструменты</span></button>
   <button class="tab-item" type="button" data-open="sheet-search"><svg class="ico"><use href="#i-search"/></svg><span>Поиск</span></button>
@@ -485,10 +502,10 @@
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
 <script src="assets/js/haptics.js?v=8488e836" defer></script>
-<script src="assets/js/data.js?v=53ae7e0a" defer></script>
-<script src="assets/js/pages.js?v=96d35392" defer></script>
+<script src="assets/js/data.js?v=bd111ae8" defer></script>
+<script src="assets/js/pages.js?v=b2933cee" defer></script>
 <script src="assets/js/scene.js?v=f808fa52" defer></script>
 <script src="assets/js/science.js?v=aebc169a" defer></script>
-<script src="assets/js/app.js?v=fb70b877" defer></script>
+<script src="assets/js/app.js?v=57a272f6" defer></script>
 </body>
 </html>

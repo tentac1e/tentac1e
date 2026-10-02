@@ -45,8 +45,8 @@ function watch(page, errs) {
   page.on('console', m => { if (m.type() === 'error' && !/ERR_CERT|fonts|net::ERR_(NAME|INTERNET|CONN|TUNNEL|PROXY)|Failed to load resource/.test(m.text())) errs.push(page.url().replace(/^.*\//, '') + ': ' + m.text()); });
 }
 
-const FILES = ['index.html', 'sorta.html', 'posadka.html', 'kalendar.html', 'uhod.html', 'udobreniya.html', 'formirovka.html', 'urozhay.html', 'vkus.html', 'razmnozhenie.html', 'problemy.html', 'spravka.html'];
-const SLUGS = { glavnaya: '', sorta: 'сорта', posadka: 'посадка', kalendar: 'календарь', uhod: 'уход', udobreniya: 'удобрения', formirovka: 'прищипывание', urozhay: 'урожай', vkus: 'вкус', razmnozhenie: 'размножение', problemy: 'проблемы', spravka: 'справка' };
+const FILES = ['index.html', 'sorta.html', 'posadka.html', 'kalendar.html', 'uhod.html', 'udobreniya.html', 'formirovka.html', 'urozhay.html', 'vkus.html', 'razmnozhenie.html', 'problemy.html', 'spravka.html', 'moy.html'];
+const SLUGS = { glavnaya: '', sorta: 'сорта', posadka: 'посадка', kalendar: 'календарь', uhod: 'уход', udobreniya: 'удобрения', formirovka: 'прищипывание', urozhay: 'урожай', vkus: 'вкус', razmnozhenie: 'размножение', problemy: 'проблемы', spravka: 'справка', moy: 'мой-базилик' };
 const fileUrl = f => 'file://' + path.join(ROOT, f);
 
 module.exports = { ROOT, OUT, playwright, server, ok, done, watch, FILES, SLUGS, fileUrl, results };

@@ -102,6 +102,23 @@
   transition: transform .3s var(--ease-float), color .2s, border-color .2s;
 }
 .icon-btn:hover { color: var(--basil); border-color: var(--basil); transform: rotate(-14deg); }
+/* «Мой базилик» from every page; the badge counts this week's tasks (late ones included) */
+.garden-btn { position: relative; }
+.garden-btn.is-active { color: var(--basil); border-color: var(--basil); }
+.garden-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: var(--basil);
+  color: var(--on-basil);
+  font: 800 .68rem/19px var(--font-body);
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--bg);
+}
 
 .progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; overflow: hidden; }
 .progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--leaf), var(--basil), var(--opal)); transform: scaleX(0); transform-origin: 0 50%; }
@@ -128,7 +145,7 @@
     bottom: 0;
     z-index: 60;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
     background: var(--glass-strong);
     background: color-mix(in srgb, var(--bg) 86%, transparent);
@@ -151,6 +168,9 @@
     transition: color .2s, background-color .2s;
   }
   .tab-item .ico { width: 23px; height: 23px; }
+  .tab-item { position: relative; }
+  .tab-item .garden-badge { top: 1px; right: auto; left: calc(50% + 5px); }
+  .garden-btn { display: none; }
   .tab-item:hover, .tab-item.is-active { color: var(--basil-deep); }
   .tab-item.is-active { background: var(--leaf-soft); }
 }

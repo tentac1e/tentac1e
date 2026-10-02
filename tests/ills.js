@@ -91,6 +91,8 @@ async function rootChecks(b, mode, f, errs) {
   const bt = await tabs(bp);
   for (const id of bt.length ? bt : [null]) {
     if (id) { await bp.evaluate(i => { location.hash = i; }, id); await bp.waitForTimeout(150); }
+    // both sides measured with the tab's own fonts in place: a caption font that comes later widens the text beside the frame
+    await bp.evaluate(() => document.fonts.ready);
     (await bp.evaluate(boxes)).forEach(x => { empty[(id || '') + ' ' + x[0]] = x; });
   }
   await bare.close();
@@ -144,6 +146,7 @@ async function rootChecks(b, mode, f, errs) {
   let total = 0;
   for (const id of ids.length ? ids : [null]) {
     if (id) { await page.evaluate(i => { location.hash = i; }, id); await page.waitForTimeout(120); }
+    await page.evaluate(() => document.fonts.ready);
     const pics = await page.evaluate(() => [...document.querySelectorAll('[data-ill]')].filter(e => e.getClientRects().length).map(e => {
       const svg = e.querySelector('svg');
       return [e.dataset.ill, !!svg && !!svg.getAttribute('viewBox') && svg.querySelectorAll('path, rect, circle, ellipse, polygon, line, use, g').length > 2];

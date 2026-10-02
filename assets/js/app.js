@@ -239,9 +239,14 @@
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     $$('.tab-item[data-tab="home"]').forEach(a => a.classList.toggle('is-active', id === 'glavnaya'));
+    $$('[data-garden-link]').forEach(a => { a.classList.toggle('is-active', id === 'moy'); if (id === 'moy') a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     const ch = chapterById(id);
     let title = 'Гид по базилику';
-    if (ch) {
+    // «Мой базилик» is not a chapter: its title, but not a place to «continue reading» from
+    if (id === 'moy') {
+      const panel = document.getElementById(lastPanel.get(id) || '');
+      title = 'Мой базилик' + (panel && panel.dataset.title && $$('[data-panel]', view).length > 1 ? ' · ' + panel.dataset.title : '') + ' — Гид по базилику';
+    } else if (ch) {
       const panelId = lastPanel.get(id);
       const panel = panelId && document.getElementById(panelId);
       const sub = panel && panel.dataset.title;
@@ -2734,29 +2739,47 @@
     </article>`;
   }
 
-  // the home page: the week of every bush, or an invitation to add the first one
-  function renderGardenHome() {
-    const box = $('#garden-home');
-    if (!box) return;
+  // the week of every bush, or an invitation to add the first one: on the home page (#garden-home) and on the
+  // page «Мой базилик» (#garden-page), where the cover already says whose bushes these are
+  function renderGardenBox(box, page) {
     const day = today(), [mon, sun] = weekOf(day);
     const { plants } = gardenLoad();
+    const hid = page ? 'moy-page-h' : 'moy-h';
     const keep = `<p class="g-keep"><button type="button" class="g-link" data-garden-export>Сохранить копию</button><button type="button" class="g-link" data-garden-import>Загрузить копию</button><span>Кусты хранятся только в этом браузере. Safari стирает данные сайта, который не открывали неделю, — копия в файле их сбережёт.</span></p>`;
+    // from the home page to the rest of it: the weather and the experiments live on the page
+    const more = page ? '' : `<p class="g-more"><a class="g-link" href="#moy">Все кусты, погода и опыты${icon('arrow-r')}</a></p>`;
     if (!plants.length) {
       box.innerHTML = `<div class="g-empty card">
         <span class="g-pic g-pic-big" data-leaf="green">${miniPlant('harvest')}</span>
-        <div><h2 id="moy-h">Мой <em>базилик</em></h2>
+        <div><h2 id="${hid}">${page ? 'Ваш первый <em>куст</em>' : 'Мой <em>базилик</em>'}</h2>
         <p>Добавьте свой куст — гид подскажет, что делать с ним на этой неделе: когда прищипнуть, подкормить и срезать.</p>
         <div class="g-starts">${B.GARDEN.starts.filter(s => s.id !== 'seedling').map(s => `<button class="chip" type="button" data-garden-add="${s.id}">${icon(s.id === 'seed' ? 'seed' : s.id === 'shop' ? 'bag' : 'cup')}${s.id === 'shop' ? 'Купил горшок в магазине' : s.id === 'cutting' ? 'Укоренил черенок' : s.name}</button>`).join('')}</div>
-        <p class="g-keep"><button type="button" class="g-link" data-garden-import>Загрузить копию</button></p></div>
+        <p class="g-keep"><button type="button" class="g-link" data-garden-import>Загрузить копию</button></p>${more}</div>
       </div>`;
+      fixLinks(box);
       return;
     }
     const common = plants.map(p => plantWeek(p, day).now.find(shared)).filter(Boolean)[0];
-    box.innerHTML = `<div class="block-head"><h2 id="moy-h">Мой <em>базилик</em></h2><p>На этой неделе · ${fr(mon, sun)}</p></div>
+    box.innerHTML = `<div class="block-head"><h2 id="${hid}">${page ? 'На этой <em>неделе</em>' : 'Мой <em>базилик</em>'}</h2><p>${page ? fr(mon, sun) : 'На этой неделе · ' + fr(mon, sun)}</p></div>
       ${common ? `<ul class="g-tasks g-common">${taskHtml({ id: '*' }, Object.assign({}, common, { title: common.title + ' для всех кустов на окне' }), day)}</ul>` : ''}
       <div class="g-list">${plants.map(p => gardenCard(p, day)).join('')}</div>
-      <div class="g-foot"><button class="btn btn-ghost btn-small" type="button" data-garden-add="seed">${icon('sprout')}Добавить куст</button>${keep}</div>`;
+      <div class="g-foot"><button class="btn btn-ghost btn-small" type="button" data-garden-add="seed">${icon('sprout')}Добавить куст</button>${keep}</div>${more}`;
     fixLinks(box);
+  }
+  // what is due this week over all the bushes (late ones too): the badge on the header button
+  function gardenDue() {
+    const day = today();
+    const lists = gardenLoad().plants.map(p => plantWeek(p, day).now);
+    const common = lists.some(l => l.some(shared));
+    return lists.reduce((n, l) => n + l.filter(t => !shared(t)).length, 0) + (common ? 1 : 0);
+  }
+  function renderGardenHome() {
+    const home = $('#garden-home'), page = $('#garden-page');
+    if (home) renderGardenBox(home, false);
+    if (page) renderGardenBox(page, true);
+    const n = gardenDue();
+    $$('.garden-badge').forEach(b => { b.textContent = n > 9 ? '9+' : String(n); b.hidden = !n; });
+    $$('[data-garden-link]').forEach(a => a.setAttribute('aria-label', n ? `Мой базилик: ${n} ${plural(n, 'дело', 'дела', 'дел')} на неделе` : 'Мой базилик'));
   }
 
   /* ---------------- the sheet of one bush ---------------- */
@@ -2875,6 +2898,11 @@
   }
 
   function initGarden() {
+    // the page's own models (the weather, the experiments) read and write the bushes through this
+    window.BasilGarden = {
+      load: gardenLoad, save: gardenSave, tasks: plantTasks, week: plantWeek, stage: plantStage, open: openGarden,
+      on: fn => document.addEventListener('basil:garden', fn)
+    };
     renderGardenHome();
     document.addEventListener('basil:garden', () => { renderGardenHome(); if (gardenOpen && !gardenOpen.form && $('#sheet-garden').open) { const sc = $('#sheet-garden .sheet-inner'), y = sc ? sc.scrollTop : 0; renderGardenSheet(); if (sc) sc.scrollTop = y; } });
     // a day passed while the page stayed open: the week moves on
@@ -2976,7 +3004,7 @@
         gardenSave(s);
         renderGardenSheet();
         HAP.success();
-        if (!$('#garden-home')) toast('Куст добавлен — его дела на неделю теперь на главной');
+        if (!$('#garden-home') && !$('#garden-page')) toast('Куст добавлен — его дела на неделю теперь в «Моём базилике»');
       } else if (e.target.id === 'g-log-form') {
         e.preventDefault();
         const { s, p } = findPlant(gardenOpen && gardenOpen.id);

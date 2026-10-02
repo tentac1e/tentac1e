@@ -130,11 +130,27 @@ const iso = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d
     await page.reload({ waitUntil: 'load' });
     await page.waitForTimeout(600);
     const three = await page.evaluate(() => document.querySelectorAll('.g-card').length);
-    await page.evaluate(() => document.getElementById('moy').scrollIntoView());
+    await page.evaluate(() => document.getElementById('moy-home').scrollIntoView());
     await page.waitForTimeout(300);
     const r = await page.evaluate(audit);
     const bad = [...r.A.map(x => 'A ' + x), ...r.B.map(x => 'B ' + x), ...r.C.map(x => 'C ' + x)];
     ok(three === 3 && !bad.length, M + 'home with three bushes lays out clean ' + (bad.length ? '\n    ' + bad.slice(0, 8).join('\n    ') : ''));
+
+    // the page «Мой базилик»: the same three bushes, the badge on every page counts their week, the home block leads there
+    const due = await page.evaluate(() => [...document.querySelectorAll('.g-card .g-task, .g-common .g-task')].length);
+    const badge = await page.evaluate(() => [...document.querySelectorAll('.garden-badge')].filter(b => b.getClientRects().length).map(b => b.textContent));
+    const more = await page.evaluate(() => (document.querySelector('#garden-home .g-more a') || {}).href || '');
+    await page.goto(fileUrl('moy.html'), { waitUntil: 'load' });
+    await page.waitForTimeout(600);
+    const pg = await page.evaluate(() => ({
+      cards: document.querySelectorAll('#garden-page .g-card').length, h: (document.getElementById('moy-page-h') || {}).textContent,
+      title: document.title, active: [...document.querySelectorAll('[data-garden-link]')].filter(a => a.getClientRects().length).map(a => a.classList.contains('is-active'))
+    }));
+    ok(due > 0 && badge.length === 1 && badge[0] === String(due) && /moy\.html/.test(more) && pg.cards === 3 && /неделе/.test(pg.h) && /^Мой базилик/.test(pg.title) && pg.active.length === 1 && pg.active[0],
+      M + 'page «Мой базилик» and the badge ' + JSON.stringify({ due, badge, more: more.split('/').pop(), pg }));
+    const r2 = await page.evaluate(audit);
+    const bad2 = [...r2.A.map(x => 'A ' + x), ...r2.B.map(x => 'B ' + x), ...r2.C.map(x => 'C ' + x)];
+    ok(!bad2.length, M + 'the page with three bushes lays out clean ' + (bad2.length ? '\n    ' + bad2.slice(0, 8).join('\n    ') : ''));
     await page.evaluate(() => localStorage.removeItem('basil-garden'));
     await ctx.close();
   }

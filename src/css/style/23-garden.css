@@ -151,3 +151,13 @@
 .g-form .g-seg button { border-radius: 14px; padding-inline: 8px; }
 @media (min-width: 561px) { .g-form .g-seg-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .g-form-a { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* from the home block to the page «Мой базилик» */
+.g-more, .g-empty .g-more { margin: 22px 0 0; } /* clear of the link above: each one's finger zone reaches 9 px out */
+.g-more .g-link { display: inline-flex; align-items: center; gap: 6px; font-size: .9rem; }
+.g-more .ico { width: 16px; height: 16px; }
+/* the page: the bushes first, then how the tasks are counted */
+.garden-page { margin-bottom: 28px; }
+.g-about { max-width: 68ch; color: var(--ink-2); }
+.g-about h3 { margin: 0 0 8px; }
+.g-about p { margin: 0 0 10px; }
