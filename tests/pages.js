@@ -20,13 +20,16 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
       active: !!document.querySelector('[data-view].is-active'),
       cur: (document.querySelector('#nav a[aria-current="page"]') || {}).textContent || '',
       panel: !!document.querySelector('.panel.is-active') || !document.querySelector('.panel'),
-      labsTag: !!document.querySelector('script[src*="labs/"]'),
-      // a chapter's model file may load at once only for a model or a picture near the first screen
+      // a chapter with pictures, or with models outside a closed «Глубже», brings its files with the page (defer
+      // tags written by the build); any other file of models is fetched only when a model comes near the screen
+      own: !!document.querySelector('script[src*="labs/"][defer]'),
+      shows: !!document.querySelector('[data-view] [data-ill]') || [...document.querySelectorAll('.lab-tool')].some(e => !e.closest('details:not([open])')),
+      labsTag: !!document.querySelector('script[src*="labs/"]:not([defer])'),
       near: [...document.querySelectorAll('.panel.is-active .lab-tool, .panel.is-active [data-ill], [data-view]:not(:has(.panel)) .lab-tool, [data-view]:not(:has(.panel)) [data-ill]')].some(e => { const r = e.getBoundingClientRect(); return r.width && r.top < innerHeight + 400; }),
       bad: [...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href')).filter(h => !['#main', '#top'].includes(h) && !document.getElementById(h.slice(1)) && !document.querySelector(`[data-view="${h.slice(1)}"]`)).slice(0, 5)
     }));
-    ok(st.views === 1 && st.active && st.panel && (!st.labsTag || st.near) && !st.bad.length && / — Гид по базилику$|^Гид по базилику$/.test(st.t),
-      `${f}: «${st.t}» | nav «${st.cur}» | dangling ${JSON.stringify(st.bad)}${st.labsTag && !st.near ? ' | models loaded with nothing near' : ''}`);
+    ok(st.views === 1 && st.active && st.panel && (!st.labsTag || st.near) && (!st.own || st.shows) && !st.bad.length && / — Гид по базилику$|^Гид по базилику$/.test(st.t),
+      `${f}: «${st.t}» | nav «${st.cur}» | dangling ${JSON.stringify(st.bad)}${st.labsTag && !st.near ? ' | models loaded with nothing near' : ''}${st.own && !st.shows ? ' | files brought for nothing shown' : ''}`);
   }
 
   // the catalogue: every variety in exactly one type, a tap opens a type under its row, a filter keeps the matches
@@ -140,14 +143,23 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
   await page.waitForTimeout(900);
   ok(await page.evaluate(() => document.getElementById('deep-letuchest').open) && /vkus\.html#deep-letuchest$/.test(page.url()), 'cross-page deep link opens the block');
 
-  // models: this chapter's file only (the Flavor chapter starts with one, so it is already there), fetched when the first model scrolls near
-  const before = await page.evaluate(() => [...document.querySelectorAll('script[src*="labs/"]')].length);
+  // models: the Flavor chapter shows models in its tabs, so its files come with the page — the drawing libraries it
+  // lists and its own file, each once, in that order, fingerprinted — and a model mounts when it scrolls near
+  const tagsOf = () => page.evaluate(() => ({ tags: [...document.querySelectorAll('script[src*="labs/"]')].map(s => s.getAttribute('src').replace(/^.*\/js\//, '')), mounted: document.querySelectorAll('.lab-tool[data-ready]').length }));
+  const want = v => page.evaluate(v => window.BASIL_PAGES.v.deps[v].map(x => 'lib-' + x).concat(v), v);
+  const listed = (tags, w) => tags.length === w.length && tags.every((t, i) => new RegExp('^labs/' + w[i] + '\\.js\\?v=[0-9a-f]{8}$').test(t));
   await page.evaluate(() => { document.querySelector('.panel.is-active .lab-tool').scrollIntoView(); });
   await page.waitForTimeout(1200);
-  const after = await page.evaluate(() => ({ tags: [...document.querySelectorAll('script[src*="labs/"]')].map(s => s.getAttribute('src').replace(/^.*\/js\//, '')), mounted: document.querySelectorAll('.lab-tool[data-ready]').length }));
-  // the chapter's own file and the drawing libraries it lists, each once, fingerprinted
-  const want = await page.evaluate(() => window.BASIL_PAGES.v.deps.vkus.map(x => 'lib-' + x).concat('vkus'));
-  ok(before === 0 && after.tags.length === want.length && after.tags.every((t, i) => new RegExp('^labs/' + want[i] + '\\.js\\?v=[0-9a-f]{8}$').test(t)) && after.mounted > 0, 'chapter models load on demand ' + JSON.stringify(after));
+  const vk = await tagsOf();
+  ok(listed(vk.tags, await want('vkus')) && vk.mounted > 0, 'a chapter with models on show brings its files with it ' + JSON.stringify(vk));
+  // the Calendar's models are inside «Глубже»: nothing is fetched until one is opened and comes near
+  await page.goto(fileUrl('kalendar.html'), { waitUntil: 'load' });
+  await page.waitForTimeout(600);
+  const calBefore = await tagsOf();
+  await page.evaluate(() => { const d = document.querySelector('details.deep .lab-tool').closest('details'); d.open = true; d.querySelector('.lab-tool').scrollIntoView(); });
+  await page.waitForTimeout(1500);
+  const calAfter = await tagsOf();
+  ok(calBefore.tags.length === 0 && listed(calAfter.tags, await want('kalendar')) && calAfter.mounted > 0, 'models inside «Глубже» load on demand ' + JSON.stringify({ before: calBefore.tags, after: calAfter }));
 
   // reading depth carries over
   await page.goto(fileUrl('sorta.html'), { waitUntil: 'load' });

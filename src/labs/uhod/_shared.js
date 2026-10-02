@@ -44,9 +44,10 @@
     },
     wick: () => {
       // the pot sits in the mouth of a jar of water; a cord from its drainage hole hangs into the water
-      let g = `<path d="M90 76Q85 86 91 96" stroke="${Fw('kraft-d')}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
-      g += ill.pot(90, 56, 58, 22) + ill.plant({ x: 88, y: 50, h: 28, nodes: 3, leafScale: 0.42, seed: 9 });
+      let g = ill.pot(90, 56, 58, 22) + ill.plant({ x: 88, y: 50, h: 28, nodes: 3, leafScale: 0.42, seed: 9 });
       g += Rw.jar(90, 102, 52, 48, { fill: 'water-c', level: 0.48, open: true });
+      // the cord is the point of the picture: drawn over the glass, seen through it, not lost behind the water
+      g += `<path d="M90 76Q85 86 91 97" stroke="${Fw('kraft-d')}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
       return waterP(g, 'Горшок на банке с водой: фитиль из дренажного отверстия опущен в воду', 102);
     }
   };

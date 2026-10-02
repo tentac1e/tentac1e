@@ -15,7 +15,7 @@
   const citiesChips = (id, lat) => h.chipsHtml(id, 'Город', h.CITIES.map(([l, n]) => [l, n]), lat);
 
   const { micro, ill, props } = window.BasilLibs;
-  { const st = document.createElement('style'); st.dataset.labs = "urozhay"; st.textContent = "/* pesto: the jar is shared with the anthocyanin model, the bars with gdd (src/css/lab/06-lab-tools.css) */\n.pesto-out { display: grid; gap: 10px; justify-items: center; }\n.pesto-jar { width: 160px; height: auto; }\n.pesto-verdict { margin: 0; font-size: .95rem; color: var(--ink-2); text-align: center; }\n.pesto-verdict b { display: block; font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); }\n.pesto-bars { width: 100%; }\n.pesto-notes { margin-top: 16px; font-size: .92rem; }\n\n"; document.head.appendChild(st); }
+  window.BasilScience.styleFor("urozhay", "/* pesto: the jar is shared with the anthocyanin model, the bars with gdd (src/css/lab/06-lab-tools.css) */\n.pesto-out { display: grid; gap: 10px; justify-items: center; }\n.pesto-jar { width: 160px; height: auto; }\n.pesto-verdict { margin: 0; font-size: .95rem; color: var(--ink-2); text-align: center; }\n.pesto-verdict b { display: block; font-family: var(--font-display); font-size: 1.5rem; color: var(--ink); }\n.pesto-bars { width: 100%; }\n.pesto-notes { margin-top: 16px; font-size: .92rem; }\n\n");
   /* @use props */
   /* Pictures of the Harvest chapter: the eight ways to keep basil (data-ill="store:<kind>") — a bouquet in
      water, the fridge, frozen in oil, blanched, dried, salt, oil, pesto. */

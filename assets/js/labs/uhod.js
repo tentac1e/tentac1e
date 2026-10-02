@@ -15,7 +15,7 @@
   const citiesChips = (id, lat) => h.chipsHtml(id, 'Город', h.CITIES.map(([l, n]) => [l, n]), lat);
 
   const { micro, ill, props } = window.BasilLibs;
-  { const st = document.createElement('style'); st.dataset.labs = "uhod"; st.textContent = "/* vpd */\n.vpd-map polygon { stroke: none; }\n.vpd-iso { fill: none; stroke: var(--surface); stroke-width: 1.5; opacity: .8; }\n.vpd-map .z0 { fill: var(--z0); } .vpd-map .z1 { fill: var(--z1); } .vpd-map .z2 { fill: var(--z2); } .vpd-map .z3 { fill: var(--z3); } .vpd-map .z4 { fill: var(--z4); }\n.vpd-dot { fill: none; stroke: var(--ink); stroke-width: 2.5; }\n.vpd-dot-in { fill: var(--ink); }\n.vpd-legend { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; font-size: .82rem; color: var(--ink-2); }\n.vpd-legend i { display: inline-block; width: 14px; height: 14px; margin-right: 8px; border-radius: 4px; vertical-align: -2px; }\n.vpd-legend .z0 { background: var(--z0); } .vpd-legend .z1 { background: var(--z1); } .vpd-legend .z2 { background: var(--z2); } .vpd-legend .z3 { background: var(--z3); } .vpd-legend .z4 { background: var(--z4); }\n.vpd-legend small { font-family: var(--font-mono); color: var(--ink-3); }\n\n/* ph bands */\n.ph-band { fill: var(--ser-1); opacity: .55; transition: opacity .3s; }\n.ph-band.is-low { fill: var(--ser-3); opacity: .75; }\n.ph-sym { font: 700 12px/1 var(--font-mono); fill: var(--ink-2); }\n.ph-sym.is-low { fill: var(--ser-3); }\n\n"; document.head.appendChild(st); }
+  window.BasilScience.styleFor("uhod", "/* vpd */\n.vpd-map polygon { stroke: none; }\n.vpd-iso { fill: none; stroke: var(--surface); stroke-width: 1.5; opacity: .8; }\n.vpd-map .z0 { fill: var(--z0); } .vpd-map .z1 { fill: var(--z1); } .vpd-map .z2 { fill: var(--z2); } .vpd-map .z3 { fill: var(--z3); } .vpd-map .z4 { fill: var(--z4); }\n.vpd-dot { fill: none; stroke: var(--ink); stroke-width: 2.5; }\n.vpd-dot-in { fill: var(--ink); }\n.vpd-legend { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; font-size: .82rem; color: var(--ink-2); }\n.vpd-legend i { display: inline-block; width: 14px; height: 14px; margin-right: 8px; border-radius: 4px; vertical-align: -2px; }\n.vpd-legend .z0 { background: var(--z0); } .vpd-legend .z1 { background: var(--z1); } .vpd-legend .z2 { background: var(--z2); } .vpd-legend .z3 { background: var(--z3); } .vpd-legend .z4 { background: var(--z4); }\n.vpd-legend small { font-family: var(--font-mono); color: var(--ink-3); }\n\n/* ph bands */\n.ph-band { fill: var(--ser-1); opacity: .55; transition: opacity .3s; }\n.ph-band.is-low { fill: var(--ser-3); opacity: .75; }\n.ph-sym { font: 700 12px/1 var(--font-mono); fill: var(--ink-2); }\n.ph-sym.is-low { fill: var(--ser-3); }\n\n");
   /* @use props */
   /* Pictures of the Care chapter, watering: when to water (the finger test) and how (under the root, the
      surplus out of the saucer) — data-ill="water:when|how"; too much and too little water side by side
@@ -62,9 +62,10 @@
     },
     wick: () => {
       // the pot sits in the mouth of a jar of water; a cord from its drainage hole hangs into the water
-      let g = `<path d="M90 76Q85 86 91 96" stroke="${Fw('kraft-d')}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
-      g += ill.pot(90, 56, 58, 22) + ill.plant({ x: 88, y: 50, h: 28, nodes: 3, leafScale: 0.42, seed: 9 });
+      let g = ill.pot(90, 56, 58, 22) + ill.plant({ x: 88, y: 50, h: 28, nodes: 3, leafScale: 0.42, seed: 9 });
       g += Rw.jar(90, 102, 52, 48, { fill: 'water-c', level: 0.48, open: true });
+      // the cord is the point of the picture: drawn over the glass, seen through it, not lost behind the water
+      g += `<path d="M90 76Q85 86 91 97" stroke="${Fw('kraft-d')}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
       return waterP(g, 'Горшок на банке с водой: фитиль из дренажного отверстия опущен в воду', 102);
     }
   };

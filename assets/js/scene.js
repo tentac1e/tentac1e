@@ -694,8 +694,9 @@ window.BasilScene = (() => {
   const LEAF_BOX = { x: -33, y: -112, w: 66, h: 116 };
   const LEAF_FILLS = { 'url(#pl-grad)': ['--pl-a', '--pl-b'], 'url(#pl-grad-young)': ['--pl-b', '--pl-c'], 'url(#pl-grad-back)': ['--pl-back-a', '--pl-back-b'], 'url(#pl-grad-purple)': ['--pl-pa', '--pl-pb'] };
   let leafArt = null, leafArtTheme = '';
+  const themeKey = () => ['--pl-a', '--pl-b', '--pl-c', '--pl-back-a', '--pl-pa', '--pl-vein'].map(css).join('|');
   function leafBitmaps() {
-    const theme = ['--pl-a', '--pl-b', '--pl-c', '--pl-back-a', '--pl-pa', '--pl-vein'].map(css).join('|');
+    const theme = themeKey();
     if (leafArt && leafArtTheme === theme) return leafArt;
     leafArtTheme = theme;
     const R = clamp(Math.ceil((window.devicePixelRatio || 1) * 1.6), 2, 4);
@@ -752,9 +753,30 @@ window.BasilScene = (() => {
         lf.el = img;
       }
     }
+    // back to vector leaves (coloured by the stylesheet), until bitmaps in the colours of now are drawn
+    function applyVector() {
+      bitmaps = null;
+      for (const sh of shoots) for (const lf of sh.leaves) {
+        if (lf.el.tagName.toLowerCase() !== 'image') continue;
+        const u = mk('use', { href: '#pl-leaf', class: lf.el.getAttribute('class') });
+        const tr = lf.el.getAttribute('transform');
+        if (tr) u.setAttribute('transform', tr);
+        u.style.display = lf.el.style.display;
+        u.style.fill = lf.fill;
+        lf.el.replaceWith(u);
+        lf.el = u;
+      }
+    }
     if (o.raster) {
       leafBitmaps().then(applyBitmaps);
-      document.addEventListener('basil:theme', () => { setTimeout(() => leafBitmaps().then(applyBitmaps), 60); });
+      // a theme change: the leaves take the new colours at once, as vector, and the bitmaps of those colours come
+      // after — never a frame of last theme's leaves on this theme's stems (on a slow phone that was a second);
+      // bitmaps that come late for a theme already left are not put on
+      document.addEventListener('basil:theme', () => {
+        applyVector();
+        const want = themeKey();
+        setTimeout(() => leafBitmaps().then(map => { if (themeKey() === want) applyBitmaps(map); }), 60);
+      });
     }
 
     function build(sp, parent, at, keep) {

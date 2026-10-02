@@ -14,7 +14,7 @@
   const doyLabel = n => { const d = new Date(2023, 0, n); return `${d.getDate()} ${MONTHS_GEN[d.getMonth()]}`; };
   const citiesChips = (id, lat) => h.chipsHtml(id, 'Город', h.CITIES.map(([l, n]) => [l, n]), lat);
 
-  { const st = document.createElement('style'); st.dataset.labs = "kalendar"; st.textContent = "/* gdd: the bars are shared with the pesto model (src/css/lab/06-lab-tools.css) */\n"; document.head.appendChild(st); }
+  window.BasilScience.styleFor("kalendar", "/* gdd: the bars are shared with the pesto model (src/css/lab/06-lab-tools.css) */\n");
   register('daylen', el => {
     el.innerHTML = h.head('Длина дня за год', 'Астрономический расчёт с поправкой на рефракцию. Коснитесь графика, чтобы увидеть любой день.') +
       `<div class="lab-controls">${citiesChips('lab-dl-city', 55.8)}${h.rangeHtml('lab-dl-lat', 'Широта', 40, 70, 0.1, 55.8)}</div>

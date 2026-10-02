@@ -82,10 +82,12 @@
   --shadow-lift: 0 4px 10px rgb(var(--shadow-rgb) / .07), 0 30px 60px -20px rgb(var(--shadow-rgb) / .34);
 
   /* Type: herbarium serif display, clean grotesk body, mono for numbers, hand for margin notes */
-  --font-display: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
-  --font-body: "Manrope", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  /* the second name in each stack is the system font fitted to the site's one (src/fonts/fonts.css): while the
+     font is on its way the lines break almost where they will, and nothing jumps when it comes */
+  --font-display: "Cormorant Garamond", "Cormorant Garamond Fallback", "Cormorant", Georgia, "Times New Roman", serif;
+  --font-body: "Manrope", "Manrope Fallback", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --font-hand: "Caveat", "Caveat Fallback", "Segoe Print", "Bradley Hand", cursive;
 
   --radius-leaf: 30px 6px 30px 6px;
   --radius: 22px;

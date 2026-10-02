@@ -114,6 +114,10 @@
 :root[data-theme="dark"] { --ill-bg: #1A281D; --ill-bg-2: #213325; --ill-line: rgba(160, 200, 150, .16); }
 
 .ill { display: block; width: 100%; height: auto; }
+/* a picture drawn while its frame is on the screen comes up out of its paper (the frame's ground) */
+.ill-in { animation: ill-in .24s ease-out both; }
+@keyframes ill-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .ill-in { animation: none; } }
 .ill-lbl { font: 600 10.5px/1 var(--font-body); fill: var(--ink-2); paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3.5px; stroke-linejoin: round; }
 .ill-scale line { stroke: var(--ink-2); stroke-width: 1.6; }
 .ill-scale text { font: 600 10px/1 var(--font-mono); fill: var(--ink-2); paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3px; }

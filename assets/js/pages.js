@@ -580,15 +580,15 @@ window.BASIL_PAGES = {
  "v": {
   "labs": {
    "sorta": "c21915d9",
-   "posadka": "e3bc13e5",
-   "kalendar": "b25ac3f7",
-   "uhod": "aff9a258",
-   "udobreniya": "6587c4c5",
-   "formirovka": "a3f0c1c8",
-   "urozhay": "53944379",
-   "vkus": "af3e085c",
-   "razmnozhenie": "1ae52fd4",
-   "problemy": "b23a05a1"
+   "posadka": "9388c86c",
+   "kalendar": "51f45378",
+   "uhod": "b01afd80",
+   "udobreniya": "f58f15d9",
+   "formirovka": "54a87f1b",
+   "urozhay": "1760db14",
+   "vkus": "78b30d48",
+   "razmnozhenie": "d9b5685b",
+   "problemy": "b6cf55d9"
   },
   "lib": {
    "micro": "bbc6c98e",

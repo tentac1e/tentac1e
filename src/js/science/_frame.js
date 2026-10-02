@@ -3,5 +3,5 @@ window.BasilScience = (() => {
   'use strict';
 /*@parts*/
 
-  return { init, register, illustrate, paint, variants, api, MOLS, CHEMO, PAIRS, KIND };
+  return { init, register, illustrate, paint, variants, styleFor, api, MOLS, CHEMO, PAIRS, KIND };
 })();

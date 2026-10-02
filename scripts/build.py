@@ -144,8 +144,10 @@ SCRIPTS = ['haptics.js', 'data.js', 'pages.js', 'scene.js', 'science.js', 'app.j
 
 # the one-file book has no assets folder: it keeps loading its fonts from Google, as the site did before
 GOOGLE_FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>'
-# the text font is asked for at once, before the stylesheet finds it: it is on every line of every page
-PRELOAD_FONTS = ['manrope-normal-cyrillic.woff2', 'manrope-normal-latin.woff2']
+# asked for at once, before the stylesheet finds them: the text font is on every line of every page
+PRELOAD_FONTS = ['manrope-normal-cyrillic.woff2', 'manrope-normal-latin.woff2',
+                 # the headings' face, on every page's first screen (the latin part holds the space and the digits)
+                 'cormorant-garamond-normal-cyrillic.woff2', 'cormorant-garamond-normal-latin.woff2']
 
 SITE_TITLE = 'Гид по базилику'
 SITE_DESC = ('Подробный гид по выращиванию базилика в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, '
@@ -303,6 +305,25 @@ def tie_js(text, words=False):
     if words:
         text = re.sub(SHORT_WORD + r' (?=[а-яё«(\d])', '\\1\u00a0', text, flags=re.I)
     return text
+
+
+# the chapter's science spreads, listed under its title (what science.js used to build as the page started:
+# written here, the row stands in place from the first paint and the chapter does not jump down when it comes)
+KIND_ICON = {'chem': 'hex', 'phys': 'wave', 'bio': 'cell', 'taste': 'nose'}
+
+
+def deep_nav(html):
+    deep = [dict(re.findall(r'([a-z-]+)="([^"]*)"', m.group(1))) for m in re.finditer(r'<details class="deep"([^>]*)>', html)]
+    if not deep or '<div class="ch-hero-text">' not in html:
+        return html
+    deeper = len(re.findall(r'<details class="deeper"', html))
+    ico = lambda n: f'<svg class="ico" aria-hidden="true"><use href="#i-{n}"/></svg>'
+    nav = (f'<nav class="deep-index" aria-label="Научные развороты главы"><span class="deep-index-label">{ico("hex")}Глубже <b>{len(deep)}'
+           + (f' · ещё глубже {deeper}' if deeper else '') + '</b></span>'
+           + ''.join(f'<a href="#{d["id"]}" data-kind="{d["data-kind"]}">{ico(KIND_ICON[d["data-kind"]])}{d["data-short"]}</a>' for d in deep) + '</nav>')
+    i = html.index('<div class="ch-hero-text">')
+    j = html.index('</div>', i)
+    return html[:j] + nav + html[j:]
 
 
 def label_tables(html):
@@ -479,9 +500,10 @@ def assemble(src_pages):
             (out / f'lib-{x}.js').write_text(tie_js(banner(text, f'src/labs/_lib/{x}.js'), words=True), encoding='utf-8')
             written.append(x)
         head = (f'  const {{ {", ".join(lib_name(x) for x in libs)} }} = window.BasilLibs;\n' if libs else '')
+        # the models' styles go onto the page with the chapter's first model (science.js, styleFor): a page that only
+        # shows pictures never restyles itself for them, and none of it happens while the page starts
         if lab_css[v]:
-            head += ("  { const st = document.createElement('style'); st.dataset.labs = " + json.dumps(v) + '; st.textContent = '
-                     + json.dumps(lab_css[v], ensure_ascii=False) + '; document.head.appendChild(st); }\n')
+            head += ('  window.BasilScience.styleFor(' + json.dumps(v) + ', ' + json.dumps(lab_css[v], ensure_ascii=False) + ');\n')
         body = head + '\n'.join(f.read_text(encoding='utf-8') for f in shared + [d / f'{l}.js' for l in labs])
         text = frame.replace('{{chapter}}', CH[v]['title'] if v in CH else v).replace('/*@labs*/\n', body)
         (out / f'{v}.js').write_text(tie_js(banner(text, f'src/labs/{v}/'), words=True), encoding='utf-8')
@@ -569,6 +591,15 @@ def main():
     src = {v: read_page(v) for v, _ in PAGES}
     CH = chapters()
     bundles, lib_deps, libs = assemble(src)
+    # chapters whose pictures (or models outside a closed «Глубже») stand on the page from the start: their files
+    # come with the page (see page_html); the others wait until a model comes near the screen
+    def shown_models(html):
+        while True:
+            bare = re.sub(r'<details[^>]*>(?:(?!<details).)*?</details>', '', html, flags=re.S)
+            if bare == html:
+                return 'data-lab=' in html
+            html = bare
+    eager = {v for v in bundles if (SRC / 'labs' / v / '_shared.js').exists() or shown_models(src[v])}
 
     # 1. give every searchable heading a stable id, and index the text
     static_entries_panels, static_entries_heads = [], []
@@ -728,11 +759,11 @@ def main():
     def fingerprint(html):
         if single:
             return html
-        return re.sub(r'((?:href|src)="(assets/(?:css|js)/[a-z-]+\.(?:css|js)))"', lambda m: f'{m.group(1)}?v={ver(out_dir / m.group(2))}"', html)
+        return re.sub(r'((?:href|src)="(assets/(?:css|js)/(?:labs/)?[a-z-]+\.(?:css|js)))"', lambda m: f'{m.group(1)}?v={ver(out_dir / m.group(2))}"', html)
 
     # 4. pages
     def page_html(views, here):
-        content = label_tables(typeset('\n'.join(src[v] for v in views)))
+        content = label_tables(typeset('\n'.join(deep_nav(src[v]) for v in views)))
         if not single:
             content = content.replace('<section class="view', '<section class="view is-active', 1)
             # first panel is visible straight from the HTML, before any script runs
@@ -747,6 +778,12 @@ def main():
         if not single:
             out = out.replace(f'data-nav="{here}"', f'data-nav="{here}" aria-current="page" class="is-active"')
         scripts = '\n'.join(f'<script src="assets/js/{s}" defer></script>' for s in SCRIPTS if not (single and s == 'pages.js'))
+        # a chapter whose pictures stand on the page from the start brings its picture files with it: they run right
+        # after science.js, before the interface starts, so the pictures on the screen are drawn at DOMContentLoaded
+        if not single and here in eager:
+            scripts = scripts.replace('<script src="assets/js/science.js" defer></script>',
+                                      '<script src="assets/js/science.js" defer></script>\n'
+                                      + '\n'.join(f'<script src="assets/js/labs/{n}.js" defer></script>' for n in [f'lib-{x}' for x in lib_deps.get(here, [])] + [here]))
         if single:
             scripts = scripts.replace('<script src="assets/js/science.js" defer></script>',
                                       '<script src="assets/js/science.js" defer></script>\n'

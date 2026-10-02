@@ -177,7 +177,7 @@
 - `src/js/app/17-nutrients-dose.js` (52 стр.): FRACTIONS, initDose
 - `src/js/app/18-pinching.js` (196 стр.): initSim
 - `src/js/app/19-seeds.js` (21 стр.): initGerm
-- `src/js/app/20-problems.js` (58 стр.): initDiagnostics
+- `src/js/app/20-problems.js` (59 стр.): initDiagnostics
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
 - `src/js/app/22-garden-view.js` (299 стр.): WEEKDAY, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
 - `src/js/app/22-garden.js` (128 стр.): GARDEN_KEY
@@ -191,8 +191,8 @@
 - `src/js/science/03-charts.js` (153 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (270 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
-- `src/js/science/06-labs-loader.js` (117 стр.): SELF, draw, drawDue
-- `src/js/science/07-deep.js` (225 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
+- `src/js/science/06-labs-loader.js` (221 стр.): SELF, draw, HIDDEN, drawDue
+- `src/js/science/07-deep.js` (228 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 
 **scene.js**
 - `src/js/scene/00-core.js` (8 стр.): TAU
@@ -201,7 +201,7 @@
 - `src/js/scene/03-wind.js` (22 стр.)
 - `src/js/scene/04-background.js` (499 стр.): SPR_L, initBackground
 - `src/js/scene/05-plant.js` (49 стр.)
-- `src/js/scene/06-plant-bitmaps.js` (360 стр.): LEAF_D, LEAF_BOX, LEAF_FILLS, Plant
+- `src/js/scene/06-plant-bitmaps.js` (382 стр.): LEAF_D, LEAF_BOX, LEAF_FILLS, Plant
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
 
 **data.js**

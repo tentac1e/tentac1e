@@ -2560,7 +2560,8 @@
     };
     cards.forEach(c => c.addEventListener('click', () => selectSymptom(c.dataset.id, true)));
     selectSymptom('low-yellow', false);
-    paintIll(groups, true);
+    // the tiles on the screen are drawn at once, the rest as they come near: not two dozen pictures in one go
+    paintIll(groups);
 
     // diseases and pests: as seen on the plant and under a lens
     const card = (d, i, kind) => `

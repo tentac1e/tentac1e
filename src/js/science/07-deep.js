@@ -156,7 +156,8 @@
     $$('[data-view]').forEach(view => {
       const list = $$('details.deep', view);
       const hero = $('.ch-hero-text', view);
-      if (!list.length || !hero) return;
+      // the build writes the row into the page; a page without it (an old copy) gets it here
+      if (!list.length || !hero || $('.deep-index', hero)) return;
       const deeper = $$('details.deeper', view).length;
       const nav = document.createElement('nav');
       nav.className = 'deep-index';
@@ -218,8 +219,10 @@
     initHomeMolecule();
     // models and pictures are looked for once the page stands where it opens: a link to a block far down
     // jumps there first (the router's first «basil:view»), and the ones above it are not built for nothing
+    // pictures at once; the models (heavier, and below the first screen) once the interface has started
     let started = false;
-    const start = () => { if (started) return; started = true; mountAll(); paint(); };
+    const models = () => { if (document.documentElement.classList.contains('is-ready')) mountAll(); else document.addEventListener('basil:ready', mountAll, { once: true }); };
+    const start = () => { if (started) return; started = true; paint(); models(); };
     document.addEventListener('basil:view', start, { once: true });
     setTimeout(start, 2000);
   }
