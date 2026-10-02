@@ -11,31 +11,36 @@
     return n === 1 ? 'завтра' : n < 7 ? WEEKDAY[t.due.getDay()] : fd(t.due);
   }
   const plantPic = (p, day) => { const v = gardenVariety(p); return `<span class="g-pic" data-leaf="${v ? v.leaf : 'green'}">${miniPlant(plantStage(p, day).pic)}</span>`; };
+  // the latest photo of the bush, if there is one (newest by date, then by when it was written)
+  const lastPhoto = p => (p.log || []).map((e, i) => Object.assign({ i }, e)).filter(e => e.k === 'photo' && e.ph && fromISO(e.d)).sort((a, b) => b.d.localeCompare(a.d) || b.i - a.i)[0] || null;
   const plantMeta = (p, day) => {
     const v = gardenVariety(p), st = plantStage(p, day);
     const start = B.GARDEN.starts.find(s => s.id === p.start);
     return [v && v.name !== p.name ? `«${esc(v.name)}»` : '', `${st.age + 1}-й день`, st.word, start ? start.short : ''].filter(Boolean).join(' · ');
   };
-  function taskHtml(p, t, day) {
+  // cal: in the bush's sheet a task goes into Google Calendar with one tap (the home page stays as it was)
+  function taskHtml(p, t, day, cal) {
+    const gcal = cal ? `<a class="g-how g-gcal" href="${esc(googleLink(p, t, t.due < day ? day : t.due))}" target="_blank" rel="noopener">В Google Календарь</a>` : '';
     return `<li class="g-task is-${t.state}">
       <div class="g-task-t"><b>${esc(t.title)}</b><small>${taskWhen(t, day)}</small><p>${nb(t.text)}</p></div>
-      <div class="g-task-a"><a class="g-how" href="#${t.link}">Как?</a><button class="g-done" type="button" data-plant="${p.id}" data-task="${t.key}">${icon('check')}<span>Сделано</span></button></div>
+      <div class="g-task-a"><span class="g-task-l"><a class="g-how" href="#${t.link}">Как?</a>${gcal}</span><button class="g-done" type="button" data-plant="${p.id}" data-task="${t.key}">${icon('check')}<span>Сделано</span></button></div>
     </li>`;
   }
   const notesHtml = p => `<div class="g-notes">${B.GARDEN.notes.map(n => `<button class="g-note" type="button" data-plant="${p.id}" data-note="${n.k}">${icon(n.icon)}<span>${n.name}</span></button>`).join('')}</div>`;
   // shared: the lamp is one for the whole windowsill, so on the home page it is asked once for all bushes
   const shared = t => /^light-/.test(t.key);
-  function weekHtml(p, day, common) {
+  function weekHtml(p, day, common, cal) {
     const w = plantWeek(p, day);
     if (common) w.now = w.now.filter(t => !shared(t));
     const water = lastNote(p, 'water');
-    return (w.now.length ? `<ul class="g-tasks">${w.now.map(t => taskHtml(p, t, day)).join('')}</ul>` : `<p class="g-free">На этой неделе дел по плану нет. Поливайте, когда верхние 1–2&nbsp;см грунта сухие.</p>`) +
+    return (w.now.length ? `<ul class="g-tasks">${w.now.map(t => taskHtml(p, t, day, cal)).join('')}</ul>` : `<p class="g-free">На этой неделе дел по плану нет. Поливайте, когда верхние 1–2&nbsp;см грунта сухие.</p>`) +
       (w.next ? `<p class="g-next">Дальше: ${esc(w.next.title.charAt(0).toLowerCase() + w.next.title.slice(1))} — ${fd(w.next.due)}</p>` : '') +
       notesHtml(p) + `<p class="g-water">${water ? 'Полит ' + ago(water, day) + '.' : 'Полив ещё не отмечен.'} <a href="#uhod-poliv">Как понять, что пора</a></p>`;
   }
-  function gardenCard(p, day) {
+  function gardenCard(p, day, page) {
+    const ph = page && lastPhoto(p);
     return `<article class="g-card" data-plant-card="${p.id}">
-      <div class="g-top">${plantPic(p, day)}<div class="g-id"><h3><button class="g-open" type="button" data-plant-open="${p.id}">${esc(p.name)}</button></h3><p>${plantMeta(p, day)}</p></div></div>
+      <div class="g-top">${ph ? `<span class="g-pic g-pic-photo"><img data-photo="${ph.ph}" alt="${esc(p.name)}: фото от ${fd(fromISO(ph.d))}"></span>` : plantPic(p, day)}<div class="g-id"><h3><button class="g-open" type="button" data-plant-open="${p.id}">${esc(p.name)}</button></h3><p>${plantMeta(p, day)}</p></div></div>
       ${weekHtml(p, day, true)}
     </article>`;
   }
@@ -46,7 +51,7 @@
     const day = today(), [mon, sun] = weekOf(day);
     const { plants } = gardenLoad();
     const hid = page ? 'moy-page-h' : 'moy-h';
-    const keep = `<p class="g-keep"><button type="button" class="g-link" data-garden-export>Сохранить копию</button><button type="button" class="g-link" data-garden-import>Загрузить копию</button><span>Кусты хранятся только в этом браузере. Safari стирает данные сайта, который не открывали неделю, — копия в файле их сбережёт.</span></p>`;
+    const keep = `<p class="g-keep"><button type="button" class="g-link" data-garden-export>Сохранить копию</button><button type="button" class="g-link" data-garden-import>Загрузить копию</button>${page && canShareFile() ? '<button type="button" class="g-link" data-garden-share>Отправить копию</button>' : ''}<span>Кусты хранятся только в этом браузере. Safari стирает данные сайта, который не открывали неделю, — копия в файле их сбережёт.</span></p>`;
     // from the home page to the rest of it: the weather and the experiments live on the page
     const more = page ? '' : `<p class="g-more"><a class="g-link" href="#moy">Все кусты, погода и опыты${icon('arrow-r')}</a></p>`;
     if (!plants.length) {
@@ -63,9 +68,10 @@
     const common = plants.map(p => plantWeek(p, day).now.find(shared)).filter(Boolean)[0];
     box.innerHTML = `<div class="block-head"><h2 id="${hid}">${page ? 'На этой <em>неделе</em>' : 'Мой <em>базилик</em>'}</h2><p>${page ? fr(mon, sun) : 'На этой неделе · ' + fr(mon, sun)}</p></div>
       ${common ? `<ul class="g-tasks g-common">${taskHtml({ id: '*' }, Object.assign({}, common, { title: common.title + ' для всех кустов на окне' }), day)}</ul>` : ''}
-      <div class="g-list">${plants.map(p => gardenCard(p, day)).join('')}</div>
-      <div class="g-foot"><button class="btn btn-ghost btn-small" type="button" data-garden-add="seed">${icon('sprout')}Добавить куст</button>${keep}</div>${more}`;
+      <div class="g-list">${plants.map(p => gardenCard(p, day, page)).join('')}</div>
+      <div class="g-foot"><div class="g-foot-a"><button class="btn btn-ghost btn-small" type="button" data-garden-add="seed">${icon('sprout')}Добавить куст</button>${page ? `<button class="btn btn-ghost btn-small" type="button" data-garden-ics="*">${icon('cal')}Дела в календарь</button>` : ''}</div>${keep}</div>${more}`;
     fixLinks(box);
+    if (page) fillPhotos(box);
   }
   // what is due this week over all the bushes (late ones too): the badge on the header button
   function gardenDue() {
@@ -105,7 +111,62 @@
       <div class="g-form-a"><button class="btn btn-primary btn-small" type="submit">${icon('check')}Сохранить</button><button class="btn btn-ghost btn-small" type="button" data-g-cancel>Отмена</button></div>
     </form>`;
   }
-  const NOTE_NAMES = { water: 'Полил', feed: 'Подкормил', pinch: 'Прищипнул', cut: 'Срезал', buds: 'Убрал бутоны', flush: 'Промыл грунт', note: 'Заметка' };
+  const NOTE_NAMES = { water: 'Полил', feed: 'Подкормил', pinch: 'Прищипнул', cut: 'Срезал', buds: 'Убрал бутоны', flush: 'Промыл грунт', measure: 'Замер', photo: 'Фото', note: 'Заметка' };
+  // what goes on inside the bush now, and what it is like
+  function insideHtml(p, day) {
+    const st = plantStage(p, day), x = B.GARDEN.inside[st.pic];
+    if (!x) return '';
+    return `<section class="g-sec g-inside"><h4>Что сейчас внутри<small>${st.word}</small></h4><p>${nb(x.text)}</p><p class="g-like"><b>На что похоже.</b> ${nb(x.like)}</p><a class="g-how" href="#${x.link}">Подробнее в гиде</a></section>`;
+  }
+  // the bush's height by the measures and the grams cut, over the days of its life
+  function growthData(p) {
+    const S = fromISO(p.date) || today();
+    const log = (p.log || []).map((e, i) => Object.assign({ i, date: fromISO(e.d) }, e)).filter(e => e.date).sort((a, b) => a.date - b.date || a.i - b.i);
+    const hs = log.filter(e => e.k === 'measure' && +e.h > 0).map(e => [dayDiff(S, e.date), +e.h]);
+    let sum = 0;
+    const gs = [];
+    log.filter(e => e.k === 'cut' && +e.g > 0).forEach(e => { const d = dayDiff(S, e.date); gs.push([d, sum]); sum += +e.g; gs.push([d, sum]); });
+    // the total stands until today: a step for each harvest
+    if (gs.length) gs.push([Math.max(gs[gs.length - 1][0], dayDiff(S, today())), sum]);
+    return { hs, gs, sum };
+  }
+  // round numbers for an axis: 0 … at least the top value, in steps of 1, 2 or 5 × 10ⁿ
+  function niceTicks(top, n = 4) {
+    const raw = Math.max(top, 1) / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = [1, 2, 5, 10].map(k => k * mag).find(v => v >= raw);
+    const out = [];
+    for (let v = 0; v < top + step * 0.999; v += step) out.push(Math.round(v * 100) / 100);
+    return out.length >= 2 ? out : [0, step];
+  }
+  // ticks on round days within [a, b]
+  function axisTicks(a, b, n) {
+    const raw = Math.max(b - a, 1) / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = [1, 2, 5, 10].map(k => k * mag).find(v => v >= raw);
+    const out = [];
+    for (let v = Math.ceil(a / step) * step; v <= b + 1e-9; v += step) out.push(Math.round(v));
+    return out;
+  }
+  function growthCharts(box, p) {
+    const A = window.BasilScience && window.BasilScience.api, host = $('#g-growth', box);
+    if (!A || !host) return;
+    const { hs, gs } = growthData(p);
+    const one = (el, pts, o) => {
+      const xs = pts.map(q => q[0]), x0 = Math.max(0, Math.min(...xs) - 2), x1 = Math.max(...xs) + 2;
+      const yt = niceTicks(Math.max(...pts.map(q => q[1])) * 1.1);
+      A.chart(el, {
+        label: o.label,
+        h: w => (w < 420 ? 170 : 190),
+        draw(w, hh) {
+          const xt = axisTicks(x0, x1, w < 420 ? 3 : 5);
+          const P = A.plot({ w, h: hh, pad: { l: 40, r: 14, t: 24, b: 34 }, x: [x0, x1], y: [0, yt[yt.length - 1]], xticks: xt, yticks: yt, fx: v => v + '-й', ylab: o.unit, xlab: 'день жизни куста', series: [{ pts, cls: o.cls }] });
+          return P.s + (o.dots || []).map(q => `<circle class="${o.cls}" cx="${P.X(q[0])}" cy="${P.Y(q[1])}" r="3.6"/>`).join('');
+        }
+      });
+    };
+    if (hs.length >= 2) one($('[data-g-chart="h"]', host), hs, { label: 'Высота куста по замерам', unit: 'см', cls: 's1', dots: hs });
+    // a dot where each harvest lifted the total
+    if (gs.length) one($('[data-g-chart="g"]', host), gs, { label: 'Сколько собрано с куста', unit: 'г', cls: 's2', dots: gs.filter((q, i) => i % 2 === 1 && i < gs.length - 1) });
+  }
   function renderGardenPlant(p) {
     const day = today(), v = gardenVariety(p);
     const all = plantTasks(p, day);
@@ -115,21 +176,33 @@
     const tasks = Object.fromEntries(all.map(t => [t.key, t.title]));
     const log = (p.log || []).map((e, i) => Object.assign({ i, date: fromISO(e.d) }, e)).filter(e => e.date).sort((a, b) => b.date - a.date || b.i - a.i);
     const grams = log.reduce((s, e) => s + (e.k === 'cut' && +e.g > 0 ? +e.g : 0), 0);
-    const what = e => (e.k === 'task' ? 'Сделано: ' + esc((tasks[e.task] || 'дело по плану').toLowerCase()) : (NOTE_NAMES[e.k] || 'Заметка') + (e.task && tasks[e.task] ? ` (${esc(tasks[e.task].toLowerCase())})` : '')) + (e.k === 'cut' && +e.g > 0 ? `, ${+e.g} г` : '') + (e.t ? ` — ${esc(e.t)}` : '');
+    const measure = e => [+e.h > 0 ? `${fmtNum(+e.h, 1)}\u00a0см` : '', +e.n > 0 ? `${+e.n}\u00a0${plural(+e.n, 'верхушка', 'верхушки', 'верхушек')}` : ''].filter(Boolean).join(', ');
+    const what = e => (e.k === 'task' ? 'Сделано: ' + esc((tasks[e.task] || 'дело по плану').toLowerCase()) : (NOTE_NAMES[e.k] || 'Заметка') + (e.task && tasks[e.task] ? ` (${esc(tasks[e.task].toLowerCase())})` : '')) + (e.k === 'cut' && +e.g > 0 ? `, ${+e.g} г` : '') + (e.k === 'measure' && measure(e) ? ': ' + measure(e) : '') + (e.t ? ` — ${esc(e.t)}` : '');
+    const photos = log.filter(e => e.k === 'photo' && e.ph);
+    const { hs, gs } = growthData(p);
+    const growth = hs.length >= 2 || gs.length;
     return `<div class="g-sheet">
       <div class="g-top">${plantPic(p, day)}<div class="g-id"><h3>${esc(p.name)}</h3><p>${plantMeta(p, day)}</p></div><button class="btn btn-ghost btn-small g-edit" type="button" data-g-edit>Изменить</button></div>
       ${v ? `<div class="callout"><svg class="ico"><use href="#i-leaf"/></svg><p><b>«${esc(v.name)}».</b> ${nb(v.care)}</p></div>` : ''}
-      <section class="g-sec"><h4>На этой неделе</h4>${weekHtml(p, day)}</section>
+      <section class="g-sec"><h4>На этой неделе</h4>${weekHtml(p, day, false, true)}<p class="g-cal"><button class="g-link" type="button" data-garden-ics="${p.id}">${icon('cal')}Дела этого куста в календарь телефона</button></p></section>
+      <section class="g-sec g-photos-sec"><h4>Фото${photos.length ? `<small>${photos.length}</small>` : ''}</h4>
+        <div class="g-photos">${photos.slice(0, 12).map(e => `<button class="g-photo" type="button" data-photo-open="${e.ph}" data-cap="${esc(p.name)}, ${fd(e.date)}"><img data-photo="${e.ph}" alt="Фото от ${fd(e.date)}"><span>${fd(e.date)}</span></button>`).join('')}<button class="g-photo g-photo-add" type="button" data-photo-add="${p.id}">${icon('camera')}<span>${photos.length ? 'Ещё фото' : 'Добавить фото'}</span></button></div>
+        ${photos.length ? '' : '<p class="muted g-photos-note">Снимок раз в неделю с одной точки покажет, как куст растёт и ветвится. Фото хранятся только в этом браузере.</p>'}
+      </section>
+      ${insideHtml(p, day)}
       <section class="g-sec"><h4>План куста</h4><ol class="g-plan">${plan}</ol></section>
+      ${growth ? `<section class="g-sec"><h4>Рост и урожай</h4><div class="g-growth" id="g-growth">${hs.length >= 2 ? '<figure class="g-chart"><figcaption>Высота</figcaption><div data-g-chart="h"></div></figure>' : ''}${gs.length ? '<figure class="g-chart"><figcaption>Собрано всего</figcaption><div data-g-chart="g"></div></figure>' : ''}</div></section>` : ''}
       <section class="g-sec"><h4>Дневник${grams ? `<small>собрано ${grams} г</small>` : ''}</h4>
         <form class="g-log-form" id="g-log-form">
-          <select id="g-log-k" aria-label="Что сделали">${['water', 'feed', 'pinch', 'cut', 'buds', 'flush', 'note'].map(k => `<option value="${k}">${NOTE_NAMES[k]}</option>`).join('')}</select>
+          <select id="g-log-k" aria-label="Что сделали">${['water', 'feed', 'pinch', 'cut', 'measure', 'buds', 'flush', 'note'].map(k => `<option value="${k}">${NOTE_NAMES[k]}</option>`).join('')}</select>
           <input type="date" id="g-log-d" value="${toISO(day)}" max="${toISO(day)}" aria-label="Когда">
           <input type="number" id="g-log-g" min="0" max="5000" step="1" inputmode="numeric" placeholder="граммы" aria-label="Сколько граммов срезали" hidden>
+          <input type="number" id="g-log-h" min="0" max="300" step="0.5" inputmode="decimal" placeholder="высота, см" aria-label="Высота куста, см" hidden>
+          <input type="number" id="g-log-n" min="0" max="200" step="1" inputmode="numeric" placeholder="верхушек" aria-label="Сколько верхушек" hidden>
           <input type="text" id="g-log-t" maxlength="120" placeholder="Заметка, если нужна" aria-label="Заметка">
           <button class="btn btn-ghost btn-small" type="submit">Записать</button>
         </form>
-        ${log.length ? `<ul class="g-log">${log.map(e => `<li><span class="g-log-d">${fd(e.date)}</span><span>${what(e)}</span><button class="g-log-x" type="button" data-log-del="${e.i}" aria-label="Удалить запись">${icon('close')}</button></li>`).join('')}</ul>` : '<p class="muted g-log-empty">Записей пока нет: отмечайте «Сделано» и «Полил» — гид будет считать от них.</p>'}
+        ${log.length ? `<ul class="g-log">${log.map(e => `<li><span class="g-log-d">${fd(e.date)}</span><span>${e.k === 'photo' && e.ph ? `<button class="g-log-ph" type="button" data-photo-open="${e.ph}" data-cap="${esc(p.name)}, ${fd(e.date)}"><img data-photo="${e.ph}" alt=""></button>` : ''}${what(e)}</span><button class="g-log-x" type="button" data-log-del="${e.i}" aria-label="Удалить запись">${icon('close')}</button></li>`).join('')}</ul>` : '<p class="muted g-log-empty">Записей пока нет: отмечайте «Сделано» и «Полил» — гид будет считать от них.</p>'}
       </section>
       <p class="g-del-row"><button class="g-link g-del" type="button" data-g-del>Удалить куст</button></p>
     </div>`;
@@ -145,6 +218,8 @@
     } else if (p) {
       title.textContent = 'Мой куст';
       box.innerHTML = renderGardenPlant(p);
+      fillPhotos(box);
+      growthCharts(box, p);
     } else {
       gardenOpen = null;
       closeSheet($('#sheet-garden'));
@@ -163,18 +238,31 @@
   }
 
   /* ---------------- a copy in a file ---------------- */
-  function exportGarden() {
-    const data = JSON.stringify(Object.assign(gardenLoad(), { saved: toISO(today()) }), null, 1);
+  // one file with everything: the bushes, their diaries and photos, the place for the weather, the experiments
+  async function gardenFile() {
+    const s = gardenLoad();
+    const photos = await photosOut(s.plants).catch(() => ({}));
+    const data = JSON.stringify(Object.assign({}, s, { v: 2, saved: toISO(today()) }, Object.keys(photos).length ? { photos } : {}), null, 1);
+    return { blob: new Blob([data], { type: 'application/json' }), name: `moy-bazilik-${toISO(today())}.json`, photos: Object.keys(photos).length };
+  }
+  async function exportGarden() {
+    const f = await gardenFile();
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
-    a.download = `moy-bazilik-${toISO(today())}.json`;
+    a.href = URL.createObjectURL(f.blob);
+    a.download = f.name;
     document.body.appendChild(a);
     a.click();
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-    toast('Копия сохранена в файл');
+    toast(f.photos ? `Копия с ${f.photos} фото сохранена в файл` : 'Копия сохранена в файл');
+  }
+  // to oneself in a messenger or to the cloud, where the phone can send a file
+  const canShareFile = () => { try { return !!(navigator.canShare && navigator.canShare({ files: [new File(['{}'], 'x.json', { type: 'application/json' })] })); } catch (e) { return false; } };
+  async function shareGarden() {
+    const f = await gardenFile();
+    try { await navigator.share({ files: [new File([f.blob], f.name, { type: 'application/json' })], title: 'Мой базилик — копия' }); } catch (e) { if (e && e.name !== 'AbortError') exportGarden(); }
   }
   // a copy read back: only bushes that make sense, and only after a yes
-  function importGarden(text) {
+  async function importGarden(text) {
     let s = null;
     try { s = JSON.parse(text); } catch (e) { s = null; }
     const starts = B.GARDEN.starts.map(x => x.id), places = B.GARDEN.places.map(x => x.id);
@@ -187,6 +275,9 @@
         const o = { d: e.d, k: e.k.slice(0, 12) };
         if (e.task) o.task = String(e.task).slice(0, 24);
         if (+e.g > 0) o.g = Math.min(5000, Math.round(+e.g));
+        if (+e.h > 0) o.h = Math.min(300, Math.round(+e.h * 10) / 10);
+        if (+e.n > 0) o.n = Math.min(200, Math.round(+e.n));
+        if (e.ph && /^[a-z0-9]{4,32}$/.test(e.ph)) o.ph = e.ph;
         if (e.t) o.t = String(e.t).slice(0, 120);
         return o;
       })
@@ -194,8 +285,20 @@
     if (!plants.length) { toast('В файле нет кустов'); return; }
     const n = plants.length, mine = gardenLoad().plants.length;
     if (mine && !window.confirm(`Заменить ваши кусты (${mine}) кустами из копии (${n})?`)) return;
-    gardenSave({ v: 1, plants });
-    toast(`Загружено: ${n} ${plural(n, 'куст', 'куста', 'кустов')}`);
+    const got = await photosIn(s.photos);
+    gardenSave(Object.assign({ v: 2, plants }, gardenExtra(s, gardenLoad())));
+    toast(`Загружено: ${n} ${plural(n, 'куст', 'куста', 'кустов')}` + (got ? `, ${got} фото` : ''));
+  }
+  // what a copy brings besides the bushes, checked like they are: the place for the weather and the experiments;
+  // a copy without them keeps the ones this browser has
+  function gardenExtra(s, keep) {
+    const out = {};
+    const w = s.where;
+    if (w && isFinite(+w.lat) && isFinite(+w.lon) && Math.abs(+w.lat) <= 90 && Math.abs(+w.lon) <= 180) out.where = { name: String(w.name || '').slice(0, 80), lat: +w.lat, lon: +w.lon };
+    else if (keep.where) out.where = keep.where;
+    if (Array.isArray(s.exps)) out.exps = s.exps.filter(x => x && typeof x.exp === 'string' && fromISO(x.start)).slice(0, 40).map(x => JSON.parse(JSON.stringify(x)));
+    else if (keep.exps) out.exps = keep.exps;
+    return out;
   }
 
   function initGarden() {
@@ -222,8 +325,31 @@
       file.value = '';
     });
     const findPlant = id => { const s = gardenLoad(); return { s, p: s.plants.find(x => x.id === id) }; };
+    // a photo from the camera or the gallery, for the bush whose «Добавить фото» was tapped
+    const shot = document.createElement('input');
+    shot.type = 'file';
+    shot.accept = 'image/*';
+    shot.hidden = true;
+    document.body.appendChild(shot);
+    let shotFor = null;
+    shot.addEventListener('change', async () => {
+      const f = shot.files && shot.files[0], id = shotFor;
+      shot.value = '';
+      if (!f || !id) return;
+      try {
+        const blob = await photoShrink(f);
+        const ph = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        await photoPut(ph, blob);
+        const { s, p } = findPlant(id);
+        if (!p) { photoDel(ph); return; }
+        plantNote(p, { k: 'photo', ph });
+        gardenSave(s);
+        HAP.success();
+        toast('Фото добавлено в дневник');
+      } catch (err) { toast('Фото не сохранилось: в этом браузере нет места для фото'); }
+    });
     document.addEventListener('click', e => {
-      const t = e.target.closest('[data-garden-add], [data-plant-open], .g-done, .g-note, [data-garden-export], [data-garden-import], [data-g-edit], [data-g-del], [data-g-cancel], [data-log-del], [data-g-start], [data-g-place]');
+      const t = e.target.closest('[data-garden-add], [data-plant-open], .g-done, .g-note, [data-garden-export], [data-garden-import], [data-garden-share], [data-garden-ics], [data-photo-add], [data-photo-open], [data-g-edit], [data-g-del], [data-g-cancel], [data-log-del], [data-g-start], [data-g-place]');
       if (!t) return;
       if (t.matches('[data-garden-add]')) {
         openGarden({ form: true, draft: { start: t.dataset.gardenAdd || 'seed', variety: t.dataset.variety || '', place: 'home', name: '' } });
@@ -254,6 +380,16 @@
         toast('Записано: ' + NOTE_NAMES[t.dataset.note].toLowerCase());
       } else if (t.matches('[data-garden-export]')) {
         exportGarden();
+      } else if (t.matches('[data-garden-share]')) {
+        shareGarden();
+      } else if (t.matches('[data-garden-ics]')) {
+        const all = gardenLoad().plants;
+        exportIcs(t.dataset.gardenIcs === '*' ? all : all.filter(x => x.id === t.dataset.gardenIcs));
+      } else if (t.matches('[data-photo-add]')) {
+        shotFor = t.dataset.photoAdd;
+        shot.click();
+      } else if (t.matches('[data-photo-open]')) {
+        showPhoto(t.dataset.photoOpen, t.dataset.cap);
       } else if (t.matches('[data-garden-import]')) {
         file.click();
       } else if (t.matches('[data-g-edit]')) {
@@ -263,6 +399,7 @@
       } else if (t.matches('[data-g-del]')) {
         const { s, p } = findPlant(gardenOpen && gardenOpen.id);
         if (!p || !window.confirm(`Удалить «${p.name}» вместе с дневником?`)) return;
+        photoIds(p).forEach(forgetPhoto);
         s.plants = s.plants.filter(x => x !== p);
         gardenOpen = null;
         closeSheet($('#sheet-garden'));
@@ -270,7 +407,8 @@
       } else if (t.matches('[data-log-del]')) {
         const { s, p } = findPlant(gardenOpen && gardenOpen.id);
         if (!p) return;
-        p.log.splice(+t.dataset.logDel, 1);
+        const [gone] = p.log.splice(+t.dataset.logDel, 1);
+        if (gone && gone.ph) forgetPhoto(gone.ph);
         gardenSave(s);
       } else if (t.matches('[data-g-start], [data-g-place]')) {
         // the form's segmented choices
@@ -281,7 +419,10 @@
       }
     });
     document.addEventListener('change', e => {
-      if (e.target.id === 'g-log-k') $('#g-log-g').hidden = e.target.value !== 'cut';
+      if (e.target.id === 'g-log-k') {
+        $('#g-log-g').hidden = e.target.value !== 'cut';
+        $('#g-log-h').hidden = $('#g-log-n').hidden = e.target.value !== 'measure';
+      }
       if (e.target.id === 'g-preset') $('#g-cities').textContent = 'Например, ' + B.PRESETS.find(x => x.id === e.target.value).cities;
     });
     document.addEventListener('submit', e => {
@@ -311,9 +452,13 @@
         const { s, p } = findPlant(gardenOpen && gardenOpen.id);
         if (!p) return;
         const k = $('#g-log-k').value, d = fromISO($('#g-log-d').value) || today(), g = +$('#g-log-g').value, text = $('#g-log-t').value.trim();
+        const hcm = +String($('#g-log-h').value).replace(',', '.'), tops = +$('#g-log-n').value;
         if (k === 'note' && !text) { $('#g-log-t').focus(); return; }
+        if (k === 'measure' && !(hcm > 0) && !(tops > 0)) { $('#g-log-h').focus(); return; }
         const entry = { d: toISO(d), k };
         if (k === 'cut' && g > 0) entry.g = Math.min(5000, Math.round(g));
+        if (k === 'measure' && hcm > 0) entry.h = Math.min(300, Math.round(hcm * 10) / 10);
+        if (k === 'measure' && tops > 0) entry.n = Math.min(200, Math.round(tops));
         if (text) entry.t = text.slice(0, 120);
         plantNote(p, entry);
         gardenSave(s);

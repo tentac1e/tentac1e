@@ -161,3 +161,57 @@
 .g-about { max-width: 68ch; color: var(--ink-2); }
 .g-about h3 { margin: 0 0 8px; }
 .g-about p { margin: 0 0 10px; }
+
+/* the page: add a bush, the tasks into the phone's calendar */
+.g-foot-a { display: flex; flex-wrap: wrap; gap: 8px; }
+/* a bush on the page shown by its latest photo */
+.g-pic-photo { overflow: hidden; background: var(--surface-2); }
+.g-pic-photo img { width: 100%; height: 100%; object-fit: cover; }
+/* the sheet: the week into the calendar */
+.g-cal { margin: 10px 0 0; }
+.g-cal .g-link, .g-photos-sec .g-link { display: inline-flex; align-items: center; gap: 6px; }
+.g-cal .ico { width: 15px; height: 15px; }
+/* photos: a row of thumbnails that scrolls sideways, the last tile adds one */
+.g-photos { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.g-photo {
+  position: relative;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-2);
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.g-photo img { width: 100%; height: 100%; object-fit: cover; }
+.g-photo span { position: absolute; left: 0; right: 0; bottom: 0; padding: 3px 6px; background: color-mix(in srgb, var(--surface) 82%, transparent); font: 600 .68rem/1.2 var(--font-mono); color: var(--ink-2); text-align: left; }
+.g-photo.is-gone img { visibility: hidden; }
+.g-photo-add { gap: 4px; align-content: center; border-style: dashed; border-color: var(--line-strong); color: var(--basil-deep); }
+.g-photo-add .ico { width: 24px; height: 24px; }
+.g-photo-add span { position: static; padding: 0 6px; background: none; font: 700 .72rem/1.2 var(--font-body); color: inherit; text-align: center; }
+.g-photo:hover { border-color: var(--basil); }
+.g-photos-note { margin: 8px 0 0; font-size: .82rem; line-height: 1.4; }
+.g-log-ph { display: inline-block; width: 34px; height: 34px; margin-right: 8px; padding: 0; overflow: hidden; vertical-align: middle; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); cursor: pointer; }
+.g-log-ph img { width: 100%; height: 100%; object-fit: cover; }
+/* what goes on inside the bush now */
+.g-inside { padding: 14px 16px; border-radius: 16px; background: var(--leaf-soft); }
+.g-inside p { margin: 0 0 8px; font-size: .9rem; line-height: 1.5; color: var(--ink-2); }
+.g-inside .g-like { padding-left: 12px; border-left: 3px solid var(--basil); }
+.g-inside .g-like b { color: var(--basil-deep); }
+/* growth and harvest */
+.g-growth { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px; }
+.g-chart { margin: 0; min-width: 0; }
+.g-chart figcaption { margin-bottom: 2px; font: 600 .78rem/1.2 var(--font-body); color: var(--ink-3); }
+/* one photo, large */
+.photo-view { padding: 0; border: 0; border-radius: 18px; background: var(--surface); color: var(--ink); max-width: min(92vw, 900px); max-height: 92vh; overflow: hidden; }
+.photo-view::backdrop { background: rgb(0 0 0 / .72); }
+.photo-view figure { margin: 0; }
+.photo-view img { display: block; max-width: min(92vw, 900px); max-height: calc(92vh - 42px); margin: 0 auto; object-fit: contain; }
+.photo-view figcaption { padding: 10px 56px 12px 14px; font-size: .86rem; color: var(--ink-2); }
+.photo-view .icon-btn { position: absolute; top: 10px; right: 10px; }
+.g-task-l { display: flex; flex-wrap: wrap; gap: 4px 14px; }

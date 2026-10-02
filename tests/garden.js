@@ -3,7 +3,7 @@
    с тремя кустами — ничего не налезает и не шире экрана (аудит из overlap.js).
    python3 scripts/build.py && node tests/garden.js */
 const fs = require('fs');
-const { playwright, ok, done, watch, fileUrl } = require('./lib');
+const { playwright, ok, done, watch, fileUrl, OUT } = require('./lib');
 const { audit } = require('./overlap');
 
 const iso = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
@@ -72,8 +72,61 @@ const iso = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d
     await page.fill('#g-log-g', '35');
     await page.click('#g-log-form button[type="submit"]');
     await page.waitForTimeout(300);
-    const grams = await page.evaluate(() => (document.querySelector('.g-sec h4 small') || {}).textContent || '');
+    const grams = await page.evaluate(() => { const h = [...document.querySelectorAll('.g-sec h4')].find(x => /Дневник/.test(x.textContent)); return ((h && h.querySelector('small')) || {}).textContent || ''; });
     ok(/35/.test(grams), M + 'harvest grams are summed ' + grams);
+
+    // two measures a week apart: the growth chart (a dot for each), the harvest total; what goes on inside the bush
+    const measure = async (h, n, ago) => {
+      await page.selectOption('#g-log-k', 'measure');
+      await page.fill('#g-log-d', iso(-ago));
+      await page.fill('#g-log-h', String(h));
+      await page.fill('#g-log-n', String(n));
+      await page.click('#g-log-form button[type="submit"]');
+      await page.waitForTimeout(350);
+    };
+    await measure(12, 2, 7);
+    await measure(18.5, 4, 0);
+    const growth = await page.evaluate(() => ({
+      charts: document.querySelectorAll('#g-growth svg').length, dots: document.querySelectorAll('#g-growth svg circle.s1').length,
+      inside: (document.querySelector('.g-inside p') || {}).textContent || '', line: [...document.querySelectorAll('.g-log li')].map(li => li.textContent).find(t => /Замер/.test(t)) || ''
+    }));
+    ok(growth.charts === 2 && growth.dots === 2 && growth.inside.length > 80 && /18,5 см, 4 верхушки/.test(growth.line), M + 'measures draw the growth chart; the inside of the bush is told ' + JSON.stringify(Object.assign({}, growth, { inside: growth.inside.length })));
+
+    // a photo: shrunk to 1280 px, kept in IndexedDB, shown after a reload
+    const big = await page.evaluate(() => { const c = document.createElement('canvas'); c.width = 2400; c.height = 1800; const g = c.getContext('2d'); g.fillStyle = '#4a8f3c'; g.fillRect(0, 0, 2400, 1800); g.fillStyle = '#c87'; g.fillRect(800, 1000, 800, 800); return c.toDataURL('image/png').split(',')[1]; });
+    const shotFile = require('path').join(OUT, 'garden-photo.png');
+    fs.writeFileSync(shotFile, Buffer.from(big, 'base64'));
+    const [fc] = await Promise.all([page.waitForEvent('filechooser'), page.click('#garden-detail [data-photo-add]')]);
+    await fc.setFiles(shotFile);
+    await page.waitForFunction(() => document.querySelector('#garden-detail .g-photo img[src]'), null, { timeout: 8000 }).catch(() => {});
+    const kept1 = await page.evaluate(async () => {
+      const p = JSON.parse(localStorage.getItem('basil-garden')).plants[0], e = p.log.find(x => x.k === 'photo');
+      const blob = await new Promise(res => { const r = indexedDB.open('basil-photos'); r.onsuccess = () => { const q = r.result.transaction('photos').objectStore('photos').get(e.ph); q.onsuccess = () => res(q.result); }; });
+      const bm = blob && await createImageBitmap(blob);
+      return { id: e && e.ph, w: bm && bm.width, h: bm && bm.height, kb: blob && Math.round(blob.size / 1024), thumbs: document.querySelectorAll('#garden-detail .g-photo img[src]').length };
+    });
+    await closeG();
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForTimeout(500);
+    await page.click('.g-card [data-plant-open]');
+    await page.waitForFunction(() => document.querySelector('#garden-detail .g-photo img[src]'), null, { timeout: 5000 }).catch(() => {});
+    const kept2 = await page.evaluate(() => document.querySelectorAll('#garden-detail .g-photo img[src]').length);
+    ok(kept1.w === 1280 && kept1.h === 960 && kept1.kb < 400 && kept1.thumbs === 1 && kept2 === 1, M + 'a photo is shrunk, kept and shown after a reload ' + JSON.stringify({ kept1, kept2 }));
+
+    // the tasks into the phone's calendar: every open step once, repeating ones again, folded lines, stable ids
+    const [icsDl] = await Promise.all([page.waitForEvent('download'), page.click('#garden-detail [data-garden-ics]')]);
+    const ics = fs.readFileSync(await icsDl.path(), 'utf8');
+    const flat = ics.replace(/\r\n /g, '');
+    const uids = flat.match(/^UID:.*$/gm) || [];
+    const want2 = await page.evaluate(() => {
+      const G = window.BasilGarden, p = G.load().plants[0], d = new Date(), day = new Date(d.getFullYear(), d.getMonth(), d.getDate()), end = new Date(day); end.setDate(end.getDate() + 56);
+      return G.tasks(p, day).filter(t => t.once && ['late', 'now', 'soon'].includes(t.state) && t.from <= end).map(t => t.key);
+    });
+    const onceOk = want2.every(k => uids.filter(u => u.includes('-' + k + '-')).length === 1);
+    const icsOk = uids.length > want2.length && onceOk && new Set(uids).size === uids.length && ics.split('\r\n').every(l => Buffer.byteLength(l) <= 75) &&
+      /SUMMARY:Базилик «Гвоздичный на кухне»: /.test(flat) && /DTSTART:\d{8}T090000\r\n/.test(flat) && /TRIGGER:-PT0M/.test(flat) && ics.endsWith('END:VCALENDAR\r\n');
+    const gcal = await page.evaluate(() => (document.querySelector('#garden-detail .g-gcal') || {}).href || '');
+    ok(icsOk && /^https:\/\/calendar\.google\.com\/calendar\/render\?action=TEMPLATE&text=/.test(gcal) && /dates=\d{8}T090000%2F\d{8}T091500/.test(gcal), M + `the tasks go to a calendar: ${uids.length} events, once-steps ${want2.join(',')}, Google link ${gcal ? 'yes' : 'no'}`);
 
     // edit
     await page.click('#garden-detail [data-g-edit]');
@@ -100,7 +153,13 @@ const iso = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d
     await chooser.setFiles(file);
     await page.waitForTimeout(500);
     const back = await plants();
-    ok(copy.plants.length === 1 && gone === 0 && back.length === 1 && back[0].log.length === copy.plants[0].log.length && back[0].name === 'Гвоздичный у окна', M + 'copy to a file and back ' + JSON.stringify({ copy: copy.plants.length, gone, back: back.length }));
+    // the photo travels in the copy: deleting the bush took it out of this browser, the copy brings it back
+    await page.click('.g-card [data-plant-open]');
+    await page.waitForFunction(() => document.querySelector('#garden-detail .g-photo img[src]'), null, { timeout: 5000 }).catch(() => {});
+    const photoBack = await page.evaluate(() => document.querySelectorAll('#garden-detail .g-photo img[src]').length);
+    await closeG();
+    ok(copy.plants.length === 1 && copy.v === 2 && Object.keys(copy.photos || {}).length === 1 && gone === 0 && back.length === 1 && back[0].log.length === copy.plants[0].log.length && back[0].name === 'Гвоздичный у окна' && photoBack === 1,
+      M + 'copy to a file and back, with the photo ' + JSON.stringify({ copy: copy.plants.length, photos: Object.keys(copy.photos || {}).length, gone, back: back.length, photoBack }));
 
     // «Растёт у меня» from a variety card on another page
     await page.goto(fileUrl('sorta.html'), { waitUntil: 'load' });

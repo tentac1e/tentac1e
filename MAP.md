@@ -184,7 +184,9 @@
 - `src/js/app/19-seeds.js` (21 стр.): initGerm
 - `src/js/app/20-problems.js` (59 стр.): initDiagnostics
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
-- `src/js/app/22-garden-view.js` (322 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
+- `src/js/app/22-garden-ics.js` (88 стр.): ICS_WEEKS
+- `src/js/app/22-garden-photos.js` (104 стр.): PHOTO_DB
+- `src/js/app/22-garden-view.js` (467 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
 - `src/js/app/22-garden.js` (128 стр.): GARDEN_KEY
 - `src/js/app/22-reading-pos.js` (134 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
@@ -218,7 +220,7 @@
 - `src/js/data/05-checklist.js` (30 стр.): CHECKLIST
 - `src/js/data/06-recipes.js` (77 стр.): RECIPE_CATS, RECIPES
 - `src/js/data/07-glossary.js` (49 стр.): GLOSSARY
-- `src/js/data/08-garden.js` (78 стр.): GARDEN
+- `src/js/data/08-garden.js` (87 стр.): GARDEN
 
 ## Стили (src/css/)
 
