@@ -161,10 +161,12 @@ const { playwright, server, ok, done } = require('./lib');
   d.on('pageerror', e => errs.push(e.message));
   await d.goto(U('/уход'), { waitUntil: 'load' });
   await d.waitForTimeout(900);
-  await d.evaluate(() => window.scrollTo(0, 2500));
+  // down at once (the page scrolls smoothly, and a click in the middle of that would race it), then the link:
+  // the smooth way up is waited for to its end — a page that stops short of the top still fails
+  await d.evaluate(() => window.scrollTo({ top: 2500, behavior: 'instant' }));
   await d.waitForTimeout(300);
   await d.click('#nav a[data-nav="uhod"]');
-  await d.waitForTimeout(1200);
+  await d.waitForFunction(() => scrollY < 5, null, { timeout: 3000 }).catch(() => {});
   ok(await d.evaluate(() => scrollY) < 5, 'own chapter link scrolls to top ' + await d.evaluate(() => scrollY));
   await d.click('#deep-toggle');
   ok(!(await d.evaluate(() => !!document.querySelector('[data-haptics]'))), 'no haptics switch on desktop');
