@@ -122,7 +122,9 @@
   background: radial-gradient(circle at 50% 42%, var(--k-soft), transparent 70%), repeating-radial-gradient(circle at 50% 50%, transparent 0 34px, var(--paper-line-strong) 34px 35px);
   border: 1px solid var(--line);
 }
-.mol-canvas { display: block; width: 100%; height: 320px; cursor: grab; touch-action: pan-y; }
+/* the finger on the molecule turns it any way and the page stays (MolViewer): so on a phone the stage is never more
+   than 44 % of the screen high — there is always room beside it to scroll the page */
+.mol-canvas { display: block; width: 100%; height: 320px; height: min(320px, 44svh); cursor: grab; touch-action: none; }
 .mol-canvas:active { cursor: grabbing; }
 .mol-hint { position: absolute; right: 14px; bottom: 8px; color: var(--ink-3); font-size: 1.15rem; pointer-events: none; }
 .gdd-bars, .pesto-bars { display: grid; gap: 10px; margin-top: 12px; }

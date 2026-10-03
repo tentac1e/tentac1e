@@ -434,11 +434,29 @@ window.BasilScience = (() => {
   const embedCache = new Map();
   const shape = id => { if (!embedCache.has(id)) embedCache.set(id, embed(MOLS[id])); return embedCache.get(id); };
 
-  /* 3D ball-and-stick viewer on canvas: drag to rotate, turns by itself */
+  /* the molecule's turn: a 3×3 matrix (rows), so that it goes over the top as far as the finger takes it */
+  const rx = a => { const c = Math.cos(a), s = Math.sin(a); return [[1, 0, 0], [0, c, -s], [0, s, c]]; };
+  const ry = a => { const c = Math.cos(a), s = Math.sin(a); return [[c, 0, s], [0, 1, 0], [-s, 0, c]]; };
+  const mul = (A, B) => A.map(r => [0, 1, 2].map(j => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
+  // thousands of small turns bend the matrix a little: it is squared up again after each one
+  const ortho = R => {
+    const n = v => { const l = Math.hypot(...v) || 1; return v.map(x => x / l); };
+    const a = n(R[0]), d = a[0] * R[1][0] + a[1] * R[1][1] + a[2] * R[1][2];
+    const b = n(R[1].map((x, i) => x - d * a[i]));
+    return [a, b, [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]];
+  };
+  // seen a little from above, it turns by itself as on a turntable: round the upright axis tipped by that look
+  const TILT = rx(-0.35), UNTILT = rx(0.35);
+
+  /* 3D ball-and-stick viewer on canvas: turns by itself; a finger or the mouse turns it any way — sideways round the
+     screen's upright axis, up and down round its level axis, over the top as far as one likes. The canvas keeps the
+     whole gesture (touch-action: none): the page is scrolled past it, and on a phone it is never more than 44 % of the
+     screen high (06-lab-tools.css) */
   function MolViewer(canvas, id) {
     const ctx = canvas.getContext('2d');
     let mol = MOLS[id], P = shape(id);
-    let yaw = 0.6, pitch = -0.35, vy = 0.35, dpr = 1, W = 0, H = 0, raf = 0, last = 0, visible = true, drag = null;
+    // R: the turn; spin: the turntable's speed (rad/s), wx: what is left of an up-or-down flick
+    let R = mul(TILT, ry(0.6)), spin = 0.35, wx = 0, dpr = 1, W = 0, H = 0, raf = 0, last = 0, visible = true, drag = null;
     let pal = {};
     const readPal = () => { pal = { c: css('--mol-c'), cHi: css('--mol-c-hi'), o: css('--mol-o'), oHi: css('--mol-o-hi'), bond: css('--mol-bond'), edge: css('--mol-edge') }; };
     function size() {
@@ -451,15 +469,14 @@ window.BasilScience = (() => {
       if (!W) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
       const maxR = Math.max(...P.map(p => Math.hypot(p[0], p[1], p[2]))) || 1;
       const scale = Math.min(W, H) * 0.44 / maxR;
       const f = maxR * 4;
+      const [r0, r1, r2] = R;
       const Q = P.map(([x, y, z]) => {
-        const x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
-        const y2 = y * cp - z1 * sp, z2 = y * sp + z1 * cp;
-        const k = f / (f - z2);
-        return { x: W / 2 + x1 * scale * k, y: H / 2 + y2 * scale * k, z: z2, k };
+        const x1 = r0[0] * x + r0[1] * y + r0[2] * z, y1 = r1[0] * x + r1[1] * y + r1[2] * z, z1 = r2[0] * x + r2[1] * y + r2[2] * z;
+        const k = f / (f - z1);
+        return { x: W / 2 + x1 * scale * k, y: H / 2 + y1 * scale * k, z: z1, k };
       });
       const items = [];
       mol.bonds.forEach(([a, b, o = 1]) => items.push({ t: 'b', a, b, o, z: (Q[a].z + Q[b].z) / 2 }));
@@ -505,35 +522,60 @@ window.BasilScience = (() => {
       if (!drag && !ready(ts)) return;
       const t = ts / 1000, dt = Math.min(0.05, t - (last || t));
       last = t;
-      if (!drag) { yaw += vy * dt; vy += (0.35 - vy) * 0.02; }
+      if (!drag) {
+        // the turntable, and the rest of a flick: sideways it melts into the turntable's own speed, up or down it fades
+        R = mul(TILT, mul(ry(spin * dt), mul(UNTILT, R)));
+        if (Math.abs(wx) > 1e-3) R = mul(rx(wx * dt), R);
+        R = ortho(R);
+        spin += (0.35 - spin) * 0.02;
+        wx -= wx * 0.04;
+      }
       draw();
     }
     const wake = () => { if (reduce.matches) { draw(); return; } if (!raf) { last = 0; raf = requestAnimationFrame(frame); } };
     const hap = window.BasilHaptics ? window.BasilHaptics.dragTicker(22) : null;
-    canvas.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, t: performance.now() }; if (hap) hap.start(e.clientX, e.clientY); canvas.setPointerCapture(e.pointerId); });
+    // one finger turns it; a second one on the canvas is not a new turn from another place
+    canvas.addEventListener('pointerdown', e => {
+      if (drag) return;
+      drag = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now() };
+      if (hap) hap.start(e.clientX, e.clientY);
+      canvas.setPointerCapture(e.pointerId);
+    });
     canvas.addEventListener('pointermove', e => {
-      if (!drag) return;
+      if (!drag || e.pointerId !== drag.id) return;
       if (hap) hap.move(e.clientX, e.clientY);
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-      yaw += dx * 0.012; pitch = clamp(pitch + dy * 0.01, -1.4, 1.4);
+      // the near side follows the finger: sideways round the upright axis, down round the level one
+      const b = dx * 0.012, a = -dy * 0.012;
+      R = ortho(mul(rx(a), mul(ry(b), R)));
       const dt = Math.max(16, performance.now() - drag.t) / 1000;
-      vy = clamp(dx * 0.012 / dt, -6, 6);
-      drag = { x: e.clientX, y: e.clientY, t: performance.now() };
+      spin = clamp(b / dt, -6, 6);
+      wx = clamp(a / dt, -6, 6);
+      drag = { id: drag.id, x: e.clientX, y: e.clientY, t: performance.now() };
       if (reduce.matches) draw();
     });
-    const end = () => { drag = null; };
+    // a finger that stood still before letting go puts the molecule down: no flick, the turntable comes back slowly
+    const end = e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (performance.now() - drag.t > 90) { spin = 0; wx = 0; }
+      drag = null;
+    };
     canvas.addEventListener('pointerup', end);
     canvas.addEventListener('pointercancel', end);
-    canvas.style.touchAction = 'pan-y';
+    canvas.style.touchAction = 'none';
     readPal(); size(); draw(); wake();
     if ('ResizeObserver' in window) new ResizeObserver(() => { size(); draw(); }).observe(canvas);
     if ('IntersectionObserver' in window) new IntersectionObserver(en => { visible = en.some(x => x.isIntersecting); if (visible) wake(); }).observe(canvas);
     document.addEventListener('visibilitychange', wake);
     document.addEventListener('basil:theme', () => { readPal(); draw(); });
-    return {
-      set(nid) { mol = MOLS[nid]; P = shape(nid); vy = 1.6; draw(); wake(); },
-      get id() { return Object.keys(MOLS).find(k => MOLS[k] === mol); }
+    const api = {
+      set(nid) { mol = MOLS[nid]; P = shape(nid); spin = 1.6; draw(); wake(); },
+      get id() { return Object.keys(MOLS).find(k => MOLS[k] === mol); },
+      // the turn as it stands (tests/gestures.js reads it from the canvas)
+      get turn() { return R.map(r => r.slice()); }
     };
+    canvas.molView = api;
+    return api;
   }
 
   /* ------------------------------------------------------------------ */

@@ -212,7 +212,7 @@
 - `src/js/science/02-controls.js` (30 стр.)
 - `src/js/science/03-charts.js` (153 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
-- `src/js/science/05-molecules.js` (270 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, MolViewer
+- `src/js/science/05-molecules.js` (312 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, TILT, MolViewer
 - `src/js/science/06-labs-loader.js` (221 стр.): SELF, draw, HIDDEN, drawDue
 - `src/js/science/07-deep.js` (228 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 

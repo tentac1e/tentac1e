@@ -10,7 +10,7 @@ mkdir -p tests/out
 # a suite that hangs (a browser that stopped answering) fails after 30 minutes instead of holding up the rest
 limit=""
 command -v timeout > /dev/null && limit="timeout 1800"
-for t in ${*:-pages clean nav labs overlap controls ills garden agronom pwa perf single}; do
+for t in ${*:-pages clean nav labs overlap controls gestures ills garden agronom pwa perf single}; do
   echo "== $t"
   $limit node "tests/$t.js" > tests/out/run.log 2>&1
   code=$?

@@ -1,0 +1,135 @@
+/* Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается.
+     главная и «Вкус · Молекулы» на телефоне — настоящие касания (CDP), молекула сама не вертится (reduced motion):
+       вертикальный свайп по ней — поворот вокруг горизонтальной оси, страница на месте;
+       горизонтальный — вокруг вертикальной; два хода подряд — через «голову», без упора;
+       свайп рядом с ней — страница листается;
+     высота сцены на коротком телефоне — не больше 45 % экрана; компьютер — мышью вверх-вниз так же без упора.
+   node tests/gestures.js   (сборка в корне: python3 scripts/build.py) */
+const { playwright, ok, done, watch, fileUrl } = require('./lib');
+
+// the turn of B against A (rows of 3×3 matrices): the angle in degrees and the axis on the screen
+function turned(A, B) {
+  if (!A || !B) return { ang: 0, axis: [0, 0, 0] }; // a viewer without its turn: nothing to compare, the check fails
+  const D = [0, 1, 2].map(i => [0, 1, 2].map(j => B[i][0] * A[j][0] + B[i][1] * A[j][1] + B[i][2] * A[j][2]));
+  const ang = Math.acos(Math.max(-1, Math.min(1, (D[0][0] + D[1][1] + D[2][2] - 1) / 2))) * 180 / Math.PI;
+  const ax = [D[2][1] - D[1][2], D[0][2] - D[2][0], D[1][0] - D[0][1]], l = Math.hypot(...ax) || 1;
+  return { ang: Math.round(ang), axis: ax.map(v => +(v / l).toFixed(2)) };
+}
+
+(async () => {
+  const { chromium, devices } = playwright();
+  const browser = await chromium.launch();
+  const errs = [];
+
+  // ---------- phone: real touches ----------
+  const ctx = await browser.newContext({ ...devices['Pixel 7'], reducedMotion: 'reduce' });
+  const page = await ctx.newPage();
+  watch(page, errs);
+  const cdp = await ctx.newCDPSession(page);
+  let clock = 0;
+  const send = (type, pts) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts, timestamp: clock });
+  // a finger from one point to another at its own pace, then off
+  const swipe = async (x0, y0, x1, y1, steps = 10, ms = 16) => {
+    clock = Date.now() / 1000;
+    await send('touchStart', [{ x: x0, y: y0 }]);
+    for (let i = 1; i <= steps; i++) { clock += ms / 1000; await send('touchMove', [{ x: x0 + (x1 - x0) * i / steps, y: y0 + (y1 - y0) * i / steps }]); }
+    clock += 0.016;
+    await send('touchEnd', []);
+    await page.waitForTimeout(250);
+  };
+  const state = sel => page.evaluate(s => { const c = document.querySelector(s); const r = c.getBoundingClientRect(); return { turn: c.molView && c.molView.turn, y: Math.round(scrollY), cx: r.left + r.width / 2, cy: r.top + r.height / 2, top: r.top, h: r.height, left: r.left }; }, sel);
+
+  // the home page's molecule in the middle of the screen
+  await page.goto(fileUrl('index.html'), { waitUntil: 'load' });
+  await page.waitForTimeout(800);
+  await page.evaluate(() => document.getElementById('home-molecule').scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await page.waitForFunction(() => !!document.getElementById('home-molecule').molView, null, { timeout: 8000 }).catch(() => {});
+  await page.waitForTimeout(400);
+  const H = '#home-molecule';
+  let s0 = await state(H);
+  ok(!!s0.turn, 'the home molecule is built');
+  // up and down on it: it turns round the level axis, the page stays
+  await swipe(s0.cx, s0.cy + 70, s0.cx, s0.cy - 90);
+  let s1 = await state(H), t = turned(s0.turn, s1.turn);
+  ok(Math.abs(s1.y - s0.y) <= 1 && t.ang > 60 && Math.abs(t.axis[0]) > 0.9, `up on the molecule: turned ${t.ang}° round ${t.axis}, the page moved ${s1.y - s0.y} px`);
+  // sideways: round the upright axis
+  await swipe(s1.cx - 80, s1.cy, s1.cx + 80, s1.cy);
+  let s2 = await state(H);
+  t = turned(s1.turn, s2.turn);
+  ok(Math.abs(s2.y - s1.y) <= 1 && t.ang > 60 && Math.abs(t.axis[1]) > 0.9, `sideways: turned ${t.ang}° round ${t.axis}, the page moved ${s2.y - s1.y} px`);
+  // two long moves down: over the top, no stop at 80°
+  await swipe(s2.cx, s2.cy - 75, s2.cx, s2.cy + 75);
+  await swipe(s2.cx, s2.cy - 75, s2.cx, s2.cy + 75);
+  const s3 = await state(H);
+  t = turned(s2.turn, s3.turn);
+  ok(Math.abs(s3.y - s2.y) <= 1 && t.ang > 130, `two moves down: ${t.ang}° in all (over the top), the page moved ${s3.y - s2.y} px`);
+  // beside it, in the page's margin: the page scrolls
+  await swipe(Math.max(4, s3.left / 2), s3.cy + 120, Math.max(4, s3.left / 2), s3.cy - 180, 10, 16);
+  await page.waitForTimeout(400);
+  const s4 = await state(H);
+  t = turned(s3.turn, s4.turn);
+  ok(s4.y - s3.y > 100 && t.ang < 2, `a swipe beside it scrolls the page ${s4.y - s3.y} px, the molecule stays (${t.ang}°)`);
+
+  // the model «Молекулы аромата» in Вкус
+  await page.goto(fileUrl('vkus.html') + '#молекулы', { waitUntil: 'load' });
+  await page.waitForTimeout(800);
+  await page.evaluate(() => {
+    const el = document.querySelector('.lab-tool[data-lab="molecules"]');
+    for (let d = el.closest('details'); d; d = d.parentElement.closest('details')) d.open = true;
+    el.scrollIntoView({ block: 'start', behavior: 'instant' });
+  });
+  await page.waitForFunction(() => { const c = document.getElementById('lab-mol-cv'); return c && c.molView; }, null, { timeout: 10000 }).catch(() => {});
+  await page.evaluate(() => document.getElementById('lab-mol-cv').scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await page.waitForTimeout(400);
+  const L = '#lab-mol-cv';
+  const v0 = await state(L);
+  if (ok(!!v0.turn, 'the model «Молекулы аромата» is built')) {
+    await swipe(v0.cx, v0.cy - 70, v0.cx, v0.cy + 90);
+    const v1 = await state(L);
+    t = turned(v0.turn, v1.turn);
+    ok(Math.abs(v1.y - v0.y) <= 1 && t.ang > 60 && Math.abs(t.axis[0]) > 0.9, `Вкус: down on the molecule turned it ${t.ang}° round ${t.axis}, the page moved ${v1.y - v0.y} px`);
+  }
+  await ctx.close();
+
+  // ---------- the stage leaves room to scroll on a short phone ----------
+  for (const [name, opt] of [['375×667', { viewport: { width: 375, height: 667 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 }], ['iPhone 13 mini', devices['iPhone 13 Mini']]]) {
+    const c = await browser.newContext({ ...opt, reducedMotion: 'reduce' });
+    const p = await c.newPage();
+    watch(p, errs);
+    const share = async (file, sel, prep) => {
+      await p.goto(fileUrl(file), { waitUntil: 'load' });
+      await p.waitForTimeout(500);
+      if (prep) await p.evaluate(prep);
+      return p.evaluate(s => { const e = document.querySelector(s); return e ? Math.round(100 * e.getBoundingClientRect().height / innerHeight) : null; }, sel);
+    };
+    const home = await share('index.html', H);
+    const lab = await share('vkus.html#молекулы', '.lab-tool[data-lab="molecules"] .mol-canvas, ' + L, () => {
+      const el = document.querySelector('.lab-tool[data-lab="molecules"]');
+      for (let d = el.closest('details'); d; d = d.parentElement.closest('details')) d.open = true;
+      el.scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
+    await p.waitForFunction(() => !!document.getElementById('lab-mol-cv'), null, { timeout: 10000 }).catch(() => {});
+    const lab2 = lab || await p.evaluate(() => { const e = document.getElementById('lab-mol-cv'); return e ? Math.round(100 * e.getBoundingClientRect().height / innerHeight) : null; });
+    ok(home && home <= 45 && lab2 && lab2 <= 45, `${name}: the stage takes ${home} % of the screen on the home page, ${lab2} % in Вкус`);
+    await c.close();
+  }
+
+  // ---------- a computer: the mouse up and down, over the top as well ----------
+  const d = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
+  watch(d, errs);
+  await d.goto(fileUrl('index.html'), { waitUntil: 'load' });
+  await d.waitForTimeout(600);
+  await d.evaluate(() => document.getElementById('home-molecule').scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await d.waitForFunction(() => !!document.getElementById('home-molecule').molView, null, { timeout: 8000 }).catch(() => {});
+  const m0 = await d.evaluate(() => { const c = document.getElementById('home-molecule'), r = c.getBoundingClientRect(); return { turn: c.molView && c.molView.turn, x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+  await d.mouse.move(m0.x, m0.y - 100);
+  await d.mouse.down();
+  for (let i = 1; i <= 20; i++) await d.mouse.move(m0.x, m0.y - 100 + i * 10);
+  await d.mouse.up();
+  const m1 = await d.evaluate(() => { const c = document.getElementById('home-molecule'); return c.molView && c.molView.turn; });
+  t = turned(m0.turn, m1);
+  ok(t.ang > 90 && Math.abs(t.axis[0]) > 0.9, `mouse down the molecule: ${t.ang}° round ${t.axis}`);
+
+  await browser.close();
+  done(errs);
+})().catch(e => { console.error(e); process.exit(1); });
