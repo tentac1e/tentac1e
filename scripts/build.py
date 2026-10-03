@@ -785,7 +785,8 @@ def css_families(text):
     text = re.sub(r'/\*.*?\*/', '', text, flags=re.S)
     fam, members = {}, {}
     for sel in re.findall(r'([^{}@;]+)\{', text):
-        for cls in set(re.findall(r'\.([a-zA-Z][\w-]*)', sel)):
+        # in the order they first appear (not a set: its order changes from run to run, and so would the map)
+        for cls in dict.fromkeys(re.findall(r'\.([a-zA-Z][\w-]*)', sel)):
             parts = cls.split('-')
             key = parts[0] if len(parts[0]) >= 3 or len(parts) == 1 else '-'.join(parts[:2])
             fam[key] = fam.get(key, 0) + 1

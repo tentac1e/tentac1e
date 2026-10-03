@@ -113,11 +113,11 @@
 Какие семейства классов красит файл (самые частые первыми) и его анимации `@keyframes`.
 
 ### style.css
-- `src/css/style/01-base.css`: `.skip`, `.eyebrow`, `.mono`, `.num`, `.muted`, `.ico`, `.sprite`, `.lead`, `.hand`
+- `src/css/style/01-base.css`: `.skip`, `.eyebrow`, `.num`, `.mono`, `.muted`, `.ico`, `.sprite`, `.lead`, `.hand`
 - `src/css/style/02-ambient.css`: `.aura`, `.sky-*`, `.is-off`, `.is-asleep`, `.page`, `.wrap` · анимации: `drift`, `sky-breathe`, `sky-sway`, `sky-moon`
 - `src/css/style/03-header.css`: `.search-*`, `.tab-*`, `.garden-*`, `.brand`, `.topbar-*`, `.is-active`, `.progress`, `.ico`, `.icon-*`, `.tabbar`
-- `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.table-*`, `.g-link`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
-- `src/css/style/05-views.css`: `.is-active`, `.view`, `.js`, `.panel`, `.is-entering`, `.principles`, `.chapters`, `.step`, `.ch-card`, `.tools-*`, `.quick`, `.storage` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
+- `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.g-link`, `.table-*`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
+- `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
 - `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
 - `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`, `.ar-coty`, `.ar-seed`
 - `src/css/style/08-home.css`: `.hero-*`, `.journey`, `.passport-*`, `.ch-card`, `.q-card`, `.facts`, `.season-*`, `.ch-art`, `.rule-*`, `.continue`, `.tool`, `.sprig-*` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
@@ -134,7 +134,7 @@
 - `src/css/style/19-reference.css`: `.check-*`, `.faq-*`, `.gloss-*`, `.bar`, `.glossary`, `.ico`
 - `src/css/style/20-footer.css`: `.footer-*`, `.to-top`, `.brand`, `.is-shown`
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.sr-group`, `.sr-note`, `.sr-ico`, `.is-found`, `.is-dragging` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `search-in`, `is-found`
-- `src/css/style/22-selection.css`: `.lab-*`, `.depth-*`, `.sim-*`, `.seg`, `.pager`, `.hero-*`, `.season-*`, `.chip`, `.ch-hero-*`, `.nav`, `.plant-*`, `.tabbar`
+- `src/css/style/22-selection.css`: `.depth-*`, `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.deep-*`
 - `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-photo-*`, `.g-form-*`, `.photo-*`, `.g-wx-*`, `.mini-*`
 - `src/css/style/24-toc.css`: `.toc-*`, `.sheet-*`, `.ico`, `.tools-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where` · анимации: `toc-drop`
 
@@ -149,21 +149,21 @@
 - `src/css/lab/06-lab-tools.css`: `.lab-*`, `.zone-*`, `.gdd-*`, `.fam-*`, `.line`, `.legend`, `.range`, `.band-*`, `.s1`, `.s2`, `.s3`, `.mol-*` · анимации: `shimmer`
 - `src/css/lab/07-vkus.css`: `.world-*`, `.cols-*`, `.kitchen-*`
 - `src/css/lab/08-home-science.css`: `.sh-kinds`, `.sh-mol`, `.sh-text`, `.science-*`, `.mol-*`, `.eyebrow`, `.is-total`, `.ico`, `.chips-*`, `.chip`
-- `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.deep-*`, `.tool`, `.ch-card`, `.q-card`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o` · анимации: `fade-out`
+- `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.deep-*`, `.ch-card`, `.q-card`, `.tool`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o` · анимации: `fade-out`
 - `src/css/lab/10-depth.css`: `.depth-*`, `.deep-*` · анимации: `pop-in`
 - `src/css/lab/11-deep-footer.css`: `.deeper-*`, `.deep-*`, `.eq`, `.is-deeper`
 - `src/css/lab/12-sci-notes.css`: `.sci-*`, `.ico`, `.hand`
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
-- `src/css/lab/14-paint.css`: `.plant-*`, `.osm-*`, `.is-off`, `.barrel-*`, `.nc-flow`, `.lab-*`, `.germ-*`, `.pl-stems`, `.phloem`, `.xylem`
+- `src/css/lab/14-paint.css`: `.plant-*`, `.lab-*`, `.is-off`, `.pl-stems`, `.osm-*`, `.xylem`, `.phloem`, `.barrel-*`, `.nc-flow`, `.germ-*`
 - `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.depth-*`, `.ico`, `.hap-*`, `.continue`, `.is-shown`
 
 ### стили моделей и глав
 - `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
-- `src/labs/moy/_shared.css`: `.exp-*`, `.btn`, `.is-done`, `.is-now`, `.is-missed`, `.s1`, `.s2`, `.s3`, `.g-link`, `.ico`, `.is-model`, `.is-none`
-- `src/labs/moy/weather.css`: `.wx-day`, `.wx-vpd`, `.band`, `.lab-*`, `.wx-find-*`, `.wx-place-*`, `.wx-n`, `.is-hot`, `.wx-pick`, `.wx-x`, `.wx-s`, `.wx-r`
+- `src/labs/moy/_shared.css`: `.exp-*`, `.btn`, `.is-done`, `.is-now`, `.is-missed`, `.s1`, `.s2`, `.s3`, `.g-link`, `.ico`, `.is-model`, `.is-empty`
+- `src/labs/moy/weather.css`: `.wx-day`, `.wx-vpd`, `.lab-*`, `.band`, `.wx-find-*`, `.wx-place-*`, `.wx-n`, `.is-hot`, `.wx-pick`, `.wx-x`, `.wx-r`, `.wx-s`
 - `src/labs/posadka/germ.css`: `.germ-*`, `.is-stopped` · анимации: `g-gel`, `g-root`, `g-hypo`, `g-coty`
 - `src/labs/posadka/perched.css`: `.per-*`, `.tick`, `.is-water`
-- `src/labs/posadka/shade.css`: `.rfr-*`, `.lab-*`, `.shade-*`
+- `src/labs/posadka/shade.css`: `.rfr-*`, `.shade-*`, `.lab-*`
 - `src/labs/posadka/window.css`: `.win-*`
 - `src/labs/problemy/aphid.css`: `.ap-grid`, `.ap-shoot`
 - `src/labs/problemy/dm.css`: `.dm-gauge`, `.dm-leaf`, `.dm-out`, `.g-track`, `.g-low`, `.g-mid`, `.g-high`, `.g-needle`, `.g-hub`, `.dm-level`, `.ill-*`, `.dm-cap`
@@ -172,7 +172,7 @@
 - `src/labs/razmnozhenie/seedlife.css`: `.sl-scale`
 - `src/labs/udobreniya/barrel.css`: `.stave-*`, `.barrel-*`, `.is-limit`, `.lab-*`, `.is-sel`, `.hoop`
 - `src/labs/udobreniya/ec.css`: `.ec-zone`, `.is-bad`, `.ec-name`, `.ec-needle`, `.ec-chart`, `.ec-track`, `.ec-lead`, `.ec-tick`, `.ec-val`
-- `src/labs/udobreniya/flows.css`: `.chl-*`, `.flows-*`, `.phloem`, `.xylem`, `.roots`, `.fl-tag`, `.tick`
+- `src/labs/udobreniya/flows.css`: `.chl-*`, `.flows-*`, `.xylem`, `.phloem`, `.roots`, `.fl-tag`, `.tick`
 - `src/labs/udobreniya/ncycle.css`: `.nc-edge`, `.is-off`, `.nc-lbl`, `.nc-root-*`, `.nc-flow`, `.nc-bugs`, `.nc-plate`, `.nc-chart`, `.nc-air`, `.nc-surface`, `.nc-crumbs`, `.nc-water` · анимации: `nc-run`
 - `src/labs/udobreniya/osmos.css`: `.osm-*` · анимации: `flow-dash`
 - `src/labs/udobreniya/oxide.css`: `.ox-real`, `.ox-val`, `.ox-row`, `.ox-name`, `.ox-bars`, `.lab-*`, `.ox-rows`, `.ox-pack`, `.s1`, `.s2`, `.s3`
@@ -250,16 +250,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1111`
-- `{{description}}` в `src/layout.html` — `build.py:1111`
-- `{{pwa}}` в `src/layout.html` — `build.py:1127`
-- `{{fonts}}` в `src/layout.html` — `build.py:1126`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1109`
-- `{{content}}` в `src/layout.html` — `build.py:1107`
-- `{{toc}}` в `src/layout.html` — `build.py:1109`
-- `{{scripts}}` в `src/layout.html` — `build.py:1125`
-- `{{version}}` в `src/sw.js` — `build.py:1208`
-- `{{precache}}` в `src/sw.js` — `build.py:1208`
+- `{{title}}` в `src/layout.html` — `build.py:1112`
+- `{{description}}` в `src/layout.html` — `build.py:1112`
+- `{{pwa}}` в `src/layout.html` — `build.py:1128`
+- `{{fonts}}` в `src/layout.html` — `build.py:1127`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1110`
+- `{{content}}` в `src/layout.html` — `build.py:1108`
+- `{{toc}}` в `src/layout.html` — `build.py:1110`
+- `{{scripts}}` в `src/layout.html` — `build.py:1126`
+- `{{version}}` в `src/sw.js` — `build.py:1209`
+- `{{precache}}` в `src/sw.js` — `build.py:1209`
 
 ## Проверки
 
