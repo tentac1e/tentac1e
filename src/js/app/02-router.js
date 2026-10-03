@@ -76,11 +76,6 @@
 
   function updateChrome(view) {
     const id = view.dataset.view;
-    $$('#nav a').forEach(a => {
-      const on = (a.dataset.nav || a.getAttribute('href').replace(/^#/, '')) === id;
-      a.classList.toggle('is-active', on);
-      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
-    });
     $$('.tab-item[data-tab="home"]').forEach(a => a.classList.toggle('is-active', id === 'glavnaya'));
     $$('[data-garden-link]').forEach(a => { a.classList.toggle('is-active', id === 'moy'); if (id === 'moy') a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     const ch = chapterById(id);

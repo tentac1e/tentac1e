@@ -55,12 +55,13 @@
   .ch-hero-art { grid-column: 2; grid-row: 1; width: 96px; margin-top: -6px; }
 }
 
+/* the chapter's sections: tabs on a thin rail, the open one underlined — navigation, not one more row of filter chips */
 .subnav-wrap {
   position: sticky;
   top: var(--sticky-top);
   z-index: 40;
   margin: 0 calc(50% - 50vw) clamp(18px, 3vw, 28px);
-  padding: 10px calc(50vw - 50%);
+  padding: 4px calc(50vw - 50%) 0;
   background: color-mix(in srgb, var(--bg) 84%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(1.3);
   backdrop-filter: blur(14px) saturate(1.3);
@@ -69,23 +70,27 @@
 }
 /* stuck over the text: dense enough that the lines scrolling under it do not show through */
 .subnav-wrap.is-stuck { border-bottom-color: var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); }
-.subnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+.subnav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; box-shadow: inset 0 -1px 0 var(--line); }
+.subnav-wrap.is-stuck .subnav { box-shadow: none; }
 .subnav::-webkit-scrollbar { display: none; }
 .subnav a {
+  position: relative;
   flex-shrink: 0;
-  padding: 8px 15px;
-  border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: var(--surface);
+  padding: 11px 12px 13px;
+  border-radius: 10px 10px 0 0;
   color: var(--ink-2);
-  font-size: .9rem;
+  font-size: .92rem;
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color .25s, color .25s, border-color .25s;
+  transition: background-color .25s, color .25s;
 }
-.subnav a:hover { border-color: var(--basil); color: var(--basil-deep); }
-.subnav a[aria-current="true"] { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
+.subnav a::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: var(--basil); scale: 0 1; transition: scale .3s var(--ease-float); }
+.subnav a:first-child { margin-left: -12px; }
+.subnav a:hover { background: var(--surface-2); color: var(--basil-deep); }
+.subnav a[aria-current="true"] { color: var(--basil-deep); }
+.subnav a[aria-current="true"]::after { scale: 1; }
+@media (prefers-reduced-motion: reduce) { .subnav a::after { transition: none; } }
 
 .pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: clamp(36px, 5vw, 56px); }
 .pager a {

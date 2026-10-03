@@ -34,32 +34,6 @@
 .brand svg { width: 30px; height: 30px; }
 .brand small { display: block; margin-top: 3px; font-family: var(--font-mono); font-size: .62rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 
-.nav {
-  display: flex;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 4px 6px;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
-}
-.nav::-webkit-scrollbar { display: none; }
-.nav a {
-  flex-shrink: 0;
-  padding: 6px 8px;
-  border-radius: 999px;
-  font-size: .85rem;
-  font-weight: 600;
-  color: var(--ink-2);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background-color .25s, color .25s;
-}
-.nav a:hover { background: var(--surface-2); color: var(--basil-deep); }
-.nav a.is-active { background: var(--basil); color: var(--on-basil); }
-
 .search-btn {
   display: inline-flex;
   align-items: center;
@@ -126,15 +100,15 @@
 /* ---- compact / mobile chrome ---- */
 .tabbar { display: none; }
 
-@media (max-width: 1439px) {
+@media (max-width: 1099px) {
   .search-btn span, .search-btn kbd { display: none; }
   .search-btn { width: 42px; padding: 0; justify-content: center; }
 }
 
-@media (max-width: 1279px) {
+/* a phone or a tablet held tall: the header shrinks to the brand and three buttons, the tab bar takes the rest */
+@media (max-width: 899px) {
   :root { --tabbar-h: calc(64px + env(safe-area-inset-bottom, 0px)); --sticky-top: env(safe-area-inset-top, 0px); }
   .topbar { position: relative; top: 0; }
-  .nav { display: none; }
   .brand { flex: 1; }
   .progress { display: none; }
 
@@ -145,7 +119,7 @@
     bottom: 0;
     z-index: 60;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
     background: var(--glass-strong);
     background: color-mix(in srgb, var(--bg) 86%, transparent);

@@ -24,8 +24,7 @@
     if (journey) journey.innerHTML = steps.map(s => `
       <li><a href="#${s.hash}"><span class="j-art">${s.art ? `<svg viewBox="0 0 120 120" aria-hidden="true"><use href="#${s.art}"/></svg>` : miniPlant(s.plant)}</span><b>${s.t}</b><small>${nb(s.s)}</small></a></li>`).join('');
 
-    const tools = $('#tools-home');
-    if (tools) tools.innerHTML = B.TOOLS.map(t => `<a class="tool" href="#${t.hash}"><span class="t-ico">${icon(t.icon)}</span><span><b>${t.title}</b><small>${t.desc}</small></span></a>`).join('');
+    // the tools (#tools-home) are written into the page by scripts/build.py, by what they are for
 
     const m = today().getMonth();
     const tipText = $('#season-text');

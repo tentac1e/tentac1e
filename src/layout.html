@@ -272,19 +272,7 @@
       <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 30 C 16 22 16 16 16 10" style="stroke: var(--basil)" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z" style="fill: var(--leaf); stroke: var(--basil-deep)" stroke-width="1.6"/></svg>
       <span>Базилик<small>гид садовода</small></span>
     </a>
-    <nav class="nav" id="nav" aria-label="Главы">
-      <a data-nav="sorta" href="#sorta">Сорта</a>
-      <a data-nav="posadka" href="#posadka">Посадка</a>
-      <a data-nav="kalendar" href="#kalendar">Календарь</a>
-      <a data-nav="uhod" href="#uhod">Уход</a>
-      <a data-nav="udobreniya" href="#udobreniya">Удобрения</a>
-      <a data-nav="formirovka" href="#formirovka">Прищипка</a>
-      <a data-nav="urozhay" href="#urozhay">Урожай</a>
-      <a data-nav="vkus" href="#vkus">Вкус</a>
-      <a data-nav="razmnozhenie" href="#razmnozhenie">Размножение</a>
-      <a data-nav="problemy" href="#problemy">Проблемы</a>
-      <a data-nav="spravka" href="#spravka">Справка</a>
-    </nav>
+    {{tocbtn}}
     <a class="icon-btn garden-btn" href="#moy" data-garden-link aria-label="Мой базилик"><svg class="ico"><use href="#i-sprout"/></svg><b class="garden-badge" hidden></b></a>
     <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
       <svg class="ico"><use href="#i-search"/></svg><span>Поиск</span><kbd>/</kbd>
@@ -319,24 +307,21 @@
 <nav class="tabbar" aria-label="Навигация">
   <a class="tab-item" href="#glavnaya" data-tab="home"><svg class="ico"><use href="#i-home"/></svg><span>Главная</span></a>
   <a class="tab-item" href="#moy" data-tab="moy" data-garden-link aria-label="Мой базилик"><svg class="ico"><use href="#i-sprout"/></svg><span>Мои кусты</span><b class="garden-badge" hidden></b></a>
-  <button class="tab-item" type="button" data-open="sheet-chapters"><svg class="ico"><use href="#i-book"/></svg><span>Главы</span></button>
-  <button class="tab-item" type="button" data-open="sheet-tools"><svg class="ico"><use href="#i-tools"/></svg><span>Инструменты</span></button>
+  <button class="tab-item" type="button" data-open="sheet-toc"><svg class="ico"><use href="#i-book"/></svg><span>Оглавление</span></button>
   <button class="tab-item" type="button" data-open="sheet-search"><svg class="ico"><use href="#i-search"/></svg><span>Поиск</span></button>
 </nav>
 
 <button class="to-top" id="to-top" type="button" aria-label="Наверх"><svg class="ico"><use href="#i-arrow-up"/></svg></button>
 
 <!-- sheets -->
-<dialog class="sheet" id="sheet-chapters" aria-labelledby="sheet-chapters-h" tabindex="-1">
-  <div class="sheet-top"><span class="sheet-grab" aria-hidden="true"></span><div class="sheet-head"><h2 id="sheet-chapters-h">Главы</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div></div>
-  <div class="sheet-inner">
-    <nav class="sheet-list" id="sheet-chapters-list" aria-label="Главы"></nav>
+<dialog class="sheet sheet-toc" id="sheet-toc" aria-labelledby="sheet-toc-h" tabindex="-1">
+  <div class="sheet-top">
+    <span class="sheet-grab" aria-hidden="true"></span>
+    <div class="sheet-head"><h2 id="sheet-toc-h">Оглавление</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
+    <div class="seg toc-seg" role="group" aria-label="Что показать"><button type="button" aria-pressed="true" data-toc-pane="ch">Главы</button><button type="button" aria-pressed="false" data-toc-pane="tools">Инструменты</button></div>
   </div>
-</dialog>
-<dialog class="sheet" id="sheet-tools" aria-labelledby="sheet-tools-h" tabindex="-1">
-  <div class="sheet-top"><span class="sheet-grab" aria-hidden="true"></span><div class="sheet-head"><h2 id="sheet-tools-h">Инструменты</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div></div>
   <div class="sheet-inner">
-    <nav class="sheet-list" id="sheet-tools-list" aria-label="Инструменты"></nav>
+{{toc}}
   </div>
 </dialog>
 <dialog class="sheet sheet-search" id="sheet-search" aria-label="Поиск" tabindex="-1">

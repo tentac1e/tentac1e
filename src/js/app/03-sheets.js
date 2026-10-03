@@ -3,6 +3,8 @@
   /* ================================================================== */
   // below this width a sheet is a bottom sheet that follows the finger (21-sheets.css)
   const phoneSheets = window.matchMedia('(max-width: 1279px)');
+  // from this width the contents drop from their button in the header (24-toc.css)
+  const tocDrop = window.matchMedia('(min-width: 900px)');
   function openSheet(id) {
     const d = document.getElementById(id);
     if (!d) return;
@@ -12,16 +14,7 @@
       if (id === 'sheet-search') fitSearchPanel();
       if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
     }
-    if (id === 'sheet-chapters') {
-      $$('.sheet-link', d).forEach(l => l.classList.toggle('is-current', currentView && l.getAttribute('href') === '#' + currentView.dataset.view));
-      const cur = $('.sheet-link.is-current', d);
-      const panels = currentView ? $$('[data-panel]', currentView) : [];
-      $$('.sheet-tabs', d).forEach(x => x.remove());
-      if (cur && panels.length > 1) {
-        const active = $('[data-panel].is-active', currentView);
-        cur.insertAdjacentHTML('afterend', `<nav class="sheet-tabs chips-row" aria-label="Разделы этой главы">${panels.map(p => { const t = $(`.subnav a[href="#${p.id}"]`, currentView); return `<a class="chip" href="#${p.id}"${p === active ? ' aria-current="true"' : ''}>${esc(t ? t.textContent.trim() : p.dataset.title || '')}</a>`; }).join('')}</nav>`);
-      }
-    }
+    if (id === 'sheet-toc') tocOpen(d);
     if (id === 'sheet-search') {
       // in the same tap, or the phone does not raise the keyboard
       const input = $('#search-input');
@@ -74,7 +67,7 @@
     };
     d.addEventListener('touchstart', e => {
       g = null;
-      if (!phoneSheets.matches || e.touches.length !== 1 || d.classList.contains('is-closing')) return;
+      if (!phoneSheets.matches || e.touches.length !== 1 || d.classList.contains('is-closing') || (d.id === 'sheet-toc' && tocDrop.matches)) return;
       const t = e.touches[0], r = d.getBoundingClientRect();
       // on the backdrop the finger moves nothing
       const mode = t.clientY < r.top ? 'still' : head && head.contains(e.target) ? 'sheet' : null;
@@ -128,16 +121,77 @@
     d.addEventListener('click', e => { if (d._noClick && Date.now() < d._noClick) { e.preventDefault(); e.stopPropagation(); } }, true);
   }
 
+  /* the contents («Оглавление», written into every page by scripts/build.py): the chapters, each opening into its
+     sections, and the tools by what they are for. It opens on the reader's place: that chapter open, its section
+     marked, the others folded */
+  function tocFold(li, open) {
+    li.classList.toggle('is-open', open);
+    const b = $('.toc-tog', li);
+    if (b) b.setAttribute('aria-expanded', String(open));
+  }
+  function tocPane(d, pane) {
+    const toc = $('.toc', d);
+    if (toc) toc.dataset.pane = pane;
+    $$('[data-toc-pane]', d).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tocPane === pane)));
+  }
+  function tocOpen(d) {
+    const id = currentView && currentView.dataset.view;
+    const active = currentView && $('[data-panel].is-active', currentView);
+    tocPane(d, 'ch');
+    $$('.toc-item[data-toc]', d).forEach(li => {
+      const on = li.dataset.toc === id, link = $('.toc-link', li);
+      if (on) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+      tocFold(li, on && !!$('.toc-sub', li));
+      // a section's link ends in its panel's anchor (the short Russian one on the pages, the long one in the book)
+      $$('[data-p]', li).forEach(a => { if (on && active && decodeURIComponent(a.hash.slice(1)) === active.id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    });
+    // on a computer it drops from its button
+    const btn = $('.topbar .toc-btn');
+    if (btn && tocDrop.matches) d.style.setProperty('--toc-x', Math.round(btn.getBoundingClientRect().left) + 'px');
+    // the reader's chapter in sight, under the home page and «Мой базилик» if it fits
+    const sc = $('.sheet-inner', d), cur = $('.toc-item.is-open', d);
+    if (sc) sc.scrollTop = 0;
+    if (sc && cur) {
+      const r = cur.getBoundingClientRect(), box = sc.getBoundingClientRect();
+      // with the whole row above it, from its top edge
+      const above = cur.previousElementSibling, top = above ? above.getBoundingClientRect().top : r.top;
+      if (r.bottom > box.bottom) sc.scrollTop = Math.max(0, top - box.top - 4);
+    }
+  }
+  // the header's button says where the reader is (in the one-file book it follows the chapter)
+  function tocButton(id) {
+    const btn = $('.topbar .toc-btn');
+    if (!btn) return;
+    const ch = chapterById(id);
+    const place = ch ? `<span class="toc-btn-n">${ch.num}</span> <span class="toc-btn-t">${esc(ch.short || ch.title)}</span>` : `<span class="toc-btn-t">${id === 'moy' ? 'Мой базилик' : 'Оглавление'}</span>`;
+    const box = $('.toc-btn-p', btn);
+    if (box && box.innerHTML !== place) box.innerHTML = place;
+  }
+  function initToc() {
+    const d = $('#sheet-toc');
+    if (!d) return;
+    d.addEventListener('click', e => {
+      const tog = e.target.closest('.toc-tog');
+      if (tog) {
+        const li = tog.closest('.toc-item');
+        tocFold(li, !li.classList.contains('is-open'));
+        if (window.BasilHaptics) window.BasilHaptics.tick();
+        return;
+      }
+      const seg = e.target.closest('[data-toc-pane]');
+      if (seg) tocPane(d, seg.dataset.tocPane);
+    });
+    document.addEventListener('basil:view', e => tocButton(e.detail.id));
+    // the buttons that open it say whether it is open
+    const btns = $$('[data-open="sheet-toc"]');
+    const say = open => btns.forEach(b => b.setAttribute('aria-expanded', String(open)));
+    say(false);
+    d.addEventListener('close', () => say(false));
+    btns.forEach(b => b.addEventListener('click', () => say(true)));
+  }
+
   function initSheets() {
-    const chList = $('#sheet-chapters-list');
-    if (chList) {
-      chList.innerHTML = `<a class="sheet-link" href="#glavnaya"><span class="sl-art">${icon('home')}</span><span><b>Главная</b><small>С чего начать, путь базилика, правила.</small></span>${icon('chev-r')}</a>` +
-        B.CHAPTERS.map(c => `<a class="sheet-link" href="#${c.id}"><span class="sl-art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#${c.art}"/></svg></span><span><b>${c.num}. ${c.title}</b><small>${c.desc}</small></span>${icon('chev-r')}</a>`).join('');
-    }
-    const tList = $('#sheet-tools-list');
-    if (tList) {
-      tList.innerHTML = B.TOOLS.map(t => `<a class="sheet-link" href="#${t.hash}"><span class="sl-art">${icon(t.icon)}</span><span><b>${t.title}</b><small>${t.desc}</small></span>${icon('chev-r')}</a>`).join('');
-    }
+    initToc();
     $$('[data-open]').forEach(b => b.addEventListener('click', () => openSheet(b.dataset.open)));
     $$('dialog.sheet').forEach(d => {
       d.addEventListener('click', e => {

@@ -16,24 +16,26 @@ window.BASIL = (() => {
     { id: 'spravka', num: 11, title: 'Справка', art: 'art-spravka', desc: 'Частые вопросы, словарь терминов, чек-лист сезона.' }
   ];
 
+  // group: what the reader wants to do — the contents and the home page show the tools by it (TOOL_GROUPS in
+  // scripts/build.py); «mine» is «Мой базилик», which has its own place in both
   const TOOLS = [
-    { title: 'Мой базилик', hash: 'moy', icon: 'sprout', desc: 'Свои кусты, их дела на неделю, погода и опыты' },
-    { title: 'Подбор сорта', hash: 'sorta-podbor', icon: 'seed', desc: '4 вопроса — 3 подходящих сорта' },
-    { title: 'Калькулятор грунта', hash: 'posadka-gorshok', icon: 'pot', desc: 'Сколько литров каждого компонента' },
-    { title: 'Календарь посадки', hash: 'kalendar', icon: 'cal', desc: 'Даты посева, высадки и сбора' },
-    { title: 'Калькулятор досветки', hash: 'dli', icon: 'lamp', desc: 'Хватает ли света от лампы' },
-    { title: 'Питание по стадиям', hash: 'udobreniya-stadii', icon: 'flask', desc: 'Кривая потребности в N, P, K' },
-    { title: 'План подкормок', hash: 'udobreniya-plan', icon: 'list', desc: 'Даты и дозы на весь сезон' },
-    { title: 'Расшифровка NPK', hash: 'npk', icon: 'tag', desc: 'Для чего подходит ваше удобрение' },
-    { title: 'Калькулятор раствора', hash: 'udobreniya-kalkulyator', icon: 'jar', desc: 'Граммы и ложки на объём воды' },
-    { title: 'Тренажёр прищипывания', hash: 'formirovka-trenazher', icon: 'scissors', desc: 'Вырастите куст на 8 верхушек' },
-    { title: 'Молекулы аромата', hash: 'vkus-molekuly', icon: 'hex', desc: '9 молекул в 3D и шкала летучести' },
-    { title: 'Лаборатория сочетаний', hash: 'vkus-sochetaniya', icon: 'nose', desc: 'Общие молекулы базилика и продуктов' },
-    { title: 'Когда добавлять базилик', hash: 'vkus-kuhnya', icon: 'thermo', desc: 'Модель: что остаётся от аромата при варке' },
-    { title: 'Калькулятор VPD', hash: 'deep-vpd', icon: 'wave', desc: 'Температура и влажность глазами листа' },
-    { title: 'Песто-лаборатория', hash: 'deep-pesto', icon: 'jar', desc: 'Почему песто темнеет и как этого избежать' },
-    { title: 'Диагностика', hash: 'problemy-diagnostika', icon: 'bug', desc: '21 симптом: причины и лечение' },
-    { title: 'Чек-лист сезона', hash: 'spravka-chek-list', icon: 'check', desc: 'Отмечайте сделанное' }
+    { title: 'Мой базилик', hash: 'moy', icon: 'sprout', group: 'mine', desc: 'Свои кусты, их дела на неделю, погода и опыты' },
+    { title: 'Подбор сорта', hash: 'sorta-podbor', icon: 'seed', group: 'plan', desc: '4 вопроса — 3 подходящих сорта' },
+    { title: 'Калькулятор грунта', hash: 'posadka-gorshok', icon: 'pot', group: 'calc', desc: 'Сколько литров каждого компонента' },
+    { title: 'Календарь посадки', hash: 'kalendar', icon: 'cal', group: 'plan', desc: 'Даты посева, высадки и сбора' },
+    { title: 'Калькулятор досветки', hash: 'dli', icon: 'lamp', group: 'calc', desc: 'Хватает ли света от лампы' },
+    { title: 'Питание по стадиям', hash: 'udobreniya-stadii', icon: 'flask', group: 'know', desc: 'Кривая потребности в N, P, K' },
+    { title: 'План подкормок', hash: 'udobreniya-plan', icon: 'list', group: 'plan', desc: 'Даты и дозы на весь сезон' },
+    { title: 'Расшифровка NPK', hash: 'npk', icon: 'tag', group: 'calc', desc: 'Для чего подходит ваше удобрение' },
+    { title: 'Калькулятор раствора', hash: 'udobreniya-kalkulyator', icon: 'jar', group: 'calc', desc: 'Граммы и ложки на объём воды' },
+    { title: 'Тренажёр прищипывания', hash: 'formirovka-trenazher', icon: 'scissors', group: 'know', desc: 'Вырастите куст на 8 верхушек' },
+    { title: 'Молекулы аромата', hash: 'vkus-molekuly', icon: 'hex', group: 'know', desc: '9 молекул в 3D и шкала летучести' },
+    { title: 'Лаборатория сочетаний', hash: 'vkus-sochetaniya', icon: 'nose', group: 'know', desc: 'Общие молекулы базилика и продуктов' },
+    { title: 'Когда добавлять базилик', hash: 'vkus-kuhnya', icon: 'thermo', group: 'know', desc: 'Модель: что остаётся от аромата при варке' },
+    { title: 'Калькулятор VPD', hash: 'deep-vpd', icon: 'wave', group: 'calc', desc: 'Температура и влажность глазами листа' },
+    { title: 'Песто-лаборатория', hash: 'deep-pesto', icon: 'jar', group: 'know', desc: 'Почему песто темнеет и как этого избежать' },
+    { title: 'Диагностика', hash: 'problemy-diagnostika', icon: 'bug', group: 'know', desc: '21 симптом: причины и лечение' },
+    { title: 'Чек-лист сезона', hash: 'spravka-chek-list', icon: 'check', group: 'plan', desc: 'Отмечайте сделанное' }
   ];
 
   const QUICK = [

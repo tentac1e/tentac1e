@@ -796,14 +796,6 @@ body::after {
   .hero-art { width: 128px; min-height: 0; }
 }
 
-/* ================= header: eleven chapters must fit from 1280px ================= */
-@media (min-width: 1280px) and (max-width: 1439px) {
-  .nav { gap: 0; padding-inline: 4px; }
-  .nav a { padding: 6px 5px; font-size: .8rem; }
-  .topbar-inner { gap: 10px; }
-}
-@media (min-width: 1440px) { .nav a { padding: 6px 6px; } }
-
 /* ================= header switch: open every deep dive ================= */
 .deep-toggle { position: relative; }
 .deep-toggle[aria-pressed="true"] { background: var(--sci-chem); border-color: var(--sci-chem); color: var(--surface); }

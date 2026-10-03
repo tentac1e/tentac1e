@@ -311,6 +311,103 @@ def chapters():
     return out
 
 
+# ---------------------------------------------------------------- the contents: chapters, their sections, tools
+# a tool's group is what the reader wants to do with it (group: in TOOLS, src/js/data/00-nav.js)
+TOOL_GROUPS = [('plan', 'Подобрать и спланировать'), ('calc', 'Посчитать'), ('know', 'Разобраться')]
+
+
+def nav_items():
+    """The guide's map for the contents (toc_html) and the home page's tools: the chapters (CHAPTERS in 00-nav.js)
+    with their sections (each chapter's .subnav), the tools (TOOLS) with the place each one leads to."""
+    data = (SRC / 'js' / 'data' / '00-nav.js').read_text(encoding='utf-8')
+    chapters = []
+    for m in re.finditer(r"\{ id: '([a-z]+)', num: (\d+), title: '([^']+)',([^{}]*?) desc: '([^']+)' \}", data):
+        short = re.search(r"short: '([^']+)'", m.group(4))
+        art = re.search(r"art: '([a-z-]+)'", m.group(4))
+        chapters.append({'id': m.group(1), 'num': int(m.group(2)), 'title': m.group(3), 'short': short.group(1) if short else m.group(3),
+                         'art': art.group(1)})
+    sections, panel_of = {}, {}
+    for view, _ in PAGES:
+        d = SRC / 'pages' / view
+        if not (d / '_head.html').exists():
+            continue
+        nav = re.search(r'<nav class="subnav"[^>]*>(.*?)</nav>', (d / '_head.html').read_text(encoding='utf-8'), re.S)
+        sections[view] = re.findall(r'<a href="#([^"]+)">([^<]+)</a>', nav.group(1))
+        for f in sorted(d.glob('[0-9]*-*.html')):
+            text = f.read_text(encoding='utf-8')
+            panel = re.search(r'data-panel id="([^"]+)"', text).group(1)
+            for i in re.findall(r'\sid="([^"]+)"', text):
+                panel_of[i] = (view, panel)
+    title = {c['id']: c['title'] for c in chapters} | {'moy': 'Мой базилик'}
+
+    def where(hash):
+        """«Глава · раздел» a tool opens on: the reader knows where the link leads"""
+        if hash in title:
+            return title[hash]
+        view, panel = panel_of[hash]
+        label = dict(sections.get(view, [])).get(panel)
+        return f'{title[view]} · {label}' if label else title[view]
+    tools = [{'title': m.group(1), 'hash': m.group(2), 'icon': m.group(3), 'group': m.group(4), 'desc': m.group(5), 'where': where(m.group(2))}
+             for m in re.finditer(r"\{ title: '([^']+)', hash: '([^']+)', icon: '([^']+)', group: '([a-z]+)', desc: '([^']+)' \}", data)]
+    assert chapters and tools and all(t['group'] in dict(TOOL_GROUPS) or t['group'] == 'mine' for t in tools)
+    return {'chapters': chapters, 'sections': sections, 'tools': tools}
+
+
+def ico(name):
+    return f'<svg class="ico"><use href="#i-{name}"/></svg>'
+
+
+def toc_html(nav, here):
+    """The contents in every page (the sheet «Оглавление»): the home page and «Мой базилик», then the chapters — each
+    opens into its sections; the tools by what they are for, each with the chapter and section it opens.
+    The page's own chapter is marked and open."""
+    def item(cid, face, label, subs, extra=''):
+        cur = cid == here
+        mark = ' aria-current="page"' if cur else ''
+        link = f'<a class="toc-link" href="#{cid}"{mark}{extra}>{face}</a>'
+        if not subs:
+            return f'<li class="toc-item" data-toc="{cid}"><div class="toc-row">{link}</div></li>'
+        tog = (f'<button class="toc-tog" type="button" aria-expanded="{"true" if cur else "false"}" aria-controls="toc-{cid}" '
+               f'aria-label="Разделы: {escape(label)}"><span>{len(subs)}</span>{ico("chev-r")}</button>')
+        sub = (f'<div class="toc-sub" id="toc-{cid}"><ul>'
+               + ''.join(f'<li><a href="#{pid}" data-p="{pid}">{escape(t)}</a></li>' for pid, t in subs) + '</ul></div>')
+        return f'<li class="toc-item{" is-open" if cur else ""}" data-toc="{cid}"><div class="toc-row">{link}{tog}</div>{sub}</li>'
+    rows = [item('glavnaya', f'<span class="toc-ico">{ico("home")}</span><span class="toc-t">Главная</span>', 'Главная', []),
+            item('moy', f'<span class="toc-ico">{ico("sprout")}<b class="garden-badge" hidden></b></span><span class="toc-t">Мой базилик</span>',
+                 'Мой базилик', nav['sections'].get('moy', []), ' data-garden-link')]
+    for c in nav['chapters']:
+        art = f'<span class="toc-art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#{c["art"]}"/></svg></span>'
+        rows.append(item(c['id'], f'{art}<span class="toc-t"><small>{c["num"]}</small>{escape(c["title"])}</span>', c['title'],
+                         nav['sections'].get(c['id'], [])))
+    chapters = f'<nav class="toc-pane toc-chapters" id="toc-ch" aria-label="Главы и разделы"><ul class="toc-list">{"".join(rows)}</ul></nav>'
+    groups = ''.join(
+        f'<section class="toc-group"><h3>{gt}</h3><ul>' + ''.join(
+            f'<li><a class="toc-tool" href="#{t["hash"]}"><span class="toc-ico">{ico(t["icon"])}</span>'
+            f'<span><b>{escape(t["title"])}</b><small>{escape(t["where"])}</small></span></a></li>'
+            for t in nav['tools'] if t['group'] == g) + '</ul></section>'
+        for g, gt in TOOL_GROUPS)
+    return f'<div class="toc" data-pane="ch">{chapters}<nav class="toc-pane toc-tools" id="toc-tools" aria-label="Инструменты">{groups}</nav></div>'
+
+
+def toc_button(nav, here):
+    """the header's way into the contents: it says where the reader is"""
+    c = next((c for c in nav['chapters'] if c['id'] == here), None)
+    place = (f'<span class="toc-btn-n">{c["num"]}</span> <span class="toc-btn-t">{escape(c["short"])}</span>' if c
+             else '<span class="toc-btn-t">Мой базилик</span>' if here == 'moy' else '<span class="toc-btn-t">Оглавление</span>')
+    return (f'<button class="toc-btn" type="button" data-open="sheet-toc" aria-haspopup="dialog">{ico("book")}'
+            f'<span class="toc-vh">Оглавление: </span><span class="toc-btn-p">{place}</span>{ico("chev-r")}</button>')
+
+
+def tools_home_html(nav):
+    """the home page's tools by what they are for, each with the place it opens"""
+    return '<div class="tools-groups" id="tools-home">' + ''.join(
+        f'<section class="tools-group" aria-label="{gt}"><h3 class="tools-gh">{gt}</h3><div class="tools-grid">' + ''.join(
+            f'<a class="tool" href="#{t["hash"]}"><span class="t-ico">{ico(t["icon"])}</span><span><b>{escape(t["title"])}</b>'
+            f'<small>{escape(t["desc"])}</small><span class="t-where">{escape(t["where"])}</span></span></a>'
+            for t in nav['tools'] if t['group'] == g) + '</div></section>'
+        for g, gt in TOOL_GROUPS) + '</div>'
+
+
 # a one- or two-letter preposition, conjunction or particle: it goes to the next line with the word after it
 SHORT_WORD = r'(?<![а-яёa-z\u00ad-])(в|с|к|у|о|а|и|я|во|со|ко|об|на|за|по|до|от|из|не|ни|но)'
 
@@ -617,6 +714,7 @@ def main():
     LINK = {v: (SLUG[v] or './') for v, _ in PAGES} if clean else dict(FILE)
 
     layout = typeset((SRC / 'layout.html').read_text(encoding='utf-8'))  # the frame's own text: footer, sheets, search
+    nav = nav_items()
     src = {v: read_page(v) for v, _ in PAGES}
     CH = chapters()
     bundles, lib_deps, libs = assemble(src)
@@ -810,11 +908,11 @@ def main():
         title = f"{ch['title']} — {SITE_TITLE}" if ch and not single else SITE_TITLE
         desc = (f"{ch['desc']} Глава {ch['num']} гида по выращиванию базилика." if ch['num'] else ch['desc']) if ch and not single else SITE_DESC
         out = layout.replace('{{content}}', content)
+        # the contents and the home page's tools: written here, so that every link is a link from the start
+        out = out.replace('{{toc}}', typeset(toc_html(nav, None if single else here))).replace('{{tocbtn}}', toc_button(nav, None if single else here))
+        out = out.replace('<div class="tools-grid" id="tools-home"></div>', typeset(tools_home_html(nav)))
         out = out.replace('{{title}}', escape(title)).replace('{{description}}', attr(desc))
         out = rewrite_links(out, here)
-        # header: mark the current chapter
-        if not single:
-            out = out.replace(f'data-nav="{here}"', f'data-nav="{here}" aria-current="page" class="is-active"')
         scripts = '\n'.join(f'<script src="assets/js/{s}" defer></script>' for s in SCRIPTS if not (single and s == 'pages.js'))
         # a chapter whose pictures stand on the page from the start brings its picture files with it: they run right
         # after science.js, before the interface starts, so the pictures on the screen are drawn at DOMContentLoaded
