@@ -51,11 +51,6 @@
 .panel-next:hover { border-color: var(--basil); transform: translateY(-2px); color: var(--ink); }
 .panel-next:hover .ico { transform: translateX(3px); }
 
-/* chapters sheet: the current chapter's tabs */
-.sheet-tabs { margin: -2px 0 8px 58px; }
-.sheet-tabs .chip { text-decoration: none; }
-.sheet-tabs .chip[aria-current="true"] { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
-
 /* home: «Продолжить чтение» never wider than the screen */
 .continue { max-width: 100%; }
 .continue b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

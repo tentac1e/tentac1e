@@ -56,7 +56,9 @@ function boxes() {
     let bg = cs.backgroundColor, a = e;
     // the paper may be the frame's: a transparent span inside a box that has the ground
     while (/rgba\(0, 0, 0, 0\)|transparent/.test(bg) && a.parentElement && a.parentElement.getBoundingClientRect().width <= r.width + 2) { a = a.parentElement; bg = getComputedStyle(a).backgroundColor; }
-    return [key, Math.round(r.width), Math.round(r.height), !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)];
+    // the frame's size in the layout: a card that floats in as it enters the screen is drawn a little smaller for a
+    // moment (scale .985), and that is not the page jumping
+    return [key, e.offsetWidth || Math.round(r.width), e.offsetHeight || Math.round(r.height), !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)];
   });
 }
 
