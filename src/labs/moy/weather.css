@@ -1,0 +1,88 @@
+/* «Погода глазами листа»: the place, the week, 48 hours */
+.wx-body { display: grid; gap: 16px; }
+.wx-find { display: grid; gap: 8px; }
+.wx-find label { font: 700 .82rem/1.2 var(--font-body); color: var(--ink-2); }
+.wx-find-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.wx-find-row input {
+  flex: 1 1 220px;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 1rem/1.2 var(--font-body);
+}
+.wx-found { display: grid; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; }
+.wx-pick {
+  display: grid;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font: 600 .92rem/1.25 var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+.wx-pick small { font-weight: 500; font-size: .78rem; color: var(--ink-3); }
+.wx-pick:hover { border-color: var(--basil); }
+.wx-msg { margin: 0; font-size: .86rem; color: var(--ink-2); }
+.wx-find .g-link { justify-self: start; }
+
+.wx-place { display: grid; gap: 2px; }
+.wx-place p { margin: 0; }
+.wx-place b { font: 600 1.25rem/1.2 var(--font-display); }
+.wx-place small { color: var(--ink-3); font-size: .82rem; }
+.wx-age { font-size: .8rem; color: var(--ink-3); }
+.wx-place-a { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 4px; }
+
+/* the week: a row of days that scrolls sideways on a phone */
+.wx-days { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(118px, 1fr); gap: 8px; margin: 0; padding: 0 0 4px; overflow-x: auto; list-style: none; scrollbar-width: thin; }
+.wx-day {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  font-size: .82rem;
+}
+.wx-dname { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 6px; font: 700 .86rem/1.2 var(--font-body); }
+.wx-dname small { font: 500 .72rem/1.4 var(--font-mono); color: var(--ink-3); }
+.wx-n, .wx-x { display: flex; justify-content: space-between; gap: 6px; font: 700 .92rem/1.2 var(--font-body); white-space: nowrap; }
+.wx-n small, .wx-x small { font: 500 .72rem/1.5 var(--font-body); color: var(--ink-3); }
+.wx-r, .wx-s { display: flex; align-items: center; gap: 4px; min-height: 18px; color: var(--ink-2); }
+.wx-r .ico, .wx-s .ico { width: 13px; height: 13px; flex: none; }
+.wx-r .ico { color: var(--wx-rain); }
+.wx-s .ico { color: var(--oil-bright); }
+.wx-vpd { justify-self: start; padding: 2px 7px; border-radius: 999px; font: 600 .72rem/1.4 var(--font-mono); color: var(--ink); }
+.wx-vpd.z0 { background: var(--z0); } .wx-vpd.z1 { background: var(--z1); } .wx-vpd.z2 { background: var(--z2); } .wx-vpd.z3 { background: var(--z3); } .wx-vpd.z4 { background: var(--z4); }
+.wx-day.is-cold { border-color: var(--wx-cold); background: var(--wx-cold-soft); }
+.wx-day.is-cold .wx-n { color: var(--wx-cold); }
+.wx-day.is-frost { border-color: var(--wx-frost); background: var(--wx-cold-soft); }
+.wx-day.is-frost .wx-n { color: var(--wx-frost); }
+.wx-day.is-hot { border-color: var(--wx-hot); }
+.wx-day.is-hot .wx-x { color: var(--wx-hot); }
+.wx-day.is-hot:not(.is-cold):not(.is-frost) { background: var(--wx-hot-soft); }
+
+/* what the day's air is for a leaf */
+.wx-leaf { padding: 14px 16px; border-radius: 16px; background: var(--sci-phys-soft); }
+.wx-leaf h4 { margin: 0 0 6px; font: 700 .9rem/1.25 var(--font-body); color: var(--sci-phys); }
+.wx-leaf p { margin: 0; font-size: .9rem; line-height: 1.5; color: var(--ink-2); }
+
+.wx-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.wx-chart { margin: 0; min-width: 0; }
+.wx-chart figcaption { margin-bottom: 2px; font: 600 .8rem/1.3 var(--font-body); color: var(--ink-3); }
+.lab-svg .band.is-hot { fill: var(--wx-hot-soft); }
+.lab-svg .band.wx-z0 { fill: var(--z0); opacity: .35; } .lab-svg .band.wx-z1 { fill: var(--z1); opacity: .35; } .lab-svg .band.wx-z2 { fill: var(--z2); opacity: .35; }
+.lab-svg .band.wx-z3 { fill: var(--z3); opacity: .35; } .lab-svg .band.wx-z4 { fill: var(--z4); opacity: .35; }
+.wx-src { margin: 0; font-size: .76rem; color: var(--ink-3); }
+
+/* the tab's text under the model */
+.wx-about { margin-top: 26px; }
+

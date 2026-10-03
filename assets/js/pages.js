@@ -196,8 +196,12 @@ window.BASIL_PAGES = {
   "moy": "moy",
   "moy-h": "glavnaya",
   "moy-h1": "moy",
+  "moy-h2": "moy",
+  "moy-h3": "moy",
+  "moy-h4": "moy",
   "moy-home": "glavnaya",
   "moy-kusty": "moy",
+  "moy-pogoda": "moy",
   "nauka": "glavnaya",
   "nauka-h": "glavnaya",
   "npk": "udobreniya",
@@ -450,7 +454,7 @@ window.BASIL_PAGES = {
    "phys": 11,
    "taste": 4
   },
-  "labs": 36,
+  "labs": 37,
   "deeper": 44,
   "deep": 44
  },
@@ -539,7 +543,8 @@ window.BASIL_PAGES = {
   "deep-cifry": "Глубже: Базилик в цифрах",
   "spravka-slovar": "Справка · Словарь",
   "spravka-chek-list": "Справка · Чек-лист сезона",
-  "moy-kusty": "Мой базилик · Кусты"
+  "moy-kusty": "Мой базилик · Кусты",
+  "moy-pogoda": "Мой базилик · Погода"
  },
  "alias": {
   "sorta-katalog": "каталог",
@@ -582,25 +587,28 @@ window.BASIL_PAGES = {
   "spravka-voprosy": "вопросы",
   "spravka-slovar": "словарь",
   "spravka-chek-list": "чек-лист",
-  "moy-kusty": "кусты"
+  "moy-kusty": "кусты",
+  "moy-pogoda": "погода"
  },
  "v": {
   "labs": {
    "sorta": "c21915d9",
    "posadka": "9388c86c",
    "kalendar": "51f45378",
-   "uhod": "b01afd80",
+   "uhod": "5d83f303",
    "udobreniya": "f58f15d9",
    "formirovka": "54a87f1b",
    "urozhay": "1760db14",
    "vkus": "78b30d48",
    "razmnozhenie": "d9b5685b",
-   "problemy": "b6cf55d9"
+   "problemy": "b6cf55d9",
+   "moy": "5dc99288"
   },
   "lib": {
    "micro": "bbc6c98e",
    "ills": "63c3803f",
    "props": "7e4b2fa8",
+   "agro": "ddf66414",
    "food": "9ecfd30b"
   },
   "deps": {
@@ -617,7 +625,8 @@ window.BASIL_PAGES = {
    "uhod": [
     "micro",
     "ills",
-    "props"
+    "props",
+    "agro"
    ],
    "udobreniya": [
     "micro",
@@ -645,8 +654,11 @@ window.BASIL_PAGES = {
    "problemy": [
     "micro",
     "ills"
+   ],
+   "moy": [
+    "agro"
    ]
   },
-  "search": "58357e8f"
+  "search": "50dca958"
  }
 };

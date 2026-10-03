@@ -101,6 +101,8 @@
       const sy = day.getMonth() >= 9 ? day.getFullYear() : day.getFullYear() - 1;
       once(Object.assign({}, L, { key: 'light-' + sy }), later(new Date(sy, 9, 1), added), new Date(sy + 1, 2, 31));
     }
+    // the forecast for a bush outdoors: a cold spell, the heat (22-garden-weather.js)
+    wxTasks(p, day).forEach(t => out.push(t));
     return out.sort((a, b) => a.due - b.due);
   }
   // what is left to do this week (with what is late), and what comes after it
@@ -108,7 +110,9 @@
     const end = weekOf(day)[1];
     const all = plantTasks(p, day);
     const open = all.filter(t => t.state === 'late' || t.state === 'now' || t.state === 'soon');
-    return { all, now: open.filter(t => t.due <= end), next: open.filter(t => t.due > end)[0] || null };
+    // the weather's tasks stand in the week as long as the forecast reaches them: a frost on Monday is told on Saturday
+    const shown = t => t.due <= end || (t.weather && dayDiff(day, t.due) <= 7);
+    return { all, now: open.filter(shown), next: open.filter(t => !shown(t))[0] || null };
   }
   // how the bush looks at its age: the picture of its stage and the word for it
   function plantStage(p, day) {

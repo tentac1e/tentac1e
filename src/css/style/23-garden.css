@@ -215,3 +215,14 @@
 .photo-view figcaption { padding: 10px 56px 12px 14px; font-size: .86rem; color: var(--ink-2); }
 .photo-view .icon-btn { position: absolute; top: 10px; right: 10px; }
 .g-task-l { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+
+/* the weather: one line over the bushes, a task about a cold night or the heat, the advice of the day */
+.g-wx-strip { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 14px; padding: 10px 14px; border-radius: 14px; background: var(--surface-2); font-size: .86rem; line-height: 1.45; color: var(--ink-2); }
+.g-wx-strip .ico { flex: none; width: 18px; height: 18px; margin-top: 1px; color: var(--sci-phys); }
+.g-wx-strip small { margin-left: 4px; color: var(--ink-3); }
+.g-task.is-wx { border-left-color: var(--wx-cold); background: var(--wx-cold-soft); }
+.g-task.is-wx-frost { border-left-color: var(--wx-frost); }
+.g-task.is-wx-heat { border-left-color: var(--wx-hot); background: var(--wx-hot-soft); }
+.g-wx { display: flex; align-items: flex-start; gap: 6px; margin: 8px 0 0; font-size: .84rem; line-height: 1.4; color: var(--ink-2); }
+.g-wx .ico { flex: none; width: 15px; height: 15px; margin-top: 2px; color: var(--sci-phys); }
+.g-wx-rain .ico { color: var(--wx-rain); }

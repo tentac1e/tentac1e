@@ -93,6 +93,7 @@
 ### Мой базилик — `/мой-базилик` (`moy.html`)
 - `src/pages/moy/_head.html` · обложка, вкладки · 14 стр.
 - `src/pages/moy/1-kusty.html` · #кусты — Кусты · 8 стр.
+- `src/pages/moy/2-pogoda.html` · #погода — Погода · 11 стр.<br>модели: `weather`
 - `src/pages/moy/_foot.html` · подвал главы · 3 стр.
 
 ## Модели (src/labs/)
@@ -135,6 +136,7 @@
 | `pigment` | Проблемы | Смешайте пигменты | `src/labs/problemy/pigment.js` · `src/labs/problemy/pigment.css` |
 | `dm` | Проблемы | Риск ложной мучнистой росы | `src/labs/problemy/dm.js` · `src/labs/problemy/dm.css` |
 | `aphid` | Проблемы | Колония из одной тли | `src/labs/problemy/aphid.js` · `src/labs/problemy/aphid.css` |
+| `weather` | Мой базилик | Погода глазами листа | `src/labs/moy/weather.js` · `src/labs/moy/weather.css` |
 
 Общие помощники моделей — `src/labs/_frame.js`; инструменты графиков, кнопок и ползунков (`h.chart`, `h.plot`, `h.rangeHtml` …) — `src/js/science/`.
 
@@ -142,6 +144,7 @@
 
 Модель или `_shared.js` главы подключает библиотеку строкой `/* @use micro, ills */`; сборка кладёт её в файл главы один раз.
 
+- `src/labs/_lib/agro.js` — agro: the plant's physics in numbers, shared by the models and the experiments
 - `src/labs/_lib/food.js` — food: small illustrations of what basil goes with
 - `src/labs/_lib/ills.js` — ills: plants, symptoms and pests for the illustrated guides
 - `src/labs/_lib/micro.js` — micro: drawing a leaf under the microscope
@@ -186,8 +189,9 @@
 - `src/js/app/21-reference.js` (107 стр.): initGlossary, initChecklist, initRecipes
 - `src/js/app/22-garden-ics.js` (88 стр.): ICS_WEEKS
 - `src/js/app/22-garden-photos.js` (104 стр.): PHOTO_DB
-- `src/js/app/22-garden-view.js` (467 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
-- `src/js/app/22-garden.js` (128 стр.): GARDEN_KEY
+- `src/js/app/22-garden-view.js` (477 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
+- `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
+- `src/js/app/22-garden.js` (132 стр.): GARDEN_KEY
 - `src/js/app/22-reading-pos.js` (134 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
 
@@ -221,6 +225,7 @@
 - `src/js/data/06-recipes.js` (77 стр.): RECIPE_CATS, RECIPES
 - `src/js/data/07-glossary.js` (49 стр.): GLOSSARY
 - `src/js/data/08-garden.js` (87 стр.): GARDEN
+- `src/js/data/09-weather.js` (35 стр.): WEATHER
 
 ## Стили (src/css/)
 

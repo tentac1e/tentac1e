@@ -14,7 +14,7 @@
   const doyLabel = n => { const d = new Date(2023, 0, n); return `${d.getDate()} ${MONTHS_GEN[d.getMonth()]}`; };
   const citiesChips = (id, lat) => h.chipsHtml(id, 'Город', h.CITIES.map(([l, n]) => [l, n]), lat);
 
-  const { micro, ill, props } = window.BasilLibs;
+  const { micro, ill, props, agro } = window.BasilLibs;
   window.BasilScience.styleFor("uhod", "/* vpd */\n.vpd-map polygon { stroke: none; }\n.vpd-iso { fill: none; stroke: var(--surface); stroke-width: 1.5; opacity: .8; }\n.vpd-map .z0 { fill: var(--z0); } .vpd-map .z1 { fill: var(--z1); } .vpd-map .z2 { fill: var(--z2); } .vpd-map .z3 { fill: var(--z3); } .vpd-map .z4 { fill: var(--z4); }\n.vpd-dot { fill: none; stroke: var(--ink); stroke-width: 2.5; }\n.vpd-dot-in { fill: var(--ink); }\n.vpd-legend { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; font-size: .82rem; color: var(--ink-2); }\n.vpd-legend i { display: inline-block; width: 14px; height: 14px; margin-right: 8px; border-radius: 4px; vertical-align: -2px; }\n.vpd-legend .z0 { background: var(--z0); } .vpd-legend .z1 { background: var(--z1); } .vpd-legend .z2 { background: var(--z2); } .vpd-legend .z3 { background: var(--z3); } .vpd-legend .z4 { background: var(--z4); }\n.vpd-legend small { font-family: var(--font-mono); color: var(--ink-3); }\n\n/* ph bands */\n.ph-band { fill: var(--ser-1); opacity: .55; transition: opacity .3s; }\n.ph-band.is-low { fill: var(--ser-3); opacity: .75; }\n.ph-sym { font: 700 12px/1 var(--font-mono); fill: var(--ink-2); }\n.ph-sym.is-low { fill: var(--ser-3); }\n\n");
   /* @use props */
   /* Pictures of the Care chapter, watering: when to water (the finger test) and how (under the root, the
@@ -165,9 +165,8 @@
     upd();
   });
 
-  const svp = T => 0.6108 * Math.exp(17.27 * T / (T + 237.3));
-  const VPD_Z = [[0.4, 'z0', 'Слишком влажно', 'устьица почти не тянут воду, на листьях конденсат — раздолье для ложной мучнистой росы'], [0.8, 'z1', 'Влажно', 'хорошо для рассады и черенков без корней'], [1.2, 'z2', 'Оптимум', 'вода и питание идут к листьям ровно, лист не перегревается'], [1.6, 'z3', 'Сухо', 'растение пьёт много: поливайте чаще, следите за клещом'], [99, 'z4', 'Стресс', 'устьица закрываются, фотосинтез падает, края листьев сохнут']];
-  const zoneOf = v => VPD_Z.find(z => v < z[0]);
+  /* @use agro */
+  const { svp, VPD_Z, zoneOf } = agro;
 
   register('vpd', el => {
     el.innerHTML = h.head('VPD: воздух глазами листа', 'Дефицит давления пара для листа той же температуры, что воздух. Двигайте ползунки или ведите по карте.') +

@@ -463,6 +463,13 @@
   --z2: #A4D37F;
   --z3: #EBD284;
   --z4: #E8A08A;
+  /* the weather for the bushes («Мой базилик»): a cold night, frost, heat, rain */
+  --wx-cold: #3E7FB0;
+  --wx-frost: #5B5BB8;
+  --wx-hot: #C8572E;
+  --wx-rain: #3B8FA6;
+  --wx-cold-soft: #E3EEF7;
+  --wx-hot-soft: #FBE7DD;
   --sun-light: rgba(255, 206, 84, .38);
   --sun-disc: #F2B632;
   --water-fill: rgba(80, 150, 205, .38);
@@ -564,6 +571,12 @@
     --z2: #2F5E26;
     --z3: #5E4D1C;
     --z4: #62291F;
+    --wx-cold: #8DBCE3;
+    --wx-frost: #A9A9F0;
+    --wx-hot: #F0936B;
+    --wx-rain: #7CC4D6;
+    --wx-cold-soft: #1B2C3B;
+    --wx-hot-soft: #3A2219;
     --sun-light: rgba(255, 206, 84, .22);
     --water-fill: rgba(80, 150, 205, .32);
     --water-line: #7FB8E0;
@@ -648,6 +661,12 @@
   --z2: #2F5E26;
   --z3: #5E4D1C;
   --z4: #62291F;
+  --wx-cold: #8DBCE3;
+  --wx-frost: #A9A9F0;
+  --wx-hot: #F0936B;
+  --wx-rain: #7CC4D6;
+  --wx-cold-soft: #1B2C3B;
+  --wx-hot-soft: #3A2219;
   --sun-light: rgba(255, 206, 84, .22);
   --water-fill: rgba(80, 150, 205, .32);
   --water-line: #7FB8E0;

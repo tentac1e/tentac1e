@@ -77,7 +77,7 @@ TAB = {
     'razmnozhenie-cherenki': 'черенки', 'razmnozhenie-semena': 'семена',
     'problemy-diagnostika': 'диагностика', 'problemy-bolezni': 'болезни', 'problemy-vrediteli': 'вредители', 'problemy-profilaktika': 'профилактика',
     'spravka-voprosy': 'вопросы', 'spravka-slovar': 'словарь', 'spravka-chek-list': 'чек-лист',
-    'moy-kusty': 'кусты',
+    'moy-kusty': 'кусты', 'moy-pogoda': 'погода',
 }
 
 

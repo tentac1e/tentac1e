@@ -5,6 +5,8 @@
   // when a task is due, said shortly: «просрочено на 3 дня», «до 12 октября», «в четверг»
   const WEEKDAY = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу'];
   function taskWhen(t, day) {
+    // the weather's: the night or the day it is about
+    if (t.weather) return t.weather === 'heat' ? wxWhen(t.due, day) : wxWhen(t.due, day) + ' ночью';
     if (t.state === 'late') return 'просрочено на ' + daysWord(dayDiff(t.once ? t.to : t.due, day));
     if (t.state === 'now') return !t.once || dayDiff(day, t.to) <= 0 ? 'сегодня' : dayDiff(t.from, t.to) > 40 ? 'в эти месяцы' : 'сейчас, до ' + fd(t.to);
     const n = dayDiff(day, t.due);
@@ -21,7 +23,7 @@
   // cal: in the bush's sheet a task goes into Google Calendar with one tap (the home page stays as it was)
   function taskHtml(p, t, day, cal) {
     const gcal = cal ? `<a class="g-how g-gcal" href="${esc(googleLink(p, t, t.due < day ? day : t.due))}" target="_blank" rel="noopener">В Google Календарь</a>` : '';
-    return `<li class="g-task is-${t.state}">
+    return `<li class="g-task is-${t.state}${t.weather ? ' is-wx is-wx-' + t.weather : ''}">
       <div class="g-task-t"><b>${esc(t.title)}</b><small>${taskWhen(t, day)}</small><p>${nb(t.text)}</p></div>
       <div class="g-task-a"><span class="g-task-l"><a class="g-how" href="#${t.link}">Как?</a>${gcal}</span><button class="g-done" type="button" data-plant="${p.id}" data-task="${t.key}">${icon('check')}<span>Сделано</span></button></div>
     </li>`;
@@ -35,6 +37,7 @@
     const water = lastNote(p, 'water');
     return (w.now.length ? `<ul class="g-tasks">${w.now.map(t => taskHtml(p, t, day, cal)).join('')}</ul>` : `<p class="g-free">На этой неделе дел по плану нет. Поливайте, когда верхние 1–2&nbsp;см грунта сухие.</p>`) +
       (w.next ? `<p class="g-next">Дальше: ${esc(w.next.title.charAt(0).toLowerCase() + w.next.title.slice(1))} — ${fd(w.next.due)}</p>` : '') +
+      wxAdvice(p, day).map(a => `<p class="g-wx g-wx-${a.kind}">${icon(a.kind === 'rain' ? 'drop' : a.kind === 'dry' ? 'wind' : 'sun')}<span>${nb(a.text)}</span></p>`).join('') +
       notesHtml(p) + `<p class="g-water">${water ? 'Полит ' + ago(water, day) + '.' : 'Полив ещё не отмечен.'} <a href="#uhod-poliv">Как понять, что пора</a></p>`;
   }
   function gardenCard(p, day, page) {
@@ -67,6 +70,7 @@
     }
     const common = plants.map(p => plantWeek(p, day).now.find(shared)).filter(Boolean)[0];
     box.innerHTML = `<div class="block-head"><h2 id="${hid}">${page ? 'На этой <em>неделе</em>' : 'Мой <em>базилик</em>'}</h2><p>${page ? fr(mon, sun) : 'На этой неделе · ' + fr(mon, sun)}</p></div>
+      ${wxStrip(plants, page)}
       ${common ? `<ul class="g-tasks g-common">${taskHtml({ id: '*' }, Object.assign({}, common, { title: common.title + ' для всех кустов на окне' }), day)}</ul>` : ''}
       <div class="g-list">${plants.map(p => gardenCard(p, day, page)).join('')}</div>
       <div class="g-foot"><div class="g-foot-a"><button class="btn btn-ghost btn-small" type="button" data-garden-add="seed">${icon('sprout')}Добавить куст</button>${page ? `<button class="btn btn-ghost btn-small" type="button" data-garden-ics="*">${icon('cal')}Дела в календарь</button>` : ''}</div>${keep}</div>${more}`;
@@ -294,7 +298,7 @@
   function gardenExtra(s, keep) {
     const out = {};
     const w = s.where;
-    if (w && isFinite(+w.lat) && isFinite(+w.lon) && Math.abs(+w.lat) <= 90 && Math.abs(+w.lon) <= 180) out.where = { name: String(w.name || '').slice(0, 80), lat: +w.lat, lon: +w.lon };
+    if (w && isFinite(+w.lat) && isFinite(+w.lon) && Math.abs(+w.lat) <= 90 && Math.abs(+w.lon) <= 180) out.where = { name: String(w.name || '').slice(0, 80), region: String(w.region || '').slice(0, 80), lat: +w.lat, lon: +w.lon };
     else if (keep.where) out.where = keep.where;
     if (Array.isArray(s.exps)) out.exps = s.exps.filter(x => x && typeof x.exp === 'string' && fromISO(x.start)).slice(0, 40).map(x => JSON.parse(JSON.stringify(x)));
     else if (keep.exps) out.exps = keep.exps;
@@ -305,9 +309,15 @@
     // the page's own models (the weather, the experiments) read and write the bushes through this
     window.BasilGarden = {
       load: gardenLoad, save: gardenSave, tasks: plantTasks, week: plantWeek, stage: plantStage, open: openGarden,
-      on: fn => document.addEventListener('basil:garden', fn)
+      on: fn => document.addEventListener('basil:garden', fn),
+      weather: { place: wxPlace, get: wxCached, refresh: wxRefresh, search: wxSearch, set: wxSetPlace, here: wxHere, age: wxAge, t: fmtT, when: wxWhen, on: fn => document.addEventListener('basil:weather', fn) }
     };
     renderGardenHome();
+    // the forecast once the page has started (never during the start), and again when the reader comes back to it
+    document.addEventListener('basil:weather', renderGardenHome);
+    const fresh = () => { if (wxPlace()) wxRefresh(); };
+    if (document.documentElement.classList.contains('is-ready')) setTimeout(fresh, 1500); else document.addEventListener('basil:ready', () => setTimeout(fresh, 1500), { once: true });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) fresh(); });
     document.addEventListener('basil:garden', () => { renderGardenHome(); if (gardenOpen && !gardenOpen.form && $('#sheet-garden').open) { const sc = $('#sheet-garden .sheet-inner'), y = sc ? sc.scrollTop : 0; renderGardenSheet(); if (sc) sc.scrollTop = y; } });
     // a day passed while the page stayed open: the week moves on
     document.addEventListener('visibilitychange', () => { if (!document.hidden) renderGardenHome(); });

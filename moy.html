@@ -42,8 +42,8 @@
 @font-face{font-family:'JetBrains Mono Fallback';font-style:normal;src:local('Courier New'), local('Courier'), local('Liberation Mono'), local('Roboto Mono');size-adjust:99.98%;ascent-override:102.02%;descent-override:30.00%;line-gap-override:0.00%}
 @font-face{font-family:'Caveat Fallback';font-style:normal;src:local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Roboto');size-adjust:72.65%;ascent-override:132.15%;descent-override:41.30%;line-gap-override:0.00%}
 </style>
-<link rel="stylesheet" href="assets/css/style.css?v=af76f8f4">
-<link rel="stylesheet" href="assets/css/lab.css?v=9eb59f84">
+<link rel="stylesheet" href="assets/css/style.css?v=3027b789">
+<link rel="stylesheet" href="assets/css/lab.css?v=93a2f8d2">
 </head>
 <body>
 <script>document.documentElement.classList.add('js');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
@@ -344,7 +344,7 @@
       <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-moy"/></svg></span></div>
     </header>
     <div class="subnav-wrap"><nav class="subnav" aria-label="Разделы">
-      <a href="#кусты">Кусты</a>
+      <a href="#кусты">Кусты</a><a href="#погода">Погода</a>
     </nav></div>
 
     <div class="panel is-active" data-panel id="кусты" data-title="Кусты">
@@ -353,6 +353,17 @@
         <h3 id="moy-h1">Как гид считает дела</h3>
         <p>Всё отсчитывается от даты куста — посева, покупки или черенка в воде — и от того, где он растёт. Для балкона и грядки сроки сдвигает климат: от него зависят высадка и осенние заморозки. Отметка «Сделано» или запись в дневнике («Подкормил», «Срезал») переносит следующий раз этого дела.</p>
         <p>Кусты и дневник хранятся только в этом браузере, на сервер ничего не уходит. Копия в файле сбережёт их, если браузер очистит данные сайта, и перенесёт на другой телефон.</p>
+      </div>
+    </div>
+    <div class="panel" data-panel id="погода" data-title="Погода">
+      <div class="lab-tool" data-lab="weather" data-kind="phys"></div>
+      <div class="g-about wx-about">
+        <h3 id="moy-h2">Ночь решает больше, чем день</h3>
+        <p>Базилик родом из тропиков, и холодная ночь бьёт по нему сильнее, чем прохладный день. Ниже +10 °C ферменты листа работают вполсилы — рост встаёт, хотя куст выглядит здоровым. При +5 °C и ниже оболочки клеток густеют, как масло в холодильнике, и перестают пропускать воду и сахар: через день-два листья темнеют пятнами. А при 0 °C вода в клетках замерзает, кристаллы льда рвут их изнутри, и к утру лист становится тёмным и мягким.</p>
+        <h3 id="moy-h3">Воздух глазами листа</h3>
+        <p>Лист всё время отдаёт воду через устьица, и сила, с которой воздух её тянет, — дефицит давления пара, VPD. Это как бельё на верёвке: в сырой день оно сохнет до вечера, в сухой и ветреный — за час. Умеренная тяга нужна — она поднимает воду с питанием от корней к листьям. Слишком слабая оставляет лист мокрым, и это раздолье для грибков. Слишком сильная заставляет устьица закрыться, и вместе с водой встаёт фотосинтез.</p>
+        <h3 id="moy-h4">Откуда прогноз</h3>
+        <p>Прогноз берётся у открытого сервиса Open-Meteo по координатам выбранного места, округлённым примерно до километра; больше туда ничего не уходит. Гид обновляет его раз в три часа, а без сети показывает последний, с пометкой, когда он получен. Погодные дела появляются только у кустов на балконе и грядке: на окне дома ночного холода нет.</p>
       </div>
     </div>
     <nav class="pager" aria-label="Соседние главы"></nav>
@@ -428,10 +439,12 @@
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
 <script src="assets/js/haptics.js?v=8488e836" defer></script>
-<script src="assets/js/data.js?v=45c9ceb1" defer></script>
-<script src="assets/js/pages.js?v=b2933cee" defer></script>
+<script src="assets/js/data.js?v=40a037fc" defer></script>
+<script src="assets/js/pages.js?v=e514bc76" defer></script>
 <script src="assets/js/scene.js?v=f808fa52" defer></script>
 <script src="assets/js/science.js?v=aebc169a" defer></script>
-<script src="assets/js/app.js?v=ac0cbf79" defer></script>
+<script src="assets/js/labs/lib-agro.js?v=ddf66414" defer></script>
+<script src="assets/js/labs/moy.js?v=5dc99288" defer></script>
+<script src="assets/js/app.js?v=961616b5" defer></script>
 </body>
 </html>
