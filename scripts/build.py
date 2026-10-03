@@ -502,6 +502,75 @@ def attr(s):
 BANNER = 'Файл собирает scripts/build.py из {src} — правьте там'
 
 
+def split_selectors(prelude):
+    """a selector list cut at its own commas, not at those inside :is(a, b) or [x="a,b"]"""
+    out, depth, cur, quote = [], 0, '', None
+    for ch in prelude:
+        if quote:
+            quote = None if ch == quote else quote
+        elif ch in '"\'':
+            quote = ch
+        elif ch in '([':
+            depth += 1
+        elif ch in ')]':
+            depth -= 1
+        elif ch == ',' and depth == 0:
+            out.append(cur)
+            cur = ''
+            continue
+        cur += ch
+    return out + [cur]
+
+
+def hover_only(css):
+    """«:hover» only where there is a mouse: a phone puts hover on whatever the finger lands on, and where the finger
+    drags something itself (a sheet, a molecule) no scroll ever takes it off — the row stays lit. Every style rule with
+    :hover goes into @media (hover: hover) in its place (same order, same weight); a list that mixes it with other
+    selectors is split, the others stay as they are. Rules already inside such a @media, and keyframes, are left alone."""
+    cuts = []  # (from, to, new text) for the rules to wrap
+    stack = []  # the preludes of the blocks we are in
+    i, start, n = 0, 0, len(css)
+    while i < n:
+        if css.startswith('/*', i):
+            j = css.find('*/', i + 2)
+            i = n if j < 0 else j + 2
+            continue
+        ch = css[i]
+        if ch in '"\'':
+            j = css.find(ch, i + 1)
+            i = n if j < 0 else j + 1
+            continue
+        if ch == '{':
+            prelude = css[start:i]
+            notes = ''.join(re.findall(r'/\*.*?\*/\s*', prelude, re.S))
+            name = re.sub(r'/\*.*?\*/', '', prelude, flags=re.S).strip()
+            guarded = any(re.match(r'@media[^{]*\(hover:\s*hover\)', p) or re.match(r'@(-webkit-)?keyframes', p) for p in stack)
+            if not name.startswith('@') and ':hover' in name and not guarded:
+                end = css.index('}', i)  # a style rule holds no blocks of its own
+                body = css[i:end + 1]
+                lead = prelude[:len(prelude) - len(prelude.lstrip())]
+                sels = [x.strip() for x in split_selectors(name)]
+                hov, rest = [x for x in sels if ':hover' in x], [x for x in sels if ':hover' not in x]
+                indent = lead.split('\n')[-1]
+                piece = lead + notes + (f'{", ".join(rest)} {body}\n{indent}' if rest else '') + f'@media (hover: hover) {{ {", ".join(hov)} {body} }}'
+                cuts.append((start, end + 1, piece))
+                i = start = end + 1
+                continue
+            stack.append(name)
+            start = i + 1
+        elif ch == '}':
+            if stack:
+                stack.pop()
+            start = i + 1
+        elif ch == ';':
+            start = i + 1
+        i += 1
+    # put back from the end, so that the positions before each cut still hold
+    for a, b, piece in reversed(cuts):
+        css = css[:a] + piece + css[b:]
+    return css
+
+
 def numbered(d, ext):
     """NN-name.ext files of a folder in their number order"""
     files = [f for f in d.glob('*' + ext) if re.match(r'\d+-', f.name)]
@@ -555,8 +624,9 @@ def assemble(src_pages):
     for f in sorted((SRC / 'icons').glob('*.png')):
         shutil.copyfile(f, icons / f.name)
 
+    # every :hover of every sheet only where there is a mouse (hover_only): the sources keep writing plain :hover
     style = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'style', '.css'))
-    (css / 'style.css').write_text(banner(style, 'src/css/style/'), encoding='utf-8')
+    (css / 'style.css').write_text(banner(hover_only(style), 'src/css/style/'), encoding='utf-8')
 
     # models: which page shows which, in page order
     order = [(v, page_labs(src_pages[v])) for v, _ in PAGES]
@@ -572,10 +642,10 @@ def assemble(src_pages):
     for v, labs in order:
         # the chapter's own shared styles (_shared.css: a frame several models use), then each model's
         shared_css = SRC / 'labs' / v / '_shared.css'
-        lab_css[v] = (shared_css.read_text(encoding='utf-8') if shared_css.exists() else '') + ''.join((SRC / 'labs' / v / f'{l}.css').read_text(encoding='utf-8') for l in labs if (SRC / 'labs' / v / f'{l}.css').exists())
+        lab_css[v] = hover_only((shared_css.read_text(encoding='utf-8') if shared_css.exists() else '') + ''.join((SRC / 'labs' / v / f'{l}.css').read_text(encoding='utf-8') for l in labs if (SRC / 'labs' / v / f'{l}.css').exists()))
     lab = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'lab', '.css'))
     assert lab.count('/*@labs*/\n') == 1
-    (css / 'lab.css').write_text(banner(lab.replace('/*@labs*/\n', ''), 'src/css/lab/'), encoding='utf-8')
+    (css / 'lab.css').write_text(banner(hover_only(lab.replace('/*@labs*/\n', '')), 'src/css/lab/'), encoding='utf-8')
 
     frame = (SRC / 'labs' / '_frame.js').read_text(encoding='utf-8')
     out = js / 'labs'

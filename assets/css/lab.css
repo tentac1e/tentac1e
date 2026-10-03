@@ -799,7 +799,7 @@ body::after {
 /* ================= header switch: open every deep dive ================= */
 .deep-toggle { position: relative; }
 .deep-toggle[aria-pressed="true"] { background: var(--sci-chem); border-color: var(--sci-chem); color: var(--surface); }
-.deep-toggle[aria-pressed="true"]:hover { color: var(--surface); }
+@media (hover: hover) { .deep-toggle[aria-pressed="true"]:hover { color: var(--surface); } }
 .deep-toggle::after {
   content: "";
   position: absolute;
@@ -832,7 +832,7 @@ body::after {
   transition: transform .3s var(--ease-float), border-color .2s, color .2s;
 }
 .deep-index a .ico { width: 15px; height: 15px; color: var(--k); }
-.deep-index a:hover { color: var(--ink); border-color: var(--k); transform: translateY(-2px); }
+@media (hover: hover) { .deep-index a:hover { color: var(--ink); border-color: var(--k); transform: translateY(-2px); } }
 .deep-index a[data-kind="chem"], .deep[data-kind="chem"], .lab-tool[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
 .deep-index a[data-kind="phys"], .deep[data-kind="phys"], .lab-tool[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
 .deep-index a[data-kind="bio"], .deep[data-kind="bio"], .lab-tool[data-kind="bio"] { --k: var(--sci-bio); --k-soft: var(--sci-bio-soft); }
@@ -873,7 +873,7 @@ body::after {
   scroll-margin-top: calc(var(--sticky-top) + 70px);
   transition: box-shadow .5s var(--ease-float), border-color .3s;
 }
-.deep:hover { border-color: color-mix(in srgb, var(--k) 55%, var(--line)); }
+@media (hover: hover) { .deep:hover { border-color: color-mix(in srgb, var(--k) 55%, var(--line)); } }
 .deep[open] { box-shadow: var(--shadow-float); }
 .deep > summary {
   display: block;
@@ -892,7 +892,7 @@ body::after {
 .deep > summary::-webkit-details-marker { display: none; }
 .deep > summary::marker { content: ""; }
 .deep-sum { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 16px; align-items: center; }
-.deep > summary:hover { background-position: 0 0, 0 0, 6px 4px, 6px 4px; }
+@media (hover: hover) { .deep > summary:hover { background-position: 0 0, 0 0, 6px 4px, 6px 4px; } }
 .deep-ico {
   position: relative;
   display: grid;
@@ -906,8 +906,8 @@ body::after {
 }
 .deep-ico::after { content: ""; position: absolute; inset: -5px; border-radius: 20px; border: 1.2px dashed color-mix(in srgb, var(--k) 50%, transparent); opacity: 0; transition: opacity .3s; }
 .deep-ico .ico { width: 26px; height: 26px; stroke-width: 1.6; }
-.deep > summary:hover .deep-ico { transform: rotate(-8deg) scale(1.05); border-radius: 50%; }
-.deep > summary:hover .deep-ico::after { opacity: 1; animation: spin 10s linear infinite; border-radius: 50%; }
+@media (hover: hover) { .deep > summary:hover .deep-ico { transform: rotate(-8deg) scale(1.05); border-radius: 50%; } }
+@media (hover: hover) { .deep > summary:hover .deep-ico::after { opacity: 1; animation: spin 10s linear infinite; border-radius: 50%; } }
 .deep-head { display: grid; gap: 3px; min-width: 0; }
 .deep-kind { font: 500 .7rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
 .deep-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.28rem, 2.2vw, 1.55rem); line-height: 1.08; color: var(--ink); text-wrap: balance; }
@@ -1013,7 +1013,7 @@ body::after {
 .lab-chips { margin: 0; }
 .lab-chips .chip { padding: .42em .9em; font-size: .82rem; }
 .lab-tool .chip[aria-pressed="true"], .lab-tool .seg button[aria-pressed="true"] { background: var(--k); border-color: var(--k); color: var(--surface); }
-.lab-tool .chip:hover { border-color: var(--k); }
+@media (hover: hover) { .lab-tool .chip:hover { border-color: var(--k); } }
 .lab-tool input[type="range"].range::-webkit-slider-runnable-track { background: linear-gradient(90deg, var(--k-soft), color-mix(in srgb, var(--k) 60%, var(--k-soft)), var(--k)); }
 .lab-tool input[type="range"].range::-moz-range-track { background: linear-gradient(90deg, var(--k-soft), color-mix(in srgb, var(--k) 60%, var(--k-soft)), var(--k)); }
 .lab-tool input[type="range"].range::-webkit-slider-thumb { background: var(--k); }
@@ -1239,7 +1239,8 @@ body::after {
   cursor: pointer;
   transition: background-color .2s;
 }
-.depth-pop button:hover, .depth-pop button:focus-visible { background: var(--surface-2); outline: none; }
+.depth-pop button:focus-visible { background: var(--surface-2); outline: none; }
+@media (hover: hover) { .depth-pop button:hover { background: var(--surface-2); outline: none; } }
 .depth-pop button[aria-checked="true"] { background: var(--sci-chem-soft); }
 .depth-pop b { display: block; font-size: .95rem; }
 .depth-pop small { display: block; font-size: .78rem; line-height: 1.3; color: var(--ink-3); }
@@ -1262,7 +1263,7 @@ body::after {
   cursor: pointer;
   transition: background-color .25s, color .25s, transform .35s var(--ease-float);
 }
-.depth-seg button:hover { background: var(--surface-2); transform: translateY(-2px); }
+@media (hover: hover) { .depth-seg button:hover { background: var(--surface-2); transform: translateY(-2px); } }
 .depth-seg button b { font-size: .95rem; }
 .depth-seg button small { font-size: .74rem; line-height: 1.25; color: var(--ink-3); }
 .depth-seg .depth-dots { height: 20px; margin-bottom: 4px; }
@@ -1288,7 +1289,7 @@ body::after {
   transition: background-color .2s, color .2s, transform .35s var(--ease-float);
 }
 @media (pointer: coarse) { .deep-close { min-height: 40px; } }
-.deep-close:hover { background: var(--k); color: var(--surface); transform: translateY(-2px); }
+@media (hover: hover) { .deep-close:hover { background: var(--k); color: var(--surface); transform: translateY(-2px); } }
 
 .deeper {
   position: relative;
@@ -1315,7 +1316,7 @@ body::after {
 .deeper-plus::before, .deeper-plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 1.6px; margin: -.8px 0 0 -5px; background: var(--k); }
 .deeper-plus::after { transform: rotate(90deg); }
 .deeper[open] .deeper-plus { transform: rotate(135deg); background: var(--k-soft); }
-.deeper > summary:hover .deeper-t { color: var(--k); }
+@media (hover: hover) { .deeper > summary:hover .deeper-t { color: var(--k); } }
 .deeper-body { padding: 2px 20px 18px; }
 .deeper-body > p { max-width: 68ch; color: var(--ink-2); font-size: .95rem; }
 .deeper-body > p b { color: var(--ink); }
@@ -1354,7 +1355,7 @@ body::after {
   transition: transform .5s var(--ease-float), box-shadow .5s var(--ease-float);
 }
 .sci-note:nth-child(even) { transform: rotate(.45deg); }
-.sci-note:hover { transform: rotate(0) translateY(-3px); box-shadow: var(--shadow-float); }
+@media (hover: hover) { .sci-note:hover { transform: rotate(0) translateY(-3px); box-shadow: var(--shadow-float); } }
 .sci-note::after { content: ""; position: absolute; top: -8px; left: 50%; width: 64px; height: 16px; margin-left: -32px; border-radius: 2px; background: color-mix(in srgb, var(--k) 22%, var(--surface)); opacity: .8; transform: rotate(-2deg); }
 .sci-note[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
 .sci-note[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
@@ -1364,7 +1365,7 @@ body::after {
 .sci-note-k .hand { font-size: 1.35rem; color: var(--k); }
 .sci-note p { margin: 0; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
 .sci-note-link { justify-self: start; margin-top: 2px; font: 500 .74rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
-.sci-note-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+@media (hover: hover) { .sci-note-link:hover { color: var(--ink); border-bottom-color: var(--ink); } }
 /* a finger finds the small link in a zone of about 40 px */
 @media (pointer: coarse) { .sci-note-link { position: relative; } .sci-note-link::after { content: ""; position: absolute; inset: -12px -6px; } }
 
@@ -1388,8 +1389,8 @@ body::after {
   transition: box-shadow .5s var(--ease-float), border-color .3s, transform .5s var(--ease-float);
 }
 .recipe-card[hidden] { display: none; }
-.recipe-card:hover { border-color: color-mix(in srgb, var(--rc) 45%, var(--line)); }
-.recipe-card:not([open]):hover { transform: translateY(-3px); box-shadow: var(--shadow-float); }
+@media (hover: hover) { .recipe-card:hover { border-color: color-mix(in srgb, var(--rc) 45%, var(--line)); } }
+@media (hover: hover) { .recipe-card:not([open]):hover { transform: translateY(-3px); box-shadow: var(--shadow-float); } }
 .recipe-card[open], .recipe-card.is-feat { grid-column: 1 / -1; }
 .recipe-card[open] { box-shadow: var(--shadow-float); }
 .recipe-card[data-cat="drink"] { --rc: var(--sci-phys); }
@@ -1402,7 +1403,7 @@ body::after {
 .rc-sum { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 14px; align-items: center; }
 .rc-ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: color-mix(in srgb, var(--rc) 12%, var(--surface)); color: var(--rc); transition: transform .6s var(--ease-float); }
 .rc-ico .ico { width: 24px; height: 24px; }
-.recipe-card > summary:hover .rc-ico { transform: rotate(-10deg) scale(1.06); }
+@media (hover: hover) { .recipe-card > summary:hover .rc-ico { transform: rotate(-10deg) scale(1.06); } }
 .rc-head { display: grid; gap: 2px; min-width: 0; }
 .rc-cat { font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--rc); }
 .rc-title { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.1; color: var(--ink); text-wrap: balance; }
@@ -1440,7 +1441,7 @@ body::after {
 .rc-sci-k .ico { width: 16px; height: 16px; }
 .rc-sci p { margin: 0; font-size: .92rem; color: var(--ink-2); max-width: 72ch; }
 .rc-sci a { justify-self: start; font: 500 .76rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
-.rc-sci a:hover { color: var(--ink); }
+@media (hover: hover) { .rc-sci a:hover { color: var(--ink); } }
 @media (max-width: 640px) {
   .rc-sum, .recipe-card.is-feat .rc-sum { grid-template-columns: 40px minmax(0, 1fr) 34px; gap: 12px; }
   .rc-ico, .recipe-card.is-feat .rc-ico { width: 40px; height: 40px; }
@@ -1448,7 +1449,8 @@ body::after {
 }
 @media (prefers-reduced-motion: reduce) {
   .depth-pop { animation: none; }
-  .sci-note, .sci-note:nth-child(even), .sci-note:hover { transform: none; }
+  .sci-note, .sci-note:nth-child(even) { transform: none; }
+  @media (hover: hover) { .sci-note:hover { transform: none; } }
 }
 
 /* ================= paint isolation =================
@@ -1484,7 +1486,7 @@ body::after {
 .resume-go b { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: .92rem; line-height: 1.25; }
 .resume-x { flex-shrink: 0; width: 44px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--ink-3); cursor: pointer; }
 .resume-x .ico { width: 16px; height: 16px; }
-.resume-x:hover { color: var(--ink); }
+@media (hover: hover) { .resume-x:hover { color: var(--ink); } }
 
 /* end of a tab: the next one */
 .panel-next {
@@ -1507,8 +1509,8 @@ body::after {
 .panel-next small { font: 500 .7rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 .panel-next b { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.1; }
 .panel-next .ico { flex-shrink: 0; width: 22px; height: 22px; padding: 9px; box-sizing: content-box; border-radius: 50%; background: var(--basil); color: var(--on-basil); transition: transform .35s var(--ease-float); }
-.panel-next:hover { border-color: var(--basil); transform: translateY(-2px); color: var(--ink); }
-.panel-next:hover .ico { transform: translateX(3px); }
+@media (hover: hover) { .panel-next:hover { border-color: var(--basil); transform: translateY(-2px); color: var(--ink); } }
+@media (hover: hover) { .panel-next:hover .ico { transform: translateX(3px); } }
 
 /* home: «Продолжить чтение» never wider than the screen */
 .continue { max-width: 100%; }
@@ -1517,7 +1519,8 @@ body::after {
 /* haptics switch in the depth menu */
 .depth-pop .depth-hap { margin-top: 6px; border-top: 1px solid var(--line); border-radius: 0 0 14px 14px; }
 .depth-pop .depth-hap[aria-checked] { background: none; }
-.depth-pop .depth-hap:hover, .depth-pop .depth-hap:focus-visible { background: var(--surface-2); }
+.depth-pop .depth-hap:focus-visible { background: var(--surface-2); }
+@media (hover: hover) { .depth-pop .depth-hap:hover { background: var(--surface-2); } }
 .hap-switch { position: relative; justify-self: center; width: 30px; height: 18px; border-radius: 9px; background: var(--line-strong); transition: background-color .2s; }
 .hap-switch::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface); transition: transform .25s var(--ease-float); }
 .depth-hap[aria-checked="true"] .hap-switch { background: var(--basil); }

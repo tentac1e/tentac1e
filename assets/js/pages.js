@@ -620,10 +620,10 @@ window.BASIL_PAGES = {
    "udobreniya": "f58f15d9",
    "formirovka": "54a87f1b",
    "urozhay": "1760db14",
-   "vkus": "78b30d48",
+   "vkus": "fbb3e8f3",
    "razmnozhenie": "2ce62c01",
    "problemy": "b6cf55d9",
-   "moy": "300cd785"
+   "moy": "9600ef4e"
   },
   "lib": {
    "micro": "bbc6c98e",

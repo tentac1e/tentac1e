@@ -4,8 +4,31 @@
        горизонтальный — вокруг вертикальной; два хода подряд — через «голову», без упора;
        свайп рядом с ней — страница листается;
      высота сцены на коротком телефоне — не больше 45 % экрана; компьютер — мышью вверх-вниз так же без упора.
+   Подсветка под пальцем не залипает: в собранных стилях нет «:hover» вне @media (hover: hover); на телефоне
+   наведение (включённое принудительно, как его ставит палец) не меняет вид строк оглавления, карточек и кнопок,
+   на компьютере — меняет; подсветка нажатия у шторки и карточек прозрачная.
    node tests/gestures.js   (сборка в корне: python3 scripts/build.py) */
-const { playwright, ok, done, watch, fileUrl } = require('./lib');
+const fs = require('fs');
+const path = require('path');
+const { playwright, ok, done, watch, fileUrl, ROOT } = require('./lib');
+
+// the style rules with «:hover» that no @media (hover: hover) holds: a finger leaves those lit on a phone
+function bareHover(css) {
+  css = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const stack = [], bare = [];
+  let start = 0;
+  for (let i = 0; i < css.length; i++) {
+    const ch = css[i];
+    if (ch === '"' || ch === "'") { const j = css.indexOf(ch, i + 1); i = j < 0 ? css.length : j; continue; }
+    if (ch === '{') {
+      const prelude = css.slice(start, i).trim();
+      stack.push(prelude);
+      if (!prelude.startsWith('@') && /:hover/.test(prelude) && !stack.some(p => /^@media[^{]*\(hover:\s*hover\)/.test(p)) && !stack.some(p => /^@(-webkit-)?keyframes/.test(p))) bare.push(prelude.replace(/\s+/g, ' '));
+      start = i + 1;
+    } else if (ch === '}') { stack.pop(); start = i + 1; } else if (ch === ';') start = i + 1;
+  }
+  return bare;
+}
 
 // the turn of B against A (rows of 3×3 matrices): the angle in degrees and the axis on the screen
 function turned(A, B) {
@@ -129,6 +152,64 @@ function turned(A, B) {
   const m1 = await d.evaluate(() => { const c = document.getElementById('home-molecule'); return c.molView && c.molView.turn; });
   t = turned(m0.turn, m1);
   ok(t.ang > 90 && Math.abs(t.axis[0]) > 0.9, `mouse down the molecule: ${t.ang}° round ${t.axis}`);
+
+  // ---------- the finger does not leave things lit ----------
+  // every style the site sends: the two sheets and each chapter's model styles (styleFor in its file)
+  const sheets = ['style.css', 'lab.css'].map(n => [n, fs.readFileSync(path.join(ROOT, 'assets/css', n), 'utf8')]);
+  for (const f of fs.readdirSync(path.join(ROOT, 'assets/js/labs')).filter(x => x.endsWith('.js'))) {
+    const js = fs.readFileSync(path.join(ROOT, 'assets/js/labs', f), 'utf8');
+    for (const m of js.matchAll(/styleFor\("[a-z]+", ("(?:[^"\\]|\\.)*")\)/g)) sheets.push([f, JSON.parse(m[1])]);
+  }
+  const bare = sheets.flatMap(([n, css]) => bareHover(css).map(s => `${n}: ${s}`));
+  ok(sheets.length > 8 && !bare.length, `every «:hover» is held by @media (hover: hover) — ${sheets.length} style sheets${bare.length ? `; ${bare.length} not: ${bare.slice(0, 4).join(' | ')}` : ''}`);
+
+  // a finger puts «hover» on what it lands on (a phone does; the emulator does not, so it is forced here):
+  // on a phone it changes nothing, with a mouse it still lights things up
+  const LOOK = ['background-color', 'border-color', 'color', 'transform', 'translate', 'rotate', 'box-shadow'];
+  const TARGETS = {
+    'udobreniya.html': ['#sheet-toc .toc-item[data-toc="sorta"] .toc-link', '#sheet-toc .toc-item[data-toc="udobreniya"] .toc-sub li:nth-child(2) a', '#sheet-toc .toc-item[data-toc="vkus"] .toc-tog', '.subnav a:nth-child(3)'],
+    'index.html': ['#tools-home .tool', '#theme-toggle', '#home-mol-chips .chip[aria-pressed="false"]']
+  };
+  const hovered = async (mode, opt) => {
+    const c = await browser.newContext({ ...opt, reducedMotion: 'reduce' });
+    const p = await c.newPage();
+    watch(p, errs);
+    const cdp = await c.newCDPSession(p);
+    await cdp.send('DOM.enable');
+    await cdp.send('CSS.enable');
+    const out = [];
+    for (const [file, sels] of Object.entries(TARGETS)) {
+      await p.goto(fileUrl(file), { waitUntil: 'load' });
+      await p.waitForTimeout(700);
+      if (file === 'udobreniya.html') {
+        await p.click(mode === 'phone' ? '.tabbar [data-open="sheet-toc"]' : '.topbar .toc-btn');
+        await p.waitForTimeout(600);
+      }
+      const { root } = await cdp.send('DOM.getDocument', { depth: -1 });
+      for (const sel of sels) {
+        const look = () => p.evaluate(([s, props]) => { const e = document.querySelector(s); if (!e) return null; const cs = getComputedStyle(e); return props.map(k => cs.getPropertyValue(k)).join(' | '); }, [sel, LOOK]);
+        const before = await look();
+        const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector: sel });
+        if (!before || !nodeId) { out.push({ sel, missing: true }); continue; }
+        await cdp.send('CSS.forcePseudoState', { nodeId, forcedPseudoClasses: ['hover'] });
+        await p.waitForTimeout(500);
+        const after = await look();
+        await cdp.send('CSS.forcePseudoState', { nodeId, forcedPseudoClasses: [] });
+        out.push({ sel, changed: before !== after });
+      }
+    }
+    const tap = mode === 'phone' && await p.evaluate(() => ['#sheet-toc', '.tools-group', '.sh-mol', 'main'].map(s => [s, getComputedStyle(document.querySelector(s)).webkitTapHighlightColor]));
+    await c.close();
+    return { out, tap };
+  };
+  const ph = await hovered('phone', devices['Pixel 7']);
+  const lit = ph.out.filter(x => x.missing || x.changed).map(x => x.sel + (x.missing ? ' (not found)' : ''));
+  ok(!lit.length, `phone: a finger's «hover» leaves ${ph.out.length} menu rows, tabs, cards and buttons as they were${lit.length ? ' — lit: ' + lit.join(', ') : ''}`);
+  const flash = ph.tap.filter(([, c]) => c !== 'rgba(0, 0, 0, 0)');
+  ok(!flash.length, `phone: no tap flash on the sheet, the tool groups, the molecule's stage, the page${flash.length ? ' — ' + flash.map(([s, c]) => `${s} ${c}`).join(', ') : ''}`);
+  const dk = await hovered('desktop', { viewport: { width: 1280, height: 900 } });
+  const dull = dk.out.filter(x => x.missing || !x.changed).map(x => x.sel + (x.missing ? ' (not found)' : ''));
+  ok(!dull.length, `computer: the mouse still lights up ${dk.out.length} rows, tabs, cards and buttons${dull.length ? ' — not: ' + dull.join(', ') : ''}`);
 
   await browser.close();
   done(errs);

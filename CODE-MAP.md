@@ -116,8 +116,8 @@
 - `src/css/style/01-base.css`: `.skip`, `.eyebrow`, `.mono`, `.num`, `.muted`, `.ico`, `.sprite`, `.lead`, `.hand`
 - `src/css/style/02-ambient.css`: `.aura`, `.sky-*`, `.is-off`, `.is-asleep`, `.page`, `.wrap` · анимации: `drift`, `sky-breathe`, `sky-sway`, `sky-moon`
 - `src/css/style/03-header.css`: `.search-*`, `.tab-*`, `.garden-*`, `.brand`, `.topbar-*`, `.is-active`, `.progress`, `.ico`, `.icon-*`, `.tabbar`
-- `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.g-link`, `.table-*`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
-- `src/css/style/05-views.css`: `.view`, `.is-active`, `.js`, `.panel`, `.is-entering`, `.vtypes`, `.storage`, `.tool`, `.tools-*`, `.quick`, `.card`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
+- `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.table-*`, `.g-link`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
+- `src/css/style/05-views.css`: `.is-active`, `.view`, `.js`, `.panel`, `.is-entering`, `.principles`, `.chapters`, `.step`, `.ch-card`, `.tools-*`, `.quick`, `.storage` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
 - `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
 - `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`, `.ar-coty`, `.ar-seed`
 - `src/css/style/08-home.css`: `.hero-*`, `.journey`, `.passport-*`, `.ch-card`, `.q-card`, `.facts`, `.season-*`, `.ch-art`, `.rule-*`, `.continue`, `.tool`, `.sprig-*` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
@@ -134,13 +134,13 @@
 - `src/css/style/19-reference.css`: `.check-*`, `.faq-*`, `.gloss-*`, `.bar`, `.glossary`, `.ico`
 - `src/css/style/20-footer.css`: `.footer-*`, `.to-top`, `.brand`, `.is-shown`
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.sr-group`, `.sr-note`, `.sr-ico`, `.is-found`, `.is-dragging` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `search-in`, `is-found`
-- `src/css/style/22-selection.css`: `.chip`, `.lab-*`, `.sim-*`, `.depth-*`, `.deep-*`, `.nav`, `.ch-hero-*`, `.season-*`, `.wheel-*`, `.tabbar`, `.pager`, `.btn`
+- `src/css/style/22-selection.css`: `.lab-*`, `.depth-*`, `.sim-*`, `.seg`, `.pager`, `.hero-*`, `.season-*`, `.chip`, `.ch-hero-*`, `.nav`, `.plant-*`, `.tabbar`
 - `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-photo-*`, `.g-form-*`, `.photo-*`, `.g-wx-*`, `.mini-*`
-- `src/css/style/24-toc.css`: `.toc-*`, `.sheet-*`, `.ico`, `.tools-*`, `.is-open`, `.garden-*`, `.is-closing`, `.t-where`, `.tool` · анимации: `toc-drop`
+- `src/css/style/24-toc.css`: `.toc-*`, `.sheet-*`, `.ico`, `.tools-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where` · анимации: `toc-drop`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
-- `src/css/lab/00-micro.css`: `.mic-*`, `.is-burst`, `.is-pale`, `.is-cap`, `.is-film`, `.is-done`, `.is-sel`, `.has-*` · анимации: `mic-fly`
+- `src/css/lab/00-micro.css`: `.mic-*`, `.is-burst`, `.is-pale`, `.is-film`, `.is-cap`, `.is-done`, `.has-*`, `.is-sel` · анимации: `mic-fly`
 - `src/css/lab/00-tokens.css`: `.sr-only`
 - `src/css/lab/01-hero.css`: `.pot-*`, `.hero-*`, `.aroma-*`, `.plant-*`, `.passport`, `.pl-stem-*`, `.pl-leaf`, `.is-purple`, `.pl-scar`, `.pl-pet`, `.pl-fold`, `.pl-shine` · анимации: `aroma-rise`, `label-rise`
 - `src/css/lab/03-deep-switch.css`: `.deep-*`
@@ -149,21 +149,21 @@
 - `src/css/lab/06-lab-tools.css`: `.lab-*`, `.zone-*`, `.gdd-*`, `.fam-*`, `.line`, `.legend`, `.range`, `.band-*`, `.s1`, `.s2`, `.s3`, `.mol-*` · анимации: `shimmer`
 - `src/css/lab/07-vkus.css`: `.world-*`, `.cols-*`, `.kitchen-*`
 - `src/css/lab/08-home-science.css`: `.sh-kinds`, `.sh-mol`, `.sh-text`, `.science-*`, `.mol-*`, `.eyebrow`, `.is-total`, `.ico`, `.chips-*`, `.chip`
-- `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.deep-*`, `.ch-card`, `.rule`, `.q-card`, `.tool`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o` · анимации: `fade-out`
+- `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.deep-*`, `.tool`, `.ch-card`, `.q-card`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o` · анимации: `fade-out`
 - `src/css/lab/10-depth.css`: `.depth-*`, `.deep-*` · анимации: `pop-in`
 - `src/css/lab/11-deep-footer.css`: `.deeper-*`, `.deep-*`, `.eq`, `.is-deeper`
 - `src/css/lab/12-sci-notes.css`: `.sci-*`, `.ico`, `.hand`
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
-- `src/css/lab/14-paint.css`: `.plant-*`, `.germ-*`, `.barrel-*`, `.xylem`, `.is-off`, `.phloem`, `.pl-stems`, `.nc-flow`, `.osm-*`, `.lab-*`
+- `src/css/lab/14-paint.css`: `.plant-*`, `.osm-*`, `.is-off`, `.barrel-*`, `.nc-flow`, `.lab-*`, `.germ-*`, `.pl-stems`, `.phloem`, `.xylem`
 - `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.depth-*`, `.ico`, `.hap-*`, `.continue`, `.is-shown`
 
 ### стили моделей и глав
-- `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.lab-*`, `.auxin-*`
+- `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
 - `src/labs/moy/_shared.css`: `.exp-*`, `.btn`, `.is-done`, `.is-now`, `.is-missed`, `.s1`, `.s2`, `.s3`, `.g-link`, `.ico`, `.is-model`, `.is-none`
-- `src/labs/moy/weather.css`: `.wx-day`, `.wx-vpd`, `.band`, `.lab-*`, `.wx-find-*`, `.wx-place-*`, `.wx-n`, `.is-hot`, `.wx-pick`, `.wx-x`, `.wx-r`, `.wx-s`
+- `src/labs/moy/weather.css`: `.wx-day`, `.wx-vpd`, `.band`, `.lab-*`, `.wx-find-*`, `.wx-place-*`, `.wx-n`, `.is-hot`, `.wx-pick`, `.wx-x`, `.wx-s`, `.wx-r`
 - `src/labs/posadka/germ.css`: `.germ-*`, `.is-stopped` · анимации: `g-gel`, `g-root`, `g-hypo`, `g-coty`
-- `src/labs/posadka/perched.css`: `.per-*`, `.is-water`, `.tick`
-- `src/labs/posadka/shade.css`: `.rfr-*`, `.shade-*`, `.lab-*`
+- `src/labs/posadka/perched.css`: `.per-*`, `.tick`, `.is-water`
+- `src/labs/posadka/shade.css`: `.rfr-*`, `.lab-*`, `.shade-*`
 - `src/labs/posadka/window.css`: `.win-*`
 - `src/labs/problemy/aphid.css`: `.ap-grid`, `.ap-shoot`
 - `src/labs/problemy/dm.css`: `.dm-gauge`, `.dm-leaf`, `.dm-out`, `.g-track`, `.g-low`, `.g-mid`, `.g-high`, `.g-needle`, `.g-hub`, `.dm-level`, `.ill-*`, `.dm-cap`
@@ -250,16 +250,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1041`
-- `{{description}}` в `src/layout.html` — `build.py:1041`
-- `{{pwa}}` в `src/layout.html` — `build.py:1057`
-- `{{fonts}}` в `src/layout.html` — `build.py:1056`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1039`
-- `{{content}}` в `src/layout.html` — `build.py:1037`
-- `{{toc}}` в `src/layout.html` — `build.py:1039`
-- `{{scripts}}` в `src/layout.html` — `build.py:1055`
-- `{{version}}` в `src/sw.js` — `build.py:1138`
-- `{{precache}}` в `src/sw.js` — `build.py:1138`
+- `{{title}}` в `src/layout.html` — `build.py:1111`
+- `{{description}}` в `src/layout.html` — `build.py:1111`
+- `{{pwa}}` в `src/layout.html` — `build.py:1127`
+- `{{fonts}}` в `src/layout.html` — `build.py:1126`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1109`
+- `{{content}}` в `src/layout.html` — `build.py:1107`
+- `{{toc}}` в `src/layout.html` — `build.py:1109`
+- `{{scripts}}` в `src/layout.html` — `build.py:1125`
+- `{{version}}` в `src/sw.js` — `build.py:1208`
+- `{{precache}}` в `src/sw.js` — `build.py:1208`
 
 ## Проверки
 
@@ -270,7 +270,7 @@
 - `tests/controls.js` — Каждая кнопка на каждой вкладке каждой страницы — на телефоне и компьютере, с раскрытыми «Глубже»: · корень · все страницы
 - `tests/gallery.js` — Every illustration of a chapter on one sheet, to look at them together: the pictures the page shows · корень · index.html
 - `tests/garden.js` — «Мой базилик» на телефоне и компьютере: пустой блок, куст через форму, дела на неделю, «Сделано», · корень · index.html, sorta.html, moy.html
-- `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html
+- `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html, udobreniya.html
 - `tests/ills.js` — Картинки (data-ill) на каждой вкладке каждой страницы. · сервер + корень · все страницы
 - `tests/labs.js` — Каждая модель на своей странице: запускается без ошибок, ничего не вылезает за край, · корень · все страницы
 - `tests/nav.js` — Навигация на телефоне и компьютере: страница открывается сверху, «Вы остановились здесь», · сервер
