@@ -36,6 +36,17 @@ const PLACES = { results: [
   { name: 'Воронеж', latitude: 51.67204, longitude: 39.1843, admin1: 'Воронежская область', country: 'Россия', timezone: 'Europe/Moscow' },
   { name: 'Воронеж', latitude: 50.84, longitude: 37.53, admin1: 'Курская область', country: 'Россия', timezone: 'Europe/Moscow' }
 ] };
+// experiments going on: [experiment, hours since the start, settings, records [hours, group, values], what the conclusion says]
+const EXP_RUNS = [
+  ['litmus', 0.3, {}, [[0.2, 0, { ph: 7 }], [0.2, 1, { ph: 3 }], [0.2, 2, { ph: 8 }]], /Работает как лакмус/],
+  ['osmos', 7, { tsp: 1 }, [[0, 0, { firm: 3 }], [0, 1, { firm: 3 }], [1, 0, { firm: 3 }], [1, 1, { firm: 2 }], [3, 0, { firm: 3 }], [3, 1, { firm: 1 }]], /забрала у листа упругость за 3/],
+  ['germ', 5 * 24, { tA: 24, tB: 17, n: 10 }, [[24, 0, { cnt: 0 }], [24, 1, { cnt: 0 }], [48, 0, { cnt: 1 }], [48, 1, { cnt: 0 }], [72, 0, { cnt: 4 }], [72, 1, { cnt: 0 }], [96, 0, { cnt: 8 }], [96, 1, { cnt: 1 }]], /половина семян проросла/],
+  ['sweat', 50, {}, [[0, 0, { g: 812, t: 22, rh: 40 }], [12, 0, { g: 798, t: 24, rh: 35 }], [24, 0, { g: 790, t: 20, rh: 60 }], [36, 0, { g: 776, t: 25, rh: 30 }], [48, 0, { g: 770, t: 21, rh: 55 }]], /Куст отдаёт воздуху около \d+/],
+  ['light', 80, {}, [[0, 0, { deg: 0 }], [24, 0, { deg: 20 }], [48, 0, { deg: 32 }], [60, 0, { deg: -10 }], [72, 0, { deg: 8 }]], /снова встала к свету за 24/],
+  ['apex', 15 * 24, { plants: [null, null] }, [[0, 0, { tops: 1, hcm: 12 }], [0, 1, { tops: 1, hcm: 13 }], [168, 0, { tops: 2, hcm: 14 }], [168, 1, { tops: 1, hcm: 17 }], [336, 0, { tops: 2, hcm: 16 }], [336, 1, { tops: 1, hcm: 22 }]], /У прищипнутого куста 2 верхушки, у нетронутого — 1/],
+  ['roots', 9 * 24, { tA: 24, tB: 18 }, [[48, 0, { mm: 0 }], [48, 1, { mm: 0 }], [96, 0, { mm: 0 }], [96, 1, { mm: 0 }], [144, 0, { mm: 5 }], [144, 1, { mm: 0 }], [192, 0, { mm: 15 }], [192, 1, { mm: 0 }]], /первые корешки — к 6-му дню/],
+  ['dark', 6.5 * 24, {}, [[24, 0, { mm: 4, col: 2 }], [24, 1, { mm: 10, col: 0 }], [72, 0, { mm: 9 }], [72, 1, { mm: 30, col: 0 }], [120, 0, { mm: 18 }], [120, 1, { mm: 52, col: 0 }], [144, 1, { mm: 56, col: 1 }]], /В темноте ростки в 2,9 раза выше/]
+];
 const bushes = () => ({ v: 2, plants: [
   { id: 'b1', name: 'Балконный', variety: '', start: 'shop', place: 'balcony', preset: 'temperate', date: iso(-30), added: iso(-30), log: [] },
   { id: 'g1', name: 'На грядке', variety: '', start: 'seedling', place: 'garden', preset: 'temperate', date: iso(-30), added: iso(-30), log: [] },
@@ -139,6 +150,53 @@ const bushes = () => ({ v: 2, plants: [
     const r2 = await page.evaluate(audit);
     const bad2 = [...r2.A.map(x => 'A ' + x), ...r2.B.map(x => 'B ' + x), ...r2.C.map(x => 'C ' + x)];
     ok(!bad2.length, M + 'the bushes with the weather lay out clean' + (bad2.length ? '\n    ' + bad2.slice(0, 8).join('\n    ') : ''));
+
+    // 6. the experiments, going on with records: each draws its chart and says what the numbers mean
+    await page.evaluate(runs => {
+      const H = 3600e3, now = Date.now(), p = n => String(n).padStart(2, '0');
+      const iso = ms => { const d = new Date(ms); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; };
+      const exps = runs.map(([exp, ago, cfg, recs], i) => { const t0 = now - ago * H; return { id: 'x' + i, exp, start: iso(t0), t0, cfg, done: [0], recs: recs.map(([h, g, v]) => ({ at: t0 + h * H + g, g, v })) }; });
+      localStorage.setItem('basil-garden', JSON.stringify({ v: 2, plants: [], exps }));
+    }, EXP_RUNS);
+    // from another page: the same page with only a new anchor would not load again
+    await page.goto(fileUrl('index.html'), { waitUntil: 'load' });
+    await page.goto(fileUrl('moy.html#опыты'), { waitUntil: 'load' });
+    await page.waitForTimeout(800);
+    const opened = await page.evaluate(() => [...document.querySelectorAll('.exp-card[open]')].length);
+    const seen = {};
+    for (const [exp] of EXP_RUNS) {
+      await page.evaluate(id => document.querySelector(`#opyt-${id} .lab-tool`).scrollIntoView({ block: 'center', behavior: 'instant' }), exp);
+      await page.waitForFunction(id => document.querySelector(`#opyt-${id} .lab-tool[data-ready]`), exp, { timeout: 6000 }).catch(() => {});
+      await page.waitForTimeout(250);
+      seen[exp] = await page.evaluate(id => {
+        const el = document.querySelector(`#opyt-${id} .lab-tool`);
+        return { chart: el.querySelectorAll('svg.lab-svg circle').length + el.querySelectorAll('.exp-lt-sw').length, verdict: ((el.querySelector('.exp-verdict') || {}).textContent || '').replace(/\u00a0/g, ' '), steps: el.querySelectorAll('.exp-steps li').length };
+      }, exp);
+    }
+    const missing = EXP_RUNS.filter(([exp, , , , says]) => !(seen[exp] && seen[exp].chart > 0 && seen[exp].steps > 0 && says.test(seen[exp].verdict))).map(([exp]) => `${exp}: ${JSON.stringify(seen[exp])}`);
+    ok(opened === EXP_RUNS.length && !missing.length, M + `${EXP_RUNS.length} experiments going on: open, a chart each, a conclusion against the model` + (missing.length ? '\n    ' + missing.join('\n    ') : ''));
+    const r3 = await page.evaluate(audit);
+    const bad3 = [...r3.A.map(x => 'A ' + x), ...r3.B.map(x => 'B ' + x), ...r3.C.map(x => 'C ' + x)];
+    ok(!bad3.length, M + 'the experiments tab lays out clean' + (bad3.length ? '\n    ' + bad3.slice(0, 8).join('\n    ') : ''));
+
+    // a record through the form, then the end: the run goes into the history with its conclusion
+    await page.evaluate(() => document.querySelector('#opyt-osmos .lab-tool').scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await page.click('#opyt-osmos [data-f="firm"][data-g="0"][data-v="3"]');
+    await page.click('#opyt-osmos [data-f="firm"][data-g="1"][data-v="0"]');
+    await page.click('#opyt-osmos [data-ex-form] button[type="submit"]');
+    await page.waitForTimeout(400);
+    const rec = await page.evaluate(() => { const x = JSON.parse(localStorage.getItem('basil-garden')).exps.find(e => e.exp === 'osmos'); return { n: x.recs.length, done: x.done }; });
+    await page.click('#opyt-osmos [data-ex-end]');
+    await page.waitForTimeout(400);
+    const ended = await page.evaluate(() => { const x = JSON.parse(localStorage.getItem('basil-garden')).exps.find(e => e.exp === 'osmos'); return { end: !!x.end, verdict: x.verdict || '', past: document.querySelectorAll('#opyt-osmos .exp-past-run').length, start: !!document.querySelector('#opyt-osmos [data-ex-start]') }; });
+    ok(rec.n === EXP_RUNS.find(r => r[0] === 'osmos')[3].length + 2 && rec.done.length > 1 && ended.end && /упругость/.test(ended.verdict) && ended.past === 1 && ended.start,
+      M + 'a record through the form marks the step; «Закончить» keeps the run with its conclusion ' + JSON.stringify({ rec, ended: Object.assign({}, ended, { verdict: ended.verdict.length }) }));
+
+    // and the steps due now stand among the tasks on the home page
+    await page.goto(fileUrl('index.html'), { waitUntil: 'load' });
+    await page.waitForTimeout(500);
+    const homeExp = await page.evaluate(() => [...document.querySelectorAll('#garden-home .g-exp-card .g-task')].map(t => t.querySelector('b').textContent));
+    ok(homeExp.length >= 5 && homeExp.every(t => /^«.+»: /.test(t)), M + `the experiments' steps on the home page: ${homeExp.length}`);
     await page.evaluate(() => { localStorage.removeItem('basil-garden'); localStorage.removeItem('basil-weather'); });
     await ctx.close();
   }

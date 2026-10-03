@@ -64,7 +64,7 @@
         <p>Добавьте свой куст — гид подскажет, что делать с ним на этой неделе: когда прищипнуть, подкормить и срезать.</p>
         <div class="g-starts">${B.GARDEN.starts.filter(s => s.id !== 'seedling').map(s => `<button class="chip" type="button" data-garden-add="${s.id}">${icon(s.id === 'seed' ? 'seed' : s.id === 'shop' ? 'bag' : 'cup')}${s.id === 'shop' ? 'Купил горшок в магазине' : s.id === 'cutting' ? 'Укоренил черенок' : s.name}</button>`).join('')}</div>
         <p class="g-keep"><button type="button" class="g-link" data-garden-import>Загрузить копию</button></p>${more}</div>
-      </div>`;
+      </div>${expCard() ? `<div class="g-list g-list-exp">${expCard()}</div>` : ''}`;
       fixLinks(box);
       return;
     }
@@ -72,7 +72,7 @@
     box.innerHTML = `<div class="block-head"><h2 id="${hid}">${page ? 'На этой <em>неделе</em>' : 'Мой <em>базилик</em>'}</h2><p>${page ? fr(mon, sun) : 'На этой неделе · ' + fr(mon, sun)}</p></div>
       ${wxStrip(plants, page)}
       ${common ? `<ul class="g-tasks g-common">${taskHtml({ id: '*' }, Object.assign({}, common, { title: common.title + ' для всех кустов на окне' }), day)}</ul>` : ''}
-      <div class="g-list">${plants.map(p => gardenCard(p, day, page)).join('')}</div>
+      <div class="g-list">${expCard()}${plants.map(p => gardenCard(p, day, page)).join('')}</div>
       <div class="g-foot"><div class="g-foot-a"><button class="btn btn-ghost btn-small" type="button" data-garden-add="seed">${icon('sprout')}Добавить куст</button>${page ? `<button class="btn btn-ghost btn-small" type="button" data-garden-ics="*">${icon('cal')}Дела в календарь</button>` : ''}</div>${keep}</div>${more}`;
     fixLinks(box);
     if (page) fillPhotos(box);
@@ -82,7 +82,7 @@
     const day = today();
     const lists = gardenLoad().plants.map(p => plantWeek(p, day).now);
     const common = lists.some(l => l.some(shared));
-    return lists.reduce((n, l) => n + l.filter(t => !shared(t)).length, 0) + (common ? 1 : 0);
+    return lists.reduce((n, l) => n + l.filter(t => !shared(t)).length, 0) + (common ? 1 : 0) + expTasks().filter(t => t.state === 'now').length;
   }
   function renderGardenHome() {
     const home = $('#garden-home'), page = $('#garden-page');
@@ -300,7 +300,7 @@
     const w = s.where;
     if (w && isFinite(+w.lat) && isFinite(+w.lon) && Math.abs(+w.lat) <= 90 && Math.abs(+w.lon) <= 180) out.where = { name: String(w.name || '').slice(0, 80), region: String(w.region || '').slice(0, 80), lat: +w.lat, lon: +w.lon };
     else if (keep.where) out.where = keep.where;
-    if (Array.isArray(s.exps)) out.exps = s.exps.filter(x => x && typeof x.exp === 'string' && fromISO(x.start)).slice(0, 40).map(x => JSON.parse(JSON.stringify(x)));
+    if (Array.isArray(s.exps)) out.exps = s.exps.filter(x => x && typeof x.exp === 'string' && expDef(x.exp) && fromISO(String(x.start || '').slice(0, 10)) && isFinite(x.t0)).slice(0, 40).map(x => JSON.parse(JSON.stringify(x)));
     else if (keep.exps) out.exps = keep.exps;
     return out;
   }
@@ -310,9 +310,17 @@
     window.BasilGarden = {
       load: gardenLoad, save: gardenSave, tasks: plantTasks, week: plantWeek, stage: plantStage, open: openGarden,
       on: fn => document.addEventListener('basil:garden', fn),
-      weather: { place: wxPlace, get: wxCached, refresh: wxRefresh, search: wxSearch, set: wxSetPlace, here: wxHere, age: wxAge, t: fmtT, when: wxWhen, on: fn => document.addEventListener('basil:weather', fn) }
+      weather: { place: wxPlace, get: wxCached, refresh: wxRefresh, search: wxSearch, set: wxSetPlace, here: wxHere, age: wxAge, t: fmtT, when: wxWhen, on: fn => document.addEventListener('basil:weather', fn) },
+      exps: { def: expDef, step: expStep, running: expRunning },
+      // a photo for an experiment: shrunk and kept like a bush's photo
+      photos: {
+        add: async file => { const blob = await photoShrink(file), id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6); await photoPut(id, blob); return id; },
+        fill: fillPhotos, show: showPhoto, forget: forgetPhoto
+      }
     };
     renderGardenHome();
+    // on the page, the experiments going on stand open: their models are built only when they come in sight
+    if ($('#garden-page')) expRunning().forEach(x => { const d = document.getElementById('opyt-' + x.exp); if (d) d.open = true; });
     // the forecast once the page has started (never during the start), and again when the reader comes back to it
     document.addEventListener('basil:weather', renderGardenHome);
     const fresh = () => { if (wxPlace()) wxRefresh(); };
@@ -365,6 +373,14 @@
         openGarden({ form: true, draft: { start: t.dataset.gardenAdd || 'seed', variety: t.dataset.variety || '', place: 'home', name: '' } });
       } else if (t.matches('[data-plant-open]')) {
         openGarden({ id: t.dataset.plantOpen });
+      } else if (t.matches('.g-done[data-exp]')) {
+        // a step of an experiment done (the values themselves are written on its page)
+        const s = gardenLoad(), x = (s.exps || []).find(e => e.id === t.dataset.exp);
+        if (!x) return;
+        x.done = [...new Set([...(x.done || []), +t.dataset.step])];
+        HAP.success();
+        gardenSave(s);
+        toast('Шаг опыта отмечен');
       } else if (t.matches('.g-done') && t.dataset.plant === '*') {
         // a task shared by the bushes on the windowsill: done for each that has it
         const s = gardenLoad();

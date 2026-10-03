@@ -2596,3 +2596,25 @@ svg, canvas {
 .g-wx { display: flex; align-items: flex-start; gap: 6px; margin: 8px 0 0; font-size: .84rem; line-height: 1.4; color: var(--ink-2); }
 .g-wx .ico { flex: none; width: 15px; height: 15px; margin-top: 2px; color: var(--sci-phys); }
 .g-wx-rain .ico { color: var(--wx-rain); }
+
+/* the experiments on the page: a card each, open to read and do */
+.exp-intro { margin-bottom: 18px; }
+.exp-list { display: grid; gap: 12px; }
+.exp-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-sm); scroll-margin-top: calc(var(--sticky-top) + 70px); }
+.exp-card > summary { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; list-style: none; }
+.exp-card > summary::-webkit-details-marker { display: none; }
+.exp-card > summary::before { content: ""; flex: none; width: 10px; height: 10px; border-right: 2px solid var(--ink-3); border-bottom: 2px solid var(--ink-3); transform: rotate(-45deg); transition: transform .2s; }
+.exp-card[open] > summary::before { transform: rotate(45deg); }
+.exp-sum { display: grid; gap: 2px; min-width: 0; }
+.exp-sum b { font: 600 1.25rem/1.15 var(--font-display); color: var(--ink); }
+.exp-sum small { font-size: .84rem; line-height: 1.35; color: var(--ink-3); }
+.exp-card[data-kind="chem"] > summary { border-left: 4px solid var(--sci-chem); border-radius: var(--radius) 0 0 var(--radius); }
+.exp-card[data-kind="phys"] > summary { border-left: 4px solid var(--sci-phys); border-radius: var(--radius) 0 0 var(--radius); }
+.exp-card[data-kind="bio"] > summary { border-left: 4px solid var(--sci-bio); border-radius: var(--radius) 0 0 var(--radius); }
+.exp-body { padding: 0 16px 16px; max-width: 72ch; }
+.exp-body .lab-tool { max-width: none; margin: 14px 0; }
+.exp-h { margin: 14px 0 4px; font: 700 .74rem/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.exp-body > p:not(.exp-h) { margin: 0; color: var(--ink-2); line-height: 1.55; }
+.g-pic-exp { color: var(--sci-chem); }
+.g-pic-exp .ico { width: 28px; height: 28px; }
+.g-task.is-exp { border-left-color: var(--sci-chem); }

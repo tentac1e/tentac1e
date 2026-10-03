@@ -1,3 +1,4 @@
+  /* @use agro */
   register('roots', el => {
     el.innerHTML = h.head('Черенок в стакане', 'Модель укоренения: корешки появляются из погружённых узлов и растут примерно на полсантиметра в день в тепле.', true) +
       `<div class="lab-grid wide-stage">
@@ -6,7 +7,7 @@
       </div>` + h.readHtml([['Длина корней', 'lab-rt-l'], ['Что делать', 'lab-rt-v', 'is-wide']]);
     const svg = $('#lab-rt-svg', el);
     let day = 10, temp = 22;
-    const ON = { 18: 10, 22: 7, 26: 5 }, RATE = { 18: 0.35, 22: 0.5, 26: 0.6 };
+    const ON = { 18: agro.rootsOnset(18), 22: agro.rootsOnset(22), 26: agro.rootsOnset(26) }, RATE = { 18: agro.rootsRate(18), 22: agro.rootsRate(22), 26: agro.rootsRate(26) };
     const ROOTS = [[-1, 0.9, 0], [1, 1, 1], [-1, 0.7, 2], [1, 0.8, 0.5], [-1, 0.6, 1.5], [1, 0.65, 2.5]];
     const leaf = (x, y, a, s) => `<use href="#pl-leaf" class="pl-leaf" style="fill:url(#pl-grad)" transform="translate(${x} ${y}) rotate(${a}) scale(${s})"/>`;
     const upd = () => {

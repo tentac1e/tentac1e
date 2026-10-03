@@ -14,7 +14,7 @@
   const doyLabel = n => { const d = new Date(2023, 0, n); return `${d.getDate()} ${MONTHS_GEN[d.getMonth()]}`; };
   const citiesChips = (id, lat) => h.chipsHtml(id, 'Город', h.CITIES.map(([l, n]) => [l, n]), lat);
 
-  const { micro, ill, props } = window.BasilLibs;
+  const { micro, ill, props, agro } = window.BasilLibs;
   window.BasilScience.styleFor("razmnozhenie", "/* roots */\n.roots-svg { width: 100%; max-width: 250px; height: auto; }\n.rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }\n.rt-water { fill: var(--water-fill); }\n.rt-wl { stroke: var(--water-line); stroke-width: 1.5; }\n.rt-stem { fill: none; stroke: var(--stem); stroke-width: 5; stroke-linecap: round; }\n.rt-node { fill: var(--pl-a); }\n.rt-root { fill: none; stroke: var(--root); stroke-width: 2.2; stroke-linecap: round; }\n\n/* seeds */\n.sl-scale { position: relative; height: 34px; margin: 16px 0 26px; border-radius: 10px; background: linear-gradient(90deg, color-mix(in srgb, var(--danger) 18%, var(--surface-2)), var(--surface-2) 25%, var(--band-good)); border: 1px solid var(--line); }\n.sl-scale i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 10px 0 0 10px; background: color-mix(in srgb, var(--k) 45%, transparent); border-right: 3px solid var(--k); transition: width .4s var(--ease-float); }\n.sl-scale span { position: absolute; top: calc(100% + 6px); translate: -50% 0; font: 500 .7rem/1 var(--font-mono); color: var(--ink-3); }\n.sl-scale span:first-of-type { translate: 0 0; }\n.sl-scale span:last-of-type { translate: -100% 0; }\n\n");
   /* @use props */
   /* Pictures of the Propagation chapter: the steps of rooting a cutting (data-ill="cut:1…5") and of saving
@@ -83,6 +83,7 @@
   };
   illustrate('seed', n => (SEED[n] || SEED[1])(), Object.keys(SEED));
 
+  /* @use agro */
   register('roots', el => {
     el.innerHTML = h.head('Черенок в стакане', 'Модель укоренения: корешки появляются из погружённых узлов и растут примерно на полсантиметра в день в тепле.', true) +
       `<div class="lab-grid wide-stage">
@@ -91,7 +92,7 @@
       </div>` + h.readHtml([['Длина корней', 'lab-rt-l'], ['Что делать', 'lab-rt-v', 'is-wide']]);
     const svg = $('#lab-rt-svg', el);
     let day = 10, temp = 22;
-    const ON = { 18: 10, 22: 7, 26: 5 }, RATE = { 18: 0.35, 22: 0.5, 26: 0.6 };
+    const ON = { 18: agro.rootsOnset(18), 22: agro.rootsOnset(22), 26: agro.rootsOnset(26) }, RATE = { 18: agro.rootsRate(18), 22: agro.rootsRate(22), 26: agro.rootsRate(26) };
     const ROOTS = [[-1, 0.9, 0], [1, 1, 1], [-1, 0.7, 2], [1, 0.8, 0.5], [-1, 0.6, 1.5], [1, 0.65, 2.5]];
     const leaf = (x, y, a, s) => `<use href="#pl-leaf" class="pl-leaf" style="fill:url(#pl-grad)" transform="translate(${x} ${y}) rotate(${a}) scale(${s})"/>`;
     const upd = () => {

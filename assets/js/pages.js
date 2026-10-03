@@ -196,11 +196,21 @@ window.BASIL_PAGES = {
   "moy": "moy",
   "moy-h": "glavnaya",
   "moy-h1": "moy",
+  "moy-h10": "moy",
+  "moy-h11": "moy",
+  "moy-h12": "moy",
+  "moy-h13": "moy",
   "moy-h2": "moy",
   "moy-h3": "moy",
   "moy-h4": "moy",
+  "moy-h5": "moy",
+  "moy-h6": "moy",
+  "moy-h7": "moy",
+  "moy-h8": "moy",
+  "moy-h9": "moy",
   "moy-home": "glavnaya",
   "moy-kusty": "moy",
+  "moy-opyty": "moy",
   "moy-pogoda": "moy",
   "nauka": "glavnaya",
   "nauka-h": "glavnaya",
@@ -210,6 +220,14 @@ window.BASIL_PAGES = {
   "npk-out": "udobreniya",
   "npk-p": "udobreniya",
   "npk-presets": "udobreniya",
+  "opyt-apex": "moy",
+  "opyt-dark": "moy",
+  "opyt-germ": "moy",
+  "opyt-light": "moy",
+  "opyt-litmus": "moy",
+  "opyt-osmos": "moy",
+  "opyt-roots": "moy",
+  "opyt-sweat": "moy",
   "pest-grid": "problemy",
   "place-panel": "posadka",
   "place-tabs": "posadka",
@@ -454,7 +472,7 @@ window.BASIL_PAGES = {
    "phys": 11,
    "taste": 4
   },
-  "labs": 37,
+  "labs": 45,
   "deeper": 44,
   "deep": 44
  },
@@ -544,7 +562,8 @@ window.BASIL_PAGES = {
   "spravka-slovar": "Справка · Словарь",
   "spravka-chek-list": "Справка · Чек-лист сезона",
   "moy-kusty": "Мой базилик · Кусты",
-  "moy-pogoda": "Мой базилик · Погода"
+  "moy-pogoda": "Мой базилик · Погода",
+  "moy-opyty": "Мой базилик · Опыты"
  },
  "alias": {
   "sorta-katalog": "каталог",
@@ -588,27 +607,28 @@ window.BASIL_PAGES = {
   "spravka-slovar": "словарь",
   "spravka-chek-list": "чек-лист",
   "moy-kusty": "кусты",
-  "moy-pogoda": "погода"
+  "moy-pogoda": "погода",
+  "moy-opyty": "опыты"
  },
  "v": {
   "labs": {
    "sorta": "c21915d9",
-   "posadka": "9388c86c",
+   "posadka": "25b0b7f5",
    "kalendar": "51f45378",
    "uhod": "5d83f303",
    "udobreniya": "f58f15d9",
    "formirovka": "54a87f1b",
    "urozhay": "1760db14",
    "vkus": "78b30d48",
-   "razmnozhenie": "d9b5685b",
+   "razmnozhenie": "2ce62c01",
    "problemy": "b6cf55d9",
-   "moy": "5dc99288"
+   "moy": "300cd785"
   },
   "lib": {
    "micro": "bbc6c98e",
    "ills": "63c3803f",
    "props": "7e4b2fa8",
-   "agro": "ddf66414",
+   "agro": "2133ead0",
    "food": "9ecfd30b"
   },
   "deps": {
@@ -619,7 +639,8 @@ window.BASIL_PAGES = {
    "posadka": [
     "micro",
     "ills",
-    "props"
+    "props",
+    "agro"
    ],
    "kalendar": [],
    "uhod": [
@@ -649,7 +670,8 @@ window.BASIL_PAGES = {
    "razmnozhenie": [
     "micro",
     "ills",
-    "props"
+    "props",
+    "agro"
    ],
    "problemy": [
     "micro",
@@ -659,6 +681,6 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "50dca958"
+  "search": "e9ba0436"
  }
 };

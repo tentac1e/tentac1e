@@ -1,6 +1,7 @@
+  /* @use agro */
   register('germ', el => {
-    const Tb = 10.5, To = 30, Tc = 42, th = 52;
-    const days = T => (T <= Tb || T >= Tc) ? Infinity : T <= To ? th / (T - Tb) : th / ((To - Tb) * (Tc - T) / (Tc - To));
+    const { Tb, th } = agro.GERM;
+    const days = agro.germDays;
     el.innerHTML = h.head('Сколько ждать всходов', 'Модель термального времени: семени нужно набрать около 52 градусо-дней выше базовых 10,5 °C. Выше 30 °C скорость снова падает.', true) +
       `<div class="lab-grid">
         <div class="lab-controls">${h.rangeHtml('lab-germ-t', 'Температура грунта', 8, 40, 0.5, 24)}

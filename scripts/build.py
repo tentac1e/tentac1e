@@ -77,7 +77,7 @@ TAB = {
     'razmnozhenie-cherenki': 'черенки', 'razmnozhenie-semena': 'семена',
     'problemy-diagnostika': 'диагностика', 'problemy-bolezni': 'болезни', 'problemy-vrediteli': 'вредители', 'problemy-profilaktika': 'профилактика',
     'spravka-voprosy': 'вопросы', 'spravka-slovar': 'словарь', 'spravka-chek-list': 'чек-лист',
-    'moy-kusty': 'кусты', 'moy-pogoda': 'погода',
+    'moy-kusty': 'кусты', 'moy-pogoda': 'погода', 'moy-opyty': 'опыты',
 }
 
 
@@ -454,7 +454,9 @@ def assemble(src_pages):
     # (a model appears only after that). lab.css keeps what every page needs
     lab_css = {}
     for v, labs in order:
-        lab_css[v] = ''.join((SRC / 'labs' / v / f'{l}.css').read_text(encoding='utf-8') for l in labs if (SRC / 'labs' / v / f'{l}.css').exists())
+        # the chapter's own shared styles (_shared.css: a frame several models use), then each model's
+        shared_css = SRC / 'labs' / v / '_shared.css'
+        lab_css[v] = (shared_css.read_text(encoding='utf-8') if shared_css.exists() else '') + ''.join((SRC / 'labs' / v / f'{l}.css').read_text(encoding='utf-8') for l in labs if (SRC / 'labs' / v / f'{l}.css').exists())
     lab = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'lab', '.css'))
     assert lab.count('/*@labs*/\n') == 1
     (css / 'lab.css').write_text(banner(lab.replace('/*@labs*/\n', ''), 'src/css/lab/'), encoding='utf-8')
