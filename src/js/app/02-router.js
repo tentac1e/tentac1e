@@ -96,9 +96,14 @@
 
   // «auto» follows the page's smooth scroll-behavior (01-base.css): a jump on arrival has to say instant
   // itself, or the page glides down from the top and builds every model it passes on the way
+  // the browser may read scroll-behavior from the style it had before: once the page runs, the change is applied
+  // before the scroll (the first route, while the page starts, has no style from before — and is not made to
+  // work out the whole page's style one more time)
+  let routerReady = false;
   const jump = fn => {
-    const st = document.documentElement.style, was = st.scrollBehavior;
+    const html = document.documentElement, st = html.style, was = st.scrollBehavior;
     st.scrollBehavior = 'auto';
+    if (routerReady) void getComputedStyle(html).scrollBehavior;
     try { fn(); } finally { st.scrollBehavior = was; }
   };
   function scrollAfter(r, changedView) {
@@ -192,6 +197,7 @@
     window.addEventListener('popstate', () => route(location.hash));
     window.addEventListener('hashchange', () => route(location.hash));
     route(location.hash, { initial: true, top: ENTRY.top });
+    routerReady = true;
   }
 
   /* pager + continue reading */

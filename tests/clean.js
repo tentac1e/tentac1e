@@ -1,7 +1,7 @@
 /* Версия для хостинга (dist/site) на локальном сервере с правилами .htaccess:
-   русские адреса, старые ссылки, поиск, короткие якоря вкладок.
+   русские адреса, старые ссылки, поиск, короткие якоря вкладок; кэш: страницы сверяются каждый раз, файлы с ?v= — неизменны.
    python3 scripts/build.py --clean --out dist/site && node tests/clean.js */
-const { playwright, server, ok, done } = require('./lib');
+const { ROOT, playwright, server, ok, done } = require('./lib');
 
 (async () => {
   const { chromium } = playwright();
@@ -81,6 +81,18 @@ const { playwright, server, ok, done } = require('./lib');
   ok(path() === '/удобрения#план', 'same-page search ' + sr + ' → ' + path());
   const stale = await page.evaluate(() => [...document.querySelectorAll('a[href*="#"]')].map(a => a.getAttribute('href')).filter(h => /#(sorta|posadka|uhod|udobreniya|formirovka|urozhay|vkus|razmnozhenie|problemy|spravka)-[a-z]/.test(h) && !/-h\d+$/.test(h)));
   ok(!stale.length, 'no long tab ids left in links ' + stale.slice(0, 5));
+  // the cache rules of the hosting (the same in .htaccess and serve.py): a page, the worker and the card are checked
+  // on every visit; a file with a fingerprint never changes and is not asked about again
+  await page.goto(B + '/', { waitUntil: 'load' });
+  const css = await page.evaluate(() => document.querySelector('link[rel="stylesheet"][href*="style.css"]').getAttribute('href'));
+  const cc = async u => (await fetch(B + u, { method: 'HEAD', redirect: 'manual' })).headers.get('cache-control') || '';
+  const rules = { '/': await cc('/'), '/уход': await cc(encodeURI('/уход')), 'sw.js': await cc('/sw.js'), [css]: await cc('/' + css), 'manifest': await cc('/manifest.webmanifest') };
+  ok(rules['/'] === 'no-cache' && rules['/уход'] === 'no-cache' && rules['sw.js'] === 'no-cache' && rules.manifest === 'no-cache' && /immutable/.test(rules[css]) && /max-age=31536000/.test(rules[css]),
+    'cache headers ' + JSON.stringify(rules));
+  const ht = require('fs').readFileSync(require('path').join(ROOT, 'dist/site/.htaccess'), 'utf8');
+  ok(/ExpiresByType text\/html "access plus 0 seconds"/.test(ht) && /<FilesMatch "\\\.html\$">\s*Header set Cache-Control "no-cache"/.test(ht)
+    && /<If "%\{QUERY_STRING\} =~ \/\(\^\|&\)v=\/">\s*Header set Cache-Control "public, max-age=31536000, immutable"/.test(ht),
+    '.htaccess: pages no-cache, fingerprinted files immutable');
   const bad = failed.filter(u => !/favicon/.test(u));
   ok(!bad.length, 'no failed requests ' + JSON.stringify(bad));
   await browser.close();

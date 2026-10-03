@@ -23,6 +23,43 @@
     };
     document.addEventListener('basil:garden', () => { if (window.BasilGarden && window.BasilGarden.load().plants.length) keep(); });
 
+    // the copies kept for working offline (hosting copy with the worker): how much they take, and «Обновить» —
+    // the worker fetches every file afresh and only then drops the old ones. The bushes, the diary, the photos and
+    // the experiments live elsewhere (localStorage, IndexedDB) and are never touched
+    const copies = $('#garden-copies');
+    if (copies && card && card.hasAttribute('data-sw') && 'serviceWorker' in navigator && (location.protocol === 'https:' || local) && window.MessageChannel) {
+      const ask = (type, ms) => navigator.serviceWorker.ready.then(reg => new Promise((resolve, reject) => {
+        if (!reg.active) { reject(new Error('no worker')); return; }
+        const ch = new MessageChannel();
+        const t = setTimeout(() => reject(new Error('no answer')), ms);
+        ch.port1.onmessage = e => { clearTimeout(t); resolve(e.data || {}); };
+        reg.active.postMessage({ type }, [ch.port2]);
+      }));
+      const mb = n => nb(`${(n / 1048576).toLocaleString('ru-RU', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} МБ`);
+      // the line stands from the first frame (the page does not jump when the worker answers); the size comes later
+      const draw = bytes => {
+        copies.innerHTML = `<span>Копии гида для работы без сети — <b data-copies-size>${bytes ? mb(bytes) : nb('… МБ')}</b></span>
+          <button class="g-link" type="button" data-copies>Обновить</button><small>кусты и фото останутся</small>`;
+        copies.hidden = false;
+      };
+      draw(0);
+      ask('size', 60000).then(r => { if (r.bytes) $('[data-copies-size]', copies).textContent = mb(r.bytes); }).catch(() => {});
+      copies.addEventListener('click', async e => {
+        const btn = e.target.closest('[data-copies]');
+        if (!btn || btn.disabled) return;
+        btn.disabled = true;
+        btn.textContent = 'Обновляю…';
+        // a newer sw.js on the hosting (a fresh build) installs itself with its own copies
+        try { const reg = await navigator.serviceWorker.getRegistration(); if (reg) await reg.update(); } catch (err) { /* offline */ }
+        let r = null;
+        try { r = await ask('refresh', 120000); } catch (err) { r = null; }
+        if (r && r.bytes) $('[data-copies-size]', copies).textContent = mb(r.bytes);
+        btn.disabled = false;
+        btn.textContent = 'Обновить';
+        toast(r && r.ok ? 'Копии обновлены' : 'Нет сети — копии остались прежними');
+      });
+    }
+
     const box = $('#garden-install');
     if (!box || !card) return;
     const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;

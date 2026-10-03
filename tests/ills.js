@@ -10,7 +10,8 @@
       - картинки первого экрана готовы не позже 400 мс после DOMContentLoaded;
       - файлы рисунков главы запрашиваются вместе, а не по одному;
       - вёрстка при загрузке почти не сдвигается: CLS ≤ 0,05.
-   node tests/ills.js [posadka.html,…] [--phone|--desktop] [--no-net]   (обе сборки: python3 scripts/build.py и --clean --out dist/site) */
+   node tests/ills.js [posadka.html,…] [--phone|--desktop] [--no-net|--net]   (обе сборки: python3 scripts/build.py и --clean --out dist/site;
+   --net — только часть 2: она меряет время, и tests/run.sh даёт ей машину одной) */
 const { playwright, ok, done, watch, fileUrl, FILES, SLUGS, server } = require('./lib');
 
 const args = process.argv.slice(2);
@@ -244,9 +245,11 @@ async function netChecks(b, s, f, errs) {
   DEV = { iPhone13: { ...devices['iPhone 13 Mini'], deviceScaleFactor: 1 } };
   const b = await chromium.launch();
   const errs = [];
+  // --net: only the loading part (it measures time: run.sh gives it the machine alone); --no-net: all but it
+  const netOnly = args.includes('--net');
   const jobs = [];
-  for (const mode of modes) for (const f of pages) jobs.push(() => rootChecks(b, mode, f, errs));
-  for (const f of pages) jobs.push(() => variantChecks(b, f, errs));
+  if (!netOnly) for (const mode of modes) for (const f of pages) jobs.push(() => rootChecks(b, mode, f, errs));
+  if (!netOnly) for (const f of pages) jobs.push(() => variantChecks(b, f, errs));
   const results = [];
   let next = 0;
   await Promise.all([1, 2, 3, 4].map(async () => { while (next < jobs.length) { const i = next++; results[i] = await jobs[i](); } }));

@@ -73,21 +73,36 @@ window.BasilScene = (() => {
     };
   }
 
-  /* one animation loop on that budget: a frame per display refresh while active, by a timer when calm
+  /* the calm frames of every loop come together: one timer for all, so the page draws 15 frames a second when
+     calm — two loops on timers of their own drifted apart and drew 30, as many as a phone draws while active */
+  const calmQueue = new Set();
+  let calmTimer = 0;
+  function calmTick(fn) {
+    calmQueue.add(fn);
+    if (!calmTimer) calmTimer = setTimeout(() => {
+      calmTimer = 0;
+      const list = [...calmQueue];
+      calmQueue.clear();
+      list.forEach(f => f());
+    }, 1000 / CALM_FPS - 12);
+  }
+
+  /* one animation loop on that budget: a frame per display refresh while active, by the shared timer when calm
      (no wake-ups 60 times a second for 15 frames), none while asleep — it starts again by itself.
      frame(ts) calls loop.next() to ask for the next one */
   function loop(frame) {
-    let raf = 0, tm = 0, on = false;
+    let raf = 0, waiting = false, on = false;
     const run = ts => { raf = 0; if (on) frame(ts); };
+    const go = () => { waiting = false; if (on && !raf) raf = requestAnimationFrame(run); };
     const next = () => {
-      if (!on || raf || tm) return;
+      if (!on || raf || waiting) return;
       if (act.state === 'sleep') { act.wakers.add(next); return; }
-      if (act.state === 'calm') tm = setTimeout(() => { tm = 0; if (on) raf = requestAnimationFrame(run); }, 1000 / CALM_FPS - 12);
+      if (act.state === 'calm') { waiting = true; calmTick(go); }
       else raf = requestAnimationFrame(run);
     };
     return {
       start() { on = true; next(); },
-      stop() { on = false; cancelAnimationFrame(raf); clearTimeout(tm); raf = tm = 0; act.wakers.delete(next); },
+      stop() { on = false; cancelAnimationFrame(raf); raf = 0; waiting = false; calmQueue.delete(go); act.wakers.delete(next); },
       next,
       get on() { return on; }
     };

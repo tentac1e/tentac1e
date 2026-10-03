@@ -9,7 +9,7 @@
    Проверяет сборку в корне репозитория (python3 scripts/build.py). */
 const fs = require('fs');
 const path = require('path');
-const { playwright, ok, done, watch, fileUrl, OUT, FILES } = require('./lib');
+const { ROOT, playwright, ok, done, watch, fileUrl, OUT, FILES } = require('./lib');
 
 const args = process.argv.slice(2);
 const only = (args.find(a => !a.startsWith('--')) || '').split(',').filter(Boolean);
@@ -60,84 +60,100 @@ function audit(sel) {
   return out;
 }
 
+// one page of one screen: its models, its pictures and the variants they draw after a tap
+async function check(ctx, mode, f, errs) {
+  const out = [];
+  const ok = (good, msg) => out.push([good, msg]);
+  const page = await ctx.newPage();
+  watch(page, errs);
+  await page.goto(fileUrl(f), { waitUntil: 'load' });
+  await page.waitForTimeout(500);
+  const labs = await page.evaluate(() => [...document.querySelectorAll('.lab-tool[data-lab]')].map(l => ({ lab: l.dataset.lab, panel: (l.closest('[data-panel]') || {}).id })));
+  const mine = labs.filter(l => !only.length || only.includes(l.lab));
+  const pictures = !only.length && await page.evaluate(() => !!document.querySelector('[data-ill]'));
+  if (!mine.length && !pictures) { await page.close(); return out; }
+  await page.addStyleTag({ content: '.tabbar,.to-top,.resume-pill,.topbar{visibility:hidden!important}' });
+  for (const { lab, panel } of mine) {
+    await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, panel);
+    await page.waitForTimeout(300);
+    await page.evaluate(l => {
+      const el = document.querySelector(`.lab-tool[data-lab="${l}"]`);
+      for (let d = el.closest('details'); d; d = d.parentElement.closest('details')) d.open = true;
+      el.scrollIntoView({ block: 'start' });
+    }, lab);
+    await page.waitForFunction(l => !!document.querySelector(`.lab-tool[data-lab="${l}"]`).dataset.ready, lab, { timeout: 8000 }).catch(() => {});
+    await page.waitForTimeout(700);
+    const r = await page.evaluate(audit, `.lab-tool[data-lab="${lab}"]`);
+    const problems = ['over', 'clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 6).join(', ')}${r[k].length > 6 ? ` …+${r[k].length - 6}` : ''}`);
+    ok(r.ready && !problems.length, `${mode.padEnd(7)} ${lab.padEnd(12)} ${r.ready ? '' : 'NOT MOUNTED '}${problems.join(' | ')}`);
+    if (shots) {
+      const el = await page.$(`.lab-tool[data-lab="${lab}"]`);
+      await el.screenshot({ path: path.join(OUT, `${mode}${dark ? '-dark' : ''}-${lab}.png`) }).catch(e => console.log('  shot failed', e.message));
+    }
+  }
+  // illustrations of the chapter (symptoms, diseases, pests): drawn, captions readable and inside
+  const ills = only.length ? [] : await page.evaluate(() => [...document.querySelectorAll('[data-ill]')].map(e => ({ key: e.dataset.ill, panel: (e.closest('[data-panel]') || {}).id })));
+  const seen = new Set();
+  for (const { key, panel } of ills) {
+    if (seen.has(key)) continue;
+    seen.add(key);
+    await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, panel);
+    await page.evaluate(k => { const e = document.querySelector(`[data-ill="${k}"]`); e.scrollIntoView({ block: 'center' }); window.BasilScience.paint(e, true); }, key);
+    await page.waitForFunction(k => !!document.querySelector(`[data-ill="${k}"]`).dataset.drawn, key, { timeout: 5000 }).catch(() => {});
+    const r = await page.evaluate(audit, `[data-ill="${key}"]`);
+    const problems = ['clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 4).join(', ')}`);
+    ok(r.ready && !problems.length, `${mode.padEnd(7)} ill ${key.padEnd(18)} ${r.ready ? '' : 'NOT DRAWN '}${problems.join(' | ')}`);
+  }
+  // variants a page draws only after a tap (illustrate(name, fn, variants)): each in turn in the
+  // first visible picture of its painter, at the size the page shows it
+  const vars = only.length ? {} : await page.evaluate(() => window.BasilScience.variants());
+  for (const name of Object.keys(vars)) {
+    const slot = await page.evaluate(n => {
+      const e = [...document.querySelectorAll('[data-ill]')].find(x => x.dataset.ill.split(':')[0] === n && x.getClientRects().length);
+      if (!e) return null;
+      e.id = e.id || 'ill-slot-' + n;
+      return { id: e.id, key: e.dataset.ill, panel: (e.closest('[data-panel]') || {}).id };
+    }, name);
+    if (!slot) continue;
+    await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, slot.panel);
+    for (const v of vars[name]) {
+      const key = name + ':' + v;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      await page.evaluate(([id, k]) => { const e = document.getElementById(id); e.dataset.ill = k; e.scrollIntoView({ block: 'center' }); window.BasilScience.paint(e, true); }, [slot.id, key]);
+      await page.waitForFunction(([id, k]) => document.getElementById(id).dataset.drawn === k, [slot.id, key], { timeout: 5000 }).catch(() => {});
+      const r = await page.evaluate(audit, '#' + slot.id);
+      const problems = ['clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 4).join(', ')}`);
+      ok(r.ready && !problems.length, `${mode.padEnd(7)} ill ${key.padEnd(18)} ${r.ready ? '' : 'NOT DRAWN '}${problems.join(' | ')}`);
+    }
+    await page.evaluate(([id, k]) => { const e = document.getElementById(id); e.dataset.ill = k; window.BasilScience.paint(e, true); }, [slot.id, slot.key]);
+  }
+  await page.close();
+  return out;
+}
+
 (async () => {
   const { chromium, devices } = playwright();
   const browser = await chromium.launch();
   const errs = [];
   if (shots) fs.mkdirSync(OUT, { recursive: true });
+  const ctx = {};
   for (const mode of modes) {
-    const ctx = await browser.newContext({
+    ctx[mode] = await browser.newContext({
       ...(mode === 'phone' ? { ...devices['iPhone 13 Mini'], deviceScaleFactor: 2 } : { viewport: { width: 1280, height: 900 } }),
       colorScheme: dark ? 'dark' : 'light', reducedMotion: 'reduce'
     });
-    const page = await ctx.newPage();
-    watch(page, errs);
-    for (const f of FILES) {
-      await page.goto(fileUrl(f), { waitUntil: 'load' });
-      await page.waitForTimeout(500);
-      const labs = await page.evaluate(() => [...document.querySelectorAll('.lab-tool[data-lab]')].map(l => ({ lab: l.dataset.lab, panel: (l.closest('[data-panel]') || {}).id })));
-      const mine = labs.filter(l => !only.length || only.includes(l.lab));
-      const pictures = !only.length && await page.evaluate(() => !!document.querySelector('[data-ill]'));
-      if (!mine.length && !pictures) continue;
-      await page.addStyleTag({ content: '.tabbar,.to-top,.resume-pill,.topbar{visibility:hidden!important}' });
-      for (const { lab, panel } of mine) {
-        await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, panel);
-        await page.waitForTimeout(300);
-        await page.evaluate(l => {
-          const el = document.querySelector(`.lab-tool[data-lab="${l}"]`);
-          for (let d = el.closest('details'); d; d = d.parentElement.closest('details')) d.open = true;
-          el.scrollIntoView({ block: 'start' });
-        }, lab);
-        await page.waitForFunction(l => !!document.querySelector(`.lab-tool[data-lab="${l}"]`).dataset.ready, lab, { timeout: 8000 }).catch(() => {});
-        await page.waitForTimeout(700);
-        const r = await page.evaluate(audit, `.lab-tool[data-lab="${lab}"]`);
-        const problems = ['over', 'clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 6).join(', ')}${r[k].length > 6 ? ` …+${r[k].length - 6}` : ''}`);
-        ok(r.ready && !problems.length, `${mode.padEnd(7)} ${lab.padEnd(12)} ${r.ready ? '' : 'NOT MOUNTED '}${problems.join(' | ')}`);
-        if (shots) {
-          const el = await page.$(`.lab-tool[data-lab="${lab}"]`);
-          await el.screenshot({ path: path.join(OUT, `${mode}${dark ? '-dark' : ''}-${lab}.png`) }).catch(e => console.log('  shot failed', e.message));
-        }
-      }
-      // illustrations of the chapter (symptoms, diseases, pests): drawn, captions readable and inside
-      const ills = only.length ? [] : await page.evaluate(() => [...document.querySelectorAll('[data-ill]')].map(e => ({ key: e.dataset.ill, panel: (e.closest('[data-panel]') || {}).id })));
-      const seen = new Set();
-      for (const { key, panel } of ills) {
-        if (seen.has(key)) continue;
-        seen.add(key);
-        await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, panel);
-        await page.evaluate(k => { const e = document.querySelector(`[data-ill="${k}"]`); e.scrollIntoView({ block: 'center' }); window.BasilScience.paint(e, true); }, key);
-        await page.waitForFunction(k => !!document.querySelector(`[data-ill="${k}"]`).dataset.drawn, key, { timeout: 5000 }).catch(() => {});
-        const r = await page.evaluate(audit, `[data-ill="${key}"]`);
-        const problems = ['clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 4).join(', ')}`);
-        ok(r.ready && !problems.length, `${mode.padEnd(7)} ill ${key.padEnd(18)} ${r.ready ? '' : 'NOT DRAWN '}${problems.join(' | ')}`);
-      }
-      // variants a page draws only after a tap (illustrate(name, fn, variants)): each in turn in the
-      // first visible picture of its painter, at the size the page shows it
-      const vars = only.length ? {} : await page.evaluate(() => window.BasilScience.variants());
-      for (const name of Object.keys(vars)) {
-        const slot = await page.evaluate(n => {
-          const e = [...document.querySelectorAll('[data-ill]')].find(x => x.dataset.ill.split(':')[0] === n && x.getClientRects().length);
-          if (!e) return null;
-          e.id = e.id || 'ill-slot-' + n;
-          return { id: e.id, key: e.dataset.ill, panel: (e.closest('[data-panel]') || {}).id };
-        }, name);
-        if (!slot) continue;
-        await page.evaluate(p => { if (p && location.hash !== '#' + p) location.hash = p; }, slot.panel);
-        for (const v of vars[name]) {
-          const key = name + ':' + v;
-          if (seen.has(key)) continue;
-          seen.add(key);
-          await page.evaluate(([id, k]) => { const e = document.getElementById(id); e.dataset.ill = k; e.scrollIntoView({ block: 'center' }); window.BasilScience.paint(e, true); }, [slot.id, key]);
-          await page.waitForFunction(([id, k]) => document.getElementById(id).dataset.drawn === k, [slot.id, key], { timeout: 5000 }).catch(() => {});
-          const r = await page.evaluate(audit, '#' + slot.id);
-          const problems = ['clipped', 'overlap', 'tiny'].filter(k => r[k].length).map(k => `${k}: ${r[k].slice(0, 4).join(', ')}`);
-          ok(r.ready && !problems.length, `${mode.padEnd(7)} ill ${key.padEnd(18)} ${r.ready ? '' : 'NOT DRAWN '}${problems.join(' | ')}`);
-        }
-        await page.evaluate(([id, k]) => { const e = document.getElementById(id); e.dataset.ill = k; window.BasilScience.paint(e, true); }, [slot.id, slot.key]);
-      }
-    }
-    await ctx.close();
   }
+  const jobs = [];
+  for (const mode of modes) for (const f of FILES) jobs.push({ mode, f });
+  // four pages at a time, the chapters with most models and pictures first; the lines come out in the usual order
+  const weight = f => (fs.readFileSync(path.join(ROOT, f), 'utf8').match(/data-(?:lab|ill)="/g) || []).length;
+  const w = Object.fromEntries(FILES.map(f => [f, weight(f)]));
+  const order = [...jobs].sort((a, b) => w[b.f] - w[a.f]);
+  let next = 0;
+  const worker = async () => { while (next < order.length) { const j = order[next++]; j.out = await check(ctx[j.mode], j.mode, j.f, errs); } };
+  await Promise.all([1, 2, 3, 4].map(worker));
+  jobs.forEach(j => j.out.forEach(([good, msg]) => ok(good, msg)));
   await browser.close();
   done(errs);
 })();

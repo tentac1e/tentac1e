@@ -32,6 +32,7 @@ import json
 import re
 import shutil
 import sys
+import tempfile
 from html import escape
 from html.parser import HTMLParser
 from pathlib import Path
@@ -114,6 +115,8 @@ def htaccess():
         '  ExpiresByType application/javascript "access plus 1 year"',
         '  ExpiresByType font/woff2 "access plus 1 year"',
         '  ExpiresByType image/png "access plus 1 year"',
+        '  # a page has no fingerprint: the browser checks it on every visit (an unchanged one comes back as 304)',
+        '  ExpiresByType text/html "access plus 0 seconds"',
         '  # the offline worker and the app card have no fingerprint: the browser asks for news on every visit',
         '  <FilesMatch "^(sw\\.js|manifest\\.webmanifest)$">',
         '    ExpiresActive Off',
@@ -123,6 +126,19 @@ def htaccess():
         '  <FilesMatch "^(sw\\.js|manifest\\.webmanifest)$">',
         '    Header set Cache-Control "no-cache"',
         '  </FilesMatch>',
+        '  <FilesMatch "\\.html$">',
+        '    Header set Cache-Control "no-cache"',
+        '  </FilesMatch>',
+        '</IfModule>',
+        '# a file with a fingerprint never changes: not even a reload asks about it again (Apache 2.4: <If>)',
+        '<IfModule mod_headers.c>',
+        '<IfModule mod_version.c>',
+        '<IfVersion >= 2.4>',
+        '  <If "%{QUERY_STRING} =~ /(^|&)v=/">',
+        '    Header set Cache-Control "public, max-age=31536000, immutable"',
+        '  </If>',
+        '</IfVersion>',
+        '</IfModule>',
         '</IfModule>',
         '',
         'RewriteEngine On',
@@ -589,9 +605,9 @@ def page_labs(html):
     return re.findall(r'data-lab="([a-z0-9]+)"', html)
 
 
-def assemble(src_pages):
-    """write assets/js/*.js, assets/css/*.css and assets/js/labs/<view>.js from src/. Returns lab bundle names."""
-    js, css = ROOT / 'assets' / 'js', ROOT / 'assets' / 'css'
+def assemble(src_pages, assets):
+    """write <assets>/js/*.js, <assets>/css/*.css and <assets>/js/labs/<view>.js from src/. Returns lab bundle names."""
+    js, css = assets / 'js', assets / 'css'
     js.mkdir(parents=True, exist_ok=True)
     css.mkdir(parents=True, exist_ok=True)
 
@@ -610,14 +626,14 @@ def assemble(src_pages):
         assert frame.count('/*@parts*/\n') == 1, mod
         (js / f'{mod}.js').write_text(tie_js(banner(frame.replace('/*@parts*/\n', body), f'src/js/{mod}/')), encoding='utf-8')
     shutil.copyfile(SRC / 'js' / 'haptics.js', js / 'haptics.js')
-    fonts = ROOT / 'assets' / 'fonts'
+    fonts = assets / 'fonts'
     if fonts.exists():
         shutil.rmtree(fonts)
     fonts.mkdir()
     for f in sorted((SRC / 'fonts').glob('*.woff2')):
         shutil.copyfile(f, fonts / f.name)
     # the icons of the home screen (scripts/icons.js draws them)
-    icons = ROOT / 'assets' / 'icons'
+    icons = assets / 'icons'
     if icons.exists():
         shutil.rmtree(icons)
     icons.mkdir()
@@ -915,7 +931,12 @@ def main():
     nav = nav_items()
     src = {v: read_page(v) for v, _ in PAGES}
     CH = chapters()
-    bundles, lib_deps, libs = assemble(src)
+    # a build for another place (--out, --single) leaves the one in the root as it is: checks read it meanwhile
+    stage = Path(tempfile.mkdtemp(prefix='basil-book-')) if single else None
+    assets = stage / 'assets' if single else out_dir / 'assets'
+    if out_dir != ROOT and not single and assets.exists():
+        shutil.rmtree(assets)  # a fresh copy: files removed from src/ must not linger on the hosting copy
+    bundles, lib_deps, libs = assemble(src, assets)
     # chapters whose pictures (or models outside a closed «Глубже») stand on the page from the start: their files
     # come with the page (see page_html); the others wait until a model comes near the screen
     def shown_models(html):
@@ -1038,13 +1059,8 @@ def main():
         return re.sub(r'(<a\b[^>]*?\s)href="#([^"]+)"', fix, html)
 
     # 3. generated data files
-    if out_dir != ROOT:
-        # a fresh copy: files removed from assets/ must not linger on the hosting copy
-        if (out_dir / 'assets').exists():
-            shutil.rmtree(out_dir / 'assets')
-        shutil.copytree(ROOT / 'assets', out_dir / 'assets')
-        if clean:
-            (out_dir / '.htaccess').write_text(htaccess(), encoding='ascii')
+    if out_dir != ROOT and clean:
+        (out_dir / '.htaccess').write_text(htaccess(), encoding='ascii')
     js = out_dir / 'assets' / 'js'
     pages_js = {
         'files': LINK,
@@ -1130,15 +1146,17 @@ def main():
 
     if single:
         html = page_html([v for v, _ in PAGES], 'glavnaya')
-        tmp = ROOT / '.single.html'
+        tmp = stage / 'book.html'
         tmp.write_text(html, encoding='utf-8')
         import subprocess
-        subprocess.run([sys.executable, str(ROOT / 'scripts' / 'bundle.py'), str(single), '--from', str(tmp)], check=True)
-        tmp.unlink()
+        subprocess.run([sys.executable, str(ROOT / 'scripts' / 'bundle.py'), str(single), '--from', str(tmp), '--root', str(stage)], check=True)
+        shutil.rmtree(stage)
         return
 
-    write_map(src, CH)
-    write_code_map()
+    # the maps describe the sources: the build in the root writes them
+    if out_dir == ROOT:
+        write_map(src, CH)
+        write_code_map()
     for view, file in PAGES:
         (out_dir / file).write_text(page_html([view], view), encoding='utf-8')
         print(f'{file:18} {len((out_dir / file).read_bytes()) // 1024:4} КБ')

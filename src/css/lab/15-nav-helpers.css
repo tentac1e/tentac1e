@@ -27,6 +27,12 @@
 .resume-x .ico { width: 16px; height: 16px; }
 .resume-x:hover { color: var(--ink); }
 
+/* the sentence the reader comes back to lights up for a moment, like a line marked in a book */
+.resume-mark { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 30; pointer-events: none; animation: resume-mark 2.6s ease-out forwards; }
+.resume-mark i { position: absolute; border-radius: 5px; background: color-mix(in srgb, var(--oil-bright) 30%, transparent); }
+.resume-mark i.is-bar { border-radius: 2px; background: var(--oil-bright); }
+@keyframes resume-mark { 0%, 45% { opacity: 1; } 100% { opacity: 0; } }
+
 /* end of a tab: the next one */
 .panel-next {
   display: flex;
@@ -63,4 +69,4 @@
 .hap-switch::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface); transition: transform .25s var(--ease-float); }
 .depth-hap[aria-checked="true"] .hap-switch { background: var(--basil); }
 .depth-hap[aria-checked="true"] .hap-switch::after { transform: translateX(12px); }
-@media (prefers-reduced-motion: reduce) { .resume-pill, .panel-next, .panel-next .ico { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .resume-pill, .panel-next, .panel-next .ico { transition: none; } .resume-mark { animation: none; } }

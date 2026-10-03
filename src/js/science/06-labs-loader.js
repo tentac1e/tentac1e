@@ -70,7 +70,8 @@
   }
   async function drain() {
     while (work.length) {
-      const mid = scrollY + innerHeight / 2;
+      view = { y: scrollY, h: innerHeight };
+      const mid = view.y + view.h / 2;
       if (work.length > 1) work.sort((a, b) => Math.abs(a._top - mid) - Math.abs(b._top - mid));
       const t0 = performance.now();
       while (work.length && performance.now() - t0 < 8) {
@@ -78,6 +79,7 @@
         el._queued = null;
         try { fn(el); } catch (err) { console.error('[basil]', err); }
       }
+      view = null;
       if (work.length) await pause();
     }
     working = false;
@@ -138,8 +140,15 @@
   const fitIll = el => { if (el.closest(HIDDEN)) el._unfit = true; else fitLabels(el); };
   // on the screen now, by the place the observer saw it at (no new measuring); a frame never measured is not,
   // and before the page's first paint nothing is: a picture ready by then is simply there
-  const painted = () => performance.getEntriesByType && performance.getEntriesByType('paint').length > 0;
-  const seen = el => el._top != null && el._top < scrollY + innerHeight && el._top > scrollY - 240 && painted();
+  let paintedYet = false;
+  const painted = () => paintedYet || (paintedYet = !!performance.getEntriesByType && performance.getEntriesByType('paint').length > 0);
+  // where the screen stands, read once before a batch of drawings: scrollY asked right after a picture went in
+  // lays the whole page out again — once for every picture of the batch
+  let view = null;
+  const seen = el => {
+    const y = view ? view.y : scrollY, h = view ? view.h : innerHeight;
+    return el._top != null && el._top < y + h && el._top > y - 240 && painted();
+  };
   // from the queue: drawn only if nothing drew it in the meantime (a tap, an eager paint)
   const drawDue = el => { if (el.isConnected && el.dataset.drawn !== el.dataset.ill) draw(el); };
   // scrollMargin: a tile in a row that scrolls sideways is drawn a little before it slides in (ignored where unknown)
@@ -165,7 +174,9 @@
     // the ones off the screen wait until the interface has started: they are not what the reader looks at
     const watch = () => rest.forEach(el => illIO.observe(el));
     if (document.documentElement.classList.contains('is-ready')) watch(); else document.addEventListener('basil:ready', watch, { once: true });
+    view = { y: scrollY, h: vh };
     now.forEach(el => draw(el, false));
+    view = null;
     now.forEach(el => { if (el.dataset.drawn) fitIll(el); });
   }
 

@@ -17,10 +17,14 @@ function playwright() {
 async function server() {
   if (process.env.BASE) return { base: process.env.BASE.replace(/\/$/, ''), stop() {} };
   if (!fs.existsSync(path.join(ROOT, 'dist/site/index.html'))) throw new Error('Нет dist/site: python3 scripts/build.py --clean --out dist/site');
-  const port = 8790 + Math.floor(Math.random() * 200);
-  const proc = spawn('python3', [path.join(ROOT, 'scripts/serve.py'), '--port', String(port)], { stdio: ['ignore', 'pipe', 'inherit'] });
-  await new Promise((resolve, reject) => {
-    proc.stdout.once('data', resolve);
+  return serve(path.join(ROOT, 'dist/site'));
+}
+// scripts/serve.py on a port the system picks (checks run side by side): its first line names it.
+// A given port puts a stopped server back at the same address
+async function serve(dir, at = 0) {
+  const proc = spawn('python3', [path.join(ROOT, 'scripts/serve.py'), '--port', String(at), '--dir', dir], { stdio: ['ignore', 'pipe', 'inherit'] });
+  const port = await new Promise((resolve, reject) => {
+    proc.stdout.once('data', d => { const m = /:(\d+)\//.exec(String(d)); if (m) resolve(m[1]); else reject(new Error('serve.py said ' + d)); });
     proc.once('exit', c => reject(new Error('serve.py exited ' + c)));
   });
   return { base: `http://127.0.0.1:${port}`, stop() { proc.kill(); } };
@@ -49,4 +53,4 @@ const FILES = ['index.html', 'sorta.html', 'posadka.html', 'kalendar.html', 'uho
 const SLUGS = { glavnaya: '', sorta: 'сорта', posadka: 'посадка', kalendar: 'календарь', uhod: 'уход', udobreniya: 'удобрения', formirovka: 'прищипывание', urozhay: 'урожай', vkus: 'вкус', razmnozhenie: 'размножение', problemy: 'проблемы', spravka: 'справка', moy: 'мой-базилик' };
 const fileUrl = f => 'file://' + path.join(ROOT, f);
 
-module.exports = { ROOT, OUT, playwright, server, ok, done, watch, FILES, SLUGS, fileUrl, results };
+module.exports = { ROOT, OUT, playwright, server, serve, ok, done, watch, FILES, SLUGS, fileUrl, results };

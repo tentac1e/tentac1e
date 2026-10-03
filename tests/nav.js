@@ -1,5 +1,6 @@
-/* Навигация на телефоне и компьютере: страница открывается сверху, «Вы остановились здесь»,
-   «Продолжить» с главной, «Дальше» в конце вкладки, оглавление (главы раскрываются на разделы, своя глава открыта
+/* Навигация на телефоне и компьютере: страница открывается сверху (и страница из памяти для «Назад» тоже, одним
+   прыжком, и остаётся там), «Вы остановились здесь» и «Продолжить» с главной ведут к началу предложения, на котором
+   остановились (и на другой ширине экрана), «Дальше» в конце вкладки, оглавление (главы раскрываются на разделы, своя глава открыта
    и отмечена; каждый инструмент ведёт туда, где, по его подписи, лежит), тактильный отклик.
    python3 scripts/build.py --clean --out dist/site && node tests/nav.js */
 const { playwright, server, ok, done } = require('./lib');
@@ -13,34 +14,105 @@ const { playwright, server, ok, done } = require('./lib');
   // ---------- phone ----------
   const ctx = await browser.newContext({ ...devices['Pixel 7'] });
   await ctx.addInitScript(() => { window.__vib = 0; navigator.vibrate = () => { window.__vib++; return true; }; });
+  // a browser that scrolls a page it has just opened down by itself (as a phone does with a page it remembers)
+  await ctx.addInitScript(() => {
+    if (!sessionStorage.getItem('late-scroll')) return;
+    sessionStorage.removeItem('late-scroll');
+    addEventListener('DOMContentLoaded', () => setTimeout(() => {
+      scrollTo({ top: 2500, behavior: 'instant' });
+      window.__late = Math.round(scrollY);
+    }, 300));
+  });
   const page = await ctx.newPage();
   page.on('pageerror', e => errs.push(e.message));
   const path = () => decodeURI(page.url().replace(B, ''));
   const Y = () => page.evaluate(() => Math.round(scrollY));
   await page.goto(U('/уход'), { waitUntil: 'load' });
   await page.waitForTimeout(1200);
-  // read down the page like a person
+  // read down the page like a person (not to its end: there the spot cannot come up under the tabs)
   await page.mouse.move(200, 400);
-  for (let i = 0; i < 14; i++) { await page.mouse.wheel(0, 300); await page.waitForTimeout(60); }
+  for (let i = 0; i < 8; i++) { await page.mouse.wheel(0, 300); await page.waitForTimeout(60); }
   await page.waitForTimeout(900);
   const y1 = await Y();
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('basil-pos') || '{}').uhod);
-  ok(saved && saved.y > 2000 && saved.anchor, `position saved at ${y1}: ${JSON.stringify(saved)}`);
+  ok(saved && saved.y > 2000 && saved.anchor && saved.sig && Number.isInteger(saved.n) && Number.isInteger(saved.ch) && saved.ss,
+    `position saved at ${y1} as a place in the text: ${JSON.stringify(saved)}`);
+  // where the page landed: the first marked line, what is covered above it, and the words it starts with
+  const landed = () => page.evaluate(() => {
+    const i = document.querySelector('.resume-mark i');
+    if (!i) return null;
+    const r = i.getBoundingClientRect();
+    // the words from the marked line's first letter to the end of its block
+    const hit = document.caretRangeFromPoint(r.left + 5, r.top + r.height / 2);
+    let words = '';
+    if (hit) {
+      let node = hit.startContainer, off = hit.startOffset;
+      if (node.nodeType !== 3) {
+        const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        w.currentNode = node.childNodes[off] || node;
+        do { node = w.nextNode(); } while (node && !node.data.trim());
+        off = 0;
+      }
+      if (node) {
+        const rg = document.createRange();
+        rg.setStart(node, off);
+        const blk = node.parentElement.closest('p, li, dt, dd, h2, h3, h4, h5, summary, blockquote, figcaption, tr, pre, .card') || document.body;
+        rg.setEndAfter(blk.lastChild || blk);
+        words = rg.toString().replace(/\s+/g, ' ').trim();
+      }
+    }
+    const wrap = document.querySelector('[data-view].is-active .subnav-wrap');
+    const end = Math.round(scrollY) >= document.documentElement.scrollHeight - innerHeight - 2;
+    return { top: Math.round(r.top), cover: wrap ? Math.round(wrap.getBoundingClientRect().bottom) : 0, words: words.slice(0, 30), y: Math.round(scrollY), vh: innerHeight, end };
+  });
+  // the spot's first line two lines under the tabs (and the gap above it when it stood lower), lower only when the
+  // page has no more to scroll
+  const placed = (l, pos) => !!l && (Math.abs(l.top + 1 - (l.cover + 48 + (pos.dy || 0))) <= 12 || (l.end && l.top + 1 > l.cover + 36));
+  const sameWords = (l, pos) => l.words.replace(/ /g, ' ').startsWith(pos.ss.replace(/ /g, ' ').slice(0, 12));
+  const atSentence = (l, pos) => placed(l, pos) && sameWords(l, pos) && l.y <= pos.y + 4 && pos.y - l.y < l.vh * 0.6;
+  const posNow = () => page.evaluate(() => JSON.parse(localStorage.getItem('basil-pos') || '{}').uhod);
   await page.reload({ waitUntil: 'load' });
   await page.waitForTimeout(1500);
   const pill = await page.evaluate(() => { const p = document.querySelector('.resume-pill'); return p ? p.textContent.trim() : null; });
   ok(await Y() === 0 && pill, `reload opens at top (${await Y()}) and offers «${pill}»`);
+  // the bookmark as the page kept it on leaving (models built meanwhile may have moved the text)
+  const saved2 = await posNow();
   await page.tap('.resume-go');
   await page.waitForTimeout(1600);
-  const y2 = await Y();
-  ok(Math.abs(y2 - y1) < 160, `pill returns to the spot: ${y2} vs ${y1}`);
+  const l2 = await landed();
+  ok(atSentence(l2, saved2), `the pill returns to the start of the sentence, two lines under the tabs: ${JSON.stringify(l2)} vs ${saved2.y} «${saved2.ss}» +${saved2.dy}`);
+  await page.waitForTimeout(2600);
+  ok(!(await page.evaluate(() => !!document.querySelector('.resume-mark'))), 'the mark goes out');
+  // a page kept in memory for Back: it opens at the top in one jump, offers the spot and stays there
+  await page.evaluate(() => scrollTo({ top: 2700, behavior: 'instant' }));
+  await page.waitForTimeout(500);
+  await page.evaluate(() => dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+  await page.waitForTimeout(50);
+  const kept0 = await Y();
+  // …and the browser putting it back where it was right after showing it (a phone does)
+  await page.evaluate(() => scrollTo({ top: 2500, behavior: 'instant' }));
+  await page.waitForTimeout(200);
+  const kept1 = await Y();
+  await page.waitForTimeout(1000);
+  const keptPill = await page.evaluate(() => { const p = document.querySelector('.resume-pill'); return p && p.classList.contains('is-shown'); });
+  ok(kept0 === 0 && kept1 === 0 && keptPill, `a page from memory for Back: top at once (${kept0}), stays there (${kept1}), the pill stays (${keptPill})`);
+  await page.tap('.resume-x');
   // leave and come back with Back
   await page.goto(U('/удобрения'), { waitUntil: 'load' });
   await page.waitForTimeout(800);
   await page.goBack({ waitUntil: 'load' });
   await page.waitForTimeout(1500);
   ok(await Y() === 0 && await page.evaluate(() => !!document.querySelector('.resume-pill')), `back opens at top (${await Y()}) with the pill`);
+  // a link into the chapter, and the browser scrolling it down on its own a moment later: back to the top
+  await page.goto(U('/удобрения'), { waitUntil: 'load' });
+  await page.waitForTimeout(800);
+  await page.evaluate(() => sessionStorage.setItem('late-scroll', '1'));
+  await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.evaluate(() => document.querySelector('#sheet-toc .toc-item[data-toc="uhod"] .toc-link').click())]);
+  await page.waitForTimeout(900);
+  const late = await page.evaluate(() => ({ y: Math.round(scrollY), late: window.__late, path: decodeURI(location.pathname) }));
+  ok(late.path === '/уход' && late.late > 2000 && late.y === 0, 'a link opens the chapter at the top and keeps it there ' + JSON.stringify(late));
   // plain link into the chapter: top, pill
+  const saved3 = await posNow();
   await page.goto(U('/'), { waitUntil: 'load' });
   await page.waitForTimeout(1000);
   const cont = await page.evaluate(() => { const c = document.getElementById('continue'); return { hidden: c.hidden, href: c.getAttribute('href'), t: document.getElementById('continue-title').textContent }; });
@@ -48,8 +120,31 @@ const { playwright, server, ok, done } = require('./lib');
   await page.evaluate(() => document.getElementById('continue').scrollIntoView({ block: 'center' }));
   await Promise.all([page.waitForNavigation(), page.tap('#continue')]);
   await page.waitForTimeout(1800);
-  const y3 = await Y();
-  ok(Math.abs(y3 - y1) < 160 && !/resume/.test(page.url()) && !(await page.evaluate(() => !!document.querySelector('.resume-pill'))), `continue lands on the spot: ${y3} vs ${y1}, url ${path()}`);
+  const l3 = await landed();
+  ok(atSentence(l3, saved3) && !/resume/.test(page.url()) && !(await page.evaluate(() => !!document.querySelector('.resume-pill'))),
+    `continue lands at the start of the sentence: ${JSON.stringify(l3)} vs ${saved3.y} «${saved3.ss}», url ${path()}`);
+  // a wider screen: the lines break elsewhere, the same sentence comes back
+  await page.goto(U('/'), { waitUntil: 'load' });
+  const contUrl = await posNow();
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto(U('/уход') + '?resume=1#' + encodeURIComponent(contUrl.panel), { waitUntil: 'load' });
+  await page.waitForTimeout(1800);
+  const l4 = await landed();
+  ok(placed(l4, contUrl) && sameWords(l4, contUrl),
+    `on a wider screen the same sentence: ${JSON.stringify(l4)} «${contUrl.ss}»`);
+  await page.setViewportSize(devices['Pixel 7'].viewport);
+  // a bookmark kept before (pixels under a heading): back to the start of the block that stands there
+  const legacy = await page.evaluate(() => {
+    const p = JSON.parse(localStorage.getItem('basil-pos')).uhod;
+    const a = document.getElementById(p.anchor);
+    const old = { panel: p.panel, anchor: p.anchor, off: 300, y: Math.round(a.getBoundingClientRect().top + scrollY + 300), label: p.label, t: Date.now() };
+    localStorage.setItem('basil-pos', JSON.stringify({ uhod: old }));
+    return old;
+  });
+  await page.goto(U('/уход') + '?resume=1#' + encodeURIComponent(legacy.panel), { waitUntil: 'load' });
+  await page.waitForTimeout(1800);
+  const l5 = await landed();
+  ok(placed(l5, await posNow()) && l5.y <= legacy.y + 4 && legacy.y - l5.y < l5.vh, `an old bookmark lands at the start of what stands there:${JSON.stringify(l5)} vs ${legacy.y}`);
   // next tab at the end of a tab
   await page.goto(U('/удобрения'), { waitUntil: 'load' });
   await page.waitForTimeout(900);
@@ -214,8 +309,10 @@ const { playwright, server, ok, done } = require('./lib');
   const drop = await d.evaluate(() => { const s = document.getElementById('sheet-toc'), r = s.getBoundingClientRect(); return { open: s.open, x: Math.round(r.left), top: Math.round(r.top), w: Math.round(r.width), both: ['.toc-chapters', '.toc-tools'].every(q => s.querySelector(q).offsetParent !== null), exp: document.querySelector('.topbar .toc-btn').getAttribute('aria-expanded') }; });
   ok(/Оглавление: 4 Уход/.test(btn.text) && drop.open && drop.exp === 'true' && Math.abs(drop.x - btn.x) <= 2 && drop.top > btn.bottom && drop.top - btn.bottom < 40 && drop.both, `contents drop from «${btn.text}» ` + JSON.stringify(drop));
   await d.keyboard.press('Escape');
-  await d.waitForTimeout(400);
-  ok(await d.evaluate(() => !document.getElementById('sheet-toc').open && document.querySelector('.topbar .toc-btn').getAttribute('aria-expanded') === 'false'), 'Esc closes the contents');
+  // the sheet closes with its animation: waited for, not timed (a busy machine takes longer)
+  const shut = () => !document.getElementById('sheet-toc').open && document.querySelector('.topbar .toc-btn').getAttribute('aria-expanded') === 'false';
+  await d.waitForFunction(shut, null, { timeout: 3000 }).catch(() => {});
+  ok(await d.evaluate(shut), 'Esc closes the contents');
   await d.click('.topbar .toc-btn');
   await d.waitForTimeout(400);
   await d.click('#sheet-toc .toc-item[data-toc="uhod"] .toc-link');

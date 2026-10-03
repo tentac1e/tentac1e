@@ -92,7 +92,7 @@
 
 ### Мой базилик — `/мой-базилик` (`moy.html`)
 - `src/pages/moy/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/moy/1-kusty.html` · #кусты — Кусты · 9 стр.
+- `src/pages/moy/1-kusty.html` · #кусты — Кусты · 10 стр.
 - `src/pages/moy/2-pogoda.html` · #погода — Погода · 11 стр.<br>модели: `weather`
 - `src/pages/moy/3-opyty.html` · #опыты — Опыты · 121 стр.<br>модели: `exlitmus`, `exosmos`, `exgerm`, `exsweat`, `exlight`, `exapex`, `exroots`, `exdark`
 - `src/pages/moy/_foot.html` · подвал главы · 3 стр.
@@ -175,7 +175,7 @@
 **app.js**
 - `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (271 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/02-router.js` (277 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-sheets.js` (212 стр.): initToc, initSheets
 - `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
@@ -202,8 +202,8 @@
 - `src/js/app/22-garden-view.js` (493 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
 - `src/js/app/22-garden.js` (132 стр.): GARDEN_KEY
-- `src/js/app/22-install.js` (59 стр.): initInstall
-- `src/js/app/22-reading-pos.js` (134 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/22-install.js` (96 стр.): initInstall
+- `src/js/app/22-reading-pos.js` (369 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
 
 **science.js**
@@ -213,12 +213,12 @@
 - `src/js/science/03-charts.js` (153 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (312 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, TILT, MolViewer
-- `src/js/science/06-labs-loader.js` (221 стр.): SELF, draw, HIDDEN, drawDue
+- `src/js/science/06-labs-loader.js` (232 стр.): SELF, draw, HIDDEN, drawDue
 - `src/js/science/07-deep.js` (228 стр.): KIND, DEPTH_KEY, DEPTHS, EASE, ANIMATED, initDepthControl, initDeep, initHomeMolecule, init
 
 **scene.js**
 - `src/js/scene/00-core.js` (8 стр.): TAU
-- `src/js/scene/01-budget.js` (84 стр.): CALM, CALM_FPS
+- `src/js/scene/01-budget.js` (99 стр.): CALM, CALM_FPS
 - `src/js/scene/02-noise.js` (22 стр.)
 - `src/js/scene/03-wind.js` (22 стр.)
 - `src/js/scene/04-background.js` (499 стр.): SPR_L, initBackground

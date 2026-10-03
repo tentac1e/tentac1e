@@ -5,12 +5,13 @@
               открываются главная, главы и «Мой базилик» со стилями, шрифтами и скриптами, модель главы
               грузится, поиск находит;
      новая версия — заменяет сохранённое: новая страница в кэше, старого кэша нет;
-     выключатель (build.py --no-sw) — работник снимает себя и стирает копии.
+     выключатель (build.py --no-sw) — работник снимает себя и стирает копии; «Копии гида» на «Мой базилик»: размер,
+     «Обновить» скачивает копии заново и не трогает кусты и фото, без сети оставляет прежние.
    node tests/pwa.js   (сборка: python3 scripts/build.py --clean --out dist/site) */
 const fs = require('fs');
 const path = require('path');
-const { spawn, execFileSync } = require('child_process');
-const { ROOT, OUT, playwright, ok, done, watch, SLUGS } = require('./lib');
+const { execFileSync } = require('child_process');
+const { ROOT, OUT, playwright, serve, ok, done, watch, SLUGS } = require('./lib');
 
 const SITE = path.join(ROOT, 'dist/site');
 const COPY = path.join(OUT, 'pwa-site');   // served and changed by the test: dist/site stays as built
@@ -29,18 +30,11 @@ async function until(page, fn, arg, ms = 30000) {
   return false;
 }
 
-async function serve(dir) {
-  const port = 8990 + Math.floor(Math.random() * 200);
-  const proc = spawn('python3', [path.join(ROOT, 'scripts/serve.py'), '--port', String(port), '--dir', dir], { stdio: ['ignore', 'pipe', 'inherit'] });
-  await new Promise((resolve, reject) => { proc.stdout.once('data', resolve); proc.once('exit', c => reject(new Error('serve.py exited ' + c))); });
-  return { base: `http://127.0.0.1:${port}`, stop() { proc.kill(); } };
-}
-
 (async () => {
   if (!fs.existsSync(path.join(SITE, 'sw.js'))) throw new Error('Нет dist/site/sw.js: python3 scripts/build.py --clean --out dist/site');
   fs.rmSync(COPY, { recursive: true, force: true });
   fs.cpSync(SITE, COPY, { recursive: true });
-  const srv = await serve(COPY);
+  let srv = await serve(COPY);
   const base = srv.base;
   const { chromium, devices } = playwright();
   const browser = await chromium.launch();
@@ -177,6 +171,44 @@ async function serve(dir) {
     await page.reload({ waitUntil: 'load' });
     await page.evaluate(() => { const e = new Event('beforeinstallprompt', { cancelable: true }); e.prompt = () => {}; e.userChoice = Promise.resolve({}); dispatchEvent(e); });
     ok(await page.evaluate(() => document.getElementById('garden-install').hidden), '«Не сейчас»: после перезагрузки не предлагается');
+    // «Копии гида»: how much they take; «Обновить» fetches them afresh and keeps the reader's own things —
+    // without the network it keeps the old copies
+    await page.waitForFunction(() => { const c = document.getElementById('garden-copies'); return c && !c.hidden && /\d\s*МБ/.test(c.textContent); }, null, { timeout: 20000 }).catch(() => {});
+    const copies = await page.evaluate(() => { const c = document.getElementById('garden-copies'); return { hidden: c.hidden, text: c.textContent.replace(/\s+/g, ' ').trim() }; });
+    const mbOf = t => parseFloat(((t.match(/([\d,]+)\s*МБ/) || [])[1] || '0').replace(',', '.'));
+    ok(!copies.hidden && mbOf(copies.text) > 1 && /кусты и фото останутся/.test(copies.text), `«Копии гида»: ${copies.text}`);
+    const mine = await page.evaluate(async () => {
+      localStorage.setItem('basil-test-own', 'куст');
+      const own = Object.keys(localStorage).sort().join();
+      const dbs = indexedDB.databases ? (await indexedDB.databases()).map(d => d.name).sort().join() : '';
+      const shell = (await caches.keys()).find(n => /^basil-[0-9a-f]+$/.test(n));
+      return { own, dbs, shell };
+    });
+    const toastAfter = async () => page.waitForFunction(() => { const t = document.getElementById('toast'); return t && /Копии|сети/.test(t.textContent) && t.textContent; }, null, { timeout: 60000 }).then(h => h.jsonValue(), () => '');
+    await page.click('#garden-copies [data-copies]');
+    const said = await toastAfter();
+    const refreshed = await page.evaluate(async () => {
+      const names = await caches.keys(), shell = names.find(n => /^basil-[0-9a-f]+$/.test(n));
+      return { names, n: shell ? (await (await caches.open(shell)).keys()).length : 0, own: Object.keys(localStorage).sort().join(), dbs: indexedDB.databases ? (await indexedDB.databases()).map(d => d.name).sort().join() : '',
+               btn: document.querySelector('#garden-copies [data-copies]').textContent };
+    });
+    ok(/Копии обновлены/.test(said) && refreshed.names.includes(mine.shell) && refreshed.n >= keep.length && refreshed.own === mine.own && refreshed.dbs === mine.dbs && refreshed.btn === 'Обновить',
+      `«Обновить»: «${said}», кэш ${refreshed.n} из ${keep.length} адресов, свои данные на месте`);
+    await ctx.setOffline(true);
+    const offPage = await page.goto(`${base}/${encodeURI('уход')}`, { waitUntil: 'load' }).then(r => r && r.ok(), () => false);
+    await ctx.setOffline(false);
+    await page.goto(moy, { waitUntil: 'load' }).catch(() => {});
+    await page.waitForFunction(() => { const c = document.getElementById('garden-copies'); return c && !c.hidden; }, null, { timeout: 20000 }).catch(() => {});
+    await page.evaluate(() => { const t = document.getElementById('toast'); if (t) t.textContent = ''; });
+    // the worker's own requests do not obey the browser's offline switch: the server itself goes away for a moment
+    srv.stop();
+    await page.waitForTimeout(300);
+    await page.click('#garden-copies [data-copies]').catch(() => {});
+    const saidOff = await toastAfter();
+    const kept2 = await page.evaluate(async () => { const s = (await caches.keys()).find(n => /^basil-[0-9a-f]+$/.test(n)); return s ? (await (await caches.open(s)).keys()).length : 0; });
+    srv = await serve(COPY, new URL(base).port);
+    ok(offPage && /Нет сети/.test(saidOff) && kept2 >= keep.length, `после «Обновить» глава без сети открывается; без сети «${saidOff}», копий ${kept2}`);
+    await page.evaluate(() => localStorage.removeItem('basil-test-own'));
     const ictx = await browser.newContext({ ...devices['iPhone 13 Mini'], reducedMotion: 'reduce' });
     const ip = await ictx.newPage();
     watch(ip, errs);

@@ -2,7 +2,8 @@
    из src/sw.js: VERSION — отпечаток всех файлов списка, PRECACHE — страницы по русским адресам и всё, что им нужно.
    Страница — сначала из сети, а если сеть молчит дольше 3 с или её нет — сохранённая копия.
    Файл с отпечатком (?v=…) не меняется никогда: он берётся из кэша, не спрашивая сеть.
-   Чужие адреса (погода Open-Meteo) идут мимо: прогноз хранит сам интерфейс. */
+   Чужие адреса (погода Open-Meteo) идут мимо: прогноз хранит сам интерфейс.
+   По просьбе страницы («Мой базилик» → «Копии гида») говорит, сколько занимают копии, и скачивает их заново. */
 const VERSION = '{{version}}';
 const PRECACHE = {{precache}};
 const SHELL = 'basil-' + VERSION; // the pages and their files, fetched at install
@@ -44,6 +45,48 @@ self.addEventListener('fetch', e => {
   if (req.mode === 'navigate') e.respondWith(page(e, url));
   else if (url.pathname.startsWith(ASSETS)) e.respondWith(file(e, url));
 });
+
+// the page asks (a port to answer on comes with the message):
+//   { type: 'size' }    — how much the copies take, in bytes
+//   { type: 'refresh' } — every file of the list fetched afresh; only when all came, they replace the old copies
+//                         (without the network nothing is lost). The reader's bushes and photos are not here at all
+self.addEventListener('message', e => {
+  const port = e.ports && e.ports[0];
+  const type = e.data && e.data.type;
+  if (!port || (type !== 'size' && type !== 'refresh')) return;
+  e.waitUntil((async () => {
+    try {
+      if (type === 'refresh') {
+        const got = await Promise.all(PRECACHE.map(async path => {
+          const url = new URL(path, SCOPE).href;
+          const res = await fetch(new Request(url, { cache: 'reload' }));
+          if (!res.ok) throw new Error(`${path}: ${res.status}`);
+          return [url, res];
+        }));
+        for (const k of await caches.keys()) if (k.startsWith('basil-')) await caches.delete(k);
+        const shell = await caches.open(SHELL);
+        await Promise.all(got.map(([url, res]) => shell.put(url, res)));
+      }
+      port.postMessage({ ok: true, bytes: await size() });
+    } catch (err) {
+      port.postMessage({ ok: false, bytes: await size().catch(() => 0) });
+    }
+  })());
+});
+
+async function size() {
+  let n = 0;
+  for (const k of await caches.keys()) {
+    if (!k.startsWith('basil-')) continue;
+    const c = await caches.open(k);
+    for (const req of await c.keys()) {
+      const res = await c.match(req);
+      const len = res && +res.headers.get('content-length');
+      n += len || (res ? (await res.blob()).size : 0);
+    }
+  }
+  return n;
+}
 
 // the copy of a page: by its address without the query, else the home page
 const copyOf = url => caches.match(url.origin + url.pathname, MATCH).then(r => r || caches.match(SCOPE.href, MATCH));

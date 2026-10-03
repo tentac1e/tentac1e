@@ -9,7 +9,7 @@
 ### app.js
 - `src/js/app/00-core.js`: `$` 6, `$$` 7, `clamp` 9, `f1` 10, `esc` 11, `nb` 26, `plural` 28, `fmtNum` 37, `addDays` 42, `fd` 43, `fr` 44, `toISO` 49, `fromISO` 50, `today` 54, `dayDiff` 55, `icon` 56, `chapterById` 57, `paintIll` 60, `pageOf` 66, `aliasOf` 74, `urlFor` 76, `fixLinks` 85, `smooth` 95, `toast` 98, `copyText` 107
 - `src/js/app/01-theme.js`: `initTheme` 4
-- `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 77, `jump` 99, `scrollAfter` 104, `route` 139, `navigate` 169, `initRouter` 177, `initPagers` 198, `initScrollChrome` 241
+- `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 77, `jump` 103, `scrollAfter` 109, `route` 144, `navigate` 174, `initRouter` 182, `initPagers` 204, `initScrollChrome` 247
 - `src/js/app/03-sheets.js`: `openSheet` 8, `closeSheet` 30, `dragSheet` 57, `tocFold` 127, `tocPane` 132, `tocOpen` 137, `tocButton` 162, `initToc` 170, `initSheets` 193
 - `src/js/app/04-search-words.js`: `norm` 4, `isWordChar` 6, `stemRu` 10, `keysOf` 48, `fromLayout` 63, `latinTyped` 64, `sameKey` 91, `altsOf` 93, `editDistance` 104, `nearestWord` 124
 - `src/js/app/04-search.js`: `textOf` 4, `sectionOf` 19, `ownText` 30, `indexPage` 40, `sentences` 83, `buildSearchIndex` 85, `entryUrl` 114, `loadSearch` 120, `parseQuery` 140, `scanKey` 149, `scoreEntry` 172, `matchAll` 203, `vocabulary` 213, `runSearch` 223, `highlight` 259, `snippet` 273, `markFound` 286, `flashFound` 290, `fitSearchPanel` 310, `initSearch` 323
@@ -37,7 +37,7 @@
 - `src/js/app/22-garden-weather.js`: `round2` 9, `wxSvp` 12, `wxPlace` 13, `wxCached` 16, `pad2` 23, `wxParse` 25, `wxRefresh` 42, `wxSearch` 64, `wxSetPlace` 72, `wxHere` 82, `fmtT` 90, `fillText` 91, `wxWhen` 93, `wxDays` 94, `wxTasks` 97, `wxAdvice` 118, `wxAge` 135, `wxStrip` 143
 - `src/js/app/22-garden.js`: `gardenLoad` 7, `gardenSave` 11, `gardenVariety` 15, `weekOf` 17, `later` 18, `daysWord` 19, `plantTasks` 25, `plantWeek` 109, `plantStage` 118, `plantNote` 124, `plantDone` 128, `lastNote` 132
 - `src/js/app/22-install.js`: `initInstall` 6
-- `src/js/app/22-reading-pos.js`: `readPos` 6, `absTop` 11, `labelOf` 12, `currentAnchor` 18, `savePos` 32, `resumeTo` 42, `offerResume` 64, `initReadingPos` 89, `initLinks` 113, `initPageAction` 122
+- `src/js/app/22-reading-pos.js`: `readPos` 9, `absTop` 14, `labelOf` 15, `currentAnchor` 22, `headingBefore` 34, `ownWords` 46, `readBlocks` 47, `normText` 54, `sentenceStart` 57, `sentenceEnd` 63, `pointIn` 69, `caretAt` 79, `coverTop` 85, `spotAt` 94, `findSpot` 125, `firstLetter` 139, `spotTop` 146, `markSpot` 162, `holdTop` 212, `savePos` 231, `resumeTo` 248, `offerResume` 296, `initReadingPos` 321, `initLinks` 348, `initPageAction` 357
 - `src/js/app/23-boot.js`: `boot` 4
 
 Общие помощники app.js — кто зовёт:
@@ -48,7 +48,7 @@
 - `addDays` (00-core.js:42) — 5: 11-calendar, 15-nutrients-plan, 22-garden-ics …
 - `toISO` (00-core.js:49) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
 - `fromISO` (00-core.js:50) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
-- `today` (00-core.js:54) — 7: 07-home, 11-calendar, 15-nutrients-plan …
+- `today` (00-core.js:54) — 8: 07-home, 11-calendar, 15-nutrients-plan …
 - `dayDiff` (00-core.js:55) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
 - `icon` (00-core.js:56) — 14: 02-router, 04-search, 07-home …
 - `chapterById` (00-core.js:57) — 4: 02-router, 03-sheets, 04-search …
@@ -66,7 +66,7 @@
 - `src/js/science/03-charts.js`: `fitLabels` 6, `chart` 27, `r1` 58, `plot` 60, `tip` 147
 - `src/js/science/04-astronomy.js`: `decl` 5, `dayLength` 6, `h0` 13, `noonSun` 20
 - `src/js/science/05-molecules.js`: `molName` 68, `molFam` 69, `seeded` 106, `embed` 108, `shape` 167, `rx` 170, `ry` 171, `mul` 172, `ortho` 174, `MolViewer` 187
-- `src/js/science/06-labs-loader.js`: `register` 6, `url` 12, `own` 15, `parsed` 16, `script` 17, `ensureLabs` 34, `styleFor` 43, `styleOn` 44, `failed` 54, `pause` 60, `later` 63, `drain` 71, `mount` 85, `mountAll` 100, `illustrate` 113, `variants` 114, `draw` 116, `fitIll` 138, `painted` 141, `seen` 142, `drawDue` 144, `paint` 148, `ahead` 186, `early` 208
+- `src/js/science/06-labs-loader.js`: `register` 6, `url` 12, `own` 15, `parsed` 16, `script` 17, `ensureLabs` 34, `styleFor` 43, `styleOn` 44, `failed` 54, `pause` 60, `later` 63, `drain` 71, `mount` 87, `mountAll` 102, `illustrate` 115, `variants` 116, `draw` 118, `fitIll` 140, `painted` 144, `seen` 148, `drawDue` 153, `paint` 157, `ahead` 197, `early` 219
 - `src/js/science/07-deep.js`: `animateDetails` 24, `setDepth` 45, `initDepthControl` 67, `initDeep` 124, `initHomeMolecule` 181, `init` 216
 
 Общие помощники science.js — кто зовёт:
@@ -74,7 +74,7 @@
 
 ### scene.js
 - `src/js/scene/00-core.js`: `clamp` 4, `lerp` 5, `now` 6, `css` 7
-- `src/js/scene/01-budget.js`: `setLow` 8, `setState` 22, `check` 34, `poke` 41, `onWake` 50, `gate` 52, `loop` 68
+- `src/js/scene/01-budget.js`: `setLow` 8, `setState` 22, `check` 34, `poke` 41, `onWake` 50, `gate` 52, `calmTick` 69, `loop` 82
 - `src/js/scene/02-noise.js`: `rnd` 5, `fade` 12, `h3` 13, `noise3` 14
 - `src/js/scene/03-wind.js`: `gust` 5, `gustAt` 9, `wind` 17
 - `src/js/scene/04-background.js`: `leafPath` 7, `paintLeaf` 18, `makeCanvas` 58, `sprite` 66, `initBackground` 80
@@ -135,7 +135,7 @@
 - `src/css/style/20-footer.css`: `.footer-*`, `.to-top`, `.brand`, `.is-shown`
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.sr-group`, `.sr-note`, `.sr-ico`, `.is-found`, `.is-dragging` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `search-in`, `is-found`
 - `src/css/style/22-selection.css`: `.depth-*`, `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.deep-*`
-- `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-photo-*`, `.g-form-*`, `.photo-*`, `.g-wx-*`, `.mini-*`
+- `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-photo-*`, `.g-form-*`, `.g-link`, `.photo-*`, `.g-wx-*`
 - `src/css/style/24-toc.css`: `.toc-*`, `.sheet-*`, `.ico`, `.tools-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where` · анимации: `toc-drop`
 
 ### lab.css
@@ -155,7 +155,7 @@
 - `src/css/lab/12-sci-notes.css`: `.sci-*`, `.ico`, `.hand`
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
 - `src/css/lab/14-paint.css`: `.plant-*`, `.lab-*`, `.is-off`, `.pl-stems`, `.osm-*`, `.xylem`, `.phloem`, `.barrel-*`, `.nc-flow`, `.germ-*`
-- `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.depth-*`, `.ico`, `.hap-*`, `.continue`, `.is-shown`
+- `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.depth-*`, `.ico`, `.hap-*`, `.continue`, `.is-shown`, `.is-bar` · анимации: `resume-mark`
 
 ### стили моделей и глав
 - `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
@@ -193,11 +193,11 @@
 
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
-- `basil:panel` — шлёт: `src/js/app/02-router.js:73`; слушают: `src/js/science/06-labs-loader.js:174`
-- `basil:ready` — шлёт: `src/js/app/23-boot.js:17`; слушают: `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:167`, `src/js/science/06-labs-loader.js:203`, `src/js/science/07-deep.js:224`
+- `basil:panel` — шлёт: `src/js/app/02-router.js:73`; слушают: `src/js/app/22-reading-pos.js:227`, `src/js/science/06-labs-loader.js:185`
+- `basil:ready` — шлёт: `src/js/app/23-boot.js:17`; слушают: `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:214`, `src/js/science/07-deep.js:224`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
 - `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/urozhay/pesto.js:67`
-- `basil:view` — шлёт: `src/js/app/02-router.js:160`; слушают: `src/js/app/02-router.js:237`, `src/js/app/02-router.js:267`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:226`
+- `basil:view` — шлёт: `src/js/app/02-router.js:165`; слушают: `src/js/app/02-router.js:243`, `src/js/app/02-router.js:273`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:226`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
 ## Хранилище
@@ -209,10 +209,10 @@
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
 - `basil-haptics` — `src/js/haptics.js:7`
-- `basil-install` — `src/js/app/22-install.js:30`
+- `basil-install` — `src/js/app/22-install.js:67`
 - `basil-last` — `src/js/app/02-router.js:92`
 - `basil-photos` — `src/js/app/22-garden-photos.js:5`
-- `basil-pos` — `src/js/app/22-reading-pos.js:5`
+- `basil-pos` — `src/js/app/22-reading-pos.js:8`
 - `basil-recent` — `src/js/app/04-search.js:322`
 - `basil-theme` — `src/js/app/01-theme.js:8`
 - `basil-weather` — `src/js/app/22-garden-weather.js:7`
@@ -250,16 +250,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1112`
-- `{{description}}` в `src/layout.html` — `build.py:1112`
-- `{{pwa}}` в `src/layout.html` — `build.py:1128`
-- `{{fonts}}` в `src/layout.html` — `build.py:1127`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1110`
-- `{{content}}` в `src/layout.html` — `build.py:1108`
-- `{{toc}}` в `src/layout.html` — `build.py:1110`
-- `{{scripts}}` в `src/layout.html` — `build.py:1126`
-- `{{version}}` в `src/sw.js` — `build.py:1209`
-- `{{precache}}` в `src/sw.js` — `build.py:1209`
+- `{{title}}` в `src/layout.html` — `build.py:1128`
+- `{{description}}` в `src/layout.html` — `build.py:1128`
+- `{{pwa}}` в `src/layout.html` — `build.py:1144`
+- `{{fonts}}` в `src/layout.html` — `build.py:1143`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1126`
+- `{{content}}` в `src/layout.html` — `build.py:1124`
+- `{{toc}}` в `src/layout.html` — `build.py:1126`
+- `{{scripts}}` в `src/layout.html` — `build.py:1142`
+- `{{version}}` в `src/sw.js` — `build.py:1227`
+- `{{precache}}` в `src/sw.js` — `build.py:1227`
 
 ## Проверки
 
@@ -273,7 +273,7 @@
 - `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html, udobreniya.html, kalendar.html, formirovka.html
 - `tests/ills.js` — Картинки (data-ill) на каждой вкладке каждой страницы. · сервер + корень · все страницы
 - `tests/labs.js` — Каждая модель на своей странице: запускается без ошибок, ничего не вылезает за край, · корень · все страницы
-- `tests/nav.js` — Навигация на телефоне и компьютере: страница открывается сверху, «Вы остановились здесь», · сервер
+- `tests/nav.js` — Навигация на телефоне и компьютере: страница открывается сверху (и страница из памяти для «Назад» тоже, одним · сервер
 - `tests/overlap.js` — Текст не лезет на картинку — на каждой вкладке каждой страницы, на телефоне и на компьютере. · корень · все страницы
 - `tests/pages.js` — Сборка в корне репозитория (ссылки вида sorta.html), открытая как файлы: · корень · все страницы
 - `tests/perf.js` — Скорость на телефоне с процессором, замедленным в 4 раза: каждая страница. · корень · все страницы
