@@ -166,6 +166,7 @@ window.BASIL_PAGES = {
   "formirovka-osnovy": "formirovka",
   "formirovka-trenazher": "formirovka",
   "garden-home": "glavnaya",
+  "garden-install": "moy",
   "garden-page": "moy",
   "germ-count": "razmnozhenie",
   "germ-out": "razmnozhenie",

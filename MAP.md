@@ -92,7 +92,7 @@
 
 ### Мой базилик — `/мой-базилик` (`moy.html`)
 - `src/pages/moy/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/moy/1-kusty.html` · #кусты — Кусты · 8 стр.
+- `src/pages/moy/1-kusty.html` · #кусты — Кусты · 9 стр.
 - `src/pages/moy/2-pogoda.html` · #погода — Погода · 11 стр.<br>модели: `weather`
 - `src/pages/moy/3-opyty.html` · #опыты — Опыты · 121 стр.<br>модели: `exlitmus`, `exosmos`, `exgerm`, `exsweat`, `exlight`, `exapex`, `exroots`, `exdark`
 - `src/pages/moy/_foot.html` · подвал главы · 3 стр.
@@ -202,6 +202,7 @@
 - `src/js/app/22-garden-view.js` (493 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
 - `src/js/app/22-garden.js` (132 стр.): GARDEN_KEY
+- `src/js/app/22-install.js` (59 стр.): initInstall
 - `src/js/app/22-reading-pos.js` (134 стр.): POS_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (21 стр.)
 

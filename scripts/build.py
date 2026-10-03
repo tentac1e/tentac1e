@@ -97,12 +97,13 @@ def htaccess():
         'AddDefaultCharset UTF-8',
         'AddCharset UTF-8 .html .css .js',
         'AddType font/woff2 .woff2',
+        'AddType application/manifest+json .webmanifest',
         '',
         '# compressed transfer: the pages, styles, scripts and the search index shrink four- to fivefold',
         '# (Apache 2.4 takes AddOutputFilterByType from mod_filter: without it the line is skipped, not an error)',
         '<IfModule mod_deflate.c>',
         '<IfModule mod_filter.c>',
-        '  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/x-javascript',
+        '  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/x-javascript application/manifest+json',
         '</IfModule>',
         '</IfModule>',
         '# every style, script and font address carries a fingerprint of its content (?v=...): kept for a year',
@@ -112,6 +113,16 @@ def htaccess():
         '  ExpiresByType text/javascript "access plus 1 year"',
         '  ExpiresByType application/javascript "access plus 1 year"',
         '  ExpiresByType font/woff2 "access plus 1 year"',
+        '  ExpiresByType image/png "access plus 1 year"',
+        '  # the offline worker and the app card have no fingerprint: the browser asks for news on every visit',
+        '  <FilesMatch "^(sw\\.js|manifest\\.webmanifest)$">',
+        '    ExpiresActive Off',
+        '  </FilesMatch>',
+        '</IfModule>',
+        '<IfModule mod_headers.c>',
+        '  <FilesMatch "^(sw\\.js|manifest\\.webmanifest)$">',
+        '    Header set Cache-Control "no-cache"',
+        '  </FilesMatch>',
         '</IfModule>',
         '',
         'RewriteEngine On',
@@ -155,6 +166,7 @@ PRELOAD_FONTS = ['manrope-normal-cyrillic.woff2', 'manrope-normal-latin.woff2',
                  'cormorant-garamond-normal-cyrillic.woff2', 'cormorant-garamond-normal-latin.woff2']
 
 SITE_TITLE = 'Гид по базилику'
+APP_SHORT = 'Базилик'  # the name under the icon on a phone's home screen
 SITE_DESC = ('Подробный гид по выращиванию базилика в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, '
              'прищипывание, урожай, химия вкуса и аромата, размножение, болезни. С калькуляторами, научными разворотами '
              'и интерактивными моделями.')
@@ -438,6 +450,13 @@ def assemble(src_pages):
     fonts.mkdir()
     for f in sorted((SRC / 'fonts').glob('*.woff2')):
         shutil.copyfile(f, fonts / f.name)
+    # the icons of the home screen (scripts/icons.js draws them)
+    icons = ROOT / 'assets' / 'icons'
+    if icons.exists():
+        shutil.rmtree(icons)
+    icons.mkdir()
+    for f in sorted((SRC / 'icons').glob('*.png')):
+        shutil.copyfile(f, icons / f.name)
 
     style = ''.join(f.read_text(encoding='utf-8') for f in numbered(SRC / 'css' / 'style', '.css'))
     (css / 'style.css').write_text(banner(style, 'src/css/style/'), encoding='utf-8')
@@ -593,6 +612,8 @@ def main():
         out_dir = Path(sys.argv[sys.argv.index('--out') + 1]).resolve()
     # --clean: links say «урожай», not «urozhay.html»; the server maps one onto the other (.htaccess)
     clean = '--clean' in sys.argv
+    # --no-sw: the offline worker switched off — sw.js removes itself and the saved copies from the readers' browsers
+    no_sw = '--no-sw' in sys.argv
     LINK = {v: (SLUG[v] or './') for v, _ in PAGES} if clean else dict(FILE)
 
     layout = typeset((SRC / 'layout.html').read_text(encoding='utf-8'))  # the frame's own text: footer, sheets, search
@@ -764,6 +785,15 @@ def main():
             font_head = '\n'.join(f'<link rel="preload" href="assets/fonts/{n}?v={fv(n)}" as="font" type="font/woff2" crossorigin>' for n in PRELOAD_FONTS) + '\n'
         font_head += '<style>\n' + rules + '</style>'
 
+    # the hosting copy can be put on a phone's home screen and works offline (write_pwa): its pages link the app's card
+    pwa_head = ''
+    if clean:
+        pwa_head = (f'<link rel="manifest" href="manifest.webmanifest"{" data-sw" if not no_sw else ""}>\n'
+                    f'<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v={ver(out_dir / "assets" / "icons" / "apple-touch-icon.png")}">\n'
+                    '<meta name="mobile-web-app-capable" content="yes">\n'
+                    '<meta name="apple-mobile-web-app-capable" content="yes">\n'
+                    f'<meta name="apple-mobile-web-app-title" content="{APP_SHORT}">\n')
+
     def fingerprint(html):
         if single:
             return html
@@ -799,6 +829,7 @@ def main():
                                                    + [f'<script src="assets/js/labs/{v}.js" defer></script>' for v in bundles]))
         out = out.replace('{{scripts}}', scripts)
         out = out.replace('{{fonts}}', GOOGLE_FONTS if single else font_head)
+        out = out.replace('{{pwa}}\n', pwa_head)
         return fingerprint(out)
 
     if single:
@@ -814,8 +845,75 @@ def main():
     for view, file in PAGES:
         (out_dir / file).write_text(page_html([view], view), encoding='utf-8')
         print(f'{file:18} {len((out_dir / file).read_bytes()) // 1024:4} КБ')
+    if clean:
+        write_pwa(out_dir, pages_js['v'], no_sw)
     print(f'pages.js {len((js / "pages.js").read_bytes()) // 1024} КБ, search-index.js {len((js / "search-index.js").read_bytes()) // 1024} КБ, '
           f'{len(static_entries_panels) + len(static_entries_heads)} записей в индексе')
+
+
+def write_pwa(out_dir, v, no_sw):
+    """The hosting copy on a phone's home screen: the app's card (manifest.webmanifest) and the offline worker
+    (sw.js from src/sw.js). The worker keeps every page by its Russian address and every file the pages ask for:
+    styles, scripts, the models' files, the search index, the Cyrillic and Latin fonts, the icons."""
+    pages = [SLUG[view] or './' for view, _ in PAGES]
+    found = set()
+    for _, file in PAGES:
+        html = (out_dir / file).read_text(encoding='utf-8')
+        found.update(re.findall(r'(?:href|src)="(assets/[^"?]+\?v=[0-9a-f]+)"', html))
+        # the fonts of the page's own alphabets; the other ones (Greek, Vietnamese…) are kept when first asked for
+        found.update(re.findall(r'url\((assets/fonts/[a-z0-9-]+-(?:cyrillic|latin)\.woff2\?v=[0-9a-f]+)\)', html))
+    # what the pages fetch later, by the fingerprints in pages.js
+    found.update(f'assets/js/labs/{n}.js?v={h}' for n, h in v['labs'].items())
+    found.update(f'assets/js/labs/lib-{n}.js?v={h}' for n, h in v['lib'].items())
+    found.add(f'assets/js/search-index.js?v={v["search"]}')
+    ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
+    icon = lambda n: f'assets/icons/{n}?v={ver(out_dir / "assets" / "icons" / n)}'
+    icons = [icon(n) for n in ('icon-192.png', 'icon-512.png', 'icon-maskable-512.png')]
+    files = sorted(found | set(icons))
+    for f in files:
+        assert (out_dir / f.split('?')[0]).exists(), f
+    shortcut = lambda name, view, desc: {'name': name, 'url': SLUG[view], 'description': desc,
+                                         'icons': [{'src': icons[0], 'sizes': '192x192', 'type': 'image/png'}]}
+    card = {
+        'id': './',
+        'name': SITE_TITLE,
+        'short_name': APP_SHORT,
+        'description': 'Как вырастить базилик: сорта, посадка, уход, удобрения, урожай, болезни — и ваши кусты '
+                       'с делами на неделю, погодой и опытами.',
+        'lang': 'ru',
+        'dir': 'ltr',
+        'start_url': './',
+        'scope': './',
+        'display': 'standalone',
+        'background_color': '#EEF4E9',
+        'theme_color': '#2D6932',
+        'categories': ['education', 'lifestyle'],
+        'icons': [{'src': icons[0], 'sizes': '192x192', 'type': 'image/png', 'purpose': 'any'},
+                  {'src': icons[1], 'sizes': '512x512', 'type': 'image/png', 'purpose': 'any'},
+                  {'src': icons[2], 'sizes': '512x512', 'type': 'image/png', 'purpose': 'maskable'}],
+        'shortcuts': [shortcut('Мой базилик', 'moy', 'Ваши кусты, дела на неделю, погода и опыты'),
+                      shortcut('Проблемы', 'problemy', 'Что с листьями: болезни, вредители, нехватка питания'),
+                      shortcut('Календарь', 'kalendar', 'Сроки посева, высадки и сбора под ваш климат')],
+    }
+    manifest = json.dumps(card, ensure_ascii=False, indent=1) + '\n'
+    (out_dir / 'manifest.webmanifest').write_text(manifest, encoding='utf-8')
+    if no_sw:
+        shutil.copyfile(SRC / 'sw-off.js', out_dir / 'sw.js')
+        print('sw.js — выключатель: снимает себя и сохранённые копии')
+        return
+    template = (SRC / 'sw.js').read_text(encoding='utf-8')
+    # the version: a fingerprint of the worker, the card, every page and every file it keeps
+    sha = hashlib.sha1(template.encode('utf-8') + manifest.encode('utf-8'))
+    for view, file in PAGES:
+        sha.update((out_dir / file).read_bytes())
+    for f in files:
+        sha.update(f.encode('utf-8'))
+    keep = pages + files
+    assert template.count("'{{version}}'") == 1 and template.count('{{precache}}') == 1
+    sw = template.replace("'{{version}}'", json.dumps(sha.hexdigest()[:10])).replace('{{precache}}', json.dumps(keep, ensure_ascii=False, indent=1))
+    (out_dir / 'sw.js').write_text(sw, encoding='utf-8')
+    size = sum((out_dir / FILE[view]).stat().st_size for view, _ in PAGES) + sum((out_dir / f.split('?')[0]).stat().st_size for f in files)
+    print(f'sw.js: {len(keep)} адресов, {size // 1024} КБ без сжатия')
 
 
 if __name__ == '__main__':

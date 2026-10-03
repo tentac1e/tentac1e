@@ -83,7 +83,8 @@ def main():
     if not (d / 'index.html').exists():
         sys.exit(f'{d} — нет index.html. Сначала: python3 scripts/build.py --clean --out dist/site')
     Handler.extensions_map = {**SimpleHTTPRequestHandler.extensions_map, '.js': 'text/javascript; charset=utf-8',
-                              '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8'}
+                              '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8',
+                              '.webmanifest': 'application/manifest+json; charset=utf-8'}
     srv = ThreadingHTTPServer(('127.0.0.1', a.port), partial(Handler, directory=str(d)))
     srv.verbose = a.verbose
     print(f'http://127.0.0.1:{a.port}/  ← {d}', flush=True)

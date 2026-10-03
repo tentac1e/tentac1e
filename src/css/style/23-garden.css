@@ -158,6 +158,15 @@
 .g-more .ico { width: 16px; height: 16px; }
 /* the page: the bushes first, then how the tasks are counted */
 .garden-page { margin-bottom: 28px; }
+/* the page: the guide onto the phone's home screen (22-install.js), offered only where the browser can do it */
+.g-install { margin: 0 0 28px; }
+.g-install-in { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 6px 14px; align-items: start; max-width: 68ch; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.g-install-pic { width: 48px; height: 48px; border-radius: 12px; }
+.g-install-t b { display: block; margin: 2px 0 4px; font: 700 .96rem/1.3 var(--font-body); color: var(--ink); }
+.g-install-t p { margin: 0; font-size: .88rem; line-height: 1.5; color: var(--ink-2); }
+.g-install-t .g-install-ios { margin-top: 6px; font-weight: 600; color: var(--ink); }
+.g-install-a { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.g-install-a .g-link { min-height: 40px; }
 .g-about { max-width: 68ch; color: var(--ink-2); }
 .g-about h3 { margin: 0 0 8px; }
 .g-about p { margin: 0 0 10px; }
