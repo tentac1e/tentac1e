@@ -1,7 +1,31 @@
 /* Сборка в корне репозитория (ссылки вида sorta.html), открытая как файлы:
-   каждая страница, переходы между главами, поиск, глубина чтения, «Продолжить», ленивые модели.
+   каждая страница, переходы между главами, поиск, глубина чтения, «Продолжить», ленивые модели;
+   карта кода CODE-MAP.md не врёт (функции на своих строках, события и ключи есть в коде).
    node tests/pages.js */
-const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
+const fs = require('fs');
+const path = require('path');
+const { playwright, ok, done, watch, FILES, fileUrl, ROOT } = require('./lib');
+
+// CODE-MAP.md, written by the build: every function it names stands on its line, every event and key is in the code
+function codeMap() {
+  const map = fs.readFileSync(path.join(ROOT, 'CODE-MAP.md'), 'utf8');
+  const wrong = [];
+  let n = 0;
+  for (const line of map.split('\n')) {
+    const m = line.match(/^- `((?:src|scripts)\/[^`]+\.js)`[^:]*: (.+)$/);
+    if (!m) continue;
+    const src = fs.readFileSync(path.join(ROOT, m[1]), 'utf8').split('\n');
+    for (const [, name, ln] of m[2].matchAll(/`([A-Za-z_$][\w$]*)` (\d+)/g)) {
+      n++;
+      const at = src[+ln - 1] || '';
+      if (!new RegExp(`(?:function|const)\\s+${name.replace(/\$/g, '\\$')}(?![\\w$])`).test(at)) wrong.push(`${m[1]}:${ln} ${name}`);
+    }
+  }
+  const code = [...fs.readdirSync(path.join(ROOT, 'src'), { recursive: true })].filter(f => f.endsWith('.js')).map(f => fs.readFileSync(path.join(ROOT, 'src', f), 'utf8')).join('\n');
+  const named = [...map.matchAll(/^- `(basil[:-][a-z-]+)`/gm)].map(x => x[1]);
+  const missing = named.filter(k => !code.includes(`'${k}'`));
+  return { n, wrong, named: named.length, missing };
+}
 
 (async () => {
   const { chromium } = playwright();
@@ -186,6 +210,10 @@ const { playwright, ok, done, watch, FILES, fileUrl } = require('./lib');
   await page.click('.subnav a[href="#полив"]');
   await page.waitForTimeout(400);
   ok(await page.evaluate(() => decodeURI(location.href).endsWith('uhod.html#полив') && document.getElementById('полив').classList.contains('is-active')), 'tab switch in page');
+
+  const cm = codeMap();
+  ok(cm.n > 300 && !cm.wrong.length, `CODE-MAP.md: ${cm.n} functions, each on its line${cm.wrong.length ? ' — not there: ' + cm.wrong.slice(0, 5).join(', ') : ''}`);
+  ok(cm.named >= 15 && !cm.missing.length, `CODE-MAP.md: ${cm.named} events and storage keys, all in the code${cm.missing.length ? ' — missing: ' + cm.missing.join(', ') : ''}`);
 
   await browser.close();
   done(errs);

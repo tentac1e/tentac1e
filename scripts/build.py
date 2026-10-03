@@ -700,6 +700,133 @@ def write_map(src_pages, CH):
     (ROOT / 'MAP.md').write_text('\n'.join(out) + '\n', encoding='utf-8')
 
 
+# a function or an arrow function at the given depth of a piece: «function x(», «const x = (…) =>», «const x = y =>»
+FN_DECL = r'^{pad}(?:async\s+)?function\s+([A-Za-z_$][\w$]*)|^{pad}const\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?(?:\([^)]*\)|[A-Za-z_$][\w$]*)\s*=>'
+
+
+def declared(text, pad):
+    """the names declared at one depth of a file, with their line numbers"""
+    rx = re.compile(FN_DECL.format(pad=pad))
+    return [(m.group(1) or m.group(2), i + 1) for i, line in enumerate(text.splitlines()) if (m := rx.match(line))]
+
+
+def css_families(text):
+    """the families of classes a stylesheet styles (.toc-*, .subnav, .g-install-*), most used first, and its animations"""
+    text = re.sub(r'/\*.*?\*/', '', text, flags=re.S)
+    fam, members = {}, {}
+    for sel in re.findall(r'([^{}@;]+)\{', text):
+        for cls in set(re.findall(r'\.([a-zA-Z][\w-]*)', sel)):
+            parts = cls.split('-')
+            key = parts[0] if len(parts[0]) >= 3 or len(parts) == 1 else '-'.join(parts[:2])
+            fam[key] = fam.get(key, 0) + 1
+            members.setdefault(key, set()).add(cls)
+    top = sorted(fam, key=lambda k: -fam[k])[:12]
+    shown = [f'`.{k}-*`' if len(members[k]) > 1 or members[k] != {k} else f'`.{k}`' for k in top]
+    return shown, re.findall(r'@keyframes\s+([\w-]+)', text)
+
+
+def write_code_map():
+    """CODE-MAP.md: where things are in the code — every function with its file and line, which stylesheet styles what,
+    the site's events, storage keys and screen widths, the build's placeholders, what each test checks.
+    Lists and links only: rebuilt on every build, so it cannot go out of date."""
+    rel = lambda f: str(f.relative_to(ROOT))
+    out = ['# Карта кода', '',
+           'Файл собирает `scripts/build.py` при каждой сборке — не правьте руками. Содержание (главы, вкладки, модели, развороты) — '
+           'в `MAP.md`, как работать с проектом — в `CLAUDE.md`. Ищите здесь по имени, прежде чем грепать исходники.', '']
+
+    out += ['## Функции', '',
+            'Имена верхнего уровня каждого куска с номером строки. Куски одного модуля (`src/js/<модуль>/NN-*.js`) — одна область '
+            'видимости: имя, объявленное в одном, видно во всех следующих.', '']
+    for mod in ('app', 'science', 'scene', 'data'):
+        files = numbered(SRC / 'js' / mod, '.js')
+        texts = {f: f.read_text(encoding='utf-8') for f in files}
+        decl = {f: declared(t, '  ') for f, t in texts.items()}
+        out.append(f'### {mod}.js')
+        for f in files:
+            if decl[f]:
+                out.append(f"- `{rel(f)}`: " + ', '.join(f'`{n}` {ln}' for n, ln in decl[f]))
+        # the helpers the other pieces call: who uses them
+        shared = []
+        for f in files:
+            for n, ln in decl[f]:
+                if len(n) < 3:
+                    continue
+                # a piece that has its own «resolve» (a parameter of the same name) does not call this one
+                own = re.compile(r'[(,]\s*' + re.escape(n) + r'\s*[,)=]|(?<![\w$.])' + re.escape(n) + r'\s*=>')
+                users = [g.stem for g in files if g != f and re.search(r'(?<![\w$.])' + re.escape(n) + r'\b', texts[g]) and not own.search(texts[g])]
+                if len(users) >= 3:
+                    shared.append(f"`{n}` ({f.name}:{ln}) — {len(users)}: {', '.join(users[:3])}{' …' if len(users) > 3 else ''}")
+        if shared:
+            out += ['', f'Общие помощники {mod}.js — кто зовёт:'] + [f'- {s}' for s in shared]
+        out.append('')
+    out.append('### Отдельные файлы')
+    singles = [SRC / 'js' / 'haptics.js', SRC / 'labs' / '_frame.js'] + sorted((SRC / 'labs').glob('*/_shared.js'))
+    for f in singles:
+        d = declared(f.read_text(encoding='utf-8'), '  ')
+        if d:
+            out.append(f"- `{rel(f)}`: " + ', '.join(f'`{n}` {ln}' for n, ln in d))
+    for f in sorted((SRC / 'labs' / '_lib').glob('*.js')):
+        text = f.read_text(encoding='utf-8')
+        lib = re.search(r'^  const (\w+) = \(\(\) => \{', text, re.M)
+        d = declared(text, '    ')
+        if d:
+            out.append(f"- `{rel(f)}` (`{lib.group(1) if lib else f.stem}`): " + ', '.join(f'`{n}` {ln}' for n, ln in d))
+    out.append('')
+
+    out += ['## Стили', '', 'Какие семейства классов красит файл (самые частые первыми) и его анимации `@keyframes`.', '']
+    for title, files in (('style.css', numbered(SRC / 'css' / 'style', '.css')), ('lab.css', numbered(SRC / 'css' / 'lab', '.css')),
+                         ('стили моделей и глав', sorted((SRC / 'labs').glob('*/*.css')))):
+        out.append(f'### {title}')
+        for f in files:
+            fams, keys = css_families(f.read_text(encoding='utf-8'))
+            if fams or keys:
+                out.append(f"- `{rel(f)}`: " + ', '.join(fams) + (f" · анимации: {', '.join(f'`{k}`' for k in keys)}" if keys else ''))
+        out.append('')
+
+    code = sorted((SRC / 'js').rglob('*.js')) + sorted((SRC / 'labs').rglob('*.js'))
+    lines = [(f, i + 1, line) for f in code for i, line in enumerate(f.read_text(encoding='utf-8').splitlines())]
+    out += ['## События', '', 'Свои события страницы (`document`): кто шлёт и кто слушает.', '']
+    events = sorted({e for _, _, l in lines for e in re.findall(r"'(basil:[a-z-]+)'", l)})
+    for ev in events:
+        sent = [f'{rel(f)}:{n}' for f, n, l in lines if re.search(r"CustomEvent\('" + ev + "'", l)]
+        heard = [f'{rel(f)}:{n}' for f, n, l in lines if re.search(r"addEventListener\('" + ev + "'", l)]
+        out.append(f"- `{ev}` — шлёт: {', '.join(f'`{x}`' for x in sent) or '—'}; слушают: {', '.join(f'`{x}`' for x in heard) or '—'}")
+    out += ['', '## Хранилище', '', 'Ключи `localStorage` (и база IndexedDB `basil-photos`) — в каких файлах встречаются, с первой строкой.', '']
+    keys = sorted({k for _, _, l in lines for k in re.findall(r"'(basil-[a-z]+(?:-[a-z]+)*)'", l)})
+    for k in keys:
+        where = {}
+        for f, n, l in lines:
+            if f"'{k}'" in l and rel(f) not in where:
+                where[rel(f)] = n
+        out.append(f"- `{k}` — " + ', '.join(f'`{p}:{n}`' for p, n in where.items()))
+    out += ['', '## Ширины экрана', '', 'Сколько правил `@media` на каждую ширину и в каких файлах. Новую ширину не придумывайте — берите ближайшую.', '']
+    widths = {}
+    for f in sorted((SRC / 'css').rglob('*.css')) + sorted((SRC / 'labs').rglob('*.css')):
+        for kind, px in re.findall(r'@media[^{]*?\((max|min)-width:\s*(\d+)px\)', f.read_text(encoding='utf-8')):
+            w = widths.setdefault((kind, int(px)), {})
+            w[f.name] = w.get(f.name, 0) + 1
+    for (kind, px), files in sorted(widths.items(), key=lambda x: (-sum(x[1].values()), x[0][1])):
+        out.append(f"- `{kind}-width: {px}px` — {sum(files.values())}: " + ', '.join(f'{n} ×{c}' if c > 1 else n for n, c in sorted(files.items())))
+    out += ['', '## Заполнители сборки', '', '`{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.', '']
+    build = (ROOT / 'scripts' / 'build.py').read_text(encoding='utf-8').splitlines()
+    for src_file in (SRC / 'layout.html', SRC / 'sw.js'):
+        for name in dict.fromkeys(re.findall(r'\{\{(\w+)\}\}', src_file.read_text(encoding='utf-8'))):
+            at = [i + 1 for i, l in enumerate(build) if '{{' + name + '}}' in l and ('replace' in l or 'count' in l)]
+            out.append(f"- `{{{{{name}}}}}` в `{rel(src_file)}` — `build.py:{at[0]}`" if at else f"- `{{{{{name}}}}}` в `{rel(src_file)}`")
+
+    out += ['', '## Проверки', '', 'Что проверяет каждый набор `tests/*.js` (первая строка его шапки) и на чём: `сервер` — копия для хостинга '
+            '`dist/site` через `scripts/serve.py`, `корень` — сборка в корне с диска. Все разом — `sh tests/run.sh`.', '']
+    for f in sorted((ROOT / 'tests').glob('*.js')):
+        if f.name == 'lib.js':
+            continue
+        text = f.read_text(encoding='utf-8')
+        head = re.match(r'\s*/\*\s*(.*?)(?:\n|\*/)', text)
+        on = ' + '.join(x for x, hit in (('сервер', 'server()' in text or 'serve.py' in text), ('корень', 'fileUrl(' in text)) if hit) or '—'
+        pages = 'все страницы' if 'FILES' in text else ', '.join(dict.fromkeys(re.findall(r"'([a-z]+\.html)", text))) or ''
+        out.append(f"- `{rel(f)}` — {head.group(1).strip() if head else ''} · {on}" + (f" · {pages}" if pages else ''))
+    (ROOT / 'CODE-MAP.md').write_text('\n'.join(out) + '\n', encoding='utf-8')
+
+
 def main():
     single = None
     if '--single' in sys.argv:
@@ -940,6 +1067,7 @@ def main():
         return
 
     write_map(src, CH)
+    write_code_map()
     for view, file in PAGES:
         (out_dir / file).write_text(page_html([view], view), encoding='utf-8')
         print(f'{file:18} {len((out_dir / file).read_bytes()) // 1024:4} КБ')
