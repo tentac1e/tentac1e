@@ -211,6 +211,46 @@ function turned(A, B) {
   const dull = dk.out.filter(x => x.missing || !x.changed).map(x => x.sel + (x.missing ? ' (not found)' : ''));
   ok(!dull.length, `computer: the mouse still lights up ${dk.out.length} rows, tabs, cards and buttons${dull.length ? ' — not: ' + dull.join(', ') : ''}`);
 
+  // a tap is not a keyboard: an arc of the season wheel or a node of the pinching trainer (focusable for Tab) gets the
+  // focus from a finger, and Safari draws its own blue frame round it — its stylesheet still rings «:focus». Chromium's
+  // does not, so the test puts Safari's rule on the page; the site's own rule must win over it. With Tab the ring stays
+  const SAFARI = ':focus { outline: auto 5px -webkit-focus-ring-color; }';
+  const fc = await browser.newContext({ ...devices['Pixel 7'], reducedMotion: 'reduce' });
+  const fp = await fc.newPage();
+  watch(fp, errs);
+  const rings = [];
+  for (const [file, sel] of [['kalendar.html', '.w-arc'], ['formirovka.html#тренажер', '.s-node']]) {
+    await fp.goto(fileUrl(file), { waitUntil: 'load' });
+    await fp.waitForTimeout(800);
+    await fp.evaluate(css => { const st = document.createElement('style'); st.textContent = css; document.head.prepend(st); }, SAFARI);
+    await fp.evaluate(s => document.querySelector(s).scrollIntoView({ block: 'center', behavior: 'instant' }), sel);
+    await fp.waitForTimeout(300);
+    const box = await fp.evaluate(s => { const r = document.querySelector(s).getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }, sel);
+    // a point of the shape itself (an arc's box is mostly empty): the first of a grid that hits it
+    const at = await fp.evaluate(([s, b]) => {
+      const el = document.querySelector(s), r = el.getBoundingClientRect();
+      for (let i = 1; i < 12; i++) for (let j = 1; j < 12; j++) {
+        const x = r.left + r.width * i / 12, y = r.top + r.height * j / 12, hit = document.elementFromPoint(x, y);
+        if (hit && hit.closest(s) === el) return { x, y };
+      }
+      return b;
+    }, [sel, box]);
+    await fp.touchscreen.tap(at.x, at.y);
+    await fp.waitForTimeout(200);
+    const r = await fp.evaluate(s => { const a = document.activeElement; return { mine: !!(a && a.closest(s)), ring: a ? getComputedStyle(a).outlineStyle : '' }; }, sel);
+    rings.push(`${sel} ${r.mine ? 'focused' : 'not focused'}, outline ${r.ring}`);
+    if (r.mine && r.ring !== 'none') rings.push('LIT');
+  }
+  ok(!rings.includes('LIT') && rings.some(x => / focused/.test(x)), `a tap on the season wheel and on the trainer leaves no focus frame: ${rings.filter(x => x !== 'LIT').join('; ')}`);
+  await fc.close();
+  const kp = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await kp.goto(fileUrl('kalendar.html'), { waitUntil: 'load' });
+  await kp.waitForTimeout(500);
+  await kp.keyboard.press('Tab');
+  const kring = await kp.evaluate(() => { const a = document.activeElement; return a ? `${a.className || a.tagName} ${getComputedStyle(a).outlineStyle} ${getComputedStyle(a).outlineWidth}` : ''; });
+  ok(/ solid 3px$/.test(kring), `with Tab the focus ring is there: ${kring}`);
+  await kp.close();
+
   await browser.close();
   done(errs);
 })().catch(e => { console.error(e); process.exit(1); });

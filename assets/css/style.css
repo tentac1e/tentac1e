@@ -262,6 +262,9 @@ strong, b { font-weight: 700; color: var(--ink); }
   outline-offset: 2px;
   border-radius: 6px;
 }
+/* the ring is for Tab, not for a finger: an arc of the season wheel or a node of the pinching trainer can take the
+   focus (for the keyboard), and on a tap Safari would draw its own blue frame round its whole box */
+:focus:not(:focus-visible) { outline: none; }
 
 .skip {
   position: absolute;
