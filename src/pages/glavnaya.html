@@ -158,19 +158,22 @@
       <div class="sh-text">
         <p class="eyebrow">Научный слой</p>
         <h2 id="nauka-h">Почему базилик <em>именно такой</em></h2>
-        <p>Под практическими советами в каждой главе спрятаны развороты «Глубже»: химия аромата, физика света и воды, биология роста. Внутри — схемы и живые модели, от дефицита давления пара до бочки Либиха, а в самом низу — раздел «Ещё глубже» с механизмами и источниками. Выберите, насколько глубоко читать: выбор запомнится и действует во всех главах.</p>
-        <ul class="sh-kinds" id="sh-kinds" aria-label="Развороты по темам"></ul>
-        <div class="depth-seg" role="group" aria-label="Глубина чтения">
-          <button type="button" data-depth-pick="0" aria-pressed="true"><span class="depth-dots" aria-hidden="true"><i></i></span><b>Практика</b><small>только советы</small></button>
-          <button type="button" data-depth-pick="1" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i></span><b>Наука</b><small>все развороты</small></button>
-          <button type="button" data-depth-pick="2" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Лаборатория</b><small>и «ещё глубже»</small></button>
-        </div>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#vkus"><svg class="ico"><use href="#i-nose"/></svg>Вкус и аромат</a>
-          <a class="btn btn-ghost" href="#urozhay-recepty"><svg class="ico"><use href="#i-mortar"/></svg>Книга рецептов</a>
+        <button class="btn btn-ghost sh-open" type="button" aria-expanded="false" aria-controls="sh-fold sh-mol"><svg class="ico"><use href="#i-hex"/></svg><span>Развороты, модели и молекула в 3D</span><svg class="ico sh-chev"><use href="#i-chev-r"/></svg></button>
+        <div class="sh-fold" id="sh-fold">
+          <p>Под практическими советами в каждой главе спрятаны развороты «Глубже»: химия аромата, физика света и воды, биология роста. Внутри — схемы и живые модели, от дефицита давления пара до бочки Либиха, а в самом низу — раздел «Ещё глубже» с механизмами и источниками. Выберите, насколько глубоко читать: выбор запомнится и действует во всех главах.</p>
+          <ul class="sh-kinds" id="sh-kinds" aria-label="Развороты по темам"></ul>
+          <div class="depth-seg" role="group" aria-label="Глубина чтения">
+            <button type="button" data-depth-pick="0" aria-pressed="true"><span class="depth-dots" aria-hidden="true"><i></i></span><b>Практика</b><small>только советы</small></button>
+            <button type="button" data-depth-pick="1" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i></span><b>Наука</b><small>все развороты</small></button>
+            <button type="button" data-depth-pick="2" aria-pressed="false"><span class="depth-dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Лаборатория</b><small>и «ещё глубже»</small></button>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#vkus"><svg class="ico"><use href="#i-nose"/></svg>Вкус и аромат</a>
+            <a class="btn btn-ghost" href="#urozhay-recepty"><svg class="ico"><use href="#i-mortar"/></svg>Книга рецептов</a>
+          </div>
         </div>
       </div>
-      <figure class="sh-mol">
+      <figure class="sh-mol" id="sh-mol">
         <div class="mol-stage"><canvas class="mol-canvas" id="home-molecule" role="img" aria-label="Трёхмерная модель молекулы аромата базилика"></canvas><span class="mol-hint hand" aria-hidden="true" data-on-picture>покрутите</span></div>
         <figcaption><b id="home-mol-name">Линалоол</b><span id="home-mol-note">C₁₀H₁₈O · цветочная нота генуэзского базилика</span></figcaption>
         <div class="chips-row" id="home-mol-chips" role="group" aria-label="Выбор молекулы"></div>

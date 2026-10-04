@@ -90,7 +90,8 @@ function codeMap() {
 
   await page.goto(fileUrl('index.html#udobreniya-plan'), { waitUntil: 'load' });
   await page.waitForTimeout(700);
-  ok(/udobreniya\.html#%D0%BF%D0%BB%D0%B0%D0%BD$/.test(page.url()) && await page.evaluate(() => document.getElementById('план').classList.contains('is-active')), 'old index.html#udobreniya-plan → ' + at());
+  // «План» is a part of the tab «По стадиям» now (merged tabs keep their anchors): that tab open, the plan in sight
+  ok(/udobreniya\.html#%D0%BF%D0%BB%D0%B0%D0%BD$/.test(page.url()) && await page.evaluate(() => { const p = document.getElementById('план'), r = p.getBoundingClientRect(); return p.closest('.panel').id === 'стадии' && p.closest('.panel').classList.contains('is-active') && r.top >= 0 && r.top < innerHeight; }), 'old index.html#udobreniya-plan → ' + at());
 
   await page.goto(fileUrl('index.html'), { waitUntil: 'load' });
   await page.waitForTimeout(400);

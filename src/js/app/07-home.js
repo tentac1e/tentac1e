@@ -27,6 +27,15 @@
       if (window.BasilHaptics) window.BasilHaptics.tick();
     }));
 
+    // «Научный слой» in one column: its heading, and one button opens the rest (08-home-science.css)
+    const sci = $('.science-home'), sciOpen = $('.sh-open');
+    if (sci && sciOpen) sciOpen.addEventListener('click', () => {
+      const on = !sci.classList.contains('is-open');
+      sci.classList.toggle('is-open', on);
+      sciOpen.setAttribute('aria-expanded', String(on));
+      if (window.BasilHaptics) window.BasilHaptics.tick();
+    });
+
     // «Базилик коротко»: the passport, the figures, the path and the eight rules, one at a time
     $$('[data-short]').forEach(b => b.addEventListener('click', () => { showShort(b.dataset.short); if (window.BasilHaptics) window.BasilHaptics.tick(); }));
 

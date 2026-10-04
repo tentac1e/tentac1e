@@ -62,7 +62,7 @@ const { ROOT, playwright, server, ok, done } = require('./lib');
 
   await page.goto(B + encodeURI('/удобрения') + '#udobreniya-plan', { waitUntil: 'load' });
   await page.waitForTimeout(500);
-  ok(path() === '/удобрения#план' && await page.evaluate(() => document.getElementById('план').classList.contains('is-active')), 'old long tab id on new page → ' + path());
+  ok(path() === '/удобрения#план' && await page.evaluate(() => document.getElementById('план').closest('.panel.is-active').id === 'стадии'), 'old long tab id on new page → ' + path());
   await page.goto(B + encodeURI('/уход'), { waitUntil: 'load' });
   await page.waitForTimeout(400);
   await page.click('.subnav a[href="#полив"]');

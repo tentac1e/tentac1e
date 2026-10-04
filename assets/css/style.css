@@ -1009,6 +1009,7 @@ main { view-transition-name: main; }
   .hero h1 { grid-column: 1; grid-row: 2; margin: 12px 0 14px; font-size: clamp(3.3rem, 15vw, 5rem); }
   .hero-art { grid-column: 2; grid-row: 2; min-height: 0; width: 92px; align-self: center; }
   .hero .lead, .hero-actions, .continue { grid-column: 1 / -1; }
+  .hero .lead { line-height: 1.52; }
   .hero-actions { margin-top: 20px; }
   .hero-art .halo { display: none; }
   .sprig { width: 100%; }
@@ -1042,9 +1043,10 @@ main { view-transition-name: main; }
   .facts li { flex: 0 0 150px; scroll-snap-align: start; }
 }
 
-.home-block { margin-top: clamp(40px, 6vw, 80px); }
+.home-block { margin-top: clamp(32px, 6vw, 80px); }
 .block-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 24px; margin-bottom: 20px; }
 .block-head p { margin: 0; max-width: 32em; color: var(--ink-2); }
+@media (max-width: 560px) { .block-head { gap: 6px 24px; margin-bottom: 14px; } }
 
 .quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .q-card {
@@ -1069,12 +1071,16 @@ main { view-transition-name: main; }
 .q-card small { display: block; margin-top: 2px; font-size: .84rem; color: var(--ink-3); }
 .q-card > .ico { color: var(--ink-3); width: 18px; height: 18px; }
 @media (max-width: 900px) { .quick { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* a phone: two to a row, the sign beside the name and what it leads to under both */
 @media (max-width: 560px) {
   .quick { gap: 8px; }
-  .q-card { grid-template-columns: 1fr; gap: 8px; padding: 14px; align-content: start; }
+  .q-card { grid-template-columns: 32px minmax(0, 1fr); grid-template-areas: "i t" "d d"; gap: 6px 10px; padding: 12px; align-items: center; align-content: start; }
+  .q-card > span:not(.q-ico) { display: contents; }
   .q-card > .ico { display: none; }
-  .q-ico { width: 40px; height: 40px; }
-  .q-card b { font-size: .92rem; }
+  .q-ico { grid-area: i; width: 32px; height: 32px; border-radius: 16px 4px 16px 4px; }
+  .q-ico .ico { width: 17px; height: 17px; }
+  .q-card b { grid-area: t; font-size: .9rem; }
+  .q-card small { grid-area: d; margin: 0; font-size: .8rem; line-height: 1.35; }
 }
 
 /* what to do in the garden this month: a line under «С чего начать» */
@@ -1097,6 +1103,8 @@ main { view-transition-name: main; }
 @media (max-width: 560px) {
   .season-tip { grid-template-columns: 48px minmax(0, 1fr); gap: 12px; align-items: start; }
   .season-mark .art-float, .season-mark svg { width: 48px; height: 48px; }
+  .season-text { font-size: 1.12rem; }
+  .season-note { font-size: .8rem; }
 }
 
 /* «Главы гида»: the contents' list (24-toc.css, scripts/build.py), each chapter with what it holds in a line, opening
@@ -1115,12 +1123,14 @@ main { view-transition-name: main; }
 .home-chapters .toc-sub > ul { margin-left: 25px; }
 @media (max-width: 720px) {
   .home-chapters { grid-template-columns: minmax(0, 1fr); gap: 6px; }
-  .home-chapters .toc-link { gap: 12px; }
-  .home-chapters .toc-art { width: 48px; height: 48px; border-radius: 14px; }
-  .home-chapters .toc-art svg { width: 44px; height: 44px; }
-  .home-chapters .toc-t { font-size: 1.22rem; }
-  .toc-d { font-size: .8rem; line-height: 1.34; }
-  .home-chapters .toc-sub > ul { margin-left: 19px; }
+  .home-chapters .toc-item { padding: 2px; border-radius: 18px; }
+  .home-chapters .toc-link { gap: 12px; min-height: 56px; padding: 2px 6px 2px 4px; }
+  .home-chapters .toc-art { width: 44px; height: 44px; border-radius: 13px; }
+  .home-chapters .toc-art svg { width: 40px; height: 40px; }
+  .home-chapters .toc-t { font-size: 1.18rem; }
+  .toc-tx { gap: 2px; padding-block: 3px; }
+  .toc-d { font-size: .79rem; line-height: 1.3; }
+  .home-chapters .toc-sub > ul { margin-left: 17px; }
 }
 
 .journey {
@@ -2109,6 +2119,10 @@ main { view-transition-name: main; }
 .faq summary::after { content: ""; position: absolute; right: 10px; top: 50%; width: 22px; height: 22px; margin-top: -11px; border-radius: 14px 3px 14px 3px; background: var(--leaf-soft); border: 1px solid var(--line-strong); transition: rotate .4s var(--ease-float), background-color .3s; }
 .faq details[open] summary::after { rotate: 90deg; background: var(--basil); }
 .faq-body { padding: 0 0 18px; color: var(--ink-2); max-width: 70ch; }
+/* the questions of Справка at the end of their tab, before «Глубже» (faq_here in scripts/build.py) */
+.faq-here { margin: clamp(28px, 4vw, 44px) 0 0; }
+.faq-here h3 { margin-bottom: 8px; }
+.faq-more { margin: 14px 0 0; font-size: .9rem; }
 
 .gloss-filter { max-width: 420px; margin-bottom: 18px; }
 .glossary { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 10px; margin: 0; }

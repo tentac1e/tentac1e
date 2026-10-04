@@ -305,7 +305,9 @@ window.BASIL_PAGES = {
   "season-h": "glavnaya",
   "season-text": "glavnaya",
   "season-tip": "glavnaya",
+  "sh-fold": "glavnaya",
   "sh-kinds": "glavnaya",
+  "sh-mol": "glavnaya",
   "short-cifry": "glavnaya",
   "short-pasport": "glavnaya",
   "short-pravila": "glavnaya",
@@ -396,7 +398,6 @@ window.BASIL_PAGES = {
   "udobreniya-h26": "udobreniya",
   "udobreniya-h27": "udobreniya",
   "udobreniya-h28": "udobreniya",
-  "udobreniya-h29": "udobreniya",
   "udobreniya-h3": "udobreniya",
   "udobreniya-h4": "udobreniya",
   "udobreniya-h5": "udobreniya",
@@ -514,11 +515,11 @@ window.BASIL_PAGES = {
   "deep-zima": "Глубже: Зимний свет",
   "udobreniya-osnovy": "Удобрения · Правила подкормки",
   "deep-osmos": "Глубже: Осмос",
+  "deep-mify-himiya": "Глубже: Химия мифов",
   "udobreniya-elementy": "Удобрения · Что за что отвечает",
   "deep-mobilnost": "Глубже: Ксилема и флоэма",
   "udobreniya-stadii": "Удобрения · Питание по стадиям роста",
   "deep-libih": "Глубже: Закон минимума",
-  "udobreniya-plan": "Удобрения · План подкормок",
   "deep-azot": "Глубже: Круговорот азота",
   "udobreniya-sredstva": "Удобрения · Какие удобрения использовать",
   "deep-oksidy": "Глубже: Оксиды на упаковке",
@@ -526,8 +527,6 @@ window.BASIL_PAGES = {
   "deep-ec": "Глубже: EC и ppm",
   "udobreniya-gidro": "Удобрения · Гидропоника: EC и pH",
   "deep-kislorod": "Глубже: Кислород и хелаты",
-  "udobreniya-mify": "Удобрения · Мифы о подкормках",
-  "deep-mify-himiya": "Глубже: Химия мифов",
   "formirovka-osnovy": "Прищипывание · Как прищипывать",
   "deep-auksin": "Глубже: Апикальное доминирование",
   "formirovka-trenazher": "Прищипывание · Тренажёр прищипывания",
@@ -687,6 +686,6 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "e9ba0436"
+  "search": "0e2c8c02"
  }
 };

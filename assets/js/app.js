@@ -1702,6 +1702,15 @@
       if (window.BasilHaptics) window.BasilHaptics.tick();
     }));
 
+    // «Научный слой» in one column: its heading, and one button opens the rest (08-home-science.css)
+    const sci = $('.science-home'), sciOpen = $('.sh-open');
+    if (sci && sciOpen) sciOpen.addEventListener('click', () => {
+      const on = !sci.classList.contains('is-open');
+      sci.classList.toggle('is-open', on);
+      sciOpen.setAttribute('aria-expanded', String(on));
+      if (window.BasilHaptics) window.BasilHaptics.tick();
+    });
+
     // «Базилик коротко»: the passport, the figures, the path and the eight rules, one at a time
     $$('[data-short]').forEach(b => b.addEventListener('click', () => { showShort(b.dataset.short); if (window.BasilHaptics) window.BasilHaptics.tick(); }));
 
@@ -4450,6 +4459,9 @@
       if (el) for (let box = el.parentElement && el.parentElement.closest('details'); box; box = box.parentElement && box.parentElement.closest('details')) box.open = true;
       jump(() => window.scrollTo(0, Math.max(0, el ? absTop(el) + (pos.off || 0) : pos.y)));
       s = spotAt(scope);
+      // between two blocks (a calculator's controls, a picture): stay where it stood, not lower — the next block
+      // keeps its place under the line however far it is
+      if (s && !s.ch) s.dy = Math.max(s.dy, Math.round(spotTop(s) - window.scrollY - coverTop(true) - READ_LEAD));
     }
     if (!s) return;
     // open what the spot is inside — not the block whose closed title it is
@@ -4563,6 +4575,11 @@
     } else if (ENTRY.resume) {
       try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* sandboxed */ }
       if (pos) setTimeout(() => { userMoved = true; resumeTo(pos); }, 60);
+      else {
+        // nothing read yet: the start of the place «Продолжить» names — a tab merged into another is a part of it
+        const part = location.hash && document.getElementById(decodeSafe(location.hash.slice(1)));
+        if (part && part.matches('.tab-part')) setTimeout(() => { userMoved = true; route(location.hash); }, 60);
+      }
     } else if (ENTRY.top || !location.hash) {
       holdTop();
       offerResume(pos);

@@ -38,7 +38,7 @@
 - `src/js/app/22-garden-weather.js`: `round2` 9, `wxSvp` 12, `wxPlace` 13, `wxCached` 16, `pad2` 23, `wxParse` 25, `wxRefresh` 42, `wxSearch` 64, `wxSetPlace` 72, `wxHere` 82, `fmtT` 90, `fillText` 91, `wxWhen` 93, `wxDays` 94, `wxTasks` 97, `wxAdvice` 118, `wxAge` 135, `wxStrip` 143
 - `src/js/app/22-garden.js`: `gardenLoad` 7, `gardenSave` 11, `gardenVariety` 15, `weekOf` 17, `later` 18, `daysWord` 19, `plantTasks` 25, `plantWeek` 109, `plantStage` 118, `plantNote` 124, `plantDone` 128, `lastNote` 132
 - `src/js/app/22-install.js`: `initInstall` 6
-- `src/js/app/22-reading-pos.js`: `readPos` 9, `absTop` 14, `labelOf` 15, `currentAnchor` 23, `headingBefore` 35, `ownWords` 47, `readBlocks` 48, `normText` 55, `sentenceStart` 58, `sentenceEnd` 64, `pointIn` 70, `caretAt` 80, `coverTop` 86, `spotAt` 95, `spotOf` 126, `findSpot` 151, `firstLetter` 165, `spotTop` 172, `markSpot` 188, `holdTop` 238, `bookmarkHere` 258, `savePos` 273, `resumeTo` 280, `saveDetour` 331, `readDetour` 334, `dropDetour` 340, `wayBack` 343, `offerBack` 363, `offerReturn` 368, `offerResume` 373, `initReadingPos` 398, `initLinks` 436, `initPageAction` 445
+- `src/js/app/22-reading-pos.js`: `readPos` 9, `absTop` 14, `labelOf` 15, `currentAnchor` 23, `headingBefore` 35, `ownWords` 47, `readBlocks` 48, `normText` 55, `sentenceStart` 58, `sentenceEnd` 64, `pointIn` 70, `caretAt` 80, `coverTop` 86, `spotAt` 95, `spotOf` 126, `findSpot` 151, `firstLetter` 165, `spotTop` 172, `markSpot` 188, `holdTop` 238, `bookmarkHere` 258, `savePos` 273, `resumeTo` 280, `saveDetour` 334, `readDetour` 337, `dropDetour` 343, `wayBack` 346, `offerBack` 366, `offerReturn` 371, `offerResume` 376, `initReadingPos` 401, `initLinks` 444, `initPageAction` 453
 - `src/js/app/23-boot.js`: `boot` 4
 
 Общие помощники app.js — кто зовёт:
@@ -124,7 +124,7 @@
 - `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
 - `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
 - `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`, `.ar-coty`, `.ar-seed`
-- `src/css/style/08-home.css`: `.facts`, `.toc-*`, `.hero-*`, `.home-*`, `.short-*`, `.journey`, `.passport-*`, `.q-card`, `.season-*`, `.rule-*`, `.continue`, `.tool` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
+- `src/css/style/08-home.css`: `.toc-*`, `.facts`, `.hero-*`, `.home-*`, `.short-*`, `.journey`, `.passport-*`, `.q-card`, `.season-*`, `.rule-*`, `.continue`, `.q-ico` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
 - `src/css/style/09-chapter-chrome.css`: `.ch-hero-*`, `.subnav-*`, `.pager`, `.blob`, `.art-*`, `.is-stuck`, `.pg-art`, `.eyebrow`, `.lead`, `.next` · анимации: `morph`, `morph-fade`
 - `src/css/style/10-varieties.css`: `.quiz-*`, `.v-leaf`, `.vtype`, `.vt-panel-*`, `.meter`, `.vt-specs`, `.vt-sorts`, `.vd-head`, `.qr`, `.versus`, `.filters`, `.vt-toggle` · анимации: `vt-in`
 - `src/css/style/11-places.css`: `.place-*`, `.params`, `.tab`, `.comp-*`, `.tabs`, `.ill`, `.lead`
@@ -153,7 +153,7 @@
 - `src/css/lab/05-deep.css`: `.deep-*`, `.chel-*`, `.num-*`, `.ico`, `.eq`, `.ph-strip`, `.ticks`, `.chem`, `.eq-label`, `.eq-enz`, `.margin-*`, `.aside-*`
 - `src/css/lab/06-lab-tools.css`: `.lab-*`, `.zone-*`, `.gdd-*`, `.fam-*`, `.line`, `.legend`, `.range`, `.band-*`, `.s1`, `.s2`, `.s3`, `.mol-*` · анимации: `shimmer`
 - `src/css/lab/07-vkus.css`: `.world-*`, `.cols-*`, `.kitchen-*`
-- `src/css/lab/08-home-science.css`: `.sh-kinds`, `.sh-mol`, `.sh-text`, `.science-*`, `.mol-*`, `.eyebrow`, `.is-total`, `.ico`, `.chips-*`, `.chip`
+- `src/css/lab/08-home-science.css`: `.sh-mol`, `.sh-kinds`, `.science-*`, `.sh-text`, `.sh-open`, `.is-open`, `.sh-chev`, `.mol-*`, `.sh-fold`, `.eyebrow`, `.is-total`, `.ico`
 - `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.deep-*`, `.q-card`, `.tool`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o`, `.ar-c` · анимации: `fade-out`
 - `src/css/lab/10-depth.css`: `.depth-*`, `.deep-*` · анимации: `pop-in`
 - `src/css/lab/11-deep-footer.css`: `.deeper-*`, `.deep-*`, `.eq`, `.is-deeper`
@@ -211,7 +211,7 @@
 
 - `basil-deep` — `src/js/science/07-deep.js:16`
 - `basil-depth` — `src/js/science/07-deep.js:5`
-- `basil-detour` — `src/js/app/22-reading-pos.js:330`
+- `basil-detour` — `src/js/app/22-reading-pos.js:333`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
 - `basil-haptics` — `src/js/haptics.js:7`
@@ -227,12 +227,12 @@
 
 Сколько правил `@media` на каждую ширину и в каких файлах. Новую ширину не придумывайте — берите ближайшую.
 
+- `max-width: 560px` — 13: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
 - `max-width: 900px` — 12: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css
-- `max-width: 560px` — 11: 04-controls.css, 07-vkus.css, 08-home.css ×3, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
 - `max-width: 640px` — 9: 05-deep.css, 06-blocks.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, molecules.css
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
+- `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 480px` — 6: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css
-- `max-width: 860px` — 6: 05-deep.css, 08-home-science.css, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 700px` — 5: 04-deep-index.css, 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
 - `max-width: 420px` — 4: 04-controls.css, 10-depth.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
@@ -256,16 +256,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1162`
-- `{{description}}` в `src/layout.html` — `build.py:1162`
-- `{{pwa}}` в `src/layout.html` — `build.py:1178`
-- `{{fonts}}` в `src/layout.html` — `build.py:1177`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1159`
-- `{{content}}` в `src/layout.html` — `build.py:1157`
-- `{{toc}}` в `src/layout.html` — `build.py:1159`
-- `{{scripts}}` в `src/layout.html` — `build.py:1176`
-- `{{version}}` в `src/sw.js` — `build.py:1261`
-- `{{precache}}` в `src/sw.js` — `build.py:1261`
+- `{{title}}` в `src/layout.html` — `build.py:1197`
+- `{{description}}` в `src/layout.html` — `build.py:1197`
+- `{{pwa}}` в `src/layout.html` — `build.py:1213`
+- `{{fonts}}` в `src/layout.html` — `build.py:1212`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1194`
+- `{{content}}` в `src/layout.html` — `build.py:1192`
+- `{{toc}}` в `src/layout.html` — `build.py:1194`
+- `{{scripts}}` в `src/layout.html` — `build.py:1211`
+- `{{version}}` в `src/sw.js` — `build.py:1296`
+- `{{precache}}` в `src/sw.js` — `build.py:1296`
 
 ## Проверки
 

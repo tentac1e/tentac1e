@@ -63,9 +63,12 @@ function turned(A, B) {
   };
   const state = sel => page.evaluate(s => { const c = document.querySelector(s); const r = c.getBoundingClientRect(); return { turn: c.molView && c.molView.turn, y: Math.round(scrollY), cx: r.left + r.width / 2, cy: r.top + r.height / 2, top: r.top, h: r.height, left: r.left }; }, sel);
 
-  // the home page's molecule in the middle of the screen
+  // the home page's molecule in the middle of the screen (a phone keeps «Научный слой» folded: open it first)
   await page.goto(fileUrl('index.html'), { waitUntil: 'load' });
   await page.waitForTimeout(800);
+  await page.evaluate(() => { const b = document.querySelector('.sh-open'); b.scrollIntoView({ block: 'center', behavior: 'instant' }); });
+  await page.tap('.sh-open');
+  await page.waitForTimeout(300);
   await page.evaluate(() => document.getElementById('home-molecule').scrollIntoView({ block: 'center', behavior: 'instant' }));
   await page.waitForFunction(() => !!document.getElementById('home-molecule').molView, null, { timeout: 8000 }).catch(() => {});
   await page.waitForTimeout(400);
@@ -141,7 +144,7 @@ function turned(A, B) {
       if (prep) await p.evaluate(prep);
       return p.evaluate(s => { const e = document.querySelector(s); return e ? Math.round(100 * e.getBoundingClientRect().height / innerHeight) : null; }, sel);
     };
-    const home = await share('index.html', H);
+    const home = await share('index.html', H, () => document.querySelector('.sh-open').click());
     const lab = await share('vkus.html#молекулы', '.lab-tool[data-lab="molecules"] .mol-canvas, ' + L, () => {
       const el = document.querySelector('.lab-tool[data-lab="molecules"]');
       for (let d = el.closest('details'); d; d = d.parentElement.closest('details')) d.open = true;

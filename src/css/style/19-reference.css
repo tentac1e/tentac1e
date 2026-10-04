@@ -8,6 +8,10 @@
 .faq summary::after { content: ""; position: absolute; right: 10px; top: 50%; width: 22px; height: 22px; margin-top: -11px; border-radius: 14px 3px 14px 3px; background: var(--leaf-soft); border: 1px solid var(--line-strong); transition: rotate .4s var(--ease-float), background-color .3s; }
 .faq details[open] summary::after { rotate: 90deg; background: var(--basil); }
 .faq-body { padding: 0 0 18px; color: var(--ink-2); max-width: 70ch; }
+/* the questions of Справка at the end of their tab, before «Глубже» (faq_here in scripts/build.py) */
+.faq-here { margin: clamp(28px, 4vw, 44px) 0 0; }
+.faq-here h3 { margin-bottom: 8px; }
+.faq-more { margin: 14px 0 0; font-size: .9rem; }
 
 .gloss-filter { max-width: 420px; margin-bottom: 18px; }
 .glossary { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 10px; margin: 0; }

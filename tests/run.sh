@@ -43,7 +43,8 @@ suites_for() {
     src/js/app/02-router.js|src/js/app/03-sheets.js|src/js/app/22-reading-pos.js|src/js/data/00-nav.js|src/layout.html|src/js/haptics.js) echo "nav peek pages clean gestures single" ;;
     src/pages/glavnaya.html|src/js/app/07-home.js) echo "peek pages overlap controls ills gestures single" ;;
     src/js/app/04-search*) echo "nav pages" ;;
-    src/css/*) echo "overlap controls gestures ills pages" ;;
+    src/css/*) echo "overlap controls gestures ills pages peek" ;;
+    src/pages/udobreniya/*|src/pages/spravka/*) echo "peek pages nav clean overlap controls ills single" ;;
     src/pages/*) echo "pages overlap controls ills single" ;;
     src/js/scene/*) echo "perf ills" ;;
     # written by the build, or prose

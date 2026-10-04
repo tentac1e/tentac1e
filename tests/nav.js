@@ -14,6 +14,11 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   // ---------- phone ----------
   const ctx = await browser.newContext({ ...devices['Pixel 7'] });
   await ctx.addInitScript(() => { window.__vib = 0; navigator.vibrate = () => { window.__vib++; return true; }; });
+  // a bookmark of the old kind put in place as the next page starts: the page left saves its own on the way out
+  await ctx.addInitScript(() => {
+    const v = sessionStorage.getItem('legacy-pos');
+    if (v) { sessionStorage.removeItem('legacy-pos'); localStorage.setItem('basil-pos', v); }
+  });
   // a browser that scrolls a page it has just opened down by itself (as a phone does with a page it remembers)
   await ctx.addInitScript(() => {
     if (!sessionStorage.getItem('late-scroll')) return;
@@ -112,7 +117,7 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
     const p = JSON.parse(localStorage.getItem('basil-pos')).uhod;
     const a = document.getElementById(p.anchor);
     const old = { panel: p.panel, anchor: p.anchor, off: 300, y: Math.round(a.getBoundingClientRect().top + scrollY + 300), label: p.label, t: Date.now() };
-    localStorage.setItem('basil-pos', JSON.stringify({ uhod: old }));
+    sessionStorage.setItem('legacy-pos', JSON.stringify({ uhod: old }));
     return old;
   });
   await page.goto(U('/уход') + '?resume=1#' + encodeURIComponent(legacy.panel), { waitUntil: 'load' });
@@ -157,7 +162,7 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   await page.tap('#sheet-toc [data-toc-pane="ch"]');
   await page.tap('#sheet-toc .toc-item[data-toc="udobreniya"] .toc-sub li:nth-child(4) a');
   await page.waitForTimeout(800);
-  ok(await page.evaluate(() => document.querySelector('.panel.is-active').id === 'план' && !document.getElementById('sheet-toc').open), 'a section of this chapter → ' + path());
+  ok(await page.evaluate(() => document.querySelector('.panel.is-active').id === 'средства' && !document.getElementById('sheet-toc').open), 'a section of this chapter → ' + path());
   // every tool lands where its caption says: the chapter and the tab, the target itself on the page
   const wrong = [];
   for (const t of tl.tools) {

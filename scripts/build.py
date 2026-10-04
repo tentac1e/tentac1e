@@ -191,9 +191,30 @@ SITE_DESC = ('Подробный гид по выращиванию базили
 SKIP = ['#chapters', '#quick', '#tools-home', '#journey', '.diag-result', '.el-detail', '#variety-detail', '.quiz',
         '.plan-list', '.timeline', '.dose-out', '.npk-out', '.soil-out', '.dli-out', '.stage-body', '.pager', '.sim',
         '#glossary', '#disease-grid', '#pest-grid', '#diag-groups', '#place-panel', '#check-groups', '.lab-tool',
-        '.deep-index', '.recipe-book', '.deep-src']
+        '.deep-index', '.recipe-book', '.deep-src', '.faq-here']
 BOX = ['details', '.card', '.step', '.pane', 'article', '.rule', 'li']
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
+
+
+def faq_here(src):
+    """«Частые вопросы» where their topic is: each question of Справка marked data-for="<tab>" stands once more at
+    the end of that tab's practical part, before its «Глубже», and opens in place. The search keeps the one in
+    Справка (.faq-here is in SKIP); the copy has no id of its own"""
+    by_tab = {}
+    for m in re.finditer(r'<details data-for="([^"]+)">(.*?</details>)', src['spravka'], re.S):
+        by_tab.setdefault(m.group(1), []).append('<details>' + m.group(2))
+    for tab, items in by_tab.items():
+        view = tab.split('-')[0]
+        html = src[view]
+        start = html.index(f'data-panel id="{tab}"')
+        nxt = html.find('data-panel id="', start + 1)
+        zone = html.find('<div class="deep-zone">', start)
+        assert zone > 0 and (nxt < 0 or zone < nxt), f'{tab}: no «Глубже» to put the questions before'
+        block = ('<section class="faq-here">\n        <h3>Частые вопросы</h3>\n        <div class="faq">\n'
+                 + ''.join(f'          {d}\n' for d in items)
+                 + '        </div>\n        <p class="faq-more"><a href="#spravka-voprosy">Все частые вопросы</a></p>\n'
+                 '      </section>\n      ')
+        src[view] = html[:zone] + block + html[zone:]
 
 
 # ---------------------------------------------------------------- mini DOM
@@ -301,12 +322,13 @@ def section_of(head):
 
 
 def text_own(node, skip):
-    """the text of a node without the blocks in skip (ids of nodes that are indexed on their own)"""
+    """the text of a node without the blocks in skip (ids of nodes that are indexed on their own) and without the
+    copies of Справка's questions (faq_here): each piece of text is found once, where it was written"""
     parts = [node.text] if node.tag == '#text' else []
 
     def walk(n):
         for c in n.children:
-            if id(c) in skip:
+            if id(c) in skip or (c.tag != '#text' and c.matches('.faq-here')):
                 continue
             if c.tag == '#text':
                 parts.append(c.text)
@@ -963,6 +985,7 @@ def main():
     layout = typeset((SRC / 'layout.html').read_text(encoding='utf-8'))  # the frame's own text: footer, sheets, search
     nav = nav_items()
     src = {v: read_page(v) for v, _ in PAGES}
+    faq_here(src)
     CH = chapters()
     # a build for another place (--out, --single) leaves the one in the root as it is: checks read it meanwhile
     stage = Path(tempfile.mkdtemp(prefix='basil-book-')) if single else None
@@ -991,6 +1014,7 @@ def main():
         inserts = []
         page_entries = []  # (entry, the nodes that hold its text, an extra node read first, its heading)
         n = 0
+        parts_named = set()
         for node in dom.iter():
             if node.tag == '#text':
                 continue
@@ -1028,6 +1052,11 @@ def main():
                                       'page': view, 'hash': parent.attrs['id'], 'icon': 'hex'}, [parent.find('.deep-body')], node.find('.deep-sub'), None))
                 continue
             hid = node.attrs.get('id')
+            part = node.closest(['.tab-part'])
+            if not hid and part is not None and part.attrs['id'] not in parts_named:
+                # the first heading of a tab merged into another: found at the part's own anchor (/удобрения#план)
+                hid = part.attrs['id']
+                parts_named.add(hid)
             if not hid:
                 n += 1
                 hid = f'{view}-h{n}'
@@ -1062,13 +1091,19 @@ def main():
     for view, _ in PAGES:
         panels = re.findall(r'<div class="panel" data-panel id="([^"]+)"', src[view])
         assert set(panels) <= set(TAB), set(panels) - set(TAB)
-        shorts = [TAB[i] for i in panels]
+        # a tab merged into another lives on as a part of it (<section class="tab-part" id="<its old id>">) and keeps
+        # its short anchor: /удобрения#план still leads to the plan
+        ids = set(re.findall(r'\sid="([^"]+)"', src[view]))
+        merged = sorted(ids & set(TAB) - set(panels))
+        shorts = [TAB[i] for i in panels + merged]
         assert len(shorts) == len(set(shorts)), view
-        clash = set(shorts) & set(re.findall(r'\sid="([^"]+)"', src[view]))
+        clash = set(shorts) & ids
         assert not clash, (view, clash)
         if not single:
             for old in panels:
                 src[view] = src[view].replace(f'data-panel id="{old}"', f'data-panel id="{TAB[old]}"')
+            for old in merged:
+                src[view] = re.sub(rf'(\sid=)"{re.escape(old)}"', rf'\1"{TAB[old]}"', src[view])
 
     def href_for(target, here):
         if single:

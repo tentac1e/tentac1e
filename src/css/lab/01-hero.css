@@ -101,4 +101,10 @@
   .hero { grid-template-columns: minmax(0, 1fr) 128px; }
   .hero-art { width: 128px; min-height: 0; }
 }
+/* a phone: the bush a little smaller, so that it does not make the title's row taller than the title */
+@media (max-width: 560px) {
+  .plant-stage { width: 108px; }
+  .hero { grid-template-columns: minmax(0, 1fr) 108px; }
+  .hero-art { width: 108px; }
+}
 

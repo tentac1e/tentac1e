@@ -47,4 +47,19 @@
   .science-home { grid-template-columns: 1fr; }
   .sh-mol .mol-canvas { height: 280px; height: min(280px, 44svh); }
 }
+/* one column (a phone, a tablet): the heading and a button; the text, the counts, the depth of reading and the
+   molecule open under it (07-home.js) — the molecule is built only once it is in sight */
+.sh-open { display: none; }
+@media (max-width: 860px) {
+  .sh-open { display: flex; width: 100%; min-height: 48px; margin-top: 2px; color: var(--sci-chem); border-color: color-mix(in srgb, var(--sci-chem) 35%, transparent); }
+  .sh-open:hover { color: var(--sci-chem); border-color: var(--sci-chem); }
+  .sh-open span { flex: 1; text-align: left; }
+  .sh-open .sh-chev { width: 16px; height: 16px; rotate: 90deg; transition: rotate .28s var(--ease-float); }
+  .science-home.is-open .sh-chev { rotate: -90deg; }
+  .science-home:not(.is-open) { gap: 0; }
+  .science-home:not(.is-open) .sh-fold, .science-home:not(.is-open) .sh-mol { display: none; }
+  .science-home.is-open .sh-fold { margin-top: 16px; }
+  .sh-text h2 { margin-bottom: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .sh-open .sh-chev { transition: none; } }
 

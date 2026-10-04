@@ -5,7 +5,7 @@
 ## Главы и вкладки
 
 ### Главная — `/` (`index.html`)
-- `src/pages/glavnaya.html` · вся глава · 180 стр.
+- `src/pages/glavnaya.html` · вся глава · 183 стр.
 
 ### Сорта — `/сорта` (`sorta.html`)
 - `src/pages/sorta/_head.html` · обложка, вкладки · 14 стр.
@@ -36,14 +36,12 @@
 
 ### Удобрения — `/удобрения` (`udobreniya.html`)
 - `src/pages/udobreniya/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/udobreniya/1-osnovy.html` · #основы — Правила подкормки · 79 стр.<br>модели: `osmos`; глубже: Осмос `#deep-osmos`
+- `src/pages/udobreniya/1-osnovy.html` · #основы — Правила подкормки · 126 стр.<br>модели: `osmos`; глубже: Осмос `#deep-osmos`, Химия мифов `#deep-mify-himiya`
 - `src/pages/udobreniya/2-elementy.html` · #элементы — Что за что отвечает · 76 стр.<br>модели: `flows`; глубже: Ксилема и флоэма `#deep-mobilnost`
-- `src/pages/udobreniya/3-stadii.html` · #стадии — Питание по стадиям роста · 77 стр.<br>модели: `barrel`; глубже: Закон минимума `#deep-libih`
-- `src/pages/udobreniya/4-plan.html` · #план — План подкормок · 56 стр.<br>модели: `ncycle`; глубже: Круговорот азота `#deep-azot`
-- `src/pages/udobreniya/5-sredstva.html` · #средства — Какие удобрения использовать · 89 стр.<br>модели: `oxide`; глубже: Оксиды на упаковке `#deep-oksidy`
-- `src/pages/udobreniya/6-kalkulyator.html` · #калькулятор — Калькулятор раствора · 86 стр.<br>модели: `ec`; глубже: EC и ppm `#deep-ec`
-- `src/pages/udobreniya/7-gidro.html` · #гидропоника — Гидропоника: EC и pH · 85 стр.<br>модели: `o2`; глубже: Кислород и хелаты `#deep-kislorod`
-- `src/pages/udobreniya/8-mify.html` · #мифы — Мифы о подкормках · 50 стр.<br>глубже: Химия мифов `#deep-mify-himiya`
+- `src/pages/udobreniya/3-stadii.html` · #стадии — Питание по стадиям роста · 128 стр.<br>модели: `barrel`, `ncycle`; глубже: Закон минимума `#deep-libih`, Круговорот азота `#deep-azot`
+- `src/pages/udobreniya/4-sredstva.html` · #средства — Какие удобрения использовать · 89 стр.<br>модели: `oxide`; глубже: Оксиды на упаковке `#deep-oksidy`
+- `src/pages/udobreniya/5-kalkulyator.html` · #калькулятор — Калькулятор раствора · 86 стр.<br>модели: `ec`; глубже: EC и ppm `#deep-ec`
+- `src/pages/udobreniya/6-gidro.html` · #гидропоника — Гидропоника: EC и pH · 85 стр.<br>модели: `o2`; глубже: Кислород и хелаты `#deep-kislorod`
 - `src/pages/udobreniya/_foot.html` · подвал главы · 3 стр.
 
 ### Прищипывание — `/прищипывание` (`formirovka.html`)
@@ -182,7 +180,7 @@
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
 - `src/js/app/05-scene.js` (161 стр.): initScene, initHoverLight, initOffscreenPause, initLeafField
 - `src/js/app/06-mini-plants.js` (32 стр.)
-- `src/js/app/07-home.js` (51 стр.): initHome
+- `src/js/app/07-home.js` (60 стр.): initHome
 - `src/js/app/08-varieties.js` (250 стр.): EASY, initVarieties, initQuiz
 - `src/js/app/09-places.js` (43 стр.): initPlaces
 - `src/js/app/10-soil.js` (26 стр.): initSoil
@@ -204,7 +202,7 @@
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
 - `src/js/app/22-garden.js` (132 стр.): GARDEN_KEY
 - `src/js/app/22-install.js` (96 стр.): initInstall
-- `src/js/app/22-reading-pos.js` (457 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/22-reading-pos.js` (465 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (24 стр.)
 
 **science.js**

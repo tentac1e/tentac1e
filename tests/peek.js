@@ -160,10 +160,21 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
     const r = await p.evaluate(() => {
       const q = s => document.querySelectorAll(s).length;
       return { h: document.documentElement.scrollHeight, chapters: q('#chapters > .toc-item'), desc: q('#chapters .toc-d'), subs: q('#chapters .toc-sub a'), tools: q('#tools-home a.tool'),
-        passport: q('#short-pasport dl > div'), facts: q('#short-cifry .facts li'), journey: q('#journey li'), rules: q('#rules .rule'), wide: document.documentElement.scrollWidth > innerWidth };
+        passport: q('#short-pasport dl > div'), facts: q('#short-cifry .facts li'), journey: q('#journey li'), rules: q('#rules .rule'),
+        science: !!document.querySelector('#sh-fold > p') && q('.depth-seg button') === 3 && !!document.getElementById('home-molecule'), wide: document.documentElement.scrollWidth > innerWidth };
     });
-    ok(r.h <= max && r.chapters === 11 && r.desc === 11 && r.subs > 30 && r.tools === 16 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && !r.wide,
-      `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 16 tools, the passport, figures, path and rules ${JSON.stringify(r)}`);
+    ok(r.h <= max && r.chapters === 11 && r.desc === 11 && r.subs > 30 && r.tools === 16 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
+      `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 16 tools, the passport, figures, path, rules and the science layer ${JSON.stringify(r)}`);
+    // «Научный слой» in one column: its heading and a button; the text, the depth of reading and the molecule open
+    const sci = () => p.evaluate(() => ({ btn: getComputedStyle(document.querySelector('.sh-open')).display !== 'none', fold: getComputedStyle(document.getElementById('sh-fold')).display !== 'none', mol: getComputedStyle(document.getElementById('sh-mol')).display !== 'none', exp: document.querySelector('.sh-open').getAttribute('aria-expanded') }));
+    const s0 = await sci();
+    if (s0.btn) {
+      await p.click('.sh-open');
+      await p.evaluate(() => document.getElementById('home-molecule').scrollIntoView({ block: 'center', behavior: 'instant' }));
+      const built = await p.waitForFunction(() => !!document.getElementById('home-molecule').molView, null, { timeout: 8000 }).then(() => true, () => false);
+      const s1 = await sci();
+      ok(!s0.fold && !s0.mol && s1.fold && s1.mol && s1.exp === 'true' && built, `«Научный слой» folded under its button, opens with the molecule built ${JSON.stringify([s0, s1])}`);
+    } else ok(s0.fold && s0.mol, 'a computer shows «Научный слой» open, without the button');
     await p.click('#chapters [data-toc="udobreniya"] .toc-tog');
     await p.waitForTimeout(350);
     const fold = await p.evaluate(() => { const li = document.querySelector('#chapters [data-toc="udobreniya"]'); const a = li.querySelector('.toc-sub a'); return li.classList.contains('is-open') && a.getBoundingClientRect().height > 30 && /udobreniya\.html#/.test(a.getAttribute('href')); });
@@ -188,8 +199,49 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
     ok(rule, 'a link to a rule opens «Правила» and stands at it');
     await c.close();
   };
-  await home({ ...devices['iPhone 13'] }, 6200);
-  await home({ viewport: { width: 1440, height: 900 } }, 4800);
+  // about five screens of an iPhone 13 (844 px) and of a computer (900 px)
+  await home({ ...devices['iPhone 13'] }, 4450);
+  await home({ viewport: { width: 1440, height: 900 } }, 4600);
+
+  // «Удобрения» in six tabs: «Мифы» and «План» are parts of «Основы» and «По стадиям», at their old anchors
+  await page.goto(fileUrl('udobreniya.html'), { waitUntil: 'load' });
+  await page.waitForTimeout(700);
+  const tabs = await page.evaluate(() => [...document.querySelectorAll('.subnav a')].map(a => a.textContent.replace(/\u00a0/g, ' ')).join('|'));
+  ok(tabs === 'Основы|Элементы|По стадиям|Средства|Калькулятор|Гидропоника', '«Удобрения» in six tabs: ' + tabs);
+  for (const [hash, tab] of [['мифы', 'основы'], ['план', 'стадии'], ['udobreniya-plan', 'стадии'], ['udobreniya-mify', 'основы']]) {
+    await page.goto(fileUrl('udobreniya.html') + '#' + encodeURIComponent(hash), { waitUntil: 'load' });
+    await page.waitForTimeout(1000);
+    const w = await page.evaluate(() => { const id = decodeURIComponent(location.hash.slice(1)), el = document.getElementById(id), r = el && el.getBoundingClientRect(); return { id, tab: document.querySelector('.panel.is-active').id, top: r ? Math.round(r.top) : null, H: innerHeight }; });
+    ok(w.tab === tab && w.top !== null && w.top >= 0 && w.top < w.H / 2, `#${hash} → the tab «${w.tab}», the part #${w.id} at the top (${w.top})`);
+  }
+
+  // Справка's questions at the end of their tabs too, before «Глубже»: opened in place, the rest in the sheet
+  const faq = {};
+  for (const file of ['posadka.html', 'uhod.html', 'formirovka.html', 'urozhay.html', 'razmnozhenie.html']) {
+    await page.goto(fileUrl(file), { waitUntil: 'load' });
+    await page.waitForTimeout(500);
+    Object.assign(faq, await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.faq-here')].map(f => { const p = f.closest('[data-panel]'), z = p.querySelector('.deep-zone'); return [p.id, { n: f.querySelectorAll('details').length, before: !!z && !!(f.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING), ids: f.querySelectorAll('[id]').length }]; }))));
+  }
+  const counts = Object.values(faq);
+  ok(counts.length === 10 && counts.reduce((a, x) => a + x.n, 0) === 15 && counts.every(x => x.before && !x.ids), `15 questions in 10 tabs, each block before «Глубже», no ids of their own ${JSON.stringify(faq)}`);
+  await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('магазин'), { waitUntil: 'load' });
+  await page.waitForTimeout(1000);
+  await page.evaluate(() => document.querySelector('.panel.is-active .faq-here').scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await page.waitForTimeout(300);
+  await page.click('.panel.is-active .faq-here summary');
+  await page.waitForTimeout(400);
+  ok(await page.evaluate(() => document.querySelector('.panel.is-active .faq-here details').open), 'a question opens in place');
+  await page.click('.panel.is-active .faq-more a');
+  ok(await ready(page) && /spravka\.html\?peek=1#/.test((frameOf(page) || { url: () => '' }).url()), '«Все частые вопросы» opens Справка in the sheet');
+  await page.click('#sheet-peek [data-close]');
+  await shut(page);
+  const once = await page.evaluate(() => new Promise(res => {
+    const s = document.createElement('script');
+    s.src = 'assets/js/search-index.js?v=' + window.BASIL_PAGES.v.search;
+    s.onload = () => res(window.BASIL_SEARCH.filter(e => /Почему базилик из магазина погибает/.test(e.title + ' ' + e.text)).map(e => e.page));
+    document.head.appendChild(s);
+  }));
+  ok(once.length === 1 && once[0] === 'spravka', 'the search finds a question once, in Справка: ' + once.join(', '));
 
   // every link the site gives the sheet finds its place: the target is there and only it shows
   const targets = new Map();
