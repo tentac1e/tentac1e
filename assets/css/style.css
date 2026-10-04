@@ -727,6 +727,9 @@ main { view-transition-name: main; }
 .sub-head h3 { margin: 0; }
 .sub-head p { margin: 0; color: var(--ink-2); }
 .panel-lead { max-width: 60em; margin: 0 0 20px; color: var(--ink-2); }
+/* a tab merged into another: its part after the tab's own text, apart from it like a new section */
+.tab-part { margin-top: clamp(32px, 4.5vw, 52px); }
+.tab-part > h3:first-child { margin-bottom: 14px; }
 
 .cols-2 {
   display: grid;
