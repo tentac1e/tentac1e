@@ -42,7 +42,12 @@ const { ROOT, playwright, server, ok, done } = require('./lib');
   await page.waitForTimeout(500);
   await page.evaluate(() => { document.getElementById('r-pistou').open = true; });
   const href = await page.evaluate(() => document.querySelector('#r-pistou .rc-sci a').getAttribute('href'));
-  await Promise.all([page.waitForNavigation(), page.click('#r-pistou .rc-sci a')]);
+  // the link opens its place in the «Заглянуть» sheet, from the chapter's address with ?peek=1; «Открыть в главе» goes there
+  await page.click('#r-pistou .rc-sci a');
+  await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).catch(() => {});
+  const fr = page.frames().find(f => /[?&]peek=1/.test(f.url()));
+  ok(fr && decodeURI(fr.url()).replace(B, '') === '/вкус?peek=1#deep-letuchest', 'recipe link in the sheet: ' + (fr && decodeURI(fr.url()).replace(B, '')));
+  await Promise.all([page.waitForNavigation(), page.click('#peek-go')]);
   await page.waitForTimeout(900);
   ok(href === 'вкус#deep-letuchest' && path() === '/вкус#deep-letuchest' && await page.evaluate(() => document.getElementById('deep-letuchest').open), 'recipe link ' + href + ' → ' + path());
   await page.goto(B + encodeURI('/уход'), { waitUntil: 'load' });

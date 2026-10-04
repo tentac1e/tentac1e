@@ -89,7 +89,8 @@
       const panel = panelId && document.getElementById(panelId);
       const sub = panel && panel.dataset.title;
       title = `${ch.title}${sub && $$('[data-panel]', view).length > 1 ? ' · ' + sub : ''} — Гид по базилику`;
-      store.set('basil-last', { view: id, panel: panelId || null, sub: sub && $$('[data-panel]', view).length > 1 ? sub : '' });
+      // a page inside the «Заглянуть» sheet is not where the reader is: «Продолжить» stays as it was
+      if (!PEEK) store.set('basil-last', { view: id, panel: panelId || null, sub: sub && $$('[data-panel]', view).length > 1 ? sub : '' });
     }
     document.title = title;
   }
@@ -112,6 +113,9 @@
     if (r.target) {
       const rc = r.target.closest('.recipe-card');
       if (rc && rc.hidden) { const all = $('.rb-filter [data-cat="all"]'); if (all) all.click(); }
+      // the home page's «Базилик коротко» shows one part at a time: the one the link leads into (a rule from the search)
+      const sp = r.target.closest('[data-short-pane]');
+      if (sp && sp.hidden) showShort(sp.dataset.shortPane);
       let opened = false;
       for (let box = r.target.closest('details'); box; box = box.parentElement && box.parentElement.closest('details')) {
         if (!box.open) { box.open = true; opened = true; }
@@ -162,6 +166,7 @@
       else if (r.home && !changedView) window.scrollTo({ top: 0, behavior: smooth() }); // the chapter's own link: back to its top
       else scrollAfter(r, changedView);
       flashFound();
+      if (PEEK) markPeek(r);
       document.dispatchEvent(new CustomEvent('basil:view', { detail: { id: r.view.dataset.view } }));
     };
     if (changedView && !opts.initial && document.startViewTransition && !reduceMotion.matches) {
@@ -194,7 +199,8 @@
       if (dlg && dlg.open) closeSheet(dlg);
       navigate(hash, { replace: !!a.closest('.subnav') });
     });
-    window.addEventListener('popstate', () => route(location.hash));
+    // Back closes the «Заглянуть» sheet first: the page under it stays as it was
+    window.addEventListener('popstate', e => { if (!peekPop(e)) route(location.hash); });
     window.addEventListener('hashchange', () => route(location.hash));
     route(location.hash, { initial: true, top: ENTRY.top });
     routerReady = true;

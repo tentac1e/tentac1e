@@ -62,6 +62,9 @@
   /* ---------------- pages: every chapter is its own HTML file ---------------- */
   // BASIL_PAGES comes from scripts/build.py; without it (one-file build) all chapters share one page
   const PAGES = window.BASIL_PAGES || null;
+  // the page shown inside the «Заглянуть» sheet of another one (?peek=1, set in the head of the page): only the place
+  // asked for, no background, no bookmark, nothing of its own written for «Продолжить»
+  const PEEK = document.documentElement.classList.contains('is-peek');
   const here = (document.querySelector('[data-view]') || { dataset: {} }).dataset.view || 'glavnaya';
   const pageOf = id => {
     if (!PAGES || !id) return null;

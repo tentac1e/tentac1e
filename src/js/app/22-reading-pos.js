@@ -13,7 +13,8 @@
   }
   const absTop = el => el.getBoundingClientRect().top + window.scrollY;
   const labelOf = el => {
-    const t = el.matches('details.deep') ? $('.deep-title', el) : el.matches('summary') && $('.deeper-t, .rc-title', el) ? $('.deeper-t, .rc-title', el) : el;
+    const t = el.matches('details.deep') ? $('.deep-title', el) : el.matches('.recipe-card') ? $('.rc-title', el)
+      : el.matches('summary') && $('.deeper-t, .rc-title', el) ? $('.deeper-t, .rc-title', el) : el;
     const s = (t ? t.textContent : '').replace(/\s+/g, ' ').trim();
     return s.length > 56 ? s.slice(0, 54).trim() + '…' : s;
   };
@@ -119,6 +120,31 @@
       }
     }
     return { b, n: blocks.indexOf(b), ch, dy };
+  }
+  // the place of an element in the text, as a bookmark: the block it stands in and the start of its sentence
+  // (a link the reader followed: the way back leads to it)
+  function spotOf(el) {
+    const view = el.closest('[data-view]') || currentView;
+    const panel = el.closest('[data-panel]');
+    const scope = panel || view;
+    if (!scope) return null;
+    const blocks = readBlocks(scope);
+    const set = new Set(blocks);
+    let b = el.closest(READ_BLOCK);
+    while (b && !set.has(b)) b = b.parentElement && b.parentElement.closest(READ_BLOCK);
+    // a link on a line of its own after the text it belongs to: that text, from its start
+    if (!b) b = blocks.filter(x => x.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING).pop();
+    if (!b) return null;
+    let ch = 0;
+    if (!b.matches(READ_WHOLE) && b !== el && b.contains(el)) {
+      const rg = document.createRange();
+      rg.setStart(b, 0);
+      rg.setEndBefore(el);
+      ch = sentenceStart(b.textContent, rg.toString().length);
+    }
+    const t = b.textContent, a = headingBefore(b, scope);
+    return { panel: panel ? panel.id : null, anchor: a ? a.id : null, label: a ? labelOf(a) : (panel && panel.dataset.title) || '',
+             n: blocks.indexOf(b), sig: normText(t).slice(0, 40), ch, ss: normText(t.slice(ch, ch + 40)).slice(0, 24), dy: 0, y: Math.round(window.scrollY), t: Date.now() };
   }
   // the saved spot in the blocks of today's page: by its number, checked by its first words; after an update of
   // the text, the nearest block with the same words; the sentence by its first words too
@@ -228,13 +254,13 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     setTimeout(off, ms);
   }
-  function savePos() {
-    if (!currentView || here === 'glavnaya' || !userMoved) return;
-    const all = store.get(POS_KEY, {}) || {};
+  // the bookmark of the place being read now (null near the top of the page: nothing read yet)
+  function bookmarkHere() {
+    if (!currentView) return null;
     const panel = $('.panel.is-active', currentView);
     const scope = panel || currentView;
     const y = Math.round(window.scrollY);
-    if (y < 400) { delete all[here]; store.set(POS_KEY, all); return; }
+    if (y < 400) return null;
     const s = spotAt(scope);
     const a = s ? headingBefore(s.b, scope) : currentAnchor();
     const pos = { panel: panel ? panel.id : null, anchor: a ? a.id : null, label: a ? labelOf(a) : '', y, t: Date.now() };
@@ -242,13 +268,20 @@
       const t = s.b.textContent;
       Object.assign(pos, { n: s.n, sig: normText(t).slice(0, 40), ch: s.ch, ss: normText(t.slice(s.ch, s.ch + 40)).slice(0, 24), dy: s.dy });
     }
-    all[here] = pos;
+    return pos;
+  }
+  function savePos() {
+    if (!currentView || here === 'glavnaya' || !userMoved) return;
+    const all = store.get(POS_KEY, {}) || {};
+    const pos = bookmarkHere();
+    if (pos) all[here] = pos; else delete all[here];
     store.set(POS_KEY, all);
   }
   function resumeTo(pos, behavior = 'auto') {
     if (!pos) return;
     const panel = pos.panel && document.getElementById(pos.panel);
-    if (panel && !panel.classList.contains('is-active')) {
+    // in the one-file book a chapter not shown keeps its tab marked open: its chapter has to be the one shown too
+    if (panel && (!panel.classList.contains('is-active') || panel.closest('[data-view]') !== currentView)) {
       try { history.replaceState(null, '', '#' + pos.panel); } catch (e) { /* sandboxed */ }
       route('#' + pos.panel, { top: true });
     }
@@ -292,6 +325,50 @@
       remark();
     }, 800);
   }
+  /* the ways back. «Открыть в главе» from the «Заглянуть» sheet keeps where the reader came from (sessionStorage):
+     the page gone to offers the way back, and that page, come back to with Back, stands at the link's sentence */
+  const DETOUR_KEY = 'basil-detour';
+  function saveDetour(d) {
+    try { sessionStorage.setItem(DETOUR_KEY, JSON.stringify(Object.assign({}, d, { t: Date.now() }))); } catch (e) { /* private mode */ }
+  }
+  function readDetour() {
+    try {
+      const d = JSON.parse(sessionStorage.getItem(DETOUR_KEY) || 'null');
+      return d && d.from && Date.now() - (d.t || 0) < 30 * 60e3 ? d : null;
+    } catch (e) { return null; }
+  }
+  const dropDetour = () => { try { sessionStorage.removeItem(DETOUR_KEY); } catch (e) { /* private mode */ } };
+  // a pill at the bottom, like «Вы остановились здесь»: one at a time
+  let backPill = null;
+  function wayBack(small, label, go, arrow) {
+    $$('.resume-pill').forEach(x => x.remove());
+    pill = null;
+    const el = backPill = document.createElement('div');
+    el.className = 'resume-pill back-pill';
+    el.setAttribute('role', 'status');
+    el.innerHTML = `<button type="button" class="resume-go">${icon(arrow)}<span><small>${small}</small><b>${esc(label)}</b></span></button><button type="button" class="resume-x" aria-label="Скрыть">${icon('close')}</button>`;
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('is-shown'));
+    const hide = () => {
+      if (backPill !== el) return;
+      backPill = null;
+      el.classList.remove('is-shown');
+      setTimeout(() => el.remove(), 400);
+    };
+    $('.resume-go', el).addEventListener('click', () => { hide(); go(); });
+    $('.resume-x', el).addEventListener('click', hide);
+    setTimeout(hide, 20000);
+  }
+  // a link to a place lower on this tab: back up to the link's sentence
+  function offerBack(spot) {
+    if (!spot) return;
+    wayBack('Вернуться к тексту', spot.label || 'к ссылке', () => { userMoved = true; resumeTo(spot, smooth()); }, 'arrow-up');
+  }
+  // come here from the «Заглянуть» sheet of another chapter: back there, to the link
+  function offerReturn(d) {
+    wayBack('Вернуться', d.label || 'к тексту', () => { history.back(); }, 'chev-l');
+  }
+
   let pill = null;
   function offerResume(pos) {
     if (!pos || pos.y < 900 || pill) return;
@@ -321,12 +398,21 @@
   function initReadingPos() {
     if (!PAGES || here === 'glavnaya') return;
     const pos = readPos(here);
-    if (ENTRY.resume) {
+    const det = readDetour();
+    if (det && det.from === here && ENTRY.type === 'back_forward' && det.spot) {
+      // back from the chapter «Открыть в главе» led to: at the link, as the reader left it
+      dropDetour();
+      setTimeout(() => { userMoved = true; resumeTo(det.spot); }, 60);
+    } else if (ENTRY.resume) {
       try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* sandboxed */ }
       if (pos) setTimeout(() => { userMoved = true; resumeTo(pos); }, 60);
     } else if (ENTRY.top || !location.hash) {
       holdTop();
       offerResume(pos);
+    }
+    if (det && det.to === here && det.from !== here && ENTRY.type === 'navigate' && !det.shown) {
+      saveDetour(Object.assign({}, det, { shown: true }));
+      setTimeout(() => offerReturn(det), 400);
     }
     let t = 0;
     window.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(savePos, 400); }, { passive: true });
@@ -338,6 +424,8 @@
       if (!e.persisted) return;
       userMoved = false;
       clearTimeout(t);
+      const back = readDetour();
+      if (back && back.from === here && back.spot) { dropDetour(); userMoved = true; resumeTo(back.spot); return; }
       jump(() => window.scrollTo(0, 0));
       holdTop();
       offerResume(readPos(here));

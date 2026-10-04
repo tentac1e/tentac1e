@@ -173,15 +173,16 @@
 ## Скрипты (src/js/)
 
 **app.js**
-- `src/js/app/00-core.js` (125 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES
+- `src/js/app/00-core.js` (128 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES, PEEK
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (277 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/02-router.js` (283 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/03-peek.js` (265 стр.): PEEK_SKIP, initPeek, initPeekFrame
 - `src/js/app/03-sheets.js` (212 стр.): initToc, initSheets
 - `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
 - `src/js/app/05-scene.js` (161 стр.): initScene, initHoverLight, initOffscreenPause, initLeafField
 - `src/js/app/06-mini-plants.js` (32 стр.)
-- `src/js/app/07-home.js` (35 стр.): initHome
+- `src/js/app/07-home.js` (51 стр.): initHome
 - `src/js/app/08-varieties.js` (250 стр.): EASY, initVarieties, initQuiz
 - `src/js/app/09-places.js` (43 стр.): initPlaces
 - `src/js/app/10-soil.js` (26 стр.): initSoil
@@ -203,8 +204,8 @@
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
 - `src/js/app/22-garden.js` (132 стр.): GARDEN_KEY
 - `src/js/app/22-install.js` (96 стр.): initInstall
-- `src/js/app/22-reading-pos.js` (369 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, initReadingPos, initLinks, initPageAction
-- `src/js/app/23-boot.js` (21 стр.)
+- `src/js/app/22-reading-pos.js` (457 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/23-boot.js` (24 стр.)
 
 **science.js**
 - `src/js/science/00-core.js` (20 стр.)
@@ -241,6 +242,6 @@
 
 ## Стили (src/css/)
 
-**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`
+**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`
 **lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `03-deep-switch.css`, `04-deep-index.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `10-depth.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
 

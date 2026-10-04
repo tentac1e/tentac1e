@@ -91,6 +91,17 @@ const { playwright, ok, done, ROOT, OUT } = require('./lib');
   await page.evaluate(() => { location.hash = 'problemy-bolezni'; }); await page.waitForTimeout(300);
   await page.evaluate(() => { const d = document.querySelector('#deep-lmr, .lab-tool[data-lab="dm"]'); for (let p = d.closest('details'); p; p = p.parentElement.closest('details')) p.open = true; document.querySelector('.lab-tool[data-lab="dm"]').scrollIntoView(); }); await page.waitForTimeout(900);
   ok(await page.evaluate(() => !!document.querySelector('.lab-tool[data-lab="dm"][data-ready]')), 'a model from another chapter mounts too');
+  // a link from the text to another chapter: the book has no «Заглянуть» sheet (a frame would load the whole book once
+  // more) — it jumps on the page and offers the way back to the link
+  await page.evaluate(() => { location.hash = 'urozhay-recepty'; }); await page.waitForTimeout(300);
+  await page.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
+  await page.waitForTimeout(300);
+  await page.click('#r-pistou .rc-sci a'); await page.waitForTimeout(500);
+  const jumped = await page.evaluate(() => ({ view: document.querySelector('.view.is-active').dataset.view, sheet: document.getElementById('sheet-peek').open, pill: ((document.querySelector('.back-pill') || {}).textContent || '').replace(/\s+/g, ' ').trim() }));
+  ok(jumped.view === 'vkus' && !jumped.sheet && /Вернуться к тексту/.test(jumped.pill), 'a recipe\'s link jumps to the dive, no sheet, the way back offered ' + JSON.stringify(jumped));
+  await page.click('.back-pill .resume-go'); await page.waitForTimeout(900);
+  const backAt = await page.evaluate(() => { const r = document.querySelector('#r-pistou .rc-sci a').getBoundingClientRect(); return { view: document.querySelector('.view.is-active').dataset.view, top: Math.round(r.top), H: innerHeight }; });
+  ok(backAt.view === 'urozhay' && backAt.top > 0 && backAt.top < backAt.H, '«↑ Вернуться к тексту» brings the recipe back ' + JSON.stringify(backAt));
   await browser.close();
   done(errs);
 })();

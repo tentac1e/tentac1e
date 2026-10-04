@@ -4,6 +4,7 @@
        горизонтальный — вокруг вертикальной; два хода подряд — через «голову», без упора;
        свайп рядом с ней — страница листается;
      высота сцены на коротком телефоне — не больше 45 % экрана; компьютер — мышью вверх-вниз так же без упора.
+   Шторку «Заглянуть» палец стягивает вниз за шапку, и она закрывается; страница под ней стоит.
    Подсветка под пальцем не залипает: в собранных стилях нет «:hover» вне @media (hover: hover); на телефоне
    наведение (включённое принудительно, как его ставит палец) не меняет вид строк оглавления, карточек и кнопок,
    на компьютере — меняет; подсветка нажатия у шторки и карточек прозрачная.
@@ -112,6 +113,21 @@ function turned(A, B) {
     t = turned(v0.turn, v1.turn);
     ok(Math.abs(v1.y - v0.y) <= 1 && t.ang > 60 && Math.abs(t.axis[0]) > 0.9, `Вкус: down on the molecule turned it ${t.ang}° round ${t.axis}, the page moved ${v1.y - v0.y} px`);
   }
+
+  // the «Заглянуть» sheet goes down after the finger that pulls its head; the page under it stays
+  await page.goto(fileUrl('urozhay.html') + '#' + encodeURIComponent('рецепты'), { waitUntil: 'load' });
+  await page.waitForTimeout(1000);
+  await page.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
+  await page.waitForTimeout(300);
+  const py = await page.evaluate(() => Math.round(scrollY));
+  await page.click('#r-pistou .rc-sci a');
+  await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).catch(() => {});
+  await page.waitForTimeout(400);
+  const head = await page.evaluate(() => { const r = document.querySelector('#sheet-peek .peek-title').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+  await swipe(head.x, head.y, head.x, head.y + 420, 12, 16);
+  await page.waitForTimeout(500);
+  const gone = await page.evaluate(() => ({ open: document.getElementById('sheet-peek').open, y: Math.round(scrollY), step: !!(history.state && history.state.peek) }));
+  ok(!gone.open && Math.abs(gone.y - py) <= 2 && !gone.step, `a finger pulls the «Заглянуть» sheet down by its head and it closes; the page stays (${py}→${gone.y}) ${JSON.stringify(gone)}`);
   await ctx.close();
 
   // ---------- the stage leaves room to scroll on a short phone ----------

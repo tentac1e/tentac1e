@@ -1,0 +1,14 @@
+/* ================= «Заглянуть»: a page shown inside the sheet of another (?peek=1, 03-peek.js) ================= */
+/* only the place asked for: no header, tab bar, footer, chapter head, tabs, pagers or sky behind it */
+.is-peek .topbar, .is-peek .footer, .is-peek .tabbar, .is-peek .to-top, .is-peek .skip, .is-peek #leaf-field, .is-peek .aura,
+.is-peek .resume-pill, .is-peek .ch-hero, .is-peek .subnav-wrap, .is-peek .pager, .is-peek .panel-next, .is-peek .deep-index { display: none !important; }
+/* beside the path to the place, nothing (the page's own markup stays as it is: its scripts work as on their page) */
+.is-peek [data-peek-up] > :not([data-peek-up]):not([data-peek]) { display: none !important; }
+html.is-peek { scroll-padding-top: 12px; }
+html.is-peek body { padding-bottom: 0; background: var(--surface); }
+.is-peek .view { padding: 16px 0 calc(28px + env(safe-area-inset-bottom, 0px)); }
+.is-peek .deep-zone { margin-top: 0; }
+.is-peek [data-peek] + [data-peek] { margin-top: 14px; }
+/* the dive or recipe the sheet is for stays open: no fold button on it */
+.is-peek details[data-peek] > summary { cursor: default; }
+.is-peek details[data-peek] > summary .deep-plus { display: none; }

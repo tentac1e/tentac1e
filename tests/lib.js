@@ -49,8 +49,40 @@ function watch(page, errs) {
   page.on('console', m => { if (m.type() === 'error' && !/ERR_CERT|fonts|net::ERR_(NAME|INTERNET|CONN|TUNNEL|PROXY)|Failed to load resource/.test(m.text())) errs.push(page.url().replace(/^.*\//, '') + ': ' + m.text()); });
 }
 
+// where a page landed after a return to a place in the text: the first marked line (.resume-mark), what covers the
+// page above it, and the words it starts with
+function landedAt(page) {
+  return page.evaluate(() => {
+    const i = document.querySelector('.resume-mark i');
+    if (!i) return null;
+    const r = i.getBoundingClientRect();
+    // the words from the marked line's first letter to the end of its block
+    const hit = document.caretRangeFromPoint(r.left + 5, r.top + r.height / 2);
+    let words = '';
+    if (hit) {
+      let node = hit.startContainer, off = hit.startOffset;
+      if (node.nodeType !== 3) {
+        const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        w.currentNode = node.childNodes[off] || node;
+        do { node = w.nextNode(); } while (node && !node.data.trim());
+        off = 0;
+      }
+      if (node) {
+        const rg = document.createRange();
+        rg.setStart(node, off);
+        const blk = node.parentElement.closest('p, li, dt, dd, h2, h3, h4, h5, summary, blockquote, figcaption, tr, pre, .card') || document.body;
+        rg.setEndAfter(blk.lastChild || blk);
+        words = rg.toString().replace(/\s+/g, ' ').trim();
+      }
+    }
+    const wrap = document.querySelector('[data-view].is-active .subnav-wrap');
+    const end = Math.round(scrollY) >= document.documentElement.scrollHeight - innerHeight - 2;
+    return { top: Math.round(r.top), cover: wrap ? Math.round(wrap.getBoundingClientRect().bottom) : 0, words: words.slice(0, 30), y: Math.round(scrollY), vh: innerHeight, end };
+  });
+}
+
 const FILES = ['index.html', 'sorta.html', 'posadka.html', 'kalendar.html', 'uhod.html', 'udobreniya.html', 'formirovka.html', 'urozhay.html', 'vkus.html', 'razmnozhenie.html', 'problemy.html', 'spravka.html', 'moy.html'];
 const SLUGS = { glavnaya: '', sorta: 'сорта', posadka: 'посадка', kalendar: 'календарь', uhod: 'уход', udobreniya: 'удобрения', formirovka: 'прищипывание', urozhay: 'урожай', vkus: 'вкус', razmnozhenie: 'размножение', problemy: 'проблемы', spravka: 'справка', moy: 'мой-базилик' };
 const fileUrl = f => 'file://' + path.join(ROOT, f);
 
-module.exports = { ROOT, OUT, playwright, server, serve, ok, done, watch, FILES, SLUGS, fileUrl, results };
+module.exports = { ROOT, OUT, playwright, server, serve, ok, done, watch, landedAt, FILES, SLUGS, fileUrl, results };

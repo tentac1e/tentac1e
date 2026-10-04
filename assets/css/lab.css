@@ -1183,7 +1183,7 @@ body::after {
 }
 
 /* ================= hover light & tilt ================= */
-.ch-card, .q-card, .tool, .rule {
+.q-card, .tool, .rule {
   background-image: radial-gradient(280px circle at var(--mx, -400px) var(--my, -400px), var(--hover-light), transparent 70%);
 }
 .ch-hero-art { transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .6s var(--ease-float); transform-style: preserve-3d; }

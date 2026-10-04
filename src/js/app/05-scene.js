@@ -24,7 +24,7 @@
 
   function initHoverLight() {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    const sel = '.ch-card, .q-card, .tool, .rule, .deep > summary, .world-card, .lab-tool';
+    const sel = '.q-card, .tool, .rule, .deep > summary, .world-card, .lab-tool';
     // one style write per frame at most, however fast the mouse reports
     let pending = null, queued = false;
     const flush = () => {

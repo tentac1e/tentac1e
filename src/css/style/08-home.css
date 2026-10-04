@@ -152,55 +152,51 @@
   .q-card b { font-size: .92rem; }
 }
 
+/* what to do in the garden this month: a line under «С чего начать» */
 .season-tip {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
-  gap: 22px;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 18px;
   align-items: center;
-  padding: clamp(18px, 3vw, 28px);
+  margin-top: 12px;
+  padding: clamp(14px, 2.4vw, 20px) clamp(16px, 2.6vw, 24px);
   border-radius: 8px 36px 8px 36px;
   background: var(--glass);
   border: 1px solid var(--line-strong);
   box-shadow: var(--shadow-float);
 }
-.season-mark .art-float { width: 110px; height: 110px; }
-.season-mark svg { width: 110px; height: 110px; }
-.season-text { margin: 8px 0 6px; font-family: var(--font-display); font-size: clamp(1.35rem, 2.4vw, 1.75rem); font-weight: 600; line-height: 1.25; color: var(--ink); }
-.season-note { margin: 0; font-size: .86rem; color: var(--ink-3); }
+.season-mark .art-float { width: 76px; height: 76px; }
+.season-mark svg { width: 76px; height: 76px; }
+.season-text { margin: 4px 0; font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.25; color: var(--ink); }
+.season-note { margin: 0; font-size: .84rem; color: var(--ink-3); }
 @media (max-width: 560px) {
-  .season-tip { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; }
-  .season-mark .art-float, .season-mark svg { width: 64px; height: 64px; }
+  .season-tip { grid-template-columns: 48px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .season-mark .art-float, .season-mark svg { width: 48px; height: 48px; }
 }
 
-.chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-@media (max-width: 720px) { .chapters { grid-template-columns: 1fr; gap: 10px; } }
-.ch-card {
-  position: relative;
-  display: grid;
-  grid-template-columns: 84px minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
-  padding: 16px 18px 16px 14px;
-  border-radius: 24px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  color: var(--ink);
-  text-decoration: none;
-  overflow: hidden;
-  transition: transform .5s var(--ease-float), box-shadow .5s var(--ease-float), border-color .3s;
+/* «Главы гида»: the contents' list (24-toc.css, scripts/build.py), each chapter with what it holds in a line, opening
+   into its sections; two columns on a wide screen */
+.home-chapters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; align-items: start; }
+.home-chapters .toc-item { padding: 4px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+.home-chapters .toc-link { gap: 14px; min-height: 64px; padding: 4px 8px 4px 4px; border-radius: 16px; }
+.home-chapters .toc-art { width: 60px; height: 60px; border-radius: 16px; }
+.home-chapters .toc-art svg { width: 54px; height: 54px; }
+.home-chapters .toc-item:nth-child(3n+2) .toc-art { background: var(--oil-soft); }
+.home-chapters .toc-item:nth-child(3n) .toc-art { background: var(--opal-soft); }
+.home-chapters .toc-t { font: 600 1.35rem/1.15 var(--font-display); }
+.toc-tx { display: grid; gap: 3px; min-width: 0; padding-block: 4px; }
+.toc-d { font-size: .86rem; line-height: 1.38; color: var(--ink-2); }
+/* the stem of the sections from the middle of the bigger picture */
+.home-chapters .toc-sub > ul { margin-left: 25px; }
+@media (max-width: 720px) {
+  .home-chapters { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .home-chapters .toc-link { gap: 12px; }
+  .home-chapters .toc-art { width: 48px; height: 48px; border-radius: 14px; }
+  .home-chapters .toc-art svg { width: 44px; height: 44px; }
+  .home-chapters .toc-t { font-size: 1.22rem; }
+  .toc-d { font-size: .8rem; line-height: 1.34; }
+  .home-chapters .toc-sub > ul { margin-left: 19px; }
 }
-.ch-card:hover { color: var(--ink); transform: translateY(-5px); box-shadow: var(--shadow-lift); border-color: var(--line-strong); }
-.ch-card .ch-art { position: relative; display: grid; place-items: center; width: 84px; height: 84px; }
-.ch-card .ch-art::before { content: ""; position: absolute; inset: 4px; border-radius: 42% 58% 62% 38% / 45% 40% 60% 55%; background: var(--leaf-soft); transition: border-radius .8s var(--ease-float), rotate .8s var(--ease-float); }
-.ch-card:nth-child(3n+2) .ch-art::before { background: var(--oil-soft); }
-.ch-card:nth-child(3n) .ch-art::before { background: var(--opal-soft); }
-.ch-card:hover .ch-art::before { border-radius: 58% 42% 38% 62% / 55% 60% 40% 45%; rotate: 20deg; }
-.ch-card .ch-art svg { position: relative; width: 78px; height: 78px; transition: transform .6s var(--ease-float); }
-.ch-card:hover .ch-art svg { transform: scale(1.08) rotate(-4deg); }
-.ch-card .ch-num { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
-.ch-card h3 { margin: 2px 0 4px; font-size: 1.6rem; }
-.ch-card p { margin: 0; font-size: .88rem; line-height: 1.45; color: var(--ink-2); }
 
 .journey {
   position: relative;
@@ -271,25 +267,6 @@
 .tool .t-ico { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: var(--leaf-soft); color: var(--basil-deep); }
 .tool b { display: block; font-size: .95rem; line-height: 1.25; }
 .tool small { display: block; font-size: .8rem; color: var(--ink-3); line-height: 1.35; }
-@media (max-width: 560px) {
-  .tools-grid {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(2, auto);
-    grid-auto-columns: 78%;
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    /* the first card snaps to the page's gutter, not to the screen's edge */
-    scroll-padding-inline: clamp(16px, 4vw, 40px);
-    scrollbar-width: none;
-    margin-inline: calc(-1 * clamp(16px, 4vw, 40px));
-    padding: 2px clamp(16px, 4vw, 40px) 8px;
-  }
-  .tools-grid::-webkit-scrollbar { display: none; }
-  .tool { scroll-snap-align: start; }
-}
-
 .rules { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: 14px; }
 .rule { padding: 22px 20px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-leaf); box-shadow: var(--shadow-sm); }
 .rule-ico { display: grid; place-items: center; width: 46px; height: 46px; margin-bottom: 12px; border-radius: 24px 4px 24px 4px; background: var(--leaf-soft); color: var(--basil-deep); }
@@ -312,3 +289,24 @@
   .rule { flex: 0 0 80%; scroll-snap-align: center; }
 }
 
+/* «Базилик коротко»: the passport, the figures, the path and the rules — one at a time, under a switch (07-home.js) */
+.short-seg { margin-bottom: 16px; }
+.short-seg button { min-height: 40px; }
+.short-pane[hidden] { display: none; }
+.short-lead { margin: 0 0 14px; max-width: 40em; color: var(--ink-2); }
+.short-pane .passport { margin: 0; }
+.short-pane .facts { margin: 0; }
+/* the figures stand in a grid of their own: none hides behind a swipe */
+@media (max-width: 900px) {
+  .short-pane .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; margin: 0; padding: 0; }
+  .short-pane .facts li { padding: 14px 12px; border-left: 0; border-top: 1px dashed var(--line-strong); }
+  .short-pane .facts li:nth-child(-n+3) { border-top: 0; }
+  .short-pane .facts li:not(:nth-child(3n+1)) { border-left: 1px dashed var(--line-strong); }
+}
+@media (max-width: 560px) {
+  .short-pane .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .short-pane .facts li:nth-child(3) { border-top: 1px dashed var(--line-strong); }
+  .short-pane .facts li:not(:nth-child(3n+1)) { border-left: 0; }
+  .short-pane .facts li:nth-child(2n) { border-left: 1px dashed var(--line-strong); }
+  .short-pane .facts li:nth-child(odd) { padding-left: 0; }
+}

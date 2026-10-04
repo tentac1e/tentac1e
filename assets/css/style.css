@@ -694,7 +694,7 @@ main { view-transition-name: main; }
 @keyframes rise { from { translate: 0 38px; scale: .985; } to { translate: 0 0; scale: 1; } }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .steps .step, .storage .card, .ref-grid .card, .principles .card, .myths .card, .chapters .ch-card, .tools-grid .tool, .vtypes .vtype, .quick .q-card {
+    .steps .step, .storage .card, .ref-grid .card, .principles .card, .myths .card, .home-chapters > .toc-item, .tools-grid .tool, .vtypes .vtype, .quick .q-card {
       animation: rise linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 45%;
@@ -1077,55 +1077,51 @@ main { view-transition-name: main; }
   .q-card b { font-size: .92rem; }
 }
 
+/* what to do in the garden this month: a line under «С чего начать» */
 .season-tip {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
-  gap: 22px;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 18px;
   align-items: center;
-  padding: clamp(18px, 3vw, 28px);
+  margin-top: 12px;
+  padding: clamp(14px, 2.4vw, 20px) clamp(16px, 2.6vw, 24px);
   border-radius: 8px 36px 8px 36px;
   background: var(--glass);
   border: 1px solid var(--line-strong);
   box-shadow: var(--shadow-float);
 }
-.season-mark .art-float { width: 110px; height: 110px; }
-.season-mark svg { width: 110px; height: 110px; }
-.season-text { margin: 8px 0 6px; font-family: var(--font-display); font-size: clamp(1.35rem, 2.4vw, 1.75rem); font-weight: 600; line-height: 1.25; color: var(--ink); }
-.season-note { margin: 0; font-size: .86rem; color: var(--ink-3); }
+.season-mark .art-float { width: 76px; height: 76px; }
+.season-mark svg { width: 76px; height: 76px; }
+.season-text { margin: 4px 0; font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.25; color: var(--ink); }
+.season-note { margin: 0; font-size: .84rem; color: var(--ink-3); }
 @media (max-width: 560px) {
-  .season-tip { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; }
-  .season-mark .art-float, .season-mark svg { width: 64px; height: 64px; }
+  .season-tip { grid-template-columns: 48px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .season-mark .art-float, .season-mark svg { width: 48px; height: 48px; }
 }
 
-.chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-@media (max-width: 720px) { .chapters { grid-template-columns: 1fr; gap: 10px; } }
-.ch-card {
-  position: relative;
-  display: grid;
-  grid-template-columns: 84px minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
-  padding: 16px 18px 16px 14px;
-  border-radius: 24px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  color: var(--ink);
-  text-decoration: none;
-  overflow: hidden;
-  transition: transform .5s var(--ease-float), box-shadow .5s var(--ease-float), border-color .3s;
+/* «Главы гида»: the contents' list (24-toc.css, scripts/build.py), each chapter with what it holds in a line, opening
+   into its sections; two columns on a wide screen */
+.home-chapters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; align-items: start; }
+.home-chapters .toc-item { padding: 4px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+.home-chapters .toc-link { gap: 14px; min-height: 64px; padding: 4px 8px 4px 4px; border-radius: 16px; }
+.home-chapters .toc-art { width: 60px; height: 60px; border-radius: 16px; }
+.home-chapters .toc-art svg { width: 54px; height: 54px; }
+.home-chapters .toc-item:nth-child(3n+2) .toc-art { background: var(--oil-soft); }
+.home-chapters .toc-item:nth-child(3n) .toc-art { background: var(--opal-soft); }
+.home-chapters .toc-t { font: 600 1.35rem/1.15 var(--font-display); }
+.toc-tx { display: grid; gap: 3px; min-width: 0; padding-block: 4px; }
+.toc-d { font-size: .86rem; line-height: 1.38; color: var(--ink-2); }
+/* the stem of the sections from the middle of the bigger picture */
+.home-chapters .toc-sub > ul { margin-left: 25px; }
+@media (max-width: 720px) {
+  .home-chapters { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .home-chapters .toc-link { gap: 12px; }
+  .home-chapters .toc-art { width: 48px; height: 48px; border-radius: 14px; }
+  .home-chapters .toc-art svg { width: 44px; height: 44px; }
+  .home-chapters .toc-t { font-size: 1.22rem; }
+  .toc-d { font-size: .8rem; line-height: 1.34; }
+  .home-chapters .toc-sub > ul { margin-left: 19px; }
 }
-@media (hover: hover) { .ch-card:hover { color: var(--ink); transform: translateY(-5px); box-shadow: var(--shadow-lift); border-color: var(--line-strong); } }
-.ch-card .ch-art { position: relative; display: grid; place-items: center; width: 84px; height: 84px; }
-.ch-card .ch-art::before { content: ""; position: absolute; inset: 4px; border-radius: 42% 58% 62% 38% / 45% 40% 60% 55%; background: var(--leaf-soft); transition: border-radius .8s var(--ease-float), rotate .8s var(--ease-float); }
-.ch-card:nth-child(3n+2) .ch-art::before { background: var(--oil-soft); }
-.ch-card:nth-child(3n) .ch-art::before { background: var(--opal-soft); }
-@media (hover: hover) { .ch-card:hover .ch-art::before { border-radius: 58% 42% 38% 62% / 55% 60% 40% 45%; rotate: 20deg; } }
-.ch-card .ch-art svg { position: relative; width: 78px; height: 78px; transition: transform .6s var(--ease-float); }
-@media (hover: hover) { .ch-card:hover .ch-art svg { transform: scale(1.08) rotate(-4deg); } }
-.ch-card .ch-num { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
-.ch-card h3 { margin: 2px 0 4px; font-size: 1.6rem; }
-.ch-card p { margin: 0; font-size: .88rem; line-height: 1.45; color: var(--ink-2); }
 
 .journey {
   position: relative;
@@ -1196,25 +1192,6 @@ main { view-transition-name: main; }
 .tool .t-ico { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: var(--leaf-soft); color: var(--basil-deep); }
 .tool b { display: block; font-size: .95rem; line-height: 1.25; }
 .tool small { display: block; font-size: .8rem; color: var(--ink-3); line-height: 1.35; }
-@media (max-width: 560px) {
-  .tools-grid {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(2, auto);
-    grid-auto-columns: 78%;
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    /* the first card snaps to the page's gutter, not to the screen's edge */
-    scroll-padding-inline: clamp(16px, 4vw, 40px);
-    scrollbar-width: none;
-    margin-inline: calc(-1 * clamp(16px, 4vw, 40px));
-    padding: 2px clamp(16px, 4vw, 40px) 8px;
-  }
-  .tools-grid::-webkit-scrollbar { display: none; }
-  .tool { scroll-snap-align: start; }
-}
-
 .rules { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: 14px; }
 .rule { padding: 22px 20px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-leaf); box-shadow: var(--shadow-sm); }
 .rule-ico { display: grid; place-items: center; width: 46px; height: 46px; margin-bottom: 12px; border-radius: 24px 4px 24px 4px; background: var(--leaf-soft); color: var(--basil-deep); }
@@ -1237,6 +1214,27 @@ main { view-transition-name: main; }
   .rule { flex: 0 0 80%; scroll-snap-align: center; }
 }
 
+/* «Базилик коротко»: the passport, the figures, the path and the rules — one at a time, under a switch (07-home.js) */
+.short-seg { margin-bottom: 16px; }
+.short-seg button { min-height: 40px; }
+.short-pane[hidden] { display: none; }
+.short-lead { margin: 0 0 14px; max-width: 40em; color: var(--ink-2); }
+.short-pane .passport { margin: 0; }
+.short-pane .facts { margin: 0; }
+/* the figures stand in a grid of their own: none hides behind a swipe */
+@media (max-width: 900px) {
+  .short-pane .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; margin: 0; padding: 0; }
+  .short-pane .facts li { padding: 14px 12px; border-left: 0; border-top: 1px dashed var(--line-strong); }
+  .short-pane .facts li:nth-child(-n+3) { border-top: 0; }
+  .short-pane .facts li:not(:nth-child(3n+1)) { border-left: 1px dashed var(--line-strong); }
+}
+@media (max-width: 560px) {
+  .short-pane .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .short-pane .facts li:nth-child(3) { border-top: 1px dashed var(--line-strong); }
+  .short-pane .facts li:not(:nth-child(3n+1)) { border-left: 0; }
+  .short-pane .facts li:nth-child(2n) { border-left: 1px dashed var(--line-strong); }
+  .short-pane .facts li:nth-child(odd) { padding-left: 0; }
+}
 /* ================= chapter chrome ================= */
 .ch-hero {
   display: grid;
@@ -2222,6 +2220,42 @@ main { view-transition-name: main; }
   .sheet-inner { overscroll-behavior-y: none; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
 }
 
+/* «Заглянуть»: the place a reference leads to, its chapter's page in a frame (03-peek.js) */
+.sheet-peek { width: min(640px, calc(100% - 32px)); height: min(86vh, 900px); max-height: none; }
+.peek-head { align-items: flex-start; margin-bottom: 10px; }
+.peek-title { flex: 1; min-width: 0; }
+.peek-title small { display: block; font: 500 .7rem/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.peek-title h2 { margin-top: 4px; font-size: clamp(1.35rem, 4vw, 1.8rem); line-height: 1.1; }
+.peek-back { width: 44px; height: 44px; }
+.peek-head .icon-btn { width: 44px; height: 44px; }
+.peek-body { position: relative; flex: 1; min-height: 0; border-top: 1px solid var(--line); }
+.peek-frame { display: block; width: 100%; height: 100%; border: 0; background: var(--surface); transition: opacity .2s ease; }
+.sheet-peek.is-loading .peek-frame { opacity: 0; }
+/* while the chapter comes: paper with the lines of a text to be */
+.peek-paper { position: absolute; inset: 0; display: none; padding: 22px 18px; }
+.sheet-peek.is-loading .peek-paper { display: block; }
+.peek-paper i { display: block; height: 12px; margin: 0 0 16px; border-radius: 6px; background: var(--surface-2); animation: peek-paper 1.1s ease-in-out infinite alternate; }
+.peek-paper i:nth-child(1) { width: 58%; height: 22px; margin-bottom: 22px; }
+.peek-paper i:nth-child(2) { width: 92%; }
+.peek-paper i:nth-child(3) { width: 84%; }
+.peek-paper i:nth-child(4) { width: 66%; }
+@keyframes peek-paper { to { opacity: .45; } }
+.peek-foot { flex-shrink: 0; padding: 10px 18px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
+.peek-go { width: 100%; min-height: 46px; justify-content: space-between; }
+.peek-go span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 1279px) {
+  .sheet-peek { width: 100%; height: 92svh; max-height: 92svh; }
+}
+/* a computer: a panel at the right edge, the text the reader came from still in sight */
+@media (min-width: 1280px) {
+  .sheet-peek { width: 600px; height: 100vh; height: 100dvh; max-height: none; margin: 0 0 0 auto; border-width: 0 0 0 1px; border-radius: 0; }
+  .sheet-peek[open] { animation: peek-in .36s var(--ease-float); }
+  .sheet-peek.is-closing { translate: 48px 0; scale: none; }
+  .sheet-peek::backdrop { background: rgb(8 20 10 / .22); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@keyframes peek-in { from { opacity: 0; translate: 56px 0; } }
+@media (prefers-reduced-motion: reduce) { .peek-paper i { animation: none; } }
+
 .sheet-search { max-height: min(78vh, 700px); }
 @media (min-width: 1280px) { .sheet-search { margin-top: 10vh; } }
 .search-top { display: flex; align-items: center; gap: 10px; flex-shrink: 0; padding: 18px 18px 0; }
@@ -2435,10 +2469,14 @@ svg, canvas {
 .g-starts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
 .g-starts .chip { display: inline-flex; align-items: center; gap: 6px; }
 .g-starts .chip .ico { width: 16px; height: 16px; }
+/* a phone: the picture beside the heading, the rest under both */
 @media (max-width: 480px) {
-  .g-empty { grid-template-columns: 1fr; justify-items: start; }
-  .g-pic-big { width: 72px; height: 72px; }
-  .g-pic-big svg { width: 56px; height: 64px; }
+  .g-empty { grid-template-columns: 56px minmax(0, 1fr); gap: 10px 14px; }
+  .g-empty > div { display: contents; }
+  .g-empty h2 { margin: 0; }
+  .g-empty > div > :not(h2) { grid-column: 1 / -1; }
+  .g-pic-big { width: 56px; height: 56px; }
+  .g-pic-big svg { width: 44px; height: 50px; }
 }
 
 /* on the tabs about starting a bush: «add it to My basil» */
@@ -2760,6 +2798,27 @@ svg, canvas {
 .tools-gh { margin: 0 0 8px; font: 700 .72rem/1.2 var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
 .tools-group .tools-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .tool .t-where { display: block; margin-top: 3px; font: 600 .74rem/1.3 var(--font-body); color: var(--basil); }
-@media (max-width: 560px) {
-  .tools-group .tools-grid { grid-template-columns: none; grid-template-rows: none; grid-auto-columns: 80%; }
+/* a phone or a tablet: one group at a time, the switch names it */
+.tools-seg { display: none; }
+@media (max-width: 899px) {
+  .tools-seg { display: inline-flex; margin-bottom: 14px; }
+  .tools-seg button { min-height: 40px; }
+  .tools-groups { grid-template-columns: minmax(0, 1fr); }
+  .tools-group:not(.is-on) { display: none; }
+  .tools-gh { display: none; }
 }
+@media (max-width: 560px) { .tools-seg { display: flex; } }
+/* ================= «Заглянуть»: a page shown inside the sheet of another (?peek=1, 03-peek.js) ================= */
+/* only the place asked for: no header, tab bar, footer, chapter head, tabs, pagers or sky behind it */
+.is-peek .topbar, .is-peek .footer, .is-peek .tabbar, .is-peek .to-top, .is-peek .skip, .is-peek #leaf-field, .is-peek .aura,
+.is-peek .resume-pill, .is-peek .ch-hero, .is-peek .subnav-wrap, .is-peek .pager, .is-peek .panel-next, .is-peek .deep-index { display: none !important; }
+/* beside the path to the place, nothing (the page's own markup stays as it is: its scripts work as on their page) */
+.is-peek [data-peek-up] > :not([data-peek-up]):not([data-peek]) { display: none !important; }
+html.is-peek { scroll-padding-top: 12px; }
+html.is-peek body { padding-bottom: 0; background: var(--surface); }
+.is-peek .view { padding: 16px 0 calc(28px + env(safe-area-inset-bottom, 0px)); }
+.is-peek .deep-zone { margin-top: 0; }
+.is-peek [data-peek] + [data-peek] { margin-top: 14px; }
+/* the dive or recipe the sheet is for stays open: no fold button on it */
+.is-peek details[data-peek] > summary { cursor: default; }
+.is-peek details[data-peek] > summary .deep-plus { display: none; }

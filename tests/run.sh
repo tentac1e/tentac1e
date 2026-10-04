@@ -28,7 +28,7 @@ if [ "$1" = "--one" ]; then
   exit 0
 fi
 
-ALL="pages clean nav labs overlap controls gestures ills garden agronom pwa perf single"
+ALL="pages clean nav peek labs overlap controls gestures ills garden agronom pwa perf single"
 # the suites a changed file concerns (the first pattern that fits); a file the table does not know — all of them
 suites_for() {
   case "$1" in
@@ -39,7 +39,9 @@ suites_for() {
     src/pages/moy/*) echo "garden agronom controls pwa" ;;
     src/js/app/22-garden*|src/js/data/08-*|src/js/data/09-*|src/js/data/10-*) echo "garden agronom controls" ;;
     src/sw.js|src/sw-off.js|src/js/app/22-install.js|src/icons/*) echo "pwa clean" ;;
-    src/js/app/02-router.js|src/js/app/03-sheets.js|src/js/app/22-reading-pos.js|src/js/data/00-nav.js|src/layout.html|src/js/haptics.js) echo "nav pages clean gestures single" ;;
+    src/js/app/03-peek.js|src/css/style/25-peek.css) echo "peek nav pages clean gestures single pwa" ;;
+    src/js/app/02-router.js|src/js/app/03-sheets.js|src/js/app/22-reading-pos.js|src/js/data/00-nav.js|src/layout.html|src/js/haptics.js) echo "nav peek pages clean gestures single" ;;
+    src/pages/glavnaya.html|src/js/app/07-home.js) echo "peek pages overlap controls ills gestures single" ;;
     src/js/app/04-search*) echo "nav pages" ;;
     src/css/*) echo "overlap controls gestures ills pages" ;;
     src/pages/*) echo "pages overlap controls ills single" ;;
@@ -83,7 +85,7 @@ wait $b2 || { cat tests/out/run-build-clean.log; exit 1; }
 
 # the pool: the longest first, so that the short ones fill the gaps at the end
 pool="" tail=""
-for t in ills labs nav controls agronom overlap garden gestures pages clean single pwa; do
+for t in ills labs nav peek controls agronom overlap garden gestures pages clean single pwa; do
   case " $list " in *" $t "*) pool="$pool $t" ;; esac
 done
 case " $list " in *" ills "*) tail="$tail ills-net" ;; esac

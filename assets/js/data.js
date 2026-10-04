@@ -21,8 +21,8 @@ window.BASIL = (() => {
   const TOOLS = [
     { title: 'Мой базилик', hash: 'moy', icon: 'sprout', group: 'mine', desc: 'Свои кусты, их дела на неделю, погода и опыты' },
     { title: 'Подбор сорта', hash: 'sorta-podbor', icon: 'seed', group: 'plan', desc: '4 вопроса — 3 подходящих сорта' },
-    { title: 'Калькулятор грунта', hash: 'posadka-gorshok', icon: 'pot', group: 'calc', desc: 'Сколько литров каждого компонента' },
-    { title: 'Календарь посадки', hash: 'kalendar', icon: 'cal', group: 'plan', desc: 'Даты посева, высадки и сбора' },
+    { title: 'Калькулятор грунта', hash: 'posadka-gorshok', icon: 'pot', group: 'calc', desc: 'Сколько литров каждого компонента', peek: 'soil-tool' },
+    { title: 'Календарь посадки', hash: 'kalendar', icon: 'cal', group: 'plan', desc: 'Даты посева, высадки и сбора', peek: 'kalendar-tool' },
     { title: 'Калькулятор досветки', hash: 'dli', icon: 'lamp', group: 'calc', desc: 'Хватает ли света от лампы' },
     { title: 'Питание по стадиям', hash: 'udobreniya-stadii', icon: 'flask', group: 'know', desc: 'Кривая потребности в N, P, K' },
     { title: 'План подкормок', hash: 'udobreniya-plan', icon: 'list', group: 'plan', desc: 'Даты и дозы на весь сезон' },

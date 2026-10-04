@@ -144,6 +144,16 @@ async function until(page, fn, arg, ms = 30000) {
     // the weather never goes through the worker: no network, no answer, no copy from the cache
     const wx = await page.evaluate(() => fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&daily=temperature_2m_min').then(() => 'ответ', () => 'нет сети'));
     ok(wx === 'нет сети', `Open-Meteo без сети: ${wx}`);
+    // «Заглянуть» without the network: the frame's page (?peek=1) is the saved copy of its chapter
+    await page.goto(`${base}/${encodeURI('урожай')}#${encodeURI('рецепты')}`, { waitUntil: 'load' });
+    await page.waitForTimeout(800);
+    await page.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
+    await page.waitForTimeout(300);
+    await page.click('#r-pistou .rc-sci a');
+    const peeked = await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).then(() => true, () => false);
+    const pf = page.frames().find(f => /[?&]peek=1/.test(f.url()));
+    const shown = pf ? await pf.evaluate(() => { const t = document.querySelector('[data-peek]'); return !!t && t.id === 'deep-letuchest' && t.offsetHeight > 200; }).catch(() => false) : false;
+    ok(peeked && shown, `без сети шторка «Заглянуть» показывает разворот из сохранённой копии: ${pf ? decodeURI(pf.url()).replace(base, '') : 'нет рамки'}`);
     await ctx.setOffline(false);
 
     // «Установить» on the page «Мой базилик»: only when the browser offers it (headless Chromium never does — the

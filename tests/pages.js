@@ -99,7 +99,7 @@ function codeMap() {
     return { shown: [...document.querySelectorAll('#sh-kinds li b')].map(b => b.textContent).join(','), labs: s.labs, deep: s.deep };
   });
   ok(kinds.shown.split(',').includes(String(kinds.labs)) && kinds.shown.split(',').includes(String(kinds.deep)), 'home science counters ' + JSON.stringify(kinds));
-  const hrefs = await page.evaluate(() => ({ tools: [...document.querySelectorAll('#tools-home a')].slice(0, 3).map(a => a.getAttribute('href')), ch: [...document.querySelectorAll('#chapters a')].slice(0, 2).map(a => a.getAttribute('href')) }));
+  const hrefs = await page.evaluate(() => ({ tools: [...document.querySelectorAll('#tools-home a')].slice(0, 3).map(a => a.getAttribute('href')), ch: [...document.querySelectorAll('#chapters .toc-link')].slice(0, 2).map(a => a.getAttribute('href')) }));
   // «Мой базилик» lives on the home page itself; the other tools are on their chapters' pages
   ok(hrefs.tools.every(h => /\.html/.test(h) || h === '#moy') && hrefs.tools.some(h => /\.html/.test(h)) && hrefs.ch.every(h => /\.html$/.test(h)), 'home links point to pages ' + JSON.stringify(hrefs));
 
@@ -162,8 +162,11 @@ function codeMap() {
   await page.waitForTimeout(600);
   const link = await page.evaluate(() => { const a = document.querySelector('#r-pistou .rc-sci a'); return { href: a.getAttribute('href'), text: a.textContent.trim() }; });
   ok(link.href === 'vkus.html#deep-letuchest', 'recipe link ' + JSON.stringify(link));
+  // it opens in the «Заглянуть» sheet (tests/peek.js); «Открыть в главе» goes there, the block open
   await page.evaluate(() => { document.getElementById('r-pistou').open = true; });
-  await Promise.all([page.waitForNavigation(), page.click('#r-pistou .rc-sci a')]);
+  await page.click('#r-pistou .rc-sci a');
+  await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).catch(() => {});
+  await Promise.all([page.waitForNavigation(), page.click('#peek-go')]);
   await page.waitForTimeout(900);
   ok(await page.evaluate(() => document.getElementById('deep-letuchest').open) && /vkus\.html#deep-letuchest$/.test(page.url()), 'cross-page deep link opens the block');
 

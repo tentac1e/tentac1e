@@ -32,31 +32,6 @@
     </div>
   </div>
 
-  <div class="wrap">
-    <aside class="passport" aria-label="Паспорт растения">
-      <p class="passport-kicker">Паспорт растения</p>
-      <p class="passport-name">Ocimum basilicum L.</p>
-      <dl>
-        <div><dt>Тепло</dt><dd>20–28&nbsp;°C, ночью не ниже 16&nbsp;°C</dd></div>
-        <div><dt>Холод</dt><dd>ниже +10&nbsp;°C рост стоп, при +5&nbsp;°C чернеет</dd></div>
-        <div><dt>Свет</dt><dd>6–8&nbsp;ч солнца или 14–16&nbsp;ч под лампой</dd></div>
-        <div><dt>Почва</dt><dd>рыхлая, pH 6,0–7,0</dd></div>
-        <div><dt>Полив</dt><dd>когда подсохли верхние 1–2&nbsp;см</dd></div>
-      </dl>
-    </aside>
-  </div>
-
-  <div class="wrap">
-    <ul class="facts" aria-label="Базилик в цифрах">
-      <li><b>600–800</b><span>семян в 1&nbsp;г</span></li>
-      <li><b>5–10</b><span>дней до всходов при 22–25&nbsp;°C</span></li>
-      <li><b>6–8</b><span>недель от всходов до первого урожая</span></li>
-      <li><b>4–5</b><span>лет сохраняется всхожесть семян</span></li>
-      <li><b>⅓</b><span>куста — максимум за одну срезку</span></li>
-      <li><b>+10&nbsp;°C</b><span>минимум ночью для высадки на улицу</span></li>
-    </ul>
-  </div>
-
   <section class="wrap home-block garden-home" id="moy-home" aria-labelledby="moy-h">
     <div id="garden-home"><h2 id="moy-h">Мой <em>базилик</em></h2></div>
   </section>
@@ -67,9 +42,6 @@
       <p>Выберите свою ситуацию — отправим сразу в нужное место.</p>
     </div>
     <div class="quick" id="quick"></div>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="season-h">
     <div class="season-tip" id="season-tip">
       <div class="season-mark" aria-hidden="true"><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-kalendar"/></svg></span></div>
       <div>
@@ -86,6 +58,99 @@
       <p>От выбора сорта до заготовок на зиму. Читать можно в любом порядке.</p>
     </div>
     <div class="chapters" id="chapters"></div>
+  </section>
+
+  <section class="wrap home-block" aria-labelledby="tools-h">
+    <div class="block-head">
+      <h2 id="tools-h">Инструменты</h2>
+      <p>Калькуляторы, планировщики и тренажёр, спрятанные в главах.</p>
+    </div>
+    <div class="tools-grid" id="tools-home"></div>
+  </section>
+
+  <section class="wrap home-block" id="korotko" aria-labelledby="korotko-h">
+    <div class="block-head">
+      <h2 id="korotko-h">Базилик <em>коротко</em></h2>
+      <p>Паспорт растения, главное в цифрах, путь от семени до песто и восемь правил урожая.</p>
+    </div>
+    <div class="seg short-seg" role="group" aria-label="Что показать">
+      <button type="button" aria-pressed="true" aria-controls="short-pasport" data-short="pasport">Паспорт</button>
+      <button type="button" aria-pressed="false" aria-controls="short-cifry" data-short="cifry">Цифры</button>
+      <button type="button" aria-pressed="false" aria-controls="short-put" data-short="put">Путь</button>
+      <button type="button" aria-pressed="false" aria-controls="short-pravila" data-short="pravila">Правила</button>
+    </div>
+    <div class="short-pane" id="short-pasport" data-short-pane="pasport">
+      <aside class="passport" aria-label="Паспорт растения">
+        <p class="passport-kicker">Паспорт растения</p>
+        <p class="passport-name">Ocimum basilicum L.</p>
+        <dl>
+          <div><dt>Тепло</dt><dd>20–28&nbsp;°C, ночью не ниже 16&nbsp;°C</dd></div>
+          <div><dt>Холод</dt><dd>ниже +10&nbsp;°C рост стоп, при +5&nbsp;°C чернеет</dd></div>
+          <div><dt>Свет</dt><dd>6–8&nbsp;ч солнца или 14–16&nbsp;ч под лампой</dd></div>
+          <div><dt>Почва</dt><dd>рыхлая, pH 6,0–7,0</dd></div>
+          <div><dt>Полив</dt><dd>когда подсохли верхние 1–2&nbsp;см</dd></div>
+        </dl>
+      </aside>
+    </div>
+    <div class="short-pane" id="short-cifry" data-short-pane="cifry" hidden>
+      <ul class="facts" aria-label="Базилик в цифрах">
+        <li><b>600–800</b><span>семян в 1&nbsp;г</span></li>
+        <li><b>5–10</b><span>дней до всходов при 22–25&nbsp;°C</span></li>
+        <li><b>6–8</b><span>недель от всходов до первого урожая</span></li>
+        <li><b>4–5</b><span>лет сохраняется всхожесть семян</span></li>
+        <li><b>⅓</b><span>куста — максимум за одну срезку</span></li>
+        <li><b>+10&nbsp;°C</b><span>минимум ночью для высадки на улицу</span></li>
+      </ul>
+    </div>
+    <div class="short-pane" id="short-put" data-short-pane="put" hidden>
+      <p class="short-lead">Путь базилика: полный цикл занимает около двух месяцев от посева до первого песто.</p>
+      <ol class="journey" id="journey"></ol>
+    </div>
+    <div class="short-pane" id="short-pravila" data-short-pane="pravila" hidden>
+      <p class="short-lead">Восемь правил, на&nbsp;которых держится урожай. Если читать только одно — прочитайте это.</p>
+      <div class="rules" id="rules">
+        <article class="rule float-card">
+          <div class="rule-ico is-oil"><svg class="ico"><use href="#i-thermo"/></svg></div>
+          <h3>Тепло важнее всего</h3>
+          <p>Базилик родом из тропиков. Растёт при 20–28&nbsp;°C, при 12&nbsp;°C останавливается, ниже +5&nbsp;°C листья чернеют, а заморозок убивает сразу.</p>
+        </article>
+        <article class="rule float-card">
+          <div class="rule-ico is-oil"><svg class="ico"><use href="#i-sun"/></svg></div>
+          <h3>Много света</h3>
+          <p>Нужно 6–8 часов прямого солнца. Дома зимой — 14–16 часов под лампой. В тени базилик вытягивается и почти не пахнет.</p>
+        </article>
+        <article class="rule float-card">
+          <div class="rule-ico"><svg class="ico"><use href="#i-scissors"/></svg></div>
+          <h3>Прищипывайте рано</h3>
+          <p>При 3–4 парах настоящих листьев срежьте верхушку над 2-й или 3-й парой. Из пазух пойдут два побега, и вырастет куст.</p>
+        </article>
+        <article class="rule float-card">
+          <div class="rule-ico is-opal"><svg class="ico"><use href="#i-flower"/></svg></div>
+          <h3>Не давайте цвести</h3>
+          <p>Бутоны срезайте вместе с парой листьев под ними. После цветения листья мельчают, грубеют и горчат.</p>
+        </article>
+        <article class="rule float-card">
+          <div class="rule-ico"><svg class="ico"><use href="#i-drop"/></svg></div>
+          <h3>Поливайте без крайностей</h3>
+          <p>Когда верхние 1–2&nbsp;см грунта сухие. Тёплой водой, утром, под корень. Пересушка — к цветению, перелив — к гнили.</p>
+        </article>
+        <article class="rule float-card">
+          <div class="rule-ico"><svg class="ico"><use href="#i-flask"/></svg></div>
+          <h3>Кормите понемногу</h3>
+          <p>Половинные дозы раз в 1–2 недели лучше редких ударных. Избыток азота даёт водянистую зелень без аромата.</p>
+        </article>
+        <article class="rule float-card">
+          <div class="rule-ico"><svg class="ico"><use href="#i-leaf"/></svg></div>
+          <h3>Срезайте сверху</h3>
+          <p>Всегда над парой листьев, а не отдельные листья снизу. За раз — не больше трети куста.</p>
+        </article>
+        <article class="rule float-card">
+          <div class="rule-ico is-opal"><svg class="ico"><use href="#i-pot"/></svg></div>
+          <h3>Магазинный горшок рассадите</h3>
+          <p>В нём растёт 10–30 сеянцев. Разделите ком на 3–5 частей, иначе они погибнут в тесноте.</p>
+        </article>
+      </div>
+    </div>
   </section>
 
   <section class="wrap home-block" id="nauka" aria-labelledby="nauka-h">
@@ -110,71 +175,6 @@
         <figcaption><b id="home-mol-name">Линалоол</b><span id="home-mol-note">C₁₀H₁₈O · цветочная нота генуэзского базилика</span></figcaption>
         <div class="chips-row" id="home-mol-chips" role="group" aria-label="Выбор молекулы"></div>
       </figure>
-    </div>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="journey-h">
-    <div class="block-head">
-      <h2 id="journey-h">Путь <em>базилика</em></h2>
-      <p>Полный цикл занимает около двух месяцев от посева до первого песто.</p>
-    </div>
-    <ol class="journey" id="journey"></ol>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="tools-h">
-    <div class="block-head">
-      <h2 id="tools-h">Инструменты</h2>
-      <p>Калькуляторы, планировщики и тренажёр, спрятанные в главах.</p>
-    </div>
-    <div class="tools-grid" id="tools-home"></div>
-  </section>
-
-  <section class="wrap home-block" aria-labelledby="rules-h">
-    <div class="block-head">
-      <h2 id="rules-h">Восемь правил, на&nbsp;которых <em>держится урожай</em></h2>
-      <p>Если читать только одно — прочитайте это.</p>
-    </div>
-    <div class="rules" id="rules">
-      <article class="rule float-card">
-        <div class="rule-ico is-oil"><svg class="ico"><use href="#i-thermo"/></svg></div>
-        <h3>Тепло важнее всего</h3>
-        <p>Базилик родом из тропиков. Растёт при 20–28&nbsp;°C, при 12&nbsp;°C останавливается, ниже +5&nbsp;°C листья чернеют, а заморозок убивает сразу.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico is-oil"><svg class="ico"><use href="#i-sun"/></svg></div>
-        <h3>Много света</h3>
-        <p>Нужно 6–8 часов прямого солнца. Дома зимой — 14–16 часов под лампой. В тени базилик вытягивается и почти не пахнет.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-scissors"/></svg></div>
-        <h3>Прищипывайте рано</h3>
-        <p>При 3–4 парах настоящих листьев срежьте верхушку над 2-й или 3-й парой. Из пазух пойдут два побега, и вырастет куст.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico is-opal"><svg class="ico"><use href="#i-flower"/></svg></div>
-        <h3>Не давайте цвести</h3>
-        <p>Бутоны срезайте вместе с парой листьев под ними. После цветения листья мельчают, грубеют и горчат.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-drop"/></svg></div>
-        <h3>Поливайте без крайностей</h3>
-        <p>Когда верхние 1–2&nbsp;см грунта сухие. Тёплой водой, утром, под корень. Пересушка — к цветению, перелив — к гнили.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-flask"/></svg></div>
-        <h3>Кормите понемногу</h3>
-        <p>Половинные дозы раз в 1–2 недели лучше редких ударных. Избыток азота даёт водянистую зелень без аромата.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico"><svg class="ico"><use href="#i-leaf"/></svg></div>
-        <h3>Срезайте сверху</h3>
-        <p>Всегда над парой листьев, а не отдельные листья снизу. За раз — не больше трети куста.</p>
-      </article>
-      <article class="rule float-card">
-        <div class="rule-ico is-opal"><svg class="ico"><use href="#i-pot"/></svg></div>
-        <h3>Магазинный горшок рассадите</h3>
-        <p>В нём растёт 10–30 сеянцев. Разделите ком на 3–5 частей, иначе они погибнут в тесноте.</p>
-      </article>
     </div>
   </section>
 </section>

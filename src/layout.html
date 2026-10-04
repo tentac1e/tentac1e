@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="assets/css/lab.css">
 </head>
 <body>
-<script>document.documentElement.classList.add('js');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 
 <!-- ================= SVG SPRITE ================= -->
 <svg class="sprite" aria-hidden="true" focusable="false">
@@ -342,6 +342,22 @@
   <div class="sheet-inner">
     <div id="garden-detail"></div>
   </div>
+</dialog>
+<!-- «Заглянуть»: the place a reference leads to, its chapter's page in a frame showing only that place (03-peek.js) -->
+<dialog class="sheet sheet-peek" id="sheet-peek" aria-labelledby="peek-h" tabindex="-1">
+  <div class="sheet-top">
+    <span class="sheet-grab" aria-hidden="true"></span>
+    <div class="sheet-head peek-head">
+      <button class="icon-btn peek-back" type="button" data-peek-back aria-label="К предыдущему" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
+      <div class="peek-title"><small id="peek-where"></small><h2 id="peek-h"></h2></div>
+      <button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button>
+    </div>
+  </div>
+  <div class="peek-body">
+    <div class="peek-paper" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <iframe class="peek-frame" id="peek-frame" title="Отрывок из главы"></iframe>
+  </div>
+  <div class="peek-foot"><a class="btn btn-ghost peek-go" id="peek-go" href="#glavnaya"><span>Открыть в главе</span><svg class="ico"><use href="#i-arrow-r"/></svg></a></div>
 </dialog>
 <dialog class="sheet sheet-variety" id="sheet-variety" aria-labelledby="variety-h" tabindex="-1">
   <div class="sheet-top sheet-top-bare"><span></span><span class="sheet-grab" aria-hidden="true"></span><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>

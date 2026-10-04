@@ -3,7 +3,7 @@
    остановились (и на другой ширине экрана), «Дальше» в конце вкладки, оглавление (главы раскрываются на разделы, своя глава открыта
    и отмечена; каждый инструмент ведёт туда, где, по его подписи, лежит), тактильный отклик.
    python3 scripts/build.py --clean --out dist/site && node tests/nav.js */
-const { playwright, server, ok, done } = require('./lib');
+const { playwright, server, ok, done, landedAt } = require('./lib');
 
 (async () => {
   const { chromium, devices } = playwright();
@@ -38,33 +38,7 @@ const { playwright, server, ok, done } = require('./lib');
   ok(saved && saved.y > 2000 && saved.anchor && saved.sig && Number.isInteger(saved.n) && Number.isInteger(saved.ch) && saved.ss,
     `position saved at ${y1} as a place in the text: ${JSON.stringify(saved)}`);
   // where the page landed: the first marked line, what is covered above it, and the words it starts with
-  const landed = () => page.evaluate(() => {
-    const i = document.querySelector('.resume-mark i');
-    if (!i) return null;
-    const r = i.getBoundingClientRect();
-    // the words from the marked line's first letter to the end of its block
-    const hit = document.caretRangeFromPoint(r.left + 5, r.top + r.height / 2);
-    let words = '';
-    if (hit) {
-      let node = hit.startContainer, off = hit.startOffset;
-      if (node.nodeType !== 3) {
-        const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-        w.currentNode = node.childNodes[off] || node;
-        do { node = w.nextNode(); } while (node && !node.data.trim());
-        off = 0;
-      }
-      if (node) {
-        const rg = document.createRange();
-        rg.setStart(node, off);
-        const blk = node.parentElement.closest('p, li, dt, dd, h2, h3, h4, h5, summary, blockquote, figcaption, tr, pre, .card') || document.body;
-        rg.setEndAfter(blk.lastChild || blk);
-        words = rg.toString().replace(/\s+/g, ' ').trim();
-      }
-    }
-    const wrap = document.querySelector('[data-view].is-active .subnav-wrap');
-    const end = Math.round(scrollY) >= document.documentElement.scrollHeight - innerHeight - 2;
-    return { top: Math.round(r.top), cover: wrap ? Math.round(wrap.getBoundingClientRect().bottom) : 0, words: words.slice(0, 30), y: Math.round(scrollY), vh: innerHeight, end };
-  });
+  const landed = () => landedAt(page);
   // the spot's first line two lines under the tabs (and the gap above it when it stood lower), lower only when the
   // page has no more to scroll
   const placed = (l, pos) => !!l && (Math.abs(l.top + 1 - (l.cover + 48 + (pos.dy || 0))) <= 12 || (l.end && l.top + 1 > l.cover + 36));
