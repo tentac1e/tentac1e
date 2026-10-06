@@ -9,7 +9,7 @@
 ### app.js
 - `src/js/app/00-core.js`: `$` 6, `$$` 7, `clamp` 9, `f1` 10, `esc` 11, `nb` 26, `plural` 28, `fmtNum` 37, `addDays` 42, `fd` 43, `fr` 44, `toISO` 49, `fromISO` 50, `today` 54, `dayDiff` 55, `icon` 56, `chapterById` 57, `paintIll` 60, `pageOf` 69, `aliasOf` 77, `urlFor` 79, `fixLinks` 88, `smooth` 98, `toast` 101, `copyText` 110
 - `src/js/app/01-theme.js`: `initTheme` 4
-- `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 77, `jump` 104, `scrollAfter` 110, `route` 148, `navigate` 179, `initRouter` 187, `initPagers` 210, `initScrollChrome` 253
+- `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 77, `jump` 104, `rowTop` 112, `scrollAfter` 119, `route` 161, `navigate` 192, `initRouter` 200, `initPagers` 223, `initScrollChrome` 266
 - `src/js/app/03-peek.js`: `decodeSafe` 10, `placeOf` 15, `placeUrl` 27, `frameSrc` 28, `peekable` 31, `peekShow` 50, `peekLoad` 64, `resetFrame` 71, `openPeek` 80, `goToPlace` 96, `peekPop` 112, `onPeekClosed` 121, `sendTheme` 131, `onPeekMessage` 135, `initPeek` 156, `toParent` 209, `markPeek` 212, `initPeekFrame` 242
 - `src/js/app/03-sheets.js`: `openSheet` 8, `closeSheet` 30, `dragSheet` 57, `tocFold` 127, `tocPane` 132, `tocOpen` 137, `tocButton` 162, `initToc` 170, `initSheets` 193
 - `src/js/app/04-search-words.js`: `norm` 4, `isWordChar` 6, `stemRu` 10, `keysOf` 48, `fromLayout` 63, `latinTyped` 64, `sameKey` 91, `altsOf` 93, `editDistance` 104, `nearestWord` 124
@@ -199,7 +199,7 @@
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:240`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:214`, `src/js/science/07-deep.js:149`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
 - `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:205`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/vkus/pesto.js:67`
-- `basil:view` — шлёт: `src/js/app/02-router.js:170`; слушают: `src/js/app/02-router.js:249`, `src/js/app/02-router.js:279`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:151`
+- `basil:view` — шлёт: `src/js/app/02-router.js:183`; слушают: `src/js/app/02-router.js:262`, `src/js/app/02-router.js:292`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:151`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
 ## Хранилище

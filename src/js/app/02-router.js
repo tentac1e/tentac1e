@@ -107,6 +107,15 @@
     if (routerReady) void getComputedStyle(html).scrollBehavior;
     try { fn(); } finally { st.scrollBehavior = was; }
   };
+  // where the chapter's tabs stand in the text: the row is sticky, and below it its box is the one stuck under the
+  // header, not the place a tab begins
+  function rowTop(wrap) {
+    const st = wrap.style, was = st.position;
+    st.position = 'static';
+    const y = wrap.getBoundingClientRect().top + window.scrollY;
+    st.position = was;
+    return y;
+  }
   function scrollAfter(r, changedView) {
     const behavior = changedView ? 'auto' : smooth();
     const go = fn => (changedView ? jump(fn) : fn());
@@ -138,8 +147,12 @@
     }
     const wrap = $('.subnav-wrap', r.view);
     if (r.panel && wrap) {
-      const top = wrap.getBoundingClientRect().top + window.scrollY - stickyOffset();
-      if (changedView || window.scrollY > top) go(() => window.scrollTo({ top: Math.max(0, top), behavior }));
+      // a tab opens at its start, under the tabs; from further than a screen down the tab before — at once (sliding
+      // over the new tab's text would only show it fly by)
+      const top = Math.max(0, rowTop(wrap) - stickyOffset());
+      if (!changedView && window.scrollY <= top) return;
+      if (changedView || window.scrollY - top > window.innerHeight) jump(() => window.scrollTo({ top, behavior: 'auto' }));
+      else window.scrollTo({ top, behavior });
       return;
     }
     if (changedView) jump(() => window.scrollTo({ top: 0, behavior: 'auto' }));

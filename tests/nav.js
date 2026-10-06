@@ -129,11 +129,38 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   await page.waitForTimeout(900);
   const nexts = await page.evaluate(() => [...document.querySelectorAll('[data-panel]')].map(p => !!p.querySelector('.panel-next')));
   ok(nexts.slice(0, -1).every(Boolean) && !nexts[nexts.length - 1], 'every tab but the last ends with «Дальше» ' + nexts.join());
+  // where the open tab begins: right under the tabs' row (which is sticky — its own box says nothing of where the
+  // text is), not somewhere in its middle
+  const tabStart = () => page.evaluate(() => { const p = document.querySelector('.panel.is-active'), w = document.querySelector('.view.is-active .subnav-wrap');
+    return { id: p.id, gap: Math.round(p.getBoundingClientRect().top - w.getBoundingClientRect().bottom), y: Math.round(scrollY) }; });
+  const atStart = st => st.gap >= 0 && st.gap <= 48;
   await page.evaluate(() => document.querySelector('.panel.is-active .panel-next').scrollIntoView({ block: 'center' }));
   await page.tap('.panel.is-active .panel-next');
   await page.waitForTimeout(900);
-  const st = await page.evaluate(() => ({ id: document.querySelector('.panel.is-active').id, sub: Math.round(document.querySelector('.subnav-wrap').getBoundingClientRect().top) }));
-  ok(st.id === 'элементы' && st.sub < 140, 'next tab opens at its start ' + JSON.stringify(st) + ' ' + path());
+  const st = await tabStart();
+  ok(st.id === 'элементы' && atStart(st), 'next tab opens at its start ' + JSON.stringify(st) + ' ' + path());
+  // a tab from the row of tabs, read far down the one before: the new one from its start too, in a chapter and in a frame
+  const fromRow = async (fr, label) => {
+    for (let i = 0; i < 8; i++) { await page.mouse.wheel(0, 450); await page.waitForTimeout(100); }
+    await page.waitForTimeout(700);
+    const deep = await fr.evaluate(() => Math.round(-document.querySelector('.panel.is-active').getBoundingClientRect().top));
+    await fr.tap('.view.is-active .subnav a[href$="сочетания"]');
+    await page.waitForTimeout(1200);
+    const r = await fr.evaluate(() => { const p = document.querySelector('.panel.is-active'), w = document.querySelector('.view.is-active .subnav-wrap'); return { id: p.id, gap: Math.round(p.getBoundingClientRect().top - w.getBoundingClientRect().bottom) }; });
+    ok(deep > 2000 && r.id === 'сочетания' && atStart(r), `${label}: a tab from the row, ${deep} px down the tab before, opens at its start ` + JSON.stringify(r));
+  };
+  await page.goto(U('/вкус#хранение'), { waitUntil: 'load' });
+  await page.waitForTimeout(1200);
+  await fromRow(page.mainFrame(), 'a page');
+  // the app's preview shows the guide in a frame the size of the screen
+  await page.setContent(`<!doctype html><meta name="viewport" content="width=device-width"><style>html,body{margin:0;height:100%}iframe{display:block;border:0;width:100%;height:100%}</style><iframe src="${U('/вкус#хранение')}"></iframe>`);
+  await page.waitForTimeout(400);
+  const inner = page.frames().find(f => f !== page.mainFrame());
+  await inner.waitForFunction(() => document.documentElement.classList.contains('is-ready'));
+  await page.waitForTimeout(1200);
+  await fromRow(inner, 'a frame');
+  await page.goto(U('/удобрения#элементы'), { waitUntil: 'load' });
+  await page.waitForTimeout(900);
   // the contents open on the reader's place: this chapter open and marked, its tab marked, the others folded
   await page.tap('.tabbar [data-open="sheet-toc"]');
   await page.waitForTimeout(500);
