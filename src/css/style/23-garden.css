@@ -160,10 +160,17 @@
 .g-more, .g-empty .g-more { margin: 22px 0 0; } /* clear of the link above: each one's finger zone reaches 9 px out */
 .g-more .g-link { display: inline-flex; align-items: center; gap: 6px; font-size: .9rem; }
 .g-more .ico { width: 16px; height: 16px; }
-/* the page: the bushes first, then how the tasks are counted */
+/* the page: the bushes first, then how the tasks are counted. Until the script draws them the box keeps the height of
+   the invitation to add the first bush: on a slow phone the page is painted before the script runs, and the text under
+   an empty box would jump down */
 .garden-page { margin-bottom: 28px; }
-/* the page: the guide onto the phone's home screen (22-install.js), offered only where the browser can do it */
-.g-install { margin: 0 0 28px; }
+.garden-page:empty { min-height: 234px; }
+@media (max-width: 900px) { .garden-page:empty { min-height: 261px; } }
+@media (max-width: 640px) { .garden-page:empty { min-height: 289px; } }
+@media (max-width: 480px) { .garden-page:empty { min-height: 377px; } }
+/* the page, under how the tasks are counted (the text above stays put when they appear): the guide onto the phone's
+   home screen (22-install.js), offered only where the browser can do it, and the copies kept for working offline */
+.g-install { margin: 18px 0 0; }
 .g-install-in { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 6px 14px; align-items: start; max-width: 68ch; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 .g-install-pic { width: 48px; height: 48px; border-radius: 12px; }
 .g-install-t b { display: block; margin: 2px 0 4px; font: 700 .96rem/1.3 var(--font-body); color: var(--ink); }
@@ -171,8 +178,8 @@
 .g-install-t .g-install-ios { margin-top: 6px; font-weight: 600; color: var(--ink); }
 .g-install-a { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
 .g-install-a .g-link { min-height: 40px; }
-/* the guide's copies kept for working offline: their size and «Обновить», one quiet line */
-.g-copies { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 14px; max-width: 68ch; margin: 0 0 28px; font-size: .88rem; color: var(--ink-2); }
+/* the copies: their size and «Обновить», one quiet line */
+.g-copies { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 14px; max-width: 68ch; margin: 18px 0 0; font-size: .88rem; color: var(--ink-2); }
 .g-copies b { color: var(--ink); font-weight: 700; }
 .g-copies .g-link { min-height: 40px; }
 .g-copies .g-link:disabled { color: var(--ink-3); cursor: default; }

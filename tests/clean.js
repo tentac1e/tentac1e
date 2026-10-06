@@ -14,7 +14,7 @@ const { ROOT, playwright, server, ok, done } = require('./lib');
   page.on('pageerror', e => errs.push(page.url() + ' ' + e.message));
   page.on('response', r => { if (r.status() >= 400 && r.url().startsWith(B)) failed.push(r.status() + ' ' + r.url()); });
   const path = () => decodeURI(page.url().replace(B, ''));
-  for (const p of ['/', '/сорта', '/посадка', '/календарь', '/уход', '/удобрения', '/прищипывание', '/урожай', '/вкус', '/размножение', '/проблемы', '/справка']) {
+  for (const p of ['/', '/сорта', '/посадка', '/уход', '/удобрения', '/прищипывание', '/вкус', '/проблемы', '/справка']) {
     await page.goto(B + encodeURI(p), { waitUntil: 'load' });
     await page.waitForTimeout(300);
     const st = await page.evaluate(() => ({ t: document.title, css: getComputedStyle(document.body).backgroundColor, nav: [...document.querySelectorAll('#nav a')].map(a => a.getAttribute('href')), html: [...document.querySelectorAll('a[href]')].map(a => a.getAttribute('href')).filter(h => /\.html/.test(h)) }));
@@ -38,22 +38,32 @@ const { ROOT, playwright, server, ok, done } = require('./lib');
   await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
   await page.waitForTimeout(1000);
   ok(path() === '/удобрения#элементы' && /Молибден/.test(await page.evaluate(() => document.querySelector('.el-detail').textContent)), 'search action → ' + path());
-  await page.goto(B + '/urozhay#urozhay-recepty', { waitUntil: 'load' });
+  // the chapters merged into others (11 became 8): their addresses, old tab anchors and long ids lead to where those live now
+  for (const [from, to] of [['/урожай#рецепты', '/вкус#рецепты'], ['/урожай', '/прищипывание#сбор'], ['/urozhay#urozhay-recepty', '/вкус#рецепты'],
+    ['/календарь', '/посадка#сроки'], ['/kalendar.html', '/посадка#сроки'], ['/размножение#семена', '/сорта#семена'], ['/размножение#черенки', '/посадка#черенки'],
+    ['/урожай?resume=1#хранение', '/вкус#хранение'], ['/урожай#deep-pesto', '/вкус#deep-pesto'], ['/index.html#urozhay-sbor', '/прищипывание#сбор']]) {
+    await page.goto(B + encodeURI(from.split('#')[0]) + (from.includes('#') ? '#' + encodeURIComponent(from.split('#')[1]) : ''), { waitUntil: 'load' });
+    await page.waitForTimeout(700);
+    ok(path() === to, `old ${from} → ${path()}`);
+  }
+  // a deep link into another chapter opens its place in the «Заглянуть» sheet, from the chapter's address with ?peek=1;
+  // «Открыть в главе» goes there
+  await page.goto(B + encodeURI('/посадка') + '#' + encodeURIComponent('сроки'), { waitUntil: 'load' });
   await page.waitForTimeout(500);
-  await page.evaluate(() => { document.getElementById('r-pistou').open = true; });
-  const href = await page.evaluate(() => document.querySelector('#r-pistou .rc-sci a').getAttribute('href'));
-  // the link opens its place in the «Заглянуть» sheet, from the chapter's address with ?peek=1; «Открыть в главе» goes there
-  await page.click('#r-pistou .rc-sci a');
+  const sel = '.panel.is-active a[href="прищипывание#deep-florigen"]';
+  const href = await page.evaluate(sel => { const a = document.querySelector(sel); a.closest('details').open = true; a.scrollIntoView({ block: 'center', behavior: 'instant' }); return a.getAttribute('href'); }, sel);
+  await page.waitForTimeout(300);
+  await page.click(sel);
   await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).catch(() => {});
   const fr = page.frames().find(f => /[?&]peek=1/.test(f.url()));
-  ok(fr && decodeURI(fr.url()).replace(B, '') === '/вкус?peek=1#deep-letuchest', 'recipe link in the sheet: ' + (fr && decodeURI(fr.url()).replace(B, '')));
+  ok(fr && decodeURI(fr.url()).replace(B, '') === '/прищипывание?peek=1#deep-florigen', 'deep link in the sheet: ' + (fr && decodeURI(fr.url()).replace(B, '')));
   await Promise.all([page.waitForNavigation(), page.click('#peek-go')]);
   await page.waitForTimeout(900);
-  ok(href === 'вкус#deep-letuchest' && path() === '/вкус#deep-letuchest' && await page.evaluate(() => document.getElementById('deep-letuchest').open), 'recipe link ' + href + ' → ' + path());
+  ok(href === 'прищипывание#deep-florigen' && path() === '/прищипывание#deep-florigen' && await page.evaluate(() => document.getElementById('deep-florigen').open), 'deep link ' + href + ' → ' + path());
   await page.goto(B + encodeURI('/уход'), { waitUntil: 'load' });
   await page.waitForTimeout(400);
   const pg = await page.evaluate(() => [...document.querySelectorAll('.pager a')].map(a => a.getAttribute('href')).join());
-  ok(pg === 'календарь,удобрения', 'pager ' + pg);
+  ok(pg === 'посадка,удобрения', 'pager ' + pg);
   await Promise.all([page.waitForNavigation(), page.click('a.brand')]);
   ok(path() === '/', 'logo → ' + path());
   await page.goto(B + encodeURI('/удобрения') + '#deep-ec', { waitUntil: 'load' });

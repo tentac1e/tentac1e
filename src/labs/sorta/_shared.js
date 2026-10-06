@@ -1,4 +1,4 @@
-  /* @use ills */
+  /* @use ills, props */
   /* Pictures of the Varieties chapter: a portrait of every type (data-ill="vtype:<id>") and a sprig of every
      variety (data-ill="sort:<n>", n — its place in BASIL.VARIETIES), drawn from what the data says about it:
      leaf colour and form, look of the blade (ruffle, teeth, bubbly, gloss, hairs) and flowers. */
@@ -60,3 +60,29 @@
     return ill.svg(w, hh, paper(w, hh) + ill.pot(80, 129, 54, 16) + (TYPE_PIC[t.id] || TYPE_PIC.genovese)(), `Типичный куст: ${t.name.toLowerCase()}`);
   }
   illustrate('vtype', id => typePic(id), () => VT.map(t => t.id));
+
+  /* The steps of saving your own seed (data-ill="seed:1…6"), the tab «Свои семена» */
+  const Rr = props;
+  const SEED = {
+    1: () => Rr.step(ill.pot(52, 104, 52, 22) + ill.bush({ x: 52, y: 98, h: 64, nodes: 3, leaf: 0.3, spread: 0.85, flowers: 'white', seed: 5 }) + Rr.bee(98, 34, 1.1), 'Здоровый куст в цвету'),
+    2: () => {
+      let g = ill.pot(40, 104, 46, 20) + ill.bush({ x: 40, y: 98, h: 50, nodes: 2, leaf: 0.28, spread: 0.8, seed: 4 });
+      g += Rr.seedSpike(40, 48, 36, { flowers: 'white' }) + Rr.bag(41, 50, 26, 42, { kind: 'mesh' });
+      g += Rr.seedSpike(96, 104, 64, { flowers: 'purple' }) + Rr.bee(100, 30, 1);
+      return Rr.step(g, 'Цветонос под сеточкой: пчела не принесёт пыльцу другого сорта');
+    },
+    3: () => Rr.step(Rr.seedSpike(34, 104, 86, { ripe: 0.55, flowers: 'white' }) + Rr.lens(80, 54, 30, Rr.calyx(0, 18, 0.95), 125), 'Нижние чашечки побурели, внутри — чёрные семена'),
+    4: () => {
+      let g = Rr.seedSpike(48, 60, 50, { dry: true }) + Rr.seedSpike(60, 60, 44, { dry: true }) + Rr.seedSpike(72, 60, 52, { dry: true });
+      g += Rr.bag(60, 104, 62, 50, { kind: 'paper' });
+      return Rr.step(g, 'Срезанные кисти досыхают в бумажном пакете');
+    },
+    5: () => {
+      const rnd = ill.rng(6);
+      let g = Rr.bowl(60, 104, 84, { seeds: true, chaff: true }) + `<g transform="rotate(-70 60 40)">${Rr.seedSpike(60, 40, 50, { dry: true })}</g>`;
+      for (let i = 0; i < 7; i++) g += Rr.seed(46 + rnd() * 28, 50 + rnd() * 16, rnd() * 180);
+      return Rr.step(g, 'Сухие кисти растирают над миской');
+    },
+    6: () => Rr.step(Rr.envelope(52, 98, 58, 72, { seeds: false }) + [0, 1, 2, 3, 4].map(i => Rr.seed(92 + (i % 3) * 7, 96 - Math.floor(i / 3) * 6, i * 50)).join(''), 'Семена в подписанном бумажном конверте')
+  };
+  illustrate('seed', n => (SEED[n] || SEED[1])(), Object.keys(SEED));

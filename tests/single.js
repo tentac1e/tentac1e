@@ -21,7 +21,7 @@ const { playwright, ok, done, ROOT, OUT } = require('./lib');
   await page.click('.q-card[href="#posadka-magazin"]'); await page.waitForTimeout(200); await log('quick → magazin', 'posadka', 'posadka-magazin');
   await page.click('.view.is-active .subnav a[href="#posadka-gorshok"]'); await page.waitForTimeout(200); await log('subnav → gorshok', 'posadka', 'posadka-gorshok');
   await says('soil', '#soil-out', /Перлит/);
-  await page.click('.view.is-active .pager a.next'); await page.waitForTimeout(200); await log('pager next', 'kalendar', null);
+  await page.click('.view.is-active .pager a.next'); await page.waitForTimeout(200); await log('pager next', 'uhod', 'uhod-svet');
   await page.goBack(); await page.waitForTimeout(250); await log('back', 'posadka', 'posadka-gorshok');
   await page.goBack(); await page.waitForTimeout(250); await log('back again', 'glavnaya', null);
   // search
@@ -40,7 +40,7 @@ const { playwright, ok, done, ROOT, OUT } = require('./lib');
   await page.click('#sheet-variety a[href="#posadka-posev"]'); await page.waitForTimeout(250); await log('sheet link', 'posadka', 'posadka-posev');
   ok(await page.evaluate(() => !document.getElementById('sheet-variety').open), 'sheet closes on link');
   // calendar
-  await page.evaluate(() => { location.hash = 'kalendar'; }); await page.waitForTimeout(200);
+  await page.evaluate(() => { location.hash = 'posadka-sroki'; }); await page.waitForTimeout(200);
   await page.selectOption('#cal-preset', 'warm'); await says('calendar warm', '#cal-season', /высадка/);
   await page.click('#cal-mode-home'); await says('calendar home', '#cal-season', /урожай/);
   ok(await page.$$eval('#cal-wheel .w-arc', a => a.length) > 2, 'wheel arcs');
@@ -66,7 +66,7 @@ const { playwright, ok, done, ROOT, OUT } = require('./lib');
   for (let i = 0; i < 4; i++) await page.click('#sim-week-btn');
   await says('pinching simulator', '#sim-msg', /\S/);
   // germ
-  await page.evaluate(() => { location.hash = 'razmnozhenie-semena'; }); await page.waitForTimeout(200);
+  await page.evaluate(() => { location.hash = 'sorta-semena'; }); await page.waitForTimeout(200);
   await page.fill('#germ-count', '4'); await page.dispatchEvent('#germ-count', 'input'); await says('germination', '#germ-out', /40 %/);
   // glossary
   await page.evaluate(() => { location.hash = 'spravka-slovar'; }); await page.waitForTimeout(200);
@@ -93,15 +93,15 @@ const { playwright, ok, done, ROOT, OUT } = require('./lib');
   ok(await page.evaluate(() => !!document.querySelector('.lab-tool[data-lab="dm"][data-ready]')), 'a model from another chapter mounts too');
   // a link from the text to another chapter: the book has no «Заглянуть» sheet (a frame would load the whole book once
   // more) — it jumps on the page and offers the way back to the link
-  await page.evaluate(() => { location.hash = 'urozhay-recepty'; }); await page.waitForTimeout(300);
-  await page.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
+  await page.evaluate(() => { location.hash = 'vkus-recepty'; }); await page.waitForTimeout(300);
+  await page.evaluate(() => { const c = document.getElementById('r-bruschetta'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
   await page.waitForTimeout(300);
-  await page.click('#r-pistou .rc-sci a'); await page.waitForTimeout(500);
+  await page.click('#r-bruschetta .rc-sci a'); await page.waitForTimeout(500);
   const jumped = await page.evaluate(() => ({ view: document.querySelector('.view.is-active').dataset.view, sheet: document.getElementById('sheet-peek').open, pill: ((document.querySelector('.back-pill') || {}).textContent || '').replace(/\s+/g, ' ').trim() }));
-  ok(jumped.view === 'vkus' && !jumped.sheet && /Вернуться к тексту/.test(jumped.pill), 'a recipe\'s link jumps to the dive, no sheet, the way back offered ' + JSON.stringify(jumped));
+  ok(jumped.view === 'udobreniya' && !jumped.sheet && /Вернуться к тексту/.test(jumped.pill), 'a recipe\'s link jumps to the dive, no sheet, the way back offered ' + JSON.stringify(jumped));
   await page.click('.back-pill .resume-go'); await page.waitForTimeout(900);
-  const backAt = await page.evaluate(() => { const r = document.querySelector('#r-pistou .rc-sci a').getBoundingClientRect(); return { view: document.querySelector('.view.is-active').dataset.view, top: Math.round(r.top), H: innerHeight }; });
-  ok(backAt.view === 'urozhay' && backAt.top > 0 && backAt.top < backAt.H, '«↑ Вернуться к тексту» brings the recipe back ' + JSON.stringify(backAt));
+  const backAt = await page.evaluate(() => { const r = document.querySelector('#r-bruschetta .rc-sci a').getBoundingClientRect(); return { view: document.querySelector('.view.is-active').dataset.view, top: Math.round(r.top), H: innerHeight }; });
+  ok(backAt.view === 'vkus' && backAt.top > 0 && backAt.top < backAt.H, '«↑ Вернуться к тексту» brings the recipe back ' + JSON.stringify(backAt));
   await browser.close();
   done(errs);
 })();

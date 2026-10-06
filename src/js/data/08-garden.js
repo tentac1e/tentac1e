@@ -21,44 +21,44 @@
         { key: 'thin', a: 14, b: 21, title: 'Пикировка или прореживание', text: 'При 1–2 парах настоящих листьев оставьте одно сильное растение на стаканчик 200–300 мл.', link: 'posadka-posev' },
         { key: 'feed1', a: 24, b: 28, kind: 'feed', title: 'Первая подкормка', text: 'Комплексное удобрение для рассады в ¼ дозы с упаковки.', link: 'udobreniya-plan' },
         { key: 'pinch1', a: 35, b: 45, kind: 'pinch', title: 'Первое прищипывание', text: 'При 3–4 парах настоящих листьев срежьте верхушку над 2-й или 3-й парой — куст пойдёт вширь.', link: 'formirovka-osnovy' },
-        { key: 'harvest1', a: 'first', b: 10, kind: 'cut', title: 'Первый урожай', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'urozhay-sbor' }
+        { key: 'harvest1', a: 'first', b: 10, kind: 'cut', title: 'Первый урожай', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'formirovka-sbor' }
       ],
       shop: [
         { key: 'split', a: 0, b: 3, title: 'Разделите и пересадите', text: 'В магазинном горшке десятки сеянцев в тесноте. Разделите ком на 3–5 частей и рассадите по горшкам 1–2 л.', link: 'posadka-magazin' },
         { key: 'pinch1', a: 7, b: 12, kind: 'pinch', title: 'Прищипните верхушки', text: 'Когда кусты прижились и встали, срежьте верхушки над 2-й или 3-й парой листьев.', link: 'formirovka-osnovy' },
         { key: 'feed1', a: 14, b: 18, kind: 'feed', title: 'Первая подкормка', text: 'Магазинный грунт почти пустой: комплексное удобрение в ½ дозы.', link: 'udobreniya-plan' },
-        { key: 'harvest1', a: 21, b: 30, kind: 'cut', title: 'Первый срез', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'urozhay-sbor' }
+        { key: 'harvest1', a: 21, b: 30, kind: 'cut', title: 'Первый срез', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'formirovka-sbor' }
       ],
       seedling: [
         { key: 'plant', a: 0, b: 3, title: 'Пересадите в горшок', text: 'Горшок 1,5–2 л с дренажем и лёгким грунтом, заглубите до семядолей и полейте тёплой водой.', link: 'posadka-gorshok' },
         { key: 'feed1', a: 10, b: 14, kind: 'feed', title: 'Подкормка после приживания', text: 'Монокалийфосфат или комплексное удобрение в ½ дозы — для корней.', link: 'udobreniya-plan' },
         { key: 'pinch1', a: 14, b: 21, kind: 'pinch', title: 'Первое прищипывание', text: 'Над 2-й или 3-й парой настоящих листьев — куст пойдёт вширь.', link: 'formirovka-osnovy' },
-        { key: 'harvest1', a: 28, b: 38, kind: 'cut', title: 'Первый срез', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'urozhay-sbor' }
+        { key: 'harvest1', a: 28, b: 38, kind: 'cut', title: 'Первый срез', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'formirovka-sbor' }
       ],
       cutting: [
-        { key: 'roots', a: 7, b: 14, title: 'Появились корешки?', text: 'Белые корешки на узлах в воде появляются за 1–2 недели. Пока их нет, меняйте воду и держите стакан в тепле и в светлой тени.', link: 'razmnozhenie-cherenki' },
-        { key: 'pot', a: 12, b: 18, title: 'Корни 2–3 см — в горшок', text: 'Посадите в горшок 0,5–1 л с лёгким грунтом и накройте пакетом на 3–4 дня.', link: 'razmnozhenie-cherenki' },
+        { key: 'roots', a: 7, b: 14, title: 'Появились корешки?', text: 'Белые корешки на узлах в воде появляются за 1–2 недели. Пока их нет, меняйте воду и держите стакан в тепле и в светлой тени.', link: 'posadka-cherenki' },
+        { key: 'pot', a: 12, b: 18, title: 'Корни 2–3 см — в горшок', text: 'Посадите в горшок 0,5–1 л с лёгким грунтом и накройте пакетом на 3–4 дня.', link: 'posadka-cherenki' },
         { key: 'pinch1', a: 24, b: 32, kind: 'pinch', title: 'Первое прищипывание', text: 'Когда черенок тронулся в рост, срежьте верхушку над 2-й парой листьев.', link: 'formirovka-osnovy' },
         { key: 'feed1', a: 26, b: 30, kind: 'feed', title: 'Первая подкормка', text: 'Комплексное удобрение в ¼ дозы.', link: 'udobreniya-plan' },
-        { key: 'harvest1', a: 35, b: 45, kind: 'cut', title: 'Первый срез', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'urozhay-sbor' }
+        { key: 'harvest1', a: 35, b: 45, kind: 'cut', title: 'Первый срез', text: 'Срезайте верхушки над парой листьев, не больше трети куста за раз.', link: 'formirovka-sbor' }
       ]
     },
     // a bush in the garden: the season around the last spring frost (lf) and the first autumn one (af)
     season: [
       { key: 'harden', from: 'lf', a: 4, b: 13, title: 'Закаливание', text: 'Выносите рассаду на улицу, начиная с 1–2 часов в тени, и каждый день дольше.', link: 'posadka-mesto', starts: ['seed', 'seedling'] },
       { key: 'plantout', from: 'lf', a: 10, b: 21, title: 'Высадка в грунт', text: 'Когда ночи теплее +10 °C, а почва прогрелась до +15 °C. Схема 25–30 × 40 см, полив тёплой водой.', link: 'posadka-mesto', starts: ['seed', 'seedling'] },
-      { key: 'cuttings', from: 'af', a: -35, b: -21, title: 'Черенки на зиму', text: 'Укорените 3–5 верхушек в воде — зимой они дадут зелень на подоконнике.', link: 'razmnozhenie-cherenki' },
-      { key: 'final', from: 'af', a: -14, b: 0, kind: 'cut', title: 'Финальный сбор', text: 'До первых осенних заморозков срежьте всё на заготовки. Дата заморозка ориентировочная.', link: 'urozhay-hranenie' }
+      { key: 'cuttings', from: 'af', a: -35, b: -21, title: 'Черенки на зиму', text: 'Укорените 3–5 верхушек в воде — зимой они дадут зелень на подоконнике.', link: 'posadka-cherenki' },
+      { key: 'final', from: 'af', a: -14, b: 0, kind: 'cut', title: 'Финальный сбор', text: 'До первых осенних заморозков срежьте всё на заготовки. Дата заморозка ориентировочная.', link: 'vkus-hranenie' }
     ],
     // a bush on the balcony comes home before the cold nights
     balcony: { key: 'home', from: 'af', a: -28, b: -10, title: 'Заберите домой', text: 'Ночи холоднее +10 °C останавливают рост, а +5 °C чернят листья. Пора на подоконник с лампой.', link: 'uhod-teplo' },
     // what comes again and again: from the last note of that kind in the diary
     repeat: {
       feed: { after: 'feed1', every: { home: 10, balcony: 12, garden: 18 }, title: 'Подкормка', text: 'По очереди: удобрение «для зелени» в ½ дозы, калийная селитра 0,5 г/л, органика. Только по влажному грунту.', link: 'udobreniya-plan' },
-      cut: { after: 'harvest1', every: 10, title: 'Срежьте верхушки', text: 'Над парой листьев, не больше трети куста. Чем чаще срезаете, тем гуще куст.', link: 'urozhay-sbor' },
+      cut: { after: 'harvest1', every: 10, title: 'Срежьте верхушки', text: 'Над парой листьев, не больше трети куста. Чем чаще срезаете, тем гуще куст.', link: 'formirovka-sbor' },
       buds: { months: [5, 6, 7, 8], age: 45, every: 7, title: 'Проверьте бутоны', text: 'Цветонос забирает силы и аромат: выщипните его вместе с парой листьев под ним.', link: 'formirovka-cvetenie' },
       flush: { age: 60, every: 30, places: ['home', 'balcony'], title: 'Промывка грунта', text: 'Пролейте горшок чистой водой в объёме 2–3 горшков — лишние соли удобрений уйдут. Через день — сульфат магния 1 г/л.', link: 'udobreniya-plan' },
-      water: { every: 3, starts: ['cutting'], until: 'pot', title: 'Смените воду в стакане', text: 'Свежая вода комнатной температуры раз в 2–3 дня, иначе стебель загнивает.', link: 'razmnozhenie-cherenki' }
+      water: { every: 3, starts: ['cutting'], until: 'pot', title: 'Смените воду в стакане', text: 'Свежая вода комнатной температуры раз в 2–3 дня, иначе стебель загнивает.', link: 'posadka-cherenki' }
     },
     // once a winter for a bush at home: the window gives too little light from October to March
     light: { months: [9, 10, 11, 0, 1, 2], places: ['home', 'balcony'], title: 'Включите досветку', text: 'С октября по март подоконнику не хватает света: лампа 14–16 часов в день, 20–30 см над верхушками.', link: 'uhod-svet' },

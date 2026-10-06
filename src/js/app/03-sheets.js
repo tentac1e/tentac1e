@@ -163,7 +163,7 @@
     const btn = $('.topbar .toc-btn');
     if (!btn) return;
     const ch = chapterById(id);
-    const place = ch ? `<span class="toc-btn-n">${ch.num}</span> <span class="toc-btn-t">${esc(ch.short || ch.title)}</span>` : `<span class="toc-btn-t">${id === 'moy' ? 'Мой базилик' : 'Оглавление'}</span>`;
+    const place = ch ? `<span class="toc-btn-t">${esc(ch.short || ch.title)}</span>` : `<span class="toc-btn-t">${id === 'moy' ? 'Мой базилик' : 'Оглавление'}</span>`;
     const box = $('.toc-btn-p', btn);
     if (box && box.innerHTML !== place) box.innerHTML = place;
   }

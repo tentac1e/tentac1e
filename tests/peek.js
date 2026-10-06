@@ -58,29 +58,29 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   const page = await ctx.newPage();
   watch(page, errs);
   const toRecipe = async () => {
-    await page.goto(fileUrl('urozhay.html') + '#' + encodeURIComponent('рецепты'), { waitUntil: 'load' });
+    await page.goto(fileUrl('vkus.html') + '#' + encodeURIComponent('рецепты'), { waitUntil: 'load' });
     await page.waitForTimeout(1200);
-    await page.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
+    await page.evaluate(() => { const c = document.getElementById('r-bruschetta'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
     await page.waitForTimeout(400);
   };
   await toRecipe();
-  const link = await page.evaluate(() => document.querySelector('#r-pistou .rc-sci a').getAttribute('href'));
-  ok(/vkus\.html#deep-letuchest$/.test(link), 'the recipe links to the dive on another page: ' + link);
+  const link = await page.evaluate(() => document.querySelector('#r-bruschetta .rc-sci a').getAttribute('href'));
+  ok(/udobreniya\.html#deep-osmos$/.test(link), 'the recipe links to the dive on another page: ' + link);
   const before = await state(page);
-  await page.click('#r-pistou .rc-sci a');
+  await page.click('#r-bruschetta .rc-sci a');
   ok(await ready(page), 'recipe link: the sheet opens and its place comes');
   let f = frameOf(page);
-  ok(f && /vkus\.html\?peek=1#deep-letuchest$/.test(f.url()), 'the frame holds the chapter in its peek mode: ' + (f && f.url().replace(/^.*\//, '')));
+  ok(f && /udobreniya\.html\?peek=1#deep-osmos$/.test(f.url()), 'the frame holds the chapter in its peek mode: ' + (f && f.url().replace(/^.*\//, '')));
   await page.waitForTimeout(900);
   let v = f ? await inFrame(f) : {};
   ok(v.peek && v.has && v.h > 200 && v.inside && !v.stray.length && !v.chrome.length, 'in the sheet: only the dive, open, without the page around it ' + JSON.stringify(v));
   let s = await sheet(page);
-  ok(s.h.length > 8 && /Вкус и аромат · Глубже/.test(s.where), `the sheet says what and where: «${s.where}» / «${s.h}»`);
+  ok(s.h.length > 8 && /Удобрения · Глубже/.test(s.where), `the sheet says what and where: «${s.where}» / «${s.h}»`);
   let now = await state(page);
   ok(now.y === before.y && now.url === before.url && now.last === before.last && now.peekStep, `the page under it stays: y ${before.y}→${now.y}, address and «Продолжить» the same, one history step`);
   // Esc, the cross and Back close it; the history step goes with it
   for (const [how, close] of [['Esc', () => page.keyboard.press('Escape')], ['×', () => page.click('#sheet-peek [data-close]')], ['Back', () => page.evaluate(() => history.back())]]) {
-    if (!(await sheet(page)).open) { await page.click('#r-pistou .rc-sci a'); await ready(page); }
+    if (!(await sheet(page)).open) { await page.click('#r-bruschetta .rc-sci a'); await ready(page); }
     await close();
     const gone = await shut(page);
     await page.waitForTimeout(300);
@@ -89,20 +89,20 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   }
 
   // «Открыть в главе»: there, the way back, and Back to the link's sentence
-  const sentence = 'Писту не варят';
+  const sentence = 'Соль вытягивает из томатов';
   for (const back of ['pill', 'Back']) {
-    await page.click('#r-pistou .rc-sci a');
+    await page.click('#r-bruschetta .rc-sci a');
     await ready(page);
     await Promise.all([page.waitForNavigation(), page.click('#peek-go')]);
     await page.waitForTimeout(1300);
-    const there = await page.evaluate(() => { const p = document.querySelector('.back-pill'); const d = document.getElementById('deep-letuchest'); return { url: decodeURIComponent(location.href.replace(/^.*\//, '')), pill: p && p.textContent.replace(/\s+/g, ' ').trim(), open: d && d.open, top: d && Math.round(d.getBoundingClientRect().top) }; });
-    ok(/^vkus\.html#deep-letuchest/.test(there.url) && there.open && there.top < 300, `«Открыть в главе» goes to the dive itself ${JSON.stringify(there)}`);
-    ok(/Вернуться/.test(there.pill || '') && /Урожай · Писту/.test(there.pill || ''), `there the way back says where to: «${there.pill}»`);
+    const there = await page.evaluate(() => { const p = document.querySelector('.back-pill'); const d = document.getElementById('deep-osmos'); return { url: decodeURIComponent(location.href.replace(/^.*\//, '')), pill: p && p.textContent.replace(/\s+/g, ' ').trim(), open: d && d.open, top: d && Math.round(d.getBoundingClientRect().top) }; });
+    ok(/^udobreniya\.html#deep-osmos/.test(there.url) && there.open && there.top < 300, `«Открыть в главе» goes to the dive itself ${JSON.stringify(there)}`);
+    ok(/Вернуться/.test(there.pill || '') && /Вкус и кухня · Брускетта/.test(there.pill || ''), `there the way back says where to: «${there.pill}»`);
     if (back === 'pill') await Promise.all([page.waitForNavigation(), page.click('.back-pill .resume-go')]);
     else await page.goBack();
     await page.waitForTimeout(1500);
     const at = await landedAt(page);
-    ok(page.url().includes('urozhay.html') && at && at.words.replace(/\u00a0/g, ' ').startsWith(sentence) && at.top > at.cover && at.top < at.vh / 2, `${back === 'pill' ? '«← Вернуться»' : 'Back'} returns to the link's sentence ${JSON.stringify(at)}`);
+    ok(page.url().includes('vkus.html') && at && at.words.replace(/\u00a0/g, ' ').startsWith(sentence) && at.top > at.cover && at.top < at.vh / 2, `${back === 'pill' ? '«← Вернуться»' : 'Back'} returns to the link's sentence ${JSON.stringify(at)}`);
   }
 
   // the chapter's «Глубже» row: the dive of another tab in the sheet, the tab the reader is on stays
@@ -163,7 +163,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
         passport: q('#short-pasport dl > div'), facts: q('#short-cifry .facts li'), journey: q('#journey li'), rules: q('#rules .rule'),
         science: !!document.querySelector('#sh-fold > p') && q('.depth-seg button') === 3 && !!document.getElementById('home-molecule'), wide: document.documentElement.scrollWidth > innerWidth };
     });
-    ok(r.h <= max && r.chapters === 11 && r.desc === 11 && r.subs > 30 && r.tools === 16 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
+    ok(r.h <= max && r.chapters === 8 && r.desc === 8 && r.subs > 30 && r.tools === 16 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
       `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 16 tools, the passport, figures, path, rules and the science layer ${JSON.stringify(r)}`);
     // «Научный слой» in one column: its heading and a button; the text, the depth of reading and the molecule open
     const sci = () => p.evaluate(() => ({ btn: getComputedStyle(document.querySelector('.sh-open')).display !== 'none', fold: getComputedStyle(document.getElementById('sh-fold')).display !== 'none', mol: getComputedStyle(document.getElementById('sh-mol')).display !== 'none', exp: document.querySelector('.sh-open').getAttribute('aria-expanded') }));
@@ -217,7 +217,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
 
   // Справка's questions at the end of their tabs too, before «Глубже»: opened in place, the rest in the sheet
   const faq = {};
-  for (const file of ['posadka.html', 'uhod.html', 'formirovka.html', 'urozhay.html', 'razmnozhenie.html']) {
+  for (const file of ['posadka.html', 'uhod.html', 'formirovka.html', 'sorta.html', 'vkus.html']) {
     await page.goto(fileUrl(file), { waitUntil: 'load' });
     await page.waitForTimeout(500);
     Object.assign(faq, await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.faq-here')].map(f => { const p = f.closest('[data-panel]'), z = p.querySelector('.deep-zone'); return [p.id, { n: f.querySelectorAll('details').length, before: !!z && !!(f.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING), ids: f.querySelectorAll('[id]').length }]; }))));
@@ -359,22 +359,22 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   await hp.waitForTimeout(900);
   v = await inFrame(hp.mainFrame());
   ok(v.peek && v.has && v.inside && !v.chrome.length, 'the hosting copy: /уход?peek=1#deep-vpd is the dive alone ' + JSON.stringify(v));
-  await hp.goto(U('/урожай#рецепты'), { waitUntil: 'load' });
+  await hp.goto(U('/вкус#рецепты'), { waitUntil: 'load' });
   await hp.waitForTimeout(1200);
-  await hp.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
+  await hp.evaluate(() => { const c = document.getElementById('r-bruschetta'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
   await hp.waitForTimeout(400);
-  await hp.click('#r-pistou .rc-sci a');
+  await hp.click('#r-bruschetta .rc-sci a');
   ok(await ready(hp), 'the hosting copy: the recipe link opens the sheet');
   f = frameOf(hp);
-  ok(f && decodeURI(f.url()).endsWith('/вкус?peek=1#deep-letuchest'), 'its frame is /вкус?peek=1#deep-letuchest: ' + (f && decodeURI(f.url()).replace(srv.base, '')));
+  ok(f && decodeURI(f.url()).endsWith('/удобрения?peek=1#deep-osmos'), 'its frame is /удобрения?peek=1#deep-osmos: ' + (f && decodeURI(f.url()).replace(srv.base, '')));
   await Promise.all([hp.waitForNavigation(), hp.click('#peek-go')]);
   await hp.waitForTimeout(1300);
   const hthere = await hp.evaluate(() => ({ url: decodeURI(location.pathname + location.hash), pill: (document.querySelector('.back-pill') || {}).textContent }));
-  ok(hthere.url === '/вкус#deep-letuchest' && /Вернуться/.test(hthere.pill || ''), 'the hosting copy: «Открыть в главе» → ' + hthere.url);
+  ok(hthere.url === '/удобрения#deep-osmos' && /Вернуться/.test(hthere.pill || ''), 'the hosting copy: «Открыть в главе» → ' + hthere.url);
   await hp.goBack();
   await hp.waitForTimeout(1500);
   const hat = await landedAt(hp);
-  ok(decodeURI(hp.url()).includes('/урожай') && hat && hat.words.replace(/\u00a0/g, ' ').startsWith(sentence), 'the hosting copy: Back returns to the link\'s sentence: ' + JSON.stringify(hat));
+  ok(decodeURI(hp.url()).includes('/вкус') && hat && hat.words.replace(/\u00a0/g, ' ').startsWith(sentence), 'the hosting copy: Back returns to the link\'s sentence: ' + JSON.stringify(hat));
   await hc.close();
   srv.stop();
 

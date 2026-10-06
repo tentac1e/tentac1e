@@ -1,5 +1,5 @@
   /* @use props */
-  /* Pictures of the Harvest chapter: the eight ways to keep basil (data-ill="store:<kind>") — a bouquet in
+  /* Pictures of the chapter «Вкус и кухня», tab «Хранение и заготовки»: the eight ways to keep basil (data-ill="store:<kind>") — a bouquet in
      water, the fridge, frozen in oil, blanched, dried, salt, oil, pesto. */
   const Fu = ill.F, qu = ill.q, Ru = props;
   const W = 180, H = 100;

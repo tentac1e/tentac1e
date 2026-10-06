@@ -44,22 +44,32 @@ PAGES = [
     ('glavnaya', 'index.html'),
     ('sorta', 'sorta.html'),
     ('posadka', 'posadka.html'),
-    ('kalendar', 'kalendar.html'),
     ('uhod', 'uhod.html'),
     ('udobreniya', 'udobreniya.html'),
     ('formirovka', 'formirovka.html'),
-    ('urozhay', 'urozhay.html'),
     ('vkus', 'vkus.html'),
-    ('razmnozhenie', 'razmnozhenie.html'),
     ('problemy', 'problemy.html'),
     ('spravka', 'spravka.html'),
     ('moy', 'moy.html'),
 ]
 FILE = dict(PAGES)
 # addresses on the hosting: ocimum.ru/урожай. Files stay Latin (urozhay.html) — safe for any file manager
-SLUG = {'glavnaya': '', 'sorta': 'сорта', 'posadka': 'посадка', 'kalendar': 'календарь', 'uhod': 'уход',
-        'udobreniya': 'удобрения', 'formirovka': 'прищипывание', 'urozhay': 'урожай', 'vkus': 'вкус',
-        'razmnozhenie': 'размножение', 'problemy': 'проблемы', 'spravka': 'справка', 'moy': 'мой-базилик'}
+SLUG = {'glavnaya': '', 'sorta': 'сорта', 'posadka': 'посадка', 'uhod': 'уход', 'udobreniya': 'удобрения',
+        'formirovka': 'прищипывание', 'vkus': 'вкус', 'problemy': 'проблемы', 'spravka': 'справка', 'moy': 'мой-базилик'}
+# chapters merged into others (11 became 8): the old page stays at its address and only sends the reader on — each
+# of its tabs and anchors to where it lives now (moved_html). Old links, bookmarks and «Продолжить» keep working.
+# to: where the chapter itself now leads; tabs: its old tab ids with their old short anchors → the new tab ids
+MOVED = {
+    'kalendar': {'file': 'kalendar.html', 'slug': 'календарь', 'title': 'Календарь', 'to': 'posadka-sroki', 'tabs': {}},
+    'urozhay': {'file': 'urozhay.html', 'slug': 'урожай', 'title': 'Урожай', 'to': 'formirovka-sbor',
+                'tabs': {('urozhay-sbor', 'сбор'): 'formirovka-sbor', ('urozhay-hranenie', 'хранение'): 'vkus-hranenie',
+                         ('urozhay-recepty', 'рецепты'): 'vkus-recepty'}},
+    'razmnozhenie': {'file': 'razmnozhenie.html', 'slug': 'размножение', 'title': 'Размножение', 'to': 'posadka-cherenki',
+                     'tabs': {('razmnozhenie-cherenki', 'черенки'): 'posadka-cherenki', ('razmnozhenie-semena', 'семена'): 'sorta-semena'}},
+}
+# the tabs that moved and the pages they came from: the old page's other anchors (a deep dive, a recipe) are found among them
+MOVED_FROM = {'posadka-sroki': 'kalendar', 'formirovka-sbor': 'urozhay', 'vkus-hranenie': 'urozhay', 'vkus-recepty': 'urozhay',
+              'posadka-cherenki': 'razmnozhenie', 'sorta-semena': 'razmnozhenie'}
 # a page that is not a numbered chapter: its title and description for the <head>, the search and the map
 PAGE_META = {'moy': {'num': None, 'title': 'Мой базилик',
                      'desc': 'Ваши кусты и их дела на неделю, погода глазами листа и домашние опыты о том, как живёт растение.'}}
@@ -67,15 +77,15 @@ PAGE_META = {'moy': {'num': None, 'title': 'Мой базилик',
 # short Russian anchors for chapter tabs: /удобрения#план instead of #udobreniya-plan.
 # Sources, data and old bookmarks keep the long ids — the build and the router translate them.
 TAB = {
-    'sorta-katalog': 'каталог', 'sorta-podbor': 'подбор', 'sorta-vybor': 'выбор',
-    'posadka-mesto': 'место', 'posadka-posev': 'посев', 'posadka-magazin': 'магазин', 'posadka-gorshok': 'горшок',
+    'sorta-katalog': 'каталог', 'sorta-podbor': 'подбор', 'sorta-vybor': 'выбор', 'sorta-semena': 'семена',
+    'posadka-mesto': 'место', 'posadka-sroki': 'сроки', 'posadka-posev': 'посев', 'posadka-magazin': 'магазин', 'posadka-gorshok': 'горшок',
+    'posadka-cherenki': 'черенки',
     'uhod-svet': 'свет', 'uhod-poliv': 'полив', 'uhod-teplo': 'тепло', 'uhod-pochva': 'почва', 'uhod-sezony': 'сезоны',
     'udobreniya-osnovy': 'основы', 'udobreniya-elementy': 'элементы', 'udobreniya-stadii': 'стадии', 'udobreniya-plan': 'план',
     'udobreniya-sredstva': 'средства', 'udobreniya-kalkulyator': 'калькулятор', 'udobreniya-gidro': 'гидропоника', 'udobreniya-mify': 'мифы',
-    'formirovka-osnovy': 'основы', 'formirovka-trenazher': 'тренажер', 'formirovka-cvetenie': 'цветение',
-    'urozhay-sbor': 'сбор', 'urozhay-hranenie': 'хранение', 'urozhay-recepty': 'рецепты',
+    'formirovka-osnovy': 'основы', 'formirovka-trenazher': 'тренажер', 'formirovka-sbor': 'сбор', 'formirovka-cvetenie': 'цветение',
     'vkus-aromat': 'аромат', 'vkus-molekuly': 'молекулы', 'vkus-himotipy': 'химотипы', 'vkus-kuhnya': 'кухня', 'vkus-sochetaniya': 'сочетания',
-    'razmnozhenie-cherenki': 'черенки', 'razmnozhenie-semena': 'семена',
+    'vkus-hranenie': 'хранение', 'vkus-recepty': 'рецепты',
     'problemy-diagnostika': 'диагностика', 'problemy-bolezni': 'болезни', 'problemy-vrediteli': 'вредители', 'problemy-profilaktika': 'профилактика',
     'spravka-voprosy': 'вопросы', 'spravka-slovar': 'словарь', 'spravka-chek-list': 'чек-лист',
     'moy-kusty': 'кусты', 'moy-pogoda': 'погода', 'moy-opyty': 'опыты',
@@ -154,10 +164,9 @@ def htaccess():
         '',
         '# old Latin addresses -> Russian ones',
     ]
-    for view, file in PAGES:
-        if view == 'glavnaya':
-            continue
-        lines.append(f'RewriteRule ^{view}(\\.html)?/?$ /{pct(SLUG[view])} [R=301,L,NE]')
+    pages = [(view, file, SLUG[view]) for view, file in PAGES if view != 'glavnaya'] + [(v, m['file'], m['slug']) for v, m in MOVED.items()]
+    for view, file, slug in pages:
+        lines.append(f'RewriteRule ^{view}(\\.html)?/?$ /{pct(slug)} [R=301,L,NE]')
     lines += ['', '# any other .html -> without it',
               'RewriteCond %{THE_REQUEST} \\s/+([^?\\s]+?)\\.html[\\s?] [NC]',
               'RewriteRule ^ /%1 [R=301,L,NE]', '',
@@ -165,13 +174,11 @@ def htaccess():
               'RewriteCond %{REQUEST_FILENAME} !-d',
               'RewriteRule ^(.+)/$ $1 [R=301,L]', '',
               '# Russian address -> the file, the address bar does not change']
-    for view, file in PAGES:
-        if view == 'glavnaya':
-            continue
-        lines += [f'# {view}', f'RewriteRule ^{esc(SLUG[view])}$ {file} [L]']
+    for view, file, slug in pages:
+        lines += [f'# {view}' + (' (merged into other chapters: the page sends the reader on)' if view in MOVED else ''), f'RewriteRule ^{esc(slug)}$ {file} [L]']
     return '\n'.join(lines) + '\n'
 # ids that scripts create at run time, by prefix
-PREFIXES = {'dis-': 'problemy', 'pest-': 'problemy', 'g-': 'spravka', 'ck-': 'spravka', 'r-': 'urozhay'}
+PREFIXES = {'dis-': 'problemy', 'pest-': 'problemy', 'g-': 'spravka', 'ck-': 'spravka', 'r-': 'vkus'}
 SCRIPTS = ['haptics.js', 'data.js', 'pages.js', 'scene.js', 'science.js', 'app.js']
 
 # the one-file book has no assets folder: it keeps loading its fonts from Google, as the site did before
@@ -183,8 +190,8 @@ PRELOAD_FONTS = ['manrope-normal-cyrillic.woff2', 'manrope-normal-latin.woff2',
 
 SITE_TITLE = 'Гид по базилику'
 APP_SHORT = 'Базилик'  # the name under the icon on a phone's home screen
-SITE_DESC = ('Подробный гид по выращиванию базилика в 11 главах: сорта, посадка, уход, удобрения по стадиям роста, '
-             'прищипывание, урожай, химия вкуса и аромата, размножение, болезни. С калькуляторами, научными разворотами '
+SITE_DESC = ('Подробный гид по выращиванию базилика в 8 главах: сорта, посадка и черенки, уход, удобрения по стадиям роста, '
+             'прищипка и сбор, химия вкуса и кухня, болезни. С калькуляторами, научными разворотами '
              'и интерактивными моделями.')
 
 # search: the same rules the page used when it indexed itself
@@ -414,7 +421,7 @@ def toc_item(cid, face, label, subs, here=None, extra='', box='toc'):
     if not subs:
         return f'<li class="toc-item" data-toc="{cid}"><div class="toc-row">{link}</div></li>'
     tog = (f'<button class="toc-tog" type="button" aria-expanded="{"true" if cur else "false"}" aria-controls="{box}-{cid}" '
-           f'aria-label="Разделы: {escape(label)}"><span>{len(subs)}</span>{ico("chev-r")}</button>')
+           f'aria-label="Разделы: {escape(label)}">{ico("chev-r")}</button>')
     sub = (f'<div class="toc-sub" id="{box}-{cid}"><ul>'
            + ''.join(f'<li><a href="#{pid}" data-p="{pid}">{escape(t)}</a></li>' for pid, t in subs) + '</ul></div>')
     return f'<li class="toc-item{" is-open" if cur else ""}" data-toc="{cid}"><div class="toc-row">{link}{tog}</div>{sub}</li>'
@@ -434,7 +441,7 @@ def toc_html(nav, here):
             item('moy', f'<span class="toc-ico">{ico("sprout")}<b class="garden-badge" hidden></b></span><span class="toc-t">Мой базилик</span>',
                  'Мой базилик', nav['sections'].get('moy', []), ' data-garden-link')]
     for c in nav['chapters']:
-        rows.append(item(c['id'], f'{toc_art(c)}<span class="toc-t"><small>{c["num"]}</small>{escape(c["title"])}</span>', c['title'],
+        rows.append(item(c['id'], f'{toc_art(c)}<span class="toc-t">{escape(c["title"])}</span>', c['title'],
                          nav['sections'].get(c['id'], [])))
     chapters = f'<nav class="toc-pane toc-chapters" id="toc-ch" aria-label="Главы и разделы"><ul class="toc-list">{"".join(rows)}</ul></nav>'
     groups = ''.join(
@@ -449,7 +456,7 @@ def toc_html(nav, here):
 def toc_button(nav, here):
     """the header's way into the contents: it says where the reader is"""
     c = next((c for c in nav['chapters'] if c['id'] == here), None)
-    place = (f'<span class="toc-btn-n">{c["num"]}</span> <span class="toc-btn-t">{escape(c["short"])}</span>' if c
+    place = (f'<span class="toc-btn-t">{escape(c["short"])}</span>' if c
              else '<span class="toc-btn-t">Мой базилик</span>' if here == 'moy' else '<span class="toc-btn-t">Оглавление</span>')
     return (f'<button class="toc-btn" type="button" data-open="sheet-toc" aria-haspopup="dialog">{ico("book")}'
             f'<span class="toc-vh">Оглавление: </span><span class="toc-btn-p">{place}</span>{ico("chev-r")}</button>')
@@ -459,7 +466,7 @@ def chapters_home_html(nav):
     """the home page's «Главы гида»: the contents' list of chapters, each with what it holds in a line, opening into
     its sections (07-home.js folds them)"""
     return '<ul class="toc-list home-chapters" id="chapters">' + ''.join(
-        toc_item(c['id'], f'{toc_art(c)}<span class="toc-tx"><span class="toc-t"><small>{c["num"]}</small>{escape(c["title"])}</span>'
+        toc_item(c['id'], f'{toc_art(c)}<span class="toc-tx"><span class="toc-t">{escape(c["title"])}</span>'
                  f'<span class="toc-d">{escape(c["desc"])}</span></span>', c['title'], nav['sections'].get(c['id'], []), box='glavy')
         for c in nav['chapters']) + '</ul>'
 
@@ -1105,6 +1112,13 @@ def main():
             for old in merged:
                 src[view] = re.sub(rf'(\sid=)"{re.escape(old)}"', rf'\1"{TAB[old]}"', src[view])
 
+    # the merged chapters (MOVED): the chapter itself and its old tab ids lead to where they live now
+    if not single:
+        for old, m in MOVED.items():
+            owner[old], alias[old] = owner[m['to']], alias[m['to']]
+            for (long_id, _), new in m['tabs'].items():
+                owner[long_id], alias[long_id] = owner[new], alias[new]
+
     def href_for(target, here):
         if single:
             return '#' + target
@@ -1137,6 +1151,11 @@ def main():
         'stats': stats,
         'titles': titles,
         'alias': alias,
+        # a reading place or «Продолжить» saved in a merged chapter: its tab (long id or old short anchor) → the new
+        # chapter and tab (22-reading-pos.js moves them on)
+        'moved': {old: {k: [owner[new], alias.get(new, new)] for k, new in
+                        [('', m['to'])] + [(x, new) for (long_id, short), new in m['tabs'].items() for x in (long_id, short)]}
+                  for old, m in MOVED.items()} if not single else {},
     }
     # the one-file book carries no map or index of its own: the files in assets/ stay those of the site
     if not single:
@@ -1229,17 +1248,48 @@ def main():
     for view, file in PAGES:
         (out_dir / file).write_text(page_html([view], view), encoding='utf-8')
         print(f'{file:18} {len((out_dir / file).read_bytes()) // 1024:4} КБ')
+    for old, m in MOVED.items():
+        (out_dir / m['file']).write_text(moved_html(old, m, LINK, owner, alias, titles), encoding='utf-8')
     if clean:
         write_pwa(out_dir, pages_js['v'], no_sw)
     print(f'pages.js {len((js / "pages.js").read_bytes()) // 1024} КБ, search-index.js {len((js / "search-index.js").read_bytes()) // 1024} КБ, '
           f'{len(static_entries_panels) + len(static_entries_heads)} записей в индексе')
 
 
+def moved_html(old, m, link, owner, alias, titles):
+    """The page of a chapter merged into others (MOVED): it sends the reader on at once — each old anchor to where
+    it lives now: its tabs (by their long ids and old short anchors) and every anchor inside them (a deep dive, a recipe).
+    Without scripts it says where the chapter went."""
+    to = lambda i: [link[owner[i]], alias.get(i, i)]
+    where = {'': to(m['to'])}
+    for (long_id, short), new in m['tabs'].items():
+        where[long_id] = where[short] = to(new)
+    for f in sorted(SRC.glob('pages/*/[0-9]*-*.html')):
+        text = f.read_text(encoding='utf-8')
+        panel = re.search(r'data-panel id="([^"]+)"', text).group(1)
+        if MOVED_FROM.get(panel) == old:
+            for i in re.findall(r'\sid="([^"]+)"', text):
+                if i in owner:
+                    where.setdefault(i, to(i))
+    news = [m['to']] + [n for n in m['tabs'].values() if n != m['to']]
+    links = ''.join(f'<li><a href="{escape(link[owner[n]])}#{escape(alias.get(n, n))}">{escape(titles[n])}</a></li>' for n in news)
+    script = ('(function () {\n  var W = ' + json.dumps(where, ensure_ascii=False) + ', h = location.hash.slice(1);\n'
+              '  try { h = decodeURIComponent(h); } catch (e) { /* as is */ }\n'
+              '  var w = W[h] || W[\'\'];\n'
+              '  location.replace(w[0] + location.search + \'#\' + w[1]);\n})();')
+    return (f'<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            f'<meta name="robots" content="noindex">\n<title>{escape(m["title"])} — теперь в других главах · {SITE_TITLE}</title>\n'
+            f'<link rel="canonical" href="{escape(where[""][0])}">\n'
+            '<style>:root{color-scheme:light dark}body{margin:0;padding:40px 20px;font:16px/1.6 system-ui,sans-serif;background:#EEF4E9;color:#15261A}'
+            'a{color:#2D6932}@media (prefers-color-scheme:dark){body{background:#0F1912;color:#E4EEDF}a{color:#86C46A}}</style>\n'
+            f'<script>\n{script}\n</script>\n</head>\n<body>\n<p>Глава «{escape(m["title"])}» теперь в других главах гида:</p>\n<ul>{links}</ul>\n</body>\n</html>\n')
+
+
 def write_pwa(out_dir, v, no_sw):
     """The hosting copy on a phone's home screen: the app's card (manifest.webmanifest) and the offline worker
     (sw.js from src/sw.js). The worker keeps every page by its Russian address and every file the pages ask for:
     styles, scripts, the models' files, the search index, the Cyrillic and Latin fonts, the icons."""
-    pages = [SLUG[view] or './' for view, _ in PAGES]
+    pages = [SLUG[view] or './' for view, _ in PAGES] + [m['slug'] for m in MOVED.values()]
     found = set()
     for _, file in PAGES:
         html = (out_dir / file).read_text(encoding='utf-8')
@@ -1277,7 +1327,7 @@ def write_pwa(out_dir, v, no_sw):
                   {'src': icons[2], 'sizes': '512x512', 'type': 'image/png', 'purpose': 'maskable'}],
         'shortcuts': [shortcut('Мой базилик', 'moy', 'Ваши кусты, дела на неделю, погода и опыты'),
                       shortcut('Проблемы', 'problemy', 'Что с листьями: болезни, вредители, нехватка питания'),
-                      shortcut('Календарь', 'kalendar', 'Сроки посева, высадки и сбора под ваш климат')],
+                      dict(shortcut('Сроки посадки', 'posadka', 'Сроки посева, высадки и сбора под ваш климат'), url=SLUG['posadka'] + '#' + TAB['posadka-sroki'])],
     }
     manifest = json.dumps(card, ensure_ascii=False, indent=1) + '\n'
     (out_dir / 'manifest.webmanifest').write_text(manifest, encoding='utf-8')
@@ -1288,7 +1338,7 @@ def write_pwa(out_dir, v, no_sw):
     template = (SRC / 'sw.js').read_text(encoding='utf-8')
     # the version: a fingerprint of the worker, the card, every page and every file it keeps
     sha = hashlib.sha1(template.encode('utf-8') + manifest.encode('utf-8'))
-    for view, file in PAGES:
+    for file in [f for _, f in PAGES] + [m['file'] for m in MOVED.values()]:
         sha.update((out_dir / file).read_bytes())
     for f in files:
         sha.update(f.encode('utf-8'))

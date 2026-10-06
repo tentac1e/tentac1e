@@ -141,3 +141,44 @@
     }
   };
   illustrate('place', id => (PLACE[id] || PLACE.sill)(), Object.keys(PLACE));
+
+  /* The steps of rooting a cutting (data-ill="cut:1…5"), the tab «Черенки» */
+  const Fr = ill.F, qr = ill.q, Rr = props;
+  // a cutting standing on (x, y): its own stem with pairs of leaves; bare — the lower nodes without leaves
+  const cutting = (x, y, h = 62, o = {}) => Rr.shoot(x, y, h, Object.assign({ pairs: 4, s: 0.27 }, o));
+  const CUT = {
+    1: () => {
+      // a bush; the top 8–12 cm with three or four pairs is cut just under a node
+      const sh = Rr.shoot(46, 100, 92, { pairs: 6, s: 0.3 });
+      const [nx, ny] = sh.nodes[2];
+      let g = ill.pot(46, 104, 50, 20) + sh.svg + Rr.cutMark(nx, ny + 6, 22) + Rr.scissors(nx + 22, ny + 6, 196, 0.85, 0.8);
+      const my = qr((ny + 18) / 2);
+      g += `<g class="ill-scale"><path d="M98 ${qr(ny + 6)}V12M94 ${qr(ny + 6)}H102M94 12H102" fill="none" stroke="currentColor" stroke-width="1.6"/></g><text class="ill-lbl" x="114" y="${my}" text-anchor="middle" transform="rotate(-90 114 ${my})">8–12 см</text>`;
+      return Rr.step(g, 'Верхушку срезают чуть ниже узла');
+    },
+    2: () => {
+      const c = cutting(54, 104, 84, { bare: 2, s: 0.28 });
+      let g = c.svg;
+      // the two lower pairs, torn off
+      g += ill.leaf({ x: 92, y: 96, a: 110, s: 0.2, seed: 3 }) + ill.leaf({ x: 100, y: 78, a: 60, s: 0.2, seed: 5 }) + Rr.arrow(66, c.nodes[0][1] - 2, 84, 92, -6);
+      return Rr.step(g, 'С нижней трети черенка листья оборваны');
+    },
+    // the cutting goes in behind the glass wall: what is inside the glass is seen through it
+    3: () => {
+      const c = cutting(60, 98, 84, { bare: 2, s: 0.26 });
+      return Rr.step(Rr.glass(60, 104, 44, 56, { level: 0.72, inside: c.svg }), 'Черенок в стакане: нижние узлы под водой');
+    },
+    4: () => {
+      const c = cutting(40, 98, 84, { bare: 2, s: 0.26 });
+      const under = Rr.roots(40, c.nodes[0][1], 14, 6, { seed: 4 }) + Rr.roots(40, c.nodes[1][1], 10, 4, { seed: 7 }) + c.svg;
+      let g = Rr.glass(40, 104, 44, 56, { level: 0.72, inside: under });
+      g += Rr.drop(98, 34, 1.5) + ill.label(117, 62, '2–3 дня', 'end');
+      return Rr.step(g, 'Белые корешки на узлах в воде; воду меняют каждые 2–3 дня');
+    },
+    5: () => {
+      const c = cutting(56, 80, 62, { bare: 2, s: 0.24 });
+      let g = ill.pot(56, 84, 56, 24) + c.svg + Rr.bag(56, 82, 78, 76);
+      return Rr.step(g, 'Укоренённый черенок в горшке под пакетом');
+    }
+  };
+  illustrate('cut', n => (CUT[n] || CUT[1])(), Object.keys(CUT));

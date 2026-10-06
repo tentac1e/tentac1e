@@ -21,7 +21,6 @@
 .toc-btn .ico { flex: none; width: 18px; height: 18px; color: var(--basil); }
 .toc-btn > .ico:last-child { width: 14px; height: 14px; rotate: 90deg; color: var(--ink-3); }
 .toc-btn-p { display: inline-flex; align-items: baseline; gap: 7px; min-width: 0; }
-.toc-btn-n { font: 500 .74rem/1 var(--font-mono); color: var(--ink-3); }
 .toc-btn-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .toc-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 899px) { .toc-btn { display: none; } }
@@ -57,14 +56,13 @@
 .toc-link[aria-current="page"] .toc-art, .toc-link[aria-current="page"] .toc-ico { background: var(--surface); }
 .toc-ico .garden-badge { top: -5px; right: -6px; }
 .toc-t { display: flex; align-items: baseline; gap: 8px; min-width: 0; font: 700 1rem/1.25 var(--font-body); }
-.toc-t small { flex: none; min-width: 1.3em; font: 500 .74rem/1 var(--font-mono); color: var(--ink-3); }
 .toc-tog {
   flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-width: 52px;
+  min-width: 44px;
   height: 44px;
   padding: 0 10px;
   border: 0;

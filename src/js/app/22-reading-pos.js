@@ -6,6 +6,29 @@
   /* sentence. Going back there is like finding your place in a book — at the start of the sentence, with the lines */
   /* before it in sight, whatever the width of the screen now.                                                       */
   const POS_KEY = 'basil-pos';
+  // a chapter merged into others (MOVED in scripts/build.py): its reading place and «Продолжить» move with its tabs.
+  // A place kept in the chapter it moves to stays, if it is newer
+  (function moveMerged() {
+    const M = PAGES && PAGES.moved;
+    if (!M || PEEK) return;
+    const dest = (old, panel) => M[old][panel || ''] || M[old][''];
+    const last = store.get('basil-last', null);
+    if (last && M[last.view]) {
+      const [view, panel] = dest(last.view, last.panel);
+      store.set('basil-last', { view, panel, sub: '' });
+    }
+    const all = store.get(POS_KEY, {}) || {};
+    let moved = false;
+    for (const old in M) {
+      const p = all[old];
+      if (!p) continue;
+      const [view, panel] = dest(old, p.panel);
+      if (!all[view] || (all[view].t || 0) < (p.t || 0)) all[view] = Object.assign({}, p, { panel });
+      delete all[old];
+      moved = true;
+    }
+    if (moved) store.set(POS_KEY, all);
+  })();
   function readPos(view) {
     const all = store.get(POS_KEY, {}) || {};
     const p = all[view];

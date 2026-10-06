@@ -15,7 +15,7 @@
   const citiesChips = (id, lat) => h.chipsHtml(id, 'Город', h.CITIES.map(([l, n]) => [l, n]), lat);
 
   const { micro, ill, props, agro } = window.BasilLibs;
-  window.BasilScience.styleFor("posadka", "/* window */\n.win-room { fill: color-mix(in srgb, var(--surface-2) 70%, transparent); }\n.win-light { fill: var(--sun-light); }\n.win-ray { stroke: var(--sun-disc); stroke-width: 1.3; opacity: .45; stroke-dasharray: 5 6; }\n.win-sun { fill: var(--sun-disc); filter: drop-shadow(0 0 10px var(--sun-disc)); }\n.win-wall { fill: var(--line-strong); }\n.win-glass { fill: var(--sci-phys); opacity: .45; }\n.win-sill { fill: var(--ink-3); opacity: .6; }\n.win-pot { fill: var(--clay); }\n.win-leaf { fill: var(--leaf); }\n\n.win-tag { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }\n/* germination */\n.germ-fig { margin: 0; display: grid; gap: 6px; }\n.germ-anim { width: 100%; max-width: 280px; height: auto; border-radius: 16px; background: color-mix(in srgb, var(--sci-phys-soft) 70%, transparent); }\n.germ-soil { fill: var(--soil); opacity: .85; }\n.germ-coat { fill: var(--germ-coat); }\n.germ-gel { fill: var(--germ-gel); stroke: color-mix(in srgb, var(--sci-phys) 40%, transparent); stroke-width: 1; transform-origin: 0 0; }\n.germ-root { fill: none; stroke: var(--root); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 40; stroke-dashoffset: 40; }\n.germ-hypo { fill: none; stroke: var(--stem); stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 60; stroke-dashoffset: 60; }\n.germ-coty ellipse { fill: var(--leaf); transform-origin: 0 0; }\n.germ-coty { transform-box: fill-box; }\n.germ-anim .germ-gel { animation: g-gel var(--dur, 6s) var(--ease-float) infinite; }\n.germ-anim .germ-root { animation: g-root var(--dur, 6s) ease-out infinite; }\n.germ-anim .germ-hypo { animation: g-hypo var(--dur, 6s) ease-out infinite; }\n.germ-anim .germ-coty { animation: g-coty var(--dur, 6s) var(--ease-float) infinite; }\n@keyframes g-gel { 0%, 8% { scale: .3; opacity: 0; } 25%, 88% { scale: 1; opacity: 1; } 100% { scale: 1; opacity: 0; } }\n@keyframes g-root { 0%, 30% { stroke-dashoffset: 40; } 55%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }\n@keyframes g-hypo { 0%, 50% { stroke-dashoffset: 60; } 75%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }\n@keyframes g-coty { 0%, 70% { opacity: 0; scale: .2; } 82%, 92% { opacity: 1; scale: 1; } 100% { opacity: 0; } }\n.germ-anim.is-stopped * { animation: none !important; }\n.germ-anim.is-stopped .germ-gel { opacity: 0; }\n.germ-phase { margin: 0; font-size: .84rem; color: var(--ink-3); }\n\n/* shade */\n.rfr { display: grid; gap: 6px; font: 500 .7rem/1.2 var(--font-mono); }\n.rfr i { position: relative; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #B8312A, #6E1F2B); }\n.rfr i::after { content: \"\"; position: absolute; top: -4px; bottom: -4px; left: var(--p, 50%); width: 4px; margin-left: -2px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--surface); transition: left .4s var(--ease-float); }\n.rfr-r { color: var(--danger); }\n.rfr-fr { color: var(--ink-3); text-align: right; }\n.shade-stage .lab-plant { max-width: 320px; }\n\n/* perched water */\n.per-soil { fill: var(--soil); opacity: .78; }\n.per-drain { fill: color-mix(in srgb, var(--clay) 25%, var(--surface)); }\n.per-pebble { fill: var(--clay); opacity: .8; }\n.per-water { fill: var(--water-fill); }\n.per-wave { fill: none; stroke: var(--water-line); stroke-width: 2; }\n.per-pot { fill: none; stroke: var(--clay); stroke-width: 5; stroke-linejoin: round; }\n.per-rim { fill: var(--clay-rim); }\n.per-lead { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 2 3; }\n.tick.is-water { fill: var(--water-line); font-weight: 700; }\n\n");
+  window.BasilScience.styleFor("posadka", "/* window */\n.win-room { fill: color-mix(in srgb, var(--surface-2) 70%, transparent); }\n.win-light { fill: var(--sun-light); }\n.win-ray { stroke: var(--sun-disc); stroke-width: 1.3; opacity: .45; stroke-dasharray: 5 6; }\n.win-sun { fill: var(--sun-disc); filter: drop-shadow(0 0 10px var(--sun-disc)); }\n.win-wall { fill: var(--line-strong); }\n.win-glass { fill: var(--sci-phys); opacity: .45; }\n.win-sill { fill: var(--ink-3); opacity: .6; }\n.win-pot { fill: var(--clay); }\n.win-leaf { fill: var(--leaf); }\n\n.win-tag { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }\n/* gdd: the bars are shared with the pesto model (src/css/lab/06-lab-tools.css) */\n/* germination */\n.germ-fig { margin: 0; display: grid; gap: 6px; }\n.germ-anim { width: 100%; max-width: 280px; height: auto; border-radius: 16px; background: color-mix(in srgb, var(--sci-phys-soft) 70%, transparent); }\n.germ-soil { fill: var(--soil); opacity: .85; }\n.germ-coat { fill: var(--germ-coat); }\n.germ-gel { fill: var(--germ-gel); stroke: color-mix(in srgb, var(--sci-phys) 40%, transparent); stroke-width: 1; transform-origin: 0 0; }\n.germ-root { fill: none; stroke: var(--root); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 40; stroke-dashoffset: 40; }\n.germ-hypo { fill: none; stroke: var(--stem); stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 60; stroke-dashoffset: 60; }\n.germ-coty ellipse { fill: var(--leaf); transform-origin: 0 0; }\n.germ-coty { transform-box: fill-box; }\n.germ-anim .germ-gel { animation: g-gel var(--dur, 6s) var(--ease-float) infinite; }\n.germ-anim .germ-root { animation: g-root var(--dur, 6s) ease-out infinite; }\n.germ-anim .germ-hypo { animation: g-hypo var(--dur, 6s) ease-out infinite; }\n.germ-anim .germ-coty { animation: g-coty var(--dur, 6s) var(--ease-float) infinite; }\n@keyframes g-gel { 0%, 8% { scale: .3; opacity: 0; } 25%, 88% { scale: 1; opacity: 1; } 100% { scale: 1; opacity: 0; } }\n@keyframes g-root { 0%, 30% { stroke-dashoffset: 40; } 55%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }\n@keyframes g-hypo { 0%, 50% { stroke-dashoffset: 60; } 75%, 92% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; opacity: 0; } }\n@keyframes g-coty { 0%, 70% { opacity: 0; scale: .2; } 82%, 92% { opacity: 1; scale: 1; } 100% { opacity: 0; } }\n.germ-anim.is-stopped * { animation: none !important; }\n.germ-anim.is-stopped .germ-gel { opacity: 0; }\n.germ-phase { margin: 0; font-size: .84rem; color: var(--ink-3); }\n\n/* shade */\n.rfr { display: grid; gap: 6px; font: 500 .7rem/1.2 var(--font-mono); }\n.rfr i { position: relative; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #B8312A, #6E1F2B); }\n.rfr i::after { content: \"\"; position: absolute; top: -4px; bottom: -4px; left: var(--p, 50%); width: 4px; margin-left: -2px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--surface); transition: left .4s var(--ease-float); }\n.rfr-r { color: var(--danger); }\n.rfr-fr { color: var(--ink-3); text-align: right; }\n.shade-stage .lab-plant { max-width: 320px; }\n\n/* perched water */\n.per-soil { fill: var(--soil); opacity: .78; }\n.per-drain { fill: color-mix(in srgb, var(--clay) 25%, var(--surface)); }\n.per-pebble { fill: var(--clay); opacity: .8; }\n.per-water { fill: var(--water-fill); }\n.per-wave { fill: none; stroke: var(--water-line); stroke-width: 2; }\n.per-pot { fill: none; stroke: var(--clay); stroke-width: 5; stroke-linejoin: round; }\n.per-rim { fill: var(--clay-rim); }\n.per-lead { stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 2 3; }\n.tick.is-water { fill: var(--water-line); font-weight: 700; }\n\n/* roots */\n.roots-svg { width: 100%; max-width: 250px; height: auto; }\n.rt-glass { fill: color-mix(in srgb, var(--surface-2) 50%, transparent); stroke: var(--glass-edge); stroke-width: 3; stroke-linejoin: round; }\n.rt-water { fill: var(--water-fill); }\n.rt-wl { stroke: var(--water-line); stroke-width: 1.5; }\n.rt-stem { fill: none; stroke: var(--stem); stroke-width: 5; stroke-linecap: round; }\n.rt-node { fill: var(--pl-a); }\n.rt-root { fill: none; stroke: var(--root); stroke-width: 2.2; stroke-linecap: round; }\n\n");
   /* @use props */
   /* Pictures of the Planting chapter: the steps of sowing (data-ill="sow:1…9"), of saving a pot of basil
      from the shop (shop:1…7 and shop:hero, the split), and the places to grow it (place:<id>, B.PLACES). */
@@ -160,6 +160,47 @@
   };
   illustrate('place', id => (PLACE[id] || PLACE.sill)(), Object.keys(PLACE));
 
+  /* The steps of rooting a cutting (data-ill="cut:1…5"), the tab «Черенки» */
+  const Fr = ill.F, qr = ill.q, Rr = props;
+  // a cutting standing on (x, y): its own stem with pairs of leaves; bare — the lower nodes without leaves
+  const cutting = (x, y, h = 62, o = {}) => Rr.shoot(x, y, h, Object.assign({ pairs: 4, s: 0.27 }, o));
+  const CUT = {
+    1: () => {
+      // a bush; the top 8–12 cm with three or four pairs is cut just under a node
+      const sh = Rr.shoot(46, 100, 92, { pairs: 6, s: 0.3 });
+      const [nx, ny] = sh.nodes[2];
+      let g = ill.pot(46, 104, 50, 20) + sh.svg + Rr.cutMark(nx, ny + 6, 22) + Rr.scissors(nx + 22, ny + 6, 196, 0.85, 0.8);
+      const my = qr((ny + 18) / 2);
+      g += `<g class="ill-scale"><path d="M98 ${qr(ny + 6)}V12M94 ${qr(ny + 6)}H102M94 12H102" fill="none" stroke="currentColor" stroke-width="1.6"/></g><text class="ill-lbl" x="114" y="${my}" text-anchor="middle" transform="rotate(-90 114 ${my})">8–12 см</text>`;
+      return Rr.step(g, 'Верхушку срезают чуть ниже узла');
+    },
+    2: () => {
+      const c = cutting(54, 104, 84, { bare: 2, s: 0.28 });
+      let g = c.svg;
+      // the two lower pairs, torn off
+      g += ill.leaf({ x: 92, y: 96, a: 110, s: 0.2, seed: 3 }) + ill.leaf({ x: 100, y: 78, a: 60, s: 0.2, seed: 5 }) + Rr.arrow(66, c.nodes[0][1] - 2, 84, 92, -6);
+      return Rr.step(g, 'С нижней трети черенка листья оборваны');
+    },
+    // the cutting goes in behind the glass wall: what is inside the glass is seen through it
+    3: () => {
+      const c = cutting(60, 98, 84, { bare: 2, s: 0.26 });
+      return Rr.step(Rr.glass(60, 104, 44, 56, { level: 0.72, inside: c.svg }), 'Черенок в стакане: нижние узлы под водой');
+    },
+    4: () => {
+      const c = cutting(40, 98, 84, { bare: 2, s: 0.26 });
+      const under = Rr.roots(40, c.nodes[0][1], 14, 6, { seed: 4 }) + Rr.roots(40, c.nodes[1][1], 10, 4, { seed: 7 }) + c.svg;
+      let g = Rr.glass(40, 104, 44, 56, { level: 0.72, inside: under });
+      g += Rr.drop(98, 34, 1.5) + ill.label(117, 62, '2–3 дня', 'end');
+      return Rr.step(g, 'Белые корешки на узлах в воде; воду меняют каждые 2–3 дня');
+    },
+    5: () => {
+      const c = cutting(56, 80, 62, { bare: 2, s: 0.24 });
+      let g = ill.pot(56, 84, 56, 24) + c.svg + Rr.bag(56, 82, 78, 76);
+      return Rr.step(g, 'Укоренённый черенок в горшке под пакетом');
+    }
+  };
+  illustrate('cut', n => (CUT[n] || CUT[1])(), Object.keys(CUT));
+
   register('window', el => {
     el.innerHTML = h.head('Солнце в полдень', 'Выберите город и месяц. Разрез показывает, как полуденные лучи входят в окно, выходящее на юг.') +
       `<div class="lab-controls">${citiesChips('lab-win-city', 55.8)}${h.rangeHtml('lab-win-m', 'Месяц', 1, 12, 1, 12)}</div>
@@ -223,6 +264,62 @@
     h.bindPick(el, 'lab-win-city', v => { lat = +v; upd(); });
     h.bindRange(el, 'lab-win-m', v => `21 ${MONTHS_GEN[v - 1]}`, v => { m = v; upd(); });
     upd();
+  });
+
+  register('daylen', el => {
+    el.innerHTML = h.head('Длина дня за год', 'Астрономический расчёт с поправкой на рефракцию. Коснитесь графика, чтобы увидеть любой день.') +
+      `<div class="lab-controls">${citiesChips('lab-dl-city', 55.8)}${h.rangeHtml('lab-dl-lat', 'Широта', 40, 70, 0.1, 55.8)}</div>
+       <div class="lab-chart" id="lab-dl-ch"></div>` +
+      h.readHtml([['Сегодня', 'lab-dl-t'], ['Самый длинный день', 'lab-dl-max'], ['Самый короткий', 'lab-dl-min']]);
+    let lat = 55.8, hover = null;
+    const today = doyToday();
+    const series = () => { const a = []; for (let n = 1; n <= 365; n += 2) a.push([n, h.dayLength(lat, n)]); return a; };
+    const MSTART = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
+    const ch = h.chart($('#lab-dl-ch', el), {
+      label: 'Длина дня по дням года',
+      draw(w, hh) {
+        const P = h.plot({ w, h: hh, x: [1, 365], y: [0, 24], xticks: w > 520 ? MSTART.map(v => v + 14) : [15, 105, 196, 288], fx: v => MONTHS[MSTART.findIndex(s => s + 14 === v)] || MONTHS[Math.floor((v - 1) / 30.5)], yticks: [0, 6, 12, 18, 24], ylab: 'часов',
+          hbands: [{ y0: 14, y1: 16, cls: 'is-good', label: 'нужно под лампой' }],
+          series: [{ pts: series(), cls: 's1', area: true }],
+          marker: { x: today, dots: [{ y: h.dayLength(lat, today), cls: 's1' }] }, hover });
+        let s = P.s + `<text class="tick" x="${P.X(today)}" y="${P.p.t - 8}" text-anchor="middle">сегодня</text>`;
+        if (hover != null) s += h.tip(P.X(hover), P.p.t + 16, w, [doyLabel(hover), `${fmt(h.dayLength(lat, hover))} ч`]);
+        return s;
+      },
+      onPointer(x, y, w, hh, kind) {
+        const P = h.plot({ w, h: hh, x: [1, 365], y: [0, 24] });
+        hover = kind === 'leave' ? null : clamp(Math.round(P.inv(x)), 1, 365);
+        ch.redraw();
+      }
+    });
+    const upd = () => {
+      set(el, 'lab-dl-t', `${fmt(h.dayLength(lat, today))} ч`);
+      set(el, 'lab-dl-max', `${fmt(h.dayLength(lat, 172))} ч`);
+      set(el, 'lab-dl-min', `${fmt(h.dayLength(lat, 355))} ч`);
+      ch.redraw();
+    };
+    const rng = h.bindRange(el, 'lab-dl-lat', v => `${fmt(v)}° с. ш.`, v => { lat = v; city.set(''); upd(); });
+    const city = h.bindPick(el, 'lab-dl-city', v => { lat = +v; rng.input.value = v; $('#lab-dl-lat-v', el).textContent = `${fmt(+v)}° с. ш.`; upd(); });
+    upd();
+  });
+
+  register('gdd', el => {
+    el.innerHTML = h.head('Сколько ждать урожая', 'Базовая температура 10 °C; при 22 °C первая срезка — примерно через 7 недель. Выше 30 °C модель прибавки не даёт.', true) +
+      `<div class="lab-controls">${h.rangeHtml('lab-gdd-t', 'Средняя температура суток', 12, 32, 0.5, 17)}</div>
+       <div class="gdd-bars" id="lab-gdd-bars"></div>` +
+      h.readHtml([['Градусо-дней в сутки', 'lab-gdd-d'], ['До первой срезки', 'lab-gdd-w'], ['По сравнению с 22 °C', 'lab-gdd-r']]);
+    const weeks = T => T <= 10.5 ? Infinity : 588 / (7 * (Math.min(T, 30) - 10));
+    const upd = T => {
+      const wk = weeks(T), ref = weeks(22);
+      const max = 20;
+      $('#lab-gdd-bars', el).innerHTML = [['Ваше лето', wk, 's1'], ['Эталон, 22 °C', ref, 's3']].map(([n, v, c]) =>
+        `<div class="gdd-row"><span>${n}</span><i class="${c}" style="--w:${clamp(v / max, 0.02, 1) * 100}%"></i><b>${isFinite(v) ? fmt(v) + ' нед.' : '—'}</b></div>`).join('');
+      set(el, 'lab-gdd-d', fmt(Math.max(0, Math.min(T, 30) - 10)));
+      set(el, 'lab-gdd-w', isFinite(wk) ? `≈ ${fmt(wk)} нед.` : 'рост стоит');
+      set(el, 'lab-gdd-r', isFinite(wk) ? (wk > ref ? `в ${fmt(wk / ref)} раза медленнее` : `в ${fmt(ref / wk)} раза быстрее`) : '—');
+    };
+    h.bindRange(el, 'lab-gdd-t', v => `${fmt(v)} °C`, upd);
+    upd(17);
   });
 
   /* @use agro */
@@ -381,6 +478,43 @@
     h.bindPick(el, 'lab-per-s', v => { sub = v; upd(); });
     const db = $('#lab-per-d', el);
     db.addEventListener('click', () => { drain = !drain; db.setAttribute('aria-pressed', String(drain)); upd(); });
+    upd();
+  });
+
+  /* @use agro */
+  register('roots', el => {
+    el.innerHTML = h.head('Черенок в стакане', 'Модель укоренения: корешки появляются из погружённых узлов и растут примерно на полсантиметра в день в тепле.', true) +
+      `<div class="lab-grid wide-stage">
+        <div class="lab-stage"><svg class="roots-svg" id="lab-rt-svg" viewBox="0 0 220 260" role="img" aria-label="Черенок базилика в стакане с водой"></svg></div>
+        <div class="lab-controls">${h.rangeHtml('lab-rt-d', 'День', 0, 21, 1, 10)}${h.segHtml('lab-rt-t', 'Комната', [['18', '18 °C'], ['22', '22 °C'], ['26', '26 °C']], '22')}</div>
+      </div>` + h.readHtml([['Длина корней', 'lab-rt-l'], ['Что делать', 'lab-rt-v', 'is-wide']]);
+    const svg = $('#lab-rt-svg', el);
+    let day = 10, temp = 22;
+    const ON = { 18: agro.rootsOnset(18), 22: agro.rootsOnset(22), 26: agro.rootsOnset(26) }, RATE = { 18: agro.rootsRate(18), 22: agro.rootsRate(22), 26: agro.rootsRate(26) };
+    const ROOTS = [[-1, 0.9, 0], [1, 1, 1], [-1, 0.7, 2], [1, 0.8, 0.5], [-1, 0.6, 1.5], [1, 0.65, 2.5]];
+    const leaf = (x, y, a, s) => `<use href="#pl-leaf" class="pl-leaf" style="fill:url(#pl-grad)" transform="translate(${x} ${y}) rotate(${a}) scale(${s})"/>`;
+    const upd = () => {
+      const L = Math.max(0, (day - ON[temp]) * RATE[temp]);
+      let s = `<path class="rt-glass" d="M52 60 L60 246 Q61 252 68 252 H152 Q159 252 160 246 L168 60"/>`;
+      s += `<path class="rt-water" d="M55.6 120 L60.6 245 Q61.4 249.5 68 249.5 H152 Q158.6 249.5 159.4 245 L164.4 120 Z"/>`;
+      s += `<path class="rt-stem" d="M110 236 C 108 180 112 120 110 34"/>`;
+      [[176, 1], [206, 0.8]].forEach(([y, k]) => {
+        s += `<circle class="rt-node" cx="110" cy="${y}" r="3.2"/>`;
+        ROOTS.forEach(([side, len, lag], i) => {
+          const l = Math.max(0, L - lag * 0.25) * len * k * 11;
+          if (l < 1) return;
+          const cx = 110 + side * (6 + i * 1.5), ex = 110 + side * Math.min(44, l * 0.55 + 6), ey = y + Math.min(250 - y - 4, l * 0.85);
+          s += `<path class="rt-root" d="M110 ${y} Q ${r1(cx + side * l * 0.3)} ${r1(y + l * 0.2)} ${r1(ex)} ${r1(ey)}"/>`;
+        });
+      });
+      s += leaf(110, 96, -58, 0.42) + leaf(110, 96, 58, 0.42) + leaf(111, 64, -30, 0.3) + leaf(111, 64, 30, 0.3) + leaf(110, 38, -8, 0.18) + leaf(110, 38, 12, 0.16);
+      s += `<line class="rt-wl" x1="56" x2="164" y1="120" y2="120"/>`;
+      svg.innerHTML = s;
+      set(el, 'lab-rt-l', L > 0 ? `${fmt(L)} см` : 'пока нет');
+      set(el, 'lab-rt-v', day < ON[temp] - 2 ? 'Ждите: у основания идёт перестройка клеток, снаружи ничего не видно. Меняйте воду раз в 2–3 дня.' : L < 0.3 ? 'Вот-вот: в узлах набухают белые бугорки — зачатки корней.' : L < 2 ? 'Корешки растут. Сажать рано: подождите, пока будет 2–5 см.' : L <= 5 ? 'Пора сажать в грунт! 3–4 дня держите в тени под пакетом.' : 'Корни длинные и начинают путаться: сажайте, аккуратно расправив их.');
+    };
+    h.bindRange(el, 'lab-rt-d', v => `${v}-й`, v => { day = v; upd(); });
+    h.bindPick(el, 'lab-rt-t', v => { temp = +v; upd(); });
     upd();
   });
 })();

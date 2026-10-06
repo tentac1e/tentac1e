@@ -12,18 +12,18 @@
 - `src/pages/sorta/1-katalog.html` · #каталог — Каталог сортов · 112 стр.<br>глубже: Химотипы `#deep-himotipy`, Антоцианы `#deep-antociany`
 - `src/pages/sorta/2-podbor.html` · #подбор — Подбор сорта · 54 стр.<br>глубже: Генотип × среда `#deep-fenotip`
 - `src/pages/sorta/3-vybor.html` · #выбор — Как выбрать семена · 88 стр.<br>глубже: Устойчивость `#deep-ustoychivost`
+- `src/pages/sorta/4-semena.html` · #семена — Свои семена · 101 стр.<br>модели: `seedlife`; глубже: Генетика семян `#deep-genetika`, Старение семян `#deep-starenie-semyan`
 - `src/pages/sorta/_foot.html` · подвал главы · 3 стр.
 
 ### Посадка — `/посадка` (`posadka.html`)
 - `src/pages/posadka/_head.html` · обложка, вкладки · 14 стр.
 - `src/pages/posadka/1-mesto.html` · #место — Где растить · 83 стр.<br>модели: `window`; глубже: Солнце в окне `#deep-okno`
-- `src/pages/posadka/2-posev.html` · #посев — Посев и рассада · 98 стр.<br>модели: `germ`; глубже: Прорастание `#deep-prorastanie`
-- `src/pages/posadka/3-magazin.html` · #магазин — Базилик из магазина · 78 стр.<br>модели: `shade`; глубже: Теснота и тень `#deep-ten`
-- `src/pages/posadka/4-gorshok.html` · #горшок — Горшок и грунт · 104 стр.<br>модели: `perched`; глубже: Подвешенная вода `#deep-voda-v-gorshke`
+- `src/pages/posadka/2-sroki.html` · #сроки — Сроки посадки · 162 стр.<br>модели: `daylen`, `gdd`; глубже: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
+- `src/pages/posadka/3-posev.html` · #посев — Посев и рассада · 98 стр.<br>модели: `germ`; глубже: Прорастание `#deep-prorastanie`
+- `src/pages/posadka/4-magazin.html` · #магазин — Базилик из магазина · 78 стр.<br>модели: `shade`; глубже: Теснота и тень `#deep-ten`
+- `src/pages/posadka/5-gorshok.html` · #горшок — Горшок и грунт · 104 стр.<br>модели: `perched`; глубже: Подвешенная вода `#deep-voda-v-gorshke`
+- `src/pages/posadka/6-cherenki.html` · #черенки — Черенкование · 72 стр.<br>модели: `roots`; глубже: Придаточные корни `#deep-korni`
 - `src/pages/posadka/_foot.html` · подвал главы · 3 стр.
-
-### Календарь — `/календарь` (`kalendar.html`)
-- `src/pages/kalendar.html` · вся глава · 173 стр.<br>модели: `daylen`, `gdd`; глубже: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
 
 ### Уход — `/уход` (`uhod.html`)
 - `src/pages/uhod/_head.html` · обложка, вкладки · 14 стр.
@@ -44,34 +44,23 @@
 - `src/pages/udobreniya/6-gidro.html` · #гидропоника — Гидропоника: EC и pH · 85 стр.<br>модели: `o2`; глубже: Кислород и хелаты `#deep-kislorod`
 - `src/pages/udobreniya/_foot.html` · подвал главы · 3 стр.
 
-### Прищипывание — `/прищипывание` (`formirovka.html`)
+### Прищипка и сбор — `/прищипывание` (`formirovka.html`)
 - `src/pages/formirovka/_head.html` · обложка, вкладки · 14 стр.
 - `src/pages/formirovka/1-osnovy.html` · #основы — Как прищипывать · 101 стр.<br>модели: `auxin`; глубже: Апикальное доминирование `#deep-auksin`
 - `src/pages/formirovka/2-trenazher.html` · #тренажер — Тренажёр прищипывания · 61 стр.<br>модели: `branch`; глубже: Геометрия куста `#deep-2n`
-- `src/pages/formirovka/3-cvetenie.html` · #цветение — Цветение и омоложение · 70 стр.<br>глубже: Флориген `#deep-florigen`
+- `src/pages/formirovka/3-sbor.html` · #сбор — Сбор урожая · 74 стр.<br>модели: `diurnal`; глубже: Суточный ритм аромата `#deep-sutki`
+- `src/pages/formirovka/4-cvetenie.html` · #цветение — Цветение и омоложение · 70 стр.<br>глубже: Флориген `#deep-florigen`
 - `src/pages/formirovka/_foot.html` · подвал главы · 3 стр.
 
-### Урожай — `/урожай` (`urozhay.html`)
-- `src/pages/urozhay/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/urozhay/1-sbor.html` · #сбор — Правила сбора · 73 стр.<br>модели: `diurnal`; глубже: Суточный ритм аромата `#deep-sutki`
-- `src/pages/urozhay/2-hranenie.html` · #хранение — Хранение и заготовки · 58 стр.<br>модели: `storage`; глубже: Холод и потемнение `#deep-holod`
-- `src/pages/urozhay/3-recepty.html` · #рецепты — Рецепты · 47 стр.<br>модели: `pesto`; глубже: Химия песто `#deep-pesto`
-- `src/pages/urozhay/_foot.html` · подвал главы · 3 стр.
-
-### Вкус и аромат — `/вкус` (`vkus.html`)
+### Вкус и кухня — `/вкус` (`vkus.html`)
 - `src/pages/vkus/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/vkus/1-aromat.html` · #аромат — Откуда аромат · 77 стр.<br>модели: `trichome`, `pathway`; глубже: Запах разреза `#deep-geksenal`
+- `src/pages/vkus/1-aromat.html` · #аромат — Откуда аромат · 121 стр.<br>модели: `trichome`, `pathway`, `chemotype`; глубже: Запах разреза `#deep-geksenal`, Химотип и среда `#deep-himotip-sreda`
 - `src/pages/vkus/2-molekuly.html` · #молекулы — Молекулы аромата · 43 стр.<br>модели: `molecules`; глубже: Как работает нос `#deep-nos`
-- `src/pages/vkus/3-himotipy.html` · #химотипы — Сорта и химия · 47 стр.<br>модели: `chemotype`; глубже: Химотип и среда `#deep-himotip-sreda`
-- `src/pages/vkus/4-kuhnya.html` · #кухня — Физика кухни · 63 стр.<br>модели: `heat`, `anthocyanin`; глубже: Летучесть `#deep-letuchest`
-- `src/pages/vkus/5-sochetaniya.html` · #сочетания — Сочетания · 50 стр.<br>модели: `pairing`; глубже: Гипотеза пищевых пар `#deep-pary`
+- `src/pages/vkus/3-kuhnya.html` · #кухня — Физика кухни · 63 стр.<br>модели: `heat`, `anthocyanin`; глубже: Летучесть `#deep-letuchest`
+- `src/pages/vkus/4-sochetaniya.html` · #сочетания — Сочетания · 50 стр.<br>модели: `pairing`; глубже: Гипотеза пищевых пар `#deep-pary`
+- `src/pages/vkus/5-hranenie.html` · #хранение — Хранение и заготовки · 58 стр.<br>модели: `storage`; глубже: Холод и потемнение `#deep-holod`
+- `src/pages/vkus/6-recepty.html` · #рецепты — Рецепты · 47 стр.<br>модели: `pesto`; глубже: Химия песто `#deep-pesto`
 - `src/pages/vkus/_foot.html` · подвал главы · 3 стр.
-
-### Размножение — `/размножение` (`razmnozhenie.html`)
-- `src/pages/razmnozhenie/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/razmnozhenie/1-cherenki.html` · #черенки — Черенкование · 71 стр.<br>модели: `roots`; глубже: Придаточные корни `#deep-korni`
-- `src/pages/razmnozhenie/2-semena.html` · #семена — Свои семена · 100 стр.<br>модели: `seedlife`; глубже: Генетика семян `#deep-genetika`, Старение семян `#deep-starenie-semyan`
-- `src/pages/razmnozhenie/_foot.html` · подвал главы · 3 стр.
 
 ### Проблемы — `/проблемы` (`problemy.html`)
 - `src/pages/problemy/_head.html` · обложка, вкладки · 14 стр.
@@ -99,12 +88,14 @@
 
 | модель | глава | заголовок | файлы |
 |---|---|---|---|
+| `seedlife` | Сорта | Срок жизни семян | `src/labs/sorta/seedlife.js` · `src/labs/sorta/seedlife.css` |
 | `window` | Посадка | Солнце в полдень | `src/labs/posadka/window.js` · `src/labs/posadka/window.css` |
+| `daylen` | Посадка | Длина дня за год | `src/labs/posadka/daylen.js` |
+| `gdd` | Посадка | Сколько ждать урожая | `src/labs/posadka/gdd.js` · `src/labs/posadka/gdd.css` |
 | `germ` | Посадка | Сколько ждать всходов | `src/labs/posadka/germ.js` · `src/labs/posadka/germ.css` |
 | `shade` | Посадка | Тень соседей | `src/labs/posadka/shade.js` · `src/labs/posadka/shade.css` |
 | `perched` | Посадка | Где стоит вода в горшке | `src/labs/posadka/perched.js` · `src/labs/posadka/perched.css` |
-| `daylen` | Календарь | Длина дня за год | `src/labs/kalendar/daylen.js` |
-| `gdd` | Календарь | Сколько ждать урожая | `src/labs/kalendar/gdd.js` · `src/labs/kalendar/gdd.css` |
+| `roots` | Посадка | Черенок в стакане | `src/labs/posadka/roots.js` · `src/labs/posadka/roots.css` |
 | `spectrum` | Уход | Что поглощает лист | `src/labs/uhod/spectrum.js` |
 | `lamp` | Уход | Лампа и расстояние | `src/labs/uhod/lamp.js` |
 | `vpd` | Уход | VPD: воздух глазами листа | `src/labs/uhod/vpd.js` · `src/labs/uhod/vpd.css` |
@@ -118,20 +109,18 @@
 | `oxide` | Удобрения | Пересчёт оксидов в элементы | `src/labs/udobreniya/oxide.js` · `src/labs/udobreniya/oxide.css` |
 | `ec` | Удобрения | EC, ppm и осмос | `src/labs/udobreniya/ec.js` · `src/labs/udobreniya/ec.css` |
 | `o2` | Удобрения | Кислород против дыхания корней | `src/labs/udobreniya/o2.js` |
-| `auxin` | Прищипывание | Что происходит после среза | `src/labs/formirovka/auxin.js` · `src/labs/formirovka/auxin.css` |
-| `branch` | Прищипывание | Куст после n прищипываний | `src/labs/formirovka/branch.js` |
-| `diurnal` | Урожай | Летний день глазами листа | `src/labs/urozhay/diurnal.js` |
-| `storage` | Урожай | Сколько живёт срезанный базилик | `src/labs/urozhay/storage.js` |
-| `pesto` | Урожай | Песто-лаборатория | `src/labs/urozhay/pesto.js` · `src/labs/urozhay/pesto.css` |
-| `trichome` | Вкус и аромат | Лист под микроскопом | `src/labs/vkus/trichome.js` · `src/labs/vkus/trichome.css` |
-| `pathway` | Вкус и аромат | Два конвейера аромата | `src/labs/vkus/pathway.js` · `src/labs/vkus/pathway.css` |
-| `molecules` | Вкус и аромат |  | `src/labs/vkus/molecules.js` · `src/labs/vkus/molecules.css` |
-| `chemotype` | Вкус и аромат | Химический отпечаток сорта | `src/labs/vkus/chemotype.js` · `src/labs/vkus/chemotype.css` |
-| `heat` | Вкус и аромат | Когда класть базилик | `src/labs/vkus/heat.js` · `src/labs/vkus/heat.css` |
-| `anthocyanin` | Вкус и аромат | Фиолетовый базилик и pH | `src/labs/vkus/anthocyanin.js` · `src/labs/vkus/anthocyanin.css` |
-| `pairing` | Вкус и аромат | Лаборатория сочетаний | `src/labs/vkus/pairing.js` · `src/labs/vkus/pairing.css` |
-| `roots` | Размножение | Черенок в стакане | `src/labs/razmnozhenie/roots.js` · `src/labs/razmnozhenie/roots.css` |
-| `seedlife` | Размножение | Срок жизни семян | `src/labs/razmnozhenie/seedlife.js` · `src/labs/razmnozhenie/seedlife.css` |
+| `auxin` | Прищипка и сбор | Что происходит после среза | `src/labs/formirovka/auxin.js` · `src/labs/formirovka/auxin.css` |
+| `branch` | Прищипка и сбор | Куст после n прищипываний | `src/labs/formirovka/branch.js` |
+| `diurnal` | Прищипка и сбор | Летний день глазами листа | `src/labs/formirovka/diurnal.js` |
+| `trichome` | Вкус и кухня | Лист под микроскопом | `src/labs/vkus/trichome.js` · `src/labs/vkus/trichome.css` |
+| `pathway` | Вкус и кухня | Два конвейера аромата | `src/labs/vkus/pathway.js` · `src/labs/vkus/pathway.css` |
+| `chemotype` | Вкус и кухня | Химический отпечаток сорта | `src/labs/vkus/chemotype.js` · `src/labs/vkus/chemotype.css` |
+| `molecules` | Вкус и кухня |  | `src/labs/vkus/molecules.js` · `src/labs/vkus/molecules.css` |
+| `heat` | Вкус и кухня | Когда класть базилик | `src/labs/vkus/heat.js` · `src/labs/vkus/heat.css` |
+| `anthocyanin` | Вкус и кухня | Фиолетовый базилик и pH | `src/labs/vkus/anthocyanin.js` · `src/labs/vkus/anthocyanin.css` |
+| `pairing` | Вкус и кухня | Лаборатория сочетаний | `src/labs/vkus/pairing.js` · `src/labs/vkus/pairing.css` |
+| `storage` | Вкус и кухня | Сколько живёт срезанный базилик | `src/labs/vkus/storage.js` |
+| `pesto` | Вкус и кухня | Песто-лаборатория | `src/labs/vkus/pesto.js` · `src/labs/vkus/pesto.css` |
 | `pigment` | Проблемы | Смешайте пигменты | `src/labs/problemy/pigment.js` · `src/labs/problemy/pigment.css` |
 | `dm` | Проблемы | Риск ложной мучнистой росы | `src/labs/problemy/dm.js` · `src/labs/problemy/dm.css` |
 | `aphid` | Проблемы | Колония из одной тли | `src/labs/problemy/aphid.js` · `src/labs/problemy/aphid.css` |
@@ -160,13 +149,12 @@
 Иллюстрации на страницах — элементы `data-ill="художник:вариант"`; художники регистрируются через `illustrate()` в `src/labs/<глава>/_shared.js` и рисуются, когда элемент подходит к экрану. Все рисунки главы на одном листе: `node tests/gallery.js <глава>`.
 
 - `src/labs/formirovka/_shared.js`: `pinch`
-- `src/labs/posadka/_shared.js`: `sow`, `shop`, `place`
+- `src/labs/posadka/_shared.js`: `sow`, `shop`, `place`, `cut`
 - `src/labs/problemy/_shared.js`: `sym`, `dis`, `pest`
-- `src/labs/razmnozhenie/_shared.js`: `cut`, `seed`
-- `src/labs/sorta/_shared.js`: `sort`, `vtype`
+- `src/labs/sorta/_shared.js`: `sort`, `vtype`, `seed`
 - `src/labs/udobreniya/_shared.js`: `def`
 - `src/labs/uhod/_shared.js`: `water`
-- `src/labs/urozhay/_shared.js`: `store`
+- `src/labs/vkus/_shared.js`: `store`
 
 ## Скрипты (src/js/)
 
@@ -202,7 +190,7 @@
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
 - `src/js/app/22-garden.js` (132 стр.): GARDEN_KEY
 - `src/js/app/22-install.js` (96 стр.): initInstall
-- `src/js/app/22-reading-pos.js` (465 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/22-reading-pos.js` (488 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (24 стр.)
 
 **science.js**
@@ -226,7 +214,7 @@
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
 
 **data.js**
-- `src/js/data/00-nav.js` (61 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
+- `src/js/data/00-nav.js` (58 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
 - `src/js/data/01-varieties.js` (146 стр.): VARIETIES, VARIETY_TYPES, QUIZ
 - `src/js/data/02-places.js` (71 стр.): PLACES, PRESETS, SOIL_RECIPES
 - `src/js/data/03-nutrients.js` (127 стр.): ELEMENTS, STAGES, DOSE, NPK_PRESETS

@@ -148,8 +148,10 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
              active: document.querySelector('.panel.is-active').id, tools: d.querySelector('.toc-tools').offsetParent !== null,
              expanded: mine.querySelector('.toc-tog').getAttribute('aria-expanded'), shut: [...d.querySelectorAll('.toc-item:not(.is-open) .toc-sub ul')].every(u => getComputedStyle(u).visibility === 'hidden') };
   });
-  ok(toc.n === 13 && toc.open.join() === 'udobreniya' && toc.page === 'page' && toc.expanded === 'true' && toc.shut && !toc.tools, `contents: ${toc.n} rows, open ${toc.open}, the others folded, chapters shown`);
+  ok(toc.n === 10 && toc.open.join() === 'udobreniya' && toc.page === 'page' && toc.expanded === 'true' && toc.shut && !toc.tools, `contents: ${toc.n} rows, open ${toc.open}, the others folded, chapters shown`);
   ok(toc.subs.join('|') === toc.tabs.join('|') && toc.cur === toc.active, `its sections are the chapter's tabs (${toc.subs.length}), «${toc.cur}» marked`);
+  const bare = await page.evaluate(() => { const d = document.getElementById('sheet-toc'); return { digits: [...d.querySelectorAll('.toc-chapters .toc-row')].map(r => { const c = r.cloneNode(true); c.querySelectorAll('.garden-badge').forEach(x => x.remove()); return c.textContent.replace(/\s+/g, ' ').trim(); }).filter(x => /\d/.test(x)), btn: (document.querySelector('.toc-btn-p') || {}).textContent || '' }; });
+  ok(!bare.digits.length && !/\d/.test(bare.btn), `the contents have no numbers: rows ${JSON.stringify(bare.digits)}, the header button «${bare.btn.trim()}»`);
   // another chapter opens into its sections; the switch shows the tools
   await page.tap('#sheet-toc .toc-item[data-toc="vkus"] .toc-tog');
   await page.waitForTimeout(450);
@@ -286,7 +288,7 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   await d.click('.topbar .toc-btn');
   await d.waitForTimeout(400);
   const drop = await d.evaluate(() => { const s = document.getElementById('sheet-toc'), r = s.getBoundingClientRect(); return { open: s.open, x: Math.round(r.left), top: Math.round(r.top), w: Math.round(r.width), both: ['.toc-chapters', '.toc-tools'].every(q => s.querySelector(q).offsetParent !== null), exp: document.querySelector('.topbar .toc-btn').getAttribute('aria-expanded') }; });
-  ok(/Оглавление: 4 Уход/.test(btn.text) && drop.open && drop.exp === 'true' && Math.abs(drop.x - btn.x) <= 2 && drop.top > btn.bottom && drop.top - btn.bottom < 40 && drop.both, `contents drop from «${btn.text}» ` + JSON.stringify(drop));
+  ok(/^Оглавление: Уход$/.test(btn.text.replace(/\s+/g, ' ').trim()) && drop.open && drop.exp === 'true' && Math.abs(drop.x - btn.x) <= 2 && drop.top > btn.bottom && drop.top - btn.bottom < 40 && drop.both, `contents drop from «${btn.text}» ` + JSON.stringify(drop));
   await d.keyboard.press('Escape');
   // the sheet closes with its animation: waited for, not timed (a busy machine takes longer)
   const shut = () => !document.getElementById('sheet-toc').open && document.querySelector('.topbar .toc-btn').getAttribute('aria-expanded') === 'false';

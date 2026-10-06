@@ -118,7 +118,7 @@ function turned(A, B) {
   }
 
   // the «Заглянуть» sheet goes down after the finger that pulls its head; the page under it stays
-  await page.goto(fileUrl('urozhay.html') + '#' + encodeURIComponent('рецепты'), { waitUntil: 'load' });
+  await page.goto(fileUrl('vkus.html') + '#' + encodeURIComponent('рецепты'), { waitUntil: 'load' });
   await page.waitForTimeout(1000);
   await page.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
   await page.waitForTimeout(300);
@@ -238,7 +238,7 @@ function turned(A, B) {
   const fp = await fc.newPage();
   watch(fp, errs);
   const rings = [];
-  for (const [file, sel] of [['kalendar.html', '.w-arc'], ['formirovka.html#тренажер', '.s-node']]) {
+  for (const [file, sel] of [['posadka.html#сроки', '.w-arc'], ['formirovka.html#тренажер', '.s-node']]) {
     await fp.goto(fileUrl(file), { waitUntil: 'load' });
     await fp.waitForTimeout(800);
     await fp.evaluate(css => { const st = document.createElement('style'); st.textContent = css; document.head.prepend(st); }, SAFARI);
@@ -263,7 +263,7 @@ function turned(A, B) {
   ok(!rings.includes('LIT') && rings.some(x => / focused/.test(x)), `a tap on the season wheel and on the trainer leaves no focus frame: ${rings.filter(x => x !== 'LIT').join('; ')}`);
   await fc.close();
   const kp = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-  await kp.goto(fileUrl('kalendar.html'), { waitUntil: 'load' });
+  await kp.goto(fileUrl('posadka.html#сроки'), { waitUntil: 'load' });
   await kp.waitForTimeout(500);
   await kp.keyboard.press('Tab');
   const kring = await kp.evaluate(() => { const a = document.activeElement; return a ? `${a.className || a.tagName} ${getComputedStyle(a).outlineStyle} ${getComputedStyle(a).outlineWidth}` : ''; });

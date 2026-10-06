@@ -871,7 +871,7 @@
     const btn = $('.topbar .toc-btn');
     if (!btn) return;
     const ch = chapterById(id);
-    const place = ch ? `<span class="toc-btn-n">${ch.num}</span> <span class="toc-btn-t">${esc(ch.short || ch.title)}</span>` : `<span class="toc-btn-t">${id === 'moy' ? 'Мой базилик' : 'Оглавление'}</span>`;
+    const place = ch ? `<span class="toc-btn-t">${esc(ch.short || ch.title)}</span>` : `<span class="toc-btn-t">${id === 'moy' ? 'Мой базилик' : 'Оглавление'}</span>`;
     const box = $('.toc-btn-p', btn);
     if (box && box.innerHTML !== place) box.innerHTML = place;
   }
@@ -1719,8 +1719,8 @@
       { t: 'Всходы', s: '5–10 дней', plant: 'seedling', hash: 'posadka-posev' },
       { t: 'Рассада', s: '3–6 недель', plant: 'transplant', hash: 'posadka-posev' },
       { t: 'Прищипка', s: '5–6 недель', plant: 'growth', hash: 'formirovka-osnovy' },
-      { t: 'Урожай', s: 'с 6–8 недель', plant: 'harvest', hash: 'urozhay-sbor' },
-      { t: 'Песто', s: 'в любой день', art: 'art-urozhay', hash: 'urozhay-recepty' }
+      { t: 'Урожай', s: 'с 6–8 недель', plant: 'harvest', hash: 'formirovka-sbor' },
+      { t: 'Песто', s: 'в любой день', art: 'art-urozhay', hash: 'vkus-recepty' }
     ];
     const journey = $('#journey');
     if (journey) journey.innerHTML = steps.map(s => `
@@ -4172,6 +4172,29 @@
   /* sentence. Going back there is like finding your place in a book — at the start of the sentence, with the lines */
   /* before it in sight, whatever the width of the screen now.                                                       */
   const POS_KEY = 'basil-pos';
+  // a chapter merged into others (MOVED in scripts/build.py): its reading place and «Продолжить» move with its tabs.
+  // A place kept in the chapter it moves to stays, if it is newer
+  (function moveMerged() {
+    const M = PAGES && PAGES.moved;
+    if (!M || PEEK) return;
+    const dest = (old, panel) => M[old][panel || ''] || M[old][''];
+    const last = store.get('basil-last', null);
+    if (last && M[last.view]) {
+      const [view, panel] = dest(last.view, last.panel);
+      store.set('basil-last', { view, panel, sub: '' });
+    }
+    const all = store.get(POS_KEY, {}) || {};
+    let moved = false;
+    for (const old in M) {
+      const p = all[old];
+      if (!p) continue;
+      const [view, panel] = dest(old, p.panel);
+      if (!all[view] || (all[view].t || 0) < (p.t || 0)) all[view] = Object.assign({}, p, { panel });
+      delete all[old];
+      moved = true;
+    }
+    if (moved) store.set(POS_KEY, all);
+  })();
   function readPos(view) {
     const all = store.get(POS_KEY, {}) || {};
     const p = all[view];

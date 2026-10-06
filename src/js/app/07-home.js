@@ -44,8 +44,8 @@
       { t: 'Всходы', s: '5–10 дней', plant: 'seedling', hash: 'posadka-posev' },
       { t: 'Рассада', s: '3–6 недель', plant: 'transplant', hash: 'posadka-posev' },
       { t: 'Прищипка', s: '5–6 недель', plant: 'growth', hash: 'formirovka-osnovy' },
-      { t: 'Урожай', s: 'с 6–8 недель', plant: 'harvest', hash: 'urozhay-sbor' },
-      { t: 'Песто', s: 'в любой день', art: 'art-urozhay', hash: 'urozhay-recepty' }
+      { t: 'Урожай', s: 'с 6–8 недель', plant: 'harvest', hash: 'formirovka-sbor' },
+      { t: 'Песто', s: 'в любой день', art: 'art-urozhay', hash: 'vkus-recepty' }
     ];
     const journey = $('#journey');
     if (journey) journey.innerHTML = steps.map(s => `

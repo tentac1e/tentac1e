@@ -11,7 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { ROOT, OUT, playwright, serve, ok, done, watch, SLUGS } = require('./lib');
+const { ROOT, OUT, playwright, serve, ok, done, watch, SLUGS, MOVED } = require('./lib');
 
 const SITE = path.join(ROOT, 'dist/site');
 const COPY = path.join(OUT, 'pwa-site');   // served and changed by the test: dist/site stays as built
@@ -117,6 +117,11 @@ async function until(page, fn, arg, ms = 30000) {
       });
       ok(res && res.ok() && r.h1.trim() && r.styled && r.app && r.font && r.sw, `без сети /${slug}: «${r.h1.trim().slice(0, 40)}»${r.styled ? '' : ' БЕЗ СТИЛЕЙ'}${r.app ? '' : ' БЕЗ СКРИПТОВ'}${r.font ? '' : ' без Manrope'}`);
     }
+    // the address of a chapter merged into others works without the network too: its page is kept and sends on
+    for (const slug of Object.values(MOVED)) ok(keep.includes(slug), `/${slug} (глава слита с другими) в списке работника`);
+    await page.goto(`${base}/${encodeURI('урожай')}#${encodeURI('рецепты')}`, { waitUntil: 'load' }).catch(() => null);
+    await page.waitForTimeout(1200);
+    ok(decodeURI(page.url().replace(base, '')) === '/вкус#рецепты', `без сети старый адрес /урожай#рецепты → ${decodeURI(page.url().replace(base, ''))}`);
     // a chapter's models come from the saved copy
     await page.goto(`${base}/${encodeURI('уход')}`, { waitUntil: 'load' });
     const lab = await page.evaluate(() => {
@@ -145,14 +150,14 @@ async function until(page, fn, arg, ms = 30000) {
     const wx = await page.evaluate(() => fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&daily=temperature_2m_min').then(() => 'ответ', () => 'нет сети'));
     ok(wx === 'нет сети', `Open-Meteo без сети: ${wx}`);
     // «Заглянуть» without the network: the frame's page (?peek=1) is the saved copy of its chapter
-    await page.goto(`${base}/${encodeURI('урожай')}#${encodeURI('рецепты')}`, { waitUntil: 'load' });
+    await page.goto(`${base}/${encodeURI('вкус')}#${encodeURI('рецепты')}`, { waitUntil: 'load' });
     await page.waitForTimeout(800);
-    await page.evaluate(() => { const c = document.getElementById('r-pistou'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
+    await page.evaluate(() => { const c = document.getElementById('r-bruschetta'); c.open = true; c.querySelector('.rc-sci a').scrollIntoView({ block: 'center', behavior: 'instant' }); });
     await page.waitForTimeout(300);
-    await page.click('#r-pistou .rc-sci a');
+    await page.click('#r-bruschetta .rc-sci a');
     const peeked = await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).then(() => true, () => false);
     const pf = page.frames().find(f => /[?&]peek=1/.test(f.url()));
-    const shown = pf ? await pf.evaluate(() => { const t = document.querySelector('[data-peek]'); return !!t && t.id === 'deep-letuchest' && t.offsetHeight > 200; }).catch(() => false) : false;
+    const shown = pf ? await pf.evaluate(() => { const t = document.querySelector('[data-peek]'); return !!t && t.id === 'deep-osmos' && t.offsetHeight > 200; }).catch(() => false) : false;
     ok(peeked && shown, `без сети шторка «Заглянуть» показывает разворот из сохранённой копии: ${pf ? decodeURI(pf.url()).replace(base, '') : 'нет рамки'}`);
     await ctx.setOffline(false);
 

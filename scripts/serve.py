@@ -23,9 +23,12 @@ from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build import FILE, SLUG  # noqa: E402
+from build import FILE, MOVED, SLUG  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
+# the pages of the chapters merged into others (MOVED) keep their addresses, as in .htaccess
+SLUG = dict(SLUG, **{view: m['slug'] for view, m in MOVED.items()})
+FILE = dict(FILE, **{view: m['file'] for view, m in MOVED.items()})
 BY_SLUG = {slug: FILE[view] for view, slug in SLUG.items() if slug}
 
 

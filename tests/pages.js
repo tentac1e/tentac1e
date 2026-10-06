@@ -158,36 +158,50 @@ function codeMap() {
   const el = await page.evaluate(() => (document.querySelector('.el-detail') || {}).textContent || '');
   ok(/udobreniya\.html#%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D1%8B$/.test(page.url()) && /Молибден/.test(el), 'element action from another page ' + at());
 
-  // recipe science link to another chapter
-  await page.goto(fileUrl('urozhay.html#рецепты'), { waitUntil: 'load' });
+  // recipe science link to another tab of its chapter (Рецепты → Физика кухни): the «Заглянуть» sheet (tests/peek.js);
+  // «Открыть на странице» switches the tab, the block open
+  await page.goto(fileUrl('vkus.html#рецепты'), { waitUntil: 'load' });
   await page.waitForTimeout(600);
   const link = await page.evaluate(() => { const a = document.querySelector('#r-pistou .rc-sci a'); return { href: a.getAttribute('href'), text: a.textContent.trim() }; });
-  ok(link.href === 'vkus.html#deep-letuchest', 'recipe link ' + JSON.stringify(link));
-  // it opens in the «Заглянуть» sheet (tests/peek.js); «Открыть в главе» goes there, the block open
+  ok(link.href === '#deep-letuchest', 'recipe link ' + JSON.stringify(link));
   await page.evaluate(() => { document.getElementById('r-pistou').open = true; });
   await page.click('#r-pistou .rc-sci a');
   await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).catch(() => {});
+  await page.click('#peek-go');
+  await page.waitForTimeout(900);
+  ok(await page.evaluate(() => document.getElementById('deep-letuchest').open && document.querySelector('.panel.is-active').id === 'кухня'), 'a deep link to another tab opens it and the block');
+  // a deep link into another chapter (Посадка · Сроки → Прищипка и сбор): the sheet, then «Открыть в главе» goes there
+  await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('сроки'), { waitUntil: 'load' });
+  await page.waitForTimeout(600);
+  await page.evaluate(() => { const a = document.querySelector('.panel.is-active a[href="formirovka.html#deep-florigen"]'); a.closest('details').open = true; a.scrollIntoView({ block: 'center', behavior: 'instant' }); });
+  await page.waitForTimeout(300);
+  await page.click('.panel.is-active a[href="formirovka.html#deep-florigen"]');
+  await page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 10000 }).catch(() => {});
   await Promise.all([page.waitForNavigation(), page.click('#peek-go')]);
   await page.waitForTimeout(900);
-  ok(await page.evaluate(() => document.getElementById('deep-letuchest').open) && /vkus\.html#deep-letuchest$/.test(page.url()), 'cross-page deep link opens the block');
+  ok(await page.evaluate(() => document.getElementById('deep-florigen').open) && /formirovka\.html#deep-florigen$/.test(page.url()), 'cross-page deep link opens the block');
 
   // models: the Flavor chapter shows models in its tabs, so its files come with the page — the drawing libraries it
   // lists and its own file, each once, in that order, fingerprinted — and a model mounts when it scrolls near
   const tagsOf = () => page.evaluate(() => ({ tags: [...document.querySelectorAll('script[src*="labs/"]')].map(s => s.getAttribute('src').replace(/^.*\/js\//, '')), mounted: document.querySelectorAll('.lab-tool[data-ready]').length }));
   const want = v => page.evaluate(v => window.BASIL_PAGES.v.deps[v].map(x => 'lib-' + x).concat(v), v);
   const listed = (tags, w) => tags.length === w.length && tags.every((t, i) => new RegExp('^labs/' + w[i] + '\\.js\\?v=[0-9a-f]{8}$').test(t));
+  await page.goto(fileUrl('vkus.html'), { waitUntil: 'load' });
+  await page.waitForTimeout(600);
   await page.evaluate(() => { document.querySelector('.panel.is-active .lab-tool').scrollIntoView(); });
   await page.waitForTimeout(1200);
   const vk = await tagsOf();
   ok(listed(vk.tags, await want('vkus')) && vk.mounted > 0, 'a chapter with models on show brings its files with it ' + JSON.stringify(vk));
-  // the Calendar's models are inside «Глубже»: nothing is fetched until one is opened and comes near
-  await page.goto(fileUrl('kalendar.html'), { waitUntil: 'load' });
+  // a model inside a closed «Глубже» is built only once the dive is opened and comes near (the Calendar's day length,
+  // now in Посадка · Сроки; every chapter with models brings its files with the page)
+  await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('сроки'), { waitUntil: 'load' });
   await page.waitForTimeout(600);
-  const calBefore = await tagsOf();
-  await page.evaluate(() => { const d = document.querySelector('details.deep .lab-tool').closest('details'); d.open = true; d.querySelector('.lab-tool').scrollIntoView(); });
+  const dl = () => page.evaluate(() => { const l = document.querySelector('.lab-tool[data-lab="daylen"]'); return l.hasAttribute('data-ready'); });
+  const dlBefore = await dl();
+  await page.evaluate(() => { const l = document.querySelector('.lab-tool[data-lab="daylen"]'); l.closest('details').open = true; l.scrollIntoView(); });
   await page.waitForTimeout(1500);
-  const calAfter = await tagsOf();
-  ok(calBefore.tags.length === 0 && listed(calAfter.tags, await want('kalendar')) && calAfter.mounted > 0, 'models inside «Глубже» load on demand ' + JSON.stringify({ before: calBefore.tags, after: calAfter }));
+  const dlAfter = await dl();
+  ok(!dlBefore && dlAfter && listed((await tagsOf()).tags, await want('posadka')), 'a model inside «Глубже» is built when opened ' + JSON.stringify({ dlBefore, dlAfter }));
 
   // reading depth carries over
   await page.goto(fileUrl('sorta.html'), { waitUntil: 'load' });
@@ -210,7 +224,7 @@ function codeMap() {
 
   await page.goto(fileUrl('uhod.html'), { waitUntil: 'load' });
   const pg = await page.evaluate(() => [...document.querySelectorAll('.pager a')].map(a => a.getAttribute('href')));
-  ok(pg.join() === 'kalendar.html,udobreniya.html', 'pager ' + pg.join());
+  ok(pg.join() === 'posadka.html,udobreniya.html', 'pager ' + pg.join());
   await page.click('.subnav a[href="#полив"]');
   await page.waitForTimeout(400);
   ok(await page.evaluate(() => decodeURI(location.href).endsWith('uhod.html#полив') && document.getElementById('полив').classList.contains('is-active')), 'tab switch in page');

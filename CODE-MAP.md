@@ -38,7 +38,7 @@
 - `src/js/app/22-garden-weather.js`: `round2` 9, `wxSvp` 12, `wxPlace` 13, `wxCached` 16, `pad2` 23, `wxParse` 25, `wxRefresh` 42, `wxSearch` 64, `wxSetPlace` 72, `wxHere` 82, `fmtT` 90, `fillText` 91, `wxWhen` 93, `wxDays` 94, `wxTasks` 97, `wxAdvice` 118, `wxAge` 135, `wxStrip` 143
 - `src/js/app/22-garden.js`: `gardenLoad` 7, `gardenSave` 11, `gardenVariety` 15, `weekOf` 17, `later` 18, `daysWord` 19, `plantTasks` 25, `plantWeek` 109, `plantStage` 118, `plantNote` 124, `plantDone` 128, `lastNote` 132
 - `src/js/app/22-install.js`: `initInstall` 6
-- `src/js/app/22-reading-pos.js`: `readPos` 9, `absTop` 14, `labelOf` 15, `currentAnchor` 23, `headingBefore` 35, `ownWords` 47, `readBlocks` 48, `normText` 55, `sentenceStart` 58, `sentenceEnd` 64, `pointIn` 70, `caretAt` 80, `coverTop` 86, `spotAt` 95, `spotOf` 126, `findSpot` 151, `firstLetter` 165, `spotTop` 172, `markSpot` 188, `holdTop` 238, `bookmarkHere` 258, `savePos` 273, `resumeTo` 280, `saveDetour` 334, `readDetour` 337, `dropDetour` 343, `wayBack` 346, `offerBack` 366, `offerReturn` 371, `offerResume` 376, `initReadingPos` 401, `initLinks` 444, `initPageAction` 453
+- `src/js/app/22-reading-pos.js`: `readPos` 32, `absTop` 37, `labelOf` 38, `currentAnchor` 46, `headingBefore` 58, `ownWords` 70, `readBlocks` 71, `normText` 78, `sentenceStart` 81, `sentenceEnd` 87, `pointIn` 93, `caretAt` 103, `coverTop` 109, `spotAt` 118, `spotOf` 149, `findSpot` 174, `firstLetter` 188, `spotTop` 195, `markSpot` 211, `holdTop` 261, `bookmarkHere` 281, `savePos` 296, `resumeTo` 303, `saveDetour` 357, `readDetour` 360, `dropDetour` 366, `wayBack` 369, `offerBack` 389, `offerReturn` 394, `offerResume` 399, `initReadingPos` 424, `initLinks` 467, `initPageAction` 476
 - `src/js/app/23-boot.js`: `boot` 4
 
 Общие помощники app.js — кто зовёт:
@@ -99,13 +99,12 @@
 - `src/labs/_frame.js`: `r1` 8, `pct` 9, `set` 12, `doyToday` 13, `doyLabel` 14, `citiesChips` 15
 - `src/labs/formirovka/_shared.js`: `pinchP` 5
 - `src/labs/moy/_shared.js`: `EXP_DEF` 17, `two` 18, `localISO` 19, `fromLocal` 20, `whenText` 21, `sinceText` 23, `nfmt` 30, `expRid` 31, `expX` 33, `expVal` 35, `expSeries` 38, `expCross` 40, `expPlot` 52, `expTimeTicks` 63, `expFx` 69, `experiment` 71
-- `src/labs/posadka/_shared.js`: `young` 7, `placeP` 110, `basilBush` 111, `tomato` 112
+- `src/labs/posadka/_shared.js`: `young` 7, `placeP` 110, `basilBush` 111, `tomato` 112, `cutting` 148
 - `src/labs/problemy/_shared.js`: `bg` 7, `ground` 8, `sun` 9, `drop` 10, `gnat` 11, `Sc` 12, `downyZoom` 42, `greyZoom` 70, `fusZoom` 86, `rootsZoom` 97, `dampZoom` 113, `bactZoom` 124, `caption` 150, `aphidBig` 158, `miteBig` 164, `whiteflyBig` 172, `thripsBig` 178, `slugBig` 188, `gnatBig` 197
-- `src/labs/razmnozhenie/_shared.js`: `cutting` 6
 - `src/labs/sorta/_shared.js`: `lookOf` 8, `blade` 21, `stemOf` 22, `paper` 23, `sprig` 26, `sortPic` 37, `lead` 47, `typePic` 58
 - `src/labs/udobreniya/_shared.js`: `OLD` 7, `defPic` 23
 - `src/labs/uhod/_shared.js`: `waterP` 7, `potCut` 9
-- `src/labs/urozhay/_shared.js`: `storeP` 6, `cutSprig` 8
+- `src/labs/vkus/_shared.js`: `storeP` 6, `cutSprig` 8
 - `src/labs/_lib/agro.js` (`agro`): `svp` 6, `vpd` 8, `zoneOf` 10, `germDays` 15, `along` 20, `rootsOnset` 25, `rootsLength` 27, `osmoticMPa` 30
 - `src/labs/_lib/food.js` (`food`): `F` 5, `hi` 6, `leaf` 7, `dots` 8, `has` 95, `g` 96, `icon` 97, `basil` 101
 - `src/labs/_lib/ills.js` (`ill`): `q` 6, `F` 7, `id` 12, `HW` 13, `Ys` 14, `inside` 15, `mix` 16, `outline` 19, `veinEnd` 45, `veins` 46, `bay` 56, `leaf` 67, `aphid` 201, `mite` 211, `whitefly` 219, `thrips` 225, `web` 231, `spike` 241, `plant` 253, `bush` 284, `ballBush` 313, `pot` 332, `seedling` 339, `label` 352, `scale` 353, `svg` 355
@@ -139,7 +138,7 @@
 - `src/css/style/20-footer.css`: `.footer-*`, `.to-top`, `.brand`, `.is-shown`
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.peek-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.is-loading`, `.sr-group`, `.sr-note`, `.sr-ico` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `peek-paper`, `peek-in`, `search-in`, `is-found`
 - `src/css/style/22-selection.css`: `.depth-*`, `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.deep-*`
-- `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-empty`, `.g-photo-*`, `.g-form-*`, `.g-link`, `.photo-*`
+- `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-empty`, `.g-photo-*`, `.g-form-*`, `.garden-*`, `.g-link`
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.sheet-*`, `.ico`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 
@@ -168,13 +167,13 @@
 - `src/labs/moy/weather.css`: `.wx-day`, `.wx-vpd`, `.lab-*`, `.band`, `.wx-find-*`, `.wx-place-*`, `.wx-n`, `.is-hot`, `.wx-pick`, `.wx-x`, `.wx-r`, `.wx-s`
 - `src/labs/posadka/germ.css`: `.germ-*`, `.is-stopped` · анимации: `g-gel`, `g-root`, `g-hypo`, `g-coty`
 - `src/labs/posadka/perched.css`: `.per-*`, `.tick`, `.is-water`
+- `src/labs/posadka/roots.css`: `.roots-*`, `.rt-glass`, `.rt-water`, `.rt-wl`, `.rt-stem`, `.rt-node`, `.rt-root`
 - `src/labs/posadka/shade.css`: `.rfr-*`, `.shade-*`, `.lab-*`
 - `src/labs/posadka/window.css`: `.win-*`
 - `src/labs/problemy/aphid.css`: `.ap-grid`, `.ap-shoot`
 - `src/labs/problemy/dm.css`: `.dm-gauge`, `.dm-leaf`, `.dm-out`, `.g-track`, `.g-low`, `.g-mid`, `.g-high`, `.g-needle`, `.g-hub`, `.dm-level`, `.ill-*`, `.dm-cap`
 - `src/labs/problemy/pigment.css`: `.pg-out`, `.pg-verdict`, `.pg-leaf`
-- `src/labs/razmnozhenie/roots.css`: `.roots-*`, `.rt-glass`, `.rt-water`, `.rt-wl`, `.rt-stem`, `.rt-node`, `.rt-root`
-- `src/labs/razmnozhenie/seedlife.css`: `.sl-scale`
+- `src/labs/sorta/seedlife.css`: `.sl-scale`
 - `src/labs/udobreniya/barrel.css`: `.stave-*`, `.barrel-*`, `.is-limit`, `.lab-*`, `.is-sel`, `.hoop`
 - `src/labs/udobreniya/ec.css`: `.ec-zone`, `.is-bad`, `.ec-name`, `.ec-needle`, `.ec-chart`, `.ec-track`, `.ec-lead`, `.ec-tick`, `.ec-val`
 - `src/labs/udobreniya/flows.css`: `.chl-*`, `.flows-*`, `.xylem`, `.phloem`, `.roots`, `.fl-tag`, `.tick`
@@ -183,13 +182,13 @@
 - `src/labs/udobreniya/oxide.css`: `.ox-real`, `.ox-val`, `.ox-row`, `.ox-name`, `.ox-bars`, `.lab-*`, `.ox-rows`, `.ox-pack`, `.s1`, `.s2`, `.s3`
 - `src/labs/uhod/ph.css`: `.ph-band`, `.is-low`, `.ph-sym`
 - `src/labs/uhod/vpd.css`: `.vpd-*`, `.z0`, `.z1`, `.z2`, `.z3`, `.z4`
-- `src/labs/urozhay/pesto.css`: `.pesto-*`
 - `src/labs/vkus/anthocyanin.css`: `.anth-*`
 - `src/labs/vkus/chemotype.css`: `.chemo-*`, `.lab-*`, `.is-dim`, `.is-rest`, `.is-cur`, `.lf-deep`, `.lf-purple`, `.lf-thai`, `.lf-lime`
 - `src/labs/vkus/heat.css`: `.heat-*`, `.s1`, `.s2`, `.s3`, `.s4`
 - `src/labs/vkus/molecules.css`: `.vol-*`, `.mol-*`, `.mk-c`, `.mk-o`
 - `src/labs/vkus/pairing.css`: `.pa-food`, `.pa-type`, `.pa-rib`, `.pa-varieties`, `.pa-foods`, `.pa-var`, `.pa-meter`, `.is-contrast`, `.pa-title`, `.pa-types`, `.pa-stage`, `.is-dash` · анимации: `pa-draw`
 - `src/labs/vkus/pathway.css`: `.pw-end`, `.is-hot`, `.pw-node`, `.pw-info`, `.pw-chip`, `.pw-lane`, `.pw-edge`, `.pw-ah`, `.pw-enz`, `.pw-tag`, `.is-sel`, `.pw-pick`
+- `src/labs/vkus/pesto.css`: `.pesto-*`
 - `src/labs/vkus/trichome.css`: `.tr-info`, `.tr-controls`, `.mic-*`, `.tr-pel`, `.lab-*`, `.tr-svg`, `.tr-grid`, `.tr-top`, `.tr-sto`, `.tr-wrap`, `.tr-chart`, `.is-burst`
 
 ## События
@@ -198,10 +197,10 @@
 
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
-- `basil:panel` — шлёт: `src/js/app/02-router.js:73`; слушают: `src/js/app/22-reading-pos.js:253`, `src/js/science/06-labs-loader.js:185`
+- `basil:panel` — шлёт: `src/js/app/02-router.js:73`; слушают: `src/js/app/22-reading-pos.js:276`, `src/js/science/06-labs-loader.js:185`
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:240`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:214`, `src/js/science/07-deep.js:224`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
-- `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:205`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/urozhay/pesto.js:67`
+- `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:205`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/vkus/pesto.js:67`
 - `basil:view` — шлёт: `src/js/app/02-router.js:170`; слушают: `src/js/app/02-router.js:249`, `src/js/app/02-router.js:279`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:226`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
@@ -211,12 +210,12 @@
 
 - `basil-deep` — `src/js/science/07-deep.js:16`
 - `basil-depth` — `src/js/science/07-deep.js:5`
-- `basil-detour` — `src/js/app/22-reading-pos.js:333`
+- `basil-detour` — `src/js/app/22-reading-pos.js:356`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
 - `basil-haptics` — `src/js/haptics.js:7`
 - `basil-install` — `src/js/app/22-install.js:67`
-- `basil-last` — `src/js/app/02-router.js:93`
+- `basil-last` — `src/js/app/02-router.js:93`, `src/js/app/22-reading-pos.js:15`
 - `basil-photos` — `src/js/app/22-garden-photos.js:5`
 - `basil-pos` — `src/js/app/22-reading-pos.js:8`
 - `basil-recent` — `src/js/app/04-search.js:322`
@@ -228,11 +227,11 @@
 Сколько правил `@media` на каждую ширину и в каких файлах. Новую ширину не придумывайте — берите ближайшую.
 
 - `max-width: 560px` — 13: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
-- `max-width: 900px` — 12: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css
-- `max-width: 640px` — 9: 05-deep.css, 06-blocks.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, molecules.css
+- `max-width: 900px` — 13: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css, 23-garden.css
+- `max-width: 640px` — 10: 05-deep.css, 06-blocks.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
+- `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
-- `max-width: 480px` — 6: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css
 - `max-width: 700px` — 5: 04-deep-index.css, 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
 - `max-width: 420px` — 4: 04-controls.css, 10-depth.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
@@ -256,16 +255,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1197`
-- `{{description}}` в `src/layout.html` — `build.py:1197`
-- `{{pwa}}` в `src/layout.html` — `build.py:1213`
-- `{{fonts}}` в `src/layout.html` — `build.py:1212`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1194`
-- `{{content}}` в `src/layout.html` — `build.py:1192`
-- `{{toc}}` в `src/layout.html` — `build.py:1194`
-- `{{scripts}}` в `src/layout.html` — `build.py:1211`
-- `{{version}}` в `src/sw.js` — `build.py:1296`
-- `{{precache}}` в `src/sw.js` — `build.py:1296`
+- `{{title}}` в `src/layout.html` — `build.py:1216`
+- `{{description}}` в `src/layout.html` — `build.py:1216`
+- `{{pwa}}` в `src/layout.html` — `build.py:1232`
+- `{{fonts}}` в `src/layout.html` — `build.py:1231`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1213`
+- `{{content}}` в `src/layout.html` — `build.py:1211`
+- `{{toc}}` в `src/layout.html` — `build.py:1213`
+- `{{scripts}}` в `src/layout.html` — `build.py:1230`
+- `{{version}}` в `src/sw.js` — `build.py:1346`
+- `{{precache}}` в `src/sw.js` — `build.py:1346`
 
 ## Проверки
 
@@ -276,7 +275,7 @@
 - `tests/controls.js` — Каждая кнопка на каждой вкладке каждой страницы — на телефоне и компьютере, с раскрытыми «Глубже»: · корень · все страницы
 - `tests/gallery.js` — Every illustration of a chapter on one sheet, to look at them together: the pictures the page shows · корень · index.html
 - `tests/garden.js` — «Мой базилик» на телефоне и компьютере: пустой блок, куст через форму, дела на неделю, «Сделано», · корень · index.html, sorta.html, moy.html
-- `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html, urozhay.html, udobreniya.html, kalendar.html, formirovka.html
+- `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html, udobreniya.html, posadka.html, formirovka.html
 - `tests/ills.js` — Картинки (data-ill) на каждой вкладке каждой страницы. · сервер + корень · все страницы
 - `tests/labs.js` — Каждая модель на своей странице: запускается без ошибок, ничего не вылезает за край, · корень · все страницы
 - `tests/nav.js` — Навигация на телефоне и компьютере: страница открывается сверху (и страница из памяти для «Назад» тоже, одним · сервер
