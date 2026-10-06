@@ -99,7 +99,7 @@
 - `src/labs/_frame.js`: `r1` 8, `pct` 9, `set` 12, `doyToday` 13, `doyLabel` 14, `citiesChips` 15
 - `src/labs/formirovka/_shared.js`: `pinchP` 5
 - `src/labs/moy/_shared.js`: `EXP_DEF` 17, `two` 18, `localISO` 19, `fromLocal` 20, `whenText` 21, `sinceText` 23, `nfmt` 30, `expRid` 31, `expX` 33, `expVal` 35, `expSeries` 38, `expCross` 40, `expPlot` 52, `expTimeTicks` 63, `expFx` 69, `experiment` 71
-- `src/labs/posadka/_shared.js`: `young` 7, `placeP` 110, `basilBush` 111, `tomato` 112, `cutting` 148
+- `src/labs/posadka/_shared.js`: `young` 7, `youngL` 12, `placeP` 112, `potL` 114, `basilBush` 115, `tomato` 116, `cutting` 152
 - `src/labs/problemy/_shared.js`: `bg` 7, `ground` 8, `sun` 9, `drop` 10, `gnat` 11, `Sc` 12, `downyZoom` 42, `greyZoom` 70, `fusZoom` 86, `rootsZoom` 97, `dampZoom` 113, `bactZoom` 124, `caption` 150, `aphidBig` 158, `miteBig` 164, `whiteflyBig` 172, `thripsBig` 178, `slugBig` 188, `gnatBig` 197
 - `src/labs/sorta/_shared.js`: `lookOf` 8, `blade` 21, `stemOf` 22, `paper` 23, `sprig` 26, `sortPic` 37, `lead` 47, `typePic` 58
 - `src/labs/udobreniya/_shared.js`: `OLD` 7, `defPic` 23
@@ -108,6 +108,7 @@
 - `src/labs/_lib/agro.js` (`agro`): `svp` 6, `vpd` 8, `zoneOf` 10, `germDays` 15, `along` 20, `rootsOnset` 25, `rootsLength` 27, `osmoticMPa` 30
 - `src/labs/_lib/food.js` (`food`): `F` 5, `hi` 6, `leaf` 7, `dots` 8, `has` 95, `g` 96, `icon` 97, `basil` 101
 - `src/labs/_lib/ills.js` (`ill`): `q` 6, `F` 7, `id` 12, `HW` 13, `Ys` 14, `inside` 15, `mix` 16, `outline` 19, `veinEnd` 45, `veins` 46, `bay` 56, `leaf` 67, `aphid` 201, `mite` 211, `whitefly` 219, `thrips` 225, `web` 231, `spike` 241, `plant` 253, `bush` 284, `ballBush` 313, `pot` 332, `seedling` 339, `label` 352, `scale` 353, `svg` 355
+- `src/labs/_lib/line.js` (`line`): `P` 11, `g` 12, `path` 13, `paper` 17, `floor` 18, `step` 20, `wide` 22, `leaf` 26, `sprout` 33, `bush` 50, `ballBush` 74, `cloud` 81, `seed` 92, `roots` 95, `tray` 108, `cupSoil` 124, `cup` 125, `pot` 133, `bag` 139, `sprayer` 147, `lamp` 155, `thermo` 161, `lid` 167, `scissors` 175, `cutMark` 183, `sun` 186, `tree` 188, `bed` 193, `window_` 202, `balcony` 218, `greenhouse` 226, `tank` 233, `arrow` 247, `dim` 251
 - `src/labs/_lib/micro.js` (`micro`): `rng` 5, `q` 6, `smooth` 8, `cell` 18, `dots` 28, `lining` 37, `section` 48, `peltate` 173, `capitate` 197, `hair` 208, `labels` 233, `pill` 253, `scale` 257
 - `src/labs/_lib/props.js` (`props`): `P` 9, `shine` 10, `paper` 14, `ground` 15, `step` 17, `tray` 21, `seed` 38, `sprout` 40, `shoot` 60, `cupSoil` 81, `cup` 82, `shopPot` 92, `crowd` 101, `roots` 111, `rootball` 123, `sprayer` 137, `can` 147, `lamp` 158, `thermo` 167, `lid` 173, `scissors` 185, `cutMark` 194, `knife` 196, `lens` 201, `bottle` 209, `glass` 220, `jar` 231, `iceTray` 243, `bunch` 255, `envelope` 271, `bowl` 280, `mortar` 289, `saucepan` 296, `bag` 304, `window_` 313, `balcony` 327, `bed` 334, `greenhouse` 342, `tank` 353, `tree` 366, `sun` 370, `moon` 371, `drop` 373, `seedSpike` 378, `calyx` 390, `bee` 395, `snow` 399, `fridge` 409, `finger` 421, `arrow` 425, `dim` 430
 
@@ -123,7 +124,7 @@
 - `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
 - `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
 - `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`, `.ar-coty`, `.ar-seed`
-- `src/css/style/08-home.css`: `.toc-*`, `.facts`, `.hero-*`, `.home-*`, `.short-*`, `.journey`, `.passport-*`, `.q-card`, `.season-*`, `.rule-*`, `.continue`, `.q-ico` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
+- `src/css/style/08-home.css`: `.facts`, `.hero-*`, `.toc-*`, `.home-*`, `.short-*`, `.journey`, `.passport-*`, `.q-card`, `.season-*`, `.rule-*`, `.continue`, `.ico` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
 - `src/css/style/09-chapter-chrome.css`: `.ch-hero-*`, `.subnav-*`, `.pager`, `.blob`, `.art-*`, `.is-stuck`, `.pg-art`, `.eyebrow`, `.lead`, `.next` · анимации: `morph`, `morph-fade`
 - `src/css/style/10-varieties.css`: `.quiz-*`, `.v-leaf`, `.vtype`, `.vt-panel-*`, `.meter`, `.vt-specs`, `.vt-sorts`, `.vd-head`, `.qr`, `.versus`, `.filters`, `.vt-toggle` · анимации: `vt-in`
 - `src/css/style/11-places.css`: `.place-*`, `.params`, `.tab`, `.comp-*`, `.tabs`, `.ill`, `.lead`
@@ -139,11 +140,11 @@
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.peek-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.is-loading`, `.sr-group`, `.sr-note`, `.sr-ico` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `peek-paper`, `peek-in`, `search-in`, `is-found`
 - `src/css/style/22-selection.css`: `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.deep-*`, `.hap-*`
 - `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-empty`, `.g-photo-*`, `.g-form-*`, `.garden-*`, `.g-link`
-- `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.sheet-*`, `.ico`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
+- `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 
 ### lab.css
-- `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
+- `src/css/lab/00-ill.css`: `.ill-*`, `.ln`, `.ln-g`, `.ln-s`, `.ln-cut`, `.ln-dash`, `.lnf`, `.ln-dot`, `.ln-grain` · анимации: `ill-in`
 - `src/css/lab/00-micro.css`: `.mic-*`, `.is-burst`, `.is-pale`, `.is-film`, `.is-cap`, `.is-done`, `.has-*`, `.is-sel` · анимации: `mic-fly`
 - `src/css/lab/00-tokens.css`: `.sr-only`
 - `src/css/lab/01-hero.css`: `.pot-*`, `.hero-*`, `.aroma-*`, `.plant-*`, `.passport`, `.pl-stem-*`, `.pl-leaf`, `.is-purple`, `.pl-scar`, `.pl-pet`, `.pl-fold`, `.pl-shine` · анимации: `aroma-rise`, `label-rise`

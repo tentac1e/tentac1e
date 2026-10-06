@@ -693,7 +693,7 @@ window.BASIL_PAGES = {
  "v": {
   "labs": {
    "sorta": "48fb635c",
-   "posadka": "822ac97a",
+   "posadka": "d977636c",
    "uhod": "5d83f303",
    "udobreniya": "f58f15d9",
    "formirovka": "907d6bbb",
@@ -705,6 +705,7 @@ window.BASIL_PAGES = {
    "micro": "bbc6c98e",
    "ills": "63c3803f",
    "props": "7e4b2fa8",
+   "line": "3f312ab6",
    "agro": "2133ead0",
    "food": "9ecfd30b"
   },
@@ -718,6 +719,7 @@ window.BASIL_PAGES = {
     "micro",
     "ills",
     "props",
+    "line",
     "agro"
    ],
    "uhod": [

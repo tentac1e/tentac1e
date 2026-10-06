@@ -488,7 +488,7 @@ def toc_item(cid, face, label, subs, here=None, extra='', box='toc'):
 
 
 def toc_art(c):
-    return f'<span class="toc-art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#{c["art"]}"/></svg></span>'
+    return f'<span class="toc-art">{ico("ch-" + c["id"])}</span>'
 
 
 def toc_html(nav, here):
@@ -497,8 +497,8 @@ def toc_html(nav, here):
     The page's own chapter is marked and open."""
     def item(cid, face, label, subs, extra=''):
         return toc_item(cid, face, label, subs, here, extra)
-    rows = [item('glavnaya', f'<span class="toc-ico">{ico("home")}</span><span class="toc-t">Главная</span>', 'Главная', []),
-            item('moy', f'<span class="toc-ico">{ico("sprout")}<b class="garden-badge" hidden></b></span><span class="toc-t">Мой базилик</span>',
+    rows = [item('glavnaya', f'<span class="toc-art">{ico("home")}</span><span class="toc-t">Главная</span>', 'Главная', []),
+            item('moy', f'<span class="toc-art">{ico("sprout")}<b class="garden-badge" hidden></b></span><span class="toc-t">Мой базилик</span>',
                  'Мой базилик', nav['sections'].get('moy', []), ' data-garden-link')]
     for c in nav['chapters']:
         rows.append(item(c['id'], f'{toc_art(c)}<span class="toc-t">{escape(c["title"])}</span>', c['title'],

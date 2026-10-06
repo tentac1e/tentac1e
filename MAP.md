@@ -144,6 +144,7 @@
 - `src/labs/_lib/agro.js` — agro: the plant's physics in numbers, shared by the models and the experiments
 - `src/labs/_lib/food.js` — food: small illustrations of what basil goes with
 - `src/labs/_lib/ills.js` — ills: plants, symptoms and pests for the illustrated guides
+- `src/labs/_lib/line.js` — line: the things of the step-by-step pictures, drawn in one line
 - `src/labs/_lib/micro.js` — micro: drawing a leaf under the microscope
 - `src/labs/_lib/props.js` — props: things for the step-by-step pictures
 

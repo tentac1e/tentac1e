@@ -50,11 +50,11 @@
 .toc-link[aria-current="page"] { background: var(--leaf-soft); }
 .toc-art, .toc-ico { position: relative; flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; }
 .toc-art { background: var(--leaf-soft); }
-.toc-art svg { width: 36px; height: 36px; }
+.toc-art .ico { width: 24px; height: 24px; color: var(--basil-deep); }
 .toc-ico { background: var(--surface-2); color: var(--basil-deep); }
 .toc-ico .ico { width: 20px; height: 20px; }
 .toc-link[aria-current="page"] .toc-art, .toc-link[aria-current="page"] .toc-ico { background: var(--surface); }
-.toc-ico .garden-badge { top: -5px; right: -6px; }
+.toc-art .garden-badge, .toc-ico .garden-badge { top: -5px; right: -6px; }
 .toc-t { display: flex; align-items: baseline; gap: 8px; min-width: 0; font: 700 1rem/1.25 var(--font-body); }
 .toc-tog {
   flex: none;

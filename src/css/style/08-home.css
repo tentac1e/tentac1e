@@ -188,9 +188,7 @@
 .home-chapters .toc-item { padding: 4px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
 .home-chapters .toc-link { gap: 14px; min-height: 64px; padding: 4px 8px 4px 4px; border-radius: 16px; }
 .home-chapters .toc-art { width: 60px; height: 60px; border-radius: 16px; }
-.home-chapters .toc-art svg { width: 54px; height: 54px; }
-.home-chapters .toc-item:nth-child(3n+2) .toc-art { background: var(--oil-soft); }
-.home-chapters .toc-item:nth-child(3n) .toc-art { background: var(--opal-soft); }
+.home-chapters .toc-art .ico { width: 30px; height: 30px; }
 .home-chapters .toc-t { font: 600 1.35rem/1.15 var(--font-display); }
 .toc-tx { display: grid; gap: 3px; min-width: 0; padding-block: 4px; }
 .toc-d { font-size: .86rem; line-height: 1.38; color: var(--ink-2); }
@@ -201,7 +199,7 @@
   .home-chapters .toc-item { padding: 2px; border-radius: 18px; }
   .home-chapters .toc-link { gap: 12px; min-height: 56px; padding: 2px 6px 2px 4px; }
   .home-chapters .toc-art { width: 44px; height: 44px; border-radius: 13px; }
-  .home-chapters .toc-art svg { width: 40px; height: 40px; }
+  .home-chapters .toc-art .ico { width: 24px; height: 24px; }
   .home-chapters .toc-t { font-size: 1.18rem; }
   .toc-tx { gap: 2px; padding-block: 3px; }
   .toc-d { font-size: .79rem; line-height: 1.3; }
