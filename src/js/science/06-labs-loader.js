@@ -180,8 +180,9 @@
     now.forEach(el => { if (el.dataset.drawn) fitIll(el); });
   }
 
-  /* a tab coming up (the router says so before its first frame): what it shows on the screen is drawn now,
-     and the captions of the pictures drawn ahead while it was hidden take the width of their text */
+  /* a tab coming up (the router says so before its first frame, once the page stands where the tab opens): what
+     it shows on the screen is drawn now, and the captions of the pictures drawn ahead while it was hidden take the
+     width of their text */
   document.addEventListener('basil:panel', e => {
     const panel = document.getElementById(e.detail && e.detail.id);
     if (!panel) return;

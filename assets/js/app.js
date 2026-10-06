@@ -230,7 +230,6 @@
         if (on) nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: smooth() });
       });
     }
-    document.dispatchEvent(new CustomEvent('basil:panel', { detail: { id: target.id } }));
     return target;
   }
 
@@ -338,6 +337,8 @@
       if (opts.top) jump(() => window.scrollTo(0, 0));
       else if (r.home && !changedView) window.scrollTo({ top: 0, behavior: smooth() }); // the chapter's own link: back to its top
       else scrollAfter(r, changedView);
+      // the tab is up and the page stands where it opens: what is on the screen there is drawn before the first frame
+      if (panel) document.dispatchEvent(new CustomEvent('basil:panel', { detail: { id: panel.id } }));
       flashFound();
       if (PEEK) markPeek(r);
       document.dispatchEvent(new CustomEvent('basil:view', { detail: { id: r.view.dataset.view } }));

@@ -162,7 +162,7 @@
 **app.js**
 - `src/js/app/00-core.js` (128 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES, PEEK
 - `src/js/app/01-theme.js` (29 стр.): initTheme
-- `src/js/app/02-router.js` (296 стр.): ENTRY, initRouter, initPagers, initScrollChrome
+- `src/js/app/02-router.js` (297 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-peek.js` (265 стр.): PEEK_SKIP, initPeek, initPeekFrame
 - `src/js/app/03-sheets.js` (212 стр.): initToc, initSheets
 - `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
@@ -201,7 +201,7 @@
 - `src/js/science/03-charts.js` (153 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (312 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, TILT, MolViewer
-- `src/js/science/06-labs-loader.js` (232 стр.): SELF, draw, HIDDEN, drawDue
+- `src/js/science/06-labs-loader.js` (233 стр.): SELF, draw, HIDDEN, drawDue
 - `src/js/science/07-deep.js` (153 стр.): KIND, EASE, ANIMATED, initDeepAll, initDeep, initHomeMolecule, init
 
 **scene.js**
