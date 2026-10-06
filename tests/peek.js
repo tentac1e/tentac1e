@@ -17,7 +17,8 @@ const sheet = page => page.evaluate(() => {
   return { open: d.open, loading: d.classList.contains('is-loading'), h: document.getElementById('peek-h').textContent.trim(), where: document.getElementById('peek-where').textContent.trim() };
 });
 const ready = page => page.waitForFunction(() => { const d = document.getElementById('sheet-peek'); return d.open && !d.classList.contains('is-loading'); }, null, { timeout: 12000 }).then(() => true, () => false);
-const shut = page => page.waitForFunction(() => !document.getElementById('sheet-peek').open, null, { timeout: 4000 }).then(() => true, () => false);
+// closed, and its step of history taken off (history.back() lands a moment later; a page.goto before it is cut short)
+const shut = page => page.waitForFunction(() => !document.getElementById('sheet-peek').open && !(history.state && history.state.peek), null, { timeout: 4000 }).then(() => true, () => false);
 const frameOf = page => page.frames().find(f => /[?&]peek=1/.test(f.url()));
 // the page in the frame: what it shows (the target and the way to it only) and whether its models stand built
 const inFrame = f => f.evaluate(() => {
@@ -135,9 +136,9 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   await shut(page);
 
   // lower on the same tab: a scroll, and the way back up to the link
-  await page.goto(fileUrl('uhod.html') + '#' + encodeURIComponent('свет'), { waitUntil: 'load' });
+  await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('горшок'), { waitUntil: 'load' });
   await page.waitForTimeout(1200);
-  const near = 'main .panel.is-active a[href="#deep-fotosintez"]:not(.deep-index a)';
+  const near = 'main .panel.is-active a[href="#deep-voda-v-gorshke"]:not(.deep-index a)';
   await page.evaluate(sel => document.querySelector(sel).scrollIntoView({ block: 'center', behavior: 'instant' }), near);
   await page.waitForTimeout(400);
   const y0 = (await state(page)).y;
