@@ -802,21 +802,6 @@ body::after {
   .hero-art { width: 108px; }
 }
 
-/* ================= header switch: open every deep dive ================= */
-.deep-toggle { position: relative; }
-.deep-toggle[aria-pressed="true"] { background: var(--sci-chem); border-color: var(--sci-chem); color: var(--surface); }
-@media (hover: hover) { .deep-toggle[aria-pressed="true"]:hover { color: var(--surface); } }
-.deep-toggle::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1.5px dashed var(--sci-chem);
-  opacity: 0;
-  transition: opacity .3s;
-}
-.deep-toggle[aria-pressed="true"]::after { opacity: .7; animation: spin 12s linear infinite; }
-
 /* ================= chapter index of deep dives ================= */
 .deep-index { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 18px; }
 .deep-index-label { display: inline-flex; align-items: center; gap: 6px; margin-right: 4px; font: 500 .72rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sci-chem); }
@@ -866,6 +851,10 @@ body::after {
 .deep-zone-label::after { content: ""; flex: 1; height: 1px; background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 11px); }
 .deep-zone-label small { order: 2; font: 500 .72rem/1 var(--font-mono); font-style: normal; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 .deep-zone-label small::before { content: "· "; }
+/* «Раскрыть все» at the end of the line (the build writes it where the tab has two dives or more) */
+.deep-zone-label { flex-wrap: wrap; row-gap: 0; }
+.deep-all { order: 3; min-height: 36px; margin-left: auto; padding: 0 14px; border: 1px solid color-mix(in srgb, var(--sci-chem) 40%, var(--line)); border-radius: 999px; background: none; color: var(--sci-chem); font: 600 .74rem/1 var(--font-mono); font-style: normal; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+@media (hover: hover) { .deep-all:hover { color: var(--ink); border-color: var(--ink-3); } }
 
 .deep {
   --k: var(--sci-bio);
@@ -983,8 +972,6 @@ body::after {
 .chel i { height: 8px; width: var(--w); border-radius: 4px; background: var(--k); }
 .chel-scale { display: flex; justify-content: space-between; margin: 0 0 0 66px; font: 500 .64rem/1 var(--font-mono); color: var(--ink-3); }
 
-/* open state across the site */
-.deep-on .deep > summary .deep-kind::after { content: " · открыто"; color: var(--ink-3); }
 
 /* ================= lab tools ================= */
 .lab-tool {
@@ -1218,80 +1205,13 @@ body::after {
 .ar-oil { fill: var(--oil-bright); }
 
 @media (prefers-reduced-motion: reduce) {
-  .aroma-dot, .aroma-label, .deep-toggle::after, .deep-ico::after, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .lab-tool:empty { animation: none !important; }
+  .aroma-dot, .aroma-label, .deep-ico::after, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .lab-tool:empty { animation: none !important; }
   .germ-anim * { animation: none !important; }
   .germ-root, .germ-hypo { stroke-dashoffset: 0; }
   .aroma-label { opacity: 1; transform: translate(-50%, -140%); animation: fade-out 2.4s forwards !important; }
   .ch-hero-art { transform: none; }
 }
 @keyframes fade-out { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
-
-/* ================= depth of reading: header menu + home switch ================= */
-.deep-toggle[data-depth="2"] { box-shadow: 0 0 0 4px color-mix(in srgb, var(--sci-chem) 22%, transparent); }
-.deep-toggle[data-depth="2"]::after { inset: -7px; opacity: .9; }
-.depth-pop {
-  position: fixed;
-  z-index: 60;
-  width: min(300px, calc(100vw - 16px));
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  box-shadow: var(--shadow-float);
-  animation: pop-in .28s var(--ease-float) both;
-}
-.depth-pop[hidden] { display: none; }
-.depth-pop::before { content: ""; position: absolute; top: -7px; right: calc(var(--arrow, 30px) - 7px); width: 12px; height: 12px; background: var(--surface); border-left: 1px solid var(--line); border-top: 1px solid var(--line); transform: rotate(45deg); }
-@keyframes pop-in { from { opacity: 0; transform: translateY(-6px) scale(.97); } }
-.depth-pop-h { margin: 4px 8px 8px; font: 500 .68rem/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
-.depth-pop button {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  gap: 10px;
-  align-items: center;
-  width: 100%;
-  padding: 10px;
-  border: 0;
-  border-radius: 14px;
-  background: none;
-  color: var(--ink);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color .2s;
-}
-.depth-pop button:focus-visible { background: var(--surface-2); outline: none; }
-@media (hover: hover) { .depth-pop button:hover { background: var(--surface-2); outline: none; } }
-.depth-pop button[aria-checked="true"] { background: var(--sci-chem-soft); }
-.depth-pop b { display: block; font-size: .95rem; }
-.depth-pop small { display: block; font-size: .78rem; line-height: 1.3; color: var(--ink-3); }
-.depth-dots { display: inline-flex; align-items: flex-end; justify-content: center; gap: 3px; height: 22px; }
-.depth-dots i { width: 6px; border-radius: 3px; background: var(--sci-chem); opacity: .85; }
-.depth-dots i:nth-child(1) { height: 8px; } .depth-dots i:nth-child(2) { height: 14px; } .depth-dots i:nth-child(3) { height: 20px; }
-
-.depth-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; max-width: 520px; margin: 18px 0 20px; padding: 6px; border-radius: 22px; border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 70%, transparent); }
-.depth-seg button {
-  display: grid;
-  justify-items: start;
-  gap: 2px;
-  padding: 10px 12px 11px;
-  border: 0;
-  border-radius: 16px;
-  background: none;
-  color: var(--ink);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color .25s, color .25s, transform .35s var(--ease-float);
-}
-@media (hover: hover) { .depth-seg button:hover { background: var(--surface-2); transform: translateY(-2px); } }
-.depth-seg button b { font-size: .95rem; }
-.depth-seg button small { font-size: .74rem; line-height: 1.25; color: var(--ink-3); }
-.depth-seg .depth-dots { height: 20px; margin-bottom: 4px; }
-.depth-seg button[aria-pressed="true"] { background: var(--sci-chem); color: var(--surface); }
-.depth-seg button[aria-pressed="true"] small { color: color-mix(in srgb, var(--surface) 80%, transparent); }
-.depth-seg button[aria-pressed="true"] .depth-dots i { background: var(--surface); }
-@media (max-width: 420px) { .depth-seg button small { display: none; } }
 
 /* ================= deep dive: footer, tag, «ещё глубже», sources ================= */
 .deep-tag.is-deeper { background: transparent; border: 1px dashed color-mix(in srgb, var(--k) 55%, transparent); }
@@ -1390,6 +1310,26 @@ body::after {
 /* a finger finds the small link in a zone of about 40 px */
 @media (pointer: coarse) { .sci-note-link { position: relative; } .sci-note-link::after { content: ""; position: absolute; inset: -12px -6px; } }
 
+
+/* in a dive's heading, a row under the title: the fact that calls into it */
+.deep-fact { grid-column: 2 / -1; display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; margin-top: -4px; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--k) 7%, transparent); font-size: .86rem; line-height: 1.45; color: var(--ink-2); }
+.deep-fact .ico { width: 18px; height: 18px; margin-top: 1px; color: var(--k); }
+@media (max-width: 640px) { .deep-fact { grid-column: 1 / -1; margin-top: -2px; } }
+/* at the top of «Глубже»: the facts of the tab with no dive of their own here */
+.deep-facts { display: grid; gap: 10px; max-width: 72ch; margin: 0; padding: 0; list-style: none; }
+.deep-facts li { --k: var(--sci-bio); display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
+.deep-facts li[data-kind="chem"] { --k: var(--sci-chem); }
+.deep-facts li[data-kind="phys"] { --k: var(--sci-phys); }
+.deep-facts li[data-kind="taste"] { --k: var(--sci-taste); }
+.deep-facts .ico { width: 18px; height: 18px; margin-top: 2px; color: var(--k); }
+.deep-fact-link { font: 500 .74rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; white-space: nowrap; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
+@media (hover: hover) { .deep-fact-link:hover { color: var(--ink); border-bottom-color: var(--ink); } }
+@media (pointer: coarse) { .deep-fact-link { position: relative; } .deep-fact-link::after { content: ""; position: absolute; inset: -12px -6px; } }
+
+/* Справка «Любопытно»: the facts of every chapter as cards (facts_here in build.py) */
+.facts-all { display: grid; gap: clamp(26px, 4vw, 40px); margin-top: 8px; }
+.facts-ch h3 { margin: 0; }
+.facts-ch .sci-notes { margin-top: 16px; }
 /* ================= recipe book ================= */
 .rb-intro { max-width: 62ch; }
 .rb-intro h3 { margin: 8px 0 8px; font-size: clamp(1.7rem, 3.4vw, 2.3rem); }
@@ -1469,7 +1409,6 @@ body::after {
   .recipe-card > summary, .recipe-card.is-feat > summary { padding: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .depth-pop { animation: none; }
   .sci-note, .sci-note:nth-child(even) { transform: none; }
   @media (hover: hover) { .sci-note:hover { transform: none; } }
 }
@@ -1543,13 +1482,11 @@ body::after {
 .continue { max-width: 100%; }
 .continue b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* haptics switch in the depth menu */
-.depth-pop .depth-hap { margin-top: 6px; border-top: 1px solid var(--line); border-radius: 0 0 14px 14px; }
-.depth-pop .depth-hap[aria-checked] { background: none; }
-.depth-pop .depth-hap:focus-visible { background: var(--surface-2); }
-@media (hover: hover) { .depth-pop .depth-hap:hover { background: var(--surface-2); } }
-.hap-switch { position: relative; justify-self: center; width: 30px; height: 18px; border-radius: 9px; background: var(--line-strong); transition: background-color .2s; }
+/* haptics switch in the footer (haptics.js shows it where the phone can give the feedback) */
+.hap-row { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; margin-top: 10px; padding: 0; border: 0; background: none; color: var(--ink-2); font: inherit; font-size: .86rem; cursor: pointer; }
+.hap-row[hidden] { display: none; }
+.hap-switch { position: relative; flex: none; width: 30px; height: 18px; border-radius: 9px; background: var(--line-strong); transition: background-color .2s; }
 .hap-switch::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface); transition: transform .25s var(--ease-float); }
-.depth-hap[aria-checked="true"] .hap-switch { background: var(--basil); }
-.depth-hap[aria-checked="true"] .hap-switch::after { transform: translateX(12px); }
+.hap-row[aria-checked="true"] .hap-switch { background: var(--basil); }
+.hap-row[aria-checked="true"] .hap-switch::after { transform: translateX(12px); }
 @media (prefers-reduced-motion: reduce) { .resume-pill, .panel-next, .panel-next .ico { transition: none; } .resume-mark { animation: none; } }

@@ -362,6 +362,7 @@ window.BASIL_PAGES = {
   "spravka-h7": "spravka",
   "spravka-h8": "spravka",
   "spravka-h9": "spravka",
+  "spravka-lyubopytno": "spravka",
   "spravka-slovar": "spravka",
   "spravka-voprosy": "spravka",
   "stage-days": "udobreniya",
@@ -569,6 +570,7 @@ window.BASIL_PAGES = {
   "deep-cifry": "Глубже: Базилик в цифрах",
   "spravka-slovar": "Справка · Словарь",
   "spravka-chek-list": "Справка · Чек-лист сезона",
+  "spravka-lyubopytno": "Справка · Любопытно",
   "moy-kusty": "Мой базилик · Кусты",
   "moy-pogoda": "Мой базилик · Погода",
   "moy-opyty": "Мой базилик · Опыты"
@@ -615,6 +617,7 @@ window.BASIL_PAGES = {
   "spravka-voprosy": "вопросы",
   "spravka-slovar": "словарь",
   "spravka-chek-list": "чек-лист",
+  "spravka-lyubopytno": "любопытно",
   "moy-kusty": "кусты",
   "moy-pogoda": "погода",
   "moy-opyty": "опыты",
@@ -746,6 +749,6 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "1fd3e9e2"
+  "search": "0160eca5"
  }
 };

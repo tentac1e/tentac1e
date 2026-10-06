@@ -52,7 +52,7 @@ function wide() {
 function taps(min) {
   const root = document.querySelector('[data-panel].is-active') || document.querySelector('[data-view]');
   const seen = new Set(), small = [];
-  root.querySelectorAll('button, [role="button"], .chip, summary, a.btn, .sci-note-link').forEach(e => {
+  root.querySelectorAll('button, [role="button"], .chip, summary, a.btn, .sci-note-link, .deep-fact-link').forEach(e => {
     if (!e.getClientRects().length || e.closest('[hidden], .pager')) return;
     const kind = e.tagName + '.' + ((e.getAttribute('class') || '').split(' ')[0]);
     if (seen.has(kind)) return;

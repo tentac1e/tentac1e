@@ -15,6 +15,10 @@
 .deep-zone-label::after { content: ""; flex: 1; height: 1px; background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 11px); }
 .deep-zone-label small { order: 2; font: 500 .72rem/1 var(--font-mono); font-style: normal; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 .deep-zone-label small::before { content: "· "; }
+/* «Раскрыть все» at the end of the line (the build writes it where the tab has two dives or more) */
+.deep-zone-label { flex-wrap: wrap; row-gap: 0; }
+.deep-all { order: 3; min-height: 36px; margin-left: auto; padding: 0 14px; border: 1px solid color-mix(in srgb, var(--sci-chem) 40%, var(--line)); border-radius: 999px; background: none; color: var(--sci-chem); font: 600 .74rem/1 var(--font-mono); font-style: normal; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.deep-all:hover { color: var(--ink); border-color: var(--ink-3); }
 
 .deep {
   --k: var(--sci-bio);
@@ -132,6 +136,4 @@
 .chel i { height: 8px; width: var(--w); border-radius: 4px; background: var(--k); }
 .chel-scale { display: flex; justify-content: space-between; margin: 0 0 0 66px; font: 500 .64rem/1 var(--font-mono); color: var(--ink-3); }
 
-/* open state across the site */
-.deep-on .deep > summary .deep-kind::after { content: " · открыто"; color: var(--ink-3); }
 

@@ -32,3 +32,23 @@
 /* a finger finds the small link in a zone of about 40 px */
 @media (pointer: coarse) { .sci-note-link { position: relative; } .sci-note-link::after { content: ""; position: absolute; inset: -12px -6px; } }
 
+
+/* in a dive's heading, a row under the title: the fact that calls into it */
+.deep-fact { grid-column: 2 / -1; display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; margin-top: -4px; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--k) 7%, transparent); font-size: .86rem; line-height: 1.45; color: var(--ink-2); }
+.deep-fact .ico { width: 18px; height: 18px; margin-top: 1px; color: var(--k); }
+@media (max-width: 640px) { .deep-fact { grid-column: 1 / -1; margin-top: -2px; } }
+/* at the top of «Глубже»: the facts of the tab with no dive of their own here */
+.deep-facts { display: grid; gap: 10px; max-width: 72ch; margin: 0; padding: 0; list-style: none; }
+.deep-facts li { --k: var(--sci-bio); display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
+.deep-facts li[data-kind="chem"] { --k: var(--sci-chem); }
+.deep-facts li[data-kind="phys"] { --k: var(--sci-phys); }
+.deep-facts li[data-kind="taste"] { --k: var(--sci-taste); }
+.deep-facts .ico { width: 18px; height: 18px; margin-top: 2px; color: var(--k); }
+.deep-fact-link { font: 500 .74rem/1.3 var(--font-mono); color: var(--k); text-decoration: none; white-space: nowrap; border-bottom: 1px dashed color-mix(in srgb, var(--k) 50%, transparent); }
+.deep-fact-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+@media (pointer: coarse) { .deep-fact-link { position: relative; } .deep-fact-link::after { content: ""; position: absolute; inset: -12px -6px; } }
+
+/* Справка «Любопытно»: the facts of every chapter as cards (facts_here in build.py) */
+.facts-all { display: grid; gap: clamp(26px, 4vw, 40px); margin-top: 8px; }
+.facts-ch h3 { margin: 0; }
+.facts-ch .sci-notes { margin-top: 16px; }

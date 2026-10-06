@@ -2,7 +2,7 @@
    text you read stays selectable; controls, drawings and things you drag are not —
    rubbing a leaf, turning the season wheel or double-clicking a heading no longer paints words blue */
 ::selection { background: color-mix(in srgb, var(--basil) 32%, transparent); color: inherit; }
-button, summary, label, .btn, .chip, .seg, .nav, .subnav, .tabbar, .toc, .pager, .deep-index, .depth-seg, .depth-pop, .rb-filter,
+button, summary, label, .btn, .chip, .seg, .nav, .subnav, .tabbar, .toc, .pager, .deep-index, .hap-row, .rb-filter,
 .plant-stage, .hero-art, .ch-hero-art, .season-mark, .wheel-wrap, .mol-stage, .lab-chart, .lab-controls, .sim, .sim-stage,
 svg, canvas {
   -webkit-user-select: none;

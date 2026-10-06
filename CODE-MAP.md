@@ -71,7 +71,7 @@
 - `src/js/science/04-astronomy.js`: `decl` 5, `dayLength` 6, `h0` 13, `noonSun` 20
 - `src/js/science/05-molecules.js`: `molName` 68, `molFam` 69, `seeded` 106, `embed` 108, `shape` 167, `rx` 170, `ry` 171, `mul` 172, `ortho` 174, `MolViewer` 187
 - `src/js/science/06-labs-loader.js`: `register` 6, `url` 12, `own` 15, `parsed` 16, `script` 17, `ensureLabs` 34, `styleFor` 43, `styleOn` 44, `failed` 54, `pause` 60, `later` 63, `drain` 71, `mount` 87, `mountAll` 102, `illustrate` 115, `variants` 116, `draw` 118, `fitIll` 140, `painted` 144, `seen` 148, `drawDue` 153, `paint` 157, `ahead` 197, `early` 219
-- `src/js/science/07-deep.js`: `animateDetails` 24, `setDepth` 45, `initDepthControl` 67, `initDeep` 124, `initHomeMolecule` 181, `init` 216
+- `src/js/science/07-deep.js`: `animateDetails` 7, `initDeepAll` 30, `initDeep` 49, `initHomeMolecule` 106, `init` 141
 
 Общие помощники science.js — кто зовёт:
 - `clamp` (00-core.js:6) — 4: 01-colors, 03-charts, 04-astronomy …
@@ -95,7 +95,7 @@
 - `src/js/data/10-experiments.js`: `expDay` 4
 
 ### Отдельные файлы
-- `src/js/haptics.js`: `iosTap` 20, `play` 34, `watchSnap` 69, `initSnaps` 82, `dragTicker` 94
+- `src/js/haptics.js`: `iosTap` 20, `play` 34, `watchSnap` 69, `initSnaps` 82, `initSwitch` 94, `set` 103, `dragTicker` 106
 - `src/labs/_frame.js`: `r1` 8, `pct` 9, `set` 12, `doyToday` 13, `doyLabel` 14, `citiesChips` 15
 - `src/labs/formirovka/_shared.js`: `pinchP` 5
 - `src/labs/moy/_shared.js`: `EXP_DEF` 17, `two` 18, `localISO` 19, `fromLocal` 20, `whenText` 21, `sinceText` 23, `nfmt` 30, `expRid` 31, `expX` 33, `expVal` 35, `expSeries` 38, `expCross` 40, `expPlot` 52, `expTimeTicks` 63, `expFx` 69, `experiment` 71
@@ -137,7 +137,7 @@
 - `src/css/style/19-reference.css`: `.check-*`, `.faq-*`, `.gloss-*`, `.bar`, `.glossary`, `.ico`
 - `src/css/style/20-footer.css`: `.footer-*`, `.to-top`, `.brand`, `.is-shown`
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.peek-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.is-loading`, `.sr-group`, `.sr-note`, `.sr-ico` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `peek-paper`, `peek-in`, `search-in`, `is-found`
-- `src/css/style/22-selection.css`: `.depth-*`, `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.deep-*`
+- `src/css/style/22-selection.css`: `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.deep-*`, `.hap-*`
 - `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-empty`, `.g-photo-*`, `.g-form-*`, `.garden-*`, `.g-link`
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.sheet-*`, `.ico`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
@@ -147,19 +147,17 @@
 - `src/css/lab/00-micro.css`: `.mic-*`, `.is-burst`, `.is-pale`, `.is-film`, `.is-cap`, `.is-done`, `.has-*`, `.is-sel` · анимации: `mic-fly`
 - `src/css/lab/00-tokens.css`: `.sr-only`
 - `src/css/lab/01-hero.css`: `.pot-*`, `.hero-*`, `.aroma-*`, `.plant-*`, `.passport`, `.pl-stem-*`, `.pl-leaf`, `.is-purple`, `.pl-scar`, `.pl-pet`, `.pl-fold`, `.pl-shine` · анимации: `aroma-rise`, `label-rise`
-- `src/css/lab/03-deep-switch.css`: `.deep-*`
 - `src/css/lab/04-deep-index.css`: `.deep-*`, `.lab-*`, `.ico`, `.ch-hero`
 - `src/css/lab/05-deep.css`: `.deep-*`, `.chel-*`, `.num-*`, `.ico`, `.eq`, `.ph-strip`, `.ticks`, `.chem`, `.eq-label`, `.eq-enz`, `.margin-*`, `.aside-*`
 - `src/css/lab/06-lab-tools.css`: `.lab-*`, `.zone-*`, `.gdd-*`, `.fam-*`, `.line`, `.legend`, `.range`, `.band-*`, `.s1`, `.s2`, `.s3`, `.mol-*` · анимации: `shimmer`
 - `src/css/lab/07-vkus.css`: `.world-*`, `.cols-*`, `.kitchen-*`
 - `src/css/lab/08-home-science.css`: `.sh-mol`, `.sh-kinds`, `.science-*`, `.sh-text`, `.sh-open`, `.is-open`, `.sh-chev`, `.mol-*`, `.sh-fold`, `.eyebrow`, `.is-total`, `.ico`
-- `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.deep-*`, `.q-card`, `.tool`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o`, `.ar-c` · анимации: `fade-out`
-- `src/css/lab/10-depth.css`: `.depth-*`, `.deep-*` · анимации: `pop-in`
+- `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.q-card`, `.tool`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o`, `.ar-c`, `.ar-oil` · анимации: `fade-out`
 - `src/css/lab/11-deep-footer.css`: `.deeper-*`, `.deep-*`, `.eq`, `.is-deeper`
-- `src/css/lab/12-sci-notes.css`: `.sci-*`, `.ico`, `.hand`
+- `src/css/lab/12-sci-notes.css`: `.sci-*`, `.deep-*`, `.ico`, `.facts-*`, `.hand`
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
 - `src/css/lab/14-paint.css`: `.plant-*`, `.lab-*`, `.is-off`, `.pl-stems`, `.osm-*`, `.xylem`, `.phloem`, `.barrel-*`, `.nc-flow`, `.germ-*`
-- `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.depth-*`, `.ico`, `.hap-*`, `.continue`, `.is-shown`, `.is-bar` · анимации: `resume-mark`
+- `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.hap-*`, `.ico`, `.continue`, `.is-shown`, `.is-bar` · анимации: `resume-mark`
 
 ### стили моделей и глав
 - `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
@@ -198,18 +196,16 @@
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
 - `basil:panel` — шлёт: `src/js/app/02-router.js:73`; слушают: `src/js/app/22-reading-pos.js:276`, `src/js/science/06-labs-loader.js:185`
-- `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:240`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:214`, `src/js/science/07-deep.js:224`
+- `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:240`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:214`, `src/js/science/07-deep.js:149`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
 - `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:205`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/vkus/pesto.js:67`
-- `basil:view` — шлёт: `src/js/app/02-router.js:170`; слушают: `src/js/app/02-router.js:249`, `src/js/app/02-router.js:279`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:226`
+- `basil:view` — шлёт: `src/js/app/02-router.js:170`; слушают: `src/js/app/02-router.js:249`, `src/js/app/02-router.js:279`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:151`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
 ## Хранилище
 
 Ключи `localStorage` (и база IndexedDB `basil-photos`) — в каких файлах встречаются, с первой строкой.
 
-- `basil-deep` — `src/js/science/07-deep.js:16`
-- `basil-depth` — `src/js/science/07-deep.js:5`
 - `basil-detour` — `src/js/app/22-reading-pos.js:356`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
@@ -228,12 +224,12 @@
 
 - `max-width: 560px` — 13: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
 - `max-width: 900px` — 13: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css, 23-garden.css
-- `max-width: 640px` — 10: 05-deep.css, 06-blocks.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
+- `max-width: 640px` — 11: 05-deep.css, 06-blocks.css ×2, 12-sci-notes.css, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
 - `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 700px` — 5: 04-deep-index.css, 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
-- `max-width: 420px` — 4: 04-controls.css, 10-depth.css, 15-fertilizers.css ×2
+- `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
 - `max-width: 760px` — 3: 06-lab-tools.css, 12-steps.css, flows.css
 - `max-width: 820px` — 3: 14-care.css, 15-fertilizers.css ×2
@@ -255,16 +251,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1216`
-- `{{description}}` в `src/layout.html` — `build.py:1216`
-- `{{pwa}}` в `src/layout.html` — `build.py:1232`
-- `{{fonts}}` в `src/layout.html` — `build.py:1231`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1213`
-- `{{content}}` в `src/layout.html` — `build.py:1211`
-- `{{toc}}` в `src/layout.html` — `build.py:1213`
-- `{{scripts}}` в `src/layout.html` — `build.py:1230`
-- `{{version}}` в `src/sw.js` — `build.py:1346`
-- `{{precache}}` в `src/sw.js` — `build.py:1346`
+- `{{title}}` в `src/layout.html` — `build.py:1278`
+- `{{description}}` в `src/layout.html` — `build.py:1278`
+- `{{pwa}}` в `src/layout.html` — `build.py:1294`
+- `{{fonts}}` в `src/layout.html` — `build.py:1293`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1275`
+- `{{content}}` в `src/layout.html` — `build.py:1273`
+- `{{toc}}` в `src/layout.html` — `build.py:1275`
+- `{{scripts}}` в `src/layout.html` — `build.py:1292`
+- `{{version}}` в `src/sw.js` — `build.py:1408`
+- `{{precache}}` в `src/sw.js` — `build.py:1408`
 
 ## Проверки
 

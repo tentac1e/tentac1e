@@ -13,7 +13,7 @@
 .ar-oil { fill: var(--oil-bright); }
 
 @media (prefers-reduced-motion: reduce) {
-  .aroma-dot, .aroma-label, .deep-toggle::after, .deep-ico::after, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .lab-tool:empty { animation: none !important; }
+  .aroma-dot, .aroma-label, .deep-ico::after, .osm-flow, .xylem, .phloem, .barrel-spill, .nc-flow, .lab-tool:empty { animation: none !important; }
   .germ-anim * { animation: none !important; }
   .germ-root, .germ-hypo { stroke-dashoffset: 0; }
   .aroma-label { opacity: 1; transform: translate(-50%, -140%); animation: fade-out 2.4s forwards !important; }

@@ -203,16 +203,29 @@ function codeMap() {
   const dlAfter = await dl();
   ok(!dlBefore && dlAfter && listed((await tagsOf()).tags, await want('posadka')), 'a model inside «Глубже» is built when opened ' + JSON.stringify({ dlBefore, dlAfter }));
 
-  // reading depth carries over
-  await page.goto(fileUrl('sorta.html'), { waitUntil: 'load' });
-  await page.click('#deep-toggle');
-  await page.click('.depth-pop [data-depth-pick="2"]');
+  // no depth of reading in the header: the dives open one by one, or all of a tab's at once from its «Глубже» line
   await page.goto(fileUrl('uhod.html'), { waitUntil: 'load' });
-  await page.waitForTimeout(300);
-  const dep = await page.evaluate(() => ({ d: document.documentElement.dataset.depth, all: [...document.querySelectorAll('details.deeper')].every(d => d.open) }));
-  ok(dep.d === '2' && dep.all, 'depth carried to next page ' + JSON.stringify(dep));
-  await page.click('#deep-toggle');
-  await page.click('.depth-pop [data-depth-pick="0"]');
+  await page.waitForTimeout(500);
+  const zone = () => page.evaluate(() => { const z = document.querySelector('.panel.is-active .deep-zone'), b = z.querySelector('[data-deep-all]');
+    return { header: !!document.getElementById('deep-toggle'), n: z.querySelectorAll('details.deep').length, open: z.querySelectorAll('details.deep[open]').length, label: b && b.textContent, other: document.querySelectorAll('details.deep[open]').length }; });
+  const z0 = await zone();
+  await page.click('.panel.is-active [data-deep-all]');
+  await page.waitForTimeout(700);
+  const z1 = await zone();
+  await page.click('.panel.is-active [data-deep-all]');
+  await page.waitForTimeout(900);
+  const z2 = await zone();
+  ok(!z0.header && z0.n >= 2 && z0.open === 0 && z0.label === 'Раскрыть все' && z1.open === z1.n && z1.other === z1.n && z1.label === 'Свернуть все' && z2.open === 0 && z2.label === 'Раскрыть все',
+    '«Раскрыть все» opens the tab\'s dives and only them, then closes them ' + JSON.stringify([z0, z1, z2]));
+  // «Любопытно»: each fact stands once in its chapter — in its dive's heading or at the top of «Глубже» — and once more
+  // in Справка, signed with its tab; none is left in the chapters' text
+  const chapter = FILES.filter(f => !['index.html', 'moy.html', 'spravka.html'].includes(f)).map(f => fs.readFileSync(path.join(ROOT, f), 'utf8'));
+  const facts = chapter.reduce((n, h) => n + (h.match(/<span class="deep-fact">/g) || []).length + (h.match(/<ul class="deep-facts"[^>]*>[\s\S]*?<\/ul>/g) || []).reduce((k, ul) => k + (ul.match(/<li /g) || []).length, 0), 0);
+  const left = FILES.filter(f => f !== 'spravka.html' && /class="sci-note"/.test(fs.readFileSync(path.join(ROOT, f), 'utf8')));
+  await page.goto(fileUrl('spravka.html') + '#' + encodeURIComponent('любопытно'), { waitUntil: 'load' });
+  await page.waitForTimeout(500);
+  const coll = await page.evaluate(() => { const all = document.querySelector('.panel.is-active .facts-all'); return { active: document.querySelector('.panel.is-active').id, cards: all.querySelectorAll('.sci-note').length, chapters: all.querySelectorAll('.facts-ch h3').length, signed: [...all.querySelectorAll('.sci-note .hand')].every(x => x.textContent.trim()) }; });
+  ok(facts >= 30 && coll.cards === facts && coll.chapters === 7 && coll.signed && !left.length && /любопытно|lyubopytno/.test(coll.active), `«Любопытно»: ${facts} facts in the chapters, all in Справка ` + JSON.stringify({ coll, left }));
 
   // continue reading
   await page.goto(fileUrl('formirovka.html#цветение'), { waitUntil: 'load' });

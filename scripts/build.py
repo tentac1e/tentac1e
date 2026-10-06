@@ -87,7 +87,7 @@ TAB = {
     'vkus-aromat': 'аромат', 'vkus-molekuly': 'молекулы', 'vkus-himotipy': 'химотипы', 'vkus-kuhnya': 'кухня', 'vkus-sochetaniya': 'сочетания',
     'vkus-hranenie': 'хранение', 'vkus-recepty': 'рецепты',
     'problemy-diagnostika': 'диагностика', 'problemy-bolezni': 'болезни', 'problemy-vrediteli': 'вредители', 'problemy-profilaktika': 'профилактика',
-    'spravka-voprosy': 'вопросы', 'spravka-slovar': 'словарь', 'spravka-chek-list': 'чек-лист',
+    'spravka-voprosy': 'вопросы', 'spravka-slovar': 'словарь', 'spravka-chek-list': 'чек-лист', 'spravka-lyubopytno': 'любопытно',
     'moy-kusty': 'кусты', 'moy-pogoda': 'погода', 'moy-opyty': 'опыты',
 }
 
@@ -198,7 +198,9 @@ SITE_DESC = ('Подробный гид по выращиванию базили
 SKIP = ['#chapters', '#quick', '#tools-home', '#journey', '.diag-result', '.el-detail', '#variety-detail', '.quiz',
         '.plan-list', '.timeline', '.dose-out', '.npk-out', '.soil-out', '.dli-out', '.stage-body', '.pager', '.sim',
         '#glossary', '#disease-grid', '#pest-grid', '#diag-groups', '#place-panel', '#check-groups', '.lab-tool',
-        '.deep-index', '.recipe-book', '.deep-src', '.faq-here']
+        '.deep-index', '.recipe-book', '.deep-src', '.faq-here', '.facts-all']
+# inside a block the search reads: the copies of Справка's questions (faq_here) and the button «Раскрыть все» (deep_all)
+OWN_SKIP = ['.faq-here', '.deep-all']
 BOX = ['details', '.card', '.step', '.pane', 'article', '.rule', 'li']
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
@@ -222,6 +224,64 @@ def faq_here(src):
                  + '        </div>\n        <p class="faq-more"><a href="#spravka-voprosy">Все частые вопросы</a></p>\n'
                  '      </section>\n      ')
         src[view] = html[:zone] + block + html[zone:]
+
+
+def deep_all(src):
+    """«Раскрыть все» at the end of a tab's «Глубже» line where the tab has two dives or more (07-deep.js opens
+    and closes them); written here, so the line reads the same before and after the script"""
+    label = '<small>наука этого раздела</small></p>'
+    for view, html in src.items():
+        out, pos = [], 0
+        for m in re.finditer(r'<div class="deep-zone">', html):
+            nxt = html.find('data-panel id="', m.end())
+            zone = html[m.end():nxt if nxt > 0 else len(html)]
+            at = html.find(label, m.end())
+            if zone.count('<details class="deep"') < 2 or at < 0:
+                continue
+            at += len(label) - len('</p>')
+            out.append(html[pos:at] + '<button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button>')
+            pos = at
+        src[view] = ''.join(out) + html[pos:]
+
+
+def facts_here(src, CH):
+    """Справка «Любопытно»: every fact of the chapters, by chapter, as a card signed with its tab that leads where it
+    is told in full — the dive whose heading it stands in (.deep-fact) or its own link (.deep-facts at the top of
+    «Глубже»). The facts are written once, in the chapters; the search finds them there (.facts-all is in SKIP)"""
+    bulb = '<svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg>'
+    out = []
+    for view, _ in PAGES:
+        if view in ('glavnaya', 'spravka', 'moy'):
+            continue
+        cards = []
+        html = src[view]
+        tabs = list(re.finditer(r'data-panel id="([^"]+)" data-title="([^"]+)"', html))
+        for i, t in enumerate(tabs):
+            part = html[t.end():tabs[i + 1].start() if i + 1 < len(tabs) else len(html)]
+            title = t.group(2)
+            here = []
+            for m in re.finditer(r'<li data-kind="(\w+)"><svg[^>]*><use href="#i-bulb"/></svg><span>(.*?)</span></li>', part, re.S):
+                text, link = m.group(2), re.search(r' <a class="deep-fact-link" href="#([^"]+)">(.*?)</a>$', m.group(2), re.S)
+                if link:
+                    text = text[:link.start()]
+                    go = f'<a class="sci-note-link" href="#{link.group(1)}">{link.group(2)}</a>'
+                else:
+                    go = ''  # a fact with no dive to lead to: its label says which tab it is from
+                here.append((m.start(), m.group(1), title, text, go))
+            for m in re.finditer(r'<details class="deep" id="([^"]+)" data-kind="(\w+)" data-short="([^"]+)">(.*?)</summary>', part, re.S):
+                for f in re.finditer(r'<span class="deep-fact"><svg[^>]*><use href="#i-bulb"/></svg><span>(.*?)</span></span>', m.group(4), re.S):
+                    go = f'<a class="sci-note-link" href="#{m.group(1)}">Глубже: {m.group(3)} <span aria-hidden="true">→</span></a>'
+                    here.append((m.start(), m.group(2), title, f.group(1), go))
+            cards += sorted(here, key=lambda c: c[0])  # in the order they stand on the tab
+        if cards:
+            out.append(f'<section class="facts-ch"><h3>{escape(CH[view]["title"])}</h3>\n        <div class="sci-notes">\n'
+                       + ''.join(f'          <aside class="sci-note" data-kind="{k}"><span class="sci-note-k">{bulb}<span class="hand">{escape(ti)}</span></span>'
+                                 f'<p>{tx.strip()}</p>{go}</aside>\n' for _, k, ti, tx, go in cards)
+                       + '        </div></section>')
+    n = sum(x.count('<aside') for x in out)
+    holder = '<div class="facts-all"></div>'
+    assert src['spravka'].count(holder) == 1, 'Справка: no place for «Любопытно»'
+    src['spravka'] = src['spravka'].replace(holder, f'<div class="facts-all" data-count="{n}">\n      ' + '\n      '.join(out) + '\n      </div>')
 
 
 # ---------------------------------------------------------------- mini DOM
@@ -329,13 +389,13 @@ def section_of(head):
 
 
 def text_own(node, skip):
-    """the text of a node without the blocks in skip (ids of nodes that are indexed on their own) and without the
-    copies of Справка's questions (faq_here): each piece of text is found once, where it was written"""
+    """the text of a node without the blocks in skip (ids of nodes that are indexed on their own) and without
+    OWN_SKIP: each piece of text is found once, where it was written"""
     parts = [node.text] if node.tag == '#text' else []
 
     def walk(n):
         for c in n.children:
-            if id(c) in skip or (c.tag != '#text' and c.matches('.faq-here')):
+            if id(c) in skip or (c.tag != '#text' and any(c.matches(x) for x in OWN_SKIP)):
                 continue
             if c.tag == '#text':
                 parts.append(c.text)
@@ -993,7 +1053,9 @@ def main():
     nav = nav_items()
     src = {v: read_page(v) for v, _ in PAGES}
     faq_here(src)
+    deep_all(src)
     CH = chapters()
+    facts_here(src, CH)
     # a build for another place (--out, --single) leaves the one in the root as it is: checks read it meanwhile
     stage = Path(tempfile.mkdtemp(prefix='basil-book-')) if single else None
     assets = stage / 'assets' if single else out_dir / 'assets'

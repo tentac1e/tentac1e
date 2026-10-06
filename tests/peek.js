@@ -161,11 +161,11 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
       const q = s => document.querySelectorAll(s).length;
       return { h: document.documentElement.scrollHeight, chapters: q('#chapters > .toc-item'), desc: q('#chapters .toc-d'), subs: q('#chapters .toc-sub a'), tools: q('#tools-home a.tool'),
         passport: q('#short-pasport dl > div'), facts: q('#short-cifry .facts li'), journey: q('#journey li'), rules: q('#rules .rule'),
-        science: !!document.querySelector('#sh-fold > p') && q('.depth-seg button') === 3 && !!document.getElementById('home-molecule'), wide: document.documentElement.scrollWidth > innerWidth };
+        science: !!document.querySelector('#sh-fold > p') && !q('.depth-seg button') && !!document.getElementById('home-molecule'), wide: document.documentElement.scrollWidth > innerWidth };
     });
     ok(r.h <= max && r.chapters === 8 && r.desc === 8 && r.subs > 30 && r.tools === 16 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
       `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 16 tools, the passport, figures, path, rules and the science layer ${JSON.stringify(r)}`);
-    // «Научный слой» in one column: its heading and a button; the text, the depth of reading and the molecule open
+    // «Научный слой» in one column: its heading and a button; the text and the molecule open
     const sci = () => p.evaluate(() => ({ btn: getComputedStyle(document.querySelector('.sh-open')).display !== 'none', fold: getComputedStyle(document.getElementById('sh-fold')).display !== 'none', mol: getComputedStyle(document.getElementById('sh-mol')).display !== 'none', exp: document.querySelector('.sh-open').getAttribute('aria-expanded') }));
     const s0 = await sci();
     if (s0.btn) {

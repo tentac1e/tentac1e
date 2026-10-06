@@ -61,12 +61,11 @@
 .continue { max-width: 100%; }
 .continue b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* haptics switch in the depth menu */
-.depth-pop .depth-hap { margin-top: 6px; border-top: 1px solid var(--line); border-radius: 0 0 14px 14px; }
-.depth-pop .depth-hap[aria-checked] { background: none; }
-.depth-pop .depth-hap:hover, .depth-pop .depth-hap:focus-visible { background: var(--surface-2); }
-.hap-switch { position: relative; justify-self: center; width: 30px; height: 18px; border-radius: 9px; background: var(--line-strong); transition: background-color .2s; }
+/* haptics switch in the footer (haptics.js shows it where the phone can give the feedback) */
+.hap-row { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; margin-top: 10px; padding: 0; border: 0; background: none; color: var(--ink-2); font: inherit; font-size: .86rem; cursor: pointer; }
+.hap-row[hidden] { display: none; }
+.hap-switch { position: relative; flex: none; width: 30px; height: 18px; border-radius: 9px; background: var(--line-strong); transition: background-color .2s; }
 .hap-switch::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface); transition: transform .25s var(--ease-float); }
-.depth-hap[aria-checked="true"] .hap-switch { background: var(--basil); }
-.depth-hap[aria-checked="true"] .hap-switch::after { transform: translateX(12px); }
+.hap-row[aria-checked="true"] .hap-switch { background: var(--basil); }
+.hap-row[aria-checked="true"] .hap-switch::after { transform: translateX(12px); }
 @media (prefers-reduced-motion: reduce) { .resume-pill, .panel-next, .panel-next .ico { transition: none; } .resume-mark { animation: none; } }

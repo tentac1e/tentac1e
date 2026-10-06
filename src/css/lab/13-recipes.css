@@ -77,7 +77,6 @@
   .recipe-card > summary, .recipe-card.is-feat > summary { padding: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .depth-pop { animation: none; }
   .sci-note, .sci-note:nth-child(even), .sci-note:hover { transform: none; }
 }
 

@@ -59,7 +59,7 @@ window.BasilHaptics = (() => {
     if (el && (el.type === 'checkbox' || el.type === 'radio') && e.isTrusted) play('select');
   }, true);
   // taps on controls that change something on the page
-  const TAPS = 'button, summary, [role="button"], [data-v], [data-cat], [data-depth-pick], .subnav a, .deep-index a, .w-arc, select';
+  const TAPS = 'button, summary, [role="button"], [data-v], [data-cat], .subnav a, .deep-index a, .w-arc, select';
   document.addEventListener('click', e => {
     if (!e.isTrusted || !e.target.closest) return;
     const el = e.target.closest(TAPS);
@@ -90,6 +90,18 @@ window.BasilHaptics = (() => {
   // rows that the page builds at start-up (symptom gallery, pairing foods) exist only after it is ready
   document.addEventListener('basil:ready', initSnaps);
 
+  // the switch in the footer: shown only where the phone can give the feedback
+  const initSwitch = () => {
+    if (!supported) return;
+    document.querySelectorAll('[data-haptics]').forEach(b => {
+      b.hidden = false;
+      b.setAttribute('aria-checked', String(on));
+      b.addEventListener('click', () => { set(!on); b.setAttribute('aria-checked', String(on)); });
+    });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSwitch); else initSwitch();
+  function set(v) { on = !!v; try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) { /* private mode */ } if (on) play('select'); }
+
   // dragging over a chart or turning a model: a tick every `px` pixels of travel
   function dragTicker(px = 18) {
     let x0 = null, y0 = null;
@@ -106,7 +118,7 @@ window.BasilHaptics = (() => {
   return {
     supported,
     get enabled() { return on; },
-    set(v) { on = !!v; try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) { /* private mode */ } if (on) play('select'); },
+    set,
     tick: () => play('tick'),
     select: () => play('select'),
     impact: () => play('impact'),
