@@ -7,7 +7,7 @@ dist/gid-po-baziliku-regru.zip   содержимое dist/site (вместе с
                                  его распаковывают в www/ocimum.ru/ на REG.RU
 dist/preview/page.html           главная для превью-страницы: без строк каркаса (их добавляет сам хостинг превью)
 dist/preview/*.html              остальные страницы; шрифты — у Google, как у книги одним файлом (своих файлов шрифтов
-                                 превью не несёт)
+                                 превью не несёт); старые адреса слитых глав (MOVED) — как есть: они сразу ведут дальше
 dist/preview/files.json          опубликованный путь → файл на диске: страницы, стили, скрипты, модели глав
 """
 import json
@@ -18,7 +18,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build import GOOGLE_FONTS, ROOT  # noqa: E402
+from build import GOOGLE_FONTS, MOVED, ROOT  # noqa: E402
 
 DIST = ROOT / 'dist'
 SITE = DIST / 'site'
@@ -52,8 +52,13 @@ def preview():
             p.unlink()
     PREVIEW.mkdir(parents=True, exist_ok=True)
     files = {}
+    moved = {m['file'] for m in MOVED.values()}
     for f in sorted(ROOT.glob('*.html')):
         html = f.read_text(encoding='utf-8')
+        if f.name in moved:
+            (PREVIEW / f.name).write_text(html, encoding='utf-8')
+            files[f.name] = str(PREVIEW / f.name)
+            continue
         html, n = re.subn(r'<style>\n/\* Шрифты сайта.*?</style>', lambda m: GOOGLE_FONTS, html, count=1, flags=re.S)
         assert n == 1, f'{f.name}: the fonts block is not where it was'
         # the font preloads point at files the preview does not carry
