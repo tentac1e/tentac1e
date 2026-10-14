@@ -134,7 +134,7 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   const tabStart = () => page.evaluate(() => { const p = document.querySelector('.panel.is-active'), w = document.querySelector('.view.is-active .subnav-wrap');
     return { id: p.id, gap: Math.round(p.getBoundingClientRect().top - w.getBoundingClientRect().bottom), y: Math.round(scrollY) }; });
   const atStart = st => st.gap >= 0 && st.gap <= 48;
-  await page.evaluate(() => document.querySelector('.panel.is-active .panel-next').scrollIntoView({ block: 'center' }));
+  await page.evaluate(() => document.querySelector('.panel.is-active .panel-next').scrollIntoView({ block: 'center', behavior: 'instant' }));
   await page.tap('.panel.is-active .panel-next');
   await page.waitForTimeout(900);
   const st = await tabStart();
