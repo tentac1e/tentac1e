@@ -12,7 +12,7 @@
   const SEARCH_GROUPS = [['sec', 'Разделы'], ['prob', 'Проблемы и симптомы'], ['var', 'Сорта'], ['el', 'Питание'], ['rec', 'Рецепты'], ['word', 'Словарь и вкус']];
 
   /* the one-file book has no index file: the page indexes itself by the rules of scripts/build.py */
-  const SEARCH_SKIP = '#chapters, #quick, #tools-home, #journey, .diag-result, .el-detail, #variety-detail, .quiz, .plan-list, .timeline, .dose-out, .npk-out, .soil-out, .dli-out, .stage-body, .pager, .sim, #glossary, #disease-grid, #pest-grid, #diag-groups, #place-panel, #check-groups, .lab-tool, .deep-index, .recipe-book, .deep-src';
+  const SEARCH_SKIP = '#chapters, #quick, #tools-home, #journey, .diag-result, .el-detail, #variety-detail, .quiz, .plan-list, .timeline, .dose-out, .npk-out, .soil-out, .dli-out, .stage-body, .pager, .sim, #glossary, #disease-grid, #pest-grid, #diag-groups, #place-panel, #check-groups, .lab-tool, .recipe-book, .deep-src';
   const SEARCH_BOX = 'details, .card, .step, .pane, article, .rule, li';
   // what a heading titles: its box when it is the box's first heading, else itself and what follows it
   // up to the next heading
@@ -52,17 +52,17 @@
           const host = h.closest('details.deep');
           if (!h.id) h.id = host ? host.id + '-glubzhe' : 's-' + (++n);
           const t = $('.deeper-t', h);
-          list.push([{ title: (t || h).textContent.trim(), sub: 'Ещё глубже · ' + (host ? host.dataset.short : where), hash: h.id, icon: 'hex' }, [h.nextElementSibling]]);
+          list.push([{ title: (t || h).textContent.trim(), sub: 'Подробнее · ' + (host ? host.dataset.short : where), hash: h.id, icon: 'hex' }, [h.nextElementSibling]]);
           return;
         }
         if (h.tagName === 'SUMMARY' && parent.classList.contains('deep')) {
           const t = $('.deep-title', h);
-          list.push([{ title: (t || h).textContent.trim(), sub: 'Глубже · ' + where, hash: parent.id, icon: 'hex' }, [$('.deep-body', parent)], $('.deep-sub', h)]);
+          list.push([{ title: (t || h).textContent.trim(), sub: 'Для любопытных · ' + where, hash: parent.id, icon: 'hex' }, [$('.deep-body', parent)], $('.deep-sub', h)]);
           return;
         }
         if (!h.id) h.id = 's-' + (++n);
         const deep = h.closest('.deep');
-        list.push([{ title: h.textContent.trim(), sub: where + (deep ? ' · Глубже' + (deep.dataset.short ? ': ' + deep.dataset.short : '') : ''), hash: h.id, icon: h.tagName === 'SUMMARY' ? 'info' : 'leaf' }, sectionOf(h), null, h]);
+        list.push([{ title: h.textContent.trim(), sub: where + (deep ? ' · Для любопытных' + (deep.dataset.short ? ': ' + deep.dataset.short : '') : ''), hash: h.id, icon: h.tagName === 'SUMMARY' ? 'info' : 'leaf' }, sectionOf(h), null, h]);
       });
     });
     const owned = new Set();

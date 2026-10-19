@@ -37,7 +37,7 @@
 .deep-fact { grid-column: 2 / -1; display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; margin-top: -4px; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--k) 7%, transparent); font-size: .86rem; line-height: 1.45; color: var(--ink-2); }
 .deep-fact .ico { width: 18px; height: 18px; margin-top: 1px; color: var(--k); }
 @media (max-width: 640px) { .deep-fact { grid-column: 1 / -1; margin-top: -2px; } }
-/* at the top of «Глубже»: the facts of the tab with no dive of their own here */
+/* at the top of «Для любопытных»: the facts of the tab with no dive of their own here */
 .deep-facts { display: grid; gap: 10px; max-width: 72ch; margin: 0; padding: 0; list-style: none; }
 .deep-facts li { --k: var(--sci-bio); display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
 .deep-facts li[data-kind="chem"] { --k: var(--sci-chem); }

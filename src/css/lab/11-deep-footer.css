@@ -1,5 +1,4 @@
-/* ================= deep dive: footer, tag, «ещё глубже», sources ================= */
-.deep-tag.is-deeper { background: transparent; border: 1px dashed color-mix(in srgb, var(--k) 55%, transparent); }
+/* ================= deep dive: footer, «Подробнее», sources ================= */
 .deep-foot { display: flex; justify-content: center; margin-top: 22px; }
 .deep-close {
   display: inline-flex;

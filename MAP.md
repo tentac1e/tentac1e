@@ -9,78 +9,78 @@
 
 ### Сорта — `/сорта` (`sorta.html`)
 - `src/pages/sorta/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/sorta/1-katalog.html` · #каталог — Каталог сортов · 106 стр.<br>глубже: Химотипы `#deep-himotipy`, Антоцианы `#deep-antociany`
-- `src/pages/sorta/2-podbor.html` · #подбор — Подбор сорта · 51 стр.<br>глубже: Генотип × среда `#deep-fenotip`
-- `src/pages/sorta/3-vybor.html` · #выбор — Как выбрать семена · 84 стр.<br>глубже: Устойчивость `#deep-ustoychivost`
-- `src/pages/sorta/4-semena.html` · #семена — Свои семена · 95 стр.<br>модели: `seedlife`; глубже: Генетика семян `#deep-genetika`, Старение семян `#deep-starenie-semyan`
+- `src/pages/sorta/1-katalog.html` · #каталог — Каталог сортов · 106 стр.<br>развороты: Химотипы `#deep-himotipy`, Антоцианы `#deep-antociany`
+- `src/pages/sorta/2-podbor.html` · #подбор — Подбор сорта · 51 стр.<br>развороты: Генотип × среда `#deep-fenotip`
+- `src/pages/sorta/3-vybor.html` · #выбор — Как выбрать семена · 84 стр.<br>развороты: Устойчивость `#deep-ustoychivost`
+- `src/pages/sorta/4-semena.html` · #семена — Свои семена · 95 стр.<br>модели: `seedlife`; развороты: Генетика семян `#deep-genetika`, Старение семян `#deep-starenie-semyan`
 - `src/pages/sorta/_foot.html` · подвал главы · 3 стр.
 
 ### Посадка — `/посадка` (`posadka.html`)
 - `src/pages/posadka/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/posadka/1-mesto.html` · #место — Где растить · 76 стр.<br>модели: `window`; глубже: Солнце в окне `#deep-okno`
-- `src/pages/posadka/2-sroki.html` · #сроки — Сроки посадки · 152 стр.<br>модели: `daylen`, `gdd`; глубже: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
-- `src/pages/posadka/3-posev.html` · #посев — Посев и рассада · 89 стр.<br>модели: `germ`; глубже: Прорастание `#deep-prorastanie`
-- `src/pages/posadka/4-magazin.html` · #магазин — Базилик из магазина · 72 стр.<br>модели: `shade`; глубже: Теснота и тень `#deep-ten`
-- `src/pages/posadka/5-gorshok.html` · #горшок — Горшок и грунт · 99 стр.<br>модели: `perched`; глубже: Подвешенная вода `#deep-voda-v-gorshke`
-- `src/pages/posadka/6-cherenki.html` · #черенки — Черенкование · 66 стр.<br>модели: `roots`; глубже: Придаточные корни `#deep-korni`
+- `src/pages/posadka/1-mesto.html` · #место — Где растить · 76 стр.<br>модели: `window`; развороты: Солнце в окне `#deep-okno`
+- `src/pages/posadka/2-sroki.html` · #сроки — Сроки посадки · 152 стр.<br>модели: `daylen`, `gdd`; развороты: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
+- `src/pages/posadka/3-posev.html` · #посев — Посев и рассада · 89 стр.<br>модели: `germ`; развороты: Прорастание `#deep-prorastanie`
+- `src/pages/posadka/4-magazin.html` · #магазин — Базилик из магазина · 72 стр.<br>модели: `shade`; развороты: Теснота и тень `#deep-ten`
+- `src/pages/posadka/5-gorshok.html` · #горшок — Горшок и грунт · 99 стр.<br>модели: `perched`; развороты: Подвешенная вода `#deep-voda-v-gorshke`
+- `src/pages/posadka/6-cherenki.html` · #черенки — Черенкование · 66 стр.<br>модели: `roots`; развороты: Придаточные корни `#deep-korni`
 - `src/pages/posadka/_foot.html` · подвал главы · 3 стр.
 
 ### Уход — `/уход` (`uhod.html`)
 - `src/pages/uhod/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/uhod/1-svet.html` · #свет — Свет · 122 стр.<br>модели: `spectrum`, `lamp`; глубже: Фотосинтез `#deep-fotosintez`, Обратные квадраты `#deep-lampa`
-- `src/pages/uhod/2-poliv.html` · #полив — Полив · 95 стр.<br>модели: `vpd`; глубже: Путь воды и VPD `#deep-vpd`
-- `src/pages/uhod/3-teplo.html` · #тепло — Тепло и воздух · 82 стр.<br>модели: `temp`; глубже: Ферменты и жара `#deep-fermenty`
-- `src/pages/uhod/4-pochva.html` · #почва — Почва и pH · 75 стр.<br>модели: `ph`; глубже: pH и доступность `#deep-ph`
-- `src/pages/uhod/5-sezony.html` · #сезоны — Уход по сезонам · 47 стр.<br>модели: `solar`; глубже: Зимний свет `#deep-zima`
+- `src/pages/uhod/1-svet.html` · #свет — Свет · 122 стр.<br>модели: `spectrum`, `lamp`; развороты: Фотосинтез `#deep-fotosintez`, Обратные квадраты `#deep-lampa`
+- `src/pages/uhod/2-poliv.html` · #полив — Полив · 95 стр.<br>модели: `vpd`; развороты: Путь воды и VPD `#deep-vpd`
+- `src/pages/uhod/3-teplo.html` · #тепло — Тепло и воздух · 82 стр.<br>модели: `temp`; развороты: Ферменты и жара `#deep-fermenty`
+- `src/pages/uhod/4-pochva.html` · #почва — Почва и pH · 75 стр.<br>модели: `ph`; развороты: pH и доступность `#deep-ph`
+- `src/pages/uhod/5-sezony.html` · #сезоны — Уход по сезонам · 47 стр.<br>модели: `solar`; развороты: Зимний свет `#deep-zima`
 - `src/pages/uhod/_foot.html` · подвал главы · 3 стр.
 
 ### Удобрения — `/удобрения` (`udobreniya.html`)
 - `src/pages/udobreniya/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/udobreniya/1-osnovy.html` · #основы — Правила подкормки · 123 стр.<br>модели: `osmos`; глубже: Осмос `#deep-osmos`, Химия мифов `#deep-mify-himiya`
-- `src/pages/udobreniya/2-elementy.html` · #элементы — Что за что отвечает · 70 стр.<br>модели: `flows`; глубже: Ксилема и флоэма `#deep-mobilnost`
-- `src/pages/udobreniya/3-stadii.html` · #стадии — Питание по стадиям роста · 122 стр.<br>модели: `barrel`, `ncycle`; глубже: Закон минимума `#deep-libih`, Круговорот азота `#deep-azot`
-- `src/pages/udobreniya/4-sredstva.html` · #средства — Какие удобрения использовать · 85 стр.<br>модели: `oxide`; глубже: Оксиды на упаковке `#deep-oksidy`
-- `src/pages/udobreniya/5-kalkulyator.html` · #калькулятор — Калькулятор раствора · 87 стр.<br>модели: `ec`; глубже: EC и ppm `#deep-ec`
+- `src/pages/udobreniya/1-osnovy.html` · #основы — Правила подкормки · 123 стр.<br>модели: `osmos`; развороты: Осмос `#deep-osmos`, Химия мифов `#deep-mify-himiya`
+- `src/pages/udobreniya/2-elementy.html` · #элементы — Что за что отвечает · 70 стр.<br>модели: `flows`; развороты: Ксилема и флоэма `#deep-mobilnost`
+- `src/pages/udobreniya/3-stadii.html` · #стадии — Питание по стадиям роста · 122 стр.<br>модели: `barrel`, `ncycle`; развороты: Закон минимума `#deep-libih`, Круговорот азота `#deep-azot`
+- `src/pages/udobreniya/4-sredstva.html` · #средства — Какие удобрения использовать · 85 стр.<br>модели: `oxide`; развороты: Оксиды на упаковке `#deep-oksidy`
+- `src/pages/udobreniya/5-kalkulyator.html` · #калькулятор — Калькулятор раствора · 87 стр.<br>модели: `ec`; развороты: EC и ppm `#deep-ec`
 - `src/pages/udobreniya/_foot.html` · подвал главы · 3 стр.
 
 ### Гидропоника — `/гидропоника` (`gidro.html`)
 - `src/pages/gidro/_head.html` · обложка, вкладки · 13 стр.
-- `src/pages/gidro/1-osnovy.html` · #основы — Гидропоника: введение · 201 стр.<br>модели: `hsys`, `o2box`, `alloc`; глубже: Дыхание корня `#deep-dyhanie-kornya`, Почему быстрее `#deep-bystree`, История `#deep-istoriya-gidroponiki`
-- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 188 стр.<br>модели: `kratky`, `capil`; глубже: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
-- `src/pages/gidro/3-rastvor.html` · #раствор — Раствор: EC, pH и кислород · 172 стр.<br>модели: `hmix`, `o2`, `drift`; глубже: Кислород и хелаты `#deep-kislorod`, Дрейф pH и EC `#deep-dreyf-ph`, Концентраты `#deep-osadok`
-- `src/pages/gidro/4-proverki.html` · #проверки — Проверки и неполадки · 158 стр.<br>модели: `hcheck`, `pyth`; глубже: Питиум `#deep-pitium`, Водоросли `#deep-vodorosli`, Приборы `#deep-pribory`
-- `src/pages/gidro/5-sravnenie.html` · #сравнение — Горшок или гидропоника · 143 стр.<br>глубже: Вкус `#deep-vkus-gidro`, Вода `#deep-voda-gidro`
+- `src/pages/gidro/1-osnovy.html` · #основы — Гидропоника: введение · 201 стр.<br>модели: `hsys`, `o2box`, `alloc`; развороты: Дыхание корня `#deep-dyhanie-kornya`, Почему быстрее `#deep-bystree`, История `#deep-istoriya-gidroponiki`
+- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 188 стр.<br>модели: `kratky`, `capil`; развороты: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
+- `src/pages/gidro/3-rastvor.html` · #раствор — Раствор: EC, pH и кислород · 172 стр.<br>модели: `hmix`, `o2`, `drift`; развороты: Кислород и хелаты `#deep-kislorod`, Дрейф pH и EC `#deep-dreyf-ph`, Концентраты `#deep-osadok`
+- `src/pages/gidro/4-proverki.html` · #проверки — Проверки и неполадки · 158 стр.<br>модели: `hcheck`, `pyth`; развороты: Питиум `#deep-pitium`, Водоросли `#deep-vodorosli`, Приборы `#deep-pribory`
+- `src/pages/gidro/5-sravnenie.html` · #сравнение — Горшок или гидропоника · 143 стр.<br>развороты: Вкус `#deep-vkus-gidro`, Вода `#deep-voda-gidro`
 - `src/pages/gidro/_foot.html` · подвал главы · 3 стр.
 
 ### Прищипка и сбор — `/прищипывание` (`formirovka.html`)
 - `src/pages/formirovka/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/formirovka/1-osnovy.html` · #основы — Как прищипывать · 95 стр.<br>модели: `auxin`; глубже: Апикальное доминирование `#deep-auksin`
-- `src/pages/formirovka/2-trenazher.html` · #тренажер — Тренажёр прищипывания · 61 стр.<br>модели: `branch`; глубже: Геометрия куста `#deep-2n`
-- `src/pages/formirovka/3-sbor.html` · #сбор — Сбор урожая · 68 стр.<br>модели: `diurnal`; глубже: Суточный ритм аромата `#deep-sutki`
-- `src/pages/formirovka/4-cvetenie.html` · #цветение — Цветение и омоложение · 64 стр.<br>глубже: Флориген `#deep-florigen`
+- `src/pages/formirovka/1-osnovy.html` · #основы — Как прищипывать · 95 стр.<br>модели: `auxin`; развороты: Апикальное доминирование `#deep-auksin`
+- `src/pages/formirovka/2-trenazher.html` · #тренажер — Тренажёр прищипывания · 61 стр.<br>модели: `branch`; развороты: Геометрия куста `#deep-2n`
+- `src/pages/formirovka/3-sbor.html` · #сбор — Сбор урожая · 68 стр.<br>модели: `diurnal`; развороты: Суточный ритм аромата `#deep-sutki`
+- `src/pages/formirovka/4-cvetenie.html` · #цветение — Цветение и омоложение · 64 стр.<br>развороты: Флориген `#deep-florigen`
 - `src/pages/formirovka/_foot.html` · подвал главы · 3 стр.
 
 ### Вкус и кухня — `/вкус` (`vkus.html`)
 - `src/pages/vkus/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/vkus/1-aromat.html` · #аромат — Откуда аромат · 117 стр.<br>модели: `trichome`, `pathway`, `chemotype`; глубже: Запах разреза `#deep-geksenal`, Химотип и среда `#deep-himotip-sreda`
-- `src/pages/vkus/2-molekuly.html` · #молекулы — Молекулы аромата · 43 стр.<br>модели: `molecules`; глубже: Как работает нос `#deep-nos`
-- `src/pages/vkus/3-kuhnya.html` · #кухня — Физика кухни · 63 стр.<br>модели: `heat`, `anthocyanin`; глубже: Летучесть `#deep-letuchest`
-- `src/pages/vkus/4-sochetaniya.html` · #сочетания — Сочетания · 50 стр.<br>модели: `pairing`; глубже: Гипотеза пищевых пар `#deep-pary`
-- `src/pages/vkus/5-hranenie.html` · #хранение — Хранение и заготовки · 54 стр.<br>модели: `storage`; глубже: Холод и потемнение `#deep-holod`
-- `src/pages/vkus/6-recepty.html` · #рецепты — Рецепты · 47 стр.<br>модели: `pesto`; глубже: Химия песто `#deep-pesto`
+- `src/pages/vkus/1-aromat.html` · #аромат — Откуда аромат · 117 стр.<br>модели: `trichome`, `pathway`, `chemotype`; развороты: Запах разреза `#deep-geksenal`, Химотип и среда `#deep-himotip-sreda`
+- `src/pages/vkus/2-molekuly.html` · #молекулы — Молекулы аромата · 43 стр.<br>модели: `molecules`; развороты: Как работает нос `#deep-nos`
+- `src/pages/vkus/3-kuhnya.html` · #кухня — Физика кухни · 63 стр.<br>модели: `heat`, `anthocyanin`; развороты: Летучесть `#deep-letuchest`
+- `src/pages/vkus/4-sochetaniya.html` · #сочетания — Сочетания · 50 стр.<br>модели: `pairing`; развороты: Гипотеза пищевых пар `#deep-pary`
+- `src/pages/vkus/5-hranenie.html` · #хранение — Хранение и заготовки · 54 стр.<br>модели: `storage`; развороты: Холод и потемнение `#deep-holod`
+- `src/pages/vkus/6-recepty.html` · #рецепты — Рецепты · 47 стр.<br>модели: `pesto`; развороты: Химия песто `#deep-pesto`
 - `src/pages/vkus/_foot.html` · подвал главы · 3 стр.
 
 ### Проблемы — `/проблемы` (`problemy.html`)
 - `src/pages/problemy/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/problemy/1-diagnostika.html` · #диагностика — Диагностика по симптомам · 47 стр.<br>модели: `pigment`; глубже: Язык цвета `#deep-pigmenty`
-- `src/pages/problemy/2-bolezni.html` · #болезни — Болезни · 43 стр.<br>модели: `dm`; глубже: Ложная мучнистая роса `#deep-oomicet`
-- `src/pages/problemy/3-vrediteli.html` · #вредители — Вредители · 41 стр.<br>модели: `aphid`; глубже: Экспонента тли `#deep-tlya`
-- `src/pages/problemy/4-profilaktika.html` · #профилактика — Профилактика и средства · 65 стр.<br>глубже: Химическая оборона `#deep-oborona`
+- `src/pages/problemy/1-diagnostika.html` · #диагностика — Диагностика по симптомам · 47 стр.<br>модели: `pigment`; развороты: Язык цвета `#deep-pigmenty`
+- `src/pages/problemy/2-bolezni.html` · #болезни — Болезни · 43 стр.<br>модели: `dm`; развороты: Ложная мучнистая роса `#deep-oomicet`
+- `src/pages/problemy/3-vrediteli.html` · #вредители — Вредители · 41 стр.<br>модели: `aphid`; развороты: Экспонента тли `#deep-tlya`
+- `src/pages/problemy/4-profilaktika.html` · #профилактика — Профилактика и средства · 65 стр.<br>развороты: Химическая оборона `#deep-oborona`
 - `src/pages/problemy/_foot.html` · подвал главы · 3 стр.
 
 ### Справка — `/справка` (`spravka.html`)
 - `src/pages/spravka/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/spravka/1-voprosy.html` · #вопросы — Частые вопросы · 76 стр.<br>глубже: Базилик в цифрах `#deep-cifry`
+- `src/pages/spravka/1-voprosy.html` · #вопросы — Частые вопросы · 76 стр.<br>развороты: Базилик в цифрах `#deep-cifry`
 - `src/pages/spravka/2-slovar.html` · #словарь — Словарь · 5 стр.
 - `src/pages/spravka/3-chek-list.html` · #чек-лист — Чек-лист сезона · 11 стр.
 - `src/pages/spravka/4-lyubopytno.html` · #любопытно — Любопытно · 4 стр.
@@ -181,7 +181,7 @@
 - `src/js/app/00-core.js` (128 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES, PEEK
 - `src/js/app/01-theme.js` (29 стр.): initTheme
 - `src/js/app/02-router.js` (297 стр.): ENTRY, initRouter, initPagers, initScrollChrome
-- `src/js/app/03-peek.js` (265 стр.): PEEK_SKIP, initPeek, initPeekFrame
+- `src/js/app/03-peek.js` (263 стр.): PEEK_SKIP, initPeek, initPeekFrame
 - `src/js/app/03-sheets.js` (212 стр.): initToc, initSheets
 - `src/js/app/04-search-words.js` (137 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
@@ -220,7 +220,7 @@
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
 - `src/js/science/05-molecules.js` (312 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, TILT, MolViewer
 - `src/js/science/06-labs-loader.js` (233 стр.): SELF, draw, HIDDEN, drawDue
-- `src/js/science/07-deep.js` (153 стр.): KIND, EASE, ANIMATED, initDeepAll, initDeep, initHomeMolecule, init
+- `src/js/science/07-deep.js` (134 стр.): KIND, EASE, ANIMATED, initDeepAll, initDeep, initHomeMolecule, init
 
 **scene.js**
 - `src/js/scene/00-core.js` (8 стр.): TAU
@@ -248,5 +248,5 @@
 ## Стили (src/css/)
 
 **style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`
-**lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-index.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
+**lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-kinds.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
 

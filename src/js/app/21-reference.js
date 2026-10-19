@@ -63,7 +63,7 @@
     const linkLabel = href => {
       const el = document.getElementById(href.slice(1));
       if (!el) return (PAGES && PAGES.titles && PAGES.titles[href.slice(1)]) || 'подробнее';
-      if (el.classList.contains('deep')) return 'Глубже: ' + el.dataset.short;
+      if (el.classList.contains('deep')) return 'Для любопытных: ' + el.dataset.short;
       const ch = chapterById(el.closest('[data-view]').dataset.view);
       return `${ch ? ch.title : ''} · ${el.dataset.title}`;
     };

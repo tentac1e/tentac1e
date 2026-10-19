@@ -44,7 +44,7 @@ function codeMap() {
       active: !!document.querySelector('[data-view].is-active'),
       cur: (document.querySelector('#nav a[aria-current="page"]') || {}).textContent || '',
       panel: !!document.querySelector('.panel.is-active') || !document.querySelector('.panel'),
-      // a chapter with pictures, or with models outside a closed «Глубже», brings its files with the page (defer
+      // a chapter with pictures, or with models outside a closed dive, brings its files with the page (defer
       // tags written by the build); any other file of models is fetched only when a model comes near the screen
       own: !!document.querySelector('script[src*="labs/"][defer]'),
       shows: !!document.querySelector('[data-view] [data-ill]') || [...document.querySelectorAll('.lab-tool')].some(e => !e.closest('details:not([open])')),
@@ -104,7 +104,7 @@ function codeMap() {
   // «Мой базилик» lives on the home page itself; the other tools are on their chapters' pages
   ok(hrefs.tools.every(h => /\.html/.test(h) || h === '#moy') && hrefs.tools.some(h => /\.html/.test(h)) && hrefs.ch.every(h => /\.html$/.test(h)), 'home links point to pages ' + JSON.stringify(hrefs));
 
-  // search from home into «Ещё глубже» on another page
+  // search from home into «Подробнее» on another page
   await page.keyboard.press('/');
   await page.waitForTimeout(300);
   await page.keyboard.type('Эстафета протонов');
@@ -114,7 +114,7 @@ function codeMap() {
   await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
   await page.waitForTimeout(1200);
   const dp = await page.evaluate(() => { const d = document.querySelector('#deep-ec .deeper'); return { deeper: d.open, deep: d.closest('details.deep').open, top: Math.round(document.getElementById('deep-ec-glubzhe').getBoundingClientRect().top) }; });
-  ok(dp.deeper && dp.deep && dp.top > 0 && dp.top < 400, 'landed in «Ещё глубже» ' + JSON.stringify(dp));
+  ok(dp.deeper && dp.deep && dp.top > 0 && dp.top < 400, 'landed in «Подробнее» ' + JSON.stringify(dp));
 
   ok(await page.evaluate(() => !!document.querySelector('#deep-ec .deeper.is-found')), 'the place found lights up');
 
@@ -192,7 +192,7 @@ function codeMap() {
   await page.waitForTimeout(1200);
   const vk = await tagsOf();
   ok(listed(vk.tags, await want('vkus')) && vk.mounted > 0, 'a chapter with models on show brings its files with it ' + JSON.stringify(vk));
-  // a model inside a closed «Глубже» is built only once the dive is opened and comes near (the Calendar's day length,
+  // a model inside a closed dive is built only once the dive is opened and comes near (the Calendar's day length,
   // now in Посадка · Сроки; every chapter with models brings its files with the page)
   await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('сроки'), { waitUntil: 'load' });
   await page.waitForTimeout(600);
@@ -201,9 +201,9 @@ function codeMap() {
   await page.evaluate(() => { const l = document.querySelector('.lab-tool[data-lab="daylen"]'); l.closest('details').open = true; l.scrollIntoView(); });
   await page.waitForTimeout(1500);
   const dlAfter = await dl();
-  ok(!dlBefore && dlAfter && listed((await tagsOf()).tags, await want('posadka')), 'a model inside «Глубже» is built when opened ' + JSON.stringify({ dlBefore, dlAfter }));
+  ok(!dlBefore && dlAfter && listed((await tagsOf()).tags, await want('posadka')), 'a model inside a closed dive is built when opened ' + JSON.stringify({ dlBefore, dlAfter }));
 
-  // no depth of reading in the header: the dives open one by one, or all of a tab's at once from its «Глубже» line
+  // no depth of reading in the header: the dives open one by one, or all of a tab's at once from its «Для любопытных» line
   await page.goto(fileUrl('uhod.html'), { waitUntil: 'load' });
   await page.waitForTimeout(500);
   const zone = () => page.evaluate(() => { const z = document.querySelector('.panel.is-active .deep-zone'), b = z.querySelector('[data-deep-all]');
@@ -217,7 +217,7 @@ function codeMap() {
   const z2 = await zone();
   ok(!z0.header && z0.n >= 2 && z0.open === 0 && z0.label === 'Раскрыть все' && z1.open === z1.n && z1.other === z1.n && z1.label === 'Свернуть все' && z2.open === 0 && z2.label === 'Раскрыть все',
     '«Раскрыть все» opens the tab\'s dives and only them, then closes them ' + JSON.stringify([z0, z1, z2]));
-  // «Любопытно»: each fact stands once in its chapter — in its dive's heading or at the top of «Глубже» — and once more
+  // «Любопытно»: each fact stands once in its chapter — in its dive's heading or at the top of «Для любопытных» — and once more
   // in Справка, signed with its tab; none is left in the chapters' text
   const chapter = FILES.filter(f => !['index.html', 'moy.html', 'spravka.html'].includes(f)).map(f => fs.readFileSync(path.join(ROOT, f), 'utf8'));
   const facts = chapter.reduce((n, h) => n + (h.match(/<span class="deep-fact">/g) || []).length + (h.match(/<ul class="deep-facts"[^>]*>[\s\S]*?<\/ul>/g) || []).reduce((k, ul) => k + (ul.match(/<li /g) || []).length, 0), 0);

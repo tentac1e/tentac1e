@@ -1,6 +1,6 @@
   /* ------------------------------------------------------------------ */
   /* registry: every <div class="lab-tool" data-lab="…"> gets its model  */
-  /* when it first becomes visible (inside an opened «Глубже»)           */
+  /* when it first becomes visible (inside an opened dive)                 */
   /* ------------------------------------------------------------------ */
   const labs = {};
   const register = (name, fn) => { labs[name] = fn; };

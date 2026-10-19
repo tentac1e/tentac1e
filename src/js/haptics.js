@@ -59,7 +59,7 @@ window.BasilHaptics = (() => {
     if (el && (el.type === 'checkbox' || el.type === 'radio') && e.isTrusted) play('select');
   }, true);
   // taps on controls that change something on the page
-  const TAPS = 'button, summary, [role="button"], [data-v], [data-cat], .subnav a, .deep-index a, .w-arc, select';
+  const TAPS = 'button, summary, [role="button"], [data-v], [data-cat], .subnav a, .w-arc, select';
   document.addEventListener('click', e => {
     if (!e.isTrusted || !e.target.closest) return;
     const el = e.target.closest(TAPS);

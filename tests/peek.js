@@ -1,4 +1,4 @@
-/* «Заглянуть»: ссылка из текста в другую главу или на другую вкладку, кнопка строки «Глубже» в шапке главы и инструмент
+/* «Заглянуть»: ссылка из текста в другую главу или на другую вкладку (и на разворот «Для любопытных» там) и инструмент
    открывают своё место в шторке (03-peek.js), страница под ней не сдвигается; в шторке видно только это место
    (25-peek.css), его модели собраны; Esc, × и «Назад» закрывают шторку, не оставляя шага в истории. «Открыть в главе» —
    переход, там «← Вернуться», а «Назад» ставит к предложению со ссылкой; ссылка ниже на той же вкладке — прокрутка
@@ -32,7 +32,7 @@ const inFrame = f => f.evaluate(() => {
   return {
     peek: document.documentElement.classList.contains('is-peek'), has: !!t, h: t ? t.offsetHeight : 0,
     inside: !target || !!(t && (t === target || t.contains(target) || (t.matches('[data-panel]') && t.contains(target)))),
-    stray: stray.slice(0, 4), chrome: ['.topbar', '.ch-hero', '.subnav-wrap', '.pager', '.footer', '.tabbar', '.deep-index'].filter(s => vis(document.querySelector(s))),
+    stray: stray.slice(0, 4), chrome: ['.topbar', '.ch-hero', '.subnav-wrap', '.pager', '.footer', '.tabbar'].filter(s => vis(document.querySelector(s))),
     labs: t ? [...t.querySelectorAll('.lab-tool')].map(l => l.childElementCount) : [], theme: document.documentElement.getAttribute('data-theme')
   };
 });
@@ -76,7 +76,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   let v = f ? await inFrame(f) : {};
   ok(v.peek && v.has && v.h > 200 && v.inside && !v.stray.length && !v.chrome.length, 'in the sheet: only the dive, open, without the page around it ' + JSON.stringify(v));
   let s = await sheet(page);
-  ok(s.h.length > 8 && /Удобрения · Глубже/.test(s.where), `the sheet says what and where: «${s.where}» / «${s.h}»`);
+  ok(s.h.length > 8 && /Удобрения · Для любопытных/.test(s.where), `the sheet says what and where: «${s.where}» / «${s.h}»`);
   let now = await state(page);
   ok(now.y === before.y && now.url === before.url && now.last === before.last && now.peekStep, `the page under it stays: y ${before.y}→${now.y}, address and «Продолжить» the same, one history step`);
   // Esc, the cross and Back close it; the history step goes with it
@@ -106,17 +106,24 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
     ok(page.url().includes('vkus.html') && at && at.words.replace(/\u00a0/g, ' ').startsWith(sentence) && at.top > at.cover && at.top < at.vh / 2, `${back === 'pill' ? '«← Вернуться»' : 'Back'} returns to the link's sentence ${JSON.stringify(at)}`);
   }
 
-  // the chapter's «Глубже» row: the dive of another tab in the sheet, the tab the reader is on stays
-  await page.goto(fileUrl('uhod.html'), { waitUntil: 'load' });
+  // no row of dives under the chapter's title: they stand at the ends of their tabs, «Для любопытных»
+  const row = await page.evaluate(() => ({ nav: document.querySelectorAll('.deep-index, .ch-hero a[href^="#deep-"]').length, label: (document.querySelector('.deep-zone-label') || {}).textContent }));
+  // a link from the text to a dive of another tab of this chapter: the dive in the sheet, the tab the reader is on stays
+  await page.goto(fileUrl('gidro.html') + '#' + encodeURIComponent('сборка'), { waitUntil: 'load' });
   await page.waitForTimeout(1200);
+  const row2 = await page.evaluate(() => ({ nav: document.querySelectorAll('.deep-index, .ch-hero a[href^="#deep-"]').length, kinds: document.querySelectorAll('.deep-kind, .deep-tag, .deep-time').length, deeper: [...new Set([...document.querySelectorAll('.deeper-k')].map(x => x.textContent))] }));
+  ok(!row.nav && !row2.nav && !row2.kinds && /^Для любопытных/.test(row.label || '') && row2.deeper.join() === 'Подробнее', `the chapter's head has no row of dives, their headings only what they are about ${JSON.stringify({ row, row2 })}`);
   const tab0 = await page.evaluate(() => document.querySelector('.panel.is-active').id);
-  await page.click('.deep-index a[href="#deep-vpd"]');
-  ok(await ready(page), 'a chip of the «Глубже» row opens the sheet');
+  const toDive = 'main .panel.is-active a[href="#deep-dyhanie-kornya"]';
+  await page.evaluate(sel => document.querySelector(sel).scrollIntoView({ block: 'center', behavior: 'instant' }), toDive);
+  await page.waitForTimeout(300);
+  await page.click(toDive);
+  ok(await ready(page), 'a link to a dive of another tab opens the sheet');
   f = frameOf(page);
   await page.waitForTimeout(700);
   v = f ? await inFrame(f) : {};
   const tab1 = await page.evaluate(() => document.querySelector('.panel.is-active').id);
-  ok(f && /uhod\.html\?peek=1#deep-vpd$/.test(f.url()) && v.has && v.inside && !v.stray.length && tab1 === tab0, `the dive «VPD» in the sheet, the tab stays «${tab0}»→«${tab1}» ${JSON.stringify(v)}`);
+  ok(f && /gidro\.html\?peek=1#deep-dyhanie-kornya$/.test(f.url()) && v.has && v.inside && !v.stray.length && tab1 === tab0, `the dive «Дыхание корня» in the sheet, the tab stays «${tab0}»→«${tab1}» ${JSON.stringify(v)}`);
   const labs = f ? await built(f) : [];
   ok(labs.length && labs.every(x => !x.endsWith(':0')), 'its models are built in the sheet as the reader comes to them ' + labs.join(', '));
   // a link inside the sheet opens its place in the same sheet, ← comes back
@@ -130,7 +137,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
     await page.click('#sheet-peek [data-peek-back]');
     await ready(page);
     await page.waitForTimeout(300);
-    ok(/#deep-vpd$/.test(frameOf(page).url()) && (await page.evaluate(() => document.querySelector('#sheet-peek [data-peek-back]').hidden)), '← goes back to the dive');
+    ok(/#deep-dyhanie-kornya$/.test(frameOf(page).url()) && (await page.evaluate(() => document.querySelector('#sheet-peek [data-peek-back]').hidden)), '← goes back to the dive');
   }
   await page.click('#sheet-peek [data-close]');
   await shut(page);
@@ -138,7 +145,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   // lower on the same tab: a scroll, and the way back up to the link
   await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('горшок'), { waitUntil: 'load' });
   await page.waitForTimeout(1200);
-  const near = 'main .panel.is-active a[href="#deep-voda-v-gorshke"]:not(.deep-index a)';
+  const near = 'main .panel.is-active a[href="#deep-voda-v-gorshke"]';
   await page.evaluate(sel => document.querySelector(sel).scrollIntoView({ block: 'center', behavior: 'instant' }), near);
   await page.waitForTimeout(400);
   const y0 = (await state(page)).y;
@@ -217,7 +224,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
     ok(w.tab === tab && w.top !== null && w.top >= 0 && w.top < w.H / 2, `#${hash} → the tab «${w.tab}», the part #${w.id} at the top (${w.top})`);
   }
 
-  // Справка's questions at the end of their tabs too, before «Глубже»: opened in place, the rest in the sheet
+  // Справка's questions at the end of their tabs too, before «Для любопытных»: opened in place, the rest in the sheet
   const faq = {};
   for (const file of ['posadka.html', 'uhod.html', 'gidro.html', 'formirovka.html', 'sorta.html', 'vkus.html']) {
     await page.goto(fileUrl(file), { waitUntil: 'load' });
@@ -225,7 +232,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
     Object.assign(faq, await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.faq-here')].map(f => { const p = f.closest('[data-panel]'), z = p.querySelector('.deep-zone'); return [p.id, { n: f.querySelectorAll('details').length, before: !!z && !!(f.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING), ids: f.querySelectorAll('[id]').length }]; }))));
   }
   const counts = Object.values(faq);
-  ok(counts.length === 15 && counts.reduce((a, x) => a + x.n, 0) === 20 && counts.every(x => x.before && !x.ids), `20 questions in 15 tabs, each block before «Глубже», no ids of their own ${JSON.stringify(faq)}`);
+  ok(counts.length === 15 && counts.reduce((a, x) => a + x.n, 0) === 20 && counts.every(x => x.before && !x.ids), `20 questions in 15 tabs, each block before «Для любопытных», no ids of their own ${JSON.stringify(faq)}`);
   await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('магазин'), { waitUntil: 'load' });
   await page.waitForTimeout(1000);
   await page.evaluate(() => document.querySelector('.panel.is-active .faq-here').scrollIntoView({ block: 'center', behavior: 'instant' }));
@@ -263,7 +270,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
         if (view === here) {
           const el = document.getElementById(id);
           if (!el || el.matches('[data-panel], [data-view]')) return;
-          if (!a.closest('.deep-index') && el.closest('[data-panel]') === a.closest('[data-panel]')) return; // near: a scroll
+          if (el.closest('[data-panel]') === a.closest('[data-panel]')) return; // near: a scroll
         }
         out.push({ view, id, from: here + ' «' + a.textContent.replace(/\s+/g, ' ').trim().slice(0, 30) + '»' });
       });

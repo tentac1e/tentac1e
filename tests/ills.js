@@ -46,7 +46,7 @@ function onScreen() {
     return r.width > 0 && r.bottom > 0 && r.top < vh && r.right > 0 && r.left < innerWidth;
   });
 }
-// in the page: size and ground of every picture shown on the open tab, with «Глубже» open
+// in the page: size and ground of every picture shown on the open tab, with its dives open
 function boxes() {
   document.querySelectorAll('details.deep, details.deeper').forEach(d => { d.open = true; });
   // the same picture may stand twice on a tab (a tile and the large result): told apart by their order

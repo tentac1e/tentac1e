@@ -1,0 +1,5 @@
+/* ================= the colour of a discipline: a dive and a model take it from data-kind ================= */
+.deep[data-kind="chem"], .lab-tool[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
+.deep[data-kind="phys"], .lab-tool[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
+.deep[data-kind="bio"], .lab-tool[data-kind="bio"] { --k: var(--sci-bio); --k-soft: var(--sci-bio-soft); }
+.deep[data-kind="taste"], .lab-tool[data-kind="taste"] { --k: var(--sci-taste); --k-soft: var(--sci-taste-soft); }

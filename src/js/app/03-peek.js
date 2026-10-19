@@ -1,7 +1,7 @@
   /* ================================================================== */
   /* «ЗАГЛЯНУТЬ»: a reference opens in a sheet over the text            */
   /* ================================================================== */
-  /* A link from the text to another chapter or another tab, a chip of the chapter's «Глубже» row and a tool show
+  /* A link from the text to another chapter or another tab (a dive there too) and a tool show
      their place in a sheet: the page of that chapter in a frame, in its peek mode (?peek=1, see markPeek) — only
      the place asked for, its models, pictures and calculators working as on their own page. Closing the sheet
      leaves the page where it was; «Открыть в главе» goes there, and the way back returns to the link.
@@ -41,8 +41,6 @@
     if (!pl.id) return null;
     const el = document.getElementById(pl.id) || document.getElementById(aliasOf(pl.id));
     if (!el || el.matches('[data-panel], [data-view]')) return null; // a tab of this chapter: its own way
-    // the chapter's «Глубже» row: the dive in the sheet, the tab the reader is on stays
-    if (a.closest('.deep-index')) return pl;
     const tab = el.closest('[data-panel]'), open = currentView && $('.panel.is-active', currentView);
     return tab && tab !== open ? pl : { ...pl, near: true };
   }
@@ -82,7 +80,7 @@
     // where the reader was: the way back from «Открыть в главе» leads there — to the link in the text, or, from the
     // contents or the chapter's head, to the place being read (the top of the chapter when nothing is read yet)
     const ch = chapterById(here) || (here === 'moy' ? { title: 'Мой базилик' } : null);
-    let sp = a && a.closest('main') && !a.closest('.deep-index') ? spotOf(a) : null;
+    let sp = a && a.closest('main') ? spotOf(a) : null;
     if (!sp && ch) sp = bookmarkHere();
     peek.from = ch ? { spot: sp, label: [ch.title, sp && sp.label].filter(Boolean).join(' · ') } : null;
     peek.stack = [t];
@@ -162,7 +160,7 @@
       document.addEventListener('click', e => {
         if (e.defaultPrevented || e.button !== 0) return;
         const a = e.target.closest('main a[href^="#"]');
-        if (!a || a.closest(PEEK_SKIP + ', .deep-index')) return;
+        if (!a || a.closest(PEEK_SKIP)) return;
         const el = document.getElementById(decodeSafe(a.getAttribute('href').slice(1)));
         if (!el || el.matches('[data-panel], [data-view]')) return;
         const sp = spotOf(a);
@@ -224,11 +222,11 @@
       up.setAttribute('data-peek-up', '');
       if (up === main) break;
     }
-    // a dive asked for stands open whatever the depth of reading
+    // a dive asked for stands open
     for (let box = parts[0].closest('details'); box; box = box.parentElement && box.parentElement.closest('details')) box.open = true;
     const el = parts[0], ch = chapterById(r.view.dataset.view), tab = el.closest('[data-panel]');
     let title, where = ch ? ch.title : '';
-    if (el.matches('details.deep')) { title = labelOf(el); where += ' · Глубже'; }
+    if (el.matches('details.deep')) { title = labelOf(el); where += ' · Для любопытных'; }
     else if (el.matches('[data-panel]')) title = el.dataset.title;
     else if (el.matches('[data-view]')) title = ch ? ch.title : '';
     else {

@@ -68,12 +68,9 @@
 .deep > summary:hover .deep-ico { transform: rotate(-8deg) scale(1.05); border-radius: 50%; }
 .deep > summary:hover .deep-ico::after { opacity: 1; animation: spin 10s linear infinite; border-radius: 50%; }
 .deep-head { display: grid; gap: 3px; min-width: 0; }
-.deep-kind { font: 500 .7rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
 .deep-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.28rem, 2.2vw, 1.55rem); line-height: 1.08; color: var(--ink); text-wrap: balance; }
 .deep-sub { font-size: .88rem; line-height: 1.35; color: var(--ink-3); }
 .deep-meta { display: flex; align-items: center; gap: 8px; }
-.deep-tag, .deep-time { font: 500 .7rem/1 var(--font-mono); letter-spacing: .04em; color: var(--ink-3); white-space: nowrap; }
-.deep-tag { padding: 5px 8px; border-radius: 999px; background: var(--k-soft); color: var(--k); }
 .deep-plus {
   position: relative;
   width: 34px;
@@ -92,7 +89,6 @@
   .deep-sum { grid-template-columns: 42px minmax(0, 1fr) 34px; gap: 12px; }
   .deep-ico { width: 42px; height: 42px; border-radius: 13px; }
   .deep-ico .ico { width: 22px; height: 22px; }
-  .deep-meta .deep-tag, .deep-meta .deep-time { display: none; }
   .deep-sub { font-size: .82rem; }
 }
 

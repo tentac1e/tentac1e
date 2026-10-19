@@ -378,7 +378,7 @@
 /* picking a tissue: the rest steps back */
 .mic-t { transition: opacity .25s; }
 .has-sel .mic-t:not(.is-sel), .has-sel .mic-label:not(.is-sel) { opacity: .3; }
-/* Научный слой: живая сцена, развороты «Глубже» как страницы лабораторного журнала,
+/* Научный слой: живая сцена, развороты «Для любопытных» как страницы лабораторного журнала,
    модели и глава «Вкус». Цвет дисциплины: химия — антоциан, физика — вода и свет,
    биология — лист, вкус — оливковое масло. */
 :root {
@@ -802,38 +802,11 @@ body::after {
   .hero-art { width: 108px; }
 }
 
-/* ================= chapter index of deep dives ================= */
-.deep-index { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 18px; }
-.deep-index-label { display: inline-flex; align-items: center; gap: 6px; margin-right: 4px; font: 500 .72rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sci-chem); }
-.deep-index-label .ico { width: 17px; height: 17px; }
-.deep-index-label b { font-weight: 500; color: var(--ink-3); }
-.deep-index a {
-  --k: var(--sci-bio);
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px 5px 8px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--k) 38%, var(--line));
-  background: color-mix(in srgb, var(--k) 7%, var(--surface));
-  color: var(--ink-2);
-  font-size: .8rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform .3s var(--ease-float), border-color .2s, color .2s;
-}
-.deep-index a .ico { width: 15px; height: 15px; color: var(--k); }
-@media (hover: hover) { .deep-index a:hover { color: var(--ink); border-color: var(--k); transform: translateY(-2px); } }
-.deep-index a[data-kind="chem"], .deep[data-kind="chem"], .lab-tool[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
-.deep-index a[data-kind="phys"], .deep[data-kind="phys"], .lab-tool[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
-.deep-index a[data-kind="bio"], .deep[data-kind="bio"], .lab-tool[data-kind="bio"] { --k: var(--sci-bio); --k-soft: var(--sci-bio-soft); }
-.deep-index a[data-kind="taste"], .deep[data-kind="taste"], .lab-tool[data-kind="taste"] { --k: var(--sci-taste); --k-soft: var(--sci-taste-soft); }
-@media (max-width: 700px) {
-  .ch-hero .deep-index { grid-column: 1 / -1; grid-row: 4; margin-top: 4px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; margin-inline: -2px; }
-  .ch-hero .deep-index::-webkit-scrollbar { display: none; }
-  .deep-index a, .deep-index-label { flex-shrink: 0; }
-}
-
+/* ================= the colour of a discipline: a dive and a model take it from data-kind ================= */
+.deep[data-kind="chem"], .lab-tool[data-kind="chem"] { --k: var(--sci-chem); --k-soft: var(--sci-chem-soft); }
+.deep[data-kind="phys"], .lab-tool[data-kind="phys"] { --k: var(--sci-phys); --k-soft: var(--sci-phys-soft); }
+.deep[data-kind="bio"], .lab-tool[data-kind="bio"] { --k: var(--sci-bio); --k-soft: var(--sci-bio-soft); }
+.deep[data-kind="taste"], .lab-tool[data-kind="taste"] { --k: var(--sci-taste); --k-soft: var(--sci-taste-soft); }
 /* ================= deep dives: pages from a lab notebook ================= */
 .deep-zone { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin-top: clamp(30px, 4vw, 46px); }
 .deep-zone > *, .deep-body, .deep-text, .deep-aside { min-width: 0; }
@@ -904,12 +877,9 @@ body::after {
 @media (hover: hover) { .deep > summary:hover .deep-ico { transform: rotate(-8deg) scale(1.05); border-radius: 50%; } }
 @media (hover: hover) { .deep > summary:hover .deep-ico::after { opacity: 1; animation: spin 10s linear infinite; border-radius: 50%; } }
 .deep-head { display: grid; gap: 3px; min-width: 0; }
-.deep-kind { font: 500 .7rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
 .deep-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.28rem, 2.2vw, 1.55rem); line-height: 1.08; color: var(--ink); text-wrap: balance; }
 .deep-sub { font-size: .88rem; line-height: 1.35; color: var(--ink-3); }
 .deep-meta { display: flex; align-items: center; gap: 8px; }
-.deep-tag, .deep-time { font: 500 .7rem/1 var(--font-mono); letter-spacing: .04em; color: var(--ink-3); white-space: nowrap; }
-.deep-tag { padding: 5px 8px; border-radius: 999px; background: var(--k-soft); color: var(--k); }
 .deep-plus {
   position: relative;
   width: 34px;
@@ -928,7 +898,6 @@ body::after {
   .deep-sum { grid-template-columns: 42px minmax(0, 1fr) 34px; gap: 12px; }
   .deep-ico { width: 42px; height: 42px; border-radius: 13px; }
   .deep-ico .ico { width: 22px; height: 22px; }
-  .deep-meta .deep-tag, .deep-meta .deep-time { display: none; }
   .deep-sub { font-size: .82rem; }
 }
 
@@ -1213,8 +1182,7 @@ body::after {
 }
 @keyframes fade-out { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
 
-/* ================= deep dive: footer, tag, «ещё глубже», sources ================= */
-.deep-tag.is-deeper { background: transparent; border: 1px dashed color-mix(in srgb, var(--k) 55%, transparent); }
+/* ================= deep dive: footer, «Подробнее», sources ================= */
 .deep-foot { display: flex; justify-content: center; margin-top: 22px; }
 .deep-close {
   display: inline-flex;
@@ -1315,7 +1283,7 @@ body::after {
 .deep-fact { grid-column: 2 / -1; display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; margin-top: -4px; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--k) 7%, transparent); font-size: .86rem; line-height: 1.45; color: var(--ink-2); }
 .deep-fact .ico { width: 18px; height: 18px; margin-top: 1px; color: var(--k); }
 @media (max-width: 640px) { .deep-fact { grid-column: 1 / -1; margin-top: -2px; } }
-/* at the top of «Глубже»: the facts of the tab with no dive of their own here */
+/* at the top of «Для любопытных»: the facts of the tab with no dive of their own here */
 .deep-facts { display: grid; gap: 10px; max-width: 72ch; margin: 0; padding: 0; list-style: none; }
 .deep-facts li { --k: var(--sci-bio); display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
 .deep-facts li[data-kind="chem"] { --k: var(--sci-chem); }

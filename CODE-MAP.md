@@ -10,7 +10,7 @@
 - `src/js/app/00-core.js`: `$` 6, `$$` 7, `clamp` 9, `f1` 10, `esc` 11, `nb` 26, `plural` 28, `fmtNum` 37, `addDays` 42, `fd` 43, `fr` 44, `toISO` 49, `fromISO` 50, `today` 54, `dayDiff` 55, `icon` 56, `chapterById` 57, `paintIll` 60, `pageOf` 69, `aliasOf` 77, `urlFor` 79, `fixLinks` 88, `smooth` 98, `toast` 101, `copyText` 110
 - `src/js/app/01-theme.js`: `initTheme` 4
 - `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 76, `jump` 103, `rowTop` 111, `scrollAfter` 118, `route` 160, `navigate` 193, `initRouter` 201, `initPagers` 224, `initScrollChrome` 267
-- `src/js/app/03-peek.js`: `decodeSafe` 10, `placeOf` 15, `placeUrl` 27, `frameSrc` 28, `peekable` 31, `peekShow` 50, `peekLoad` 64, `resetFrame` 71, `openPeek` 80, `goToPlace` 96, `peekPop` 112, `onPeekClosed` 121, `sendTheme` 131, `onPeekMessage` 135, `initPeek` 156, `toParent` 209, `markPeek` 212, `initPeekFrame` 242
+- `src/js/app/03-peek.js`: `decodeSafe` 10, `placeOf` 15, `placeUrl` 27, `frameSrc` 28, `peekable` 31, `peekShow` 48, `peekLoad` 62, `resetFrame` 69, `openPeek` 78, `goToPlace` 94, `peekPop` 110, `onPeekClosed` 119, `sendTheme` 129, `onPeekMessage` 133, `initPeek` 154, `toParent` 207, `markPeek` 210, `initPeekFrame` 240
 - `src/js/app/03-sheets.js`: `openSheet` 8, `closeSheet` 30, `dragSheet` 57, `tocFold` 127, `tocPane` 132, `tocOpen` 137, `tocButton` 162, `initToc` 170, `initSheets` 193
 - `src/js/app/04-search-words.js`: `norm` 4, `isWordChar` 6, `stemRu` 10, `keysOf` 48, `fromLayout` 63, `latinTyped` 64, `sameKey` 94, `altsOf` 96, `editDistance` 107, `nearestWord` 127
 - `src/js/app/04-search.js`: `textOf` 4, `sectionOf` 19, `ownText` 30, `indexPage` 40, `sentences` 83, `buildSearchIndex` 85, `entryUrl` 114, `loadSearch` 120, `parseQuery` 140, `scanKey` 149, `scoreEntry` 172, `matchAll` 203, `vocabulary` 213, `runSearch` 223, `highlight` 259, `snippet` 273, `markFound` 286, `flashFound` 290, `fitSearchPanel` 310, `initSearch` 323
@@ -72,7 +72,7 @@
 - `src/js/science/04-astronomy.js`: `decl` 5, `dayLength` 6, `h0` 13, `noonSun` 20
 - `src/js/science/05-molecules.js`: `molName` 68, `molFam` 69, `seeded` 106, `embed` 108, `shape` 167, `rx` 170, `ry` 171, `mul` 172, `ortho` 174, `MolViewer` 187
 - `src/js/science/06-labs-loader.js`: `register` 6, `url` 12, `own` 15, `parsed` 16, `script` 17, `ensureLabs` 34, `styleFor` 43, `styleOn` 44, `failed` 54, `pause` 60, `later` 63, `drain` 71, `mount` 87, `mountAll` 102, `illustrate` 115, `variants` 116, `draw` 118, `fitIll` 140, `painted` 144, `seen` 148, `drawDue` 153, `paint` 157, `ahead` 198, `early` 220
-- `src/js/science/07-deep.js`: `animateDetails` 7, `initDeepAll` 30, `initDeep` 49, `initHomeMolecule` 106, `init` 141
+- `src/js/science/07-deep.js`: `animateDetails` 7, `initDeepAll` 30, `initDeep` 49, `initHomeMolecule` 87, `init` 122
 
 Общие помощники science.js — кто зовёт:
 - `clamp` (00-core.js:6) — 4: 01-colors, 03-charts, 04-astronomy …
@@ -139,7 +139,7 @@
 - `src/css/style/19-reference.css`: `.check-*`, `.faq-*`, `.gloss-*`, `.bar`, `.glossary`, `.ico`
 - `src/css/style/20-footer.css`: `.footer-*`, `.to-top`, `.brand`, `.is-shown`
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.peek-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.is-loading`, `.sr-group`, `.sr-note`, `.sr-ico` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `peek-paper`, `peek-in`, `search-in`, `is-found`
-- `src/css/style/22-selection.css`: `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.deep-*`, `.hap-*`
+- `src/css/style/22-selection.css`: `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.hap-*`, `.rb-filter`
 - `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-empty`, `.g-photo-*`, `.g-form-*`, `.garden-*`, `.g-link`
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
@@ -150,13 +150,13 @@
 - `src/css/lab/00-micro.css`: `.mic-*`, `.is-burst`, `.is-pale`, `.is-film`, `.is-cap`, `.is-done`, `.has-*`, `.is-sel` · анимации: `mic-fly`
 - `src/css/lab/00-tokens.css`: `.sr-only`
 - `src/css/lab/01-hero.css`: `.pot-*`, `.hero-*`, `.aroma-*`, `.plant-*`, `.passport`, `.pl-stem-*`, `.pl-leaf`, `.is-purple`, `.pl-scar`, `.pl-pet`, `.pl-fold`, `.pl-shine` · анимации: `aroma-rise`, `label-rise`
-- `src/css/lab/04-deep-index.css`: `.deep-*`, `.lab-*`, `.ico`, `.ch-hero`
+- `src/css/lab/04-deep-kinds.css`: `.deep`, `.lab-*`
 - `src/css/lab/05-deep.css`: `.deep-*`, `.chel-*`, `.num-*`, `.ico`, `.eq`, `.ph-strip`, `.ticks`, `.chem`, `.eq-label`, `.eq-enz`, `.margin-*`, `.aside-*`
 - `src/css/lab/06-lab-tools.css`: `.lab-*`, `.zone-*`, `.gdd-*`, `.fam-*`, `.line`, `.legend`, `.range`, `.band-*`, `.s1`, `.s2`, `.s3`, `.mol-*` · анимации: `shimmer`
 - `src/css/lab/07-vkus.css`: `.world-*`, `.cols-*`, `.kitchen-*`
 - `src/css/lab/08-home-science.css`: `.sh-mol`, `.sh-kinds`, `.science-*`, `.sh-text`, `.sh-open`, `.is-open`, `.sh-chev`, `.mol-*`, `.sh-fold`, `.eyebrow`, `.is-total`, `.ico`
 - `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.q-card`, `.tool`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o`, `.ar-c`, `.ar-oil` · анимации: `fade-out`
-- `src/css/lab/11-deep-footer.css`: `.deeper-*`, `.deep-*`, `.eq`, `.is-deeper`
+- `src/css/lab/11-deep-footer.css`: `.deeper-*`, `.deep-*`, `.eq`
 - `src/css/lab/12-sci-notes.css`: `.sci-*`, `.deep-*`, `.ico`, `.facts-*`, `.hand`
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
 - `src/css/lab/14-paint.css`: `.plant-*`, `.lab-*`, `.is-off`, `.pl-stems`, `.osm-*`, `.xylem`, `.phloem`, `.barrel-*`, `.nc-flow`, `.germ-*`
@@ -207,10 +207,10 @@
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
 - `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:275`, `src/js/science/06-labs-loader.js:186`
-- `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:240`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:149`
+- `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:238`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:130`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
-- `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:205`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/vkus/pesto.js:67`
-- `basil:view` — шлёт: `src/js/app/02-router.js:184`; слушают: `src/js/app/02-router.js:263`, `src/js/app/02-router.js:293`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:151`
+- `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/vkus/pesto.js:67`
+- `basil:view` — шлёт: `src/js/app/02-router.js:184`; слушают: `src/js/app/02-router.js:263`, `src/js/app/02-router.js:293`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:132`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
 ## Хранилище
@@ -241,7 +241,7 @@
 - `max-width: 760px` — 7: 06-lab-tools.css, 12-steps.css, 26-hydro.css, _shared.css, drift.css, flows.css, kratky.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
-- `max-width: 700px` — 5: 04-deep-index.css, 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
+- `max-width: 700px` — 4: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
 - `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
 - `max-width: 820px` — 3: 14-care.css, 15-fertilizers.css ×2
@@ -262,16 +262,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1291`
-- `{{description}}` в `src/layout.html` — `build.py:1291`
-- `{{pwa}}` в `src/layout.html` — `build.py:1307`
-- `{{fonts}}` в `src/layout.html` — `build.py:1306`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1288`
-- `{{content}}` в `src/layout.html` — `build.py:1286`
-- `{{toc}}` в `src/layout.html` — `build.py:1288`
-- `{{scripts}}` в `src/layout.html` — `build.py:1305`
-- `{{version}}` в `src/sw.js` — `build.py:1421`
-- `{{precache}}` в `src/sw.js` — `build.py:1421`
+- `{{title}}` в `src/layout.html` — `build.py:1272`
+- `{{description}}` в `src/layout.html` — `build.py:1272`
+- `{{pwa}}` в `src/layout.html` — `build.py:1288`
+- `{{fonts}}` в `src/layout.html` — `build.py:1287`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1269`
+- `{{content}}` в `src/layout.html` — `build.py:1267`
+- `{{toc}}` в `src/layout.html` — `build.py:1269`
+- `{{scripts}}` в `src/layout.html` — `build.py:1286`
+- `{{version}}` в `src/sw.js` — `build.py:1402`
+- `{{precache}}` в `src/sw.js` — `build.py:1402`
 
 ## Проверки
 
@@ -279,7 +279,7 @@
 
 - `tests/agronom.js` — «Карманный агроном»: погода для кустов (ответы Open-Meteo подменены заготовками, сеть не нужна). · корень · все страницы
 - `tests/clean.js` — Версия для хостинга (dist/site) на локальном сервере с правилами .htaccess: · сервер
-- `tests/controls.js` — Каждая кнопка на каждой вкладке каждой страницы — на телефоне и компьютере, с раскрытыми «Глубже»: · корень · все страницы
+- `tests/controls.js` — Каждая кнопка на каждой вкладке каждой страницы — на телефоне и компьютере, с раскрытыми разворотами «Для любопытных»: · корень · все страницы
 - `tests/gallery.js` — Every illustration of a chapter on one sheet, to look at them together: the pictures the page shows · корень · index.html
 - `tests/garden.js` — «Мой базилик» на телефоне и компьютере: пустой блок, куст через форму, дела на неделю, «Сделано», · корень · index.html, sorta.html, moy.html
 - `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html, udobreniya.html, posadka.html, formirovka.html
@@ -288,7 +288,7 @@
 - `tests/nav.js` — Навигация на телефоне и компьютере: страница открывается сверху (и страница из памяти для «Назад» тоже, одним · сервер
 - `tests/overlap.js` — Текст не лезет на картинку — на каждой вкладке каждой страницы, на телефоне и на компьютере. · корень · все страницы
 - `tests/pages.js` — Сборка в корне репозитория (ссылки вида sorta.html), открытая как файлы: · корень · все страницы
-- `tests/peek.js` — «Заглянуть»: ссылка из текста в другую главу или на другую вкладку, кнопка строки «Глубже» в шапке главы и инструмент · сервер + корень · все страницы
+- `tests/peek.js` — «Заглянуть»: ссылка из текста в другую главу или на другую вкладку (и на разворот «Для любопытных» там) и инструмент · сервер + корень · все страницы
 - `tests/perf.js` — Скорость на телефоне с процессором, замедленным в 4 раза: каждая страница. · корень · все страницы
 - `tests/pwa.js` — Гид на экране телефона и без сети — на копии сборки для хостинга (dist/site), через scripts/serve.py. · сервер · sorta.html, index.html
 - `tests/single.js` — Книга одним файлом (python3 scripts/build.py --single …): все главы на одной странице, переходы по #id, · — · single.html

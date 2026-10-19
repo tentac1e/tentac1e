@@ -1,5 +1,5 @@
   /* ------------------------------------------------------------------ */
-  /* deep blocks: reading time, chapter index, a tab's «Раскрыть все»    */
+  /* deep blocks: the way to fold one, a tab's «Раскрыть все», home    */
   /* ------------------------------------------------------------------ */
   const KIND = { chem: ['Химия', 'hex'], phys: ['Физика', 'wave'], bio: ['Биология', 'cell'], taste: ['Вкус', 'nose'] };
   /* smooth open/close that works the same in every browser */
@@ -25,7 +25,7 @@
   }
   const ANIMATED = 'details.deep, details.deeper, details.recipe-card';
 
-  // «Раскрыть все» in a tab's «Глубже» line (the build writes it where there are two dives or more): every dive
+  // «Раскрыть все» in a tab's «Для любопытных» line (the build writes it where there are two dives or more): every dive
   // of that zone at once, and «Свернуть все» once they all stand open
   function initDeepAll() {
     const zones = $$('.deep-zone').filter(z => $('[data-deep-all]', z));
@@ -48,14 +48,9 @@
 
   function initDeep() {
     const blocks = $$('details.deep');
+    // the heading says only what the dive is about: its icon, title, one line under it and its fact
     blocks.forEach(d => {
       const body = $('.deep-body', d);
-      const words = (body.textContent.match(/\S+/g) || []).length;
-      const tools = $$('.lab-tool', body).length;
-      const t = $('.deep-time', d);
-      if (t) t.textContent = `≈ ${Math.max(1, Math.ceil(words / 150))} мин`;
-      if (tools && !$('.deep-tag', d)) $('.deep-meta', d).insertAdjacentHTML('afterbegin', '<span class="deep-tag">интерактив</span>');
-      if ($('details.deeper', body)) $('.deep-meta', d).insertAdjacentHTML('afterbegin', '<span class="deep-tag is-deeper" title="Есть раздел «Ещё глубже»">+1 уровень</span>');
       const foot = document.createElement('div');
       foot.className = 'deep-foot';
       foot.innerHTML = `<button type="button" class="deep-close"><span aria-hidden="true">↑</span> Свернуть разворот</button>`;
@@ -78,27 +73,13 @@
       animateDetails(d, !d.open);
     });
 
-    $$('[data-view]').forEach(view => {
-      const list = $$('details.deep', view);
-      const hero = $('.ch-hero-text', view);
-      // the build writes the row into the page; a page without it (an old copy) gets it here
-      if (!list.length || !hero || $('.deep-index', hero)) return;
-      const deeper = $$('details.deeper', view).length;
-      const nav = document.createElement('nav');
-      nav.className = 'deep-index';
-      nav.setAttribute('aria-label', 'Научные развороты главы');
-      nav.innerHTML = `<span class="deep-index-label">${icon('hex')}Глубже <b>${list.length}${deeper ? ` · ещё глубже ${deeper}` : ''}</b></span>` +
-        list.map(d => `<a href="#${d.id}" data-kind="${d.dataset.kind}">${icon(KIND[d.dataset.kind][1])}${esc(d.dataset.short)}</a>`).join('');
-      hero.appendChild(nav);
-    });
-
     const kinds = $('#sh-kinds');
     if (kinds) {
       // on the home page the chapters are other files: take the counts the build wrote down
       const st = window.BASIL_PAGES && window.BASIL_PAGES.stats;
       const count = k => st ? (st.kinds[k] || 0) : blocks.filter(d => d.dataset.kind === k).length;
       kinds.innerHTML = Object.entries(KIND).map(([k, [name, ic]]) => `<li data-kind="${k}">${icon(ic)}<b>${count(k)}</b><span>${name}</span></li>`).join('') +
-        `<li class="is-total">${icon('grid')}<b>${st ? st.labs : $$('.lab-tool').length}</b><span>моделей</span></li><li class="is-total">${icon('book')}<b>${st ? st.deeper : $$('details.deeper').length}</b><span>«ещё глубже»</span></li>`;
+        `<li class="is-total">${icon('grid')}<b>${st ? st.labs : $$('.lab-tool').length}</b><span>моделей</span></li><li class="is-total">${icon('book')}<b>${st ? st.deeper : $$('details.deeper').length}</b><span>«Подробнее»</span></li>`;
     }
     initDeepAll();
   }

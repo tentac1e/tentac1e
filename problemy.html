@@ -42,8 +42,8 @@
 @font-face{font-family:'JetBrains Mono Fallback';font-style:normal;src:local('Courier New'), local('Courier'), local('Liberation Mono'), local('Roboto Mono');size-adjust:99.98%;ascent-override:102.02%;descent-override:30.00%;line-gap-override:0.00%}
 @font-face{font-family:'Caveat Fallback';font-style:normal;src:local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Roboto');size-adjust:72.65%;ascent-override:132.15%;descent-override:41.30%;line-gap-override:0.00%}
 </style>
-<link rel="stylesheet" href="assets/css/style.css?v=0d9783e3">
-<link rel="stylesheet" href="assets/css/lab.css?v=9a1fce6d">
+<link rel="stylesheet" href="assets/css/style.css?v=86738e5d">
+<link rel="stylesheet" href="assets/css/lab.css?v=a739bef0">
 </head>
 <body>
 <script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
@@ -344,7 +344,7 @@
         <p class="eyebrow">Глава 8</p>
         <h1>Что случилось <em>с базиликом</em></h1>
         <p class="lead">В девяти случаях из десяти причина в условиях: свет, полив, температура. Начните с диагностики по симптому, а справочники болезней и вредителей помогут уточнить.</p>
-      <nav class="deep-index" aria-label="Научные развороты главы"><span class="deep-index-label"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Глубже <b>4 · ещё глубже 4</b></span><a href="#deep-pigmenty" data-kind="chem"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Язык цвета</a><a href="#deep-oomicet" data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-cell"/></svg>Ложная мучнистая роса</a><a href="#deep-tlya" data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-cell"/></svg>Экспонента тли</a><a href="#deep-oborona" data-kind="chem"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Химическая оборона</a></nav></div>
+      </div>
       <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-problemy"/></svg></span></div>
     </header>
     <div class="subnav-wrap"><nav class="subnav" aria-label="Разделы главы">
@@ -357,12 +357,12 @@
         <div class="pane diag-result" id="diag-result" aria-live="polite"></div>
       </div>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-pigmenty" data-kind="chem" data-short="Язык цвета">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Язык цвета листа</span><span class="deep-sub">Хлорофиллы, каротиноиды и антоцианы</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Язык цвета листа</span><span class="deep-sub">Хлорофиллы, каротиноиды и антоцианы</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Спутники следят за здоровьем полей по тому же принципу, что и вы: здоровый лист иначе отражает свет, особенно невидимый инфракрасный.</span></span>
           </span></summary>
           <div class="deep-body">
@@ -379,7 +379,7 @@
             </div>
             <div class="lab-tool" data-lab="pigment" data-kind="chem"></div>
             <details class="deeper">
-              <summary id="deep-pigmenty-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Красный край и спутники</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-pigmenty-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Красный край и спутники</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Здоровый лист сильно поглощает красный свет, а ближний инфракрасный (около 800&nbsp;нм) почти полностью отражает — его рассеивает губчатая ткань с воздушными полостями. Резкий скачок отражения около 700&nbsp;нм называют «красным краем».</p>
                 <p>Спутники оценивают здоровье полей по индексу NDVI, который сравнивает отражение в ближнем инфракрасном и красном. Больное или обезвоженное растение отражает меньше инфракрасного, и индекс падает — иногда раньше, чем симптомы заметит глаз.</p>
@@ -401,12 +401,12 @@
     <div class="panel" data-panel id="болезни" data-title="Болезни">
       <div class="ref-grid" id="disease-grid"></div>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-oomicet" data-kind="bio" data-short="Ложная мучнистая роса">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Ложная мучнистая роса — не гриб</span><span class="deep-sub">Оомицет, ночная влажность и жизненный цикл</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Ложная мучнистая роса — не гриб</span><span class="deep-sub">Оомицет, ночная влажность и жизненный цикл</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Возбудителя ложной мучнистой росы базилика описали как отдельный вид только в 2009 году.</span></span>
           </span></summary>
           <div class="deep-body">
@@ -423,7 +423,7 @@
             </div>
             <div class="lab-tool" data-lab="dm" data-kind="bio"></div>
             <details class="deeper">
-              <summary id="deep-oomicet-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Родня картофельной фитофторы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-oomicet-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Родня картофельной фитофторы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>К оомицетам относится и <i>Phytophthora infestans</i> — возбудитель фитофтороза картофеля, из-за которого в 1845–⁠1849 годах в Ирландии случился Великий голод. У многих оомицетов, включая фитофтору, есть подвижные зооспоры с двумя жгутиками: они плавают в плёнке воды и находят устьица по химическому следу. У <i>Peronospora belbahrii</i> таких спор нет — её спорангии прорастают сразу трубкой. Но и им нужна капля воды на листе, поэтому вся эта родня так любит мокрую листву.</p>
                 <p>Возбудитель ложной мучнистой росы базилика как отдельный вид, <i>Peronospora belbahrii</i>, описали только в 2009 году. До этого его путали с похожими паразитами других яснотковых.</p>
@@ -444,12 +444,12 @@
     <div class="panel" data-panel id="вредители" data-title="Вредители">
       <div class="ref-grid" id="pest-grid"></div>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-tlya" data-kind="bio" data-short="Экспонента тли">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Экспонента тли</span><span class="deep-sub">Почему пара тлей за три недели становится колонией</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Экспонента тли</span><span class="deep-sub">Почему пара тлей за три недели становится колонией</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Взрослая божья коровка съедает десятки тлей в день, а её личинка — ещё больше. Это самый дешёвый «инсектицид».</span></span>
           </span></summary>
           <div class="deep-body">
@@ -465,7 +465,7 @@
             </div>
             <div class="lab-tool" data-lab="aphid" data-kind="bio"></div>
             <details class="deeper">
-              <summary id="deep-tlya-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Крылатые и бескрылые</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-tlya-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Крылатые и бескрылые</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Пока еды много, тля рожает бескрылых самок: им не нужно тратить ресурсы на крылья и мышцы. Когда на растении становится тесно или оно стареет, появляются крылатые особи и улетают искать новый дом. Осенью у многих видов рождаются самцы, и откладываются зимующие яйца.</p>
                 <p>Экологи называют такой цикл циклическим партеногенезом: он сочетает скорость бесполого размножения с разнообразием, которое даёт половое.</p>
@@ -507,12 +507,12 @@
         </article>
       </div>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-oborona" data-kind="chem" data-short="Химическая оборона">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Химическая оборона базилика</span><span class="deep-sub">Эфирные масла, жасмонаты и зов на помощь</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Химическая оборона базилика</span><span class="deep-sub">Эфирные масла, жасмонаты и зов на помощь</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
           </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
@@ -527,7 +527,7 @@
               </aside>
             </div>
             <details class="deeper">
-              <summary id="deep-oborona-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Рост или оборона</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-oborona-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Рост или оборона</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Защита стоит дорого. Углерод и азот, ушедшие на эфирное масло и ингибиторы, не превратятся в новые листья. Поэтому у растений есть внутренний переключатель: жасмонат запускает оборону и одновременно тормозит рост, а гиббереллины, гормоны роста, делают наоборот.</p>
                 <p>Сердце переключателя — белки-репрессоры JAZ и DELLA. Пока жасмоната нет, JAZ держат гены защиты выключенными, а сигнал тревоги отправляет их на разрушение. DELLA сдерживают рост и заодно связывают JAZ, так что две системы перетягивают канат.</p>
@@ -635,14 +635,14 @@
 
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
-<script src="assets/js/haptics.js?v=654d121d" defer></script>
+<script src="assets/js/haptics.js?v=4d2dfba4" defer></script>
 <script src="assets/js/data.js?v=bc6c660d" defer></script>
-<script src="assets/js/pages.js?v=862d90d4" defer></script>
+<script src="assets/js/pages.js?v=65df7bd8" defer></script>
 <script src="assets/js/scene.js?v=0bc454b3" defer></script>
-<script src="assets/js/science.js?v=cfaa4871" defer></script>
+<script src="assets/js/science.js?v=56add51a" defer></script>
 <script src="assets/js/labs/lib-micro.js?v=bbc6c98e" defer></script>
 <script src="assets/js/labs/lib-ills.js?v=63c3803f" defer></script>
 <script src="assets/js/labs/problemy.js?v=b6cf55d9" defer></script>
-<script src="assets/js/app.js?v=551a5375" defer></script>
+<script src="assets/js/app.js?v=2bcde4c4" defer></script>
 </body>
 </html>

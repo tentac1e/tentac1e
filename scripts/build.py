@@ -203,7 +203,7 @@ SITE_DESC = ('Подробный гид по выращиванию базили
 SKIP = ['#chapters', '#quick', '#tools-home', '#journey', '.diag-result', '.el-detail', '#variety-detail', '.quiz',
         '.plan-list', '.timeline', '.dose-out', '.npk-out', '.soil-out', '.dli-out', '.stage-body', '.pager', '.sim',
         '#glossary', '#disease-grid', '#pest-grid', '#diag-groups', '#place-panel', '#check-groups', '.lab-tool',
-        '.deep-index', '.recipe-book', '.deep-src', '.faq-here', '.facts-all']
+        '.recipe-book', '.deep-src', '.faq-here', '.facts-all']
 # inside a block the search reads: the copies of Справка's questions (faq_here) and the button «Раскрыть все» (deep_all)
 OWN_SKIP = ['.faq-here', '.deep-all']
 BOX = ['details', '.card', '.step', '.pane', 'article', '.rule', 'li']
@@ -212,7 +212,7 @@ VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'met
 
 def faq_here(src):
     """«Частые вопросы» where their topic is: each question of Справка marked data-for="<tab>" stands once more at
-    the end of that tab's practical part, before its «Глубже», and opens in place. The search keeps the one in
+    the end of that tab's practical part, before its «Для любопытных», and opens in place. The search keeps the one in
     Справка (.faq-here is in SKIP); the copy has no id of its own"""
     by_tab = {}
     for m in re.finditer(r'<details data-for="([^"]+)">(.*?</details>)', src['spravka'], re.S):
@@ -223,7 +223,7 @@ def faq_here(src):
         start = html.index(f'data-panel id="{tab}"')
         nxt = html.find('data-panel id="', start + 1)
         zone = html.find('<div class="deep-zone">', start)
-        assert zone > 0 and (nxt < 0 or zone < nxt), f'{tab}: no «Глубже» to put the questions before'
+        assert zone > 0 and (nxt < 0 or zone < nxt), f'{tab}: no «Для любопытных» to put the questions before'
         block = ('<section class="faq-here">\n        <h3>Частые вопросы</h3>\n        <div class="faq">\n'
                  + ''.join(f'          {d}\n' for d in items)
                  + '        </div>\n        <p class="faq-more"><a href="#spravka-voprosy">Все частые вопросы</a></p>\n'
@@ -232,18 +232,18 @@ def faq_here(src):
 
 
 def deep_all(src):
-    """«Раскрыть все» at the end of a tab's «Глубже» line where the tab has two dives or more (07-deep.js opens
-    and closes them); written here, so the line reads the same before and after the script"""
-    label = '<small>наука этого раздела</small></p>'
+    """«Раскрыть все» at the end of a tab's «Для любопытных» line where the tab has two dives or more (07-deep.js
+    opens and closes them); written here, so the line reads the same before and after the script"""
+    label = '<p class="deep-zone-label">'
     for view, html in src.items():
         out, pos = [], 0
         for m in re.finditer(r'<div class="deep-zone">', html):
             nxt = html.find('data-panel id="', m.end())
             zone = html[m.end():nxt if nxt > 0 else len(html)]
             at = html.find(label, m.end())
-            if zone.count('<details class="deep"') < 2 or at < 0:
+            if zone.count('<details class="deep"') < 2 or at < 0 or (nxt > 0 and at > nxt):
                 continue
-            at += len(label) - len('</p>')
+            at = html.index('</p>', at)
             out.append(html[pos:at] + '<button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button>')
             pos = at
         src[view] = ''.join(out) + html[pos:]
@@ -252,7 +252,7 @@ def deep_all(src):
 def facts_here(src, CH):
     """Справка «Любопытно»: every fact of the chapters, by chapter, as a card signed with its tab that leads where it
     is told in full — the dive whose heading it stands in (.deep-fact) or its own link (.deep-facts at the top of
-    «Глубже»). The facts are written once, in the chapters; the search finds them there (.facts-all is in SKIP)"""
+    «Для любопытных»). The facts are written once, in the chapters; the search finds them there (.facts-all is in SKIP)"""
     bulb = '<svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg>'
     out = []
     for view, _ in PAGES:
@@ -275,7 +275,7 @@ def facts_here(src, CH):
                 here.append((m.start(), m.group(1), title, text, go))
             for m in re.finditer(r'<details class="deep" id="([^"]+)" data-kind="(\w+)" data-short="([^"]+)">(.*?)</summary>', part, re.S):
                 for f in re.finditer(r'<span class="deep-fact"><svg[^>]*><use href="#i-bulb"/></svg><span>(.*?)</span></span>', m.group(4), re.S):
-                    go = f'<a class="sci-note-link" href="#{m.group(1)}">Глубже: {m.group(3)} <span aria-hidden="true">→</span></a>'
+                    go = f'<a class="sci-note-link" href="#{m.group(1)}">Для любопытных: {m.group(3)} <span aria-hidden="true">→</span></a>'
                     here.append((m.start(), m.group(2), title, f.group(1), go))
             cards += sorted(here, key=lambda c: c[0])  # in the order they stand on the tab
         if cards:
@@ -563,25 +563,6 @@ def tie_js(text, words=False):
     if words:
         text = re.sub(SHORT_WORD + r' (?=[а-яё«(\d])', '\\1\u00a0', text, flags=re.I)
     return text
-
-
-# the chapter's science spreads, listed under its title (what science.js used to build as the page started:
-# written here, the row stands in place from the first paint and the chapter does not jump down when it comes)
-KIND_ICON = {'chem': 'hex', 'phys': 'wave', 'bio': 'cell', 'taste': 'nose'}
-
-
-def deep_nav(html):
-    deep = [dict(re.findall(r'([a-z-]+)="([^"]*)"', m.group(1))) for m in re.finditer(r'<details class="deep"([^>]*)>', html)]
-    if not deep or '<div class="ch-hero-text">' not in html:
-        return html
-    deeper = len(re.findall(r'<details class="deeper"', html))
-    ico = lambda n: f'<svg class="ico" aria-hidden="true"><use href="#i-{n}"/></svg>'
-    nav = (f'<nav class="deep-index" aria-label="Научные развороты главы"><span class="deep-index-label">{ico("hex")}Глубже <b>{len(deep)}'
-           + (f' · ещё глубже {deeper}' if deeper else '') + '</b></span>'
-           + ''.join(f'<a href="#{d["id"]}" data-kind="{d["data-kind"]}">{ico(KIND_ICON[d["data-kind"]])}{d["data-short"]}</a>' for d in deep) + '</nav>')
-    i = html.index('<div class="ch-hero-text">')
-    j = html.index('</div>', i)
-    return html[:j] + nav + html[j:]
 
 
 def label_tables(html):
@@ -875,7 +856,7 @@ def write_map(src_pages, CH):
             if labs:
                 extra.append('модели: ' + ', '.join(f'`{l}`' for l in labs))
             if deeps:
-                extra.append('глубже: ' + ', '.join(f'{t} `#{i}`' for i, t in deeps))
+                extra.append('развороты: ' + ', '.join(f'{t} `#{i}`' for i, t in deeps))
             rows.append(f"- `{rel(f)}` · {tab} · {html.count(chr(10))} стр." + (f"<br>{'; '.join(extra)}" if extra else ''))
         out += rows + ['']
     out += ['## Модели (src/labs/)', '', '| модель | глава | заголовок | файлы |', '|---|---|---|---|']
@@ -1067,7 +1048,7 @@ def main():
     if out_dir != ROOT and not single and assets.exists():
         shutil.rmtree(assets)  # a fresh copy: files removed from src/ must not linger on the hosting copy
     bundles, lib_deps, libs = assemble(src, assets)
-    # chapters whose pictures (or models outside a closed «Глубже») stand on the page from the start: their files
+    # chapters whose pictures (or models outside a closed dive) stand on the page from the start: their files
     # come with the page (see page_html); the others wait until a model comes near the screen
     def shown_models(html):
         while True:
@@ -1093,7 +1074,7 @@ def main():
             if node.tag == '#text':
                 continue
             if node.tag == 'details' and 'deep' in node.classes and node.attrs.get('id'):
-                titles[node.attrs['id']] = 'Глубже: ' + node.attrs.get('data-short', '')
+                titles[node.attrs['id']] = 'Для любопытных: ' + node.attrs.get('data-short', '')
             if node.matches('[data-panel]') and ch:
                 titles[node.attrs['id']] = f"{ch['title']} · {node.attrs.get('data-title', '')}"
             if node.matches('[data-panel]'):
@@ -1118,11 +1099,11 @@ def main():
                 if 'id' not in node.attrs:
                     inserts.append((node.pos, hid))
                 t = node.find('.deeper-t')
-                page_entries.append(({'title': text_of(t), 'sub': 'Ещё глубже · ' + (host.attrs.get('data-short') if host is not None else where),
+                page_entries.append(({'title': text_of(t), 'sub': 'Подробнее · ' + (host.attrs.get('data-short') if host is not None else where),
                                       'page': view, 'hash': hid, 'icon': 'hex'}, [node.next_element()], None, None))
                 continue
             if node.tag == 'summary' and 'deep' in parent.classes:
-                page_entries.append(({'title': text_of(node.find('.deep-title')), 'sub': 'Глубже · ' + where,
+                page_entries.append(({'title': text_of(node.find('.deep-title')), 'sub': 'Для любопытных · ' + where,
                                       'page': view, 'hash': parent.attrs['id'], 'icon': 'hex'}, [parent.find('.deep-body')], node.find('.deep-sub'), None))
                 continue
             hid = node.attrs.get('id')
@@ -1136,7 +1117,7 @@ def main():
                 hid = f'{view}-h{n}'
                 inserts.append((node.pos, hid))
             deep = node.closest(['.deep'])
-            page_entries.append(({'title': text_of(node), 'sub': where + (' · Глубже' + (': ' + deep.attrs['data-short'] if deep is not None and deep.attrs.get('data-short') else '') if deep is not None else ''),
+            page_entries.append(({'title': text_of(node), 'sub': where + (' · Для любопытных' + (': ' + deep.attrs['data-short'] if deep is not None and deep.attrs.get('data-short') else '') if deep is not None else ''),
                                   'page': view, 'hash': hid, 'icon': 'info' if node.tag == 'summary' else 'leaf'}, section_of(node), None, node))
         # every piece of text goes to one entry: the one whose section holds it most closely
         # (a heading's own section is left out of the tab, the deep dive or the card around it)
@@ -1275,7 +1256,7 @@ def main():
 
     # 4. pages
     def page_html(views, here):
-        content = label_tables(typeset('\n'.join(deep_nav(src[v]) for v in views)))
+        content = label_tables(typeset('\n'.join(src[v] for v in views)))
         if not single:
             content = content.replace('<section class="view', '<section class="view is-active', 1)
             # first panel is visible straight from the HTML, before any script runs

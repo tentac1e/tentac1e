@@ -42,8 +42,8 @@
 @font-face{font-family:'JetBrains Mono Fallback';font-style:normal;src:local('Courier New'), local('Courier'), local('Liberation Mono'), local('Roboto Mono');size-adjust:99.98%;ascent-override:102.02%;descent-override:30.00%;line-gap-override:0.00%}
 @font-face{font-family:'Caveat Fallback';font-style:normal;src:local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Roboto');size-adjust:72.65%;ascent-override:132.15%;descent-override:41.30%;line-gap-override:0.00%}
 </style>
-<link rel="stylesheet" href="assets/css/style.css?v=0d9783e3">
-<link rel="stylesheet" href="assets/css/lab.css?v=9a1fce6d">
+<link rel="stylesheet" href="assets/css/style.css?v=86738e5d">
+<link rel="stylesheet" href="assets/css/lab.css?v=a739bef0">
 </head>
 <body>
 <script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
@@ -344,7 +344,7 @@
         <p class="eyebrow">Глава 3</p>
         <h1>Свет, вода, тепло <em>и почва</em></h1>
         <p class="lead">От этих четырёх вещей зависит всё остальное. Если базилику плохо, почти всегда виновата одна из них, а не нехватка удобрений.</p>
-      <nav class="deep-index" aria-label="Научные развороты главы"><span class="deep-index-label"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Глубже <b>6 · ещё глубже 6</b></span><a href="#deep-fotosintez" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Фотосинтез</a><a href="#deep-lampa" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Обратные квадраты</a><a href="#deep-vpd" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Путь воды и VPD</a><a href="#deep-fermenty" data-kind="chem"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Ферменты и жара</a><a href="#deep-ph" data-kind="chem"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>pH и доступность</a><a href="#deep-zima" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Зимний свет</a></nav></div>
+      </div>
       <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-uhod"/></svg></span></div>
     </header>
     <div class="subnav-wrap"><nav class="subnav" aria-label="Разделы главы">
@@ -402,12 +402,12 @@
         <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
       </section>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small><button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button></p>
+        <p class="deep-zone-label"><span>Для любопытных</span><button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button></p>
         <details class="deep" id="deep-fotosintez" data-kind="phys" data-short="Фотосинтез">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Фотосинтез: как свет становится листом</span><span class="deep-sub">Спектр поглощения, фотоны и почему базилик зелёный</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Фотосинтез: как свет становится листом</span><span class="deep-sub">Спектр поглощения, фотоны и почему базилик зелёный</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Люксметр меряет свет «глазами человека», с упором на зелёный. Растение считает фотоны всех цветов, поэтому для фитоламп люксы почти бесполезны.</span></span>
           </span></summary>
           <div class="deep-body">
@@ -425,7 +425,7 @@
             </div>
             <div class="lab-tool" data-lab="spectrum" data-kind="phys"></div>
             <details class="deeper">
-              <summary id="deep-fotosintez-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Z-схема и квантовый выход</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-fotosintez-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Z-схема и квантовый выход</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Световые реакции идут через две фотосистемы. Фотосистема II (реакционный центр P680) отнимает электроны у воды, фотосистема I (P700) поднимает их ещё выше по энергии, чтобы восстановить НАДФ⁺. На энергетической диаграмме путь электрона похож на букву Z.</p>
                 <p>Чтобы выделить одну молекулу O₂, нужно передать четыре электрона, и каждый проходит обе фотосистемы — отсюда минимум восемь фотонов. На практике лист связывает около 0,05–⁠0,1 молекулы CO₂ на поглощённый фотон. Кривая Маккри показывает, что красные фотоны работают эффективнее всего, но и зелёные дают около 70&nbsp;% их отдачи.</p>
@@ -443,8 +443,8 @@
         <details class="deep" id="deep-lampa" data-kind="phys" data-short="Обратные квадраты">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Почему лампу нельзя просто поднять повыше</span><span class="deep-sub">Закон обратных квадратов для фитолампы</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Почему лампу нельзя просто поднять повыше</span><span class="deep-sub">Закон обратных квадратов для фитолампы</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Летний полдень даёт около 2000&nbsp;мкмоль/⁠м²·с — в 5–⁠10 раз больше, чем хорошая комнатная фитолампа.</span></span>
           </span></summary>
           <div class="deep-body">
@@ -461,7 +461,7 @@
             </div>
             <div class="lab-tool" data-lab="lamp" data-kind="phys"></div>
             <details class="deeper">
-              <summary id="deep-lampa-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Сколько света даёт ватт</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-lampa-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Сколько света даёт ватт</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Эффективность фитолампы измеряют в <b>микромолях фотонов на джоуль</b> (мкмоль/⁠Дж). Лучшие светодиодные панели дают 2,5–⁠3&nbsp;мкмоль/⁠Дж, натриевые лампы — около 1,7–⁠1,9, люминесцентные — 1–⁠1,3.</p>
                 <p>Прикинем: панель на 30&nbsp;Вт с эффективностью 2,5&nbsp;мкмоль/⁠Дж испускает 75&nbsp;мкмоль фотонов в секунду. Если почти весь свет попадает на площадь 50&nbsp;×&nbsp;50&nbsp;см (0,25&nbsp;м²), в среднем выйдет 300&nbsp;мкмоль/⁠м²·с — как раз столько, сколько нужно базилику.</p>
@@ -541,12 +541,12 @@
         <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
       </section>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-vpd" data-kind="phys" data-short="Путь воды и VPD">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Путь воды: от корня до устьица</span><span class="deep-sub">Водный потенциал и дефицит давления пара (VPD)</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">калькулятор</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Путь воды: от корня до устьица</span><span class="deep-sub">Водный потенциал и дефицит давления пара (VPD)</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>До 95–⁠99&nbsp;% воды, которую выпивает растение, уходит через устьица в воздух. На рост тканей остаётся лишь малая доля.</span></span>
           </span></summary>
           <div class="deep-body">
@@ -565,7 +565,7 @@
             </div>
             <div class="lab-tool" data-lab="vpd" data-kind="phys"></div>
             <details class="deeper">
-              <summary id="deep-vpd-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Точка росы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-vpd-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Точка росы</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Если лист холоднее точки росы, на нём конденсируется вода. Ночью так бывает часто: лист излучает тепло в небо и остывает на 1–⁠3&nbsp;°C ниже воздуха. При влажности 85&nbsp;% и 18&nbsp;°C точка росы — около 15,5&nbsp;°C, так что роса выпадет уже при небольшом охлаждении. Мокрый лист — вход для ложной мучнистой росы.</p>
                 <div class="eq"><span class="eq-label">Формула Магнуса</span><p>γ = ln(RH/100) + 17,27·T/(237,3 + T)<br>T<sub>р</sub> = 237,3·γ / (17,27 − γ)</p></div>
@@ -623,12 +623,12 @@
         </div>
       </div>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-fermenty" data-kind="chem" data-short="Ферменты и жара">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Температура и ферменты</span><span class="deep-sub">Правило Q₁₀, рубиско и цена жары</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Температура и ферменты</span><span class="deep-sub">Правило Q₁₀, рубиско и цена жары</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>При нагреве на 10&nbsp;°C большинство реакций в клетке ускоряется примерно вдвое — до тех пор, пока белки не начинают разрушаться.</span></span>
           </span></summary>
           <div class="deep-body">
@@ -645,7 +645,7 @@
             </div>
             <div class="lab-tool" data-lab="temp" data-kind="chem"></div>
             <details class="deeper">
-              <summary id="deep-fermenty-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Уравнение Аррениуса</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-fermenty-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Уравнение Аррениуса</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Правило Q₁₀ — упрощение уравнения Аррениуса: скорость реакции растёт экспоненциально с температурой, а крутизну задаёт энергия активации E<sub>a</sub>. Для типичной ферментной реакции с E<sub>a</sub>&nbsp;≈&nbsp;50&nbsp;кДж/⁠моль около 20&nbsp;°C как раз получается Q₁₀&nbsp;≈&nbsp;2.</p>
                 <p>Выше оптимума в игру вступает обратный процесс — белки начинают разворачиваться, и кривая скорости падает. Поэтому у каждого фермента своя температура, при которой он работает быстрее всего.</p>
@@ -697,15 +697,15 @@
         </div>
       </div>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <ul class="deep-facts" aria-label="Любопытно">
-          <li data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>В грамме плодородной почвы живёт до миллиарда бактерий. Большая часть питания корней проходит через их «руки». <a class="deep-fact-link" href="udobreniya.html#deep-azot">Глубже: Круговорот азота <span aria-hidden="true">→</span></a></span></li>
+          <li data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>В грамме плодородной почвы живёт до миллиарда бактерий. Большая часть питания корней проходит через их «руки». <a class="deep-fact-link" href="udobreniya.html#deep-azot">Для любопытных: Круговорот азота <span aria-hidden="true">→</span></a></span></li>
         </ul>
         <details class="deep" id="deep-ph" data-kind="chem" data-short="pH и доступность">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">pH: почему кислотность решает, что доступно корням</span><span class="deep-sub">Ионы, заряды и ёмкость катионного обмена</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">интерактив</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">pH: почему кислотность решает, что доступно корням</span><span class="deep-sub">Ионы, заряды и ёмкость катионного обмена</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
           </span></summary>
           <div class="deep-body">
             <div class="deep-grid">
@@ -722,7 +722,7 @@
             </div>
             <div class="lab-tool" data-lab="ph" data-kind="chem"></div>
             <details class="deeper">
-              <summary id="deep-ph-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Буфер и доломит</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-ph-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Буфер и доломит</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Грунт сопротивляется изменению pH: гумус и глина держат запас ионов H⁺ на своих зарядах. Поэтому, чтобы поднять pH верхового торфа с 3,5–⁠4,5 до 6, нужно не щепотка, а несколько граммов доломитовой муки на литр.</p>
                 <p>Доломит — двойной карбонат кальция и магния CaMg(CO₃)₂. Он растворяется медленно и только в кислой среде, поэтому передозировать его труднее, чем гашёную известь, а заодно он даёт кальций и магний.</p>
@@ -755,12 +755,12 @@
         <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
       </section>
       <div class="deep-zone">
-        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small></p>
+        <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-zima" data-kind="phys" data-short="Зимний свет">
           <summary><span class="deep-sum">
             <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
-            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Зимний свет в цифрах</span><span class="deep-sub">Сколько солнечной энергии приходит в каждый месяц</span></span>
-            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-head"><span class="deep-title">Зимний свет в цифрах</span><span class="deep-sub">Сколько солнечной энергии приходит в каждый месяц</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-plus"></span></span>
             <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>В декабре в Москве солнце в полдень поднимается всего на 11° — примерно на высоту кулака на вытянутой руке.</span></span>
           </span></summary>
           <div class="deep-body">
@@ -775,7 +775,7 @@
             </div>
             <div class="lab-tool" data-lab="solar" data-kind="phys"></div>
             <details class="deeper">
-              <summary id="deep-zima-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Облака, снег и рассеянный свет</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <summary id="deep-zima-glubzhe"><span class="deeper-k">Подробнее</span><span class="deeper-t">Облака, снег и рассеянный свет</span><span class="deeper-plus" aria-hidden="true"></span></summary>
               <div class="deeper-body">
                 <p>Формула в развороте считает свет над облаками. У земли всё решает облачность: сплошной слой туч пропускает лишь 10–⁠30&nbsp;% энергии ясного дня. Ноябрь и декабрь в средней полосе — самые пасмурные месяцы, поэтому реальная разница между июнем и декабрём ближе к 15–⁠20 разам.</p>
                 <p>Зимой помогает снег. Свежий снег отражает 80–⁠90&nbsp;% света, трава — около 20&nbsp;%. Свет от сугробов входит в окно снизу и заметно добавляет освещённости подоконнику, особенно на нижних этажах. Долю отражённого света физики называют <b>альбедо</b>.</p>
@@ -882,16 +882,16 @@
 
 <!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
 <script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
-<script src="assets/js/haptics.js?v=654d121d" defer></script>
+<script src="assets/js/haptics.js?v=4d2dfba4" defer></script>
 <script src="assets/js/data.js?v=bc6c660d" defer></script>
-<script src="assets/js/pages.js?v=862d90d4" defer></script>
+<script src="assets/js/pages.js?v=65df7bd8" defer></script>
 <script src="assets/js/scene.js?v=0bc454b3" defer></script>
-<script src="assets/js/science.js?v=cfaa4871" defer></script>
+<script src="assets/js/science.js?v=56add51a" defer></script>
 <script src="assets/js/labs/lib-micro.js?v=bbc6c98e" defer></script>
 <script src="assets/js/labs/lib-ills.js?v=63c3803f" defer></script>
 <script src="assets/js/labs/lib-props.js?v=7e4b2fa8" defer></script>
 <script src="assets/js/labs/lib-agro.js?v=2133ead0" defer></script>
 <script src="assets/js/labs/uhod.js?v=5d83f303" defer></script>
-<script src="assets/js/app.js?v=551a5375" defer></script>
+<script src="assets/js/app.js?v=2bcde4c4" defer></script>
 </body>
 </html>
