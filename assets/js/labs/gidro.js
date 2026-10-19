@@ -15,7 +15,7 @@
   const citiesChips = (id, lat) => h.chipsHtml(id, 'Город', h.CITIES.map(([l, n]) => [l, n]), lat);
 
   const { micro, ill, props } = window.BasilLibs;
-  window.BasilScience.styleFor("gidro", "/* captions inside the hydroponics schemes: a halo of the paper keeps them readable over water and walls */\n.hs-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); letter-spacing: .02em; paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3.5px; stroke-linejoin: round; }\n.hs-chart .lab-svg { display: block; border-radius: 14px; }\n.lab-svg .band.is-low { fill: var(--danger-soft); opacity: .75; }\n/* the share of growth that goes to the leaves and to the roots */\n.al-split { display: grid; gap: 10px; margin-top: 14px; }\n.al-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 92px; gap: 12px; align-items: center; }\n.al-name { font-weight: 600; font-size: .9rem; }\n.al-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--surface-2); }\n.al-bar i { display: block; width: var(--w); transition: width .4s var(--ease-float); }\n.al-leaf.s1 { background: var(--ser-1); } .al-leaf.s2 { background: var(--ser-2); }\n.al-root { background: var(--root); box-shadow: inset 0 0 0 1px var(--line-strong); }\n.al-val { font: 500 .78rem/1.2 var(--font-mono); color: var(--ink-3); text-align: right; }\n@media (max-width: 460px) { .al-row { grid-template-columns: 86px minmax(0, 1fr) 80px; gap: 8px; } }\n/* the jar beside its chart */\n.kr-grid { grid-template-columns: minmax(0, 170px) minmax(0, 1fr); margin-top: 6px; }\n.kr-stage .ill { width: 100%; max-width: 170px; height: auto; }\n@media (max-width: 760px) { .kr-grid { grid-template-columns: 1fr; } .kr-stage .ill { max-width: 150px; } }\n.cap-stage .cap-svg { display: block; width: 100%; max-width: 360px; height: auto; margin-inline: auto; }\n/* the solution calculator: how much of each part, and the order */\n.hm-row { margin-bottom: 0; }\n.hm-out { display: grid; gap: 14px; margin-top: 16px; }\n.hm-parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px; }\n.hm-part { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }\n.hm-k { font: 600 .7rem/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }\n.hm-part b { font: 600 1.5rem/1.1 var(--font-display); color: var(--k); }\n.hm-part small { font: 500 .76rem/1.3 var(--font-mono); color: var(--ink-3); }\n.hm-steps { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; color: var(--ink-2); }\n.hm-warn { margin: 0; padding: 10px 14px; border-radius: 12px; background: var(--oil-soft); color: var(--ink); font-size: .92rem; }\n.hm-row { grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); align-items: end; }\n/* the check: what to do, worst first */\n.hc-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 8px; }\n.hc-item { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }\n.hc-item b { display: block; font-size: .95rem; }\n.hc-item p { margin: 3px 0 0; font-size: .88rem; color: var(--ink-2); }\n.hc-st { justify-self: start; padding: 3px 9px; border-radius: 999px; font: 600 .7rem/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }\n.hc-item.is-bad { border-color: color-mix(in srgb, var(--danger) 45%, var(--line)); }\n.hc-item.is-bad .hc-st { background: var(--danger-soft); color: var(--danger); }\n.hc-item.is-warn .hc-st { background: var(--oil-soft); color: var(--ink); }\n.hc-item.is-ok .hc-st, .hc-item.is-all .hc-st { background: var(--leaf-soft); color: var(--basil-deep); }\n@media (max-width: 460px) { .hc-item { grid-template-columns: 1fr; gap: 6px; } }\n/* the costs: three columns side by side, one under another on a phone */\n.hcost-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 10px; }\n.hcost-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0 6px; }\n@media (max-width: 760px) { .hcost-cols { grid-template-columns: 1fr; } }\n.hcost-col { padding: 12px 14px; border: 1px solid var(--line); border-top: 3px solid var(--ser-1); border-radius: 14px; background: var(--surface); }\n.hcost-col.s2 { border-top-color: var(--ser-2); }\n.hcost-col.s3 { border-top-color: var(--ser-3); }\n.hcost-h { margin: 0 0 6px; font: 600 1.05rem/1.2 var(--font-display); }\n.hcost-col dl { margin: 0; display: grid; gap: 4px; }\n.hcost-col dl > div { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }\n.hcost-col dt { font-size: .82rem; color: var(--ink-3); }\n.hcost-col dd { margin: 0; font: 600 .95rem/1.3 var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }\n");
+  window.BasilScience.styleFor("gidro", "/* captions inside the hydroponics schemes: a halo of the paper keeps them readable over water and walls */\n.hs-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); letter-spacing: .02em; paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3.5px; stroke-linejoin: round; }\n.hs-chart .lab-svg { display: block; border-radius: 14px; }\n.lab-svg .band.is-low { fill: var(--danger-soft); opacity: .75; }\n/* readings without a chart (hyGauge, hyScale, hyHero in _shared.js) */\n.hy-hero { display: grid; gap: 4px; margin: 0; }\n.hy-hero b { font: 700 3rem/1 var(--font-body); color: var(--ink); letter-spacing: -.01em; }\n.hy-hero span { font-size: .92rem; line-height: 1.4; color: var(--ink-2); }\n.hy-gauge { display: grid; gap: 8px; }\n.hy-gauge-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; }\n.hy-gauge-h span { font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }\n.hy-gauge-h b { font: 600 1.1rem/1.2 var(--font-body); color: var(--ink); }\n.hy-state { padding: 2px 9px; border-radius: 999px; font: 600 .74rem/1.4 var(--font-body); font-style: normal; }\n.hy-state.is-good { background: var(--leaf-soft); color: var(--basil-deep); }\n.hy-state.is-warn { background: var(--oil-soft); color: var(--ink); }\n.hy-state.is-bad { background: var(--danger-soft); color: var(--danger); }\n.hy-mtrack { position: relative; display: block; height: 12px; border-radius: 6px; overflow: hidden; }\n.hy-mfill { display: block; height: 100%; border-radius: 0 6px 6px 0; transition: width .35s var(--ease-float); }\n.hy-meter.is-good .hy-mtrack { background: var(--leaf-soft); } .hy-meter.is-good .hy-mfill { background: var(--basil); }\n.hy-meter.is-warn .hy-mtrack { background: var(--oil-soft); } .hy-meter.is-warn .hy-mfill { background: var(--oil); }\n.hy-meter.is-bad .hy-mtrack { background: var(--danger-soft); } .hy-meter.is-bad .hy-mfill { background: var(--danger); }\n.hy-mtick { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--surface); }\n.hy-scale { display: grid; gap: 5px; }\n.hy-znames, .hy-ticks { position: relative; height: 18px; }\n.hy-znames span, .hy-ticks span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; font: 500 .74rem/18px var(--font-mono); color: var(--ink-3); }\n.hy-znames span { font: 600 .78rem/18px var(--font-body); color: var(--ink-2); }\n.hy-ticks span:first-child { transform: none; }\n.hy-ticks span:last-child { transform: translateX(-100%); }\n.hy-track { position: relative; height: 16px; }\n.hy-zones { position: absolute; inset: 0; border-radius: 8px; overflow: hidden; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); }\n.hy-zone { position: absolute; top: 0; bottom: 0; }\n.hy-zone.is-good { background: var(--leaf-soft); } .hy-zone.is-warn { background: var(--oil-soft); } .hy-zone.is-bad { background: var(--danger-soft); }\n.hy-link { position: absolute; top: 7px; height: 2px; background: var(--ink-3); transition: left .35s var(--ease-float), width .35s var(--ease-float); }\n.hy-mark { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0 2px var(--surface); transition: left .35s var(--ease-float); }\n.hy-mark.is-from { background: var(--surface); border: 2px solid var(--ink-3); }\n.hy-mark.is-to.is-good { background: var(--basil); } .hy-mark.is-to.is-warn { background: var(--oil); } .hy-mark.is-to.is-bad { background: var(--danger); }\n.hy-key { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0 0; padding: 0; list-style: none; font-size: .8rem; color: var(--ink-3); }\n.hy-key li { display: flex; align-items: center; gap: 6px; }\n.hy-key i { width: 12px; height: 12px; border-radius: 50%; }\n.hy-key .is-from { background: var(--surface); border: 2px solid var(--ink-3); }\n.hy-key .is-to { background: var(--ink-2); }\n/* a model's picture beside its readings, one under the other on a phone */\n.hy-split { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 28px); align-items: center; margin-top: 8px; }\n@media (max-width: 760px) { .hy-split { grid-template-columns: 1fr; } }\n.hy-pic .ill { display: block; width: 100%; height: auto; border-radius: 14px; }\n.hy-read { display: grid; gap: 18px; align-content: start; }\n.hy-verdict { margin: 0; color: var(--ink-2); }\n/* the share of growth that goes to the leaves and to the roots: one bar of two parts, a gap of the surface\n   between them */\n.al-split { display: grid; gap: 10px; }\n.al-row { display: grid; grid-template-columns: 84px minmax(0, 1fr) 84px; gap: 10px; align-items: center; }\n.al-name { font-weight: 600; font-size: .9rem; }\n.al-bar { display: flex; gap: 2px; height: 14px; }\n.al-bar i { display: block; width: var(--w); border-radius: 4px; transition: width .4s var(--ease-float); }\n.al-leaf, .al-key-leaf { background: var(--ser-1); }\n.al-root, .al-key-root { background: var(--soil); }\n.al-val { font: 500 .78rem/1.2 var(--font-mono); color: var(--ink-3); text-align: right; }\n@media (max-width: 460px) { .al-row { grid-template-columns: 70px minmax(0, 1fr) 76px; gap: 8px; } }\n/* the jar beside its readings */\n.kr-split { grid-template-columns: minmax(0, 200px) minmax(0, 1fr); }\n.kr-stage .ill { max-width: 200px; margin-inline: auto; }\n@media (max-width: 760px) { .kr-split { grid-template-columns: 1fr; } .kr-stage .ill { max-width: 170px; } }\n.cap-stage .cap-svg { display: block; width: 100%; max-width: 360px; height: auto; margin-inline: auto; }\n/* the solution calculator: how much of each part, and the order */\n.hm-row { margin-bottom: 0; }\n.hm-out { display: grid; gap: 14px; margin-top: 16px; }\n.hm-parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px; }\n.hm-part { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }\n.hm-k { font: 600 .7rem/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }\n.hm-part b { font: 600 1.5rem/1.1 var(--font-display); color: var(--k); }\n.hm-part small { font: 500 .76rem/1.3 var(--font-mono); color: var(--ink-3); }\n.hm-steps { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; color: var(--ink-2); }\n.hm-warn { margin: 0; padding: 10px 14px; border-radius: 12px; background: var(--oil-soft); color: var(--ink); font-size: .92rem; }\n.hm-row { grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); align-items: end; }\n/* oxygen in the water and what the roots ask for: two bars on one scale */\n.o2-out { display: grid; gap: 16px; margin-top: 14px; }\n.o2-bars { display: grid; gap: 10px; }\n.o2-row { display: grid; grid-template-columns: 116px minmax(0, 1fr) 82px; gap: 10px; align-items: center; }\n.o2-name { font-weight: 600; font-size: .9rem; }\n.o2-bar { display: block; height: 16px; border-radius: 4px; background: var(--surface-2); }\n.o2-bar i { display: block; height: 100%; border-radius: 0 4px 4px 0; transition: width .35s var(--ease-float); }\n.o2-bar .is-o2 { background: var(--ser-4); }\n.o2-bar .is-need { background: var(--ser-3); }\n.o2-val { font: 500 .82rem/1.2 var(--font-mono); color: var(--ink-2); text-align: right; }\n@media (max-width: 460px) { .o2-row { grid-template-columns: 96px minmax(0, 1fr) 72px; gap: 8px; } }\n/* the solution on two scales: EC and pH, where it was and where it is */\n.dr-out { display: grid; gap: 16px; margin-top: 8px; }\n.dr-scales { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; }\n@media (max-width: 760px) { .dr-scales { grid-template-columns: 1fr; } }\n.dr-scale { display: grid; gap: 6px; }\n.dr-h { display: flex; align-items: baseline; gap: 10px; margin: 0; }\n.dr-h span { font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }\n.dr-h b { font: 600 1.05rem/1.2 var(--font-body); color: var(--ink); }\n/* the check: what to do, worst first */\n.hc-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 8px; }\n.hc-item { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }\n.hc-item b { display: block; font-size: .95rem; }\n.hc-item p { margin: 3px 0 0; font-size: .88rem; color: var(--ink-2); }\n.hc-st { justify-self: start; padding: 3px 9px; border-radius: 999px; font: 600 .7rem/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }\n.hc-item.is-bad { border-color: color-mix(in srgb, var(--danger) 45%, var(--line)); }\n.hc-item.is-bad .hc-st { background: var(--danger-soft); color: var(--danger); }\n.hc-item.is-warn .hc-st { background: var(--oil-soft); color: var(--ink); }\n.hc-item.is-ok .hc-st, .hc-item.is-all .hc-st { background: var(--leaf-soft); color: var(--basil-deep); }\n@media (max-width: 460px) { .hc-item { grid-template-columns: 1fr; gap: 6px; } }\n");
   /* @use props */
   /* Pictures of the Hydroponics chapter: the steps of a Kratky jar (data-ill="hyd:k1…k5") and of a bucket with an
      air pump, DWC (hyd:d1…d5), the tab «Своими руками». The jar and the bucket are drawn cut open where it helps. */
@@ -140,6 +140,42 @@
   const pickHtml = (id, label, options, value) => `<div class="lab-seg-wrap"><span class="lab-label" id="${id}-l">${label}</span>${h.chipsHtml(id, label, options, value)}</div>`;
   // a number with its tenths only when it has them: 24 °C, 24,5 °C
   const fv = v => Math.abs(v % 1) > 1e-9 ? fmt(v) : fmt0(v);
+
+  /* Readings without a chart. A meter — one value against its limits, its fill in the colour of its state and its
+     track a lighter step of it; a scale with zones on which a value goes from where it was (a ring) to where it
+     is (a dot). Both are HTML laid out in percentages: their words keep their real size at any width, and the
+     state is said in a word beside the colour, never by the colour alone. */
+  const hyPc = (v, a, b) => clamp((v - a) / (b - a), 0, 1) * 100;
+  const hyAt = (v, a, b) => hyPc(v, a, b).toFixed(1) + '%';
+  const HY_STATE = { good: 'хорошо', warn: 'на грани', bad: 'плохо' };
+  // a reading: its name, the value, the state in a word, and the meter under them. o: label, value, state, word,
+  // v, max, min, ticks (values marked on the track)
+  function hyGauge(o) {
+    const min = o.min || 0;
+    const ticks = (o.ticks || []).map(v => `<i class="hy-mtick" style="left:${hyAt(v, min, o.max)}"></i>`).join('');
+    return `<div class="hy-gauge"><p class="hy-gauge-h"><span>${o.label}</span><b>${o.value}</b><em class="hy-state is-${o.state}">${o.word || HY_STATE[o.state]}</em></p>` +
+      `<div class="hy-meter is-${o.state}" role="img" aria-label="${esc(o.label + ': ' + String(o.value).replace(/<[^>]+>/g, ''))}"><span class="hy-mtrack"><i class="hy-mfill" style="width:${hyAt(o.v, min, o.max)}"></i>${ticks}</span></div></div>`;
+  }
+  // a scale: zones [[from, to, state, name]], ticks under it, a value from → to (either may be left out)
+  function hyScale(o) {
+    const { min, max } = o, f = o.fmt || fmt;
+    const zones = (o.zones || []).map(([a, b, st]) => `<i class="hy-zone is-${st}" style="left:${hyAt(a, min, max)};width:${(hyPc(b, min, max) - hyPc(a, min, max)).toFixed(1)}%"></i>`).join('');
+    const names = (o.zones || []).filter(z => z[3]).map(([a, b, , name]) => `<span style="left:${((hyPc(a, min, max) + hyPc(b, min, max)) / 2).toFixed(1)}%">${name}</span>`).join('');
+    let marks = '';
+    if (o.from != null && o.to != null) {
+      const a = hyPc(Math.min(o.from, o.to), min, max), b = hyPc(Math.max(o.from, o.to), min, max);
+      marks += `<i class="hy-link" style="left:${a.toFixed(1)}%;width:${(b - a).toFixed(1)}%"></i>`;
+    }
+    if (o.from != null) marks += `<b class="hy-mark is-from" style="left:${hyAt(o.from, min, max)}"></b>`;
+    if (o.to != null) marks += `<b class="hy-mark is-to is-${o.state || 'good'}" style="left:${hyAt(o.to, min, max)}"></b>`;
+    const ticks = (o.ticks || []).map(v => `<span style="left:${hyAt(v, min, max)}">${f(v)}</span>`).join('');
+    return `<div class="hy-scale" role="img" aria-label="${esc(o.label || '')}"><div class="hy-znames">${names}</div>` +
+      `<div class="hy-track"><span class="hy-zones">${zones}</span>${marks}</div><div class="hy-ticks">${ticks}</div></div>`;
+  }
+  // the state of a value by the zones of its scale
+  const hyZone = (Z, v) => (Z.find(([a, b]) => v >= a && v < b) || Z[v < Z[0][0] ? 0 : Z.length - 1])[2];
+  // the one number a model leads with
+  const hyHero = (value, text) => `<p class="hy-hero"><b>${value}</b><span>${text}</span></p>`;
 
   /* Six systems cut open, moving: where the water goes and where the roots get their air.
      The scene is drawn in a box of 360 × 200 and scaled to the width; its captions stay at their real size. */
@@ -334,142 +370,173 @@
     else loop.start();
   });
 
-  /* The oxygen of a tank: what the air pump and the surface bring in against what the roots and microbes use.
-     dC/dt = k·(Cs − C) − D. Cs — saturation at the temperature (doAt, o2.js); k — how fast air gets in (pump on:
-     a few per hour, still water: a few hundredths); D — the use by the roots (grows with the bushes, Q10 = 2)
-     and by the microbes in the water. */
+  /* The oxygen of a tank once the air pump stops: dC/dt = k·(Cs − C) − D. Cs — saturation at the temperature
+     (doAt, o2.js); k — how fast air gets in (pump on: a few per hour, still water: a few hundredths); D — the use
+     by the roots (grows with the bushes, Q10 = 2) and by the microbes in the water. Shown as the tank itself:
+     the blue dots are the oxygen, fewer as the hours go; beside it the hours it lasts and where it stands now. */
   const O2B = {
-    bucket: { name: 'Ведро 15 л, 4 куста', v: 15, n: 4, on: 4, off: 0.04 },
-    jar: { name: 'Банка 3 л, 1 куст', v: 3, n: 1, on: 6, off: 0.06 }
+    bucket: { name: 'ведро, 4 куста', v: 15, n: 4, on: 4, off: 0.04 },
+    jar: { name: 'банка, 1 куст', v: 3, n: 1, on: 6, off: 0.06 }
   };
+  const O2B_AGE = { small: { name: 'сеянцы', w: 3 }, mid: { name: 'растут', w: 6 }, big: { name: 'большие кусты', w: 10 } };
   register('o2box', el => {
-    el.innerHTML = h.head('Если выключить компрессор', 'Зелёная линия — кислород в растворе, пока работает компрессор, жёлтая — после того, как его выключили в момент 0. Расход корнями — условный, растёт с размером кустов и с теплом (Q₁₀ = 2); насыщение — справочное, как в соседней модели.', true) +
+    el.innerHTML = h.head('Если выключить компрессор', 'Синие точки — кислород в растворе. Компрессор выключили: двигайте время или прокрутите сутки и смотрите, как его становится меньше. Расход корнями — условный, растёт с размером кустов и с теплом.', true) +
       `<div class="lab-controls">
         ${h.segHtml('lab-o2b-box', 'Ёмкость', Object.keys(O2B).map(k => [k, O2B[k].name]), 'bucket')}
+        ${pickHtml('lab-o2b-age', 'Кусты', Object.keys(O2B_AGE).map(k => [k, O2B_AGE[k].name]), 'mid')}
         ${h.rangeHtml('lab-o2b-t', 'Температура раствора', 16, 30, 0.5, 22)}
-        ${h.rangeHtml('lab-o2b-w', 'Возраст кустов', 2, 10, 1, 6)}
+        ${h.rangeHtml('lab-o2b-h', 'Без компрессора', 0, 24, 0.5, 0)}
+        <div class="lab-actions"><button class="btn btn-ghost btn-small" type="button" id="lab-o2b-play">▶ Прокрутить сутки</button></div>
       </div>
-      <div class="lab-chart" id="lab-o2b-ch"></div>
-      <ul class="legend legend-lines"><li><i class="k-s1"></i>компрессор работает</li><li><i class="k-s3"></i>компрессор выключили</li></ul>` +
-      h.readHtml([['Предел при этой температуре', 'lab-o2b-s'], ['С компрессором', 'lab-o2b-on'], ['Без него до 4 мг/л', 'lab-o2b-t4'], ['Вывод', 'lab-o2b-v', 'is-wide']]);
-    let box = 'bucket', T = 22, W = 6, hover = null;
+      <div class="hy-split">
+        <div class="hy-pic" id="lab-o2b-pic"></div>
+        <div class="hy-read" aria-live="polite"><div id="lab-o2b-hero"></div><div id="lab-o2b-now"></div><p class="hy-verdict" id="lab-o2b-v"></p></div>
+      </div>`;
+    const F = ill.F, q = ill.q;
+    let box = 'bucket', age = 'mid', T = 22, H = 0;
     const use = () => {
-      const b = O2B[box], q10 = Math.pow(2, (T - 20) / 10);
+      const b = O2B[box], q10 = Math.pow(2, (T - 20) / 10), w = O2B_AGE[age].w;
       // a bush's roots use about 0.03·weeks² mg of O₂ an hour at 20 °C; microbes 0.02 mg per litre an hour
-      return (b.n * 0.03 * W * W * q10 + 0.02 * b.v * q10) / b.v;
+      return (b.n * 0.03 * w * w * q10 + 0.02 * b.v * q10) / b.v;
     };
     const state = () => {
       const b = O2B[box], Cs = doAt(T), D = use(), Con = Math.max(0, Cs - D / b.on), Cinf = Cs - D / b.off;
       const at = t => Math.max(0, Cinf + (Con - Cinf) * Math.exp(-b.off * t));
       const t4 = Cinf >= 4 ? null : Con <= 4 ? 0 : -Math.log((4 - Cinf) / (Con - Cinf)) / b.off;
-      return { Cs, D, Con, at, t4 };
+      return { Cs, Con, at, t4 };
     };
-    const ch = h.chart($('#lab-o2b-ch', el), {
-      label: 'Растворённый кислород за сутки: с компрессором и после его выключения',
-      draw(w, hh) {
-        const st = state(), pts = [];
-        for (let t = 0; t <= 24; t += 0.25) pts.push([t, st.at(t)]);
-        const P = h.plot({ w, h: hh, clip: true, x: [0, 24], y: [0, 12], xticks: [0, 4, 8, 12, 16, 20, 24], yticks: [0, 2, 4, 6, 8, 10, 12], fx: v => v + ' ч', ylab: 'мг O₂ на литр', xlab: 'часов после выключения',
-          hbands: [{ y0: 0, y1: 4, cls: 'is-low', label: 'корням душно' }],
-          series: [{ pts: [[0, st.Con], [24, st.Con]], cls: 's1', label: 'с компрессором', labelAt: 18, ldy: -10 }, { pts, cls: 's3', label: 'без него', labelAt: 9, ldy: 16 }],
-          marker: st.t4 != null && st.t4 <= 24 ? { x: st.t4, dots: [{ y: 4, cls: 's3' }] } : null, hover });
-        let s = P.s;
-        if (hover != null) s += h.tip(P.X(hover), P.p.t + 4, w, [`через ${fmt(hover)} ч`, `O₂: ${fmt(st.at(hover))} мг/л`]);
-        return s;
-      },
-      onPointer(x, y, w, hh, kind) {
-        const P = h.plot({ w, h: hh, x: [0, 24], y: [0, 12] });
-        hover = kind === 'leave' ? null : clamp(Math.round(P.inv(x) * 2) / 2, 0, 24);
-        ch.redraw();
+    // the tank cut open: the cups and roots, the pump outside (grey once it is off), the oxygen as dots
+    const pic = (c, phase) => {
+      const W = 300, Hh = 190, x0 = 46, x1 = 214, top = 52, bot = 172, rnd = ill.rng(9), cups = box === 'jar' ? [130] : [76, 112, 148, 184];
+      let g = Rh.paper(W, Hh) + Rh.ground(bot, W, Hh);
+      g += `<rect x="${x0}" y="${top}" width="${x1 - x0}" height="${bot - top}" rx="8" fill="${F('box')}"/>`;
+      g += `<rect x="${x0 + 6}" y="${top + 14}" width="${x1 - x0 - 12}" height="${bot - top - 20}" rx="4" fill="${F('water-c')}"/>`;
+      cups.forEach((x, i) => { g += Rh.roots(x, top + 10, 70 + (O2B_AGE[age].w - 3) * 6, 7, { seed: 3 + i, spread: 0.35, w: 1.5 }); });
+      // the oxygen: as many dots as milligrams in a litre, five to a milligram
+      const n = Math.round(c * 5);
+      for (let i = 0; i < 60; i++) {
+        const x = x0 + 12 + rnd() * (x1 - x0 - 24), y = top + 20 + rnd() * (bot - top - 32), s = rnd();
+        if (i >= n) continue;
+        g += `<circle cx="${q(x + Math.sin(phase + i) * 2)}" cy="${q(y + Math.cos(phase * 0.7 + i) * 2)}" r="${q(2.2 + s)}" fill="${F('sky')}" stroke="${F('glass-d')}" stroke-width=".8"/>`;
       }
-    });
+      g += `<rect x="${x0 - 4}" y="${top - 6}" width="${x1 - x0 + 8}" height="10" rx="3" fill="${F('box-d')}"/>`;
+      cups.forEach((x, i) => { g += hcup(x, top - 5, 18, 14, { fill: 'clay' }) + ill.bush({ x, y: top - 8, h: 18 + O2B_AGE[age].w * 2.2, nodes: 2, leaf: 0.11 + O2B_AGE[age].w * 0.008, spread: 0.7, seed: 4 + i }); });
+      // the pump: on a shelf, its hose down to the stone on the bottom
+      const on = H === 0;
+      g += `<path d="M232 70H286" stroke="${F('wood-d')}" stroke-width="3" stroke-linecap="round"/>`;
+      g += `<rect x="238" y="50" width="42" height="20" rx="5" fill="${F(on ? 'frame' : 'radiator')}" stroke="${F('frame-d')}" stroke-width="1.2"/><circle cx="249" cy="60" r="3.2" fill="${F(on ? 'grip' : 'frame-d')}"/>`;
+      g += `<path d="M238 62Q226 62 222 70V162Q222 168 214 168H140" stroke="${F('frame-d')}" stroke-width="2" fill="none"/><rect x="118" y="164" width="24" height="6" rx="3" fill="${F('frame-d')}"/>`;
+      if (on) for (let i = 0; i < 16; i++) { const u = ((phase * 0.08 + i / 16) % 1 + 1) % 1; g += `<circle cx="${q(130 + Math.sin(u * 7 + i) * 7)}" cy="${q(162 - u * 96)}" r="${q(1.2 + (i % 3) * 0.5)}" fill="none" stroke="${F('hi')}" stroke-width="1"/>`; }
+      g += `<text class="hs-lbl" data-on-picture x="259" y="88" text-anchor="middle">${on ? 'работает' : 'выключен'}</text>`;
+      return ill.svg(W, Hh, g, `Ведро в разрезе: ${on ? 'компрессор работает' : `компрессор выключен ${fmt(H)} ч`}, кислорода ${fmt(c)} мг на литр`);
+    };
+    let phase = 0;
+    const paint = () => {
+      const st = state(), c = st.at(H);
+      $('#lab-o2b-pic', el).innerHTML = pic(c, phase);
+      return { st, c };
+    };
     const upd = () => {
-      const st = state();
-      set(el, 'lab-o2b-s', `${fmt(st.Cs)} мг/л`);
-      set(el, 'lab-o2b-on', `${fmt(st.Con)} мг/л`);
-      set(el, 'lab-o2b-t4', st.t4 == null ? 'не опустится' : st.t4 <= 0 ? 'уже ниже' : st.t4 > 24 ? 'больше суток' : `за ${h.nb(fmt(st.t4) + ' ч')}`);
-      set(el, 'lab-o2b-v', st.t4 == null || st.t4 > 24 ? 'Кусты маленькие или вода прохладная: сутки без компрессора они переживут.'
-        : st.t4 > 8 ? `Запас на ${fmt0(st.t4)} часов: ночь без электричества не страшна, но больше суток — уже риск.`
-          : `Всего ${h.nb(fmt(st.t4) + ' ч')} — и корням душно. Большие кусты в тёплой воде без пузырей задыхаются за вечер: при отключении опустите уровень, чтобы верх корней оказался в воздухе.`);
-      ch.redraw();
+      const { st, c } = paint();
+      set(el, 'lab-o2b-hero', hyHero(st.t4 == null || st.t4 > 24 ? 'больше суток' : st.t4 <= 0 ? 'нет запаса' : h.nb(`≈ ${fmt0(Math.max(1, Math.round(st.t4)))} ч`), 'столько корни продержатся без пузырей, пока кислорода не станет совсем мало'));
+      const s = c >= 6 ? 'good' : c >= 4 ? 'warn' : 'bad';
+      set(el, 'lab-o2b-now', hyGauge({ label: H ? `Через ${h.nb(fv(H) + ' ч')}` : 'Сейчас', value: h.nb(`${fmt(c)} мг/л`), state: s, word: { good: 'корням хорошо', warn: 'на грани', bad: 'корням душно' }[s], v: c, max: 12, ticks: [4, 6] }));
+      set(el, 'lab-o2b-v', h.nb(st.t4 == null || st.t4 > 24 ? 'Кусты маленькие или вода прохладная: сутки без компрессора они переживут.'
+        : st.t4 > 8 ? 'Ночь без электричества не страшна. Если отключение дольше — опустите уровень раствора, чтобы верх корней оказался в воздухе.'
+          : 'Запаса — на вечер. Большие кусты в тёплой воде без пузырей задыхаются быстро: при отключении опустите уровень, чтобы верх корней оказался в воздухе, и уберите ёмкость с тепла.'));
     };
     h.bindPick(el, 'lab-o2b-box', v => { box = v; upd(); });
+    h.bindPick(el, 'lab-o2b-age', v => { age = v; upd(); });
     h.bindRange(el, 'lab-o2b-t', v => h.nb(`${fv(v)} °C`), v => { T = v; upd(); });
-    h.bindRange(el, 'lab-o2b-w', v => `${fmt0(v)} ${h.plural(v, 'неделя', 'недели', 'недель')}`, v => { W = v; upd(); });
+    const hr = h.bindRange(el, 'lab-o2b-h', v => v ? h.nb(`${fv(v)} ч`) : 'компрессор работает', v => { H = v; upd(); });
+    // the play button runs the day by: an hour in about a third of a second
+    let t0 = 0;
+    const play = S.loop(ts => {
+      if (!t0) t0 = ts - H * 330;
+      const v = Math.min(24, (ts - t0) / 330);
+      phase = ts / 1000;
+      hr.set(Math.round(v * 2) / 2);
+      if (v >= 24) { play.stop(); t0 = 0; return; }
+      play.next();
+    });
+    $('#lab-o2b-play', el).addEventListener('click', () => {
+      if (play.on) { play.stop(); t0 = 0; return; }
+      if (H >= 24) hr.set(0);
+      if (h.reduce.matches) { hr.set(24); return; }
+      t0 = 0; play.start();
+    });
     upd();
   });
 
   /* Balanced growth (Brouwer): the plant shares its sugars between leaves and roots so that the roots bring in as
      much as the leaves can use. Light sets what a gram of leaf makes (sL), the root zone what a gram of root
      brings (sN); the share of leaves f = sN / (sL + sN). Growth is exponential while the leaves do not shade one
-     another and linear after that (expolinear, from 40 g). All numbers are illustrative. */
-  const AL_ROOT = { good: { name: 'горшок, хороший уход', n: 0.55 }, dry: { name: 'горшок, пересыхает', n: 0.3 } };
+     another and linear after that (expolinear, from 40 g). All numbers are illustrative: the model is drawn as the
+     two bushes themselves, their tops and roots in proportion to what each grew. */
+  const AL_ROOT = { good: { name: 'хороший уход', n: 0.55 }, dry: { name: 'пересыхает', n: 0.3 } };
+  const AL_LIGHT = { winter: { name: 'зимнее окно', dli: 5 }, window: { name: 'светлое окно', dli: 10 }, lamp: { name: 'лампа', dli: 15 }, sun: { name: 'солнечный балкон', dli: 25 } };
   const AL_HYDRO = 1.2;
   register('alloc', el => {
-    el.innerHTML = h.head('Корни, листья и свет', 'Один и тот же сеянец в горшке и в растворе. Модель условная: она делит рост между корнями и листьями по правилу Брауэра и показывает, сколько зелени наберёт куст за 8 недель.', true) +
+    el.innerHTML = h.head('Корни, листья и свет', 'Два одинаковых сеянца через 8 недель: в горшке и в растворе. Модель условная — она делит рост между корнями и листьями по правилу Брауэра и рисует, что получилось.', true) +
       `<div class="lab-controls">
-        ${h.rangeHtml('lab-al-dli', 'Свет за день', 4, 30, 1, 15)}
+        ${pickHtml('lab-al-l', 'Свет', Object.keys(AL_LIGHT).map(k => [k, AL_LIGHT[k].name]), 'lamp')}
         ${h.segHtml('lab-al-pot', 'Горшок', Object.keys(AL_ROOT).map(k => [k, AL_ROOT[k].name]), 'good')}
       </div>
-      <div class="lab-chart" id="lab-al-ch"></div>
-      <ul class="legend legend-lines"><li><i class="k-s1"></i>гидропоника</li><li><i class="k-s2"></i>горшок</li></ul>
-      <div class="al-split" id="lab-al-split" aria-live="polite"></div>` +
-      h.readHtml([['Через 8 недель', 'lab-al-m'], ['Разница', 'lab-al-d'], ['Вывод', 'lab-al-v', 'is-wide']]);
-    let dli = 15, pot = 'good', hover = null;
+      <div class="hy-split">
+        <div class="hy-pic" id="lab-al-pic"></div>
+        <div class="hy-read" aria-live="polite"><div id="lab-al-hero"></div><div class="al-split" id="lab-al-split"></div><p class="hy-verdict" id="lab-al-v"></p></div>
+      </div>`;
+    const F = ill.F, q = ill.q;
+    let light = 'lamp', pot = 'good';
     const sL = d => 0.3 * d / (d + 12);
-    const grow = sN => {
-      const L = sL(dli), f = sN / (L + sN), rgr = Math.max(0.005, L * f - 0.02), Mc = 40, pts = [];
+    const grow = (sN, dli) => {
+      const L = sL(dli), f = sN / (L + sN), rgr = Math.max(0.005, L * f - 0.02), Mc = 40;
       let m = 0.5;
-      for (let day = 0; day <= 56; day++) {
-        if (day % 2 === 0) pts.push([day / 7, m]);
-        m += m < Mc ? rgr * m : rgr * Mc;
-      }
-      return { f, pts, end: pts[pts.length - 1][1] };
+      for (let day = 0; day < 56; day++) m += m < Mc ? rgr * m : rgr * Mc;
+      return { f, m, shoot: m * f, root: m * (1 - f) };
     };
-    const nice = v => { const s = [10, 20, 50, 100, 200, 300]; return s.find(x => x >= v * 1.08) || 400; };
-    const lightWord = d => d <= 6 ? 'зимнее окно без лампы' : d <= 11 ? 'светлое окно весной' : d <= 18 ? 'лампа 14–16 часов' : d <= 24 ? 'солнечный балкон' : 'летнее солнце';
-    const ch = h.chart($('#lab-al-ch', el), {
-      label: 'Масса зелени куста за 8 недель в горшке и в гидропонике',
-      draw(w, hh) {
-        const H = grow(AL_HYDRO), Pt = grow(AL_ROOT[pot].n), top = nice(Math.max(H.end, Pt.end));
-        const step = top / 4;
-        const P = h.plot({ w, h: hh, clip: true, x: [0, 8], y: [0, top], xticks: [0, 2, 4, 6, 8], yticks: [0, step, step * 2, step * 3, top], fx: v => v + ' нед', fy: v => fmt0(v), ylab: 'граммов зелени', xlab: 'недели после посадки',
-          series: [{ pts: H.pts, cls: 's1', label: 'гидропоника', labelAt: 6.6, ldy: -10 }, { pts: Pt.pts, cls: 's2', label: 'горшок', labelAt: 7.4, ldy: 16 }], hover });
-        let s = P.s;
-        if (hover != null) {
-          const at = pts => pts.reduce((a, b) => Math.abs(b[0] - hover) < Math.abs(a[0] - hover) ? b : a)[1];
-          s += h.tip(P.X(hover), P.p.t + 4, w, [`${fmt(hover)} нед`, `гидропоника: ${fmt0(at(H.pts))} г`, `горшок: ${fmt0(at(Pt.pts))} г`]);
-        }
-        return s;
-      },
-      onPointer(x, y, w, hh, kind) {
-        const P = h.plot({ w, h: hh, x: [0, 8], y: [0, 1] });
-        hover = kind === 'leave' ? null : clamp(Math.round(P.inv(x) * 2) / 2, 0, 8);
-        ch.redraw();
-      }
-    });
+    // the biggest each part can be here (in a solution under the sun): the drawing's scale
+    const TOP = grow(AL_HYDRO, 30), ROOT = grow(AL_ROOT.dry.n, 30);
+    const pic = (P, Hy) => {
+      const W = 320, Hh = 210, gy = 110;
+      let g = Rh.paper(W, Hh);
+      // under the ground line: soil on the left, the solution on the right, cut open
+      g += `<path data-bg d="M8 ${gy}H156V196Q156 202 150 202H14Q8 202 8 196Z" fill="${F('soil')}" opacity=".9"/>`;
+      g += `<path data-bg d="M164 ${gy}H312V196Q312 202 306 202H170Q164 202 164 196Z" fill="${F('water-c')}"/>`;
+      for (let i = 0; i < 26; i++) g += `<circle cx="${q(16 + (i * 53) % 132)}" cy="${q(gy + 10 + (i * 29) % 82)}" r="1.4" fill="${F('soil-d')}" opacity=".8"/>`;
+      [[82, P], [238, Hy]].forEach(([x, r], k) => {
+        const rl = 14 + 70 * Math.sqrt(r.root / ROOT.root), rn = 5 + Math.round(6 * Math.sqrt(r.root / ROOT.root));
+        g += Rh.roots(x, gy + 2, rl, rn, { seed: 5 + k, spread: k ? 0.5 : 0.9, w: 1.6 });
+        g += `<rect x="${x - 13}" y="${gy - 4}" width="26" height="8" rx="3" fill="${F(k ? 'plastic' : 'pot')}"/>`;
+        // the same bush on both sides, only its size differs: the height goes with the square root of the mass
+        const hh = 16 + 74 * Math.sqrt(r.shoot / TOP.shoot);
+        g += hh < 34 ? Rh.sprout(x, gy - 4, hh, { pairs: 2, s: 1.1 }) : ill.bush({ x, y: gy - 4, h: hh, nodes: 3, leaf: 0.1 + 0.14 * hh / 90, spread: 0.85, seed: 6 });
+      });
+      g += `<text class="hs-lbl" data-on-picture x="82" y="198" text-anchor="middle">горшок</text><text class="hs-lbl" data-on-picture x="238" y="198" text-anchor="middle">раствор</text>`;
+      return ill.svg(W, Hh, g, `Куст в горшке и в растворе через 8 недель: листья и корни в пропорции`);
+    };
     const upd = () => {
-      const H = grow(AL_HYDRO), Pt = grow(AL_ROOT[pot].n), gain = H.end / Pt.end - 1;
-      $('#lab-al-split', el).innerHTML = [['Гидропоника', H.f, 's1'], ['Горшок', Pt.f, 's2']].map(([n, f, c]) =>
-        `<div class="al-row"><span class="al-name">${n}</span><span class="al-bar"><i class="al-leaf ${c}" style="--w:${fmt0(f * 100)}%"></i><i class="al-root" style="--w:${fmt0((1 - f) * 100)}%"></i></span><span class="al-val">корни ${fmt0((1 - f) * 100)} %</span></div>`).join('') +
-        `<p class="lab-foot">Цветная часть полосы — доля прироста, которая уходит в листья и стебли, бежевая — в корни.</p>`;
-      set(el, 'lab-al-m', `${fmt0(H.end)} г и ${fmt0(Pt.end)} г`);
-      set(el, 'lab-al-d', `+${fmt0(H.end - Pt.end)} г · +${fmt0(gain * 100)} %`);
-      set(el, 'lab-al-v', H.end < 30
-        ? `Света мало (${lightWord(dli)}): куст растёт медленно и там, и там, а выигрыш гидропоники — считаные граммы. Сначала — лампа.`
+      const d = AL_LIGHT[light].dli, Hy = grow(AL_HYDRO, d), P = grow(AL_ROOT[pot].n, d), k = Hy.shoot / P.shoot;
+      $('#lab-al-pic', el).innerHTML = pic(P, Hy);
+      set(el, 'lab-al-hero', hyHero(k < 1.15 ? 'почти поровну' : h.nb(`в ${fmt(k)} раза`), k < 1.15 ? 'зелени в растворе и в горшке: свет — узкое место' : 'больше зелени в растворе, чем в горшке'));
+      $('#lab-al-split', el).innerHTML = [['Раствор', Hy.f], ['Горшок', P.f]].map(([n, f]) =>
+        `<div class="al-row"><span class="al-name">${n}</span><span class="al-bar" role="img" aria-label="${n}: листьям ${fmt0(f * 100)} %, корням ${fmt0((1 - f) * 100)} % прироста"><i class="al-leaf" style="--w:${fmt0(f * 100)}%"></i><i class="al-root" style="--w:${fmt0((1 - f) * 100)}%"></i></span><span class="al-val">корням ${fmt0((1 - f) * 100)} %</span></div>`).join('') +
+        `<ul class="hy-key"><li><i class="al-key-leaf"></i>листьям и стеблям</li><li><i class="al-key-root"></i>корням</li></ul>`;
+      set(el, 'lab-al-v', h.nb(k < 1.15
+        ? 'Света мало: куст растёт медленно и там, и там. Раствор почти ничего не прибавляет — сначала нужна лампа.'
         : pot === 'dry'
-          ? `В пересыхающем горшке корень забирает себе большую долю роста. В растворе её получают листья — отсюда разница в ${fmt0(gain * 100)} %.`
-          : `Света хватает (${lightWord(dli)}), и раствор позволяет держать меньше корней: больше сахаров уходит в листья, а каждый новый лист сам добавляет сахаров.`);
-      ch.redraw();
+          ? 'В пересыхающем горшке корень забирает себе большую долю роста. В растворе её получают листья — и каждый новый лист сам делает сахара для следующих.'
+          : 'Света хватает, а раствор позволяет держать меньше корней: больше сахаров уходит в листья, и прирост растёт как сложные проценты.'));
     };
-    h.bindRange(el, 'lab-al-dli', v => h.nb(`${fmt0(v)} моль/м²`), v => { dli = v; upd(); });
+    h.bindPick(el, 'lab-al-l', v => { light = v; upd(); });
     h.bindPick(el, 'lab-al-pot', v => { pot = v; upd(); });
     upd();
   });
 
   /* A Kratky jar week by week: the bush drinks more as its leaves grow (about 0.012·e^(0.38·week) litres a day
      under a lamp, less on a window, more in the sun), the level falls and the air gap under the lid grows.
-     Illustrative: a real bush drinks more in heat and dry air. */
+     Illustrative: a real bush drinks more in heat and dry air. Shown as the jar itself, how much is left in it
+     and how long it lasts. */
   const KR_LIGHT = { window: { name: 'окно', k: 0.6 }, lamp: { name: 'лампа', k: 1 }, sun: { name: 'солнечный балкон', k: 1.5 } };
   register('kratky', el => {
     el.innerHTML = h.head('Хватит ли банки', 'Куст растёт и пьёт всё больше, уровень падает, воздушный зазор растёт. Модель условная; в жару и сухой воздух куст пьёт быстрее.', true) +
@@ -479,13 +546,11 @@
         ${h.rangeHtml('lab-kr-w', 'Неделя', 0, 8, 0.25, 3)}
         <div class="lab-actions"><button class="btn btn-ghost btn-small" type="button" id="lab-kr-play">▶ Прокрутить 8 недель</button></div>
       </div>
-      <div class="lab-grid kr-grid">
-        <div class="lab-stage kr-stage" id="lab-kr-jar"></div>
-        <div class="lab-chart" id="lab-kr-ch"></div>
-      </div>` +
-      h.readHtml([['Выпито', 'lab-kr-drunk'], ['Осталось', 'lab-kr-left'], ['Хватит на', 'lab-kr-end'], ['Совет', 'lab-kr-tip', 'is-wide']]);
-    let V = 2, light = 'lamp', W = 3, hover = null;
-    const day = w => 0.012 * Math.exp(0.38 * w) * KR_LIGHT[light].k;
+      <div class="hy-split kr-split">
+        <div class="hy-pic kr-stage" id="lab-kr-jar"></div>
+        <div class="hy-read" aria-live="polite"><div id="lab-kr-hero"></div><div id="lab-kr-now"></div><p class="hy-verdict" id="lab-kr-tip"></p></div>
+      </div>`;
+    let V = 2, light = 'lamp', W = 3;
     // litres drunk from week 0 to week w
     const drunk = w => 0.012 * KR_LIGHT[light].k * 7 / 0.38 * (Math.exp(0.38 * w) - 1);
     const fill = () => V * 0.85;
@@ -495,42 +560,19 @@
       const hj = 70 + V * 12, y = 176, lv = left(W) / V, rootLen = Math.min(hj - 18, 8 + W * 14);
       const j = hjar(70, y, 62, hj, { level: lv, fill: W < 0.5 ? 'cube' : 'clay', roots: W < 0.3 ? 0 : rootLen, air: true, seed: 6 });
       const plant = W < 1.5 ? Rh.sprout(70, j.top - 4, 18 + W * 10, { pairs: 1 + Math.round(W), s: 1.2 }) : ill.bush({ x: 70, y: j.top - 4, h: Math.min(78, 22 + W * 8), nodes: W < 4 ? 2 : 3, leaf: Math.min(0.26, 0.14 + W * 0.016), spread: 0.85, seed: 6 });
-      return ill.svg(140, 190, Rh.paper(140, 190) + Rh.ground(y, 140, 190) + j.svg + plant, `Банка ${fmt(V)} л на неделе ${fmt0(W)}: раствора ${fmt(left(W))} л`);
+      return ill.svg(140, 190, Rh.paper(140, 190) + Rh.ground(y, 140, 190) + j.svg + plant, `Банка ${fv(V)} л на неделе ${fmt0(W)}: раствора ${fmt(left(W))} л`);
     };
-    const ch = h.chart($('#lab-kr-ch', el), {
-      label: 'Сколько раствора остаётся в банке по неделям',
-      draw(w, hh) {
-        const pts = [], top = Math.ceil(V);
-        for (let x = 0; x <= 8; x += 0.25) pts.push([x, left(x)]);
-        const ys = top <= 2 ? [0, 0.5, 1, 1.5, 2] : [0, 1, 2, 3, 4, 5].filter(v => v <= top);
-        const P = h.plot({ w, h: hh, clip: true, x: [0, 8], y: [0, top], xticks: [0, 2, 4, 6, 8], yticks: ys, fx: v => v + ' нед', fy: v => fmt(v), ylab: 'литров раствора', xlab: 'недели',
-          hbands: [{ y0: 0, y1: fill() * 0.15, cls: 'is-low', label: 'почти пусто' }],
-          series: [{ pts, cls: 's4', label: 'раствор', labelAt: 1.5, ldy: -10 }],
-          marker: { x: W, dots: [{ y: left(W), cls: 's4' }] }, hover });
-        let s = P.s;
-        if (hover != null) s += h.tip(P.X(hover), P.p.t + 4, w, [`неделя ${fmt(hover)}`, `осталось ${fmt(left(hover))} л`, `пьёт ${fmt0(day(hover) * 1000)} мл в день`]);
-        return s;
-      },
-      onPointer(x, y, w, hh, kind) {
-        const P = h.plot({ w, h: hh, x: [0, 8], y: [0, 1] });
-        const v = clamp(Math.round(P.inv(x) * 4) / 4, 0, 8);
-        if (kind === 'set') { hover = null; wk.set(v); return; }
-        hover = kind === 'leave' ? null : v;
-        ch.redraw();
-      }
-    });
     const upd = () => {
       $('#lab-kr-jar', el).innerHTML = jarSvg();
-      const e = endWeek();
-      set(el, 'lab-kr-drunk', h.nb(`${fmt(Math.min(fill(), drunk(W)))} л`));
-      set(el, 'lab-kr-left', h.nb(`${fmt(left(W))} л · ${fmt0(left(W) / V * 100)} % банки`));
-      set(el, 'lab-kr-end', e == null || e > 8 ? 'больше 8 недель' : h.nb(`≈ ${fmt0(e)} ${h.plural(Math.round(e), 'неделю', 'недели', 'недель')}`));
-      set(el, 'lab-kr-tip', e != null && e < 5
-        ? `Банки не хватит до первого большого среза. Возьмите банку на ${fmt(Math.ceil(drunk(6) / 0.7225 * 2) / 2)} л или больше — или на ${fmt0(Math.max(1, e - 1))}-й неделе долейте раствор половинной крепости, только до половины банки.`
+      const e = endWeek(), share = left(W) / fill();
+      set(el, 'lab-kr-hero', hyHero(e == null || e > 8 ? 'на весь срок' : h.nb(`≈ ${fmt0(e)} ${h.plural(Math.round(e), 'неделю', 'недели', 'недель')}`), 'хватит этой банки при таком свете, без долива'));
+      const s = share > 0.4 ? 'good' : share > 0.15 ? 'warn' : 'bad';
+      set(el, 'lab-kr-now', hyGauge({ label: `Неделя ${W % 1 ? fmt(W, 2) : fmt0(W)}`, value: `осталось ${fmt0(share * 100)} %`, state: s, word: { good: 'хватает', warn: 'скоро кончится', bad: 'почти пусто' }[s], v: share, max: 1 }));
+      set(el, 'lab-kr-tip', h.nb(e != null && e < 5
+        ? `Банки не хватит до первого большого среза. Возьмите банку побольше — или, когда раствор опустится до трети, долейте раствор половинной крепости, только до половины банки.`
         : e != null && e < 8
-          ? `К ${fmt0(e)}-й неделе банка опустеет. Тогда смените раствор целиком или переселите куст в ведро.`
-          : 'Банки хватит на весь срок: просто смотрите, чтобы корни внизу оставались в растворе.');
-      ch.redraw();
+          ? 'К концу срока банка опустеет. Тогда смените раствор целиком или переселите куст в ведро.'
+          : 'Банки хватит на весь срок: просто смотрите, чтобы корни внизу оставались в растворе.'));
     };
     h.bindRange(el, 'lab-kr-v', v => h.nb(`${fv(v)} л`), v => { V = v; upd(); });
     h.bindPick(el, 'lab-kr-l', v => { light = v; upd(); });
@@ -689,67 +731,58 @@
   const DO_T = [[10, 11.29], [12, 10.77], [14, 10.29], [16, 9.86], [18, 9.47], [20, 9.09], [22, 8.74], [24, 8.42], [26, 8.11], [28, 7.83], [30, 7.56], [32, 7.3], [34, 7.06], [35, 6.95]];
   const doAt = t => { for (let i = 0; i < DO_T.length - 1; i++) if (t <= DO_T[i + 1][0]) return lerp(DO_T[i][1], DO_T[i + 1][1], (t - DO_T[i][0]) / (DO_T[i + 1][0] - DO_T[i][0])); return DO_T[DO_T.length - 1][1]; };
   const demand = t => 6.1 * Math.pow(2, (t - 20) / 10);
+  const O2_TZ = [[10, 18, 'warn', 'прохладно'], [18, 22, 'good', 'норма'], [22, 24, 'warn'], [24, 35, 'bad', 'опасно']];
 
+  /* Oxygen against the roots' breathing at one temperature: two bars on one scale — what the water holds
+     (reference data for fresh water) and what the roots ask for (illustrative, Q10 = 2) — and the margin between */
   register('o2', el => {
-    el.innerHTML = h.head('Кислород против дыхания корней', 'Растворимость O₂ — справочные данные для пресной воды. Потребность корней — условная, с Q₁₀ = 2: важен не уровень, а момент, когда линии пересекаются.', true) +
-      `<div class="lab-controls">${h.rangeHtml('lab-o2-t', 'Температура раствора', 10, 35, 0.5, 22)}</div>
-       <div class="lab-chart" id="lab-o2-ch"></div>
-       <ul class="legend legend-lines"><li><i class="k-s4"></i>кислород в воде</li><li><i class="k-s3"></i>потребность корней</li></ul>` +
-      h.readHtml([['Растворено O₂', 'lab-o2-d'], ['Запас', 'lab-o2-m'], ['Вывод', 'lab-o2-v', 'is-wide']]);
-    let T = 22, hover = null;
-    const ch = h.chart($('#lab-o2-ch', el), {
-      label: 'Растворённый кислород и потребность корней по температуре',
-      draw(w, hh) {
-        const pts = f => { const a = []; for (let t = 10; t <= 35; t += 0.5) a.push([t, f(t)]); return a; };
-        const P = h.plot({ w, h: hh, clip: true, x: [10, 35], y: [2, 14], xticks: [10, 15, 20, 25, 30, 35], yticks: [2, 4, 6, 8, 10, 12, 14], fx: v => v + '°', ylab: 'мг O₂ на литр', xlab: 'температура раствора, °C',
-          vbands: [{ x0: 18, x1: 22, cls: 'is-good', label: 'норма' }],
-          series: [{ pts: pts(doAt), cls: 's4', label: 'O₂ в воде', labelAt: 13, ldy: -10 }, { pts: pts(demand), cls: 's3', label: 'потребность', labelAt: 31, ldy: -10 }],
-          marker: { x: T, dots: [{ y: doAt(T), cls: 's4' }, { y: Math.min(14, demand(T)), cls: 's3' }] }, hover });
-        let s = P.s;
-        if (hover != null) s += h.tip(P.X(hover), P.p.t + 4, w, [`${fmt(hover)} °C`, `O₂: ${fmt(doAt(hover))} мг/л`, `потребность: ${fmt(demand(hover))}`]);
-        return s;
-      },
-      onPointer(x, y, w, hh, kind) {
-        const P = h.plot({ w, h: hh, x: [10, 35], y: [2, 14] });
-        const v = clamp(Math.round(P.inv(x) * 2) / 2, 10, 35);
-        if (kind === 'set') { hover = null; rng.set(v); return; }
-        hover = kind === 'leave' ? null : v;
-        ch.redraw();
-      }
-    });
+    el.innerHTML = h.head('Кислород против дыхания корней', 'Сколько кислорода держит вода при этой температуре и сколько просят корни. Растворимость — справочные данные для пресной воды, потребность корней — условная: важен не уровень, а запас между ними.', true) +
+      `<div class="lab-controls">${h.rangeHtml('lab-o2-t', 'Температура раствора', 10, 35, 0.5, 22)}<div id="lab-o2-tz"></div></div>
+       <div class="o2-out" aria-live="polite"><div id="lab-o2-hero"></div><div class="o2-bars" id="lab-o2-bars"></div><p class="hy-verdict" id="lab-o2-v"></p></div>`;
+    let T = 22;
     const upd = () => {
-      const d = doAt(T), m = d - demand(T);
-      set(el, 'lab-o2-d', `${fmt(d)} мг/л`);
-      set(el, 'lab-o2-m', m >= 0 ? `+${fmt(m)}` : `−${fmt(-m)}`);
-      set(el, 'lab-o2-v', m > 1.2 ? 'Кислорода с запасом: корни белые и плотные.' : m > 0 ? 'На грани: добавьте аэрацию или охладите раствор.' : 'Корням не хватает кислорода: риск питиума и бурых корней. Охладите раствор до 18–22 °C.');
-      ch.redraw();
+      const d = doAt(T), n = demand(T), m = d - n, s = m > 1.2 ? 'good' : m > 0 ? 'warn' : 'bad';
+      set(el, 'lab-o2-tz', hyScale({ min: 10, max: 35, zones: O2_TZ, ticks: [10, 20, 30], fmt: v => v + ' °C', to: T, state: hyZone(O2_TZ, T), label: `Температура раствора ${fv(T)} °C` }));
+      set(el, 'lab-o2-hero', hyHero(h.nb(`${m >= 0 ? '+' : '−'}${fmt(Math.abs(m))} мг/л`), { good: 'запас кислорода сверх того, что просят корни', warn: 'запас почти кончился: корни на грани', bad: 'кислорода меньше, чем просят корни' }[s]));
+      $('#lab-o2-bars', el).innerHTML = [['В воде', d, 'is-o2'], ['Нужно корням', Math.min(12, n), 'is-need']].map(([name, v, c]) =>
+        `<div class="o2-row"><span class="o2-name">${name}</span><span class="o2-bar"><i class="${c}" style="width:${(v / 12 * 100).toFixed(1)}%"></i></span><span class="o2-val">${h.nb(fmt(v) + ' мг/л')}</span></div>`).join('');
+      set(el, 'lab-o2-v', h.nb(s === 'good' ? 'Кислорода с запасом: корни белые и плотные.' : s === 'warn' ? 'На грани: добавьте аэрацию или охладите раствор.' : 'Корням не хватает кислорода: риск питиума и бурых корней. Охладите раствор до 18–22 °C.'));
     };
-    const rng = h.bindRange(el, 'lab-o2-t', v => `${fmt(v)} °C`, v => { T = v; upd(); });
+    h.bindRange(el, 'lab-o2-t', v => h.nb(`${fv(v)} °C`), v => { T = v; upd(); });
     upd();
   });
 
   /* Two weeks of a solution: every day the bushes drink water (more in heat and dry air) and take salts with it at
-     their own «uptake EC». When that is below the solution's EC, the salts stay behind and EC climbs; above it, EC
-     falls. Taking nitrate makes the roots give out OH⁻, so pH climbs in proportion to what they took (illustrative). */
+     their own «uptake EC». When that is below the solution's EC, the salts stay behind and EC climbs; above it,
+     EC falls. Taking nitrate makes the roots give out OH⁻, so pH climbs in proportion to what they took
+     (illustrative). Shown on two scales with their zones: where the solution was on day 0 and where it is now. */
   const DR_BOX = { jar: { name: 'банка 3 л, 1 куст', v: 3, n: 1 }, bucket: { name: 'ведро 15 л, 4 куста', v: 15, n: 4 } };
   const DR_AIR = { dry: { name: 'жарко и сухо', e: 1.5, c: 0.8 }, norm: { name: 'обычно', e: 1, c: 1.15 }, wet: { name: 'прохладно и сыро', e: 0.6, c: 1.6 } };
   const DR_TOP = { none: 'не доливать', water: 'водой', half: 'раствором ½', full: 'раствором той же EC' };
+  const DR_EC = [[0, 0.8, 'warn', 'слабо'], [0.8, 1.8, 'good', 'норма'], [1.8, 3, 'bad', 'крепко']];
+  const DR_PH = [[5, 5.5, 'warn'], [5.5, 6.5, 'good', 'норма'], [6.5, 7, 'warn'], [7, 8, 'bad', 'высоко']];
   register('drift', el => {
-    el.innerHTML = h.head('Куда уплывёт раствор за две недели', 'Взрослые кусты. Каждый день они пьют воду и берут соли; синяя линия — EC, жёлтая — pH. Модель условная, но направление дрейфа она показывает верно.', true) +
+    el.innerHTML = h.head('Куда уплывёт раствор', 'Взрослые кусты каждый день пьют воду и берут соли. Кружок — где был раствор в день смены, точка — где он сейчас. Модель условная, но направление дрейфа она показывает верно.', true) +
       `<div class="lab-controls">
         ${pickHtml('lab-dr-b', 'Ёмкость', Object.keys(DR_BOX).map(k => [k, DR_BOX[k].name]), 'bucket')}
         ${pickHtml('lab-dr-a', 'Воздух', Object.keys(DR_AIR).map(k => [k, DR_AIR[k].name]), 'norm')}
         ${pickHtml('lab-dr-t', 'Каждый вечер доливать', Object.keys(DR_TOP).map(k => [k, DR_TOP[k]]), 'water')}
-        ${h.rangeHtml('lab-dr-e', 'EC в начале', 0.6, 2, 0.05, 1.2)}
+        ${h.rangeHtml('lab-dr-e', 'EC в день смены', 0.6, 2, 0.05, 1.2)}
+        ${h.rangeHtml('lab-dr-d', 'День', 0, 14, 1, 14)}
+        <div class="lab-actions"><button class="btn btn-ghost btn-small" type="button" id="lab-dr-play">▶ Прокрутить две недели</button></div>
       </div>
-      <div class="lab-chart" id="lab-dr-ec"></div>
-      <div class="lab-chart" id="lab-dr-ph"></div>` +
-      h.readHtml([['EC через 2 недели', 'lab-dr-e14'], ['pH через 2 недели', 'lab-dr-p14'], ['pH выйдет за 6,5', 'lab-dr-pd'], ['Вывод', 'lab-dr-v', 'is-wide']]);
-    let box = 'bucket', air = 'norm', top = 'water', ec0 = 1.2, hover = null;
+      <div class="dr-out" aria-live="polite">
+        <div id="lab-dr-hero"></div>
+        <div class="dr-scales"><div class="dr-scale"><p class="dr-h"><span>EC</span><b id="lab-dr-ev"></b></p><div id="lab-dr-ec"></div></div>
+          <div class="dr-scale"><p class="dr-h"><span>pH</span><b id="lab-dr-pv"></b></p><div id="lab-dr-ph"></div></div></div>
+        <ul class="hy-key"><li><i class="is-from"></i>в день смены</li><li><i class="is-to"></i>сейчас</li></ul>
+        <p class="hy-verdict" id="lab-dr-v"></p>
+      </div>`;
+    let box = 'bucket', air = 'norm', top = 'water', ec0 = 1.2, day = 14;
     const run = () => {
       const b = DR_BOX[box], a = DR_AIR[air], E = b.n * 0.15 * a.e;
       let V = b.v, S = ec0 * b.v, pH = 6;
-      const ec = [[0, ec0]], ph = [[0, pH]];
+      const ec = [ec0], ph = [pH];
       let dry = null;
       for (let d = 1; d <= 14; d++) {
         const drink = Math.min(E, V * 0.9), took = Math.min(S, a.c * drink);
@@ -758,47 +791,44 @@
         if (top === 'water') { pH = Math.min(7.8, pH + 0.02 * (b.v - V) / b.v); V = b.v; }
         else if (top === 'half' || top === 'full') { S += (b.v - V) * ec0 * (top === 'half' ? 0.5 : 1); V = b.v; }
         if (top === 'none' && V < b.v * 0.15 && dry == null) dry = d;
-        ec.push([d, S / V]); ph.push([d, pH]);
+        ec.push(S / V); ph.push(pH);
       }
-      const over = ph.find(p => p[1] > 6.5);
-      return { ec, ph, dry, over: over ? over[0] : null };
+      const over = ph.findIndex(p => p > 6.5);
+      return { ec, ph, dry, over: over > 0 ? over : null };
     };
-    const mk = (id, kind) => h.chart($('#' + id, el), {
-      label: kind === 'ec' ? 'EC раствора по дням' : 'pH раствора по дням',
-      h: w => Math.round(clamp(w * 0.34, 170, 220)),
-      draw(w, hh) {
-        const r = run(), pts = kind === 'ec' ? r.ec : r.ph;
-        const yr = kind === 'ec' ? [0, Math.max(2.4, Math.ceil(Math.max(...pts.map(p => p[1])) * 2) / 2)] : [5, 8];
-        const yt = kind === 'ec' ? [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4].filter(v => v <= yr[1]) : [5, 5.5, 6, 6.5, 7, 7.5, 8];
-        const P = h.plot({ w, h: hh, clip: true, x: [0, 14], y: yr, xticks: [0, 2, 4, 6, 8, 10, 12, 14], yticks: yt, fx: v => v + ' д', fy: v => fmt(v), ylab: kind === 'ec' ? 'EC, мС/см' : 'pH', xlab: kind === 'ec' ? '' : 'дни',
-          hbands: [kind === 'ec' ? { y0: 1, y1: 1.6, cls: 'is-good', label: 'норма' } : { y0: 5.5, y1: 6.5, cls: 'is-good', label: 'норма' }],
-          series: [{ pts, cls: kind === 'ec' ? 's4' : 's3', label: kind === 'ec' ? 'EC' : 'pH', labelAt: 12, ldy: -10 }], hover });
-        let s = P.s;
-        if (hover != null) { const p = pts[Math.round(hover)]; s += h.tip(P.X(hover), P.p.t + 4, w, [`день ${hover}`, `${kind === 'ec' ? 'EC' : 'pH'}: ${fmt(p[1], 2)}`]); }
-        return s;
-      },
-      onPointer(x, y, w, hh, k) {
-        const P = h.plot({ w, h: hh, x: [0, 14], y: [0, 1] });
-        hover = k === 'leave' ? null : clamp(Math.round(P.inv(x)), 0, 14);
-        cEC.redraw(); cPH.redraw();
-      }
-    });
-    const cEC = mk('lab-dr-ec', 'ec'), cPH = mk('lab-dr-ph', 'ph');
     const upd = () => {
-      const r = run(), e14 = r.ec[14][1], p14 = r.ph[14][1], de = e14 - ec0;
-      set(el, 'lab-dr-e14', `${fmt(e14, 2)} (${de >= 0 ? '+' : '−'}${fmt(Math.abs(de), 2)})`);
-      set(el, 'lab-dr-p14', fmt(p14, 1));
-      set(el, 'lab-dr-pd', r.over == null ? 'не выйдет' : `на ${r.over}-й день`);
-      set(el, 'lab-dr-v', r.dry != null ? `Без долива ёмкость почти пуста к ${r.dry}-му дню: кусты выпьют раствор быстрее, чем он выработается.`
-        : de > 0.3 ? `EC растёт: кусты пьют воду быстрее, чем берут соли${top === 'none' ? ', и соли остаются в банке' : ''}. ${top === 'water' ? 'Раствор пора менять' : 'Доливайте чистой водой'}, а раствор меняйте раз в 2–3 недели.`
+      const r = run(), e = r.ec[day], p = r.ph[day], de = r.ec[14] - ec0;
+      set(el, 'lab-dr-ev', h.nb(`${fmt(ec0, 1)} → ${fmt(e, 1)}`));
+      set(el, 'lab-dr-pv', h.nb(`6,0 → ${fmt(p, 1)}`));
+      set(el, 'lab-dr-ec', hyScale({ min: 0, max: 3, zones: DR_EC, ticks: [0, 1, 2, 3], fmt: v => fmt0(v), from: ec0, to: e, state: hyZone(DR_EC, e), label: `EC: в день смены ${fmt(ec0, 1)}, на ${day}-й день ${fmt(e, 1)}` }));
+      set(el, 'lab-dr-ph', hyScale({ min: 5, max: 8, zones: DR_PH, ticks: [5, 6, 7, 8], fmt: v => fmt0(v), from: 6, to: p, state: hyZone(DR_PH, p), label: `pH: в день смены 6,0, на ${day}-й день ${fmt(p, 1)}` }));
+      set(el, 'lab-dr-hero', r.dry != null ? hyHero(`${r.dry}-й день`, 'и ёмкость почти пуста: без долива кусты выпьют её до дна')
+        : r.over != null ? hyHero(`${r.over}-й день`, 'pH выйдет за 6,5 — пора опустить его pH-минусом')
+          : hyHero('две недели', 'pH держится в норме — проверяйте раз в 2–3 дня'));
+      set(el, 'lab-dr-v', h.nb(r.dry != null ? 'Без долива уровень падает быстрее, чем вырабатывается раствор: доливайте каждый вечер.'
+        : de > 0.3 ? `EC растёт: кусты пьют воду быстрее, чем берут соли${top === 'none' ? ', и соли остаются в ёмкости' : ''}. Доливайте чистой водой, а раствор меняйте раз в 2–3 недели.`
           : de < -0.3 ? `EC падает: соли уходят с каждым днём, а долив их не возвращает. ${top === 'half' ? 'Доливайте раствором покрепче или меняйте раствор раньше' : 'Доливайте раствором половинной или той же крепости'}.`
-            : `EC держится. ${r.over != null ? `А pH ползёт вверх и к ${r.over}-му дню выходит за 6,5 — поправьте его pH-минусом.` : 'pH почти стоит — проверяйте раз в 2–3 дня.'}`);
-      cEC.redraw(); cPH.redraw();
+            : 'EC держится: так и доливайте.'));
     };
     h.bindPick(el, 'lab-dr-b', v => { box = v; upd(); });
     h.bindPick(el, 'lab-dr-a', v => { air = v; upd(); });
     h.bindPick(el, 'lab-dr-t', v => { top = v; upd(); });
     h.bindRange(el, 'lab-dr-e', v => `${fmt(v, 2)} мС/см`, v => { ec0 = v; upd(); });
+    const dd = h.bindRange(el, 'lab-dr-d', v => `${fmt0(v)}`, v => { day = v; upd(); });
+    // the play button runs the two weeks by, a day in about a third of a second
+    let t0 = 0;
+    const play = S.loop(ts => {
+      if (!t0) t0 = ts;
+      const v = Math.min(14, Math.floor((ts - t0) / 330));
+      if (v !== day) dd.set(v);
+      if (v >= 14) { play.stop(); t0 = 0; return; }
+      play.next();
+    });
+    $('#lab-dr-play', el).addEventListener('click', () => {
+      if (play.on) { play.stop(); t0 = 0; return; }
+      if (h.reduce.matches) { dd.set(14); return; }
+      dd.set(0); t0 = 0; play.start();
+    });
     upd();
   });
 
@@ -953,103 +983,5 @@
     if (h.reduce.matches) { for (let i = 0; i < 300; i++) step(0.05); dyn = $('.py-dyn', ch.svg); paint(); return; }
     if ('IntersectionObserver' in window) new IntersectionObserver(en => { if (en.some(x => x.isIntersecting)) { last = 0; loop.start(); } else loop.stop(); }).observe(el);
     else loop.start();
-  });
-
-  /* What a pot and a hydroponic system cost to start and to keep, and what their leaves would cost in a shop.
-     Prices are a guide from the big marketplaces in autumn 2026, the harvest is a typical one for a bush under good
-     light (hydroponics a third more); both are assumptions, and the reader can put in their own start and tariff. */
-  const HC_SYS = {
-    kratky: { name: 'банки Кратки', shared: 2300, unit: 1, unitCost: 140, pump: 0, solution: 7.5 },
-    dwc: { name: 'ведро DWC', shared: 3100, unit: 4, unitCost: 1950, pump: 3, solution: 12 },
-    farm: { name: 'готовая ферма', shared: 2300, unit: 8, unitCost: 12000, pump: 2, solution: 10, lamp: 24 }
-  };
-  const HC_LIGHT = { lamp: { name: 'лампа 14–16 часов', pot: 60, hydro: 80 }, sun: { name: 'солнечное окно, без лампы', pot: 70, hydro: 90 } };
-  register('hcost', el => {
-    el.innerHTML = h.head('Во что обойдётся и когда окупится', 'Старт, расходы в месяц и цена 100 г зелени — горшок, гидропоника и магазин. Цены — ориентир по крупным маркетплейсам осенью 2026 года, урожай — типичный для куста при хорошем свете; впишите свои цифры.') +
-      `<div class="lab-controls">
-        ${pickHtml('lab-hc-sys', 'Гидропоника', Object.keys(HC_SYS).map(k => [k, HC_SYS[k].name]), 'dwc')}
-        ${pickHtml('lab-hc-l', 'Свет', Object.keys(HC_LIGHT).map(k => [k, HC_LIGHT[k].name]), 'lamp')}
-        ${h.rangeHtml('lab-hc-n', 'Кустов', 1, 12, 1, 4)}
-        <div class="hcost-row">
-          <div class="field"><label for="lab-hc-start">Старт гидропоники, ₽</label><input type="number" id="lab-hc-start" min="0" max="200000" step="100" inputmode="numeric"></div>
-          <div class="field"><label for="lab-hc-tar">Тариф, ₽ за кВт·ч</label><input type="number" id="lab-hc-tar" min="0" max="50" step="0.1" value="8.9" inputmode="decimal"></div>
-          <div class="field"><label for="lab-hc-shop">Базилик в магазине, ₽ за 100 г</label><input type="number" id="lab-hc-shop" min="0" max="5000" step="10" value="400" inputmode="numeric"></div>
-        </div>
-        <p class="lab-foot" id="lab-hc-own" hidden>Старт — ваша цифра. <button class="chip" type="button" id="lab-hc-reset">Вернуть ориентир</button></p>
-      </div>
-      <div class="hcost-cols" id="lab-hc-cols" aria-live="polite"></div>
-      <div class="lab-chart" id="lab-hc-ch"></div>
-      <ul class="legend legend-lines"><li><i class="k-s1"></i>гидропоника</li><li><i class="k-s2"></i>горшок</li><li><i class="k-s3"></i>та же зелень из магазина</li></ul>` +
-      h.readHtml([['Окупится против магазина', 'lab-hc-pay'], ['Вывод', 'lab-hc-v', 'is-wide']]);
-    let sys = 'dwc', light = 'lamp', N = 4, own = false, hover = null;
-    const num = id => { const v = parseFloat(String($('#' + id, el).value).replace(',', '.')); return isFinite(v) && v >= 0 ? v : 0; };
-    const lampW = () => light === 'lamp' ? Math.max(20, N * 8) : 0;
-    const autoStart = () => { const s = HC_SYS[sys]; return s.shared + Math.ceil(N / s.unit) * s.unitCost + (light === 'lamp' && !s.lamp ? lampPrice() : 0); };
-    const lampPrice = () => 1000 + 60 * lampW();
-    const calc = () => {
-      const s = HC_SYS[sys], L = HC_LIGHT[light], tar = num('lab-hc-tar'), shop = num('lab-hc-shop'), units = Math.ceil(N / s.unit);
-      const kwh = w => w * 30 / 1000;
-      // the lamp burns 15 hours a day for a pot and for a system alike; a farm has its own
-      const lampKwh = light === 'lamp' ? kwh(lampW() * 15) : 0;
-      const hydroLamp = s.lamp ? kwh(s.lamp * units * 15) : lampKwh;
-      const hydroMonth = (hydroLamp + kwh(s.pump * units * 24)) * tar + N * s.solution * 4;
-      const potMonth = lampKwh * tar + N * (15 + 25);
-      const potStart = 300 + N * 250 + (light === 'lamp' ? lampPrice() : 0);
-      const hydroStart = num('lab-hc-start');
-      const gHydro = N * L.hydro, gPot = N * L.pot;
-      // the first month goes to growing: leaves from the second on
-      const spend = (start, month) => Array.from({ length: 13 }, (_, m) => [m, start + month * m]);
-      const shopLine = Array.from({ length: 13 }, (_, m) => [m, Math.max(0, m - 1) * gHydro / 100 * shop]);
-      const per100 = (start, month, g) => (start + month * 12) / (g * 11 / 100);
-      const gain = gHydro / 100 * shop - hydroMonth;
-      const pay = gain > 0 ? 1 + hydroStart / gain : null;
-      return { hydroMonth, potMonth, potStart, hydroStart, gHydro, gPot, shop, hydro: spend(hydroStart, hydroMonth), pot: spend(potStart, potMonth), shopLine,
-        p100h: per100(hydroStart, hydroMonth, gHydro), p100p: per100(potStart, potMonth, gPot), pay, kwhMonth: hydroLamp + kwh(s.pump * units * 24) };
-    };
-    const money = v => h.nb(`${fmt0(Math.round(v / 10) * 10)} ₽`);
-    const ch = h.chart($('#lab-hc-ch', el), {
-      label: 'Сколько денег уйдёт за год: гидропоника, горшок и та же зелень из магазина',
-      draw(w, hh) {
-        const r = calc(), mx = Math.max(...r.hydro.map(p => p[1]), ...r.pot.map(p => p[1]), ...r.shopLine.map(p => p[1]), 1000);
-        const st = [500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000, 100000].find(x => mx / x <= 5) || 200000, top = Math.ceil(mx * 1.05 / st) * st;
-        const yt = []; for (let v = 0; v <= top; v += st) yt.push(v);
-        const P = h.plot({ w, h: hh, clip: true, x: [0, 12], y: [0, top], pad: { l: 54 }, xticks: [0, 2, 4, 6, 8, 10, 12], yticks: yt, fx: v => String(v), fy: v => v >= 1000 ? fv(v / 1000) + ' тыс' : fmt0(v), ylab: 'рублей всего', xlab: 'месяцев',
-          series: [{ pts: r.hydro, cls: 's1', label: 'гидропоника', labelAt: 9, ldy: -10 }, { pts: r.pot, cls: 's2', label: 'горшок', labelAt: 11, ldy: 16 }, { pts: r.shopLine, cls: 's3', label: 'магазин', labelAt: 6, ldy: -10 }], hover });
-        let s = P.s;
-        if (hover != null) s += h.tip(P.X(hover), P.p.t + 4, w, [`${hover} мес`, `гидропоника: ${fmt0(r.hydro[hover][1])} ₽`, `горшок: ${fmt0(r.pot[hover][1])} ₽`, `магазин: ${fmt0(r.shopLine[hover][1])} ₽`]);
-        return s;
-      },
-      onPointer(x, y, w, hh, kind) {
-        const P = h.plot({ w, h: hh, pad: { l: 54 }, x: [0, 12], y: [0, 1] });
-        hover = kind === 'leave' ? null : clamp(Math.round(P.inv(x)), 0, 12);
-        ch.redraw();
-      }
-    });
-    const startIn = $('#lab-hc-start', el);
-    const fillStart = () => { if (!own) startIn.value = String(autoStart()); $('#lab-hc-own', el).hidden = !own; };
-    const upd = () => {
-      fillStart();
-      const r = calc();
-      $('#lab-hc-cols', el).innerHTML = [['Горшок', r.potStart, r.potMonth, r.gPot, r.p100p, 's2'], ['Гидропоника', r.hydroStart, r.hydroMonth, r.gHydro, r.p100h, 's1']].map(([n, st, mo, g, p, c]) =>
-        `<div class="hcost-col ${c}"><p class="hcost-h">${n}</p><dl>
-          <div><dt>Старт</dt><dd>${money(st)}</dd></div>
-          <div><dt>В месяц</dt><dd>${money(mo)}</dd></div>
-          <div><dt>Зелени в месяц</dt><dd>${h.nb(`≈ ${fmt0(g)} г`)}</dd></div>
-          <div><dt>100 г в первый год</dt><dd>${money(p)}</dd></div></dl></div>`).join('') +
-        `<div class="hcost-col s3"><p class="hcost-h">Магазин</p><dl><div><dt>100 г</dt><dd>${money(r.shop)}</dd></div><div><dt>Столько же зелени в месяц</dt><dd>${money(r.gHydro / 100 * r.shop)}</dd></div></dl></div>`;
-      set(el, 'lab-hc-pay', r.pay == null ? 'не окупится' : r.pay > 24 ? 'больше двух лет' : h.nb(`за ≈ ${fmt0(Math.ceil(r.pay))} ${h.plural(Math.ceil(r.pay), 'месяц', 'месяца', 'месяцев')}`));
-      set(el, 'lab-hc-v', h.nb(r.pay == null
-        ? 'Свет и раствор стоят дороже зелени, которую дают кусты: для такого числа кустов выгоднее горшок или магазин.'
-        : `Электричество — ≈ ${fmt(r.kwhMonth, 1)} кВт·ч в месяц${light === 'lamp' ? ', почти всё — лампа: её тратит и горшок' : ''}. ` +
-          (r.p100h < r.p100p ? 'Гидропоника даёт 100 г зелени дешевле горшка: больше урожая на те же лампу и место.' : 'В первый год 100 г из горшка дешевле: старт гидропоники окупается урожаем, но не сразу. На второй год, когда приборы и бак уже куплены, разница сходит на нет.')));
-      ch.redraw();
-    };
-    startIn.addEventListener('input', () => { own = true; upd(); });
-    $('#lab-hc-reset', el).addEventListener('click', () => { own = false; upd(); });
-    $$('#lab-hc-tar, #lab-hc-shop', el).forEach(i => i.addEventListener('input', upd));
-    h.bindPick(el, 'lab-hc-sys', v => { sys = v; upd(); });
-    h.bindPick(el, 'lab-hc-l', v => { light = v; upd(); });
-    h.bindRange(el, 'lab-hc-n', v => `${fmt0(v)}`, v => { N = v; upd(); });
-    upd();
   });
 })();

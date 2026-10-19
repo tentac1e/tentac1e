@@ -122,3 +122,39 @@
   const pickHtml = (id, label, options, value) => `<div class="lab-seg-wrap"><span class="lab-label" id="${id}-l">${label}</span>${h.chipsHtml(id, label, options, value)}</div>`;
   // a number with its tenths only when it has them: 24 °C, 24,5 °C
   const fv = v => Math.abs(v % 1) > 1e-9 ? fmt(v) : fmt0(v);
+
+  /* Readings without a chart. A meter — one value against its limits, its fill in the colour of its state and its
+     track a lighter step of it; a scale with zones on which a value goes from where it was (a ring) to where it
+     is (a dot). Both are HTML laid out in percentages: their words keep their real size at any width, and the
+     state is said in a word beside the colour, never by the colour alone. */
+  const hyPc = (v, a, b) => clamp((v - a) / (b - a), 0, 1) * 100;
+  const hyAt = (v, a, b) => hyPc(v, a, b).toFixed(1) + '%';
+  const HY_STATE = { good: 'хорошо', warn: 'на грани', bad: 'плохо' };
+  // a reading: its name, the value, the state in a word, and the meter under them. o: label, value, state, word,
+  // v, max, min, ticks (values marked on the track)
+  function hyGauge(o) {
+    const min = o.min || 0;
+    const ticks = (o.ticks || []).map(v => `<i class="hy-mtick" style="left:${hyAt(v, min, o.max)}"></i>`).join('');
+    return `<div class="hy-gauge"><p class="hy-gauge-h"><span>${o.label}</span><b>${o.value}</b><em class="hy-state is-${o.state}">${o.word || HY_STATE[o.state]}</em></p>` +
+      `<div class="hy-meter is-${o.state}" role="img" aria-label="${esc(o.label + ': ' + String(o.value).replace(/<[^>]+>/g, ''))}"><span class="hy-mtrack"><i class="hy-mfill" style="width:${hyAt(o.v, min, o.max)}"></i>${ticks}</span></div></div>`;
+  }
+  // a scale: zones [[from, to, state, name]], ticks under it, a value from → to (either may be left out)
+  function hyScale(o) {
+    const { min, max } = o, f = o.fmt || fmt;
+    const zones = (o.zones || []).map(([a, b, st]) => `<i class="hy-zone is-${st}" style="left:${hyAt(a, min, max)};width:${(hyPc(b, min, max) - hyPc(a, min, max)).toFixed(1)}%"></i>`).join('');
+    const names = (o.zones || []).filter(z => z[3]).map(([a, b, , name]) => `<span style="left:${((hyPc(a, min, max) + hyPc(b, min, max)) / 2).toFixed(1)}%">${name}</span>`).join('');
+    let marks = '';
+    if (o.from != null && o.to != null) {
+      const a = hyPc(Math.min(o.from, o.to), min, max), b = hyPc(Math.max(o.from, o.to), min, max);
+      marks += `<i class="hy-link" style="left:${a.toFixed(1)}%;width:${(b - a).toFixed(1)}%"></i>`;
+    }
+    if (o.from != null) marks += `<b class="hy-mark is-from" style="left:${hyAt(o.from, min, max)}"></b>`;
+    if (o.to != null) marks += `<b class="hy-mark is-to is-${o.state || 'good'}" style="left:${hyAt(o.to, min, max)}"></b>`;
+    const ticks = (o.ticks || []).map(v => `<span style="left:${hyAt(v, min, max)}">${f(v)}</span>`).join('');
+    return `<div class="hy-scale" role="img" aria-label="${esc(o.label || '')}"><div class="hy-znames">${names}</div>` +
+      `<div class="hy-track"><span class="hy-zones">${zones}</span>${marks}</div><div class="hy-ticks">${ticks}</div></div>`;
+  }
+  // the state of a value by the zones of its scale
+  const hyZone = (Z, v) => (Z.find(([a, b]) => v >= a && v < b) || Z[v < Z[0][0] ? 0 : Z.length - 1])[2];
+  // the one number a model leads with
+  const hyHero = (value, text) => `<p class="hy-hero"><b>${value}</b><span>${text}</span></p>`;

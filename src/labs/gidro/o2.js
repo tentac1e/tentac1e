@@ -1,41 +1,23 @@
   const DO_T = [[10, 11.29], [12, 10.77], [14, 10.29], [16, 9.86], [18, 9.47], [20, 9.09], [22, 8.74], [24, 8.42], [26, 8.11], [28, 7.83], [30, 7.56], [32, 7.3], [34, 7.06], [35, 6.95]];
   const doAt = t => { for (let i = 0; i < DO_T.length - 1; i++) if (t <= DO_T[i + 1][0]) return lerp(DO_T[i][1], DO_T[i + 1][1], (t - DO_T[i][0]) / (DO_T[i + 1][0] - DO_T[i][0])); return DO_T[DO_T.length - 1][1]; };
   const demand = t => 6.1 * Math.pow(2, (t - 20) / 10);
+  const O2_TZ = [[10, 18, 'warn', 'прохладно'], [18, 22, 'good', 'норма'], [22, 24, 'warn'], [24, 35, 'bad', 'опасно']];
 
+  /* Oxygen against the roots' breathing at one temperature: two bars on one scale — what the water holds
+     (reference data for fresh water) and what the roots ask for (illustrative, Q10 = 2) — and the margin between */
   register('o2', el => {
-    el.innerHTML = h.head('Кислород против дыхания корней', 'Растворимость O₂ — справочные данные для пресной воды. Потребность корней — условная, с Q₁₀ = 2: важен не уровень, а момент, когда линии пересекаются.', true) +
-      `<div class="lab-controls">${h.rangeHtml('lab-o2-t', 'Температура раствора', 10, 35, 0.5, 22)}</div>
-       <div class="lab-chart" id="lab-o2-ch"></div>
-       <ul class="legend legend-lines"><li><i class="k-s4"></i>кислород в воде</li><li><i class="k-s3"></i>потребность корней</li></ul>` +
-      h.readHtml([['Растворено O₂', 'lab-o2-d'], ['Запас', 'lab-o2-m'], ['Вывод', 'lab-o2-v', 'is-wide']]);
-    let T = 22, hover = null;
-    const ch = h.chart($('#lab-o2-ch', el), {
-      label: 'Растворённый кислород и потребность корней по температуре',
-      draw(w, hh) {
-        const pts = f => { const a = []; for (let t = 10; t <= 35; t += 0.5) a.push([t, f(t)]); return a; };
-        const P = h.plot({ w, h: hh, clip: true, x: [10, 35], y: [2, 14], xticks: [10, 15, 20, 25, 30, 35], yticks: [2, 4, 6, 8, 10, 12, 14], fx: v => v + '°', ylab: 'мг O₂ на литр', xlab: 'температура раствора, °C',
-          vbands: [{ x0: 18, x1: 22, cls: 'is-good', label: 'норма' }],
-          series: [{ pts: pts(doAt), cls: 's4', label: 'O₂ в воде', labelAt: 13, ldy: -10 }, { pts: pts(demand), cls: 's3', label: 'потребность', labelAt: 31, ldy: -10 }],
-          marker: { x: T, dots: [{ y: doAt(T), cls: 's4' }, { y: Math.min(14, demand(T)), cls: 's3' }] }, hover });
-        let s = P.s;
-        if (hover != null) s += h.tip(P.X(hover), P.p.t + 4, w, [`${fmt(hover)} °C`, `O₂: ${fmt(doAt(hover))} мг/л`, `потребность: ${fmt(demand(hover))}`]);
-        return s;
-      },
-      onPointer(x, y, w, hh, kind) {
-        const P = h.plot({ w, h: hh, x: [10, 35], y: [2, 14] });
-        const v = clamp(Math.round(P.inv(x) * 2) / 2, 10, 35);
-        if (kind === 'set') { hover = null; rng.set(v); return; }
-        hover = kind === 'leave' ? null : v;
-        ch.redraw();
-      }
-    });
+    el.innerHTML = h.head('Кислород против дыхания корней', 'Сколько кислорода держит вода при этой температуре и сколько просят корни. Растворимость — справочные данные для пресной воды, потребность корней — условная: важен не уровень, а запас между ними.', true) +
+      `<div class="lab-controls">${h.rangeHtml('lab-o2-t', 'Температура раствора', 10, 35, 0.5, 22)}<div id="lab-o2-tz"></div></div>
+       <div class="o2-out" aria-live="polite"><div id="lab-o2-hero"></div><div class="o2-bars" id="lab-o2-bars"></div><p class="hy-verdict" id="lab-o2-v"></p></div>`;
+    let T = 22;
     const upd = () => {
-      const d = doAt(T), m = d - demand(T);
-      set(el, 'lab-o2-d', `${fmt(d)} мг/л`);
-      set(el, 'lab-o2-m', m >= 0 ? `+${fmt(m)}` : `−${fmt(-m)}`);
-      set(el, 'lab-o2-v', m > 1.2 ? 'Кислорода с запасом: корни белые и плотные.' : m > 0 ? 'На грани: добавьте аэрацию или охладите раствор.' : 'Корням не хватает кислорода: риск питиума и бурых корней. Охладите раствор до 18–22 °C.');
-      ch.redraw();
+      const d = doAt(T), n = demand(T), m = d - n, s = m > 1.2 ? 'good' : m > 0 ? 'warn' : 'bad';
+      set(el, 'lab-o2-tz', hyScale({ min: 10, max: 35, zones: O2_TZ, ticks: [10, 20, 30], fmt: v => v + ' °C', to: T, state: hyZone(O2_TZ, T), label: `Температура раствора ${fv(T)} °C` }));
+      set(el, 'lab-o2-hero', hyHero(h.nb(`${m >= 0 ? '+' : '−'}${fmt(Math.abs(m))} мг/л`), { good: 'запас кислорода сверх того, что просят корни', warn: 'запас почти кончился: корни на грани', bad: 'кислорода меньше, чем просят корни' }[s]));
+      $('#lab-o2-bars', el).innerHTML = [['В воде', d, 'is-o2'], ['Нужно корням', Math.min(12, n), 'is-need']].map(([name, v, c]) =>
+        `<div class="o2-row"><span class="o2-name">${name}</span><span class="o2-bar"><i class="${c}" style="width:${(v / 12 * 100).toFixed(1)}%"></i></span><span class="o2-val">${h.nb(fmt(v) + ' мг/л')}</span></div>`).join('');
+      set(el, 'lab-o2-v', h.nb(s === 'good' ? 'Кислорода с запасом: корни белые и плотные.' : s === 'warn' ? 'На грани: добавьте аэрацию или охладите раствор.' : 'Корням не хватает кислорода: риск питиума и бурых корней. Охладите раствор до 18–22 °C.'));
     };
-    const rng = h.bindRange(el, 'lab-o2-t', v => `${fmt(v)} °C`, v => { T = v; upd(); });
+    h.bindRange(el, 'lab-o2-t', v => h.nb(`${fv(v)} °C`), v => { T = v; upd(); });
     upd();
   });

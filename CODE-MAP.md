@@ -99,7 +99,7 @@
 - `src/js/haptics.js`: `iosTap` 20, `play` 34, `watchSnap` 69, `initSnaps` 82, `initSwitch` 94, `set` 103, `dragTicker` 106
 - `src/labs/_frame.js`: `r1` 8, `pct` 9, `set` 12, `doyToday` 13, `doyLabel` 14, `citiesChips` 15
 - `src/labs/formirovka/_shared.js`: `pinchP` 5
-- `src/labs/gidro/_shared.js`: `hjar` 8, `hcup` 36, `hsprout` 47, `pickHtml` 122, `fv` 124
+- `src/labs/gidro/_shared.js`: `hjar` 8, `hcup` 36, `hsprout` 47, `pickHtml` 122, `fv` 124, `hyPc` 130, `hyAt` 131, `hyGauge` 135, `hyScale` 142, `hyZone` 158, `hyHero` 160
 - `src/labs/moy/_shared.js`: `EXP_DEF` 17, `two` 18, `localISO` 19, `fromLocal` 20, `whenText` 21, `sinceText` 23, `nfmt` 30, `expRid` 31, `expX` 33, `expVal` 35, `expSeries` 38, `expCross` 40, `expPlot` 52, `expTimeTicks` 63, `expFx` 69, `experiment` 71
 - `src/labs/posadka/_shared.js`: `young` 7, `placeP` 110, `basilBush` 111, `tomato` 112, `cutting` 148
 - `src/labs/problemy/_shared.js`: `bg` 7, `ground` 8, `sun` 9, `drop` 10, `gnat` 11, `Sc` 12, `downyZoom` 42, `greyZoom` 70, `fusZoom` 86, `rootsZoom` 97, `dampZoom` 113, `bactZoom` 124, `caption` 150, `aphidBig` 158, `miteBig` 164, `whiteflyBig` 172, `thripsBig` 178, `slugBig` 188, `gnatBig` 197
@@ -143,7 +143,7 @@
 - `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-empty`, `.g-photo-*`, `.g-form-*`, `.garden-*`, `.g-link`
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
-- `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-time`, `.hy-role-*`, `.hy-need`, `.hy-trio`, `.hy-h`, `.hy-when`, `.sub`, `.card`, `.is-leaf`, `.is-soil`
+- `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
@@ -164,13 +164,14 @@
 
 ### стили моделей и глав
 - `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
-- `src/labs/gidro/_shared.css`: `.lab-*`, `.hs-lbl`, `.hs-chart`, `.band`, `.is-low`
-- `src/labs/gidro/alloc.css`: `.al-row`, `.al-bar`, `.al-leaf`, `.al-split`, `.al-name`, `.s1`, `.s2`, `.al-root`, `.al-val`
+- `src/labs/gidro/_shared.css`: `.hy-meter`, `.is-good`, `.is-warn`, `.is-bad`, `.hy-mark`, `.hy-key`, `.hy-gauge-*`, `.hy-state`, `.hy-mtrack`, `.hy-mfill`, `.hy-ticks`, `.hy-zone`
+- `src/labs/gidro/alloc.css`: `.al-row`, `.al-bar`, `.al-key-*`, `.al-split`, `.al-name`, `.al-leaf`, `.al-root`, `.al-val`
 - `src/labs/gidro/capil.css`: `.cap-*`
+- `src/labs/gidro/drift.css`: `.dr-h`, `.dr-scales`, `.dr-out`, `.dr-scale`
 - `src/labs/gidro/hcheck.css`: `.hc-item`, `.hc-st`, `.is-bad`, `.hc-list`, `.is-warn`, `.is-ok`, `.is-all`
-- `src/labs/gidro/hcost.css`: `.hcost-*`, `.s2`, `.s3`
 - `src/labs/gidro/hmix.css`: `.hm-part`, `.hm-row`, `.hm-out`, `.hm-parts`, `.hm-k`, `.hm-steps`, `.hm-warn`
-- `src/labs/gidro/kratky.css`: `.kr-grid`, `.kr-stage`, `.ill`
+- `src/labs/gidro/kratky.css`: `.kr-split`, `.kr-stage`, `.ill`
+- `src/labs/gidro/o2.css`: `.o2-bar`, `.o2-row`, `.o2-out`, `.o2-bars`, `.o2-name`, `.is-o2`, `.is-need`, `.o2-val`
 - `src/labs/moy/_shared.css`: `.exp-*`, `.btn`, `.is-done`, `.is-now`, `.is-missed`, `.s1`, `.s2`, `.s3`, `.g-link`, `.ico`, `.is-model`, `.is-empty`
 - `src/labs/moy/weather.css`: `.wx-day`, `.wx-vpd`, `.lab-*`, `.band`, `.wx-find-*`, `.wx-place-*`, `.wx-n`, `.is-hot`, `.wx-pick`, `.wx-x`, `.wx-r`, `.wx-s`
 - `src/labs/posadka/germ.css`: `.germ-*`, `.is-stopped` · анимации: `g-gel`, `g-root`, `g-hypo`, `g-coty`
@@ -232,14 +233,14 @@
 
 Сколько правил `@media` на каждую ширину и в каких файлах. Новую ширину не придумывайте — берите ближайшую.
 
+- `max-width: 900px` — 14: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css, 23-garden.css, 26-hydro.css
 - `max-width: 560px` — 13: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
-- `max-width: 900px` — 13: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css, 23-garden.css
 - `max-width: 640px` — 11: 05-deep.css, 06-blocks.css ×2, 12-sci-notes.css, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
 - `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
+- `max-width: 760px` — 7: 06-lab-tools.css, 12-steps.css, 26-hydro.css, _shared.css, drift.css, flows.css, kratky.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
-- `max-width: 760px` — 6: 06-lab-tools.css, 12-steps.css, 26-hydro.css, flows.css, hcost.css, kratky.css
-- `max-width: 460px` — 5: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, oxide.css
+- `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
 - `max-width: 700px` — 5: 04-deep-index.css, 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
 - `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css

@@ -9,11 +9,8 @@
 /* a heading that opens a part of a tab (the jar, the bucket) */
 .hy-h { margin: 0 0 14px; }
 .hy-h.sub { margin-top: clamp(32px, 4.5vw, 52px); }
-/* what to buy: the thing on the left, its price on the right */
-.hy-need { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
-.hy-need li { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding-bottom: 6px; border-bottom: 1px dashed var(--line); font-size: .92rem; }
-.hy-need li:last-child { border-bottom: 0; }
-.hy-need b { font: 600 .86rem/1.3 var(--font-mono); white-space: nowrap; color: var(--ink); }
+/* what to buy */
+.hy-list { margin: 0 0 10px; }
 /* the routine: four cards from every day to every few weeks */
 .hy-routine { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 1060px) { .hy-routine { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -39,3 +36,25 @@
 .hy-water-key { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .78rem; color: var(--ink-3); }
 .hy-water-key li { display: flex; align-items: center; gap: 5px; }
 .hy-water-key i { width: 10px; height: 10px; border-radius: 3px; }
+/* a few words that open a part of a tab */
+.hy-intro { max-width: 60em; margin: -6px 0 16px; color: var(--ink-2); }
+/* the five rules: numbered cards, two in a row on a wide screen */
+.hy-rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+.hy-rules li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: start; }
+.hy-rules h4 { margin: 2px 0 4px; }
+.hy-rules p { margin: 0; color: var(--ink-2); font-size: .95rem; }
+.hy-rule-n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--leaf-soft); color: var(--basil-deep); font: 700 1.25rem/1 var(--font-display); }
+/* where to begin: three ways, one card each */
+.hy-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .hy-paths { grid-template-columns: 1fr; } }
+.hy-path { display: grid; gap: 6px; align-content: start; }
+.hy-path h3, .hy-path p { margin: 0; }
+.hy-path p:not(.hy-when) { color: var(--ink-2); font-size: .95rem; }
+.hy-path a { justify-self: start; margin-top: 4px; font-weight: 600; }
+/* «дороже, но…»: what the money buys, in words */
+.hy-cost { display: grid; gap: 14px; }
+.hy-cost-h { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: center; }
+.hy-cost-h h3 { margin: 0; }
+.hy-cost-p { margin: 0; max-width: 60em; color: var(--ink-2); }
+.hy-cost-list { columns: 2 300px; column-gap: 28px; margin: 0; }
+.hy-cost-list li { break-inside: avoid; }

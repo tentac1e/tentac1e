@@ -187,7 +187,7 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   await page.tap('#sheet-toc [data-toc-pane="tools"]');
   await page.waitForTimeout(250);
   const tl = await page.evaluate(() => { const d = document.getElementById('sheet-toc'); return { ch: d.querySelector('.toc-chapters').offsetParent !== null, tools: [...d.querySelectorAll('.toc-tool')].map(a => ({ href: a.href, t: a.querySelector('b').textContent, where: a.querySelector('small').textContent })) }; });
-  ok(!tl.ch && tl.tools.length === 20 && tl.tools.every(t => t.where), `the tools: ${tl.tools.length}, each says where it leads`);
+  ok(!tl.ch && tl.tools.length === 19 && tl.tools.every(t => t.where), `the tools: ${tl.tools.length}, each says where it leads`);
   await page.tap('#sheet-toc [data-toc-pane="ch"]');
   await page.tap('#sheet-toc .toc-item[data-toc="udobreniya"] .toc-sub li:nth-child(4) a');
   await page.waitForTimeout(800);

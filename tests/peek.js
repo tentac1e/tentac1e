@@ -164,8 +164,8 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
         passport: q('#short-pasport dl > div'), facts: q('#short-cifry .facts li'), journey: q('#journey li'), rules: q('#rules .rule'),
         science: !!document.querySelector('#sh-fold > p') && !q('.depth-seg button') && !!document.getElementById('home-molecule'), wide: document.documentElement.scrollWidth > innerWidth };
     });
-    ok(r.h <= max && r.chapters === 9 && r.desc === 9 && r.subs > 30 && r.tools === 20 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
-      `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 20 tools, the passport, figures, path, rules and the science layer ${JSON.stringify(r)}`);
+    ok(r.h <= max && r.chapters === 9 && r.desc === 9 && r.subs > 30 && r.tools === 19 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
+      `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 19 tools, the passport, figures, path, rules and the science layer ${JSON.stringify(r)}`);
     // «Научный слой» in one column: its heading and a button; the text and the molecule open
     const sci = () => p.evaluate(() => ({ btn: getComputedStyle(document.querySelector('.sh-open')).display !== 'none', fold: getComputedStyle(document.getElementById('sh-fold')).display !== 'none', mol: getComputedStyle(document.getElementById('sh-mol')).display !== 'none', exp: document.querySelector('.sh-open').getAttribute('aria-expanded') }));
     const s0 = await sci();
@@ -192,7 +192,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
         const n = await p.evaluate(x => [...document.querySelectorAll('#tools-home .tool')].filter(a => a.offsetParent).map(a => a.closest('.tools-group').id), g);
         ok(n.length > 3 && n.every(id => id === 'tools-' + g), `the tools' switch → ${g}: ${n.length} of its tools, no other`);
       }
-    } else ok((await p.evaluate(() => [...document.querySelectorAll('#tools-home .tool')].filter(a => a.offsetParent).length)) === 20, 'a computer shows all 20 tools at once');
+    } else ok((await p.evaluate(() => [...document.querySelectorAll('#tools-home .tool')].filter(a => a.offsetParent).length)) === 19, 'a computer shows all 19 tools at once');
     // the search leads to a rule: its part opens
     await p.goto(fileUrl('index.html') + '#glavnaya-h5', { waitUntil: 'load' });
     await p.waitForTimeout(900);

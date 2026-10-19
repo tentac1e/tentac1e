@@ -1,0 +1,11 @@
+/* oxygen in the water and what the roots ask for: two bars on one scale */
+.o2-out { display: grid; gap: 16px; margin-top: 14px; }
+.o2-bars { display: grid; gap: 10px; }
+.o2-row { display: grid; grid-template-columns: 116px minmax(0, 1fr) 82px; gap: 10px; align-items: center; }
+.o2-name { font-weight: 600; font-size: .9rem; }
+.o2-bar { display: block; height: 16px; border-radius: 4px; background: var(--surface-2); }
+.o2-bar i { display: block; height: 100%; border-radius: 0 4px 4px 0; transition: width .35s var(--ease-float); }
+.o2-bar .is-o2 { background: var(--ser-4); }
+.o2-bar .is-need { background: var(--ser-3); }
+.o2-val { font: 500 .82rem/1.2 var(--font-mono); color: var(--ink-2); text-align: right; }
+@media (max-width: 460px) { .o2-row { grid-template-columns: 96px minmax(0, 1fr) 72px; gap: 8px; } }

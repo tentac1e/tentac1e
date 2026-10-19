@@ -2,3 +2,46 @@
 .hs-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); letter-spacing: .02em; paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3.5px; stroke-linejoin: round; }
 .hs-chart .lab-svg { display: block; border-radius: 14px; }
 .lab-svg .band.is-low { fill: var(--danger-soft); opacity: .75; }
+/* readings without a chart (hyGauge, hyScale, hyHero in _shared.js) */
+.hy-hero { display: grid; gap: 4px; margin: 0; }
+.hy-hero b { font: 700 3rem/1 var(--font-body); color: var(--ink); letter-spacing: -.01em; }
+.hy-hero span { font-size: .92rem; line-height: 1.4; color: var(--ink-2); }
+.hy-gauge { display: grid; gap: 8px; }
+.hy-gauge-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; }
+.hy-gauge-h span { font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.hy-gauge-h b { font: 600 1.1rem/1.2 var(--font-body); color: var(--ink); }
+.hy-state { padding: 2px 9px; border-radius: 999px; font: 600 .74rem/1.4 var(--font-body); font-style: normal; }
+.hy-state.is-good { background: var(--leaf-soft); color: var(--basil-deep); }
+.hy-state.is-warn { background: var(--oil-soft); color: var(--ink); }
+.hy-state.is-bad { background: var(--danger-soft); color: var(--danger); }
+.hy-mtrack { position: relative; display: block; height: 12px; border-radius: 6px; overflow: hidden; }
+.hy-mfill { display: block; height: 100%; border-radius: 0 6px 6px 0; transition: width .35s var(--ease-float); }
+.hy-meter.is-good .hy-mtrack { background: var(--leaf-soft); } .hy-meter.is-good .hy-mfill { background: var(--basil); }
+.hy-meter.is-warn .hy-mtrack { background: var(--oil-soft); } .hy-meter.is-warn .hy-mfill { background: var(--oil); }
+.hy-meter.is-bad .hy-mtrack { background: var(--danger-soft); } .hy-meter.is-bad .hy-mfill { background: var(--danger); }
+.hy-mtick { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--surface); }
+.hy-scale { display: grid; gap: 5px; }
+.hy-znames, .hy-ticks { position: relative; height: 18px; }
+.hy-znames span, .hy-ticks span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; font: 500 .74rem/18px var(--font-mono); color: var(--ink-3); }
+.hy-znames span { font: 600 .78rem/18px var(--font-body); color: var(--ink-2); }
+.hy-ticks span:first-child { transform: none; }
+.hy-ticks span:last-child { transform: translateX(-100%); }
+.hy-track { position: relative; height: 16px; }
+.hy-zones { position: absolute; inset: 0; border-radius: 8px; overflow: hidden; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); }
+.hy-zone { position: absolute; top: 0; bottom: 0; }
+.hy-zone.is-good { background: var(--leaf-soft); } .hy-zone.is-warn { background: var(--oil-soft); } .hy-zone.is-bad { background: var(--danger-soft); }
+.hy-link { position: absolute; top: 7px; height: 2px; background: var(--ink-3); transition: left .35s var(--ease-float), width .35s var(--ease-float); }
+.hy-mark { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0 2px var(--surface); transition: left .35s var(--ease-float); }
+.hy-mark.is-from { background: var(--surface); border: 2px solid var(--ink-3); }
+.hy-mark.is-to.is-good { background: var(--basil); } .hy-mark.is-to.is-warn { background: var(--oil); } .hy-mark.is-to.is-bad { background: var(--danger); }
+.hy-key { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0 0; padding: 0; list-style: none; font-size: .8rem; color: var(--ink-3); }
+.hy-key li { display: flex; align-items: center; gap: 6px; }
+.hy-key i { width: 12px; height: 12px; border-radius: 50%; }
+.hy-key .is-from { background: var(--surface); border: 2px solid var(--ink-3); }
+.hy-key .is-to { background: var(--ink-2); }
+/* a model's picture beside its readings, one under the other on a phone */
+.hy-split { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 28px); align-items: center; margin-top: 8px; }
+@media (max-width: 760px) { .hy-split { grid-template-columns: 1fr; } }
+.hy-pic .ill { display: block; width: 100%; height: auto; border-radius: 14px; }
+.hy-read { display: grid; gap: 18px; align-content: start; }
+.hy-verdict { margin: 0; color: var(--ink-2); }

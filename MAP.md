@@ -45,11 +45,11 @@
 
 ### Гидропоника — `/гидропоника` (`gidro.html`)
 - `src/pages/gidro/_head.html` · обложка, вкладки · 13 стр.
-- `src/pages/gidro/1-osnovy.html` · #основы — Как работает гидропоника · 185 стр.<br>модели: `hsys`, `o2box`, `alloc`; глубже: Дыхание корня `#deep-dyhanie-kornya`, Почему быстрее `#deep-bystree`, История `#deep-istoriya-gidroponiki`
-- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 187 стр.<br>модели: `kratky`, `capil`; глубже: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
+- `src/pages/gidro/1-osnovy.html` · #основы — Гидропоника: введение · 201 стр.<br>модели: `hsys`, `o2box`, `alloc`; глубже: Дыхание корня `#deep-dyhanie-kornya`, Почему быстрее `#deep-bystree`, История `#deep-istoriya-gidroponiki`
+- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 184 стр.<br>модели: `kratky`, `capil`; глубже: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
 - `src/pages/gidro/3-rastvor.html` · #раствор — Раствор: EC, pH и кислород · 172 стр.<br>модели: `hmix`, `o2`, `drift`; глубже: Кислород и хелаты `#deep-kislorod`, Дрейф pH и EC `#deep-dreyf-ph`, Концентраты `#deep-osadok`
 - `src/pages/gidro/4-proverki.html` · #проверки — Проверки и неполадки · 158 стр.<br>модели: `hcheck`, `pyth`; глубже: Питиум `#deep-pitium`, Водоросли `#deep-vodorosli`, Приборы `#deep-pribory`
-- `src/pages/gidro/5-sravnenie.html` · #сравнение — Горшок или гидропоника · 132 стр.<br>модели: `hcost`; глубже: Вкус `#deep-vkus-gidro`, Вода `#deep-voda-gidro`
+- `src/pages/gidro/5-sravnenie.html` · #сравнение — Горшок или гидропоника · 143 стр.<br>глубже: Вкус `#deep-vkus-gidro`, Вода `#deep-voda-gidro`
 - `src/pages/gidro/_foot.html` · подвал главы · 3 стр.
 
 ### Прищипка и сбор — `/прищипывание` (`formirovka.html`)
@@ -123,11 +123,10 @@
 | `kratky` | Гидропоника | Хватит ли банки | `src/labs/gidro/kratky.js` · `src/labs/gidro/kratky.css` |
 | `capil` | Гидропоника | Докуда поднимется вода | `src/labs/gidro/capil.js` · `src/labs/gidro/capil.css` |
 | `hmix` | Гидропоника | Раствор для гидропоники | `src/labs/gidro/hmix.js` · `src/labs/gidro/hmix.css` |
-| `o2` | Гидропоника | Кислород против дыхания корней | `src/labs/gidro/o2.js` |
-| `drift` | Гидропоника | Куда уплывёт раствор за две недели | `src/labs/gidro/drift.js` |
+| `o2` | Гидропоника | Кислород против дыхания корней | `src/labs/gidro/o2.js` · `src/labs/gidro/o2.css` |
+| `drift` | Гидропоника | Куда уплывёт раствор | `src/labs/gidro/drift.js` · `src/labs/gidro/drift.css` |
 | `hcheck` | Гидропоника | Проверка за две минуты | `src/labs/gidro/hcheck.js` · `src/labs/gidro/hcheck.css` |
 | `pyth` | Гидропоника | Споры у корня | `src/labs/gidro/pyth.js` |
-| `hcost` | Гидропоника | Во что обойдётся и когда окупится | `src/labs/gidro/hcost.js` · `src/labs/gidro/hcost.css` |
 | `auxin` | Прищипка и сбор | Что происходит после среза | `src/labs/formirovka/auxin.js` · `src/labs/formirovka/auxin.css` |
 | `branch` | Прищипка и сбор | Куст после n прищипываний | `src/labs/formirovka/branch.js` |
 | `diurnal` | Прищипка и сбор | Летний день глазами листа | `src/labs/formirovka/diurnal.js` |
@@ -234,7 +233,7 @@
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
 
 **data.js**
-- `src/js/data/00-nav.js` (63 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
+- `src/js/data/00-nav.js` (62 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
 - `src/js/data/01-varieties.js` (146 стр.): VARIETIES, VARIETY_TYPES, QUIZ
 - `src/js/data/02-places.js` (71 стр.): PLACES, PRESETS, SOIL_RECIPES
 - `src/js/data/03-nutrients.js` (127 стр.): ELEMENTS, STAGES, DOSE, NPK_PRESETS

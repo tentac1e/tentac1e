@@ -29,7 +29,6 @@ window.BASIL = (() => {
     { title: 'Системы гидропоники', hash: 'gidro-osnovy', icon: 'drop', group: 'know', desc: 'Шесть систем в разрезе: где корни берут воздух', peek: 'hsys-tool' },
     { title: 'Раствор для гидропоники', hash: 'gidro-rastvor', icon: 'flask', group: 'calc', desc: 'Миллилитры частей A и B под нужную EC', peek: 'hmix-tool' },
     { title: 'Проверка раствора', hash: 'gidro-proverki', icon: 'check', group: 'plan', desc: 'EC, pH и температура — что делать сейчас', peek: 'hcheck-tool' },
-    { title: 'Гидропоника или горшок', hash: 'gidro-sravnenie', icon: 'tag', group: 'calc', desc: 'Старт, расходы и цена 100 г зелени', peek: 'hcost-tool' },
     { title: 'Тренажёр прищипывания', hash: 'formirovka-trenazher', icon: 'scissors', group: 'know', desc: 'Вырастите куст на 8 верхушек' },
     { title: 'Молекулы аромата', hash: 'vkus-molekuly', icon: 'hex', group: 'know', desc: '9 молекул в 3D и шкала летучести' },
     { title: 'Лаборатория сочетаний', hash: 'vkus-sochetaniya', icon: 'nose', group: 'know', desc: 'Общие молекулы базилика и продуктов' },

@@ -163,6 +163,7 @@ window.BASIL_PAGES = {
   "dli-out": "uhod",
   "dli-ppfd": "uhod",
   "dli-presets": "uhod",
+  "dorozhe": "gidro",
   "dose-fert": "udobreniya",
   "dose-form": "udobreniya",
   "dose-out": "udobreniya",
@@ -228,7 +229,17 @@ window.BASIL_PAGES = {
   "gidro-h34": "gidro",
   "gidro-h35": "gidro",
   "gidro-h36": "gidro",
+  "gidro-h37": "gidro",
+  "gidro-h38": "gidro",
+  "gidro-h39": "gidro",
   "gidro-h4": "gidro",
+  "gidro-h40": "gidro",
+  "gidro-h41": "gidro",
+  "gidro-h42": "gidro",
+  "gidro-h43": "gidro",
+  "gidro-h44": "gidro",
+  "gidro-h45": "gidro",
+  "gidro-h46": "gidro",
   "gidro-h5": "gidro",
   "gidro-h6": "gidro",
   "gidro-h7": "gidro",
@@ -254,7 +265,6 @@ window.BASIL_PAGES = {
   "glossary": "spravka",
   "gotovye-fermy": "gidro",
   "hcheck-tool": "gidro",
-  "hcost-tool": "gidro",
   "hero-plant": "glavnaya",
   "hero-plant-g": "glavnaya",
   "hmix-tool": "gidro",
@@ -365,6 +375,7 @@ window.BASIL_PAGES = {
   "problemy-h2": "problemy",
   "problemy-profilaktika": "problemy",
   "problemy-vrediteli": "problemy",
+  "pyat-pravil": "gidro",
   "quick": "glavnaya",
   "quiz": "sorta",
   "razmnozhenie": "posadka",
@@ -372,6 +383,7 @@ window.BASIL_PAGES = {
   "razmnozhenie-semena": "sorta",
   "recipe-book": "vkus",
   "rules": "glavnaya",
+  "s-chego-nachat": "gidro",
   "season-h": "glavnaya",
   "season-text": "glavnaya",
   "season-tip": "glavnaya",
@@ -564,7 +576,7 @@ window.BASIL_PAGES = {
    "phys": 15,
    "taste": 5
   },
-  "labs": 55,
+  "labs": 54,
   "deeper": 56,
   "deep": 56
  },
@@ -616,7 +628,7 @@ window.BASIL_PAGES = {
   "deep-oksidy": "Глубже: Оксиды на упаковке",
   "udobreniya-kalkulyator": "Удобрения · Калькулятор раствора",
   "deep-ec": "Глубже: EC и ppm",
-  "gidro-osnovy": "Гидропоника · Как работает гидропоника",
+  "gidro-osnovy": "Гидропоника · Гидропоника: введение",
   "deep-dyhanie-kornya": "Глубже: Дыхание корня",
   "deep-bystree": "Глубже: Почему быстрее",
   "deep-istoriya-gidroponiki": "Глубже: История",
@@ -809,7 +821,7 @@ window.BASIL_PAGES = {
    "posadka": "822ac97a",
    "uhod": "5d83f303",
    "udobreniya": "fec08694",
-   "gidro": "79cb4a0f",
+   "gidro": "456bb260",
    "formirovka": "907d6bbb",
    "vkus": "e056550f",
    "problemy": "b6cf55d9",
@@ -868,6 +880,6 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "f38e6b06"
+  "search": "871dfa28"
  }
 };

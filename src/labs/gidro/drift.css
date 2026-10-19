@@ -1,0 +1,8 @@
+/* the solution on two scales: EC and pH, where it was and where it is */
+.dr-out { display: grid; gap: 16px; margin-top: 8px; }
+.dr-scales { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; }
+@media (max-width: 760px) { .dr-scales { grid-template-columns: 1fr; } }
+.dr-scale { display: grid; gap: 6px; }
+.dr-h { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+.dr-h span { font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.dr-h b { font: 600 1.05rem/1.2 var(--font-body); color: var(--ink); }
