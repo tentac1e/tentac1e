@@ -38,8 +38,8 @@
         const rl = 14 + 70 * Math.sqrt(r.root / ROOT.root), rn = 5 + Math.round(6 * Math.sqrt(r.root / ROOT.root));
         g += Rh.roots(x, gy + 2, rl, rn, { seed: 5 + k, spread: k ? 0.5 : 0.9, w: 1.6 });
         g += `<rect x="${x - 13}" y="${gy - 4}" width="26" height="8" rx="3" fill="${F(k ? 'plastic' : 'pot')}"/>`;
-        // the same bush on both sides, only its size differs: the height goes with the square root of the mass
-        const hh = 16 + 74 * Math.sqrt(r.shoot / TOP.shoot);
+        // the same bush on both sides, only its size differs
+        const hh = 16 + 74 * Math.pow(r.shoot / TOP.shoot, 0.75);
         g += hh < 34 ? Rh.sprout(x, gy - 4, hh, { pairs: 2, s: 1.1 }) : ill.bush({ x, y: gy - 4, h: hh, nodes: 3, leaf: 0.1 + 0.14 * hh / 90, spread: 0.85, seed: 6 });
       });
       g += `<text class="hs-lbl" data-on-picture x="82" y="198" text-anchor="middle">горшок</text><text class="hs-lbl" data-on-picture x="238" y="198" text-anchor="middle">раствор</text>`;
@@ -50,7 +50,7 @@
       $('#lab-al-pic', el).innerHTML = pic(P, Hy);
       set(el, 'lab-al-hero', hyHero(k < 1.15 ? 'почти поровну' : h.nb(`в ${fmt(k)} раза`), k < 1.15 ? 'зелени в растворе и в горшке: свет — узкое место' : 'больше зелени в растворе, чем в горшке'));
       $('#lab-al-split', el).innerHTML = [['Раствор', Hy.f], ['Горшок', P.f]].map(([n, f]) =>
-        `<div class="al-row"><span class="al-name">${n}</span><span class="al-bar" role="img" aria-label="${n}: листьям ${fmt0(f * 100)} %, корням ${fmt0((1 - f) * 100)} % прироста"><i class="al-leaf" style="--w:${fmt0(f * 100)}%"></i><i class="al-root" style="--w:${fmt0((1 - f) * 100)}%"></i></span><span class="al-val">корням ${fmt0((1 - f) * 100)} %</span></div>`).join('') +
+        `<div class="al-row"><span class="al-name">${n}</span><span class="al-bar" role="img" aria-label="${n}: листьям ${fmt0(f * 100)} %, корням ${fmt0((1 - f) * 100)} % прироста"><i class="al-leaf" style="--w:${fmt0(f * 100)}%"></i><i class="al-root" style="--w:${fmt0((1 - f) * 100)}%"></i></span><span class="al-val">корням ${fmt0((1 - f) * 100)}&nbsp;%</span></div>`).join('') +
         `<ul class="hy-key"><li><i class="al-key-leaf"></i>листьям и стеблям</li><li><i class="al-key-root"></i>корням</li></ul>`;
       set(el, 'lab-al-v', h.nb(k < 1.15
         ? 'Света мало: куст растёт медленно и там, и там. Раствор почти ничего не прибавляет — сначала нужна лампа.'

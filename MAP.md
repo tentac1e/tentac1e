@@ -46,7 +46,7 @@
 ### Гидропоника — `/гидропоника` (`gidro.html`)
 - `src/pages/gidro/_head.html` · обложка, вкладки · 13 стр.
 - `src/pages/gidro/1-osnovy.html` · #основы — Гидропоника: введение · 201 стр.<br>модели: `hsys`, `o2box`, `alloc`; глубже: Дыхание корня `#deep-dyhanie-kornya`, Почему быстрее `#deep-bystree`, История `#deep-istoriya-gidroponiki`
-- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 184 стр.<br>модели: `kratky`, `capil`; глубже: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
+- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 188 стр.<br>модели: `kratky`, `capil`; глубже: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
 - `src/pages/gidro/3-rastvor.html` · #раствор — Раствор: EC, pH и кислород · 172 стр.<br>модели: `hmix`, `o2`, `drift`; глубже: Кислород и хелаты `#deep-kislorod`, Дрейф pH и EC `#deep-dreyf-ph`, Концентраты `#deep-osadok`
 - `src/pages/gidro/4-proverki.html` · #проверки — Проверки и неполадки · 158 стр.<br>модели: `hcheck`, `pyth`; глубже: Питиум `#deep-pitium`, Водоросли `#deep-vodorosli`, Приборы `#deep-pribory`
 - `src/pages/gidro/5-sravnenie.html` · #сравнение — Горшок или гидропоника · 143 стр.<br>глубже: Вкус `#deep-vkus-gidro`, Вода `#deep-voda-gidro`

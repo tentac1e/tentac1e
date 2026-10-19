@@ -1,11 +1,11 @@
 /* the share of growth that goes to the leaves and to the roots: one bar of two parts, a gap of the surface
    between them */
 .al-split { display: grid; gap: 10px; }
-.al-row { display: grid; grid-template-columns: 84px minmax(0, 1fr) 84px; gap: 10px; align-items: center; }
+.al-row { display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
 .al-name { font-weight: 600; font-size: .9rem; }
 .al-bar { display: flex; gap: 2px; height: 14px; }
 .al-bar i { display: block; width: var(--w); border-radius: 4px; transition: width .4s var(--ease-float); }
 .al-leaf, .al-key-leaf { background: var(--ser-1); }
 .al-root, .al-key-root { background: var(--soil); }
-.al-val { font: 500 .78rem/1.2 var(--font-mono); color: var(--ink-3); text-align: right; }
-@media (max-width: 460px) { .al-row { grid-template-columns: 70px minmax(0, 1fr) 76px; gap: 8px; } }
+.al-val { font: 500 .78rem/1.2 var(--font-mono); color: var(--ink-3); text-align: right; white-space: nowrap; }
+@media (max-width: 460px) { .al-row { grid-template-columns: 70px minmax(0, 1fr) auto; gap: 8px; } }

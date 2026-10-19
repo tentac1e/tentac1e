@@ -49,7 +49,7 @@
       set(el, 'lab-dr-ec', hyScale({ min: 0, max: 3, zones: DR_EC, ticks: [0, 1, 2, 3], fmt: v => fmt0(v), from: ec0, to: e, state: hyZone(DR_EC, e), label: `EC: в день смены ${fmt(ec0, 1)}, на ${day}-й день ${fmt(e, 1)}` }));
       set(el, 'lab-dr-ph', hyScale({ min: 5, max: 8, zones: DR_PH, ticks: [5, 6, 7, 8], fmt: v => fmt0(v), from: 6, to: p, state: hyZone(DR_PH, p), label: `pH: в день смены 6,0, на ${day}-й день ${fmt(p, 1)}` }));
       set(el, 'lab-dr-hero', r.dry != null ? hyHero(`${r.dry}-й день`, 'и ёмкость почти пуста: без долива кусты выпьют её до дна')
-        : r.over != null ? hyHero(`${r.over}-й день`, 'pH выйдет за 6,5 — пора опустить его pH-минусом')
+        : r.over != null ? hyHero(`${r.over}-й день`, 'pH выйдет за 6,5 — пора опустить его pH‑минусом')
           : hyHero('две недели', 'pH держится в норме — проверяйте раз в 2–3 дня'));
       set(el, 'lab-dr-v', h.nb(r.dry != null ? 'Без долива уровень падает быстрее, чем вырабатывается раствор: доливайте каждый вечер.'
         : de > 0.3 ? `EC растёт: кусты пьют воду быстрее, чем берут соли${top === 'none' ? ', и соли остаются в ёмкости' : ''}. Доливайте чистой водой, а раствор меняйте раз в 2–3 недели.`

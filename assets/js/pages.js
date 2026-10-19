@@ -240,6 +240,8 @@ window.BASIL_PAGES = {
   "gidro-h44": "gidro",
   "gidro-h45": "gidro",
   "gidro-h46": "gidro",
+  "gidro-h47": "gidro",
+  "gidro-h48": "gidro",
   "gidro-h5": "gidro",
   "gidro-h6": "gidro",
   "gidro-h7": "gidro",
@@ -821,7 +823,7 @@ window.BASIL_PAGES = {
    "posadka": "822ac97a",
    "uhod": "5d83f303",
    "udobreniya": "fec08694",
-   "gidro": "456bb260",
+   "gidro": "7851625e",
    "formirovka": "907d6bbb",
    "vkus": "e056550f",
    "problemy": "b6cf55d9",
@@ -880,6 +882,6 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "871dfa28"
+  "search": "a80aa921"
  }
 };

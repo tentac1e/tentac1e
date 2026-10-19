@@ -2913,3 +2913,5 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 .hy-cost-p { margin: 0; max-width: 60em; color: var(--ink-2); }
 .hy-cost-list { columns: 2 300px; column-gap: 28px; margin: 0; }
 .hy-cost-list li { break-inside: avoid; }
+/* a part of a tab with its own heading (the jar, the bucket): a link can open it whole in the sheet */
+.hy-part + .hy-part { margin-top: clamp(32px, 4.5vw, 52px); }
