@@ -110,12 +110,12 @@
       <div class="field"><label for="g-variety">Сорт</label><select id="g-variety">${varietyOptions(p.variety)}</select></div>
       <div class="field"><span class="label" id="g-start-l">С чего начали</span>${seg('start', G.starts, p.start)}</div>
       <div class="field"><span class="label" id="g-place-l">Где растёт</span>${seg('place', G.places, p.place)}</div>
-      <div class="field" id="g-preset-f"${p.place === 'home' ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><small class="field-note" id="g-cities">Например, ${esc(B.PRESETS.find(x => x.id === (p.preset || 'temperate')).cities)}</small></div>
+      <div class="field" id="g-preset-f"${G.indoor.includes(p.place || 'home') ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><small class="field-note" id="g-cities">Например, ${esc(B.PRESETS.find(x => x.id === (p.preset || 'temperate')).cities)}</small></div>
       <div class="field"><label for="g-date" id="g-date-l">${startDef.date}</label><input type="date" id="g-date" value="${p.date || toISO(today())}" max="${toISO(addDays(today(), 60))}"></div>
       <div class="g-form-a"><button class="btn btn-primary btn-small" type="submit">${icon('check')}Сохранить</button><button class="btn btn-ghost btn-small" type="button" data-g-cancel>Отмена</button></div>
     </form>`;
   }
-  const NOTE_NAMES = { water: 'Полил', feed: 'Подкормил', pinch: 'Прищипнул', cut: 'Срезал', buds: 'Убрал бутоны', flush: 'Промыл грунт', measure: 'Замер', photo: 'Фото', note: 'Заметка' };
+  const NOTE_NAMES = { water: 'Полил', feed: 'Подкормил', pinch: 'Прищипнул', cut: 'Срезал', buds: 'Убрал бутоны', flush: 'Промыл грунт', sol: 'Проверил раствор', change: 'Сменил раствор', measure: 'Замер', photo: 'Фото', note: 'Заметка' };
   // what goes on inside the bush now, and what it is like
   function insideHtml(p, day) {
     const st = plantStage(p, day), x = B.GARDEN.inside[st.pic];
@@ -370,7 +370,7 @@
       const t = e.target.closest('[data-garden-add], [data-plant-open], .g-done, .g-note, [data-garden-export], [data-garden-import], [data-garden-share], [data-garden-ics], [data-photo-add], [data-photo-open], [data-g-edit], [data-g-del], [data-g-cancel], [data-log-del], [data-g-start], [data-g-place]');
       if (!t) return;
       if (t.matches('[data-garden-add]')) {
-        openGarden({ form: true, draft: { start: t.dataset.gardenAdd || 'seed', variety: t.dataset.variety || '', place: 'home', name: '' } });
+        openGarden({ form: true, draft: { start: t.dataset.gardenAdd || 'seed', variety: t.dataset.variety || '', place: B.GARDEN.places.some(x => x.id === t.dataset.place) ? t.dataset.place : 'home', name: '' } });
       } else if (t.matches('[data-plant-open]')) {
         openGarden({ id: t.dataset.plantOpen });
       } else if (t.matches('.g-done[data-exp]')) {
@@ -441,7 +441,7 @@
         const group = t.parentElement;
         $$('button', group).forEach(b => b.setAttribute('aria-pressed', String(b === t)));
         if (t.dataset.gStart) $('#g-date-l').textContent = B.GARDEN.starts.find(x => x.id === t.dataset.gStart).date;
-        if (t.dataset.gPlace) $('#g-preset-f').hidden = t.dataset.gPlace === 'home';
+        if (t.dataset.gPlace) $('#g-preset-f').hidden = B.GARDEN.indoor.includes(t.dataset.gPlace);
       }
     });
     document.addEventListener('change', e => {

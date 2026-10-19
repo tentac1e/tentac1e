@@ -1,0 +1,4 @@
+/* captions inside the hydroponics schemes: a halo of the paper keeps them readable over water and walls */
+.hs-lbl { font: 600 11px/1 var(--font-mono); fill: var(--ink-2); letter-spacing: .02em; paint-order: stroke; stroke: var(--ill-bg); stroke-width: 3.5px; stroke-linejoin: round; }
+.hs-chart .lab-svg { display: block; border-radius: 14px; }
+.lab-svg .band.is-low { fill: var(--danger-soft); opacity: .75; }

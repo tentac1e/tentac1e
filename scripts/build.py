@@ -46,6 +46,7 @@ PAGES = [
     ('posadka', 'posadka.html'),
     ('uhod', 'uhod.html'),
     ('udobreniya', 'udobreniya.html'),
+    ('gidro', 'gidro.html'),
     ('formirovka', 'formirovka.html'),
     ('vkus', 'vkus.html'),
     ('problemy', 'problemy.html'),
@@ -55,7 +56,7 @@ PAGES = [
 FILE = dict(PAGES)
 # addresses on the hosting: ocimum.ru/урожай. Files stay Latin (urozhay.html) — safe for any file manager
 SLUG = {'glavnaya': '', 'sorta': 'сорта', 'posadka': 'посадка', 'uhod': 'уход', 'udobreniya': 'удобрения',
-        'formirovka': 'прищипывание', 'vkus': 'вкус', 'problemy': 'проблемы', 'spravka': 'справка', 'moy': 'мой-базилик'}
+        'gidro': 'гидропоника', 'formirovka': 'прищипывание', 'vkus': 'вкус', 'problemy': 'проблемы', 'spravka': 'справка', 'moy': 'мой-базилик'}
 # chapters merged into others (11 became 8): the old page stays at its address and only sends the reader on — each
 # of its tabs and anchors to where it lives now (moved_html). Old links, bookmarks and «Продолжить» keep working.
 # to: where the chapter itself now leads; tabs: its old tab ids with their old short anchors → the new tab ids
@@ -67,6 +68,9 @@ MOVED = {
     'razmnozhenie': {'file': 'razmnozhenie.html', 'slug': 'размножение', 'title': 'Размножение', 'to': 'posadka-cherenki',
                      'tabs': {('razmnozhenie-cherenki', 'черенки'): 'posadka-cherenki', ('razmnozhenie-semena', 'семена'): 'sorta-semena'}},
 }
+# tabs that moved to another chapter while their own chapter stays: their old long id and old short anchor on the old
+# page → the new tab id. Links, the old address (/удобрения#гидропоника), bookmarks and «Продолжить» lead there
+MOVED_TABS = {('udobreniya', 'udobreniya-gidro', 'гидропоника'): 'gidro-rastvor'}
 # the tabs that moved and the pages they came from: the old page's other anchors (a deep dive, a recipe) are found among them
 MOVED_FROM = {'posadka-sroki': 'kalendar', 'formirovka-sbor': 'urozhay', 'vkus-hranenie': 'urozhay', 'vkus-recepty': 'urozhay',
               'posadka-cherenki': 'razmnozhenie', 'sorta-semena': 'razmnozhenie'}
@@ -82,7 +86,8 @@ TAB = {
     'posadka-cherenki': 'черенки',
     'uhod-svet': 'свет', 'uhod-poliv': 'полив', 'uhod-teplo': 'тепло', 'uhod-pochva': 'почва', 'uhod-sezony': 'сезоны',
     'udobreniya-osnovy': 'основы', 'udobreniya-elementy': 'элементы', 'udobreniya-stadii': 'стадии', 'udobreniya-plan': 'план',
-    'udobreniya-sredstva': 'средства', 'udobreniya-kalkulyator': 'калькулятор', 'udobreniya-gidro': 'гидропоника', 'udobreniya-mify': 'мифы',
+    'udobreniya-sredstva': 'средства', 'udobreniya-kalkulyator': 'калькулятор', 'udobreniya-mify': 'мифы',
+    'gidro-osnovy': 'основы', 'gidro-sborka': 'сборка', 'gidro-rastvor': 'раствор', 'gidro-proverki': 'проверки', 'gidro-sravnenie': 'сравнение',
     'formirovka-osnovy': 'основы', 'formirovka-trenazher': 'тренажер', 'formirovka-sbor': 'сбор', 'formirovka-cvetenie': 'цветение',
     'vkus-aromat': 'аромат', 'vkus-molekuly': 'молекулы', 'vkus-himotipy': 'химотипы', 'vkus-kuhnya': 'кухня', 'vkus-sochetaniya': 'сочетания',
     'vkus-hranenie': 'хранение', 'vkus-recepty': 'рецепты',
@@ -190,8 +195,8 @@ PRELOAD_FONTS = ['manrope-normal-cyrillic.woff2', 'manrope-normal-latin.woff2',
 
 SITE_TITLE = 'Гид по базилику'
 APP_SHORT = 'Базилик'  # the name under the icon on a phone's home screen
-SITE_DESC = ('Подробный гид по выращиванию базилика в 8 главах: сорта, посадка и черенки, уход, удобрения по стадиям роста, '
-             'прищипка и сбор, химия вкуса и кухня, болезни. С калькуляторами, научными разворотами '
+SITE_DESC = ('Подробный гид по выращиванию базилика в 9 главах: сорта, посадка и черенки, уход, удобрения по стадиям роста, '
+             'гидропоника своими руками, прищипка и сбор, химия вкуса и кухня, болезни. С калькуляторами, научными разворотами '
              'и интерактивными моделями.')
 
 # search: the same rules the page used when it indexed itself
@@ -1180,6 +1185,11 @@ def main():
             owner[old], alias[old] = owner[m['to']], alias[m['to']]
             for (long_id, _), new in m['tabs'].items():
                 owner[long_id], alias[long_id] = owner[new], alias[new]
+        # a tab moved out of a chapter that stays (MOVED_TABS): its long id and its old short anchor lead to the new tab
+        for (_, long_id, short), new in MOVED_TABS.items():
+            assert long_id not in owner and short not in owner, (long_id, short)
+            owner[long_id] = owner[short] = owner[new]
+            alias[long_id] = alias[short] = alias[new]
 
     def href_for(target, here):
         if single:
@@ -1215,9 +1225,12 @@ def main():
         'alias': alias,
         # a reading place or «Продолжить» saved in a merged chapter: its tab (long id or old short anchor) → the new
         # chapter and tab (22-reading-pos.js moves them on)
-        'moved': {old: {k: [owner[new], alias.get(new, new)] for k, new in
-                        [('', m['to'])] + [(x, new) for (long_id, short), new in m['tabs'].items() for x in (long_id, short)]}
-                  for old, m in MOVED.items()} if not single else {},
+        'moved': {**{old: {k: [owner[new], alias.get(new, new)] for k, new in
+                           [('', m['to'])] + [(x, new) for (long_id, short), new in m['tabs'].items() for x in (long_id, short)]}
+                     for old, m in MOVED.items()},
+                  # a tab moved out of a chapter that stays: only its own place moves (no '' — the rest stays)
+                  **{view: {x: [owner[new], alias.get(new, new)] for (v, long_id, short), new in MOVED_TABS.items() if v == view
+                            for x in (long_id, short)} for view in {v for v, _, _ in MOVED_TABS}}} if not single else {},
     }
     # the one-file book carries no map or index of its own: the files in assets/ stay those of the site
     if not single:

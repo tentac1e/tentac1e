@@ -81,8 +81,8 @@ function landedAt(page) {
   });
 }
 
-const FILES = ['index.html', 'sorta.html', 'posadka.html', 'uhod.html', 'udobreniya.html', 'formirovka.html', 'vkus.html', 'problemy.html', 'spravka.html', 'moy.html'];
-const SLUGS = { glavnaya: '', sorta: 'сорта', posadka: 'посадка', uhod: 'уход', udobreniya: 'удобрения', formirovka: 'прищипывание', vkus: 'вкус', problemy: 'проблемы', spravka: 'справка', moy: 'мой-базилик' };
+const FILES = ['index.html', 'sorta.html', 'posadka.html', 'uhod.html', 'udobreniya.html', 'gidro.html', 'formirovka.html', 'vkus.html', 'problemy.html', 'spravka.html', 'moy.html'];
+const SLUGS = { glavnaya: '', sorta: 'сорта', posadka: 'посадка', uhod: 'уход', udobreniya: 'удобрения', gidro: 'гидропоника', formirovka: 'прищипывание', vkus: 'вкус', problemy: 'проблемы', spravka: 'справка', moy: 'мой-базилик' };
 // the chapters merged into others (MOVED in scripts/build.py): their pages only send the reader on
 const MOVED = { kalendar: 'календарь', urozhay: 'урожай', razmnozhenie: 'размножение' };
 const fileUrl = f => 'file://' + path.join(ROOT, f);

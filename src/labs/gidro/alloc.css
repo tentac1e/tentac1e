@@ -1,0 +1,10 @@
+/* the share of growth that goes to the leaves and to the roots */
+.al-split { display: grid; gap: 10px; margin-top: 14px; }
+.al-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 92px; gap: 12px; align-items: center; }
+.al-name { font-weight: 600; font-size: .9rem; }
+.al-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--surface-2); }
+.al-bar i { display: block; width: var(--w); transition: width .4s var(--ease-float); }
+.al-leaf.s1 { background: var(--ser-1); } .al-leaf.s2 { background: var(--ser-2); }
+.al-root { background: var(--root); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.al-val { font: 500 .78rem/1.2 var(--font-mono); color: var(--ink-3); text-align: right; }
+@media (max-width: 460px) { .al-row { grid-template-columns: 86px minmax(0, 1fr) 80px; gap: 8px; } }

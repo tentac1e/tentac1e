@@ -12,8 +12,19 @@
     places: [
       { id: 'home', name: 'Дома, на окне' },
       { id: 'balcony', name: 'Балкон, лоджия' },
-      { id: 'garden', name: 'Грядка, теплица' }
+      { id: 'garden', name: 'Грядка, теплица' },
+      { id: 'hydro', name: 'Гидропоника' }
     ],
+    // indoors: no frosts and no weather for the bush
+    indoor: ['home', 'hydro'],
+    // a bush in a solution: its own words for the steps that are about soil, and no feeding by the plan (null) —
+    // the solution feeds it (repeat.sol, repeat.change)
+    hydro: {
+      feed1: null,
+      split: { title: 'Разделите и отмойте корни', text: 'Разделите ком на 3–5 частей, отмойте корни от торфа тёплой водой и посадите каждую часть в сетчатый стаканчик с керамзитом. Надёжнее — нарезать с куста черенков.', link: 'gidro-sborka' },
+      plant: { title: 'Посадите в стаканчик', text: 'Отмойте корни от грунта, поставьте рассаду в сетчатый стаканчик и засыпьте керамзитом. Первые дни раствор — у самого дна стаканчика.', link: 'gidro-sborka' },
+      pot: { title: 'Корни 2–3 см — в стаканчик', text: 'Поставьте черенок в сетчатый стаканчик с керамзитом, корнями вниз сквозь сетку. Первую неделю — раствор послабее, EC 0,6–0,8.', link: 'gidro-sborka' }
+    },
     // one-time steps by how the bush began
     steps: {
       seed: [
@@ -58,10 +69,12 @@
       cut: { after: 'harvest1', every: 10, title: 'Срежьте верхушки', text: 'Над парой листьев, не больше трети куста. Чем чаще срезаете, тем гуще куст.', link: 'formirovka-sbor' },
       buds: { months: [5, 6, 7, 8], age: 45, every: 7, title: 'Проверьте бутоны', text: 'Цветонос забирает силы и аромат: выщипните его вместе с парой листьев под ним.', link: 'formirovka-cvetenie' },
       flush: { age: 60, every: 30, places: ['home', 'balcony'], title: 'Промывка грунта', text: 'Пролейте горшок чистой водой в объёме 2–3 горшков — лишние соли удобрений уйдут. Через день — сульфат магния 1 г/л.', link: 'udobreniya-plan' },
+      sol: { age: 7, every: 3, places: ['hydro'], title: 'Проверьте раствор', text: 'Уровень, EC, pH и температуру раствора. EC растёт — долейте воды, падает — раствора половинной крепости; pH выше 6,5 — опустите до 5,8–6,2.', link: 'gidro-proverki' },
+      change: { age: 21, every: 18, places: ['hydro'], title: 'Смените раствор', text: 'Новый раствор целиком, ёмкость и камень — помыть. В банке Кратки раствор меняют реже: раз в 6–8 недель.', link: 'gidro-rastvor' },
       water: { every: 3, starts: ['cutting'], until: 'pot', title: 'Смените воду в стакане', text: 'Свежая вода комнатной температуры раз в 2–3 дня, иначе стебель загнивает.', link: 'posadka-cherenki' }
     },
     // once a winter for a bush at home: the window gives too little light from October to March
-    light: { months: [9, 10, 11, 0, 1, 2], places: ['home', 'balcony'], title: 'Включите досветку', text: 'С октября по март подоконнику не хватает света: лампа 14–16 часов в день, 20–30 см над верхушками.', link: 'uhod-svet' },
+    light: { months: [9, 10, 11, 0, 1, 2], places: ['home', 'balcony', 'hydro'], title: 'Включите досветку', text: 'С октября по март подоконнику не хватает света: лампа 14–16 часов в день, 20–30 см над верхушками.', link: 'uhod-svet' },
     // how the bush looks at its age: the picture and the word on its card
     stages: {
       seed: [[8, 'seed', 'прорастание'], [35, 'seedling', 'рассада'], [52, 'growth', 'растёт'], [Infinity, 'harvest', 'урожай']],

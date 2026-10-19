@@ -17,11 +17,13 @@
           <h3>${p.name}</h3>
           <p class="lead">${nb(p.lead)}</p>
           <dl class="params">${p.params.map(([k, v]) => `<div><dt>${k}</dt><dd>${nb(v)}</dd></div>`).join('')}</dl>
+          ${p.more ? `<p class="place-more"><a href="#${p.more[0]}">${icon('arrow-r')}${nb(p.more[1])}</a></p>` : ''}
         </div>
         <div class="place-side">
           <div><h4>${icon('check')}Советы</h4><ul class="ticks">${p.tips.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
           <div><h4>${icon('alert')}Подводные камни</h4><ul class="ticks is-warn">${p.risks.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
         </div>`;
+      fixLinks(panel);
       paintIll(panel, !!now);
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => render(i, true)));

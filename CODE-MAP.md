@@ -12,7 +12,7 @@
 - `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 76, `jump` 103, `rowTop` 111, `scrollAfter` 118, `route` 160, `navigate` 193, `initRouter` 201, `initPagers` 224, `initScrollChrome` 267
 - `src/js/app/03-peek.js`: `decodeSafe` 10, `placeOf` 15, `placeUrl` 27, `frameSrc` 28, `peekable` 31, `peekShow` 50, `peekLoad` 64, `resetFrame` 71, `openPeek` 80, `goToPlace` 96, `peekPop` 112, `onPeekClosed` 121, `sendTheme` 131, `onPeekMessage` 135, `initPeek` 156, `toParent` 209, `markPeek` 212, `initPeekFrame` 242
 - `src/js/app/03-sheets.js`: `openSheet` 8, `closeSheet` 30, `dragSheet` 57, `tocFold` 127, `tocPane` 132, `tocOpen` 137, `tocButton` 162, `initToc` 170, `initSheets` 193
-- `src/js/app/04-search-words.js`: `norm` 4, `isWordChar` 6, `stemRu` 10, `keysOf` 48, `fromLayout` 63, `latinTyped` 64, `sameKey` 91, `altsOf` 93, `editDistance` 104, `nearestWord` 124
+- `src/js/app/04-search-words.js`: `norm` 4, `isWordChar` 6, `stemRu` 10, `keysOf` 48, `fromLayout` 63, `latinTyped` 64, `sameKey` 94, `altsOf` 96, `editDistance` 107, `nearestWord` 127
 - `src/js/app/04-search.js`: `textOf` 4, `sectionOf` 19, `ownText` 30, `indexPage` 40, `sentences` 83, `buildSearchIndex` 85, `entryUrl` 114, `loadSearch` 120, `parseQuery` 140, `scanKey` 149, `scoreEntry` 172, `matchAll` 203, `vocabulary` 213, `runSearch` 223, `highlight` 259, `snippet` 273, `markFound` 286, `flashFound` 290, `fitSearchPanel` 310, `initSearch` 323
 - `src/js/app/05-scene.js`: `initScene` 4, `initHoverLight` 25, `initOffscreenPause` 64, `initLeafField` 70
 - `src/js/app/06-mini-plants.js`: `miniPlant` 4
@@ -36,9 +36,9 @@
 - `src/js/app/22-garden-photos.js`: `photoOpen` 7, `photoReq` 20, `photoPut` 25, `photoGet` 26, `photoDel` 27, `photoIds` 28, `photoShrink` 31, `fillPhotos` 47, `forgetPhoto` 59, `showPhoto` 65, `photosOut` 85, `photosIn` 96
 - `src/js/app/22-garden-view.js`: `ago` 4, `taskWhen` 7, `plantPic` 15, `lastPhoto` 17, `plantMeta` 18, `taskHtml` 24, `notesHtml` 31, `shared` 33, `weekHtml` 34, `gardenCard` 43, `renderGardenBox` 53, `gardenDue` 81, `renderGardenHome` 87, `varietyOptions` 98, `renderGardenForm` 104, `insideHtml` 120, `growthData` 126, `niceTicks` 138, `axisTicks` 146, `growthCharts` 153, `renderGardenPlant` 174, `renderGardenSheet` 214, `openGarden` 234, `gardenFile` 246, `exportGarden` 252, `canShareFile` 263, `shareGarden` 264, `importGarden` 269, `gardenExtra` 298, `initGarden` 308
 - `src/js/app/22-garden-weather.js`: `round2` 9, `wxSvp` 12, `wxPlace` 13, `wxCached` 16, `pad2` 23, `wxParse` 25, `wxRefresh` 42, `wxSearch` 64, `wxSetPlace` 72, `wxHere` 82, `fmtT` 90, `fillText` 91, `wxWhen` 93, `wxDays` 94, `wxTasks` 97, `wxAdvice` 118, `wxAge` 135, `wxStrip` 143
-- `src/js/app/22-garden.js`: `gardenLoad` 7, `gardenSave` 11, `gardenVariety` 15, `weekOf` 17, `later` 18, `daysWord` 19, `plantTasks` 25, `plantWeek` 109, `plantStage` 118, `plantNote` 124, `plantDone` 128, `lastNote` 132
+- `src/js/app/22-garden.js`: `gardenLoad` 7, `gardenSave` 11, `gardenVariety` 15, `weekOf` 17, `later` 18, `daysWord` 19, `plantTasks` 25, `plantWeek` 115, `plantStage` 124, `plantNote` 130, `plantDone` 134, `lastNote` 138
 - `src/js/app/22-install.js`: `initInstall` 6
-- `src/js/app/22-reading-pos.js`: `readPos` 32, `absTop` 37, `labelOf` 38, `currentAnchor` 46, `headingBefore` 58, `ownWords` 70, `readBlocks` 71, `normText` 78, `sentenceStart` 81, `sentenceEnd` 87, `pointIn` 93, `caretAt` 103, `coverTop` 109, `spotAt` 118, `spotOf` 149, `findSpot` 174, `firstLetter` 188, `spotTop` 195, `markSpot` 211, `holdTop` 261, `bookmarkHere` 281, `savePos` 296, `resumeTo` 303, `saveDetour` 357, `readDetour` 360, `dropDetour` 366, `wayBack` 369, `offerBack` 389, `offerReturn` 394, `offerResume` 399, `initReadingPos` 424, `initLinks` 467, `initPageAction` 476
+- `src/js/app/22-reading-pos.js`: `readPos` 31, `absTop` 36, `labelOf` 37, `currentAnchor` 45, `headingBefore` 57, `ownWords` 69, `readBlocks` 70, `normText` 77, `sentenceStart` 80, `sentenceEnd` 86, `pointIn` 92, `caretAt` 102, `coverTop` 108, `spotAt` 117, `spotOf` 148, `findSpot` 173, `firstLetter` 187, `spotTop` 194, `markSpot` 210, `holdTop` 260, `bookmarkHere` 280, `savePos` 295, `resumeTo` 302, `saveDetour` 356, `readDetour` 359, `dropDetour` 365, `wayBack` 368, `offerBack` 388, `offerReturn` 393, `offerResume` 398, `initReadingPos` 423, `initLinks` 466, `initPageAction` 475
 - `src/js/app/23-boot.js`: `boot` 4
 
 Общие помощники app.js — кто зовёт:
@@ -55,6 +55,7 @@
 - `chapterById` (00-core.js:57) — 5: 02-router, 03-peek, 03-sheets …
 - `paintIll` (00-core.js:60) — 4: 08-varieties, 09-places, 13-nutrients-elements …
 - `aliasOf` (00-core.js:77) — 3: 02-router, 03-peek, 04-search
+- `fixLinks` (00-core.js:88) — 3: 09-places, 22-garden-view, 22-reading-pos
 - `smooth` (00-core.js:98) — 6: 02-router, 08-varieties, 13-nutrients-elements …
 - `toast` (00-core.js:101) — 4: 22-garden-ics, 22-garden-view, 22-install …
 - `openSheet` (03-sheets.js:8) — 3: 03-peek, 08-varieties, 22-garden-view
@@ -98,6 +99,7 @@
 - `src/js/haptics.js`: `iosTap` 20, `play` 34, `watchSnap` 69, `initSnaps` 82, `initSwitch` 94, `set` 103, `dragTicker` 106
 - `src/labs/_frame.js`: `r1` 8, `pct` 9, `set` 12, `doyToday` 13, `doyLabel` 14, `citiesChips` 15
 - `src/labs/formirovka/_shared.js`: `pinchP` 5
+- `src/labs/gidro/_shared.js`: `hjar` 8, `hcup` 36, `hsprout` 47, `pickHtml` 122, `fv` 124
 - `src/labs/moy/_shared.js`: `EXP_DEF` 17, `two` 18, `localISO` 19, `fromLocal` 20, `whenText` 21, `sinceText` 23, `nfmt` 30, `expRid` 31, `expX` 33, `expVal` 35, `expSeries` 38, `expCross` 40, `expPlot` 52, `expTimeTicks` 63, `expFx` 69, `experiment` 71
 - `src/labs/posadka/_shared.js`: `young` 7, `placeP` 110, `basilBush` 111, `tomato` 112, `cutting` 148
 - `src/labs/problemy/_shared.js`: `bg` 7, `ground` 8, `sun` 9, `drop` 10, `gnat` 11, `Sc` 12, `downyZoom` 42, `greyZoom` 70, `fusZoom` 86, `rootsZoom` 97, `dampZoom` 113, `bactZoom` 124, `caption` 150, `aphidBig` 158, `miteBig` 164, `whiteflyBig` 172, `thripsBig` 178, `slugBig` 188, `gnatBig` 197
@@ -122,11 +124,11 @@
 - `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.g-link`, `.table-*`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
 - `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
 - `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
-- `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`, `.ar-coty`, `.ar-seed`
+- `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-sol-*`, `.ar-root-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`
 - `src/css/style/08-home.css`: `.facts`, `.hero-*`, `.toc-*`, `.home-*`, `.short-*`, `.journey`, `.passport-*`, `.q-card`, `.season-*`, `.rule-*`, `.continue`, `.ico` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
 - `src/css/style/09-chapter-chrome.css`: `.ch-hero-*`, `.subnav-*`, `.pager`, `.blob`, `.art-*`, `.is-stuck`, `.pg-art`, `.eyebrow`, `.lead`, `.next` · анимации: `morph`, `morph-fade`
 - `src/css/style/10-varieties.css`: `.quiz-*`, `.v-leaf`, `.vtype`, `.vt-panel-*`, `.meter`, `.vt-specs`, `.vt-sorts`, `.vd-head`, `.qr`, `.versus`, `.filters`, `.vt-toggle` · анимации: `vt-in`
-- `src/css/style/11-places.css`: `.place-*`, `.params`, `.tab`, `.comp-*`, `.tabs`, `.ill`, `.lead`
+- `src/css/style/11-places.css`: `.place-*`, `.params`, `.tab`, `.comp-*`, `.tabs`, `.ill`, `.lead`, `.ico`
 - `src/css/style/12-steps.css`: `.step-*`, `.soil-*`, `.ill-*`, `.rescue-*`, `.steps`, `.mx-a`, `.mx-b`, `.mx-c`, `.mx-d`
 - `src/css/style/13-calendar.css`: `.cal-*`, `.legend`, `.timeline`, `.wheel-*`, `.tl-mark`, `.tl-dot`, `.tl-body`, `.w-center-*`, `.tl-date`, `.w-arc`, `.w-ev`, `.is-key`
 - `src/css/style/14-care.css`: `.dli-*`, `.scale-*`, `.mix-*`, `.water-*`, `.season`, `.soil-*`, `.big`, `.is-single`, `.z-dead`, `.z-cold`, `.z-slow`, `.z-ok`
@@ -141,6 +143,7 @@
 - `src/css/style/23-garden.css`: `.exp-*`, `.g-pic-*`, `.g-task-*`, `.g-step-*`, `.g-log-*`, `.ico`, `.g-install-*`, `.g-empty`, `.g-photo-*`, `.g-form-*`, `.garden-*`, `.g-link`
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
+- `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-time`, `.hy-role-*`, `.hy-need`, `.hy-trio`, `.hy-h`, `.hy-when`, `.sub`, `.card`, `.is-leaf`, `.is-soil`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
@@ -161,6 +164,13 @@
 
 ### стили моделей и глав
 - `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
+- `src/labs/gidro/_shared.css`: `.lab-*`, `.hs-lbl`, `.hs-chart`, `.band`, `.is-low`
+- `src/labs/gidro/alloc.css`: `.al-row`, `.al-bar`, `.al-leaf`, `.al-split`, `.al-name`, `.s1`, `.s2`, `.al-root`, `.al-val`
+- `src/labs/gidro/capil.css`: `.cap-*`
+- `src/labs/gidro/hcheck.css`: `.hc-item`, `.hc-st`, `.is-bad`, `.hc-list`, `.is-warn`, `.is-ok`, `.is-all`
+- `src/labs/gidro/hcost.css`: `.hcost-*`, `.s2`, `.s3`
+- `src/labs/gidro/hmix.css`: `.hm-part`, `.hm-row`, `.hm-out`, `.hm-parts`, `.hm-k`, `.hm-steps`, `.hm-warn`
+- `src/labs/gidro/kratky.css`: `.kr-grid`, `.kr-stage`, `.ill`
 - `src/labs/moy/_shared.css`: `.exp-*`, `.btn`, `.is-done`, `.is-now`, `.is-missed`, `.s1`, `.s2`, `.s3`, `.g-link`, `.ico`, `.is-model`, `.is-empty`
 - `src/labs/moy/weather.css`: `.wx-day`, `.wx-vpd`, `.lab-*`, `.band`, `.wx-find-*`, `.wx-place-*`, `.wx-n`, `.is-hot`, `.wx-pick`, `.wx-x`, `.wx-r`, `.wx-s`
 - `src/labs/posadka/germ.css`: `.germ-*`, `.is-stopped` · анимации: `g-gel`, `g-root`, `g-hypo`, `g-coty`
@@ -195,7 +205,7 @@
 
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
-- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:276`, `src/js/science/06-labs-loader.js:186`
+- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:275`, `src/js/science/06-labs-loader.js:186`
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:240`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:149`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
 - `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:205`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/vkus/pesto.js:67`
@@ -206,12 +216,12 @@
 
 Ключи `localStorage` (и база IndexedDB `basil-photos`) — в каких файлах встречаются, с первой строкой.
 
-- `basil-detour` — `src/js/app/22-reading-pos.js:356`
+- `basil-detour` — `src/js/app/22-reading-pos.js:355`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
 - `basil-haptics` — `src/js/haptics.js:7`
 - `basil-install` — `src/js/app/22-install.js:67`
-- `basil-last` — `src/js/app/02-router.js:92`, `src/js/app/22-reading-pos.js:15`
+- `basil-last` — `src/js/app/02-router.js:92`, `src/js/app/22-reading-pos.js:16`
 - `basil-photos` — `src/js/app/22-garden-photos.js:5`
 - `basil-pos` — `src/js/app/22-reading-pos.js:8`
 - `basil-recent` — `src/js/app/04-search.js:322`
@@ -228,22 +238,22 @@
 - `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
+- `max-width: 760px` — 6: 06-lab-tools.css, 12-steps.css, 26-hydro.css, flows.css, hcost.css, kratky.css
+- `max-width: 460px` — 5: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, oxide.css
 - `max-width: 700px` — 5: 04-deep-index.css, 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
 - `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
-- `max-width: 760px` — 3: 06-lab-tools.css, 12-steps.css, flows.css
 - `max-width: 820px` — 3: 14-care.css, 15-fertilizers.css ×2
 - `max-width: 899px` — 3: 03-header.css, 24-toc.css ×2
 - `min-width: 900px` — 3: 11-deep-footer.css, 24-toc.css, pairing.css
 - `max-width: 940px` — 3: 15-fertilizers.css, 18-problems.css ×2
 - `max-width: 1279px` — 3: 21-sheets.css ×3
-- `max-width: 460px` — 2: 10-varieties.css, oxide.css
 - `min-width: 941px` — 2: 18-problems.css ×2
+- `max-width: 1060px` — 2: 08-home.css, 26-hydro.css
 - `min-width: 1280px` — 2: 21-sheets.css ×2
 - `min-width: 481px` — 1: 12-steps.css
 - `min-width: 561px` — 1: 23-garden.css
 - `max-width: 800px` — 1: molecules.css
-- `max-width: 1060px` — 1: 08-home.css
 - `max-width: 1099px` — 1: 03-header.css
 - `min-width: 1100px` — 1: 24-toc.css
 
@@ -251,16 +261,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1278`
-- `{{description}}` в `src/layout.html` — `build.py:1278`
-- `{{pwa}}` в `src/layout.html` — `build.py:1294`
-- `{{fonts}}` в `src/layout.html` — `build.py:1293`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1275`
-- `{{content}}` в `src/layout.html` — `build.py:1273`
-- `{{toc}}` в `src/layout.html` — `build.py:1275`
-- `{{scripts}}` в `src/layout.html` — `build.py:1292`
-- `{{version}}` в `src/sw.js` — `build.py:1408`
-- `{{precache}}` в `src/sw.js` — `build.py:1408`
+- `{{title}}` в `src/layout.html` — `build.py:1291`
+- `{{description}}` в `src/layout.html` — `build.py:1291`
+- `{{pwa}}` в `src/layout.html` — `build.py:1307`
+- `{{fonts}}` в `src/layout.html` — `build.py:1306`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1288`
+- `{{content}}` в `src/layout.html` — `build.py:1286`
+- `{{toc}}` в `src/layout.html` — `build.py:1288`
+- `{{scripts}}` в `src/layout.html` — `build.py:1305`
+- `{{version}}` в `src/sw.js` — `build.py:1421`
+- `{{precache}}` в `src/sw.js` — `build.py:1421`
 
 ## Проверки
 

@@ -1,0 +1,41 @@
+/* ================= the Hydroponics chapter ================= */
+/* what the soil did and what takes its place: three cards in a row, one under another on a phone */
+.hy-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 760px) { .hy-trio { grid-template-columns: 1fr; } }
+.hy-role { display: grid; gap: 8px; align-content: start; }
+.hy-role h3, .hy-role p { margin: 0; }
+.hy-role p { color: var(--ink-2); }
+.hy-role-ico { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--leaf-soft); color: var(--basil-deep); }
+/* a heading that opens a part of a tab (the jar, the bucket) */
+.hy-h { margin: 0 0 14px; }
+.hy-h.sub { margin-top: clamp(32px, 4.5vw, 52px); }
+/* what to buy: the thing on the left, its price on the right */
+.hy-need { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+.hy-need li { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding-bottom: 6px; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+.hy-need li:last-child { border-bottom: 0; }
+.hy-need b { font: 600 .86rem/1.3 var(--font-mono); white-space: nowrap; color: var(--ink); }
+/* the routine: four cards from every day to every few weeks */
+.hy-routine { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1060px) { .hy-routine { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .hy-routine { grid-template-columns: 1fr; } }
+.hy-routine .card { display: grid; gap: 6px; align-content: start; }
+.hy-routine h3, .hy-routine p { margin: 0; }
+.hy-routine p:not(.hy-when) { color: var(--ink-2); font-size: .94rem; }
+.hy-when { font: 600 .7rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--basil-deep); }
+/* milestones of the history of hydroponics */
+.hy-time { list-style: none; margin: 0; padding: 0 0 0 14px; display: grid; gap: 10px; border-left: 2px solid var(--line-strong); }
+.hy-time li { display: grid; gap: 1px; position: relative; }
+.hy-time li::before { content: ""; position: absolute; left: -20px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--basil); }
+.hy-time b { font: 600 .9rem/1.2 var(--font-mono); color: var(--basil-deep); }
+.hy-time span { font-size: .86rem; line-height: 1.35; color: var(--ink-2); }
+/* where the water goes: two stacked bars */
+.hy-water { display: grid; gap: 6px; }
+.hy-water-h { margin: 4px 0 0; font-size: .8rem; font-weight: 600; color: var(--ink-2); }
+.hy-water-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--surface-2); }
+.hy-water-bar i { display: block; width: var(--w); }
+.hy-water .is-leaf { background: var(--leaf); }
+.hy-water .is-soil { background: var(--soil); }
+.hy-water .is-drain { background: var(--water); }
+.hy-water-key { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .78rem; color: var(--ink-3); }
+.hy-water-key li { display: flex; align-items: center; gap: 5px; }
+.hy-water-key i { width: 10px; height: 10px; border-radius: 3px; }

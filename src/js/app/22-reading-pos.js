@@ -7,22 +7,21 @@
   /* before it in sight, whatever the width of the screen now.                                                       */
   const POS_KEY = 'basil-pos';
   // a chapter merged into others (MOVED in scripts/build.py): its reading place and «Продолжить» move with its tabs.
+  // A tab moved out of a chapter that stays (MOVED_TABS) takes only its own place along: the chapter has no '' entry.
   // A place kept in the chapter it moves to stays, if it is newer
   (function moveMerged() {
     const M = PAGES && PAGES.moved;
     if (!M || PEEK) return;
     const dest = (old, panel) => M[old][panel || ''] || M[old][''];
     const last = store.get('basil-last', null);
-    if (last && M[last.view]) {
-      const [view, panel] = dest(last.view, last.panel);
-      store.set('basil-last', { view, panel, sub: '' });
-    }
+    const to = last && M[last.view] && dest(last.view, last.panel);
+    if (to) store.set('basil-last', { view: to[0], panel: to[1], sub: '' });
     const all = store.get(POS_KEY, {}) || {};
     let moved = false;
     for (const old in M) {
-      const p = all[old];
-      if (!p) continue;
-      const [view, panel] = dest(old, p.panel);
+      const p = all[old], d = p && dest(old, p.panel);
+      if (!d) continue;
+      const [view, panel] = d;
       if (!all[view] || (all[view].t || 0) < (p.t || 0)) all[view] = Object.assign({}, p, { panel });
       delete all[old];
       moved = true;

@@ -1020,7 +1020,10 @@
     { words: ['рассада', 'сеянцы', 'всходы', 'проростки'] },
     { words: ['кислый', 'кислотность', 'ph'] },
     { words: ['горшок', 'кашпо', 'контейнер', 'емкость'] },
-    { words: ['грунт', 'почва', 'субстрат'] }
+    { words: ['грунт', 'почва', 'субстрат'] },
+    { words: ['гидропоника', 'гидропонный', 'гидропонике', 'беспочвенный'] },
+    { words: ['аэратор', 'компрессор', 'аэрация', 'пузыри', 'распылитель'] },
+    { words: ['раствор', 'питательный', 'концентрат'] }
   ].map(g => Object.assign(g, { keys: [...new Set([].concat(...g.words.map(w => keysOf(norm(w)))))].filter(k => g.forms || k.length >= 4) }));
   const sameKey = (a, b) => a === b || (a.length >= 4 && b.startsWith(a)) || (b.length >= 4 && a.startsWith(b));
   // what a query word may be found as: its own keys (weight 1), its synonyms' keys (weight 0.7)
@@ -2016,11 +2019,13 @@
           <h3>${p.name}</h3>
           <p class="lead">${nb(p.lead)}</p>
           <dl class="params">${p.params.map(([k, v]) => `<div><dt>${k}</dt><dd>${nb(v)}</dd></div>`).join('')}</dl>
+          ${p.more ? `<p class="place-more"><a href="#${p.more[0]}">${icon('arrow-r')}${nb(p.more[1])}</a></p>` : ''}
         </div>
         <div class="place-side">
           <div><h4>${icon('check')}Советы</h4><ul class="ticks">${p.tips.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
           <div><h4>${icon('alert')}Подводные камни</h4><ul class="ticks is-warn">${p.risks.map(t => `<li>${nb(t)}</li>`).join('')}</ul></div>
         </div>`;
+      fixLinks(panel);
       paintIll(panel, !!now);
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => render(i, true)));
@@ -3416,12 +3421,12 @@
       <div class="field"><label for="g-variety">Сорт</label><select id="g-variety">${varietyOptions(p.variety)}</select></div>
       <div class="field"><span class="label" id="g-start-l">С чего начали</span>${seg('start', G.starts, p.start)}</div>
       <div class="field"><span class="label" id="g-place-l">Где растёт</span>${seg('place', G.places, p.place)}</div>
-      <div class="field" id="g-preset-f"${p.place === 'home' ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><small class="field-note" id="g-cities">Например, ${esc(B.PRESETS.find(x => x.id === (p.preset || 'temperate')).cities)}</small></div>
+      <div class="field" id="g-preset-f"${G.indoor.includes(p.place || 'home') ? ' hidden' : ''}><label for="g-preset">Климат — от него сроки высадки и осенних заморозков</label><select id="g-preset">${B.PRESETS.filter(x => x.lf).map(x => `<option value="${x.id}"${x.id === (p.preset || 'temperate') ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select><small class="field-note" id="g-cities">Например, ${esc(B.PRESETS.find(x => x.id === (p.preset || 'temperate')).cities)}</small></div>
       <div class="field"><label for="g-date" id="g-date-l">${startDef.date}</label><input type="date" id="g-date" value="${p.date || toISO(today())}" max="${toISO(addDays(today(), 60))}"></div>
       <div class="g-form-a"><button class="btn btn-primary btn-small" type="submit">${icon('check')}Сохранить</button><button class="btn btn-ghost btn-small" type="button" data-g-cancel>Отмена</button></div>
     </form>`;
   }
-  const NOTE_NAMES = { water: 'Полил', feed: 'Подкормил', pinch: 'Прищипнул', cut: 'Срезал', buds: 'Убрал бутоны', flush: 'Промыл грунт', measure: 'Замер', photo: 'Фото', note: 'Заметка' };
+  const NOTE_NAMES = { water: 'Полил', feed: 'Подкормил', pinch: 'Прищипнул', cut: 'Срезал', buds: 'Убрал бутоны', flush: 'Промыл грунт', sol: 'Проверил раствор', change: 'Сменил раствор', measure: 'Замер', photo: 'Фото', note: 'Заметка' };
   // what goes on inside the bush now, and what it is like
   function insideHtml(p, day) {
     const st = plantStage(p, day), x = B.GARDEN.inside[st.pic];
@@ -3676,7 +3681,7 @@
       const t = e.target.closest('[data-garden-add], [data-plant-open], .g-done, .g-note, [data-garden-export], [data-garden-import], [data-garden-share], [data-garden-ics], [data-photo-add], [data-photo-open], [data-g-edit], [data-g-del], [data-g-cancel], [data-log-del], [data-g-start], [data-g-place]');
       if (!t) return;
       if (t.matches('[data-garden-add]')) {
-        openGarden({ form: true, draft: { start: t.dataset.gardenAdd || 'seed', variety: t.dataset.variety || '', place: 'home', name: '' } });
+        openGarden({ form: true, draft: { start: t.dataset.gardenAdd || 'seed', variety: t.dataset.variety || '', place: B.GARDEN.places.some(x => x.id === t.dataset.place) ? t.dataset.place : 'home', name: '' } });
       } else if (t.matches('[data-plant-open]')) {
         openGarden({ id: t.dataset.plantOpen });
       } else if (t.matches('.g-done[data-exp]')) {
@@ -3747,7 +3752,7 @@
         const group = t.parentElement;
         $$('button', group).forEach(b => b.setAttribute('aria-pressed', String(b === t)));
         if (t.dataset.gStart) $('#g-date-l').textContent = B.GARDEN.starts.find(x => x.id === t.dataset.gStart).date;
-        if (t.dataset.gPlace) $('#g-preset-f').hidden = t.dataset.gPlace === 'home';
+        if (t.dataset.gPlace) $('#g-preset-f').hidden = B.GARDEN.indoor.includes(t.dataset.gPlace);
       }
     });
     document.addEventListener('change', e => {
@@ -3894,7 +3899,7 @@
   // tasks: the coldest night ahead (one task, on that night: what to do depends on how cold it gets) and the heat;
   // only for bushes outdoors, and a task done stays done
   function wxTasks(p, day) {
-    const place = p.place || 'home', c = place === 'home' ? null : wxCached();
+    const place = p.place || 'home', c = B.GARDEN.indoor.includes(place) ? null : wxCached();
     if (!c) return [];
     const W = B.WEATHER, days = wxDays(c, day), log = p.log || [], out = [];
     const done = key => log.some(e => e.task === key);
@@ -3921,7 +3926,7 @@
     const soon = days.filter(x => dayDiff(day, x.date) <= 1);
     const rain = place === 'garden' && soon.find(x => x.rain >= W.rain.mm);
     if (rain) out.push({ kind: 'rain', text: fillText(W.rain.text, { mm: `${fmtNum(rain.rain, 0)} мм`, when: wxWhen(rain.date, day) }) });
-    const dry = place !== 'home' && soon.find(x => x.vpd !== null && x.vpd >= W.dry.vpd);
+    const dry = !B.GARDEN.indoor.includes(place) && soon.find(x => x.vpd !== null && x.vpd >= W.dry.vpd);
     if (dry) out.push({ kind: 'dry', text: fillText(W.dry.text, { v: fmtNum(dry.vpd, 1), when: wxWhen(dry.date, day) }) });
     if (place !== 'garden') {
       let n = 0;
@@ -3941,7 +3946,7 @@
   // one line about the weather over the bushes: the place, tonight and today, or an invitation to choose a place
   function wxStrip(plants, page) {
     const w = wxPlace();
-    const outdoors = plants.some(p => p.place && p.place !== 'home');
+    const outdoors = plants.some(p => p.place && !B.GARDEN.indoor.includes(p.place));
     const where = '#moy-pogoda';
     if (!w) return outdoors ? `<p class="g-wx-strip">${icon('thermo')}<span>Укажите город — гид предупредит о холодных ночах и жаре для кустов на улице. <a href="${where}">Выбрать город</a></span></p>` : '';
     const c = wxCached(), day = today();
@@ -3979,7 +3984,7 @@
     const S = fromISO(p.date) || day;
     const added = fromISO(p.added) || S;
     const age = dayDiff(S, day);
-    const place = p.place || 'home';
+    const place = p.place || 'home', indoor = G.indoor.includes(place);
     const log = (p.log || []).map(e => Object.assign({ date: fromISO(e.d) }, e)).filter(e => e.date).sort((a, b) => a.date - b.date);
     const last = k => log.reduce((m, e) => (e.k === k ? e.date : m), null);
     const out = [], byKey = {};
@@ -4004,14 +4009,18 @@
 
     // outdoors the season counts from the frosts of the climate
     let lf = null, af = null;
-    if (place !== 'home') {
+    if (!indoor) {
       let fr = seasonFrosts(p.preset || 'temperate', S.getFullYear());
       if (S > fr.af) fr = seasonFrosts(p.preset || 'temperate', S.getFullYear() + 1);
       lf = fr.lf;
       af = fr.af;
     }
     const plantOut = place === 'garden' && (p.start === 'seed' || p.start === 'seedling');
-    (G.steps[p.start] || G.steps.seed).forEach(st => {
+    (G.steps[p.start] || G.steps.seed).forEach(st0 => {
+      // a bush in a solution: the steps about soil in its own words, the feeding plan none (the solution feeds it)
+      const alt = place === 'hydro' ? G.hydro[st0.key] : undefined;
+      if (alt === null) return;
+      const st = alt ? Object.assign({}, st0, alt) : st0;
       if (plantOut && st.key === 'plant') return; // a garden bush is planted out by the season
       let a = st.a, b = st.b;
       if (a === 'first') {
@@ -4045,11 +4054,13 @@
       if (closed(byKey.harvest1)) again('cut', R.cut, addDays(later(last('cut'), baseOf(byKey.harvest1)), R.cut.every));
       if (R.buds.months.includes(day.getMonth()) && age >= R.buds.age) { const b = last('buds'); again('buds', R.buds, b ? addDays(b, R.buds.every) : day); }
       if (R.flush.places.includes(place) && age >= R.flush.age) again('flush', R.flush, addDays(later(last('flush'), addDays(S, R.flush.age - R.flush.every)), R.flush.every));
+      // a solution is checked and changed instead
+      ['sol', 'change'].forEach(k => { const r = R[k]; if (r.places.includes(place)) again(k, r, addDays(later(last(k), addDays(S, r.age - r.every)), r.every)); });
     }
     if (p.start === 'cutting' && byKey.pot && !closed(byKey.pot)) again('water', R.water, addDays(later(last('water'), S), R.water.every));
     // the lamp: once a winter, at home (on the balcony once the bush has come in)
     const L = G.light;
-    if (L.months.includes(day.getMonth()) && L.places.includes(place) && (place === 'home' || (af && day >= addDays(af, -10)))) {
+    if (L.months.includes(day.getMonth()) && L.places.includes(place) && (indoor || (af && day >= addDays(af, -10)))) {
       const sy = day.getMonth() >= 9 ? day.getFullYear() : day.getFullYear() - 1;
       once(Object.assign({}, L, { key: 'light-' + sy }), later(new Date(sy, 9, 1), added), new Date(sy + 1, 2, 31));
     }
@@ -4187,22 +4198,21 @@
   /* before it in sight, whatever the width of the screen now.                                                       */
   const POS_KEY = 'basil-pos';
   // a chapter merged into others (MOVED in scripts/build.py): its reading place and «Продолжить» move with its tabs.
+  // A tab moved out of a chapter that stays (MOVED_TABS) takes only its own place along: the chapter has no '' entry.
   // A place kept in the chapter it moves to stays, if it is newer
   (function moveMerged() {
     const M = PAGES && PAGES.moved;
     if (!M || PEEK) return;
     const dest = (old, panel) => M[old][panel || ''] || M[old][''];
     const last = store.get('basil-last', null);
-    if (last && M[last.view]) {
-      const [view, panel] = dest(last.view, last.panel);
-      store.set('basil-last', { view, panel, sub: '' });
-    }
+    const to = last && M[last.view] && dest(last.view, last.panel);
+    if (to) store.set('basil-last', { view: to[0], panel: to[1], sub: '' });
     const all = store.get(POS_KEY, {}) || {};
     let moved = false;
     for (const old in M) {
-      const p = all[old];
-      if (!p) continue;
-      const [view, panel] = dest(old, p.panel);
+      const p = all[old], d = p && dest(old, p.panel);
+      if (!d) continue;
+      const [view, panel] = d;
       if (!all[view] || (all[view].t || 0) < (p.t || 0)) all[view] = Object.assign({}, p, { panel });
       delete all[old];
       moved = true;

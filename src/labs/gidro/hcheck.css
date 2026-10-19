@@ -1,0 +1,11 @@
+/* the check: what to do, worst first */
+.hc-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 8px; }
+.hc-item { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.hc-item b { display: block; font-size: .95rem; }
+.hc-item p { margin: 3px 0 0; font-size: .88rem; color: var(--ink-2); }
+.hc-st { justify-self: start; padding: 3px 9px; border-radius: 999px; font: 600 .7rem/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+.hc-item.is-bad { border-color: color-mix(in srgb, var(--danger) 45%, var(--line)); }
+.hc-item.is-bad .hc-st { background: var(--danger-soft); color: var(--danger); }
+.hc-item.is-warn .hc-st { background: var(--oil-soft); color: var(--ink); }
+.hc-item.is-ok .hc-st, .hc-item.is-all .hc-st { background: var(--leaf-soft); color: var(--basil-deep); }
+@media (max-width: 460px) { .hc-item { grid-template-columns: 1fr; gap: 6px; } }

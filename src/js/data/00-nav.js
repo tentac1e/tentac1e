@@ -4,10 +4,11 @@
     { id: 'posadka', num: 2, title: 'Посадка', art: 'art-posadka', desc: 'Где растить, сроки под ваш климат, посев и рассада, магазинный горшок, грунт и черенки.' },
     { id: 'uhod', num: 3, title: 'Уход', art: 'art-uhod', desc: 'Свет, полив, тепло, почва и уход по сезонам.' },
     { id: 'udobreniya', num: 4, title: 'Удобрения', art: 'art-udobreniya', desc: 'Элементы питания, подкормки по стадиям, план и калькуляторы.' },
-    { id: 'formirovka', num: 5, title: 'Прищипка и сбор', art: 'art-formirovka', desc: 'Как сделать из стебля густой куст и когда собирать урожай. С тренажёром.' },
-    { id: 'vkus', num: 6, title: 'Вкус и кухня', art: 'art-vkus', desc: 'Химия аромата, 3D-молекулы, физика кухни, сочетания, хранение и 17 рецептов.' },
-    { id: 'problemy', num: 7, title: 'Проблемы', art: 'art-problemy', desc: 'Диагностика по симптомам, болезни, вредители, профилактика.' },
-    { id: 'spravka', num: 8, title: 'Справка', art: 'art-spravka', desc: 'Частые вопросы, словарь терминов, чек-лист сезона и любопытные факты.' }
+    { id: 'gidro', num: 5, title: 'Гидропоника', art: 'art-gidro', desc: 'Базилик без земли: как работают системы, банка и ведро своими руками, раствор, проверки и сколько это стоит.' },
+    { id: 'formirovka', num: 6, title: 'Прищипка и сбор', art: 'art-formirovka', desc: 'Как сделать из стебля густой куст и когда собирать урожай. С тренажёром.' },
+    { id: 'vkus', num: 7, title: 'Вкус и кухня', art: 'art-vkus', desc: 'Химия аромата, 3D-молекулы, физика кухни, сочетания, хранение и 17 рецептов.' },
+    { id: 'problemy', num: 8, title: 'Проблемы', art: 'art-problemy', desc: 'Диагностика по симптомам, болезни, вредители, профилактика.' },
+    { id: 'spravka', num: 9, title: 'Справка', art: 'art-spravka', desc: 'Частые вопросы, словарь терминов, чек-лист сезона и любопытные факты.' }
   ];
 
   // group: what the reader wants to do — the contents and the home page show the tools by it (TOOL_GROUPS in
@@ -22,6 +23,10 @@
     { title: 'План подкормок', hash: 'udobreniya-plan', icon: 'list', group: 'plan', desc: 'Даты и дозы на весь сезон' },
     { title: 'Расшифровка NPK', hash: 'npk', icon: 'tag', group: 'calc', desc: 'Для чего подходит ваше удобрение' },
     { title: 'Калькулятор раствора', hash: 'udobreniya-kalkulyator', icon: 'jar', group: 'calc', desc: 'Граммы и ложки на объём воды' },
+    { title: 'Системы гидропоники', hash: 'gidro-osnovy', icon: 'drop', group: 'know', desc: 'Шесть систем в разрезе: где корни берут воздух', peek: 'hsys-tool' },
+    { title: 'Раствор для гидропоники', hash: 'gidro-rastvor', icon: 'flask', group: 'calc', desc: 'Миллилитры частей A и B под нужную EC', peek: 'hmix-tool' },
+    { title: 'Проверка раствора', hash: 'gidro-proverki', icon: 'check', group: 'plan', desc: 'EC, pH и температура — что делать сейчас', peek: 'hcheck-tool' },
+    { title: 'Гидропоника или горшок', hash: 'gidro-sravnenie', icon: 'tag', group: 'calc', desc: 'Старт, расходы и цена 100 г зелени', peek: 'hcost-tool' },
     { title: 'Тренажёр прищипывания', hash: 'formirovka-trenazher', icon: 'scissors', group: 'know', desc: 'Вырастите куст на 8 верхушек' },
     { title: 'Молекулы аромата', hash: 'vkus-molekuly', icon: 'hex', group: 'know', desc: '9 молекул в 3D и шкала летучести' },
     { title: 'Лаборатория сочетаний', hash: 'vkus-sochetaniya', icon: 'nose', group: 'know', desc: 'Общие молекулы базилика и продуктов' },

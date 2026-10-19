@@ -175,7 +175,7 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
              active: document.querySelector('.panel.is-active').id, tools: d.querySelector('.toc-tools').offsetParent !== null,
              expanded: mine.querySelector('.toc-tog').getAttribute('aria-expanded'), shut: [...d.querySelectorAll('.toc-item:not(.is-open) .toc-sub ul')].every(u => getComputedStyle(u).visibility === 'hidden') };
   });
-  ok(toc.n === 10 && toc.open.join() === 'udobreniya' && toc.page === 'page' && toc.expanded === 'true' && toc.shut && !toc.tools, `contents: ${toc.n} rows, open ${toc.open}, the others folded, chapters shown`);
+  ok(toc.n === 11 && toc.open.join() === 'udobreniya' && toc.page === 'page' && toc.expanded === 'true' && toc.shut && !toc.tools, `contents: ${toc.n} rows, open ${toc.open}, the others folded, chapters shown`);
   ok(toc.subs.join('|') === toc.tabs.join('|') && toc.cur === toc.active, `its sections are the chapter's tabs (${toc.subs.length}), «${toc.cur}» marked`);
   const bare = await page.evaluate(() => { const d = document.getElementById('sheet-toc'); return { digits: [...d.querySelectorAll('.toc-chapters .toc-row')].map(r => { const c = r.cloneNode(true); c.querySelectorAll('.garden-badge').forEach(x => x.remove()); return c.textContent.replace(/\s+/g, ' ').trim(); }).filter(x => /\d/.test(x)), btn: (document.querySelector('.toc-btn-p') || {}).textContent || '' }; });
   ok(!bare.digits.length && !/\d/.test(bare.btn), `the contents have no numbers: rows ${JSON.stringify(bare.digits)}, the header button «${bare.btn.trim()}»`);
@@ -187,7 +187,7 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   await page.tap('#sheet-toc [data-toc-pane="tools"]');
   await page.waitForTimeout(250);
   const tl = await page.evaluate(() => { const d = document.getElementById('sheet-toc'); return { ch: d.querySelector('.toc-chapters').offsetParent !== null, tools: [...d.querySelectorAll('.toc-tool')].map(a => ({ href: a.href, t: a.querySelector('b').textContent, where: a.querySelector('small').textContent })) }; });
-  ok(!tl.ch && tl.tools.length === 16 && tl.tools.every(t => t.where), `the tools: ${tl.tools.length}, each says where it leads`);
+  ok(!tl.ch && tl.tools.length === 20 && tl.tools.every(t => t.where), `the tools: ${tl.tools.length}, each says where it leads`);
   await page.tap('#sheet-toc [data-toc-pane="ch"]');
   await page.tap('#sheet-toc .toc-item[data-toc="udobreniya"] .toc-sub li:nth-child(4) a');
   await page.waitForTimeout(800);

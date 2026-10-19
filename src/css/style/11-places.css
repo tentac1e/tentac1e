@@ -42,3 +42,7 @@
 .comp-list b { font-family: var(--font-display); font-size: 1.22rem; }
 .comp-list span { font-size: .93rem; color: var(--ink-2); }
 
+/* a place that has a chapter of its own: the way there */
+.place-more { margin: 14px 0 0; }
+.place-more a { display: inline-flex; gap: 8px; align-items: flex-start; font-weight: 600; }
+.place-more .ico { flex: none; margin-top: 2px; }

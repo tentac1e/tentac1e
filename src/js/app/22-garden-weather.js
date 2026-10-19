@@ -95,7 +95,7 @@
   // tasks: the coldest night ahead (one task, on that night: what to do depends on how cold it gets) and the heat;
   // only for bushes outdoors, and a task done stays done
   function wxTasks(p, day) {
-    const place = p.place || 'home', c = place === 'home' ? null : wxCached();
+    const place = p.place || 'home', c = B.GARDEN.indoor.includes(place) ? null : wxCached();
     if (!c) return [];
     const W = B.WEATHER, days = wxDays(c, day), log = p.log || [], out = [];
     const done = key => log.some(e => e.task === key);
@@ -122,7 +122,7 @@
     const soon = days.filter(x => dayDiff(day, x.date) <= 1);
     const rain = place === 'garden' && soon.find(x => x.rain >= W.rain.mm);
     if (rain) out.push({ kind: 'rain', text: fillText(W.rain.text, { mm: `${fmtNum(rain.rain, 0)} мм`, when: wxWhen(rain.date, day) }) });
-    const dry = place !== 'home' && soon.find(x => x.vpd !== null && x.vpd >= W.dry.vpd);
+    const dry = !B.GARDEN.indoor.includes(place) && soon.find(x => x.vpd !== null && x.vpd >= W.dry.vpd);
     if (dry) out.push({ kind: 'dry', text: fillText(W.dry.text, { v: fmtNum(dry.vpd, 1), when: wxWhen(dry.date, day) }) });
     if (place !== 'garden') {
       let n = 0;
@@ -142,7 +142,7 @@
   // one line about the weather over the bushes: the place, tonight and today, or an invitation to choose a place
   function wxStrip(plants, page) {
     const w = wxPlace();
-    const outdoors = plants.some(p => p.place && p.place !== 'home');
+    const outdoors = plants.some(p => p.place && !B.GARDEN.indoor.includes(p.place));
     const where = '#moy-pogoda';
     if (!w) return outdoors ? `<p class="g-wx-strip">${icon('thermo')}<span>Укажите город — гид предупредит о холодных ночах и жаре для кустов на улице. <a href="${where}">Выбрать город</a></span></p>` : '';
     const c = wxCached(), day = today();

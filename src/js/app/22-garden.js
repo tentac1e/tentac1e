@@ -27,7 +27,7 @@
     const S = fromISO(p.date) || day;
     const added = fromISO(p.added) || S;
     const age = dayDiff(S, day);
-    const place = p.place || 'home';
+    const place = p.place || 'home', indoor = G.indoor.includes(place);
     const log = (p.log || []).map(e => Object.assign({ date: fromISO(e.d) }, e)).filter(e => e.date).sort((a, b) => a.date - b.date);
     const last = k => log.reduce((m, e) => (e.k === k ? e.date : m), null);
     const out = [], byKey = {};
@@ -52,14 +52,18 @@
 
     // outdoors the season counts from the frosts of the climate
     let lf = null, af = null;
-    if (place !== 'home') {
+    if (!indoor) {
       let fr = seasonFrosts(p.preset || 'temperate', S.getFullYear());
       if (S > fr.af) fr = seasonFrosts(p.preset || 'temperate', S.getFullYear() + 1);
       lf = fr.lf;
       af = fr.af;
     }
     const plantOut = place === 'garden' && (p.start === 'seed' || p.start === 'seedling');
-    (G.steps[p.start] || G.steps.seed).forEach(st => {
+    (G.steps[p.start] || G.steps.seed).forEach(st0 => {
+      // a bush in a solution: the steps about soil in its own words, the feeding plan none (the solution feeds it)
+      const alt = place === 'hydro' ? G.hydro[st0.key] : undefined;
+      if (alt === null) return;
+      const st = alt ? Object.assign({}, st0, alt) : st0;
       if (plantOut && st.key === 'plant') return; // a garden bush is planted out by the season
       let a = st.a, b = st.b;
       if (a === 'first') {
@@ -93,11 +97,13 @@
       if (closed(byKey.harvest1)) again('cut', R.cut, addDays(later(last('cut'), baseOf(byKey.harvest1)), R.cut.every));
       if (R.buds.months.includes(day.getMonth()) && age >= R.buds.age) { const b = last('buds'); again('buds', R.buds, b ? addDays(b, R.buds.every) : day); }
       if (R.flush.places.includes(place) && age >= R.flush.age) again('flush', R.flush, addDays(later(last('flush'), addDays(S, R.flush.age - R.flush.every)), R.flush.every));
+      // a solution is checked and changed instead
+      ['sol', 'change'].forEach(k => { const r = R[k]; if (r.places.includes(place)) again(k, r, addDays(later(last(k), addDays(S, r.age - r.every)), r.every)); });
     }
     if (p.start === 'cutting' && byKey.pot && !closed(byKey.pot)) again('water', R.water, addDays(later(last('water'), S), R.water.every));
     // the lamp: once a winter, at home (on the balcony once the bush has come in)
     const L = G.light;
-    if (L.months.includes(day.getMonth()) && L.places.includes(place) && (place === 'home' || (af && day >= addDays(af, -10)))) {
+    if (L.months.includes(day.getMonth()) && L.places.includes(place) && (indoor || (af && day >= addDays(af, -10)))) {
       const sy = day.getMonth() >= 9 ? day.getFullYear() : day.getFullYear() - 1;
       once(Object.assign({}, L, { key: 'light-' + sy }), later(new Date(sy, 9, 1), added), new Date(sy + 1, 2, 31));
     }

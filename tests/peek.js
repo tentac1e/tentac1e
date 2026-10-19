@@ -164,8 +164,8 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
         passport: q('#short-pasport dl > div'), facts: q('#short-cifry .facts li'), journey: q('#journey li'), rules: q('#rules .rule'),
         science: !!document.querySelector('#sh-fold > p') && !q('.depth-seg button') && !!document.getElementById('home-molecule'), wide: document.documentElement.scrollWidth > innerWidth };
     });
-    ok(r.h <= max && r.chapters === 8 && r.desc === 8 && r.subs > 30 && r.tools === 16 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
-      `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 16 tools, the passport, figures, path, rules and the science layer ${JSON.stringify(r)}`);
+    ok(r.h <= max && r.chapters === 9 && r.desc === 9 && r.subs > 30 && r.tools === 20 && r.passport === 5 && r.facts === 6 && r.journey === 6 && r.rules === 8 && r.science && !r.wide,
+      `home ${ctxOpt.viewport.width} px: ${r.h} px tall (≤ ${max}), every chapter with its sections, 20 tools, the passport, figures, path, rules and the science layer ${JSON.stringify(r)}`);
     // «Научный слой» in one column: its heading and a button; the text and the molecule open
     const sci = () => p.evaluate(() => ({ btn: getComputedStyle(document.querySelector('.sh-open')).display !== 'none', fold: getComputedStyle(document.getElementById('sh-fold')).display !== 'none', mol: getComputedStyle(document.getElementById('sh-mol')).display !== 'none', exp: document.querySelector('.sh-open').getAttribute('aria-expanded') }));
     const s0 = await sci();
@@ -192,7 +192,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
         const n = await p.evaluate(x => [...document.querySelectorAll('#tools-home .tool')].filter(a => a.offsetParent).map(a => a.closest('.tools-group').id), g);
         ok(n.length > 3 && n.every(id => id === 'tools-' + g), `the tools' switch → ${g}: ${n.length} of its tools, no other`);
       }
-    } else ok((await p.evaluate(() => [...document.querySelectorAll('#tools-home .tool')].filter(a => a.offsetParent).length)) === 16, 'a computer shows all 16 tools at once');
+    } else ok((await p.evaluate(() => [...document.querySelectorAll('#tools-home .tool')].filter(a => a.offsetParent).length)) === 20, 'a computer shows all 20 tools at once');
     // the search leads to a rule: its part opens
     await p.goto(fileUrl('index.html') + '#glavnaya-h5', { waitUntil: 'load' });
     await p.waitForTimeout(900);
@@ -218,13 +218,13 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
 
   // Справка's questions at the end of their tabs too, before «Глубже»: opened in place, the rest in the sheet
   const faq = {};
-  for (const file of ['posadka.html', 'uhod.html', 'formirovka.html', 'sorta.html', 'vkus.html']) {
+  for (const file of ['posadka.html', 'uhod.html', 'gidro.html', 'formirovka.html', 'sorta.html', 'vkus.html']) {
     await page.goto(fileUrl(file), { waitUntil: 'load' });
     await page.waitForTimeout(500);
     Object.assign(faq, await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.faq-here')].map(f => { const p = f.closest('[data-panel]'), z = p.querySelector('.deep-zone'); return [p.id, { n: f.querySelectorAll('details').length, before: !!z && !!(f.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING), ids: f.querySelectorAll('[id]').length }]; }))));
   }
   const counts = Object.values(faq);
-  ok(counts.length === 10 && counts.reduce((a, x) => a + x.n, 0) === 15 && counts.every(x => x.before && !x.ids), `15 questions in 10 tabs, each block before «Глубже», no ids of their own ${JSON.stringify(faq)}`);
+  ok(counts.length === 15 && counts.reduce((a, x) => a + x.n, 0) === 20 && counts.every(x => x.before && !x.ids), `20 questions in 15 tabs, each block before «Глубже», no ids of their own ${JSON.stringify(faq)}`);
   await page.goto(fileUrl('posadka.html') + '#' + encodeURIComponent('магазин'), { waitUntil: 'load' });
   await page.waitForTimeout(1000);
   await page.evaluate(() => document.querySelector('.panel.is-active .faq-here').scrollIntoView({ block: 'center', behavior: 'instant' }));

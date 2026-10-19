@@ -40,9 +40,17 @@
 - `src/pages/udobreniya/2-elementy.html` · #элементы — Что за что отвечает · 70 стр.<br>модели: `flows`; глубже: Ксилема и флоэма `#deep-mobilnost`
 - `src/pages/udobreniya/3-stadii.html` · #стадии — Питание по стадиям роста · 122 стр.<br>модели: `barrel`, `ncycle`; глубже: Закон минимума `#deep-libih`, Круговорот азота `#deep-azot`
 - `src/pages/udobreniya/4-sredstva.html` · #средства — Какие удобрения использовать · 85 стр.<br>модели: `oxide`; глубже: Оксиды на упаковке `#deep-oksidy`
-- `src/pages/udobreniya/5-kalkulyator.html` · #калькулятор — Калькулятор раствора · 86 стр.<br>модели: `ec`; глубже: EC и ppm `#deep-ec`
-- `src/pages/udobreniya/6-gidro.html` · #гидропоника — Гидропоника: EC и pH · 79 стр.<br>модели: `o2`; глубже: Кислород и хелаты `#deep-kislorod`
+- `src/pages/udobreniya/5-kalkulyator.html` · #калькулятор — Калькулятор раствора · 87 стр.<br>модели: `ec`; глубже: EC и ppm `#deep-ec`
 - `src/pages/udobreniya/_foot.html` · подвал главы · 3 стр.
+
+### Гидропоника — `/гидропоника` (`gidro.html`)
+- `src/pages/gidro/_head.html` · обложка, вкладки · 13 стр.
+- `src/pages/gidro/1-osnovy.html` · #основы — Как работает гидропоника · 185 стр.<br>модели: `hsys`, `o2box`, `alloc`; глубже: Дыхание корня `#deep-dyhanie-kornya`, Почему быстрее `#deep-bystree`, История `#deep-istoriya-gidroponiki`
+- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 187 стр.<br>модели: `kratky`, `capil`; глубже: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
+- `src/pages/gidro/3-rastvor.html` · #раствор — Раствор: EC, pH и кислород · 172 стр.<br>модели: `hmix`, `o2`, `drift`; глубже: Кислород и хелаты `#deep-kislorod`, Дрейф pH и EC `#deep-dreyf-ph`, Концентраты `#deep-osadok`
+- `src/pages/gidro/4-proverki.html` · #проверки — Проверки и неполадки · 158 стр.<br>модели: `hcheck`, `pyth`; глубже: Питиум `#deep-pitium`, Водоросли `#deep-vodorosli`, Приборы `#deep-pribory`
+- `src/pages/gidro/5-sravnenie.html` · #сравнение — Горшок или гидропоника · 132 стр.<br>модели: `hcost`; глубже: Вкус `#deep-vkus-gidro`, Вода `#deep-voda-gidro`
+- `src/pages/gidro/_foot.html` · подвал главы · 3 стр.
 
 ### Прищипка и сбор — `/прищипывание` (`formirovka.html`)
 - `src/pages/formirovka/_head.html` · обложка, вкладки · 14 стр.
@@ -72,7 +80,7 @@
 
 ### Справка — `/справка` (`spravka.html`)
 - `src/pages/spravka/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/spravka/1-voprosy.html` · #вопросы — Частые вопросы · 69 стр.<br>глубже: Базилик в цифрах `#deep-cifry`
+- `src/pages/spravka/1-voprosy.html` · #вопросы — Частые вопросы · 76 стр.<br>глубже: Базилик в цифрах `#deep-cifry`
 - `src/pages/spravka/2-slovar.html` · #словарь — Словарь · 5 стр.
 - `src/pages/spravka/3-chek-list.html` · #чек-лист — Чек-лист сезона · 11 стр.
 - `src/pages/spravka/4-lyubopytno.html` · #любопытно — Любопытно · 4 стр.
@@ -109,7 +117,17 @@
 | `ncycle` | Удобрения | Круговорот азота | `src/labs/udobreniya/ncycle.js` · `src/labs/udobreniya/ncycle.css` |
 | `oxide` | Удобрения | Пересчёт оксидов в элементы | `src/labs/udobreniya/oxide.js` · `src/labs/udobreniya/oxide.css` |
 | `ec` | Удобрения | EC, ppm и осмос | `src/labs/udobreniya/ec.js` · `src/labs/udobreniya/ec.css` |
-| `o2` | Удобрения | Кислород против дыхания корней | `src/labs/udobreniya/o2.js` |
+| `hsys` | Гидропоника | Шесть систем в разрезе | `src/labs/gidro/hsys.js` |
+| `o2box` | Гидропоника | Если выключить компрессор | `src/labs/gidro/o2box.js` |
+| `alloc` | Гидропоника | Корни, листья и свет | `src/labs/gidro/alloc.js` · `src/labs/gidro/alloc.css` |
+| `kratky` | Гидропоника | Хватит ли банки | `src/labs/gidro/kratky.js` · `src/labs/gidro/kratky.css` |
+| `capil` | Гидропоника | Докуда поднимется вода | `src/labs/gidro/capil.js` · `src/labs/gidro/capil.css` |
+| `hmix` | Гидропоника | Раствор для гидропоники | `src/labs/gidro/hmix.js` · `src/labs/gidro/hmix.css` |
+| `o2` | Гидропоника | Кислород против дыхания корней | `src/labs/gidro/o2.js` |
+| `drift` | Гидропоника | Куда уплывёт раствор за две недели | `src/labs/gidro/drift.js` |
+| `hcheck` | Гидропоника | Проверка за две минуты | `src/labs/gidro/hcheck.js` · `src/labs/gidro/hcheck.css` |
+| `pyth` | Гидропоника | Споры у корня | `src/labs/gidro/pyth.js` |
+| `hcost` | Гидропоника | Во что обойдётся и когда окупится | `src/labs/gidro/hcost.js` · `src/labs/gidro/hcost.css` |
 | `auxin` | Прищипка и сбор | Что происходит после среза | `src/labs/formirovka/auxin.js` · `src/labs/formirovka/auxin.css` |
 | `branch` | Прищипка и сбор | Куст после n прищипываний | `src/labs/formirovka/branch.js` |
 | `diurnal` | Прищипка и сбор | Летний день глазами листа | `src/labs/formirovka/diurnal.js` |
@@ -150,6 +168,7 @@
 Иллюстрации на страницах — элементы `data-ill="художник:вариант"`; художники регистрируются через `illustrate()` в `src/labs/<глава>/_shared.js` и рисуются, когда элемент подходит к экрану. Все рисунки главы на одном листе: `node tests/gallery.js <глава>`.
 
 - `src/labs/formirovka/_shared.js`: `pinch`
+- `src/labs/gidro/_shared.js`: `hyd`
 - `src/labs/posadka/_shared.js`: `sow`, `shop`, `place`, `cut`
 - `src/labs/problemy/_shared.js`: `sym`, `dis`, `pest`
 - `src/labs/sorta/_shared.js`: `sort`, `vtype`, `seed`
@@ -165,13 +184,13 @@
 - `src/js/app/02-router.js` (297 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-peek.js` (265 стр.): PEEK_SKIP, initPeek, initPeekFrame
 - `src/js/app/03-sheets.js` (212 стр.): initToc, initSheets
-- `src/js/app/04-search-words.js` (134 стр.): AS_IS, LAYOUT_EN, SYNONYMS
+- `src/js/app/04-search-words.js` (137 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
 - `src/js/app/05-scene.js` (161 стр.): initScene, initHoverLight, initOffscreenPause, initLeafField
 - `src/js/app/06-mini-plants.js` (32 стр.)
 - `src/js/app/07-home.js` (60 стр.): initHome
 - `src/js/app/08-varieties.js` (250 стр.): EASY, initVarieties, initQuiz
-- `src/js/app/09-places.js` (43 стр.): initPlaces
+- `src/js/app/09-places.js` (45 стр.): initPlaces
 - `src/js/app/10-soil.js` (26 стр.): initSoil
 - `src/js/app/11-calendar.js` (226 стр.): initCalendar
 - `src/js/app/12-light.js` (39 стр.): initDli
@@ -189,9 +208,9 @@
 - `src/js/app/22-garden-photos.js` (104 стр.): PHOTO_DB
 - `src/js/app/22-garden-view.js` (493 стр.): WEEKDAY, renderGardenBox, renderGardenHome, renderGardenForm, NOTE_NAMES, renderGardenPlant, renderGardenSheet, initGarden
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
-- `src/js/app/22-garden.js` (132 стр.): GARDEN_KEY
+- `src/js/app/22-garden.js` (138 стр.): GARDEN_KEY
 - `src/js/app/22-install.js` (96 стр.): initInstall
-- `src/js/app/22-reading-pos.js` (488 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/22-reading-pos.js` (487 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (24 стр.)
 
 **science.js**
@@ -215,20 +234,20 @@
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
 
 **data.js**
-- `src/js/data/00-nav.js` (58 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
+- `src/js/data/00-nav.js` (63 стр.): CHAPTERS, TOOLS, QUICK, MONTH_TIPS
 - `src/js/data/01-varieties.js` (146 стр.): VARIETIES, VARIETY_TYPES, QUIZ
 - `src/js/data/02-places.js` (71 стр.): PLACES, PRESETS, SOIL_RECIPES
 - `src/js/data/03-nutrients.js` (127 стр.): ELEMENTS, STAGES, DOSE, NPK_PRESETS
 - `src/js/data/04-problems.js` (112 стр.): P_LABEL, DIAG, DISEASES, PESTS, TREATMENTS
 - `src/js/data/05-checklist.js` (30 стр.): CHECKLIST
 - `src/js/data/06-recipes.js` (77 стр.): RECIPE_CATS, RECIPES
-- `src/js/data/07-glossary.js` (49 стр.): GLOSSARY
-- `src/js/data/08-garden.js` (87 стр.): GARDEN
+- `src/js/data/07-glossary.js` (59 стр.): GLOSSARY
+- `src/js/data/08-garden.js` (100 стр.): GARDEN
 - `src/js/data/09-weather.js` (35 стр.): WEATHER
 - `src/js/data/10-experiments.js` (50 стр.): EXPERIMENTS
 
 ## Стили (src/css/)
 
-**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`
+**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`
 **lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-index.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
 

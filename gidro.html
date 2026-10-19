@@ -1,0 +1,1321 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Гидропоника — Гид по базилику</title>
+<meta name="description" content="Базилик без земли: как работают системы, банка и ведро своими руками, раствор, проверки и сколько это стоит. Глава 5 гида по выращиванию базилика.">
+<meta name="theme-color" content="#2D6932">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30 C 16 22 16 16 16 10' stroke='%232D6932' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z' fill='%236AA83D' stroke='%231D4B22' stroke-width='1.6'/%3E%3C/svg%3E">
+<style>
+/* Шрифты сайта: файлы в src/fonts/, собирает scripts/fonts.py */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic-ext.woff2?v=ea9ad85a) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-cyrillic.woff2?v=afe89756) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin-ext.woff2?v=5b59be73) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500 600;font-display:swap;src:url(assets/fonts/caveat-normal-latin.woff2?v=8a01467a) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic-ext.woff2?v=ad99a4c1) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-cyrillic.woff2?v=4f12a1a0) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-vietnamese.woff2?v=e3000ed8) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin-ext.woff2?v=a3b94a5a) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(assets/fonts/cormorant-garamond-italic-latin.woff2?v=52ea38a7) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic-ext.woff2?v=c18dbd11) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-cyrillic.woff2?v=ac78c6c2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-vietnamese.woff2?v=8a92de9f) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin-ext.woff2?v=a9e49ee5) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 700;font-display:swap;src:url(assets/fonts/cormorant-garamond-normal-latin.woff2?v=74db058f) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic-ext.woff2?v=feae5721) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-cyrillic.woff2?v=9d8db2e8) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-greek.woff2?v=bcedb9e2) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-vietnamese.woff2?v=326a88b4) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin-ext.woff2?v=06ad3600) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/jetbrains-mono-normal-latin.woff2?v=4f27206c) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic-ext.woff2?v=5d8e0798) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-cyrillic.woff2?v=d8fc94bf) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-greek.woff2?v=1cb6f3ca) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-vietnamese.woff2?v=89cd8db6) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin-ext.woff2?v=1f62546f) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/manrope-normal-latin.woff2?v=b4295101) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+/* запасные начертания: scripts/fonts.py --fallbacks */
+@font-face{font-family:'Manrope Fallback';font-style:normal;src:local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Roboto');size-adjust:97.66%;ascent-override:109.16%;descent-override:30.72%;line-gap-override:0.00%}
+@font-face{font-family:'Cormorant Garamond Fallback';font-style:normal;src:local('Times New Roman'), local('Times'), local('Liberation Serif'), local('Noto Serif');size-adjust:93.38%;ascent-override:98.95%;descent-override:30.73%;line-gap-override:0.00%}
+@font-face{font-family:'Cormorant Garamond Fallback';font-style:italic;src:local('Times New Roman Italic'), local('Times-Italic'), local('Liberation Serif Italic'), local('Noto Serif Italic');size-adjust:87.07%;ascent-override:106.12%;descent-override:32.96%;line-gap-override:0.00%}
+@font-face{font-family:'JetBrains Mono Fallback';font-style:normal;src:local('Courier New'), local('Courier'), local('Liberation Mono'), local('Roboto Mono');size-adjust:99.98%;ascent-override:102.02%;descent-override:30.00%;line-gap-override:0.00%}
+@font-face{font-family:'Caveat Fallback';font-style:normal;src:local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Roboto');size-adjust:72.65%;ascent-override:132.15%;descent-override:41.30%;line-gap-override:0.00%}
+</style>
+<link rel="stylesheet" href="assets/css/style.css?v=ed72c3c6">
+<link rel="stylesheet" href="assets/css/lab.css?v=9a1fce6d">
+</head>
+<body>
+<script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+
+<!-- ================= SVG SPRITE ================= -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="lg-hero" x1="0" y1="1" x2="0.3" y2="0">
+      <stop offset="0" style="stop-color: var(--hero-leaf-a)"/>
+      <stop offset="1" style="stop-color: var(--hero-leaf-b)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-a)"/>
+      <stop offset="1" style="stop-color: var(--pl-b)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad-young" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-b)"/>
+      <stop offset="1" style="stop-color: var(--pl-c)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad-back" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-back-a)"/>
+      <stop offset="1" style="stop-color: var(--pl-back-b)"/>
+    </linearGradient>
+    <linearGradient id="pl-grad-purple" x1="0" y1="1" x2="0.25" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-pa)"/>
+      <stop offset="1" style="stop-color: var(--pl-pb)"/>
+    </linearGradient>
+    <linearGradient id="pl-stem-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color: var(--pl-stem-a)"/>
+      <stop offset=".55" style="stop-color: var(--pl-stem-b)"/>
+      <stop offset="1" style="stop-color: var(--pl-stem-a)"/>
+    </linearGradient>
+    <linearGradient id="pot-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color: var(--pot-a)"/>
+      <stop offset=".45" style="stop-color: var(--pot-b)"/>
+      <stop offset="1" style="stop-color: var(--pot-a)"/>
+    </linearGradient>
+    <g id="pl-leaf">
+      <path class="pl-pet" d="M0 1 L0 -12"/>
+      <path class="pl-blade" d="M0 -10 C 22 -11 31 -30 30 -50 C 29 -72 13 -98 0 -110 C -13 -98 -29 -72 -30 -50 C -31 -30 -22 -11 0 -10 Z"/>
+      <path class="pl-fold" d="M0 -10 C 22 -11 31 -30 30 -50 C 29 -72 13 -98 0 -110 Z"/>
+      <path class="pl-shine" d="M-4 -20 C -19 -27 -24 -46 -21 -62 C -18 -78 -9 -92 -2 -101 C -7 -82 -10 -52 -4 -20 Z"/>
+      <path class="pl-vein" d="M0 -11 Q 1.6 -58 0 -105 M0.4 -28 Q 12 -32 21 -45 M0.4 -28 Q -12 -32 -21 -45 M0.6 -46 Q 11 -51 18 -64 M0.6 -46 Q -11 -51 -18 -64 M0.5 -64 Q 8 -69 12 -80 M0.5 -64 Q -8 -69 -12 -80 M0.4 -80 Q 5 -85 7 -93 M0.4 -80 Q -5 -85 -7 -93"/>
+    </g>
+    <g id="leaf-shape">
+      <path d="M0 0 L0 -7" fill="none" stroke-width="2"/>
+      <path d="M0 -6 C 20 -14 27 -44 0 -68 C -27 -44 -20 -14 0 -6 Z" stroke-width="1.3"/>
+      <path d="M0 -8 Q 1.6 -36 0 -63 M0.6 -20 Q 9 -24 14 -33 M0.6 -20 Q -8 -24 -13 -33 M0.8 -34 Q 8 -38 11 -46 M0.8 -34 Q -7 -38 -10 -46 M0.6 -47 Q 5 -51 7 -56 M0.6 -47 Q -4 -51 -6 -56" fill="none" stroke-width="1" opacity=".75"/>
+    </g>
+  </defs>
+  <!-- icons -->
+  <symbol id="i-hex" viewBox="0 0 24 24"><path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><circle cx="12" cy="12" r="3.4"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12c1.7-4.5 3.3-4.5 5 0s3.3 4.5 5 0 3.3-4.5 5 0"/><path d="M19 9.5l2.5 2.5-2.5 2.5"/></symbol>
+  <symbol id="i-cell" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7.5"/><circle cx="10.5" cy="11" r="2.6"/><circle cx="16" cy="14.6" r=".9"/><circle cx="7" cy="15" r=".7"/></symbol>
+  <symbol id="i-nose" viewBox="0 0 24 24"><path d="M7.5 21c0-3.2 3-4.3 3-7.5S7.5 9.2 7.5 6s1.4-3 1.4-3"/><path d="M14 21c0-3.2 3-4.3 3-7.5S14 9.2 14 6s1.4-3 1.4-3"/></symbol>
+  <symbol id="i-mortar" viewBox="0 0 24 24"><path d="M3.5 11.5h17c0 4.4-3.4 8-8.5 8s-8.5-3.6-8.5-8z"/><path d="M8.5 19.2l-.8 1.8h8.6l-.8-1.8"/><path d="M13.5 11.3l6-7.6a1.5 1.5 0 0 1 2.3 1.9l-6.2 6.2"/><path d="M7 9.2c.8-1.4 2.2-2.1 3.8-1.8"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18c0 4.7-4 8.5-9 8.5S3 15.7 3 11z"/><path d="M9 19.2V21h6v-1.8"/><path d="M8 8.2c0-1.6 1-2.6 1-4M12 8.2c0-1.6 1-2.6 1-4M16 8.2c0-1.6 1-2.6 1-4"/></symbol>
+  <symbol id="i-glass" viewBox="0 0 24 24"><path d="M6 3.5h12l-1.6 16.2a1.6 1.6 0 0 1-1.6 1.3H9.2a1.6 1.6 0 0 1-1.6-1.3z"/><path d="M6.7 9.5h10.6"/><path d="M14.5 3.5l2.8-2"/><circle cx="10.5" cy="14" r="1"/><circle cx="13.5" cy="16.8" r=".8"/></symbol>
+  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M5.5 20.5v-6.8c0-1.2 1-2.2 2.2-2.2h8.6c1.2 0 2.2 1 2.2 2.2v6.8"/><path d="M5.5 15.4c1.1 1.1 2.1 1.1 3.2 0s2.1-1.1 3.3 0 2.1 1.1 3.2 0 2.1-1.1 3.3 0"/><path d="M12 11.5V8.5"/><path d="M12 8.5c-1.8-.4-2.6-1.8-2.2-3.6 1.8.4 2.6 1.8 2.2 3.6zm0 0c1.8-.4 2.6-1.8 2.2-3.6-1.8.4-2.6 1.8-2.2 3.6z"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17.5h6M9.8 20.5h4.4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1 1.4 1 2.2v1.5h5.2V16c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M12 7.2v3.2"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.2c-3.4 4.3-6 7.7-6 10.9a6 6 0 0 0 12 0c0-3.2-2.6-6.6-6-10.9z"/><path d="M9.2 14.6a3 3 0 0 0 2.4 2.6"/></symbol>
+  <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4 4 0 1 1-4 0z"/><path d="M12 9v7.5"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6.5" r="2.6"/><circle cx="6" cy="17.5" r="2.6"/><path d="M8.2 8L20 17.5M8.2 16L20 6.5"/></symbol>
+  <symbol id="i-flower" viewBox="0 0 24 24"><path d="M12 21.5V4.5"/><path d="M12 7.5c-1.6 0-2.8-.9-3.2-2.3 1.6 0 2.8.9 3.2 2.3zm0 0c1.6 0 2.8-.9 3.2-2.3-1.6 0-2.8.9-3.2 2.3zM12 12c-1.8 0-3.2-1-3.7-2.6 1.8 0 3.2 1 3.7 2.6zm0 0c1.8 0 3.2-1 3.7-2.6-1.8 0-3.2 1-3.7 2.6zM12 16.5c-2 0-3.5-1.1-4-2.8 2 0 3.5 1.1 4 2.8zm0 0c2 0 3.5-1.1 4-2.8-2 0-3.5 1.1-4 2.8z"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.2L5 18.4A1.8 1.8 0 0 0 6.6 21h10.8a1.8 1.8 0 0 0 1.6-2.6L14 9.2V3"/><path d="M7.2 15h9.6"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19C5 10.5 10.6 5 20 5c0 9.4-5.5 14.9-14 14.9z"/><path d="M5 19l8.5-8.5"/></symbol>
+  <symbol id="i-pot" viewBox="0 0 24 24"><path d="M4 9.5h16l-1.8 10.7a1 1 0 0 1-1 .8H6.8a1 1 0 0 1-1-.8z"/><path d="M12 9.5V5.8M12 6.2c0-2 1.6-3.2 3.6-3.2 0 2-1.6 3.2-3.6 3.2zM12 7c0-1.8-1.4-2.8-3.2-2.8 0 1.8 1.4 2.8 3.2 2.8z"/></symbol>
+  <symbol id="i-bug" viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="4.2" ry="5.5"/><path d="M12 8.5v11M9.5 5.5 12 8.5l2.5-3M7.8 11.5 4.5 10M16.2 11.5l3.3-1.5M7.8 15.5H4M16.2 15.5H20M8.4 18.8 5.5 20.5M15.6 18.8l2.9 1.7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-seed" viewBox="0 0 24 24"><path d="M12 3.5c4.2 3.2 5.2 9.6 0 17-5.2-7.4-4.2-13.8 0-17z"/><path d="M12 8v9"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-8.5"/><path d="M12 12.5C12 8.6 9.4 6.4 5 6.4c0 3.9 2.6 6.1 7 6.1zM12 10.4c0-3.9 2.6-6.1 7-6.1 0 3.9-2.6 6.1-7 6.1z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3.5 8.5h3.6l1.7-2.6h6.4l1.7 2.6h3.6V19h-17z"/><circle cx="12" cy="13.3" r="3.4"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3.6 15.6 15.6 3.6l4.8 4.8-12 12z"/><path d="M7.4 11.8l1.9 1.9M10 9.2l1.3 1.3M12.6 6.6l1.9 1.9M4.8 14.4l1.3 1.3"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 14.5V3.8M8 7.6l4-3.8 4 3.8"/><path d="M6.5 10.5H5v9.7h14v-9.7h-1.5"/></symbol>
+  <symbol id="i-lamp" viewBox="0 0 24 24"><path d="M5 4.5h14l-2.8 5H7.8z"/><path d="M8.5 13l-1.2 3M12 13v4M15.5 13l1.2 3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-6.5 8 6.5V20H4z"/><path d="M9.5 20v-5h5v5"/></symbol>
+  <symbol id="i-balcony" viewBox="0 0 24 24"><path d="M3.5 12h17M3.5 20.5h17M6 12v8.5M10 12v8.5M14 12v8.5M18 12v8.5"/><path d="M7.5 12V4h9v8"/></symbol>
+  <symbol id="i-garden" viewBox="0 0 24 24"><path d="M2.5 20h19"/><path d="M6 20v-4.5M6 15.5c0-2 1.2-3 3-3 0 2-1.2 3-3 3zM12 20v-7M12 13c0-2.4 1.4-3.6 3.6-3.6 0 2.4-1.4 3.6-3.6 3.6zM12 15c0-2-1.3-3-3.2-3 0 2 1.3 3 3.2 3zM18 20v-4.5M18 15.5c0-2-1.2-3-3-3 0 2 1.2 3 3 3z"/></symbol>
+  <symbol id="i-greenhouse" viewBox="0 0 24 24"><path d="M3 20.5V11a9 9 0 0 1 18 0v9.5z"/><path d="M12 2v18.5M3 14h18M7.5 4.5v16M16.5 4.5v16"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8.5h11a3 3 0 1 0-3-3M3 15.5h14.5a3 3 0 1 1-3 3M3 12h7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2.5v19M3.8 7.2l16.4 9.6M20.2 7.2 3.8 16.8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17.2v.1"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.1"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></symbol>
+  <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-jar" viewBox="0 0 24 24"><path d="M7 3.5h10M8 3.5v3M16 3.5v3M6.5 6.5h11a1 1 0 0 1 1 1V19a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V7.5a1 1 0 0 1 1-1z"/><path d="M5.5 11h13"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M6 4h12l-1.5 16.5h-9z"/><path d="M6.8 12h10.4"/><path d="M12 12V6.5M12 7.5c0-1.6 1.2-2.6 2.8-2.6 0 1.6-1.2 2.6-2.8 2.6z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1 1 0 0 1 0 1.4l-7.3 7.3a1 1 0 0 1-1.4 0z"/><circle cx="8.2" cy="8.2" r="1.6"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9z"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20.5 20.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h2M12 17h8"/><circle cx="16" cy="7" r="2.5"/><circle cx="9" cy="17" r="2.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v13"/></symbol>
+  <!-- the chapters in the contents and on the home page, drawn as the icons above: one stroke, like the text -->
+  <symbol id="i-ch-sorta" viewBox="0 0 24 24"><path d="M6 6l1.5-2 1.5 2 1.5-2 1.5 2 1.5-2 1.5 2 1.5-2 1.5 2v13a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19z"/><path d="M12 17.5C9.3 16.2 8.6 12 12 8.8c3.4 3.2 2.7 7.4 0 8.7z"/><path d="M12 17.5v-6"/></symbol>
+  <symbol id="i-ch-posadka" viewBox="0 0 24 24"><path d="M5.5 11h13v2.5h-13z"/><path d="M6.8 13.5l1.3 7h7.8l1.3-7"/><path d="M12 11V6.6"/><path d="M12 8.7C12 6.5 10.5 5.1 8 5.1c0 2.2 1.5 3.6 4 3.6zM12 7.4c0-2.2 1.5-3.6 4-3.6 0 2.2-1.5 3.6-4 3.6z"/></symbol>
+  <symbol id="i-ch-uhod" viewBox="0 0 24 24"><path d="M9 10.5h8v7.6a1.4 1.4 0 0 1-1.4 1.4h-5.2A1.4 1.4 0 0 1 9 18.1z"/><path d="M11 10.5c0-1.5.9-2.4 2-2.4s2 .9 2 2.4"/><path d="M17 12c2.3 0 3.4 1.2 3.4 2.8S19.3 17.6 17 17.6"/><path d="M9 16.8 4.3 11.2"/><path d="M3 12.4l2.7-2.4"/></symbol>
+  <symbol id="i-ch-udobreniya" viewBox="0 0 24 24"><path d="M7.2 8.5C5.3 10.3 4.4 12.8 4.4 15.6c0 2.6 1.5 4.9 3.8 4.9h4.4c2.3 0 3.8-2.3 3.8-4.9 0-2.8-.9-5.3-2.8-7.1z"/><path d="M7.6 8.5 6.6 4.7l3.8 1.4 3.8-1.4-1 3.8"/><circle cx="18.6" cy="19.6" r="1.05" fill="currentColor" stroke="none"/><circle cx="20.9" cy="19.6" r="1.05" fill="currentColor" stroke="none"/><circle cx="19.75" cy="17.6" r="1.05" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-ch-gidro" viewBox="0 0 24 24"><path d="M5.5 9.5h13v9.2a1.8 1.8 0 0 1-1.8 1.8H7.3a1.8 1.8 0 0 1-1.8-1.8z"/><path d="M5.5 14.5c1.6 0 1.6.9 3.25.9s1.6-.9 3.25-.9 1.6.9 3.25.9 1.6-.9 3.25-.9"/><path d="M10 9.5v3.4M12 9.5v5.6M14 9.5v3.4"/><path d="M12 9.5V6.2"/><path d="M12 7.6C12 5.6 10.6 4.3 8.4 4.3c0 2 1.4 3.3 3.6 3.3zM12 6.6c0-2 1.4-3.3 3.6-3.3 0 2-1.4 3.3-3.6 3.3z"/></symbol>
+  <symbol id="i-ch-formirovka" viewBox="0 0 24 24"><circle cx="7.4" cy="17" r="2.7"/><circle cx="16.6" cy="17" r="2.7"/><path d="M9.3 15 17.6 3.8M14.7 15 6.4 3.8"/></symbol>
+  <symbol id="i-ch-vkus" viewBox="0 0 24 24"><path d="M4.5 12h15c0 4.2-3.4 7.2-7.5 7.2S4.5 16.2 4.5 12z"/><path d="M9.6 19.1 9.1 21h5.8l-.5-1.9"/><path d="M13.4 12 18.7 4.5a1.4 1.4 0 0 1 2.3 1.6L15.8 12"/><path d="M7.4 12c-.5-2.4.9-4.1 3.4-4.3.3 2.4-1 4-3.4 4.3z"/></symbol>
+  <symbol id="i-ch-problemy" viewBox="0 0 24 24"><ellipse cx="12" cy="14.6" rx="4.6" ry="5.6"/><path d="M9.5 9.7a2.5 2.5 0 0 1 5 0"/><path d="M12 9.2v11"/><path d="M7.6 12.4 4.6 11M7.4 15.3H4M8 18.2l-2.6 1.9M16.4 12.4l3-1.4M16.6 15.3H20M16 18.2l2.6 1.9M10.6 7.6 9.2 5.3M13.4 7.6l1.4-2.3"/></symbol>
+  <symbol id="i-ch-spravka" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M9.5 9.6a2.6 2.6 0 0 1 5.1.7c0 1.8-2.6 2.2-2.6 4"/><circle cx="12" cy="17.1" r="1.05" fill="currentColor" stroke="none"/></symbol>
+
+  <!-- chapter illustrations, 120×120 -->
+  <symbol id="art-sorta" viewBox="0 0 120 120">
+    <g transform="translate(82 104)"><use href="#leaf-shape" class="ar-leaf-p" transform="rotate(40) scale(.7)"/></g>
+    <g transform="translate(86 106)"><use href="#leaf-shape" class="ar-leaf-l" transform="rotate(70) scale(.56)"/></g>
+    <path class="ar-paper" d="M22 26 h56 v72 a4 4 0 0 1 -4 4 h-48 a4 4 0 0 1 -4 -4 z"/>
+    <path class="ar-band" d="M22 26 h56 v14 h-56 z"/>
+    <path class="ar-zig" d="M22 40 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4"/>
+    <g transform="translate(50 80)"><use href="#leaf-shape" class="ar-leaf" transform="scale(.46)"/></g>
+    <path class="ar-line" d="M34 88 h32 M38 94 h24"/>
+    <g transform="translate(92 110)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(10) scale(.8)"/></g>
+    <ellipse class="ar-seed" cx="16" cy="108" rx="3" ry="2" transform="rotate(-20 16 108)"/>
+    <ellipse class="ar-seed" cx="24" cy="112" rx="3" ry="2" transform="rotate(15 24 112)"/>
+    <ellipse class="ar-seed" cx="10" cy="114" rx="3" ry="2"/>
+  </symbol>
+  <symbol id="art-posadka" viewBox="0 0 120 120">
+    <path class="ar-stem" d="M60 80 V48"/>
+    <ellipse class="ar-coty" cx="48" cy="66" rx="10" ry="4.6" transform="rotate(-18 48 66)"/>
+    <ellipse class="ar-coty" cx="72" cy="66" rx="10" ry="4.6" transform="rotate(18 72 66)"/>
+    <g transform="translate(60 52)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-42) scale(.48)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(42) scale(.48)"/></g>
+    <g transform="translate(60 48)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-14) scale(.2)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(14) scale(.2)"/></g>
+    <path class="ar-pot" d="M30 82 L90 82 L82 114 L38 114 Z"/>
+    <rect class="ar-rim" x="26" y="75" width="68" height="11" rx="3"/>
+    <ellipse class="ar-soil" cx="60" cy="77" rx="31" ry="3.4"/>
+    <path class="ar-shine" d="M36 92 L40 110"/>
+  </symbol>
+  <symbol id="art-kalendar" viewBox="0 0 120 120">
+    <rect class="ar-paper" x="16" y="24" width="86" height="82" rx="9"/>
+    <path class="ar-head" d="M16 46 V33 a9 9 0 0 1 9 -9 h68 a9 9 0 0 1 9 9 V46 z"/>
+    <rect class="ar-ring" x="36" y="16" width="6" height="16" rx="3"/>
+    <rect class="ar-ring" x="76" y="16" width="6" height="16" rx="3"/>
+    <g class="ar-dotg">
+      <circle cx="30" cy="58" r="2.6"/><circle cx="44" cy="58" r="2.6"/><circle cx="58" cy="58" r="2.6"/><circle cx="72" cy="58" r="2.6"/><circle cx="86" cy="58" r="2.6"/>
+      <circle cx="30" cy="72" r="2.6"/><circle cx="44" cy="72" r="2.6"/><circle cx="58" cy="72" r="2.6"/><circle cx="86" cy="72" r="2.6"/>
+      <circle cx="30" cy="86" r="2.6"/><circle cx="44" cy="86" r="2.6"/><circle cx="58" cy="86" r="2.6"/><circle cx="72" cy="86" r="2.6"/>
+    </g>
+    <circle class="ar-hl" cx="72" cy="72" r="7.5"/>
+    <circle class="ar-hl-dot" cx="72" cy="72" r="3"/>
+    <g transform="translate(100 108)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-8) scale(.52)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(48) scale(.4)"/></g>
+  </symbol>
+  <symbol id="art-uhod" viewBox="0 0 120 120">
+    <circle class="ar-sun" cx="90" cy="28" r="12"/>
+    <path class="ar-rays" d="M90 8 v5 M90 43 v5 M70 28 h5 M105 28 h5 M76 14 l3.4 3.4 M100.6 38.6 l3.4 3.4 M76 42 l3.4 -3.4 M100.6 17.4 l3.4 -3.4"/>
+    <path class="ar-can-s" d="M42 60 C 46 42 72 42 76 60"/>
+    <path class="ar-can-s" d="M80 68 C 99 68 99 96 80 96"/>
+    <path class="ar-can-s ar-spout" d="M38 74 L14 52"/>
+    <rect class="ar-can" x="34" y="58" width="48" height="44" rx="9"/>
+    <ellipse class="ar-can" cx="12" cy="50" rx="6" ry="4" transform="rotate(-45 12 50)"/>
+    <path class="ar-shine" d="M42 66 V94"/>
+    <path class="ar-water" d="M8 64 c-2.4 3-3.8 5.3-3.8 7.2a3.8 3.8 0 0 0 7.6 0c0-1.9-1.4-4.2-3.8-7.2z"/>
+    <path class="ar-water" d="M18 72 c-2 2.6-3.2 4.5-3.2 6.1a3.2 3.2 0 0 0 6.4 0c0-1.6-1.2-3.5-3.2-6.1z"/>
+    <path class="ar-water" d="M6 82 c-2 2.6-3.2 4.5-3.2 6.1a3.2 3.2 0 0 0 6.4 0c0-1.6-1.2-3.5-3.2-6.1z"/>
+    <g transform="translate(106 112)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-20) scale(.44)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(30) scale(.36)"/></g>
+  </symbol>
+  <symbol id="art-udobreniya" viewBox="0 0 120 120">
+    <g transform="translate(60 40)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(26) scale(.62)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(-36) scale(.44)"/></g>
+    <path class="ar-liquid" d="M39.2 72 L80.8 72 L90 92 a8 8 0 0 1 -7 12 h-46 a8 8 0 0 1 -7 -12 z"/>
+    <circle class="ar-bubble" cx="50" cy="88" r="3.4"/><circle class="ar-bubble" cx="63" cy="80" r="2.2"/><circle class="ar-bubble" cx="72" cy="94" r="2.8"/>
+    <path class="ar-glass" d="M52 18 v26 L30 92 a8 8 0 0 0 7 12 h46 a8 8 0 0 0 7 -12 L68 44 V18 z"/>
+    <path class="ar-rim-line" d="M47 18 h26"/>
+    <text class="ar-text" x="60" y="64" text-anchor="middle">N·P·K</text>
+    <ellipse class="ar-sun" cx="100" cy="100" rx="4" ry="3"/><ellipse class="ar-seed" cx="108" cy="104" rx="3.4" ry="2.4"/><ellipse class="ar-coty" cx="98" cy="108" rx="3.2" ry="2.4"/>
+  </symbol>
+  <symbol id="art-gidro" viewBox="0 0 120 120">
+    <rect class="ar-glass" x="28" y="46" width="64" height="62" rx="11"/>
+    <path class="ar-sol" d="M30.5 74 H89.5 V96 a9.5 9.5 0 0 1 -9.5 9.5 H40 a9.5 9.5 0 0 1 -9.5 -9.5 Z"/>
+    <path class="ar-sol-top" d="M30.5 74 H89.5"/>
+    <path class="ar-root-o" d="M55 58 C53 68 49 78 47 92 M58 58 C58 70 56 84 57 100 M62 58 C63 70 66 82 66 96 M65 58 C69 66 74 76 76 88 M57 66 C53 70 44 74 40 82"/>
+    <path class="ar-root" d="M55 58 C53 68 49 78 47 92 M58 58 C58 70 56 84 57 100 M62 58 C63 70 66 82 66 96 M65 58 C69 66 74 76 76 88 M57 66 C53 70 44 74 40 82"/>
+    <circle class="ar-bubble" cx="44" cy="99" r="2.4"/><circle class="ar-bubble" cx="72" cy="84" r="1.8"/><circle class="ar-bubble" cx="82" cy="98" r="2.6"/>
+    <path class="ar-shine" d="M35 54 V96"/>
+    <path class="ar-level" d="M86 60 h4 M86 67 h4 M86 74 h4"/>
+    <rect class="ar-lid" x="24" y="38" width="72" height="10" rx="3.5"/>
+    <path class="ar-cup" d="M47 34 H73 L69 60 H51 Z"/>
+    <path class="ar-net" d="M51.5 42 H68.5 M52 50 H68 M56 36 L55 59 M60 36 V59 M64 36 L65 59"/>
+    <circle class="ar-pebble" cx="54" cy="33" r="3.6"/><circle class="ar-pebble" cx="61" cy="32" r="3.8"/><circle class="ar-pebble" cx="67.5" cy="33.2" r="3.3"/>
+    <path class="ar-stem" d="M60 32 V12"/>
+    <g transform="translate(60 26)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-58) scale(.42)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(58) scale(.42)"/></g>
+    <g transform="translate(60 14)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-24) scale(.2)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(24) scale(.2)"/></g>
+    <ellipse class="ar-sun" cx="104" cy="104" rx="4" ry="3"/><ellipse class="ar-seed" cx="12" cy="106" rx="3.4" ry="2.4"/>
+  </symbol>
+  <symbol id="art-formirovka" viewBox="0 0 120 120">
+    <g class="ar-ghost">
+      <path class="ar-stem" d="M48 58 V28"/>
+      <g transform="translate(48 42)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-44) scale(.32)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(44) scale(.32)"/></g>
+    </g>
+    <path class="ar-stem" d="M48 114 V62"/>
+    <g transform="translate(48 100)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-62) scale(.56)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(62) scale(.56)"/></g>
+    <g transform="translate(48 72)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-58) scale(.4 .5)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(58) scale(.4 .5)"/></g>
+    <g transform="translate(48 70)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-24) scale(.16)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(24) scale(.16)"/></g>
+    <path class="ar-cut" d="M28 62 H68"/>
+    <path class="ar-blade" d="M98 74 L84 64 L60 56"/>
+    <path class="ar-blade" d="M102 56 L84 64 L60 66"/>
+    <circle class="ar-handle" cx="102" cy="78" r="7.5"/>
+    <circle class="ar-handle" cx="106" cy="52" r="7.5"/>
+    <circle class="ar-sun" cx="84" cy="64" r="2.6"/>
+  </symbol>
+  <symbol id="art-urozhay" viewBox="0 0 120 120">
+    <rect class="ar-glass" x="30" y="40" width="56" height="68" rx="12"/>
+    <rect class="ar-pesto" x="33.5" y="54" width="49" height="50.5" rx="9"/>
+    <circle class="ar-bubble" cx="42" cy="62" r="2"/><circle class="ar-bubble" cx="70" cy="96" r="2.4"/>
+    <rect class="ar-lid" x="33" y="28" width="50" height="15" rx="4"/>
+    <path class="ar-lid-line" d="M40 31 v9 M48 31 v9 M56 31 v9 M64 31 v9 M72 31 v9"/>
+    <rect class="ar-paper" x="40" y="68" width="36" height="22" rx="3"/>
+    <g transform="translate(58 86)"><use href="#leaf-shape" class="ar-leaf" transform="scale(.24)"/></g>
+    <g transform="translate(96 110)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-16) scale(.64)"/><use href="#leaf-shape" class="ar-leaf-p" transform="rotate(36) scale(.46)"/></g>
+    <ellipse class="ar-nut" cx="18" cy="106" rx="3.6" ry="2.4" transform="rotate(-25 18 106)"/>
+    <ellipse class="ar-nut" cx="12" cy="112" rx="3.6" ry="2.4" transform="rotate(10 12 112)"/>
+    <ellipse class="ar-nut" cx="22" cy="113" rx="3.6" ry="2.4" transform="rotate(40 22 113)"/>
+  </symbol>
+  <symbol id="art-problemy" viewBox="0 0 120 120">
+    <g transform="translate(46 108) rotate(-18) scale(1.18)">
+      <use href="#leaf-shape" class="ar-leaf-sick"/>
+      <circle class="ar-spot" cx="5" cy="-30" r="3.6"/><circle class="ar-spot" cx="-7" cy="-44" r="2.8"/><circle class="ar-spot" cx="-5" cy="-18" r="2.4"/><circle class="ar-spot" cx="8" cy="-50" r="2"/>
+    </g>
+    <circle class="ar-lens" cx="80" cy="56" r="20"/>
+    <circle class="ar-spot" cx="76" cy="54" r="5.5"/>
+    <path class="ar-lens-h" d="M94.5 70.5 L108 86"/>
+  </symbol>
+  <symbol id="art-vkus" viewBox="0 0 120 120">
+    <g transform="translate(44 100)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-26) scale(.82)"/></g>
+    <path class="ar-wisp" d="M24 44 c-5 -6 5 -10 0 -17 M34 38 c-5 -6 5 -10 0 -17"/>
+    <g transform="translate(80 34)">
+      <path class="ar-mol" d="M0 -16 L13.9 -8 L13.9 8 L0 16 L-13.9 8 L-13.9 -8 Z M13.9 -8 L24 -14 M0 16 L0 25"/>
+      <circle class="ar-mol" r="6.6"/>
+      <circle class="ar-o" cx="25" cy="-14.6" r="3.6"/>
+      <circle class="ar-c" cx="0" cy="26" r="2.6"/>
+    </g>
+    <path class="ar-oil" d="M88 64 c-6 8 -10 13 -10 18 a10 10 0 0 0 20 0 c0 -5 -4 -10 -10 -18z"/>
+    <path class="ar-shine" d="M84 80 a5 5 0 0 0 3 5"/>
+  </symbol>
+  <symbol id="art-moy" viewBox="0 0 120 120">
+    <circle class="ar-sun" cx="94" cy="24" r="10"/>
+    <path class="ar-rays" d="M94 7 v4 M94 37 v4 M77 24 h4 M107 24 h4 M82 12 l2.8 2.8 M103.2 33.2 l2.8 2.8 M82 36 l2.8 -2.8 M103.2 14.8 l2.8 -2.8"/>
+    <path class="ar-stem" d="M48 76 V38 M48 64 C 42 59 36 56 29 55 M48 56 C 54 51 60 48 67 47"/>
+    <g transform="translate(48 40)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-34) scale(.42)"/><use href="#leaf-shape" class="ar-leaf" transform="rotate(34) scale(.42)"/></g>
+    <g transform="translate(29 55)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-72) scale(.34)"/></g>
+    <g transform="translate(67 47)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(68) scale(.34)"/></g>
+    <path class="ar-pot" d="M24 80 L72 80 L65 108 L31 108 Z"/>
+    <rect class="ar-rim" x="20" y="74" width="56" height="10" rx="3"/>
+    <ellipse class="ar-soil" cx="48" cy="76" rx="25" ry="3"/>
+    <path class="ar-shine" d="M29 89 L32 104"/>
+    <path class="ar-lens-h" d="M100 96 L108 104"/>
+    <circle class="ar-lens" cx="91" cy="86" r="12"/>
+    <g transform="translate(91 91)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(-8) scale(.22)"/></g>
+  </symbol>
+  <symbol id="art-spravka" viewBox="0 0 120 120">
+    <path class="ar-cover" d="M12 40 V100 C 30 95 48 95 60 104 C 72 95 90 95 108 100 V40"/>
+    <path class="ar-paper" d="M60 42 C 48 34 30 34 18 38 V96 C 30 92 48 92 60 100 Z"/>
+    <path class="ar-paper" d="M60 42 C 72 34 90 34 102 38 V96 C 90 92 72 92 60 100 Z"/>
+    <path class="ar-line" d="M26 50 C 36 47 46 48 52 51 M26 60 C 36 57 46 58 52 61 M26 70 C 36 67 46 68 52 71 M26 80 C 36 77 46 78 52 81 M68 51 C 74 48 84 47 94 50 M68 61 C 74 58 84 57 94 60 M68 71 C 74 68 84 67 94 70"/>
+    <g transform="translate(84 44)"><use href="#leaf-shape" class="ar-leaf" transform="rotate(10) scale(.5)"/></g>
+  </symbol>
+</svg>
+
+<canvas id="leaf-field" aria-hidden="true"></canvas>
+<div class="aura" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<div class="page">
+
+<a class="skip" href="#main">К содержанию</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Гид по базилику — на главную">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 30 C 16 22 16 16 16 10" style="stroke: var(--basil)" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 26 C 26 22 30 12 16 2 C 2 12 6 22 16 26 Z" style="fill: var(--leaf); stroke: var(--basil-deep)" stroke-width="1.6"/></svg>
+      <span>Базилик<small>гид садовода</small></span>
+    </a>
+    <button class="toc-btn" type="button" data-open="sheet-toc" aria-haspopup="dialog"><svg class="ico"><use href="#i-book"/></svg><span class="toc-vh">Оглавление: </span><span class="toc-btn-p"><span class="toc-btn-t">Гидропоника</span></span><svg class="ico"><use href="#i-chev-r"/></svg></button>
+    <a class="icon-btn garden-btn" href="moy.html" data-garden-link aria-label="Мой базилик"><svg class="ico"><use href="#i-sprout"/></svg><b class="garden-badge" hidden></b></a>
+    <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
+      <svg class="ico"><use href="#i-search"/></svg><span>Поиск</span><kbd>/</kbd>
+    </button>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-label="Сменить тему">
+      <svg class="ico"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+<section class="view is-active" data-view="gidro" aria-label="Гидропоника">
+  <div class="wrap">
+    <header class="ch-hero">
+      <div class="ch-hero-text">
+        <p class="eyebrow">Глава 5</p>
+        <h1>Гидропоника: базилик <em>без земли</em></h1>
+        <p class="lead">Корни — в воде или в сетчатом стаканчике с керамзитом, всё питание — в растворе. Базилик — одна из самых благодарных культур для гидропоники: растёт быстро, корни у него неглубокие, а частые срезки ему только на пользу. Здесь — как это устроено, как собрать систему из банки или ведра, чем кормить, что проверять и во что это обойдётся рядом с обычным горшком.</p>
+      <nav class="deep-index" aria-label="Научные развороты главы"><span class="deep-index-label"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Глубже <b>13 · ещё глубже 13</b></span><a href="#deep-dyhanie-kornya" data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-cell"/></svg>Дыхание корня</a><a href="#deep-bystree" data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-cell"/></svg>Почему быстрее</a><a href="#deep-istoriya-gidroponiki" data-kind="chem"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>История</a><a href="#deep-kapillyary" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Капилляры</a><a href="#deep-puzyri" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Пузыри</a><a href="#deep-kislorod" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Кислород и хелаты</a><a href="#deep-dreyf-ph" data-kind="chem"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Дрейф pH и EC</a><a href="#deep-osadok" data-kind="chem"><svg class="ico" aria-hidden="true"><use href="#i-hex"/></svg>Концентраты</a><a href="#deep-pitium" data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-cell"/></svg>Питиум</a><a href="#deep-vodorosli" data-kind="bio"><svg class="ico" aria-hidden="true"><use href="#i-cell"/></svg>Водоросли</a><a href="#deep-pribory" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Приборы</a><a href="#deep-vkus-gidro" data-kind="taste"><svg class="ico" aria-hidden="true"><use href="#i-nose"/></svg>Вкус</a><a href="#deep-voda-gidro" data-kind="phys"><svg class="ico" aria-hidden="true"><use href="#i-wave"/></svg>Вода</a></nav></div>
+      <div class="ch-hero-art" aria-hidden="true"><span class="blob"></span><span class="art-float"><svg viewBox="0 0 120 120"><use href="#art-gidro"/></svg></span></div>
+    </header>
+    <div class="subnav-wrap"><nav class="subnav" aria-label="Разделы главы">
+      <a href="#основы">Как это работает</a><a href="#сборка">Своими руками</a><a href="#раствор">Раствор</a><a href="#проверки">Проверки</a><a href="#сравнение">Горшок или вода</a>
+    </nav></div>
+    <div class="panel is-active" data-panel id="основы" data-title="Как работает гидропоника">
+      <p class="panel-lead">Гидропоника — выращивание без почвы. Почва даёт корням три вещи: опору, воду с питанием и воздух. В гидропонике каждую из них берёт на себя своя деталь, и все системы — от банки на подоконнике до вертикальной фермы — различаются прежде всего тем, как они дают корням воздух.</p>
+      <div class="hy-trio">
+        <article class="card hy-role">
+          <span class="hy-role-ico" aria-hidden="true"><svg class="ico"><use href="#i-pot"/></svg></span>
+          <h3 id="gidro-h1">Опора</h3>
+          <p>Сетчатый стаканчик в крышке и горсть инертного субстрата: керамзита, минваты или кокоса. Субстрат не кормит, он только держит стебель и корни.</p>
+        </article>
+        <article class="card hy-role">
+          <span class="hy-role-ico" aria-hidden="true"><svg class="ico"><use href="#i-flask"/></svg></span>
+          <h3 id="gidro-h2">Вода и питание</h3>
+          <p>Раствор минеральных солей. Сколько в нём солей, показывает электропроводность (EC), доступны ли они — кислотность (pH). Всё, что в горшке делали почва и подкормки, здесь делает раствор.</p>
+        </article>
+        <article class="card hy-role">
+          <span class="hy-role-ico" aria-hidden="true"><svg class="ico"><use href="#i-wind"/></svg></span>
+          <h3 id="gidro-h3">Воздух</h3>
+          <p>Корни дышат, и в стоячей воде им быстро становится душно. Воздух дают зазор между крышкой и раствором, пузыри аэратора, отлив воды или тонкая плёнка вместо толщи.</p>
+        </article>
+      </div>
+      <div class="lab-tool sub" data-lab="hsys" data-kind="phys" id="hsys-tool"></div>
+      <div class="sub card table-scroll">
+        <h3 id="gidro-h4">Системы для дома</h3>
+        <table class="mini-table stack">
+          <thead><tr><th scope="col">Система</th><th scope="col">Как корни получают воздух</th><th scope="col">Электричество</th><th scope="col">Для базилика</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Система"><b>Кратки</b>, без насосов</td><td data-label="Как корни получают воздух">Растение выпивает раствор, уровень опускается, и над ним растёт влажный воздушный зазор</td><td data-label="Электричество">не нужно</td><td data-label="Для базилика">1–⁠2 куста в банке на 1–⁠3 л или 3–⁠4 в ящике; самая простая</td></tr>
+            <tr><td data-label="Система"><b>Глубоководная</b> (DWC)</td><td data-label="Как корни получают воздух">Аквариумный компрессор круглые сутки гонит пузыри через распылитель на дне</td><td data-label="Электричество">компрессор 2–⁠5 Вт</td><td data-label="Для базилика">1–⁠6 кустов в ведре на 10–⁠20 л; самый быстрый рост из простых систем</td></tr>
+            <tr><td data-label="Система"><b>Фитиль</b></td><td data-label="Как корни получают воздух">Раствор поднимается по шнуру в рыхлый субстрат, где много пор с воздухом</td><td data-label="Электричество">не нужно</td><td data-label="Для базилика">небольшой куст: большому фитиль не успевает подавать воду</td></tr>
+            <tr><td data-label="Система"><b>Прилив-отлив</b></td><td data-label="Как корни получают воздух">Насос по таймеру затапливает лоток с горшками, вода уходит обратно, и в субстрат втягивается воздух</td><td data-label="Электричество">насос 5–⁠20 Вт и таймер</td><td data-label="Для базилика">много горшков на одном лотке; средняя сложность</td></tr>
+            <tr><td data-label="Система"><b>NFT</b>, питательный слой</td><td data-label="Как корни получают воздух">По желобу с уклоном течёт плёнка раствора в несколько миллиметров, верх корневого мата — в воздухе</td><td data-label="Электричество">насос круглые сутки</td><td data-label="Для базилика">ряды кустов, вертикальные фермы; встанет насос — корни сохнут за несколько часов</td></tr>
+            <tr><td data-label="Система"><b>Капельная</b></td><td data-label="Как корни получают воздух">Капельницы подают раствор в кокос или минвату, лишнее стекает, поры субстрата остаются с воздухом</td><td data-label="Электричество">насос по таймеру</td><td data-label="Для базилика">крупные кусты в теплице; капельницы надо проверять</td></tr>
+            <tr><td data-label="Система"><b>Аэропоника</b></td><td data-label="Как корни получают воздух">Корни висят в воздухе, форсунки обдают их туманом раствора</td><td data-label="Электричество">насос высокого давления</td><td data-label="Для базилика">быстро и красиво, но капризно: засорилась форсунка — корни сохнут</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note"><b>Кратки и DWC</b> — лучшее начало: в обеих нет насосов для воды и почти нет деталей. Как их собрать — на вкладке <a href="#сборка">«Своими руками»</a>.</p>
+      </div>
+      <div class="sub cols-2">
+        <article class="card">
+          <h3 id="gidro-h5">Почему базилику подходит</h3>
+          <ul class="ticks">
+            <li><b>Растёт быстро.</b> Первый срез — через 4–⁠6 недель после всходов, дальше раз в 1–⁠2 недели.</li>
+            <li><b>Корни неглубокие</b> и легко живут в стаканчике на 5–⁠7 см.</li>
+            <li><b>Нужны листья, а не плоды:</b> один раствор на весь срок, без смены питания под цветение и завязь.</li>
+            <li><b>Черенок укореняется прямо в воде</b> и переезжает в систему без пересадки.</li>
+            <li><b>Перелива не бывает,</b> если корням хватает воздуха, — а в горшке перелив губит базилик чаще всего.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 id="gidro-h6">Чего гидропоника не отменяет</h3>
+          <ul class="ticks is-warn">
+            <li><b>Свет.</b> Без 14–⁠16 часов яркого света зимой не помогут ни раствор, ни аэратор: лампа нужна так же, как над горшком.</li>
+            <li><b>Внимание.</b> Почва прощает ошибку неделями, раствор — днями: уровень, EC и pH проверяют 1–⁠2 раза в неделю.</li>
+            <li><b>Тепло раствора.</b> Выше 24 °C в воде мало кислорода и много питиума: корни могут сгнить за несколько дней.</li>
+            <li><b>Одна вода на всех.</b> Болезнь корней расходится по всему раствору сразу, а не сидит в одном горшке.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout sub"><svg class="ico"><use href="#i-info"/></svg><p><b>Гидропоника — не «без удобрений».</b> Всё, что возьмёт растение, вы положите в воду сами. Зато ничего лишнего: ни мошек в грунте, ни кислой подушки в поддоне, ни пересадок. Что лучше для вас — горшок или раствор — по урожаю, вкусу, времени и деньгам сравнивает вкладка <a href="#сравнение">«Горшок или вода»</a>.</p></div>
+      <section class="faq-here">
+        <h3>Частые вопросы</h3>
+        <div class="faq">
+          <details><summary>Что проще для начала — гидропоника или горшок?</summary><div class="faq-body"><p>Горшок прощает больше ошибок, но самая простая гидропоника — банка Кратки — не сложнее: банка, стаканчик, раствор, и больше ничего не надо делать 6–⁠8 недель. Сложнее с ведром и насосами: там раствор надо проверять раз в 2–⁠3 дня. Свет нужен одинаково.</p></div></details>
+        </div>
+        <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
+      </section>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small><button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button></p>
+        <details class="deep" id="deep-dyhanie-kornya" data-kind="bio" data-short="Дыхание корня">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Как корень дышит в воде</span><span class="deep-sub">Диффузия, пузыри и воздушные корни</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Кислород проходит сквозь воду примерно в 10 000 раз медленнее, чем сквозь воздух. Поэтому в стоячей воде корню душно, даже когда кислорода в ней много.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Корень — не трубочка для воды, а живая ткань, которая дышит круглые сутки. Ионы из раствора втягивают насосы в мембранах его клеток, и работают они на АТФ — продукте дыхания. Лист на свету выделяет кислород, но до корня тот почти не доходит: воздушных каналов, как у риса, у базилика почти нет. Кислород корень берёт снаружи.</p>
+                <p>В почве корень окружён порами с воздухом, и кислород подходит к нему за доли секунды. В воде он ползёт диффузией в десять тысяч раз медленнее, и вокруг корня остаётся обеднённая плёнка. Чем она толще, тем меньше достаётся клеткам. Пузыри и течение срывают её и всё время подносят свежую воду, поэтому DWC без компрессора — это просто стоячее ведро.</p>
+                <p>В банке Кратки работает другое. Уровень раствора медленно опускается, верх корневой системы оказывается во влажном воздухе и обрастает корневыми волосками — это «воздушные» корни, они дышат. Нижние, «водяные», остаются в растворе и пьют. Поэтому банку не доливают до верха: затопленные воздушные корни задыхаются.</p>
+                <p>Когда кислород кончается, клетки переходят на брожение. Из молекулы глюкозы оно даёт 2 молекулы АТФ вместо примерно 30 при дыхании, а в клетках копятся этанол и кислоты. Корень буреет, теряет волоски и становится лёгкой добычей питиума.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>≈ 10 000 ×</b><span>во столько раз медленнее кислород диффундирует в воде, чем в воздухе</span></div>
+                <div class="eq"><span class="eq-label">Кислород в ёмкости</span><p>dC/dt = k·(C<sub>нас</sub> − C) − R/V</p></div>
+                <div class="num-note"><b>2 и ≈ 30</b><span>молекул АТФ из глюкозы при брожении и при дыхании</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="o2box" data-kind="bio"></div>
+            <details class="deeper">
+              <summary id="deep-dyhanie-kornya-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Что убивает корень без кислорода</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Корень гибнет не от голода, а от кислоты. Без кислорода митохондрии встают, и клетка выжимает энергию брожением. Сначала идёт молочнокислое: кислота закисляет цитоплазму на полединицы pH и больше, и ферменты начинают отказывать. Клетка переключается на спиртовое брожение — этанол уходит из клетки легче, — но АТФ всё равно мало, и мембранные насосы не держат ионы. Корень «течёт»: калий выходит наружу, внутрь заходят микробы.</p>
+                <p>Многие болотные растения отвечают на нехватку кислорода тканью с воздушными полостями — аэренхимой: по ней воздух из листьев спускается к кончику корня. Сигнал к её постройке — газ этилен, который копится в затопленном корне. Базилик так почти не умеет, поэтому весь его кислород — растворённый в воде или воздух над ней.</p>
+                <p>В ёмкости кислород расходуют не только корни. Микробы на стенках, на субстрате и на отмерших корешках дышат тоже, и в грязной ёмкости их доля бывает больше, чем у самого растения. Отсюда простое правило: чистая ёмкость и свежий раствор — это ещё и кислород.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Drew M. C. Oxygen deficiency and root metabolism: injury and acclimation under hypoxia and anoxia. <i>Annual Review of Plant Physiology and Plant Molecular Biology</i>, 1997.</li>
+                <li>Armstrong W. Aeration in higher plants. <i>Advances in Botanical Research</i>, 1979.</li>
+                <li>Kratky B. A. Three non-circulating hydroponic methods for growing lettuce. <i>Acta Horticulturae</i> 843, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-bystree" data-kind="bio" data-short="Почему быстрее">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-leaf"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Почему в воде растёт быстрее — и когда нет</span><span class="deep-sub">Корни, листья и свет</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>В опыте в Загребе «Дженовезе» в плавающей гидропонике дал 4 кг зелени с квадратного метра — на 31 % больше, чем на грядке, а маленький «Минимум» — почти вдвое больше.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Каждую новую порцию сахаров растение делит между листьями и корнями. Правило дележа описал голландский физиолог Р. Брауэр в 1960-х: растение растит то, чего ему не хватает. В сухой бедной почве корень вынужден искать воду и ионы и забирает себе до трети прироста. В растворе всё рядом: корни держат малую долю, и больше сахаров уходит в листья.</p>
+                <p>А листья — это новый фотосинтез. Прирост считается как сложные проценты: на каждый грамм листа приходится грамм-другой новых, и небольшая разница в доле листьев за месяц складывается в заметную разницу в урожае. Отсюда и «быстрее»: в опытах гидропонный базилик обычно на 15–⁠100 % урожайнее почвенного, а сорт решает не меньше системы.</p>
+                <p>Но проценты начисляются от света. Если его мало — зимой на окне без лампы, — растение упирается в фотосинтез, и раствор почти ничего не прибавляет: в модели обе линии остаются у дна графика, а выигрыш — считаные граммы. Гидропоника ускоряет рост там, где узким местом был корень, а не там, где узкое место — свет.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>+16–⁠97 %</b><span>урожай трёх сортов в плавающей гидропонике против грядки (Загреб, 2021)</span></div>
+                <div class="eq"><span class="eq-label">Равновесие Брауэра</span><p>корень: масса × активность ≈ лист: масса × активность</p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="alloc" data-kind="bio"></div>
+            <details class="deeper">
+              <summary id="deep-bystree-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Сложные проценты роста</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Молодое растение растёт экспоненциально: прирост за день пропорционален тому, что уже выросло. Коэффициент — относительная скорость роста, RGR. У сеянцев базилика при хорошем свете она около 0,15–⁠0,2 в сутки: за день растение прибавляет 15–⁠20 % своей массы.</p>
+                <p>Если гидропоника поднимает RGR всего на 0,015 в сутки, за 30 дней разница в массе — e<sup>0,015 · 30</sup> ≈ 1,57, то есть больше половины. Поэтому маленький сдвиг в доле листьев так заметен в урожае.</p>
+                <p>Позже листья начинают затенять друг друга, и рост из экспоненциального становится почти линейным: каждый день прибавляет примерно одно и то же. На этом этапе всё решают свет и частые срезки, которые снова открывают нижние листья солнцу.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Brouwer R. Some aspects of the equilibrium between overground and underground plant parts. <i>Jaarboek IBS</i>, Wageningen, 1963.</li>
+                <li>Poorter H., Nagel O. The role of biomass allocation in the growth response of plants to different levels of light, CO₂, nutrients and water: a quantitative review. <i>Australian Journal of Plant Physiology</i>, 2000.</li>
+                <li>Šic Žlabur J. et al. Valorization of nutritional potential and specialized metabolites of basil cultivars depending on cultivation method. <i>Agronomy</i> 11: 1048, 2021.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-istoriya-gidroponiki" data-kind="chem" data-short="История">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-book"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Как растения научились жить без земли</span><span class="deep-sub">От мяты Вудворда до банки Кратки</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Первый опыт гидропоники описал англичанин Джон Вудворд в 1699 году: он растил мяту в воде из разных источников и сравнивал прирост.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Вудворд поставил веточки мяты в дождевую воду, в воду из Темзы и в воду из лондонского водовода, а в часть сосудов подмешал садовой земли. Лучше всего росла мята в самой мутной воде, и он решил, что растение питается «землистой материей». Вывод был неверным, но вопрос — чем питается растение, если не землёй, — оказался верным.</p>
+                <p>Ответ дали немецкие ботаники Юлиус Сакс и Вильгельм Кноп в 1860-х. Они растили растения в растворах из чистых солей и выяснили, без каких элементов те не могут: так появился список элементов питания, который и сегодня стоит в каждой таблице удобрений.</p>
+                <p>Из лабораторного приёма в огород водную культуру вывел американец Уильям Герике. Профессор Калифорнийского университета, в конце 1920-х он вырастил у себя во дворе томаты в баках с раствором — плети были выше садовой лестницы — и придумал слово «гидропоника»: по-гречески «водный труд». Вскоре на коралловом острове Уэйк, где нет почвы, авиакомпания выращивала так овощи для пассажиров тихоокеанских рейсов.</p>
+                <p>Дальше — инженерия: стандартный раствор Хогленда и Арнона, тонкая плёнка NFT Аллена Купера в Англии и, наконец, метод Бернарда Кратки с Гавайев — банка, в которой нет ни одной движущейся детали.</p>
+              </div>
+              <aside class="deep-aside">
+                <ol class="hy-time" aria-label="Вехи гидропоники">
+                  <li><b>1699</b><span>Вудворд растит мяту в воде</span></li>
+                  <li><b>1860-е</b><span>Сакс и Кноп: растворы из чистых солей</span></li>
+                  <li><b>1929–⁠1937</b><span>Герике: томаты в баках, слово «гидропоника»</span></li>
+                  <li><b>1938</b><span>раствор Хогленда и Арнона</span></li>
+                  <li><b>1960–⁠1970-е</b><span>Купер: тонкая плёнка, NFT</span></li>
+                  <li><b>2009</b><span>Кратки: банка без насосов</span></li>
+                </ol>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-istoriya-gidroponiki-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Что в растворе Хогленда</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Раствор Хогленда — несколько солей в точных пропорциях: кальциевая и калиевая селитра дают азот, кальций и калий, монофосфат калия — фосфор, сульфат магния — магний и серу, а микроэлементы идут каплями из отдельного концентрата: железо, бор, марганец, цинк, медь и молибден. Азота в нём около 210 мг на литр, калия — 235, кальция — 200.</p>
+                <p>Почти все удобрения для гидропоники — потомки этой прописи. Их делят на две-три части только для того, чтобы в концентрате кальций не встретился с фосфатами и сульфатами и не выпал в осадок. В рабочем растворе, разбавленном в сотни раз, им уже ничего не грозит.</p>
+                <p>Для базилика полный раствор Хогленда крепковат: его EC около 2. Половинная крепость ближе к тому, что базилик любит.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Woodward J. Some thoughts and experiments concerning vegetation. <i>Philosophical Transactions of the Royal Society</i> 21, 1699.</li>
+                <li>Gericke W. F. Hydroponics — crop production in liquid culture media. <i>Science</i> 85, 1937.</li>
+                <li>Hoagland D. R., Arnon D. I. The water-culture method for growing plants without soil. <i>California Agricultural Experiment Station Circular</i> 347, 1950.</li>
+                <li>Kratky B. A. Three non-circulating hydroponic methods for growing lettuce. <i>Acta Horticulturae</i> 843, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="panel" data-panel id="сборка" data-title="Система своими руками">
+      <p class="panel-lead">Две системы собираются за вечер из того, что есть дома или в зоомагазине. Банка Кратки — один-два куста без проводов и шума. Ведро с аэратором (DWC) — три-четыре куста и самый быстрый рост. Готовая домашняя ферма с лампой устроена так же, только детали в ней спрятаны в корпус.</p>
+      <p class="g-invite"><button class="btn btn-ghost btn-small" type="button" data-garden-add="seed" data-place="hydro"><svg class="ico"><use href="#i-sprout"/></svg>Посадил — добавить в «Мой базилик»</button><span>Гид напомнит проверить и сменить раствор, прищипнуть и срезать.</span></p>
+      <h3 class="hy-h" id="kratki-banka">Банка Кратки</h3>
+      <div class="two-col">
+        <ol class="steps">
+          <li class="step card"><span class="step-num">1</span><div><span class="step-meta">5 минут</span><h4 id="gidro-h7">Банка и темнота</h4>
+            <span class="step-ill" data-ill="hyd:k1" aria-hidden="true"></span><p>Стеклянная банка на 1–⁠3 л или непрозрачный пищевой контейнер. Оберните её фольгой, плотной бумагой или чехлом из носка, оставив узкую щель, чтобы видеть уровень: на свету раствор зацветёт водорослями.</p></div></li>
+          <li class="step card"><span class="step-num">2</span><div><span class="step-meta">10 минут</span><h4 id="gidro-h8">Крышка и стаканчик</h4>
+            <span class="step-ill" data-ill="hyd:k2" aria-hidden="true"></span><p>В крышке прорежьте отверстие под сетчатый стаканчик на 5–⁠7 см так, чтобы он висел на бортике. Подойдёт и стаканчик из-под йогурта, если прорезать в нём щели.</p></div></li>
+          <li class="step card"><span class="step-num">3</span><div><span class="step-meta">день 0</span><h4 id="gidro-h9">Раствор</h4>
+            <span class="step-ill" data-ill="hyd:k3" aria-hidden="true"></span><p>EC 0,8–⁠1,2, pH 5,8–⁠6,2 — как его развести, на вкладке <a href="#раствор">«Раствор»</a>. Налейте столько, чтобы дно стаканчика стояло в растворе на 1–⁠2 см.</p></div></li>
+          <li class="step card"><span class="step-num">4</span><div><span class="step-meta">день 0</span><h4 id="gidro-h10">Посадка</h4>
+            <span class="step-ill" data-ill="hyd:k4" aria-hidden="true"></span><p>Сеянец с 1–⁠2 парами настоящих листьев в кубике минваты или кокосовой таблетке поставьте в стаканчик и засыпьте вокруг промытым керамзитом. Корни сами пойдут вниз за водой.</p></div></li>
+          <li class="step card"><span class="step-num">5</span><div><span class="step-meta">недели 2–⁠8</span><h4 id="gidro-h11">Не доливайте до верха</h4>
+            <span class="step-ill" data-ill="hyd:k5" aria-hidden="true"></span><p>Куст пьёт, уровень падает, верх корней оказывается в воздухе и начинает дышать. Если раствор кончается раньше, чем куст готов, долейте раствор половинной крепости только до половины банки. Через 6–⁠8 недель смените раствор целиком или переселите куст в ведро.</p></div></li>
+        </ol>
+        <aside class="sticky-side">
+          <div class="card">
+            <h3 id="gidro-h12">Что понадобится</h3>
+            <ul class="hy-need">
+              <li><span>Банка 1–⁠3 л или контейнер</span><b>0–⁠150 ₽</b></li>
+              <li><span>Сетчатые стаканчики 5–⁠7 см, 10 шт.</span><b>150–⁠350 ₽</b></li>
+              <li><span>Керамзит 2–⁠5 л</span><b>100–⁠300 ₽</b></li>
+              <li><span>Кубики минваты или кокосовые таблетки</span><b>150–⁠400 ₽</b></li>
+              <li><span>Удобрение для гидропоники</span><b>500–⁠2 000 ₽</b></li>
+              <li><span>EC-метр (TDS-карандаш)</span><b>400–⁠1 200 ₽</b></li>
+              <li><span>pH-метр или капельный тест</span><b>300–⁠2 000 ₽</b></li>
+            </ul>
+            <p class="muted">Цены — ориентир по крупным маркетплейсам осенью 2026 года. Удобрения и приборов хватит на много банок и сезонов.</p>
+          </div>
+          <div class="card">
+            <h3 id="gidro-h13">Частые ошибки</h3>
+            <ul class="ticks is-bad">
+              <li><b>Долили до верха</b> — воздушные корни задохнулись, куст сник.</li>
+              <li><b>Прозрачная банка</b> — зелёный налёт за неделю.</li>
+              <li><b>Сеянец высоко над водой</b> в первые дни — кубик пересох, корень не дошёл.</li>
+              <li><b>Банка на батарее или на солнце</b> — раствор теплее 24 °C.</li>
+              <li><b>Большой куст в литровой банке</b> — к третьей неделе он выпивает её за день.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+      <div class="lab-tool sub" data-lab="kratky" data-kind="bio"></div>
+
+      <h3 class="hy-h sub" id="vedro-dwc">Ведро с аэратором (DWC)</h3>
+      <div class="two-col">
+        <ol class="steps">
+          <li class="step card"><span class="step-num">1</span><div><span class="step-meta">5 минут</span><h4 id="gidro-h14">Ведро</h4>
+            <span class="step-ill" data-ill="hyd:d1" aria-hidden="true"></span><p>Непрозрачное пищевое ведро или контейнер на 10–⁠20 л с крышкой. Белое пропускает свет — оберните его или покрасьте снаружи. Один куст — на 3–⁠5 л раствора.</p></div></li>
+          <li class="step card"><span class="step-num">2</span><div><span class="step-meta">20 минут</span><h4 id="gidro-h15">Отверстия</h4>
+            <span class="step-ill" data-ill="hyd:d2" aria-hidden="true"></span><p>В крышке — 3–⁠4 отверстия под стаканчики через 15–⁠20 см друг от друга и одно маленькое для шланга. Края отверстий зашкурьте, чтобы стаканчик сидел плотно.</p></div></li>
+          <li class="step card"><span class="step-num">3</span><div><span class="step-meta">10 минут</span><h4 id="gidro-h16">Компрессор и камень</h4>
+            <span class="step-ill" data-ill="hyd:d3" aria-hidden="true"></span><p>Аквариумный компрессор на 2–⁠5 Вт, шланг и распылитель на дно. Компрессор ставят выше уровня воды или с обратным клапаном: иначе, когда отключат свет, раствор по шлангу стечёт в него.</p></div></li>
+          <li class="step card"><span class="step-num">4</span><div><span class="step-meta">день 0</span><h4 id="gidro-h17">Уровень</h4>
+            <span class="step-ill" data-ill="hyd:d4" aria-hidden="true"></span><p>Сначала раствор — на 1–⁠2 см ниже дна стаканчиков: пузыри брызгают на субстрат и поят сеянец, пока корни не достали до воды. Когда корни отросли на 10 см, опустите уровень на 3–⁠5 см.</p></div></li>
+          <li class="step card"><span class="step-num">5</span><div><span class="step-meta">каждые 2–⁠3 недели</span><h4 id="gidro-h18">Пузыри круглые сутки</h4>
+            <span class="step-ill" data-ill="hyd:d5" aria-hidden="true"></span><p>Компрессор работает без перерыва и без таймера. Раствор меняют целиком раз в 2–⁠3 недели, а между сменами доливают водой или раствором половинной крепости.</p></div></li>
+        </ol>
+        <aside class="sticky-side">
+          <div class="card">
+            <h3 id="gidro-h19">Что понадобится</h3>
+            <ul class="hy-need">
+              <li><span>Ведро 10–⁠20 л с крышкой</span><b>300–⁠800 ₽</b></li>
+              <li><span>Компрессор 2–⁠5 Вт</span><b>600–⁠1 500 ₽</b></li>
+              <li><span>Шланг, камень, обратный клапан</span><b>200–⁠400 ₽</b></li>
+              <li><span>Стаканчики, керамзит, минвата</span><b>300–⁠700 ₽</b></li>
+              <li><span>Удобрение и два прибора</span><b>1 200–⁠5 000 ₽</b></li>
+            </ul>
+            <p class="muted">Компрессор на 3 Вт за месяц круглосуточной работы потратит около 2 кВт·ч — меньше 20 ₽.</p>
+          </div>
+          <div class="card">
+            <h3 id="gidro-h20">Если отключат электричество</h3>
+            <p>Без пузырей кислород в растворе кончается за несколько часов, тем быстрее, чем крупнее кусты и теплее вода. Уезжаете или ждёте отключения — опустите уровень на 5 см: верх корней окажется в воздухе, и ведро на время станет банкой Кратки. Как быстро тратится кислород, считает модель в развороте <a href="#deep-dyhanie-kornya">«Как корень дышит в воде»</a>.</p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="sub card table-scroll" id="substraty">
+        <h3 id="gidro-h21">Субстраты: что держит корни</h3>
+        <table class="mini-table stack">
+          <thead><tr><th scope="col">Субстрат</th><th scope="col">Что это</th><th scope="col">Плюсы</th><th scope="col">Минусы</th><th scope="col">Для чего</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Субстрат"><b>Керамзит</b></td><td data-label="Что это">обожжённая вспученная глина, шарики 8–⁠16 мм</td><td data-label="Плюсы">вечный, держит воздух, не гниёт</td><td data-label="Минусы">пыльный — промыть и замочить; воду почти не поднимает</td><td data-label="Для чего">засыпка стаканчика вокруг кубика</td></tr>
+            <tr><td data-label="Субстрат"><b>Минеральная вата</b></td><td data-label="Что это">волокно из расплавленного камня, кубики 2–⁠4 см</td><td data-label="Плюсы">держит и воду, и воздух, стерильная</td><td data-label="Минусы">щелочная — замочить на сутки в воде с pH 5,5; волокна колются</td><td data-label="Для чего">посев и черенки</td></tr>
+            <tr><td data-label="Субстрат"><b>Кокос</b></td><td data-label="Что это">волокно и крошка из скорлупы кокоса, таблетки</td><td data-label="Плюсы">дешёвый, натуральный, хорошо пьёт воду</td><td data-label="Минусы">бывает солёным — промыть; крошится в раствор</td><td data-label="Для чего">посев, капельный полив</td></tr>
+            <tr><td data-label="Субстрат"><b>Перлит, вермикулит</b></td><td data-label="Что это">вспученное вулканическое стекло и слюда</td><td data-label="Плюсы">лёгкие, дешёвые</td><td data-label="Минусы">всплывают, забивают насосы</td><td data-label="Для чего">фитиль, смеси в горшках</td></tr>
+            <tr><td data-label="Субстрат"><b>Поролоновые кубики</b></td><td data-label="Что это">пористый пищевой полимер</td><td data-label="Плюсы">дёшево, удобно резать</td><td data-label="Минусы">могут держать слишком много воды</td><td data-label="Для чего">посев в кассетах домашних ферм</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub cols-2">
+        <article class="card">
+          <h3 id="gidro-h22">Посев прямо в кубик</h3>
+          <ol class="plain-ol">
+            <li>Замочите кубики минваты в воде с pH 5,5 или размочите кокосовые таблетки.</li>
+            <li>По 2–⁠3 семени в лунку кубика, сверху не засыпайте или чуть-чуть прикройте крошкой.</li>
+            <li>Под крышку, 22–⁠25 °C. Всходы — за 5–⁠10 дней, сразу под свет на 14–⁠16 часов.</li>
+            <li>Первые 7–⁠10 дней — чистая вода или раствор с EC 0,4–⁠0,6. Оставьте в кубике один сеянец.</li>
+            <li>Когда снизу кубика показались белые корешки, ставьте его в стаканчик системы.</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h3 id="gidro-h23">Черенок или куст из магазина</h3>
+          <p><b>Черенок</b> укореняется прямо в воде: верхушка 8–⁠10 см, нижние листья долой, стакан на светлое место. Через 1–⁠2 недели корни 2–⁠3 см — и черенок садится в стаканчик с керамзитом, корнями вниз через сетку. Подробно — на вкладке <a href="posadka.html#черенки">«Черенки»</a>.</p>
+          <p><b>Куст из магазина</b> можно отмыть от торфа и разделить, но с торфом в раствор попадут споры и мошки. Надёжнее нарезать с него черенков: через две недели будет чистая рассада.</p>
+        </article>
+      </div>
+      <div class="callout sub"><svg class="ico"><use href="#i-lamp"/></svg><p><b>Свет — тот же, что для горшка.</b> С октября по март подоконнику его не хватает: лампа на 14–⁠16 часов, 20–⁠30 см над верхушками. Хватит ли вашей — посчитает <a href="uhod.html#dli">калькулятор досветки</a>.</p></div>
+      <section class="faq-here">
+        <h3>Частые вопросы</h3>
+        <div class="faq">
+          <details><summary>Можно ли растить базилик просто в банке с водой?</summary><div class="faq-body"><p>Укоренить черенок — да, за 1–⁠2 недели. Растить дальше — нет: в чистой воде нет питания, и через пару недель листья мельчают и бледнеют. Как только появились корни, нужен раствор удобрения для гидропоники с EC 0,8–⁠1,2 или горшок.</p></div></details>
+        </div>
+        <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
+      </section>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small><button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button></p>
+        <details class="deep" id="deep-kapillyary" data-kind="phys" data-short="Капилляры">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-drop"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Как субстрат держит воду и воздух</span><span class="deep-sub">Капилляры, поры и высота подъёма</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Кубик минваты на 95–⁠97 % состоит из пустоты: волокна занимают несколько процентов объёма, остальное делят вода и воздух.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Вода поднимается по узким щелям сама: молекулы липнут к стенкам и тянут за собой соседей. Чем уже щель, тем выше подъём — так по закону Жюрена. Между шариками керамзита щели в миллиметр-два, и вода в них поднимается на сантиметр с небольшим. Между волокнами минваты — десятые доли миллиметра, и вода встаёт на 10–⁠15 см: кубик пропитывается до верха, стоя в растворе краешком.</p>
+                <p>Поэтому в стаканчике работают два субстрата вместе. Минвата или кокос вокруг корня держат воду и поят сеянец, пока корень не дошёл до раствора. Керамзит вокруг них остаётся сухим и воздушным: не гниёт, не цветёт и не даёт стаканчику превратиться в мокрую губку.</p>
+                <p>Крупные поры, которые вода не удерживает, — это воздух. У хорошего субстрата под базилик, когда лишняя вода стекла, воздух занимает 10–⁠30 % объёма. Меньше — корни задыхаются, больше — пересыхают.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Закон Жюрена</span><p>h = 2σ·cos θ / (ρ·g·r)</p></div>
+                <div class="num-note"><b>≈ 15 мм</b><span>поднимется вода в щели радиусом 1 мм; в щели 0,1 мм — около 15 см</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="capil" data-kind="phys"></div>
+            <details class="deeper">
+              <summary id="deep-kapillyary-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Вода, которую корень может взять</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Не всю воду в субстрате корень может забрать. Самые тонкие поры держат её так крепко, что корню её не вытянуть: это недоступная вода. В крупных порах вода стекает сама под своим весом. Корню достаётся середина — вода, которую поры держат, но отдают под всасывающей силой корня.</p>
+                <p>У минваты почти вся вода — в этой середине, поэтому её так любят для рассады: кубик отдаёт корню почти всё, что держит, и сохнет равномерно. У торфа и кокоса заметная часть воды держится в мелких порах и в самих волокнах, у керамзита вода — в основном плёнкой на шариках и внутри их пор.</p>
+                <p>Сила, с которой поры держат воду, считается так же, как высота подъёма: давление ≈ 2σ / r. Для пор в 0,03 мм это около 5 кПа — столько же, сколько у столба воды в полметра.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>de Gennes P.-G., Brochard-Wyart F., Quéré D. <i>Capillarity and Wetting Phenomena</i>. Springer, 2004.</li>
+                <li>Raviv M., Lieth J. H. (ред.) <i>Soilless Culture: Theory and Practice</i>. Elsevier, 2008.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-puzyri" data-kind="phys" data-short="Пузыри">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Зачем пузыри и какой нужен компрессор</span><span class="deep-sub">Перемешивание важнее самих пузырей</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Даже если в воду переходит всего 1 % кислорода из пузырей, литр воздуха в минуту приносит около 170 мг O₂ в час — в двадцать раз больше, чем выпьют четыре взрослых куста.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Пузырь проходит ведро за пару секунд — пузырь в миллиметр всплывает со скоростью около 10 см в секунду. За это время в воду успевает перейти малая доля его кислорода. Но воздуха через ведро идёт много, и его хватает с большим запасом.</p>
+                <p>Главная работа пузырей — перемешивание. Цепочка пузырей тянет за собой воду вверх, как насос-эрлифт: у поверхности вода насыщается кислородом из воздуха, а затем опускается к корням. Без этого течения вокруг корней застаивается обеднённая вода, и кислород сверху до них просто не доходит.</p>
+                <p>Мелкие пузыри лучше крупных: при том же объёме воздуха у них больше поверхность и они дольше всплывают. Поэтому нужен распылитель — пористый камень или диск, — а не открытый конец шланга. Компрессор на 2–⁠4 Вт, который даёт 1,5–⁠3 л воздуха в минуту, хватает на ведро 10–⁠20 л.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Поверхность пузырей</span><p>S / V = 6 / d</p></div>
+                <div class="num-note"><b>× 4</b><span>больше поверхности даёт тот же воздух в пузырях по 1 мм, чем в пузырях по 4 мм</span></div>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-puzyri-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему камень кладут на дно</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Чем глубже камень, тем дольше пузырь в воде и тем больше кислорода он отдаёт. Кроме того, на глубине давление выше, и по закону Генри на границе пузыря растворяется чуть больше газа: на 20 см глубины — на 2 % больше, чем у поверхности.</p>
+                <p>Мелкие пузыри сливаются в крупные, если их слишком много и они теснятся. Поэтому два небольших камня в разных углах ведра работают лучше одного большого в середине: и пузыри мельче, и течение охватывает всю ёмкость.</p>
+                <p>Компрессор качает уличный — точнее, комнатный — воздух. В тёплой комнате он тёплый и сухой, но на температуру раствора почти не влияет: теплоёмкость воздуха в тысячи раз меньше, чем у воды. Греют раствор лампа, батарея и солнце.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Clift R., Grace J. R., Weber M. E. <i>Bubbles, Drops, and Particles</i>. Academic Press, 1978.</li>
+                <li>Raviv M., Lieth J. H. (ред.) <i>Soilless Culture: Theory and Practice</i>. Elsevier, 2008.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="panel" data-panel id="раствор" data-title="Раствор: EC, pH и кислород">
+      <p class="panel-lead">В гидропонике всё питание — в растворе, поэтому концентрацию контролируют кондуктометром (EC) и pH-метром. Используйте удобрения для гидропоники: почвенные не содержат всего набора элементов — остальное в горшке добирает почва, а здесь её нет.</p>
+      <div class="card table-scroll">
+        <table class="mini-table stack">
+          <thead><tr><th scope="col">Стадия</th><th scope="col">EC, <span class="unit">мС/⁠см</span></th><th scope="col"><span class="unit">pH</span></th><th scope="col">Комментарий</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Стадия">Сеянцы, 1–⁠2 пары листьев</td><td data-label="EC, мС/⁠см" class="num">0,4–⁠0,8</td><td data-label="pH" class="num">5,8–⁠6,2</td><td data-label="Комментарий">Слабый раствор, корни ещё нежные</td></tr>
+            <tr><td data-label="Стадия">Активный рост</td><td data-label="EC, мС/⁠см" class="num">1,0–⁠1,4</td><td data-label="pH" class="num">5,5–⁠6,5</td><td data-label="Комментарий">Повышайте постепенно, на 0,1–⁠0,2 в неделю</td></tr>
+            <tr><td data-label="Стадия">Регулярные срезки</td><td data-label="EC, мС/⁠см" class="num">1,2–⁠1,6</td><td data-label="pH" class="num">5,5–⁠6,5</td><td data-label="Комментарий">Выше 1,8–⁠2,0 — риск ожога корней и горечи</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note"><b>Температура раствора на всех стадиях — 18–⁠22&nbsp;°C.</b> Выше 24&nbsp;°C в воде мало кислорода: корни задыхаются и начинают гнить.</p>
+        <p class="table-note">Базилик к EC нетребователен: в опытах он рос почти одинаково в широком диапазоне, примерно от 0,5 до 4&nbsp;мС/⁠см, а в вертикальной ферме лучше всего — при 0,9–⁠1,2. Поэтому точность в десятые доли не нужна; важнее, чтобы EC не уплывала. Как прибор меряет соли и что такое ppm — в развороте <a href="udobreniya.html#deep-ec">«EC и ppm»</a>.</p>
+      </div>
+      <div class="sub two-col" id="kak-razvesti">
+        <div class="lab-tool" data-lab="hmix" data-kind="chem" id="hmix-tool"></div>
+        <aside class="sticky-side">
+          <div class="card">
+            <h3 id="gidro-h24">Порядок — всегда один</h3>
+            <ol class="plain-ol">
+              <li><b>Вода</b> комнатной температуры. Измерьте её EC: водопроводная — 0,2–⁠0,7. Выше 0,8 — смешайте с фильтрованной.</li>
+              <li><b>Часть A</b> — в воду, перемешайте.</li>
+              <li><b>Часть B</b> (и C, если есть) — перемешайте. Концентраты между собой не смешивают никогда, только в воде.</li>
+              <li><b>Через 10–⁠15 минут</b> измерьте EC и добавьте удобрения или воды.</li>
+              <li><b>pH — последним:</b> удобрения сами его сдвигают. pH-минус — по капле на литр, перемешивая и меряя через 5 минут.</li>
+            </ol>
+          </div>
+        </aside>
+      </div>
+      <div class="sub cols-2">
+        <article class="card">
+          <h3 id="gidro-h25">Когда менять раствор</h3>
+          <ul class="ticks">
+            <li><b>Банка Кратки</b> — целиком раз в 6–⁠8 недель или когда большой куст выпил половину.</li>
+            <li><b>Ведро DWC</b> — раз в 2–⁠3 недели, у больших кустов летом — раз в 10–⁠14 дней.</li>
+            <li><b>Сразу</b> — если раствор помутнел, пенится или пахнет гнилью.</li>
+            <li><b>Между сменами:</b> EC растёт — доливайте чистую воду, падает — раствор половинной крепости.</li>
+            <li><b>Старый раствор</b> безопасен: им можно полить комнатные цветы или вылить в канализацию.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 id="gidro-h26">Частые ошибки</h3>
+          <ul class="ticks is-bad">
+            <li>Раствор на свету — водоросли и нехватка кислорода.</li>
+            <li>Тёплая комната летом — раствор перегревается, корни буреют.</li>
+            <li>Долив концентратом вместо воды — EC растёт, листья горят.</li>
+            <li>pH «на глаз» — железо и марганец становятся недоступны.</li>
+            <li>Части A и B налиты в один стакан — белые хлопья, кальций и фосфор выпали в осадок.</li>
+            <li>Почвенное удобрение вместо гидропонного — через пару недель нехватка кальция и микроэлементов.</li>
+          </ul>
+        </article>
+      </div>
+      <section class="faq-here">
+        <h3>Частые вопросы</h3>
+        <div class="faq">
+          <details><summary>Подойдёт ли обычное удобрение для рассады?</summary><div class="faq-body"><p>Лучше не надо. В почвенных удобрениях часто нет кальция, магния и полного набора микроэлементов — их добирает почва. В растворе без почвы через 2–⁠3 недели начнётся нехватка. Берите удобрение с пометкой «для гидропоники».</p></div></details>
+        </div>
+        <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
+      </section>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small><button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button></p>
+        <details class="deep" id="deep-kislorod" data-kind="phys" data-short="Кислород и хелаты">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-wave"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Кислород в растворе и хелаты</span><span class="deep-sub">Почему тёплая вода душит корни</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">график</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Литр воды при 20&nbsp;°C держит около 9&nbsp;мг кислорода, а литр воздуха — около 280&nbsp;мг: в тридцать раз больше.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Корни дышат: энергия на поглощение ионов берётся из дыхания, а для него нужен кислород. В гидропонике он есть только растворённый в воде.</p>
+                <p>Растворимость газов падает с ростом температуры: при 15&nbsp;°C в литре воды около 10&nbsp;мг O<sub>2</sub>, при 25&nbsp;°C — около 8,3&nbsp;мг, при 30&nbsp;°C — 7,6&nbsp;мг. А дыхание корней с нагревом ускоряется. Ножницы смыкаются: в тёплом растворе кислорода не хватает, и корни становятся лёгкой добычей гнилей вроде питиума.</p>
+                <p>Железо при pH выше 6,5 быстро выпадает в осадок гидроксидом. <b>Хелат</b> — молекула-клешня, которая держит ион железа растворённым. У каждой клешни свой рабочий диапазон: ЭДТА — примерно до pH 6,5, ДТПА — до 7,5, ЭДДГА — до 9 и выше.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>9,1 → 7,6</b><span>мг O<sub>2</sub> на литр при нагреве воды с 20 до 30&nbsp;°C</span></div>
+                <div class="chel" role="img" aria-label="Рабочий диапазон хелатов железа: ЭДТА до pH 6,5, ДТПА до 7,5, ЭДДГА до 9 и выше">
+                  <div><span>ЭДТА</span><i style="--w: 50%"></i></div>
+                  <div><span>ДТПА</span><i style="--w: 70%"></i></div>
+                  <div><span>ЭДДГА</span><i style="--w: 100%"></i></div>
+                  <p class="chel-scale"><span>pH 4</span><span>6,5</span><span>7,5</span><span>9+</span></p>
+                </div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="o2" data-kind="phys"></div>
+            <details class="deeper">
+              <summary id="deep-kislorod-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Закон Генри в цифрах</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Концентрация газа в воде пропорциональна его парциальному давлению над водой. Кислорода в воздухе 21&nbsp;%, и при 20&nbsp;°C литр пресной воды держит около 9&nbsp;мг O₂. В тёплой воде константа растворимости меньше, а в солёной — ещё меньше: питательный раствор держит чуть меньше кислорода, чем чистая вода.</p>
+                <p>Аэратор не «накачивает» воду кислородом сверх нормы: он лишь быстрее восполняет то, что съели корни и микробы, и не даёт образоваться застойным зонам.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Morard P., Silvestre J. Plant injury due to oxygen deficiency in the root environment of soilless culture: a review. <i>Plant and Soil</i>, 1996.</li>
+                <li>Lucena J. J. Fe chelates for remediation of Fe chlorosis in strategy I plants. <i>Journal of Plant Nutrition</i>, 2003.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-dreyf-ph" data-kind="chem" data-short="Дрейф pH и EC">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-flask"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Почему pH ползёт вверх, а EC — куда захочет</span><span class="deep-sub">Нитрат, бикарбонаты и вода, которую пьёт куст</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Базилик, который ест нитрат, сам подщелачивает раствор: за каждый взятый ион NO₃⁻ корень отдаёт наружу ион OH⁻ или HCO₃⁻.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Корень обязан оставаться электрически нейтральным. Если он берёт больше отрицательных ионов, чем положительных, он отдаёт в раствор отрицательные взамен — гидроксид или бикарбонат. Главный ион питания базилика — нитрат NO₃⁻, и его берут больше всех остальных вместе, поэтому pH раствора с нитратным удобрением медленно растёт: на 0,1–⁠0,3 в сутки у больших кустов.</p>
+                <p>С аммонием наоборот: за ион NH₄⁺ корень отдаёт протон, и раствор кисленет. Поэтому в удобрения для гидропоники кладут немного аммонийного азота — он гасит подщелачивание. Жёсткая вода с бикарбонатами толкает pH вверх ещё сильнее и сопротивляется кислоте: на неё уходит больше pH-минуса.</p>
+                <p>EC зависит от того, что куст берёт быстрее — воду или соли. В жару и сухой воздух он много пьёт, вода уходит быстрее солей, и EC растёт. В прохладе и сырости он пьёт мало, а соли берёт, и EC падает. Отсюда правило долива: растёт — чистая вода, падает — слабый раствор.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Обмен у корня</span><p>NO₃⁻ внутрь → OH⁻ или HCO₃⁻ наружу</p></div>
+                <div class="eq"><span class="eq-label">Буфер жёсткой воды</span><p>HCO₃⁻ + H⁺ → CO₂ + H₂O</p></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="drift" data-kind="chem"></div>
+            <details class="deeper">
+              <summary id="deep-dreyf-ph-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему pH-минус действует не сразу</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>В водопроводной воде растворены бикарбонаты — от 50 до 300&nbsp;мг на литр и больше в жёсткой воде. Пока они есть, каждая капля кислоты уходит на то, чтобы превратить бикарбонат в углекислый газ, и pH почти не двигается. Когда бикарбонаты кончились, следующая капля роняет pH сразу на единицу. Поэтому кислоту льют по капле, мешают и ждут: кривая титрования сначала пологая, потом обрывается.</p>
+                <p>Тот же буфер объясняет, почему раствор на мягкой или фильтрованной воде «скачет»: в нём нечем гасить колебания, и pH уходит от любой мелочи. Небольшая жёсткость — скорее друг: 30–⁠50&nbsp;мг бикарбоната на литр держат pH спокойным.</p>
+                <p>Углекислый газ, который выделяется при подкислении, уходит в воздух — особенно под аэратором. Поэтому pH в ведре с пузырями после подкисления ещё час-другой чуть подрастает: из раствора выдувается растворённая углекислота.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Marschner P. (ред.) <i>Marschner's Mineral Nutrition of Higher Plants</i>, 3-е изд. Academic Press, 2012.</li>
+                <li>Hinsinger P. et al. Origins of root-mediated pH changes in the rhizosphere and their responses to environmental constraints: a review. <i>Plant and Soil</i> 248, 2003.</li>
+                <li>Sonneveld C., Voogt W. <i>Plant Nutrition of Greenhouse Crops</i>. Springer, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-osadok" data-kind="chem" data-short="Концентраты">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-hex"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · химия</span><span class="deep-title">Почему концентраты нельзя смешивать</span><span class="deep-sub">Кальций, сульфат и фосфат</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Гипс в стене и белые хлопья в стакане, где встретились части A и B, — одно и то же вещество: сульфат кальция.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>В части A обычно кальциевая селитра и хелат железа, в части B — фосфаты, сульфаты, калий, магний и микроэлементы. Порознь они растворимы. Но кальций с сульфатом дают гипс, растворимость которого всего около 2&nbsp;г на литр, а кальций с фосфатом — ещё менее растворимые фосфаты кальция.</p>
+                <p>В концентрате всё в сотни раз крепче, чем в рабочем растворе, и если A и B встретятся без воды, кальций с фосфором тут же выпадут белыми хлопьями. Растению они уже недоступны: через пару недель на новых листьях — нехватка кальция, а на старых — фосфора.</p>
+                <p>В рабочем растворе, разбавленном в 100–⁠250 раз, ионам тесно не бывает, и они остаются растворёнными. Но и тут есть граница — pH: выше 6,5 фосфаты кальция и железо начинают выпадать и в рабочем растворе. Поэтому pH правят последним и держат ниже 6,5.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Гипс</span><p>Ca²⁺ + SO₄²⁻ ⇄ CaSO₄↓</p></div>
+                <div class="eq"><span class="eq-label">Фосфат кальция</span><p>Ca²⁺ + HPO₄²⁻ ⇄ CaHPO₄↓</p></div>
+                <div class="num-note"><b>≈ 2 г/⁠л</b><span>растворимость гипса в воде при комнатной температуре</span></div>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-osadok-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Произведение растворимости</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Соль выпадает в осадок, когда произведение концентраций её ионов больше константы — произведения растворимости. У гипса она около 5 · 10<sup>−5</sup>, если считать концентрации в молях на литр.</p>
+                <p>В рабочем растворе кальция около 4 ммоль/⁠л, сульфата — около 2: произведение 0,004 · 0,002 = 8 · 10<sup>−6</sup>, в шесть раз меньше константы, и гипс не выпадает. В концентрате, который в сто раз крепче, то же произведение — 0,4 · 0,2 = 0,08, в полторы тысячи раз больше константы. Осадок неизбежен.</p>
+                <p>Расчёт упрощённый: в крепких растворах ионы мешают друг другу, и их «действующая» концентрация меньше настоящей. Но порядок величины он показывает верно — и объясняет, почему производители делят удобрение на части.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Sonneveld C., Voogt W. <i>Plant Nutrition of Greenhouse Crops</i>. Springer, 2009.</li>
+                <li>Raviv M., Lieth J. H. (ред.) <i>Soilless Culture: Theory and Practice</i>. Elsevier, 2008.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="panel" data-panel id="проверки" data-title="Проверки и неполадки">
+      <p class="panel-lead">Раствор меняется каждый день: куст пьёт воду, берёт соли, сдвигает pH. Две минуты раз в 2–⁠3 дня — и ни одна беда не застанет врасплох. Ниже — что смотреть, что значат цифры и что делать, если что-то пошло не так.</p>
+      <div class="hy-routine">
+        <article class="card"><p class="hy-when">Каждый день</p><h3 id="gidro-h27">Взгляд</h3><p>Листья упругие, уровень на месте, компрессор гудит, пузыри идут, ничем не пахнет.</p></article>
+        <article class="card"><p class="hy-when">Раз в 2–⁠3 дня</p><h3 id="gidro-h28">Цифры</h3><p>EC, pH и температура раствора. Корни — белые или кремовые, упругие, без слизи.</p></article>
+        <article class="card"><p class="hy-when">Раз в неделю</p><h3 id="gidro-h29">Долив и срезка</h3><p>Долив водой или слабым раствором, срезка верхушек, сухая тряпка по крышке и стаканчикам.</p></article>
+        <article class="card"><p class="hy-when">Раз в 2–⁠3 недели</p><h3 id="gidro-h30">Смена</h3><p>Новый раствор, мойка ёмкости и камня. Раз в месяц — проверка приборов калибровочными растворами.</p></article>
+      </div>
+      <div class="lab-tool sub" data-lab="hcheck" data-kind="chem" id="hcheck-tool"></div>
+      <div class="sub card table-scroll" id="nepoladki">
+        <h3 id="gidro-h31">Неполадки: признак, причина, что делать</h3>
+        <table class="mini-table stack">
+          <thead><tr><th scope="col">Что видно</th><th scope="col">Вероятная причина</th><th scope="col">Что делать</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Что видно">Корни бурые, слизистые, пахнут гнилью; куст вянет</td><td data-label="Вероятная причина">Корневая гниль (питиум): тёплый раствор и мало кислорода</td><td data-label="Что делать">Смените раствор, вымойте ёмкость, отрежьте гнилые корни, охладите раствор до 18–⁠22 °C, проверьте компрессор</td></tr>
+            <tr><td data-label="Что видно">Корни белые, но нижние листья бледнеют, рост тонкий</td><td data-label="Вероятная причина">Раствор слабый (EC ниже 0,6) или выработан</td><td data-label="Что делать">Новый раствор с EC 1,0–⁠1,4</td></tr>
+            <tr><td data-label="Что видно">Кончики и края листьев сохнут бурой каймой</td><td data-label="Вероятная причина">Раствор крепкий (EC выше 2) или жара</td><td data-label="Что делать">Долейте воды до EC 1,2–⁠1,6, уберите ёмкость от батареи и солнца</td></tr>
+            <tr><td data-label="Что видно">Новые листья жёлтые с зелёными жилками</td><td data-label="Вероятная причина">pH выше 6,5: железо недоступно</td><td data-label="Что делать">pH до 5,8–⁠6,2; если pH в норме — свежий раствор с хелатом железа</td></tr>
+            <tr><td data-label="Что видно">Верхушки сморщенные и кривые, кончики молодых листьев чернеют</td><td data-label="Вероятная причина">Нехватка кальция: смешали концентраты, сухой воздух, нет движения воздуха</td><td data-label="Что делать">Свежий раствор в правильном порядке, проветривание, вентилятор на слабом ходу</td></tr>
+            <tr><td data-label="Что видно">Зелёный налёт на стенках, раствор зеленеет</td><td data-label="Вероятная причина">Свет попадает в ёмкость</td><td data-label="Что делать">Закрыть ёмкость и щели, отмыть стенки, сменить раствор</td></tr>
+            <tr><td data-label="Что видно">Куст вянет днём, хотя корни в растворе</td><td data-label="Вероятная причина">Корни задыхаются: стал компрессор, перегрев или в банке Кратки уровень слишком высокий</td><td data-label="Что делать">Проверить компрессор и камень, температуру; в банке опустить уровень</td></tr>
+            <tr><td data-label="Что видно">Белый налёт на керамзите и крышке</td><td data-label="Вероятная причина">Соли выкристаллизовались там, где испаряется вода</td><td data-label="Что делать">Безвредно: смыть тёплой водой при смене раствора</td></tr>
+            <tr><td data-label="Что видно">pH каждый день прыгает на единицу</td><td data-label="Вероятная причина">Мягкая вода без буфера или грязный электрод pH-метра</td><td data-label="Что делать">Откалибровать прибор, разбавить фильтрованную воду водопроводной</td></tr>
+            <tr><td data-label="Что видно">Тля, клещ, белокрылка</td><td data-label="Вероятная причина">Те же гости, что у горшка; грунтовых мошек в гидропонике почти нет</td><td data-label="Что делать">Как у горшка — на вкладке <a href="problemy.html#вредители">«Вредители»</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sub cols-2">
+        <article class="card">
+          <h3 id="gidro-h32">Приборы: чтобы цифрам можно было верить</h3>
+          <ul class="ticks">
+            <li><b>EC-метр</b> проверяют калибровочным раствором 1,413 мС/⁠см раз в месяц. Прибор с термокомпенсацией (ATC) сам приводит показания к 25 °C.</li>
+            <li><b>pH-метр</b> калибруют по двум буферам — 4,01 и 6,86 или 7,00 — раз в 2–⁠4 недели и после промывки.</li>
+            <li><b>Электрод pH-метра</b> хранят влажным, в растворе для хранения или в буфере, но не в дистиллированной воде: она вымывает из стекла ионы.</li>
+            <li><b>TDS-карандаш</b> показывает ppm — это та же EC, умноженная на 500 или 700. Как пересчитать — в развороте <a href="udobreniya.html#deep-ec">«EC и ppm»</a>.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 id="gidro-h33">Чистота — половина защиты</h3>
+          <ul class="ticks">
+            <li>При смене раствора мойте ёмкость горячей водой с содой, ополосните.</li>
+            <li>Камень распылителя раз в месяц — в слабый раствор уксуса на час: соли закупоривают поры.</li>
+            <li>Отмершие корешки и листья, упавшие в раствор, — сразу вон: они кормят бактерии и тратят кислород.</li>
+            <li>Для профилактики гнили — биофунгицид на основе <i>Bacillus subtilis</i> при каждой смене, по инструкции. Не вместе с перекисью: она убьёт и полезных бактерий.</li>
+          </ul>
+        </article>
+      </div>
+      <section class="faq-here">
+        <h3>Частые вопросы</h3>
+        <div class="faq">
+          <details><summary>Почему корни в гидропонике стали коричневыми?</summary><div class="faq-body"><p>Если корни бурые, слизистые и пахнут — это корневая гниль, чаще всего от тёплого раствора без кислорода. Смените раствор, вымойте ёмкость, отрежьте гнилое и держите раствор при 18–⁠22&nbsp;°C. Если корни просто чуть желтоватые и упругие — это нормальный цвет корней в растворе с удобрением.</p></div></details>
+        </div>
+        <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
+      </section>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small><button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button></p>
+        <details class="deep" id="deep-pitium" data-kind="bio" data-short="Питиум">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-cell"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Питиум: гниль, которая плавает</span><span class="deep-sub">Зооспоры, тепло и кислород</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">модель</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Питиум — не гриб, а оомицет, родня бурых водорослей: его споры плавают в растворе на двух жгутиках и находят корень по запаху его выделений.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>В горшке болезнь корней сидит в одном горшке. В гидропонике у всех кустов одна вода, а возбудитель корневой гнили питиум приспособлен именно к ней: его зооспоры плывут, как сперматозоиды, на двух жгутиках и поворачивают туда, где гуще сахара и аминокислоты, которые корень выделяет в раствор. Доплыв, спора теряет жгутики, прилипает и прорастает внутрь корня.</p>
+                <p>Питиум живёт почти везде — в воде из-под крана, на пыли, на руках, — и вопрос не в том, попадёт ли он в систему, а в том, сможет ли он там развернуться. Решают температура и кислород. На гидропонных фермах салата вспышки гнили шли при температуре раствора от 20 до 30,5 °C и не случались при 13,5–⁠18 °C, а в лабораторных опытах питиум поражал корни при 24–⁠27 °C и почти не трогал их при 16–⁠17 °C.</p>
+                <p>Тёплый раствор бьёт дважды: в нём меньше кислорода, и корень слабеет, а питиум, наоборот, растёт быстрее. Поэтому советы одни и те же: раствор 18–⁠22 °C, растворённого кислорода больше 6 мг на литр, чистая ёмкость, и при первых бурых корнях — смена раствора целиком.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>24 °C</b><span>рабочий порог: выше него риск гнили резко растёт</span></div>
+                <div class="num-note"><b>&gt; 6 мг/⁠л</b><span>растворённого кислорода — с таким запасом корни сопротивляются гнили</span></div>
+              </aside>
+            </div>
+            <div class="lab-tool" data-lab="pyth" data-kind="bio"></div>
+            <details class="deeper">
+              <summary id="deep-pitium-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Полезные микробы против питиума</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Стерильная система — не самая здоровая. В свежем растворе микробов мало, и первый, кто доплывёт до корня, займёт его. Если это питиум — беда. Если раньше корень заселили безвредные бактерии, им нечего делить с хозяином, а с питиумом они делят место и пищу.</p>
+                <p>На этом работают биофунгициды: бактерии <i>Bacillus subtilis</i>, грибы <i>Trichoderma</i>. Они выделяют вещества против оомицетов и плотно заселяют поверхность корня. Работают они профилактически — до болезни, а не вместо её лечения.</p>
+                <p>Перекись водорода и хлор убивают всех подряд: и питиум, и полезных соседей. После такой обработки корень на время остаётся беззащитным, поэтому их оставляют на случай, когда систему надо спасать, а не держать.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Sutton J. C. et al. Etiology and epidemiology of Pythium root rot in hydroponic crops: current knowledge and perspectives. <i>Summa Phytopathologica</i>, 2006.</li>
+                <li>Stanghellini M. E., Rasmussen S. L. Hydroponics: a solution for zoosporic pathogens. <i>Plant Disease</i>, 1994.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-vodorosli" data-kind="bio" data-short="Водоросли">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-sun"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · биология</span><span class="deep-title">Водоросли и свет</span><span class="deep-sub">Почему зелёный налёт — это не только некрасиво</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>Водорослям хватает света, которого не заметит глаз: полоски сквозь щель в крышке достаточно, чтобы за неделю стенки позеленели.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Раствор для базилика — идеальная среда и для водорослей: в нём есть всё, что нужно для роста, кроме света. Стоит пустить свет, и через несколько дней стенки зеленеют.</p>
+                <p>Водоросли едят то же, что и куст, но опаснее другое. Днём они фотосинтезируют, забирают из воды углекислоту, и pH уходит вверх. Ночью дышат и тратят кислород, нужный корням. Отмирая, они кормят бактерии, которые тратят его ещё больше. Нити водорослей забивают поры камня и капельницы.</p>
+                <p>Защита одна — темнота. Непрозрачная ёмкость, закрытые отверстия, стаканчики, засыпанные керамзитом доверху. Белая пластмасса пропускает свет, чёрная внутри и белая снаружи — нет и не греется на солнце.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">День: pH вверх</span><p>CO₂ + H₂O → (CH₂O) + O₂</p></div>
+                <div class="eq"><span class="eq-label">Ночь: кислород вниз</span><p>(CH₂O) + O₂ → CO₂ + H₂O</p></div>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-vodorosli-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему стенки зеленеют сверху</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Свет в воде гаснет с глубиной, а у мутной, зелёной воды — ещё быстрее. Поэтому налёт гуще у поверхности и у щелей крышки, а на дне его почти нет. Чем больше водорослей, тем мутнее вода и тем сильнее они затеняют сами себя — рост упирается в собственную тень.</p>
+                <p>Кислородная яма ночью бывает глубокой: густая зелень в маленькой банке за ночь способна выпить заметную часть растворённого кислорода. Утром, когда включается лампа, водоросли снова его производят — у корней получаются качели, а им нужна ровная вода.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Raviv M., Lieth J. H. (ред.) <i>Soilless Culture: Theory and Practice</i>. Elsevier, 2008.</li>
+                <li>Resh H. M. <i>Hydroponic Food Production</i>, 7-е изд. CRC Press, 2012.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-pribory" data-kind="phys" data-short="Приборы">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-thermo"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Как работают EC-метр и pH-метр</span><span class="deep-sub">Ток между электродами и потенциал стекла</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>pH-метр — это вольтметр: тонкое стекло его электрода даёт около 59 милливольт на каждую единицу pH при 25 °C.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>EC-метр пускает между двумя электродами переменный ток и меряет, насколько легко он идёт. Ток в воде несут ионы растворённых солей, поэтому проводимость растёт с их количеством. Чистая вода тока почти не проводит. Переменный ток нужен, чтобы ионы не оседали на электродах и не портили замер.</p>
+                <p>С температурой проводимость растёт примерно на 2 % на градус: ионы двигаются быстрее. Поэтому хороший прибор меряет и температуру и пересчитывает показание к 25 °C. Без этой поправки один и тот же раствор утром и днём покажет разную EC.</p>
+                <p>pH-метр устроен иначе. Его электрод — тонкий шарик особого стекла: ионы водорода из раствора садятся на его поверхность, и на стекле возникает напряжение. Его сравнивают с электродом сравнения, и разница — около 59 мВ на единицу pH — пересчитывается в число на экране. Стекло стареет, контакт забивается, и наклон уплывает: поэтому прибор и калибруют.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="eq"><span class="eq-label">Уравнение Нернста, 25 °C</span><p>E = E₀ − 0,0592 · pH</p></div>
+                <div class="num-note"><b>≈ 2 % на °C</b><span>растёт проводимость раствора при нагреве</span></div>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-pribory-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Почему TDS — не граммы соли</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>TDS-карандаш тоже меряет проводимость, а потом умножает её на коэффициент — 500 или 700 — и показывает ppm, «частей на миллион». Настоящее количество солей так не узнать: ион калия и ион кальция проводят ток по-разному, а сахара и мочевина не проводят его вовсе.</p>
+                <p>Поэтому один и тот же раствор на двух карандашах с разными шкалами покажет 600 и 840 ppm. Для гидропоники надёжнее писать и сравнивать EC: она не зависит от выбранного коэффициента.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Bates R. G. <i>Determination of pH: Theory and Practice</i>. Wiley, 1973.</li>
+                <li>Sonneveld C., Voogt W. <i>Plant Nutrition of Greenhouse Crops</i>. Springer, 2009.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="panel" data-panel id="сравнение" data-title="Горшок или гидропоника">
+      <p class="panel-lead">Гидропоника не волшебная. Она быстрее там, где горшок упирался в корни, и дороже там, где горшку хватает земли и лейки. Ниже — сравнение по урожаю, вкусу, времени и деньгам и калькулятор, который посчитает ваш случай.</p>
+      <div class="card table-scroll">
+        <table class="mini-table compare stack">
+          <thead><tr><th scope="col">Что сравниваем</th><th scope="col">Горшок с грунтом</th><th scope="col">Гидропоника</th></tr></thead>
+          <tbody>
+            <tr><td data-label="Что сравниваем">Первый срез</td><td data-label="Горшок с грунтом">через 6–⁠8 недель после всходов</td><td data-label="Гидропоника">через 4–⁠6 недель</td></tr>
+            <tr><td data-label="Что сравниваем">Урожай</td><td data-label="Горшок с грунтом">базовый</td><td data-label="Гидропоника">в опытах на 15–⁠100 % выше — сильнее всего у компактных сортов; при слабом свете разницы почти нет</td></tr>
+            <tr><td data-label="Что сравниваем">Вкус и аромат</td><td data-label="Горшок с грунтом">насыщеннее: в листьях больше эфирного масла и фенолов</td><td data-label="Гидропоника">мягче и анисовее: больше метилхавикола, меньше свежего 1,8-цинеола</td></tr>
+            <tr><td data-label="Что сравниваем">Уход</td><td data-label="Горшок с грунтом">полив по пальцу 2–⁠4 раза в неделю, подкормки раз в 10–⁠14 дней, пересадка</td><td data-label="Гидропоника">долив и замер EC и pH раз в 2–⁠3 дня, смена раствора раз в 2–⁠8 недель</td></tr>
+            <tr><td data-label="Что сравниваем">Ошибки прощает</td><td data-label="Горшок с грунтом">неделями: почва — буфер</td><td data-label="Гидропоника">днями: раствор меняется быстро</td></tr>
+            <tr><td data-label="Что сравниваем">Вредители и болезни</td><td data-label="Горшок с грунтом">грибные мошки в грунте, чёрная ножка</td><td data-label="Гидропоника">мошек почти нет; гниль корней расходится по всей системе</td></tr>
+            <tr><td data-label="Что сравниваем">Вода</td><td data-label="Горшок с грунтом">часть уходит в поддон и испаряется с грунта</td><td data-label="Гидропоника">почти вся уходит через листья; ёмкость закрыта</td></tr>
+            <tr><td data-label="Что сравниваем">Электричество</td><td data-label="Горшок с грунтом">только лампа, если она нужна</td><td data-label="Гидропоника">лампа и компрессор 2–⁠5 Вт; банке Кратки — ничего</td></tr>
+            <tr><td data-label="Что сравниваем">Старт</td><td data-label="Горшок с грунтом">горшок и грунт — 300–⁠800 ₽</td><td data-label="Гидропоника">банка — 1 500–⁠3 000 ₽, ведро — 3 000–⁠7 000 ₽, ферма — 5 000–⁠25 000 ₽</td></tr>
+            <tr><td data-label="Что сравниваем">Шум и место</td><td data-label="Горшок с грунтом">тихо, горшок на окне</td><td data-label="Гидропоника">компрессор тихо гудит; ведро тяжёлое — 10–⁠20 кг</td></tr>
+            <tr><td data-label="Что сравниваем">Отпуск на неделю</td><td data-label="Горшок с грунтом">фитиль или сосед</td><td data-label="Гидропоника">банка Кратки переживёт сама; ведру нужен свет в розетке</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">Цены — ориентир по крупным маркетплейсам осенью 2026 года. В наборы гидропоники входят приборы и удобрение, которых хватит на годы.</p>
+      </div>
+      <div class="lab-tool sub" data-lab="hcost" data-kind="phys" id="hcost-tool"></div>
+      <div class="sub cols-2">
+        <article class="card">
+          <h3 id="gidro-h34">Выбирайте гидропонику, если</h3>
+          <ul class="ticks">
+            <li>базилика нужно много и постоянно — на салаты, песто и заготовки;</li>
+            <li>дома уже есть лампа или яркое окно: свет — главное условие;</li>
+            <li>надоели мошки, кислый грунт и пересадки;</li>
+            <li>интересно следить за цифрами и пробовать — гидропоника превращает подоконник в лабораторию.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 id="gidro-h35">Оставайтесь с горшком, если</h3>
+          <ul class="ticks is-warn">
+            <li>нужно 1–⁠2 куста «к столу» и пара срезок в неделю;</li>
+            <li>часто уезжаете и некому заглянуть в раствор;</li>
+            <li>главное — самый яркий аромат: на солнечном балконе в грунте он сильнее;</li>
+            <li>в комнате летом жарче 26 °C, а охладить раствор нечем.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="sub card" id="gotovye-fermy">
+        <h3 id="gidro-h36">Готовые домашние фермы</h3>
+        <p>Это то же DWC или фитиль, только в корпусе: бак на 2–⁠5 л, крышка на 6–⁠12 стаканчиков, светодиодная лампа на кронштейне с таймером и маленький насос или аэратор. Удобно, красиво и почти не требует сборки. Стоят 5 000–⁠25 000 ₽, а фирменные капсулы с семенами — 150–⁠400 ₽ за штуку, но вместо них можно посеять свои семена в кубики минваты.</p>
+        <ul class="ticks">
+          <li><b>Лампа</b> — не меньше 20–⁠25 Вт на 6 кустов; лучше с регулировкой высоты: базилик вырастает до 40–⁠60 см.</li>
+          <li><b>Бак</b> — не меньше 0,5–⁠1 л на куст, иначе летом раствор кончается за пару дней.</li>
+          <li><b>Свои семена</b> — проверьте, что стаканчики подходят под обычные кубики или губки.</li>
+          <li><b>Шум насоса</b> — для спальни выбирайте с аэратором или с режимом «тишина».</li>
+        </ul>
+      </div>
+      <section class="faq-here">
+        <h3>Частые вопросы</h3>
+        <div class="faq">
+          <details><summary>Гидропонный базилик вкуснее или нет?</summary><div class="faq-body"><p>Обычно он крупнее и сочнее, но пахнет мягче: в опытах у базилика с грядки больше эфирного масла и фенолов. Ярче всего аромат у гидропонного базилика при сильном свете и без перекорма азотом.</p></div></details>
+        </div>
+        <p class="faq-more"><a href="spravka.html#вопросы">Все частые вопросы</a></p>
+      </section>
+      <div class="deep-zone">
+        <p class="deep-zone-label"><span>Глубже</span><small>наука этого раздела</small><button class="deep-all" type="button" data-deep-all aria-pressed="false">Раскрыть все</button></p>
+        <details class="deep" id="deep-vkus-gidro" data-kind="taste" data-short="Вкус">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-nose"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · вкус</span><span class="deep-title">Вкус гидропонного базилика</span><span class="deep-sub">Эфирное масло, фенолы и лёгкий стресс</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>В гидропонике у базилика больше метилхавикола с запахом аниса, а 1,8-цинеола — свежей «эвкалиптовой» ноты — заметно меньше, чем у растений с поля.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Гидропонный базилик крупнее, зеленее и сочнее, а пахнет обычно мягче. Опыты сходятся: у растений с поля больше сухого вещества, эфирного масла, фенолов, флавоноидов и витамина C, у гидропонных — больше биомассы и пигментов. Меняется и состав масла: в гидропонике больше метилхавикола, меньше 1,8-цинеола.</p>
+                <p>Причина — баланс роста и защиты. Эфирное масло и фенолы растение строит из тех же сахаров, что и новые листья. Когда всего вдоволь, сахара уходят в рост, и аромат «разбавляется» в большой массе листа. Лёгкий стресс — яркое солнце и ультрафиолет, ветер, небольшая нехватка воды или азота — тормозит рост, и лишние сахара уходят в защиту, а это и есть аромат.</p>
+                <p>Поэтому сильнее всего аромат у гидропонного базилика при ярком свете и без перекорма азотом. Срезайте утром, когда масла в железках больше всего. Как устроен аромат — в главе <a href="vkus.html#аромат">«Вкус и кухня»</a>.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="num-note"><b>больше масла</b><span>и фенолов у базилика с поля, чем у гидропонного (опыты 2021 и 2024 годов)</span></div>
+                <div class="num-note"><b>больше урожая</b><span>и пигментов — у гидропонного</span></div>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-vkus-gidro-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Гипотеза углеродного баланса</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Ботаники давно заметили: растение на бедной почве при ярком свете богаче защитными веществами, чем то же растение на богатой почве в тени. Объяснение назвали гипотезой баланса углерода и питания. Если азота мало, а света много, сахаров больше, чем может уйти в рост, и излишек превращается в вещества без азота — терпены и фенолы.</p>
+                <p>Гипотеза объясняет не всё: многие ароматические вещества строятся по своим сигналам, и сорт значит больше, чем способ выращивания. Но для кухни правило работает: щедро накормленный и избалованный базилик растёт быстрее, а пахнет тише.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Aghamirzaei M. et al. Effects of micronutrients on the growth and phytochemical composition of basil (<i>Ocimum basilicum</i> L.) in the field and greenhouse (hydroponics and soil culture). <i>Plants</i> 13: 2498, 2024.</li>
+                <li>Šic Žlabur J. et al. Valorization of nutritional potential and specialized metabolites of basil cultivars depending on cultivation method. <i>Agronomy</i> 11: 1048, 2021.</li>
+                <li>Bryant J. P., Chapin F. S., Klein D. R. Carbon/nutrient balance of boreal plants in relation to vertebrate herbivory. <i>Oikos</i> 40, 1983.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+        <details class="deep" id="deep-voda-gidro" data-kind="phys" data-short="Вода">
+          <summary><span class="deep-sum">
+            <span class="deep-ico" aria-hidden="true"><svg class="ico"><use href="#i-drop"/></svg></span>
+            <span class="deep-head"><span class="deep-kind">Глубже · физика</span><span class="deep-title">Куда уходит вода</span><span class="deep-sub">Транспирация, испарение и сток</span></span>
+            <span class="deep-meta" aria-hidden="true"><span class="deep-tag">схема</span><span class="deep-time"></span><span class="deep-plus"></span></span>
+            <span class="deep-fact"><svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg><span>В опыте с базиликом системы Кратки и DWC потратили на 41 % меньше раствора, чем проточная плёнка NFT и подтопление снизу, а DWC дал на 21 % больше урожая, чем NFT.</span></span>
+          </span></summary>
+          <div class="deep-body">
+            <div class="deep-grid">
+              <div class="deep-text">
+                <p>Почти вся вода, которую берёт куст, уходит через устьица листьев — это транспирация. Она охлаждает лист и тянет воду с солями от корня вверх. Её не сэкономить: сколько куст вырос, столько он и выпил.</p>
+                <p>Экономить можно на остальном. Из горшка вода уходит ещё двумя путями: испаряется с поверхности грунта и стекает в поддон. В закрытой банке или ведре испарения почти нет, а стока нет вовсе. Проточные системы с открытыми желобами и баком теряют больше: вода испаряется с плёнки и с брызг.</p>
+                <p>Поэтому в простых закрытых системах на грамм урожая уходит меньше воды, чем в горшке. Для подоконника это мелочь, а для теплиц в засушливых странах — главная причина, почему гидропоника там так популярна.</p>
+              </div>
+              <aside class="deep-aside">
+                <div class="hy-water" role="img" aria-label="Примерные доли: в горшке около двух третей воды уходит через листья, остальное испаряется с грунта и стекает в поддон; в закрытой гидропонике почти вся вода уходит через листья">
+                  <p class="hy-water-h">Горшок, примерно</p>
+                  <div class="hy-water-bar"><i class="is-leaf" style="--w: 65%"></i><i class="is-soil" style="--w: 20%"></i><i class="is-drain" style="--w: 15%"></i></div>
+                  <p class="hy-water-h">Банка или ведро</p>
+                  <div class="hy-water-bar"><i class="is-leaf" style="--w: 94%"></i><i class="is-soil" style="--w: 6%"></i></div>
+                  <ul class="hy-water-key"><li><i class="is-leaf"></i>через листья</li><li><i class="is-soil"></i>испарение</li><li><i class="is-drain"></i>в поддон</li></ul>
+                </div>
+              </aside>
+            </div>
+            <details class="deeper">
+              <summary id="deep-voda-gidro-glubzhe"><span class="deeper-k">Ещё глубже</span><span class="deeper-t">Сколько пьёт куст</span><span class="deeper-plus" aria-hidden="true"></span></summary>
+              <div class="deeper-body">
+                <p>Растение пропускает через себя сотни граммов воды на каждый грамм сухого вещества. У базилика, как и у большинства трав, это порядка 300–⁠500&nbsp;г воды на грамм. В свежем листе сухого вещества около 8–⁠10 %, так что на 100&nbsp;г свежей зелени уходит примерно 3–⁠5 литров воды.</p>
+                <p>Сколько именно — решают свет и воздух: в жару и сухость куст пьёт вдвое больше, чем в прохладе и сырости, а прирост от этого почти не меняется. Поэтому летом банка пустеет быстрее, а EC в ней растёт — подробно в развороте <a href="#deep-dreyf-ph">«Почему pH ползёт вверх»</a>.</p>
+              </div>
+            </details>
+            <div class="deep-src">
+              <p class="deep-src-h">Откуда это известно</p>
+              <ol>
+                <li>Yield, quality and resource use efficiency of basil grown in alternative soilless growing systems. <i>Acta Horticulturae</i> 1377, 2023.</li>
+                <li>Raviv M., Lieth J. H. (ред.) <i>Soilless Culture: Theory and Practice</i>. Elsevier, 2008.</li>
+              </ol>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+    <nav class="pager" aria-label="Соседние главы"></nav>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>
+      <a class="brand" href="index.html">Базилик</a>
+      <p>Дозы и сроки в гиде — ориентиры для средних условий. Инструкция производителя удобрения всегда в приоритете, а погода важнее календаря.</p>
+    </div>
+    <div class="footer-end">
+      <p class="hand">Растите с удовольствием и ешьте песто ✿</p>
+      <button class="hap-row" type="button" role="switch" aria-checked="true" data-haptics hidden><span class="hap-switch" aria-hidden="true"></span><span>Отклик вибрацией</span></button>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<!-- mobile tab bar -->
+<nav class="tabbar" aria-label="Навигация">
+  <a class="tab-item" href="index.html" data-tab="home"><svg class="ico"><use href="#i-home"/></svg><span>Главная</span></a>
+  <a class="tab-item" href="moy.html" data-tab="moy" data-garden-link aria-label="Мой базилик"><svg class="ico"><use href="#i-sprout"/></svg><span>Мои кусты</span><b class="garden-badge" hidden></b></a>
+  <button class="tab-item" type="button" data-open="sheet-toc"><svg class="ico"><use href="#i-book"/></svg><span>Оглавление</span></button>
+  <button class="tab-item" type="button" data-open="sheet-search"><svg class="ico"><use href="#i-search"/></svg><span>Поиск</span></button>
+</nav>
+
+<button class="to-top" id="to-top" type="button" aria-label="Наверх"><svg class="ico"><use href="#i-arrow-up"/></svg></button>
+
+<!-- sheets -->
+<dialog class="sheet sheet-toc" id="sheet-toc" aria-labelledby="sheet-toc-h" tabindex="-1">
+  <div class="sheet-top">
+    <span class="sheet-grab" aria-hidden="true"></span>
+    <div class="sheet-head"><h2 id="sheet-toc-h">Оглавление</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
+    <div class="seg toc-seg" role="group" aria-label="Что показать"><button type="button" aria-pressed="true" data-toc-pane="ch">Главы</button><button type="button" aria-pressed="false" data-toc-pane="tools">Инструменты</button></div>
+  </div>
+  <div class="sheet-inner">
+<div class="toc" data-pane="ch"><nav class="toc-pane toc-chapters" id="toc-ch" aria-label="Главы и разделы"><ul class="toc-list"><li class="toc-item" data-toc="glavnaya"><div class="toc-row"><a class="toc-link" href="index.html"><span class="toc-art"><svg class="ico"><use href="#i-home"/></svg></span><span class="toc-t">Главная</span></a></div></li><li class="toc-item" data-toc="moy"><div class="toc-row"><a class="toc-link" href="moy.html" data-garden-link><span class="toc-art"><svg class="ico"><use href="#i-sprout"/></svg><b class="garden-badge" hidden></b></span><span class="toc-t">Мой базилик</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-moy" aria-label="Разделы: Мой базилик"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-moy"><ul><li><a href="moy.html#кусты" data-p="moy-kusty">Кусты</a></li><li><a href="moy.html#погода" data-p="moy-pogoda">Погода</a></li><li><a href="moy.html#опыты" data-p="moy-opyty">Опыты</a></li></ul></div></li><li class="toc-item" data-toc="sorta"><div class="toc-row"><a class="toc-link" href="sorta.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-sorta"/></svg></span><span class="toc-t">Сорта</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-sorta" aria-label="Разделы: Сорта"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-sorta"><ul><li><a href="sorta.html#каталог" data-p="sorta-katalog">Каталог</a></li><li><a href="sorta.html#подбор" data-p="sorta-podbor">Подбор сорта</a></li><li><a href="sorta.html#выбор" data-p="sorta-vybor">Как выбрать семена</a></li><li><a href="sorta.html#семена" data-p="sorta-semena">Свои семена</a></li></ul></div></li><li class="toc-item" data-toc="posadka"><div class="toc-row"><a class="toc-link" href="posadka.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-posadka"/></svg></span><span class="toc-t">Посадка</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-posadka" aria-label="Разделы: Посадка"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-posadka"><ul><li><a href="posadka.html#место" data-p="posadka-mesto">Где растить</a></li><li><a href="posadka.html#сроки" data-p="posadka-sroki">Сроки</a></li><li><a href="posadka.html#посев" data-p="posadka-posev">Посев и рассада</a></li><li><a href="posadka.html#магазин" data-p="posadka-magazin">Базилик из магазина</a></li><li><a href="posadka.html#горшок" data-p="posadka-gorshok">Горшок и грунт</a></li><li><a href="posadka.html#черенки" data-p="posadka-cherenki">Черенки</a></li></ul></div></li><li class="toc-item" data-toc="uhod"><div class="toc-row"><a class="toc-link" href="uhod.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-uhod"/></svg></span><span class="toc-t">Уход</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-uhod" aria-label="Разделы: Уход"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-uhod"><ul><li><a href="uhod.html#свет" data-p="uhod-svet">Свет</a></li><li><a href="uhod.html#полив" data-p="uhod-poliv">Полив</a></li><li><a href="uhod.html#тепло" data-p="uhod-teplo">Тепло и воздух</a></li><li><a href="uhod.html#почва" data-p="uhod-pochva">Почва и pH</a></li><li><a href="uhod.html#сезоны" data-p="uhod-sezony">По сезонам</a></li></ul></div></li><li class="toc-item" data-toc="udobreniya"><div class="toc-row"><a class="toc-link" href="udobreniya.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-udobreniya"/></svg></span><span class="toc-t">Удобрения</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-udobreniya" aria-label="Разделы: Удобрения"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-udobreniya"><ul><li><a href="udobreniya.html#основы" data-p="udobreniya-osnovy">Основы</a></li><li><a href="udobreniya.html#элементы" data-p="udobreniya-elementy">Элементы</a></li><li><a href="udobreniya.html#стадии" data-p="udobreniya-stadii">По стадиям</a></li><li><a href="udobreniya.html#средства" data-p="udobreniya-sredstva">Средства</a></li><li><a href="udobreniya.html#калькулятор" data-p="udobreniya-kalkulyator">Калькулятор</a></li></ul></div></li><li class="toc-item is-open" data-toc="gidro"><div class="toc-row"><a class="toc-link" href="#gidro" aria-current="page"><span class="toc-art"><svg class="ico"><use href="#i-ch-gidro"/></svg></span><span class="toc-t">Гидропоника</span></a><button class="toc-tog" type="button" aria-expanded="true" aria-controls="toc-gidro" aria-label="Разделы: Гидропоника"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-gidro"><ul><li><a href="#основы" data-p="gidro-osnovy">Как это работает</a></li><li><a href="#сборка" data-p="gidro-sborka">Своими руками</a></li><li><a href="#раствор" data-p="gidro-rastvor">Раствор</a></li><li><a href="#проверки" data-p="gidro-proverki">Проверки</a></li><li><a href="#сравнение" data-p="gidro-sravnenie">Горшок или вода</a></li></ul></div></li><li class="toc-item" data-toc="formirovka"><div class="toc-row"><a class="toc-link" href="formirovka.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-formirovka"/></svg></span><span class="toc-t">Прищипка и сбор</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-formirovka" aria-label="Разделы: Прищипка и сбор"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-formirovka"><ul><li><a href="formirovka.html#основы" data-p="formirovka-osnovy">Как прищипывать</a></li><li><a href="formirovka.html#тренажер" data-p="formirovka-trenazher">Тренажёр</a></li><li><a href="formirovka.html#сбор" data-p="formirovka-sbor">Сбор урожая</a></li><li><a href="formirovka.html#цветение" data-p="formirovka-cvetenie">Цветение и омоложение</a></li></ul></div></li><li class="toc-item" data-toc="vkus"><div class="toc-row"><a class="toc-link" href="vkus.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-vkus"/></svg></span><span class="toc-t">Вкус и кухня</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-vkus" aria-label="Разделы: Вкус и кухня"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-vkus"><ul><li><a href="vkus.html#аромат" data-p="vkus-aromat">Откуда аромат</a></li><li><a href="vkus.html#молекулы" data-p="vkus-molekuly">Молекулы</a></li><li><a href="vkus.html#кухня" data-p="vkus-kuhnya">Физика кухни</a></li><li><a href="vkus.html#сочетания" data-p="vkus-sochetaniya">Сочетания</a></li><li><a href="vkus.html#хранение" data-p="vkus-hranenie">Хранение</a></li><li><a href="vkus.html#рецепты" data-p="vkus-recepty">Рецепты</a></li></ul></div></li><li class="toc-item" data-toc="problemy"><div class="toc-row"><a class="toc-link" href="problemy.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-problemy"/></svg></span><span class="toc-t">Проблемы</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-problemy" aria-label="Разделы: Проблемы"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-problemy"><ul><li><a href="problemy.html#диагностика" data-p="problemy-diagnostika">Диагностика</a></li><li><a href="problemy.html#болезни" data-p="problemy-bolezni">Болезни</a></li><li><a href="problemy.html#вредители" data-p="problemy-vrediteli">Вредители</a></li><li><a href="problemy.html#профилактика" data-p="problemy-profilaktika">Профилактика и средства</a></li></ul></div></li><li class="toc-item" data-toc="spravka"><div class="toc-row"><a class="toc-link" href="spravka.html"><span class="toc-art"><svg class="ico"><use href="#i-ch-spravka"/></svg></span><span class="toc-t">Справка</span></a><button class="toc-tog" type="button" aria-expanded="false" aria-controls="toc-spravka" aria-label="Разделы: Справка"><svg class="ico"><use href="#i-chev-r"/></svg></button></div><div class="toc-sub" id="toc-spravka"><ul><li><a href="spravka.html#вопросы" data-p="spravka-voprosy">Частые вопросы</a></li><li><a href="spravka.html#словарь" data-p="spravka-slovar">Словарь</a></li><li><a href="spravka.html#чек-лист" data-p="spravka-chek-list">Чек-лист сезона</a></li><li><a href="spravka.html#любопытно" data-p="spravka-lyubopytno">Любопытно</a></li></ul></div></li></ul></nav><nav class="toc-pane toc-tools" id="toc-tools" aria-label="Инструменты"><section class="toc-group"><h3>Подобрать и спланировать</h3><ul><li><a class="toc-tool" href="sorta.html#подбор"><span class="toc-ico"><svg class="ico"><use href="#i-seed"/></svg></span><span><b>Подбор сорта</b><small>Сорта · Подбор сорта</small></span></a></li><li><a class="toc-tool" href="posadka.html#сроки" data-peek="kalendar-tool"><span class="toc-ico"><svg class="ico"><use href="#i-cal"/></svg></span><span><b>Календарь посадки</b><small>Посадка · Сроки</small></span></a></li><li><a class="toc-tool" href="udobreniya.html#план"><span class="toc-ico"><svg class="ico"><use href="#i-list"/></svg></span><span><b>План подкормок</b><small>Удобрения · По стадиям</small></span></a></li><li><a class="toc-tool" href="#проверки" data-peek="hcheck-tool"><span class="toc-ico"><svg class="ico"><use href="#i-check"/></svg></span><span><b>Проверка раствора</b><small>Гидропоника · Проверки</small></span></a></li><li><a class="toc-tool" href="spravka.html#чек-лист"><span class="toc-ico"><svg class="ico"><use href="#i-check"/></svg></span><span><b>Чек-лист сезона</b><small>Справка · Чек-лист сезона</small></span></a></li></ul></section><section class="toc-group"><h3>Посчитать</h3><ul><li><a class="toc-tool" href="posadka.html#горшок" data-peek="soil-tool"><span class="toc-ico"><svg class="ico"><use href="#i-pot"/></svg></span><span><b>Калькулятор грунта</b><small>Посадка · Горшок и грунт</small></span></a></li><li><a class="toc-tool" href="uhod.html#dli"><span class="toc-ico"><svg class="ico"><use href="#i-lamp"/></svg></span><span><b>Калькулятор досветки</b><small>Уход · Свет</small></span></a></li><li><a class="toc-tool" href="udobreniya.html#npk"><span class="toc-ico"><svg class="ico"><use href="#i-tag"/></svg></span><span><b>Расшифровка NPK</b><small>Удобрения · Средства</small></span></a></li><li><a class="toc-tool" href="udobreniya.html#калькулятор"><span class="toc-ico"><svg class="ico"><use href="#i-jar"/></svg></span><span><b>Калькулятор раствора</b><small>Удобрения · Калькулятор</small></span></a></li><li><a class="toc-tool" href="#раствор" data-peek="hmix-tool"><span class="toc-ico"><svg class="ico"><use href="#i-flask"/></svg></span><span><b>Раствор для гидропоники</b><small>Гидропоника · Раствор</small></span></a></li><li><a class="toc-tool" href="#сравнение" data-peek="hcost-tool"><span class="toc-ico"><svg class="ico"><use href="#i-tag"/></svg></span><span><b>Гидропоника или горшок</b><small>Гидропоника · Горшок или вода</small></span></a></li><li><a class="toc-tool" href="uhod.html#deep-vpd"><span class="toc-ico"><svg class="ico"><use href="#i-wave"/></svg></span><span><b>Калькулятор VPD</b><small>Уход · Полив</small></span></a></li></ul></section><section class="toc-group"><h3>Разобраться</h3><ul><li><a class="toc-tool" href="udobreniya.html#стадии"><span class="toc-ico"><svg class="ico"><use href="#i-flask"/></svg></span><span><b>Питание по стадиям</b><small>Удобрения · По стадиям</small></span></a></li><li><a class="toc-tool" href="#основы" data-peek="hsys-tool"><span class="toc-ico"><svg class="ico"><use href="#i-drop"/></svg></span><span><b>Системы гидропоники</b><small>Гидропоника · Как это работает</small></span></a></li><li><a class="toc-tool" href="formirovka.html#тренажер"><span class="toc-ico"><svg class="ico"><use href="#i-scissors"/></svg></span><span><b>Тренажёр прищипывания</b><small>Прищипка и сбор · Тренажёр</small></span></a></li><li><a class="toc-tool" href="vkus.html#молекулы"><span class="toc-ico"><svg class="ico"><use href="#i-hex"/></svg></span><span><b>Молекулы аромата</b><small>Вкус и кухня · Молекулы</small></span></a></li><li><a class="toc-tool" href="vkus.html#сочетания"><span class="toc-ico"><svg class="ico"><use href="#i-nose"/></svg></span><span><b>Лаборатория сочетаний</b><small>Вкус и кухня · Сочетания</small></span></a></li><li><a class="toc-tool" href="vkus.html#кухня"><span class="toc-ico"><svg class="ico"><use href="#i-thermo"/></svg></span><span><b>Когда добавлять базилик</b><small>Вкус и кухня · Физика кухни</small></span></a></li><li><a class="toc-tool" href="vkus.html#deep-pesto"><span class="toc-ico"><svg class="ico"><use href="#i-jar"/></svg></span><span><b>Песто-лаборатория</b><small>Вкус и кухня · Рецепты</small></span></a></li><li><a class="toc-tool" href="problemy.html#диагностика"><span class="toc-ico"><svg class="ico"><use href="#i-bug"/></svg></span><span><b>Диагностика</b><small>Проблемы · Диагностика</small></span></a></li></ul></section></nav></div>
+  </div>
+</dialog>
+<dialog class="sheet sheet-search" id="sheet-search" aria-label="Поиск" tabindex="-1">
+  <div class="search-top">
+    <div class="search-box">
+      <svg class="ico"><use href="#i-search"/></svg>
+      <input type="search" id="search-input" placeholder="Что ищем? Например, желтеют листья" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-label="Поиск по гиду" aria-controls="search-results">
+      <button class="icon-btn search-x" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <button class="search-cancel" type="button" data-close>Отмена</button>
+  </div>
+  <div class="sheet-inner">
+    <div class="search-results" id="search-results" role="listbox" aria-label="Результаты поиска"></div>
+  </div>
+</dialog>
+<dialog class="sheet sheet-garden" id="sheet-garden" aria-labelledby="sheet-garden-h" tabindex="-1">
+  <div class="sheet-top"><span class="sheet-grab" aria-hidden="true"></span><div class="sheet-head"><h2 id="sheet-garden-h">Мой куст</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div></div>
+  <div class="sheet-inner">
+    <div id="garden-detail"></div>
+  </div>
+</dialog>
+<!-- «Заглянуть»: the place a reference leads to, its chapter's page in a frame showing only that place (03-peek.js) -->
+<dialog class="sheet sheet-peek" id="sheet-peek" aria-labelledby="peek-h" tabindex="-1">
+  <div class="sheet-top">
+    <span class="sheet-grab" aria-hidden="true"></span>
+    <div class="sheet-head peek-head">
+      <button class="icon-btn peek-back" type="button" data-peek-back aria-label="К предыдущему" hidden><svg class="ico"><use href="#i-chev-l"/></svg></button>
+      <div class="peek-title"><small id="peek-where"></small><h2 id="peek-h"></h2></div>
+      <button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button>
+    </div>
+  </div>
+  <div class="peek-body">
+    <div class="peek-paper" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <iframe class="peek-frame" id="peek-frame" title="Отрывок из главы"></iframe>
+  </div>
+  <div class="peek-foot"><a class="btn btn-ghost peek-go" id="peek-go" href="index.html"><span>Открыть в главе</span><svg class="ico"><use href="#i-arrow-r"/></svg></a></div>
+</dialog>
+<dialog class="sheet sheet-variety" id="sheet-variety" aria-labelledby="variety-h" tabindex="-1">
+  <div class="sheet-top sheet-top-bare"><span></span><span class="sheet-grab" aria-hidden="true"></span><button class="icon-btn" type="button" data-close aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
+  <div class="sheet-inner">
+    <div id="variety-detail"></div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- браузер заранее подгружает главу, на которую навели курсор или нажали -->
+<script type="speculationrules">{"prefetch": [{"where": {"href_matches": "/*"}, "eagerness": "moderate"}]}</script>
+<script src="assets/js/haptics.js?v=654d121d" defer></script>
+<script src="assets/js/data.js?v=6dc8a940" defer></script>
+<script src="assets/js/pages.js?v=fd827cae" defer></script>
+<script src="assets/js/scene.js?v=0bc454b3" defer></script>
+<script src="assets/js/science.js?v=cfaa4871" defer></script>
+<script src="assets/js/labs/lib-micro.js?v=bbc6c98e" defer></script>
+<script src="assets/js/labs/lib-ills.js?v=63c3803f" defer></script>
+<script src="assets/js/labs/lib-props.js?v=7e4b2fa8" defer></script>
+<script src="assets/js/labs/gidro.js?v=226c5281" defer></script>
+<script src="assets/js/app.js?v=3bbfa8b4" defer></script>
+</body>
+</html>

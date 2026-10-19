@@ -128,6 +128,28 @@ const iso = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d
     const gcal = await page.evaluate(() => (document.querySelector('#garden-detail .g-gcal') || {}).href || '');
     ok(icsOk && /^https:\/\/calendar\.google\.com\/calendar\/render\?action=TEMPLATE&text=/.test(gcal) && /dates=\d{8}T090000%2F\d{8}T091500/.test(gcal), M + `the tasks go to a calendar: ${uids.length} events, once-steps ${want2.join(',')}, Google link ${gcal ? 'yes' : 'no'}`);
 
+    // a bush in hydroponics: the solution is checked and changed, no feeding plan and no flushing of soil
+    const hy = await page.evaluate(() => {
+      const G = window.BasilGarden, d = new Date(), day = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const at = n => { const x = new Date(day); x.setDate(x.getDate() + n); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`; };
+      const keys = p => G.tasks(p, day).map(t => t.key);
+      const seed = { id: 'hy1', start: 'seed', place: 'hydro', date: at(-70), added: at(-70), log: [] };
+      const cut = { id: 'hy2', start: 'cutting', place: 'hydro', date: at(-14), added: at(-14), log: [] };
+      const pot = { id: 'hy3', start: 'seed', place: 'home', date: at(-70), added: at(-70), log: [] };
+      return { seed: keys(seed), pot: keys(pot), cutPot: ((G.tasks(cut, day).find(t => t.key === 'pot') || {}).title || '').replace(/[\u00a0\u2060]/g, c => c === '\u00a0' ? ' ' : ''), wx: G.tasks(seed, day).some(t => t.weather) };
+    });
+    ok(hy.seed.includes('sol') && hy.seed.includes('change') && !hy.seed.some(k => ['feed1', 'feed', 'flush'].includes(k)) && hy.pot.includes('flush') && !hy.pot.includes('sol') &&
+      hy.cutPot === 'Корни 2–3 см — в стаканчик' && !hy.wx, M + 'a bush in hydroponics gets its solution checked and changed, no feeding or flushing ' + JSON.stringify(hy));
+    await page.click('#garden-detail [data-g-edit]');
+    await page.waitForTimeout(200);
+    const form = await page.evaluate(() => ({ places: document.querySelectorAll('#g-form [data-g-place]').length }));
+    await page.click('#g-form [data-g-place="hydro"]');
+    const hidden = await page.evaluate(() => document.getElementById('g-preset-f').hidden);
+    await page.click('#g-form [data-g-place="home"]');
+    ok(form.places === 4 && hidden, M + 'the form offers hydroponics, and no climate for it ' + JSON.stringify({ form, hidden }));
+    await page.click('#g-form [data-g-cancel]');
+    await page.waitForTimeout(300);
+
     // edit
     await page.click('#garden-detail [data-g-edit]');
     await page.waitForTimeout(200);

@@ -38,14 +38,34 @@ const { ROOT, playwright, server, ok, done } = require('./lib');
   await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
   await page.waitForTimeout(1000);
   ok(path() === '/удобрения#элементы' && /Молибден/.test(await page.evaluate(() => document.querySelector('.el-detail').textContent)), 'search action → ' + path());
-  // the chapters merged into others (11 became 8): their addresses, old tab anchors and long ids lead to where those live now
+  // the chapters merged into others (11 became 8, then 9 with «Гидропоника»): their addresses, old tab anchors and long ids lead to where those live now
   for (const [from, to] of [['/урожай#рецепты', '/вкус#рецепты'], ['/урожай', '/прищипывание#сбор'], ['/urozhay#urozhay-recepty', '/вкус#рецепты'],
     ['/календарь', '/посадка#сроки'], ['/kalendar.html', '/посадка#сроки'], ['/размножение#семена', '/сорта#семена'], ['/размножение#черенки', '/посадка#черенки'],
-    ['/урожай?resume=1#хранение', '/вкус#хранение'], ['/урожай#deep-pesto', '/вкус#deep-pesto'], ['/index.html#urozhay-sbor', '/прищипывание#сбор']]) {
+    ['/урожай?resume=1#хранение', '/вкус#хранение'], ['/урожай#deep-pesto', '/вкус#deep-pesto'], ['/index.html#urozhay-sbor', '/прищипывание#сбор'],
+    // a tab moved out of a chapter that stays (MOVED_TABS): «Гидропоника» of «Удобрения» is «Раствор» of its own chapter
+    ['/удобрения#гидропоника', '/гидропоника#раствор'], ['/udobreniya.html#udobreniya-gidro', '/гидропоника#раствор'], ['/удобрения#deep-kislorod', '/гидропоника#deep-kislorod']]) {
     await page.goto(B + encodeURI(from.split('#')[0]) + (from.includes('#') ? '#' + encodeURIComponent(from.split('#')[1]) : ''), { waitUntil: 'load' });
     await page.waitForTimeout(700);
     ok(path() === to, `old ${from} → ${path()}`);
   }
+  // a reading place kept in the tab that moved goes with it; the chapter's other tabs keep theirs
+  const mv = await page.evaluate(() => {
+    const t = Date.now();
+    localStorage.setItem('basil-last', JSON.stringify({ view: 'udobreniya', panel: 'гидропоника', sub: '' }));
+    localStorage.setItem('basil-pos', JSON.stringify({ udobreniya: { panel: 'гидропоника', n: 2, sig: 'x', t }, uhod: { panel: 'полив', n: 1, sig: 'y', t } }));
+    return true;
+  });
+  // the home page: a chapter's page writes its own «Продолжить» as it opens
+  await page.goto(B + '/', { waitUntil: 'load' });
+  await page.waitForTimeout(500);
+  const moved = await page.evaluate(() => ({ last: JSON.parse(localStorage.getItem('basil-last')), pos: JSON.parse(localStorage.getItem('basil-pos')) }));
+  ok(mv && moved.last.view === 'gidro' && moved.last.panel === 'раствор' && moved.pos.gidro && moved.pos.gidro.panel === 'раствор' && !moved.pos.udobreniya && moved.pos.uhod,
+    `«Продолжить» and the bookmark of the moved tab go to /гидропоника#раствор ${JSON.stringify(moved)}`);
+  await page.evaluate(() => { localStorage.setItem('basil-last', JSON.stringify({ view: 'udobreniya', panel: 'стадии', sub: '' })); localStorage.setItem('basil-pos', JSON.stringify({ udobreniya: { panel: 'стадии', n: 1, sig: 'z', t: Date.now() } })); });
+  await page.goto(B + '/', { waitUntil: 'load' });
+  await page.waitForTimeout(500);
+  const stay = await page.evaluate(() => ({ last: JSON.parse(localStorage.getItem('basil-last')), pos: JSON.parse(localStorage.getItem('basil-pos')) }));
+  ok(stay.last.view === 'udobreniya' && stay.pos.udobreniya && stay.pos.udobreniya.panel === 'стадии', `a place in another tab of «Удобрения» stays ${JSON.stringify(stay)}`);
   // a deep link into another chapter opens its place in the «Заглянуть» sheet, from the chapter's address with ?peek=1;
   // «Открыть в главе» goes there
   await page.goto(B + encodeURI('/посадка') + '#' + encodeURIComponent('сроки'), { waitUntil: 'load' });

@@ -86,7 +86,10 @@
     { words: ['рассада', 'сеянцы', 'всходы', 'проростки'] },
     { words: ['кислый', 'кислотность', 'ph'] },
     { words: ['горшок', 'кашпо', 'контейнер', 'емкость'] },
-    { words: ['грунт', 'почва', 'субстрат'] }
+    { words: ['грунт', 'почва', 'субстрат'] },
+    { words: ['гидропоника', 'гидропонный', 'гидропонике', 'беспочвенный'] },
+    { words: ['аэратор', 'компрессор', 'аэрация', 'пузыри', 'распылитель'] },
+    { words: ['раствор', 'питательный', 'концентрат'] }
   ].map(g => Object.assign(g, { keys: [...new Set([].concat(...g.words.map(w => keysOf(norm(w)))))].filter(k => g.forms || k.length >= 4) }));
   const sameKey = (a, b) => a === b || (a.length >= 4 && b.startsWith(a)) || (b.length >= 4 && a.startsWith(b));
   // what a query word may be found as: its own keys (weight 1), its synonyms' keys (weight 0.7)

@@ -1,0 +1,4 @@
+/* the jar beside its chart */
+.kr-grid { grid-template-columns: minmax(0, 170px) minmax(0, 1fr); margin-top: 6px; }
+.kr-stage .ill { width: 100%; max-width: 170px; height: auto; }
+@media (max-width: 760px) { .kr-grid { grid-template-columns: 1fr; } .kr-stage .ill { max-width: 150px; } }
