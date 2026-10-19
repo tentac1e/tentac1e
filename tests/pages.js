@@ -225,7 +225,7 @@ function codeMap() {
   await page.goto(fileUrl('spravka.html') + '#' + encodeURIComponent('любопытно'), { waitUntil: 'load' });
   await page.waitForTimeout(500);
   const coll = await page.evaluate(() => { const all = document.querySelector('.panel.is-active .facts-all'); return { active: document.querySelector('.panel.is-active').id, cards: all.querySelectorAll('.sci-note').length, chapters: all.querySelectorAll('.facts-ch h3').length, signed: [...all.querySelectorAll('.sci-note .hand')].every(x => x.textContent.trim()) }; });
-  ok(facts >= 30 && coll.cards === facts && coll.chapters === 7 && coll.signed && !left.length && /любопытно|lyubopytno/.test(coll.active), `«Любопытно»: ${facts} facts in the chapters, all in Справка ` + JSON.stringify({ coll, left }));
+  ok(facts >= 30 && coll.cards === facts && coll.chapters === 8 && coll.signed && !left.length && /любопытно|lyubopytno/.test(coll.active), `«Любопытно»: ${facts} facts in the chapters, all in Справка ` + JSON.stringify({ coll, left }));
 
   // continue reading
   await page.goto(fileUrl('formirovka.html#цветение'), { waitUntil: 'load' });

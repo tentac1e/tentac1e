@@ -2221,9 +2221,10 @@
         s += `<circle class="w-ev is-key" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4"/>`;
       });
       const [tx, ty] = pt(yearFrac(now), 90);
-      const [tx2, ty2] = pt(yearFrac(now), 134);
+      // today's dot stays inside the ring of month names: mid-month it stands right under its name
+      const [tx2, ty2] = pt(yearFrac(now), 126);
       s += `<line x1="${tx.toFixed(1)}" y1="${ty.toFixed(1)}" x2="${tx2.toFixed(1)}" y2="${ty2.toFixed(1)}" style="stroke: var(--danger)" stroke-width="2" stroke-linecap="round"/>`;
-      s += `<circle class="w-today" cx="${tx2.toFixed(1)}" cy="${ty2.toFixed(1)}" r="5"><title>Сегодня, ${fd(now)}</title></circle>`;
+      s += `<circle class="w-today" cx="${tx2.toFixed(1)}" cy="${ty2.toFixed(1)}" r="4.5"><title>Сегодня, ${fd(now)}</title></circle>`;
       s += `<text class="w-center-a" x="${C}" y="${C - 22}" text-anchor="middle">${plan.center[0]}</text>`;
       s += `<text class="w-center-b" x="${C}" y="${C + 8}" text-anchor="middle">${plan.center[1]}</text>`;
       s += `<text class="w-center-c" x="${C}" y="${C + 30}" text-anchor="middle">${plan.center[2]}</text>`;

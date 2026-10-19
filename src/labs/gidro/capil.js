@@ -24,8 +24,8 @@
       const rnd = ill.rng(7);
       const yTop = BOT - CUP * CM;
       let g = `<rect data-bg width="300" height="236" rx="14" fill="${F('bg')}"/>`;
-      // the solution below
-      g += `<rect x="40" y="${q(wl)}" width="220" height="${q(232 - wl)}" fill="${F('water-c')}" opacity=".9"/><path d="M40 ${q(wl)}H260" stroke="${F('glass-d')}" stroke-width="1.2"/>`;
+      // the solution below, to the right of the ruler: its numbers stand on the paper
+      g += `<rect x="78" y="${q(wl)}" width="182" height="${q(232 - wl)}" fill="${F('water-c')}" opacity=".9"/><path d="M78 ${q(wl)}H260" stroke="${F('glass-d')}" stroke-width="1.2"/>`;
       // the cup's walls (a section): the net
       const inner = `M${X0} ${yTop}L${X0 + 8} ${BOT}H${X1 - 8}L${X1} ${yTop}Z`;
       g += `<clipPath id="cap-clip"><path d="${inner}"/></clipPath><g clip-path="url(#cap-clip)">`;

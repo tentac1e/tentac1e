@@ -192,7 +192,7 @@
 - `src/js/app/08-varieties.js` (250 стр.): EASY, initVarieties, initQuiz
 - `src/js/app/09-places.js` (45 стр.): initPlaces
 - `src/js/app/10-soil.js` (26 стр.): initSoil
-- `src/js/app/11-calendar.js` (226 стр.): initCalendar
+- `src/js/app/11-calendar.js` (227 стр.): initCalendar
 - `src/js/app/12-light.js` (39 стр.): initDli
 - `src/js/app/13-nutrients-elements.js` (43 стр.): GROUP_NAME, MOB, initElements
 - `src/js/app/14-nutrients-stages.js` (119 стр.): initStages

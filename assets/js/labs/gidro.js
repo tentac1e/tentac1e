@@ -579,8 +579,8 @@
       const rnd = ill.rng(7);
       const yTop = BOT - CUP * CM;
       let g = `<rect data-bg width="300" height="236" rx="14" fill="${F('bg')}"/>`;
-      // the solution below
-      g += `<rect x="40" y="${q(wl)}" width="220" height="${q(232 - wl)}" fill="${F('water-c')}" opacity=".9"/><path d="M40 ${q(wl)}H260" stroke="${F('glass-d')}" stroke-width="1.2"/>`;
+      // the solution below, to the right of the ruler: its numbers stand on the paper
+      g += `<rect x="78" y="${q(wl)}" width="182" height="${q(232 - wl)}" fill="${F('water-c')}" opacity=".9"/><path d="M78 ${q(wl)}H260" stroke="${F('glass-d')}" stroke-width="1.2"/>`;
       // the cup's walls (a section): the net
       const inner = `M${X0} ${yTop}L${X0 + 8} ${BOT}H${X1 - 8}L${X1} ${yTop}Z`;
       g += `<clipPath id="cap-clip"><path d="${inner}"/></clipPath><g clip-path="url(#cap-clip)">`;
@@ -943,7 +943,7 @@
       set(el, 'lab-py-r', R < 0.2 ? 'низкий' : R < 0.55 ? 'заметный' : R < 0.85 ? 'высокий' : 'очень высокий');
       set(el, 'lab-py-v', R < 0.2 ? 'Прохладно и много кислорода: споры есть, но корень сильнее. Держите так.'
         : !air ? 'Включите компрессор: без пузырей кислорода меньше, корень слабеет, а спорам всё равно.'
-          : T > 24 ? 'Охладите раствор до 18–22 °C: уберите ёмкость от батареи и солнца, положите в ведро бутылку со льдом. При бурых корнях — смена раствора и мойка.'
+          : R >= 0.55 ? 'Охладите раствор до 18–22 °C: уберите ёмкость от батареи и солнца, положите в ведро бутылку со льдом. При бурых корнях — смена раствора и мойка.'
             : 'На грани: следите за корнями и за температурой в жаркие дни, мойте ёмкость при каждой смене.');
       ch.redraw();
     };

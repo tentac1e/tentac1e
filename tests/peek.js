@@ -204,11 +204,12 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   await home({ ...devices['iPhone 13'] }, 4450);
   await home({ viewport: { width: 1440, height: 900 } }, 4600);
 
-  // «Удобрения» in six tabs: «Мифы» and «План» are parts of «Основы» and «По стадиям», at their old anchors
+  // «Удобрения» in five tabs: «Мифы» and «План» are parts of «Основы» and «По стадиям», at their old anchors;
+  // «Гидропоника» is a chapter of its own
   await page.goto(fileUrl('udobreniya.html'), { waitUntil: 'load' });
   await page.waitForTimeout(700);
   const tabs = await page.evaluate(() => [...document.querySelectorAll('.subnav a')].map(a => a.textContent.replace(/\u00a0/g, ' ')).join('|'));
-  ok(tabs === 'Основы|Элементы|По стадиям|Средства|Калькулятор|Гидропоника', '«Удобрения» in six tabs: ' + tabs);
+  ok(tabs === 'Основы|Элементы|По стадиям|Средства|Калькулятор', '«Удобрения» in five tabs: ' + tabs);
   for (const [hash, tab] of [['мифы', 'основы'], ['план', 'стадии'], ['udobreniya-plan', 'стадии'], ['udobreniya-mify', 'основы']]) {
     await page.goto(fileUrl('udobreniya.html') + '#' + encodeURIComponent(hash), { waitUntil: 'load' });
     await page.waitForTimeout(1000);
