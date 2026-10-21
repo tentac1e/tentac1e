@@ -8,8 +8,9 @@
    node tests/overlap.js                    все страницы, телефон и компьютер
    node tests/overlap.js vkus.html,uhod.html только эти
    node tests/overlap.js --phone | --desktop
+   node tests/overlap.js --skin=druid       в оформлении (grimoire, druid; --grimoire — то же, что --skin=grimoire)
    Проверяет сборку в корне репозитория (python3 scripts/build.py). */
-const { playwright, ok, done, watch, fileUrl, FILES } = require('./lib');
+const { playwright, ok, done, watch, fileUrl, FILES, skinArg, inSkin } = require('./lib');
 
 const args = process.argv.slice(2);
 const only = (args.find(a => !a.startsWith('--')) || '').split(',').filter(Boolean);
@@ -160,8 +161,8 @@ if (require.main === module) (async () => {
   const errs = [];
   const ctx = {};
   for (const mode of modes) ctx[mode] = await browser.newContext({ ...(mode === 'phone' ? { ...devices['iPhone 13 Mini'], deviceScaleFactor: 1 } : { viewport: { width: 1280, height: 900 } }), reducedMotion: 'reduce' });
-  // --grimoire: the same checks in the theme «Гримуар» (its own faces and pixel pictures)
-  if (args.includes('--grimoire')) for (const mode of modes) await ctx[mode].addInitScript(() => { try { localStorage.setItem('basil-skin', '"grimoire"'); } catch (e) { /* the theme stays off */ } });
+  // --skin=<name> (--grimoire): the same checks in a skin of the guide (its own faces and pictures)
+  for (const mode of modes) await inSkin(ctx[mode], skinArg(args));
   const jobs = [];
   for (const mode of modes) for (const f of FILES) if (!only.length || only.includes(f)) jobs.push({ mode, f });
   // four pages at a time; the lines come out in the usual order

@@ -86,5 +86,10 @@ const SLUGS = { glavnaya: '', sorta: 'сорта', posadka: 'посадка', uh
 // the chapters merged into others (MOVED in scripts/build.py): their pages only send the reader on
 const MOVED = { kalendar: 'календарь', urozhay: 'урожай', razmnozhenie: 'размножение' };
 const fileUrl = f => 'file://' + path.join(ROOT, f);
+// the skins of the guide; --skin=<name> (or --grimoire) on a check runs it in that skin: its own faces, pictures, scenes
+const SKINS = ['grimoire', 'druid'];
+const skinArg = args => { const a = args.find(x => x.startsWith('--skin=')); return a ? a.slice(7) : args.includes('--grimoire') ? 'grimoire' : null; };
+// a browser context whose pages open in the skin (the choice the menu in the header stores)
+const inSkin = (ctx, skin) => (skin ? ctx.addInitScript(s => { try { localStorage.setItem('basil-skin', JSON.stringify(s)); } catch (e) { /* the skin stays off */ } }, skin) : null);
 
-module.exports = { ROOT, OUT, playwright, server, serve, ok, done, watch, landedAt, FILES, SLUGS, MOVED, fileUrl, results };
+module.exports = { ROOT, OUT, playwright, server, serve, ok, done, watch, landedAt, FILES, SLUGS, MOVED, fileUrl, results, SKINS, skinArg, inSkin };
