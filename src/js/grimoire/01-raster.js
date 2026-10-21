@@ -54,6 +54,8 @@
         let out;
         if (o.axis) { const w = sub(m, o.axis[0]); out = sub(w, mul(o.axis[1], dot(w, o.axis[1]))); } else out = sub(m, o.ctr);
         if (dot(n, out) < 0) n = mul(n, -1);
+        // the inside of a hollow (a bowl, a well): its far wall is the one seen
+        if (o.inv) n = mul(n, -1);
         if (dot(n, sub(this.C.eye, m)) <= 0) return;
       }
       const va = this.view(a), vb = this.view(b), vc = this.view(c);
@@ -65,7 +67,8 @@
     }
     draw() {
       const x = this.x, F = this.fog;
-      this.list.sort((A, B) => (A.o.layer || 1) - (B.o.layer || 1) || B.z - A.z);
+      const lay = o => (o.layer == null ? 1 : o.layer);
+      this.list.sort((A, B) => lay(A.o) - lay(B.o) || B.z - A.z);
       for (const t of this.list) {
         const o = t.o, [a, b, c] = t.p;
         const f = o.nofog ? 0 : clamp((t.z - this.fogNear) / (this.fogFar - this.fogNear), 0, 1) ** 1.15;
@@ -140,7 +143,8 @@
     return c;
   }
 
-  // shapes: a quad (two triangles), a box, a prism (pot, candle), a low ball (an atom), a rod (a bond, a stem), a billboard
+  // shapes: a quad (two triangles), a box, a prism (pot, candle), a low ball (an atom), an egg (a seed, a beetle),
+  // a rod (a bond, a stem), a billboard; turned() — any of them turned about an axis
   function quad(R, a, b, c, d, o, u0 = 0, u1 = 1, v0 = 0, v1 = 1) {
     R.tri(a, b, c, { ...o, uv: [[u0, v1], [u1, v1], [u1, v0]] });
     R.tri(a, c, d, { ...o, uv: [[u0, v1], [u1, v0], [u0, v0]] });
@@ -149,7 +153,8 @@
     const [x, y, z] = c, [a, b, d] = s;
     const v = [[x - a, y - b, z - d], [x + a, y - b, z - d], [x + a, y + b, z - d], [x - a, y + b, z - d], [x - a, y - b, z + d], [x + a, y - b, z + d], [x + a, y + b, z + d], [x - a, y + b, z + d]];
     [[0, 1, 2, 3, 1], [5, 4, 7, 6, 1], [4, 0, 3, 7, 0], [1, 5, 6, 2, 0], [3, 2, 6, 7, 0], [4, 5, 1, 0, 0]]
-      .forEach(f => quad(R, v[f[0]], v[f[1]], v[f[2]], v[f[3]], { ...o, tex: f[4] && o.texFront ? o.texFront : o.tex, ctr: c }));
+      // the front and the back (f[4]) carry texFront, read the right way round from their own side
+      .forEach(f => quad(R, v[f[0]], v[f[1]], v[f[2]], v[f[3]], { ...o, tex: f[4] && o.texFront ? o.texFront : o.tex, ctr: c }, f[4] ? 1 : 0, f[4] ? 0 : 1));
   }
   function prism(R, cx, cz, y0, y1, r0, r1, n, o, cap, rot = 0) {
     const ctr = [cx, (y0 + y1) / 2, cz];
@@ -168,6 +173,12 @@
     return { v, f };
   })();
   function ball(R, c, r, o) { ICO.f.forEach(([a, b, d]) => R.tri(add(c, mul(ICO.v[a], r)), add(c, mul(ICO.v[b], r)), add(c, mul(ICO.v[d], r)), { ...o, ctr: c })); }
+  // a ball stretched along its own axes (r: three radii) and turned by yaw about the vertical
+  function egg(R, c, r, yaw, o) {
+    const cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const P = v => { const x = v[0] * r[0], z = v[2] * r[2]; return [c[0] + x * cy - z * sy, c[1] + v[1] * r[1], c[2] + x * sy + z * cy]; };
+    ICO.f.forEach(([a, b, d]) => R.tri(P(ICO.v[a]), P(ICO.v[b]), P(ICO.v[d]), { ...o, ctr: c }));
+  }
   function rod(R, p, q, r, o, n = 4) {
     const d = norm(sub(q, p)), up = Math.abs(d[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
     const s = norm(cross(d, up)), t = cross(d, s);
@@ -181,4 +192,12 @@
   function billboard(R, c, w, h, o) {
     const r = mul(R.C.r, w), u = mul(R.C.u, h);
     quad(R, sub(sub(c, r), u), sub(add(c, r), u), add(add(c, r), u), add(sub(c, r), u), o);
+  }
+  // a stand-in for the rasterizer that turns every vertex about the axis ax through o first, then moves it by shift:
+  // an hourglass turned over, a cut top falling, a page turned
+  function turned(R, o, ax, ang, shift = [0, 0, 0]) {
+    const k = norm(ax), c = Math.cos(ang), s = Math.sin(ang);
+    const rot = v => add(add(mul(v, c), mul(cross(k, v), s)), mul(k, dot(k, v) * (1 - c)));
+    const P = p => add(add(o, rot(sub(p, o))), shift);
+    return { C: R.C, tri: (a, b, d, q) => R.tri(P(a), P(b), P(d), { ...q, ctr: q.ctr && P(q.ctr), axis: q.axis && [P(q.axis[0]), rot(q.axis[1])] }) };
   }

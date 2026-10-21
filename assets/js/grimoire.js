@@ -91,6 +91,8 @@ window.BasilGrimoire = (() => {
         let out;
         if (o.axis) { const w = sub(m, o.axis[0]); out = sub(w, mul(o.axis[1], dot(w, o.axis[1]))); } else out = sub(m, o.ctr);
         if (dot(n, out) < 0) n = mul(n, -1);
+        // the inside of a hollow (a bowl, a well): its far wall is the one seen
+        if (o.inv) n = mul(n, -1);
         if (dot(n, sub(this.C.eye, m)) <= 0) return;
       }
       const va = this.view(a), vb = this.view(b), vc = this.view(c);
@@ -102,7 +104,8 @@ window.BasilGrimoire = (() => {
     }
     draw() {
       const x = this.x, F = this.fog;
-      this.list.sort((A, B) => (A.o.layer || 1) - (B.o.layer || 1) || B.z - A.z);
+      const lay = o => (o.layer == null ? 1 : o.layer);
+      this.list.sort((A, B) => lay(A.o) - lay(B.o) || B.z - A.z);
       for (const t of this.list) {
         const o = t.o, [a, b, c] = t.p;
         const f = o.nofog ? 0 : clamp((t.z - this.fogNear) / (this.fogFar - this.fogNear), 0, 1) ** 1.15;
@@ -177,7 +180,8 @@ window.BasilGrimoire = (() => {
     return c;
   }
 
-  // shapes: a quad (two triangles), a box, a prism (pot, candle), a low ball (an atom), a rod (a bond, a stem), a billboard
+  // shapes: a quad (two triangles), a box, a prism (pot, candle), a low ball (an atom), an egg (a seed, a beetle),
+  // a rod (a bond, a stem), a billboard; turned() — any of them turned about an axis
   function quad(R, a, b, c, d, o, u0 = 0, u1 = 1, v0 = 0, v1 = 1) {
     R.tri(a, b, c, { ...o, uv: [[u0, v1], [u1, v1], [u1, v0]] });
     R.tri(a, c, d, { ...o, uv: [[u0, v1], [u1, v0], [u0, v0]] });
@@ -186,7 +190,8 @@ window.BasilGrimoire = (() => {
     const [x, y, z] = c, [a, b, d] = s;
     const v = [[x - a, y - b, z - d], [x + a, y - b, z - d], [x + a, y + b, z - d], [x - a, y + b, z - d], [x - a, y - b, z + d], [x + a, y - b, z + d], [x + a, y + b, z + d], [x - a, y + b, z + d]];
     [[0, 1, 2, 3, 1], [5, 4, 7, 6, 1], [4, 0, 3, 7, 0], [1, 5, 6, 2, 0], [3, 2, 6, 7, 0], [4, 5, 1, 0, 0]]
-      .forEach(f => quad(R, v[f[0]], v[f[1]], v[f[2]], v[f[3]], { ...o, tex: f[4] && o.texFront ? o.texFront : o.tex, ctr: c }));
+      // the front and the back (f[4]) carry texFront, read the right way round from their own side
+      .forEach(f => quad(R, v[f[0]], v[f[1]], v[f[2]], v[f[3]], { ...o, tex: f[4] && o.texFront ? o.texFront : o.tex, ctr: c }, f[4] ? 1 : 0, f[4] ? 0 : 1));
   }
   function prism(R, cx, cz, y0, y1, r0, r1, n, o, cap, rot = 0) {
     const ctr = [cx, (y0 + y1) / 2, cz];
@@ -205,6 +210,12 @@ window.BasilGrimoire = (() => {
     return { v, f };
   })();
   function ball(R, c, r, o) { ICO.f.forEach(([a, b, d]) => R.tri(add(c, mul(ICO.v[a], r)), add(c, mul(ICO.v[b], r)), add(c, mul(ICO.v[d], r)), { ...o, ctr: c })); }
+  // a ball stretched along its own axes (r: three radii) and turned by yaw about the vertical
+  function egg(R, c, r, yaw, o) {
+    const cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const P = v => { const x = v[0] * r[0], z = v[2] * r[2]; return [c[0] + x * cy - z * sy, c[1] + v[1] * r[1], c[2] + x * sy + z * cy]; };
+    ICO.f.forEach(([a, b, d]) => R.tri(P(ICO.v[a]), P(ICO.v[b]), P(ICO.v[d]), { ...o, ctr: c }));
+  }
   function rod(R, p, q, r, o, n = 4) {
     const d = norm(sub(q, p)), up = Math.abs(d[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
     const s = norm(cross(d, up)), t = cross(d, s);
@@ -219,9 +230,18 @@ window.BasilGrimoire = (() => {
     const r = mul(R.C.r, w), u = mul(R.C.u, h);
     quad(R, sub(sub(c, r), u), sub(add(c, r), u), add(add(c, r), u), add(sub(c, r), u), o);
   }
+  // a stand-in for the rasterizer that turns every vertex about the axis ax through o first, then moves it by shift:
+  // an hourglass turned over, a cut top falling, a page turned
+  function turned(R, o, ax, ang, shift = [0, 0, 0]) {
+    const k = norm(ax), c = Math.cos(ang), s = Math.sin(ang);
+    const rot = v => add(add(mul(v, c), mul(cross(k, v), s)), mul(k, dot(k, v) * (1 - c)));
+    const P = p => add(add(o, rot(sub(p, o))), shift);
+    return { C: R.C, tri: (a, b, d, q) => R.tri(P(a), P(b), P(d), { ...q, ctr: q.ctr && P(q.ctr), axis: q.axis && [P(q.axis[0]), rot(q.axis[1])] }) };
+  }
   /* ------------------------------------------------------------------ */
   /* textures, drawn pixel by pixel: the circle on the floor, stone, the  */
-  /* altar's sigil, the pot, wax, a leaf of basil, a flame                */
+  /* altar's sigil, the pot, wax, leaves of basil, a flame, earth, pages, */
+  /* runes, letters, the night sky                                        */
   /* ------------------------------------------------------------------ */
   function tex(w, h, fn) {
     const c = doc.createElement('canvas');
@@ -250,10 +270,10 @@ window.BasilGrimoire = (() => {
     x.putImageData(img, 0, 0);
     return c;
   }
-  // the circle of the floor: two rings, a seven-pointed star, runes between the rings, the leaf of basil in the middle
-  function ritual(t, glow) {
+  // the circle of the floor: two rings, a seven-pointed star, runes between the rings, the leaf of basil in the middle;
+  // red — the colour of its lines, gold — of its runes
+  function ritual(t, red, gold) {
     const { put, line, w } = t, c = w / 2;
-    const red = glow ? [255, 70, 50] : [150, 28, 36], gold = glow ? [255, 170, 80] : [140, 104, 48];
     const ring = (r, col) => { for (let a = 0; a < 720; a++) { const q = a / 720 * Math.PI * 2; put(c + Math.cos(q) * r, c + Math.sin(q) * r, col); } };
     ring(c - 3, red); ring(c - 6, red); ring(c * 0.34, red);
     const P = [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return [c + Math.cos(q) * (c - 18), c + Math.sin(q) * (c - 18)]; });
@@ -275,15 +295,8 @@ window.BasilGrimoire = (() => {
     if (TX) return TX;
     const R0 = rng(11);
     const noise = (v, a) => clamp(v + (R0() - 0.5) * 2 * a, 0, 255);
+    const leaf = (pal, spots) => leafTex(pal, spots, noise);
     TX = {
-      floor: tex(128, 128, t => {
-        for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
-          const v = x % 32 === 0 || y % 32 === 0 ? 12 : 26;
-          t.put(x, y, [noise(v, 5), noise(v * 0.78, 4), noise(v * 1.25, 6)]);
-        }
-        ritual(t, false);
-      }),
-      glow: tex(128, 128, t => ritual(t, true)),
       stone: tex(32, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
           const row = y >> 4, joint = y % 16 === 0 || (x + (row ? 16 : 0)) % 32 === 8;
@@ -312,18 +325,25 @@ window.BasilGrimoire = (() => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) t.put(x, y, [noise(222 - y * 2, 5), noise(208 - y * 2.2, 5), noise(176 - y * 2.4, 5)]);
         for (let i = 0; i < 4; i++) { const x = 1 + i * 4, l = 6 + (i * 7) % 11; t.line(x, 0, x, l, [246, 236, 210]); }
       }),
-      // a leaf of basil with its veins, cut out of the square: the diamond of two triangles shows a rounded blade
-      leaf: tex(32, 32, t => {
-        for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
-          const u = (x + 0.5) / 32, v = (y + 0.5) / 32;
-          const s = v < 0.55 ? v / 0.55 * 0.5 : 0.5 + (v - 0.55) / 0.45 * 0.5;
-          const hw = 0.5 * Math.pow(Math.sin(Math.PI * s), 0.7), du = Math.abs(u - 0.5);
-          if (du > hw * 0.97) continue;
-          const edge = hw - du < 0.05, mid = du < 0.035, vein = ((v + du * 1.2) * 6) % 1 < 0.14 && du < hw * 0.8;
-          const k = 1 - Math.pow(du / (hw || 1), 2) * 0.28;
-          t.put(x, y, edge ? [38, 82, 30] : mid ? [168, 224, 118] : vein ? [128, 196, 86] : [noise(84 * k, 5), noise(150 * k, 6), noise(56 * k, 5)]);
-        }
-      }),
+      // the leaves of the sorts: green, the purple of «Тёмный опал», the lemon's pale, the Thai's purple midrib, one sick
+      // with brown spots, and a quill's feather of the same cut
+      leaf: leaf([[38, 82, 30], [168, 224, 118], [128, 196, 86], [84, 150, 56]]),
+      leafOpal: leaf([[34, 12, 36], [176, 96, 176], [134, 64, 136], [98, 38, 96]]),
+      leafLemon: leaf([[78, 108, 30], [228, 244, 156], [196, 226, 116], [156, 196, 84]]),
+      leafThai: leaf([[26, 64, 26], [176, 96, 186], [104, 170, 78], [62, 124, 48]]),
+      leafSick: leaf([[112, 92, 30], [214, 204, 120], [200, 188, 96], [176, 164, 64]], true),
+      feather: leaf([[150, 140, 132], [252, 246, 236], [222, 214, 200], [208, 200, 188]]),
+      // earth with its crumbs, and the green of pesto in the mortar
+      soil: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = R0(); t.put(x, y, r < 0.12 ? [96, 66, 42] : r < 0.24 ? [30, 20, 14] : [noise(58, 6), noise(38, 5), noise(26, 4)]); } }),
+      paste: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = R0(); t.put(x, y, r < 0.14 ? [140, 190, 80] : r < 0.24 ? [228, 210, 150] : [noise(54, 6), noise(104, 8), noise(36, 5)]); } }),
+      // the pages of the book: lines of a hand, a drawn leaf on the right one, a circle of runes on the left
+      pageL: tex(24, 32, t => page(t, noise, false)),
+      pageR: tex(24, 32, t => page(t, noise, true)),
+      leather: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) t.put(x, y, x === 1 || y === 1 || x === 14 || y === 14 ? [176, 132, 58] : [noise(86, 8), noise(24, 4), noise(30, 4)]); }),
+      // the night outside the window: violet going dark upwards, a few stars
+      sky: tex(32, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) { const k = y / 31; t.put(x, y, R0() < 0.025 && k < 0.7 ? [236, 226, 255] : [noise(14 + 44 * k, 3), noise(10 + 18 * k, 3), noise(34 + 40 * k, 4)]); } }),
+      runes: [...Array(6)].map((_, i) => tex(8, 8, t => runeGlyph(t, i))),
+      letters: ['N', 'P', 'K'].map(ch => tex(16, 16, t => letter(t, ch, noise))),
       flame: tex(16, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) {
           const u = (x + 0.5) / 16, v = (y + 0.5) / 32, du = Math.abs(u - 0.5);
@@ -334,6 +354,72 @@ window.BasilGrimoire = (() => {
       })
     };
     return TX;
+  }
+  // a leaf with its veins, cut out of the square: the diamond of two triangles shows a rounded blade.
+  // pal: the edge, the midrib, the veins, the blade; spots — the brown spots of a sick leaf with their yellow halo
+  function leafTex(pal, spots, noise) {
+    const [edgeC, midC, veinC, bladeC] = pal, R1 = rng(23);
+    const dots = spots ? [...Array(5)].map(() => [8 + R1() * 16, 8 + R1() * 16, 1.4 + R1() * 1.6]) : [];
+    return tex(32, 32, t => {
+      for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
+        const u = (x + 0.5) / 32, v = (y + 0.5) / 32;
+        const s = v < 0.55 ? v / 0.55 * 0.5 : 0.5 + (v - 0.55) / 0.45 * 0.5;
+        const hw = 0.5 * Math.pow(Math.sin(Math.PI * s), 0.7), du = Math.abs(u - 0.5);
+        if (du > hw * 0.97) continue;
+        const edge = hw - du < 0.05, mid = du < 0.035, vein = ((v + du * 1.2) * 6) % 1 < 0.14 && du < hw * 0.8;
+        const k = 1 - Math.pow(du / (hw || 1), 2) * 0.28;
+        const spot = dots.reduce((m, [sx, sy, r]) => Math.min(m, Math.hypot(x - sx, y - sy) / r), 9);
+        t.put(x, y, spot < 1 ? [86, 52, 26] : spot < 1.6 ? [204, 178, 70] : edge ? edgeC : mid ? midC : vein ? veinC : [noise(bladeC[0] * k, 5), noise(bladeC[1] * k, 6), noise(bladeC[2] * k, 5)]);
+      }
+    });
+  }
+  // the floor of the circle and its glow, in the colour of a chapter (made once for each colour)
+  const FLOORS = new Map();
+  function floorTex(col, glow) {
+    const key = col.join(',') + (glow ? '+' : '');
+    if (FLOORS.has(key)) return FLOORS.get(key);
+    const R2 = rng(11), noise = (v, a) => clamp(v + (R2() - 0.5) * 2 * a, 0, 255);
+    const gold = col.map((v, i) => Math.min(255, Math.round(v * 0.4 + [255, 234, 100][i] * 0.6)));
+    const c = tex(128, 128, t => {
+      if (!glow) for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
+        const v = x % 32 === 0 || y % 32 === 0 ? 12 : 26;
+        t.put(x, y, [noise(v, 5), noise(v * 0.78, 4), noise(v * 1.25, 6)]);
+      }
+      ritual(t, glow ? col : col.map(v => v * 0.55), glow ? gold : gold.map(v => v * 0.55));
+    });
+    FLOORS.set(key, c);
+    return c;
+  }
+  // a page of the grimoire: parchment, lines of writing, and a drawing — a leaf (right) or a circle of runes (left)
+  function page(t, noise, right) {
+    const { put, line } = t, ink = [74, 46, 34];
+    for (let y = 0; y < 32; y++) for (let x = 0; x < 24; x++) put(x, y, [noise(222 - y * 0.8, 6), noise(204 - y * 0.8, 6), noise(160 - y, 6)]);
+    const R3 = rng(right ? 41 : 43);
+    for (let y = 3; y < 30; y += 3) {
+      if (right ? y > 9 && y < 22 : y > 15 && y < 27) continue;
+      let x = 3;
+      while (x < 21) { const l = 1 + (R3() * 5 | 0); line(x, y, Math.min(20, x + l), y, ink); x += l + 2; }
+    }
+    if (right) {
+      for (let k = -5; k <= 5; k++) { const hw = Math.round(3.4 * Math.sin((k + 6) / 12 * Math.PI)); put(12 - hw, 16 + k, [60, 112, 46]); put(12 + hw, 16 + k, [60, 112, 46]); }
+      line(12, 10, 12, 22, [60, 112, 46]);
+    } else {
+      for (let a = 0; a < 60; a++) { const q = a / 60 * Math.PI * 2; put(12 + Math.cos(q) * 5, 21 + Math.sin(q) * 5, [150, 30, 36]); }
+      for (let i = 0; i < 5; i++) { const q = -Math.PI / 2 + i / 5 * Math.PI * 2, q2 = q + 4 * Math.PI / 5; line(12 + Math.cos(q) * 4, 21 + Math.sin(q) * 4, 12 + Math.cos(q2) * 4, 21 + Math.sin(q2) * 4, [150, 30, 36]); }
+    }
+  }
+  // a rune of light (the glyphs that circle the book): a few strokes on a grid of three by four, nothing around them
+  function runeGlyph(t, i) {
+    const R4 = rng(61 + i * 7), g = [255, 204, 112], P = [[1, 1], [6, 1], [1, 6], [6, 6], [3, 1], [3, 6], [1, 3], [6, 3], [3, 3]];
+    const n = 2 + (R4() * 2 | 0);
+    for (let k = 0; k < n; k++) { const a = P[R4() * P.length | 0], b = P[R4() * P.length | 0]; t.line(a[0], a[1], b[0], b[1], g); }
+    t.line(3, 1, 3, 6, g);
+  }
+  // a letter of gold carved into a stone: the element a flask holds
+  const GLYPH = { N: ['1001', '1101', '1011', '1001', '1001'], P: ['1110', '1001', '1110', '1000', '1000'], K: ['1001', '1010', '1100', '1010', '1001'] };
+  function letter(t, ch, noise) {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) t.put(x, y, y === 0 || x === 0 || y === 15 || x === 15 ? [30, 25, 34] : [noise(70, 9), noise(62, 8), noise(78, 10)]);
+    GLYPH[ch].forEach((row, y) => [...row].forEach((b, x) => { if (b === '1') for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) t.put(4 + x * 2 + dx, 3 + y * 2 + dy, [226, 182, 84]); }));
   }
   /* ------------------------------------------------------------------ */
   /* molecules: low polygons, the console's light                         */
@@ -414,31 +500,119 @@ window.BasilGrimoire = (() => {
     ctx.drawImage(b.cv, 0, 0, ctx.canvas.width, ctx.canvas.height);
   }
   /* ------------------------------------------------------------------ */
-  /* the altar: basil in a clay pot on a stone altar, seven candles on    */
-  /* the points of a star in a circle of runes, the molecule of the       */
-  /* chapter turning above the bush — at the head of every chapter and    */
-  /* in the hero of the home page                                         */
+  /* the altar of every chapter: a circle of runes on the floor, pillars  */
+  /* in the dark, seven candles on the points of the star — and in the    */
+  /* middle the chapter's own scene (04-scene-*.js), at the head of every */
+  /* chapter and in the hero of the home page                             */
   /* ------------------------------------------------------------------ */
-  // which molecule of the aroma rises above the bush in each chapter
-  const ALTAR_MOL = { glavnaya: 'lin', sorta: 'est', posadka: 'cin', uhod: 'lin', udobreniya: 'eug', gidro: 'cin', formirovka: 'car', vkus: 'eug', problemy: 'est', spravka: 'lin', moy: 'lin' };
+  /* A scene is scene(view, S => ({ … })): S.R — the rasterizer, S.T — the textures, S.ang — where the camera stands
+     (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
+     tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
+     point lights, fill — how strong the soft light from the camera's side is, fx(t, F) — sparks and halos over the picture (F.spark, F.halo, F.dot, F.streak), tap(t) — what
+     a tap on the altar does; candles — its own candles; glow — the colour of the circle; glowAdd(t) — how bright it
+     burns; look, rad, near — the camera (the point it looks at, how far it stands beside the text of a wide
+     screen, how far in the middle of a narrow one);
+     orbit [angle, swing] — a camera that swings in front of the scene instead of going round it; still — the
+     moment shown when the reader asked for less motion */
+  const SCENES = {};
+  const scene = (view, make) => { SCENES[view] = make; };
+  const smooth = v => { v = clamp(v, 0, 1); return v * v * (3 - 2 * v); };
+  const mix3 = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
+
+  // a leaf of basil from its base B along F, its blade spread along S (across F when not given): four triangles of
+  // the cut-out texture; o.w — how wide, o.curl — how much its tip bends down, o.flat — one colour instead of the
+  // texture (a leaf far off in the fog, a kite of four flat triangles: cheaper)
+  function leaf(R, B, F, len, tex, o = {}) {
+    let S = o.side || cross(F, [0, 1, 0]);
+    if (Math.hypot(S[0], S[1], S[2]) < 1e-3) S = [1, 0, 0];
+    S = norm(S);
+    const U = cross(S, F), w = o.w || 0.36, curl = o.curl == null ? 0.22 : o.curl;
+    const Tp = add(add(B, mul(F, len)), mul(U, -len * curl)), M = add(add(B, mul(F, len * 0.5)), mul(U, len * 0.1));
+    const Lf = add(add(B, mul(F, len * 0.42)), mul(S, -len * w)), Rt = add(add(B, mul(F, len * 0.42)), mul(S, len * w));
+    const q = o.flat ? { col: o.flat, ds: true, layer: o.layer, add: o.add } : { tex, ds: true, cut: true, layer: o.layer, add: o.add };
+    R.tri(B, Lf, M, { ...q, uv: [[0.5, 1], [0, 0.55], [0.5, 0.55]] });
+    R.tri(Lf, Tp, M, { ...q, uv: [[0, 0.55], [0.5, 0], [0.5, 0.55]] });
+    R.tri(B, M, Rt, { ...q, uv: [[0.5, 1], [0.5, 0.55], [1, 0.55]] });
+    R.tri(M, Tp, Rt, { ...q, uv: [[0.5, 0.55], [0.5, 0], [1, 0.55]] });
+  }
+  // the bush: a stem and pairs of leaves, each pair a quarter turn from the one below. o: s — its size, tex — the
+  // leaves (texAt(k) — of the k-th pair; flat — one colour), stem — its colour, lean [x, z] — where its top bends,
+  // leaf — the leaves' length, w — their width, yaw — its turn, pairs — [height 0…1, length, pitch]. Gives the top
+  // of the stem
+  const PAIRS = [[0.18, 0.46, 0.15], [0.42, 0.4, 0.05], [0.65, 0.32, -0.1], [0.82, 0.24, -0.3], [0.95, 0.15, -0.6]];
+  function bush(R, T, b, t, o = {}) {
+    const s = o.s || 1, H = 0.85 * s, lean = o.lean || [0, 0];
+    const sway = k => Math.sin(t * 1.3 + k) * 0.05;
+    const top = [b[0] + Math.sin(t * 0.7) * 0.02 + lean[0] * H, b[1] + H, b[2] + lean[1] * H];
+    // the stem bends towards its top: the lower part stands, the upper follows the lean
+    const at = f => [b[0] + (top[0] - b[0]) * f * f, b[1] + H * f, b[2] + (top[2] - b[2]) * f * f];
+    rod(R, b, at(0.5), 0.03 * s, { col: o.stem || [70, 128, 48] });
+    rod(R, at(0.5), top, 0.022 * s, { col: o.stem || [80, 140, 52] });
+    (o.pairs || PAIRS).forEach(([f, len, pitch], k) => {
+      for (let j = 0; j < 2; j++) {
+        const yaw = k * Math.PI / 2 + j * Math.PI + 0.3 + (o.yaw || 0) + sway(k + j), pt = pitch + sway(k * 2 + j) * 0.8;
+        const F = norm([Math.cos(yaw) * Math.cos(pt), -Math.sin(pt) * 0.6 + 0.1, Math.sin(yaw) * Math.cos(pt)]);
+        leaf(R, at(f), F, len * s * (o.leaf || 1), o.texAt ? o.texAt(k) : o.tex || T.leaf, { w: o.w, flat: o.flat });
+      }
+    });
+    return top;
+  }
+  // a clay pot with its rim and earth (n sides): gives the height of the earth, where a bush stands
+  function pot(R, T, x, z, y0, s = 1, earth = [46, 28, 22], n = 8) {
+    prism(R, x, z, y0, y0 + 0.38 * s, 0.27 * s, 0.37 * s, n, { tex: T.pot });
+    prism(R, x, z, y0 + 0.35 * s, y0 + 0.44 * s, 0.39 * s, 0.41 * s, n, { col: [120, 44, 32] }, earth);
+    return y0 + 0.39 * s;
+  }
+  // the flat top of a ring (the rim of a well, a mortar): quads between the radii r0 and r1 at the height y
+  function ringTop(R, cx, cz, y, r0, r1, n, o) {
+    for (let i = 0; i < n; i++) {
+      const a0 = i / n * Math.PI * 2, a1 = (i + 1) / n * Math.PI * 2;
+      const P = (a, r) => [cx + Math.cos(a) * r, y, cz + Math.sin(a) * r];
+      quad(R, P(a0, r1), P(a1, r1), P(a1, r0), P(a0, r0), { ...o, ds: true }, i / n, (i + 1) / n, 0, 1);
+    }
+  }
+  // a flat disc of earth or paste at the height y: a fan of the texture
+  function disc(R, cx, cz, y, r, n, o) {
+    for (let i = 0; i < n; i++) {
+      const a0 = i / n * Math.PI * 2, a1 = (i + 1) / n * Math.PI * 2;
+      R.tri([cx, y, cz], [cx + Math.cos(a0) * r, y, cz + Math.sin(a0) * r], [cx + Math.cos(a1) * r, y, cz + Math.sin(a1) * r], { ...o, ds: true, uv: [[0.5, 0.5], [0.5 + Math.cos(a0) / 2, 0.5 + Math.sin(a0) / 2], [0.5 + Math.cos(a1) / 2, 0.5 + Math.sin(a1) / 2]] });
+    }
+  }
+  // the stone altar with its sigil: gives the height of its top
+  function altarStone(R, T) {
+    box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar });
+    box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
+    return 1.08;
+  }
+  // a molecule of the aroma, small and glowing: its atoms at the centre c, turned by yaw; a — how much of it is seen
+  function essence(R, mol, c, yaw, k = 1, a = null) {
+    const ca = Math.cos(yaw), sa = Math.sin(yaw);
+    const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [c[0] + q[0] * 0.15 * k, c[1] + q[1] * 0.135 * k + q[2] * 0.03 * k, c[2] + q[2] * 0.15 * k]; });
+    mol.bonds.forEach(([i, j]) => rod(R, MP[i], MP[j], 0.012 * k, { col: [170, 120, 230], emis: true, add: a }, 3));
+    mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? [240, 70, 60] : [214, 190, 255], emis: true, add: a }));
+  }
+
   function altar(host, view) {
     const stage = doc.createElement('div');
     stage.className = 'psx-stage';
+    stage.dataset.scene = SCENES[view] ? view : 'glavnaya';
     stage.setAttribute('aria-hidden', 'true');
     const cv = doc.createElement('canvas');
     stage.appendChild(cv);
     host.insertBefore(stage, host.firstChild);
     const T = textures();
     const R = new Raster(cv, { px: 3, maxW: 400, levels: 16, fogNear: 3.5, fogFar: 15, amb: [0.13, 0.1, 0.17] });
-    R.key = { dir: norm([-0.35, 0.85, -0.4]), i: 0.42, col: [0.55, 0.5, 0.85] };
-    const candles = [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; });
-    candles.push({ x: -0.74, z: 0.4, h: 0.26, ph: 4.2, top: 1.09 }, { x: 0.74, z: -0.4, h: 0.2, ph: 2.2, top: 1.09 });
+    const KEY = { dir: norm([-0.35, 0.85, -0.4]), i: 0.42, col: [0.55, 0.5, 0.85] };
+    const S = { R, T, view, ang: 0.6 };
+    const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, glow: [255, 70, 50], ...(SCENES[view] || SCENES.glavnaya)(S) };
+    const FLOOR = floorTex(sc.glow, false), GLOW = floorTex(sc.glow, true);
+    const candles = [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; }).concat(sc.candles || []);
     const embers = [...Array(46)].map((_, i) => ({ k: i % candles.length, a: (i * 0.37) % 1, s: 0.3 + (i * 13 % 10) / 22, dx: ((i * 29) % 11 - 5) / 60, dz: ((i * 17) % 11 - 5) / 60 }));
     const pillars = [...Array(8)].map((_, i) => { const q = 0.35 + i / 8 * Math.PI * 2; return { x: Math.cos(q) * 7.4, z: Math.sin(q) * 7.4, h: 1.6 + ((i * 53) % 10) / 4 }; });
-    const mol = molShape(ALTAR_MOL[view] || 'lin') || molShape('lin');
-    // the reader turns the altar with a finger or the mouse; a tap sends up a puff of sparks
+    // the reader turns the altar with a finger or the mouse; a tap does what the scene does (a puff of sparks by default)
     const ptr = { turn: 0, lift: 0, drag: null, puffs: [] };
     const t0 = performance.now();
+    const clock = () => (reduce.matches ? sc.still : (performance.now() - t0) / 1000);
     const onDown = e => { ptr.drag = { x: e.clientX, y: e.clientY, turn: ptr.turn, lift: ptr.lift, moved: false }; };
     const onMove = e => {
       if (!ptr.drag) return;
@@ -449,7 +623,11 @@ window.BasilGrimoire = (() => {
       L.start();
     };
     const onUp = () => {
-      if (ptr.drag && !ptr.drag.moved) { ptr.puffs.push({ t: (performance.now() - t0) / 1000 }); if (ptr.puffs.length > 4) ptr.puffs.shift(); }
+      if (ptr.drag && !ptr.drag.moved) {
+        if (sc.tap) sc.tap(clock());
+        else { ptr.puffs.push({ t: clock() }); if (ptr.puffs.length > 4) ptr.puffs.shift(); }
+        L.start();
+      }
       ptr.drag = null;
     };
     stage.addEventListener('pointerdown', onDown);
@@ -457,23 +635,29 @@ window.BasilGrimoire = (() => {
     addEventListener('pointerup', onUp);
     addEventListener('pointercancel', onUp);
     function frame(now) {
-      const still = reduce.matches;
-      const t = (now - t0) / 1000;
+      // the clock of the scene: stands at its chosen moment when the reader asked for less motion
+      const t = reduce.matches ? sc.still : (now - t0) / 1000;
       R.size();
-      const wide = R.W > R.H * 1.9;
-      const ang = (still ? 0.6 : t * 0.11) + ptr.turn, eyeY = 2.55 + (still ? 0 : Math.sin(t * 0.3) * 0.15) + ptr.lift;
-      const rad = wide ? 6.4 : 7.4;
-      R.cam([Math.cos(ang) * rad, eyeY, Math.sin(ang) * rad], [0, 1.45, 0], wide ? 1.25 : 1.05, wide ? 0.68 : 0.5, wide ? 0.44 : 0.4);
-      R.lights = candles.map(c => ({ p: [c.x, (c.top || 0) + c.h + 0.14, c.z], col: [1, 0.6, 0.28], i: 0.5 + (still ? 0 : 0.12 * Math.sin(t * 11 + c.ph) + 0.08 * Math.sin(t * 23 + c.ph * 2)), fall: 0.55 }));
+      // wide: the chapter's text on the left, the scene to the right of it; else the scene in the middle, closer
+      const wide = R.W > R.H * 1.45;
+      const ang = (sc.orbit ? sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1] : 0.6 + t * 0.11) + ptr.turn;
+      const look = sc.look, eyeY = look[1] + 1.1 + Math.sin(t * 0.3) * 0.15 + ptr.lift;
+      const rad = wide ? sc.rad : sc.near;
+      S.ang = ang;
+      R.cam([look[0] + Math.cos(ang) * rad, eyeY, look[2] + Math.sin(ang) * rad], look, wide ? 1.25 : 1.05, wide ? 0.68 : 0.5, wide ? 0.44 : 0.4);
+      R.key = KEY;
+      if (sc.tick) sc.tick(t);
+      R.lights = candles.map(c => ({ p: [c.x, (c.top || 0) + c.h + 0.14, c.z], col: [1, 0.6, 0.28], i: 0.5 + 0.12 * Math.sin(t * 11 + c.ph) + 0.08 * Math.sin(t * 23 + c.ph * 2), fall: 0.55 }))
+        .concat(sc.fill ? [{ p: [look[0] + Math.cos(ang) * 2.2, look[1] + 1.5, look[2] + Math.sin(ang) * 2.2], col: [0.78, 0.62, 0.95], i: sc.fill, fall: 0.16 }] : [], sc.lights ? sc.lights(t) : []);
       const x = R.x, g = x.createLinearGradient(0, 0, 0, R.H);
       g.addColorStop(0, '#07050B'); g.addColorStop(0.55, '#1C1122'); g.addColorStop(1, '#120B17');
       x.fillStyle = g; x.fillRect(0, 0, R.W, R.H);
       // the floor and its circle: a layer of their own, under everything
-      const FL = 4.4, N = 2;
+      const FL = 4.4, N = 2, glowA = sc.glowAdd ? sc.glowAdd(t) : 0.32 + 0.22 * Math.sin(t * 1.4);
       for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
         const x0 = -FL + i * FL * 2 / N, x1 = x0 + FL * 2 / N, z0 = -FL + j * FL * 2 / N, z1 = z0 + FL * 2 / N;
-        quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: T.floor, layer: 0, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
-        quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: T.glow, layer: 0, add: still ? 0.4 : 0.32 + 0.22 * Math.sin(t * 1.4), ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
+        quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: FLOOR, layer: 0, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
+        quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: GLOW, layer: 0, add: glowA, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
       }
       for (let k = 0; k < 4; k++) {
         const q = k * Math.PI / 2, far = 16, s = [Math.cos(q), Math.sin(q)], tn = [-s[1], s[0]];
@@ -481,43 +665,13 @@ window.BasilGrimoire = (() => {
         quad(R, p(FL, -FL), p(far, -far), p(far, far), p(FL, FL), { col: [30, 22, 36], layer: 0, ds: true });
       }
       pillars.forEach(p => box(R, [p.x, p.h / 2, p.z], [0.32, p.h / 2, 0.32], { tex: T.stone }));
-      box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar });
-      box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
-      prism(R, 0, 0, 1.08, 1.46, 0.27, 0.37, 8, { tex: T.pot });
-      prism(R, 0, 0, 1.43, 1.52, 0.39, 0.41, 8, { col: [120, 44, 32] }, [46, 28, 22]);
-      // the bush: a stem and pairs of leaves, each pair a quarter turn from the one below
-      const sway = k => still ? 0 : Math.sin(t * 1.3 + k) * 0.05;
-      const top = [still ? 0 : Math.sin(t * 0.7) * 0.02, 2.32, 0];
-      rod(R, [0, 1.47, 0], [top[0] * 0.5, 1.9, 0], 0.03, { col: [70, 128, 48] });
-      rod(R, [top[0] * 0.5, 1.9, 0], top, 0.022, { col: [80, 140, 52] });
-      [[1.62, 0.46, 0.15], [1.83, 0.4, 0.05], [2.02, 0.32, -0.1], [2.17, 0.24, -0.3], [2.28, 0.15, -0.6]].forEach(([y, len, pitch], k) => {
-        for (let s = 0; s < 2; s++) {
-          const yaw = k * Math.PI / 2 + s * Math.PI + 0.3 + sway(k + s), pt = pitch + sway(k * 2 + s) * 0.8;
-          const Fn = norm([Math.cos(yaw) * Math.cos(pt), -Math.sin(pt) * 0.6 + 0.1, Math.sin(yaw) * Math.cos(pt)]);
-          const Sd = norm(cross(Fn, [0, 1, 0])), U = cross(Sd, Fn);
-          const B = [top[0] * (y - 1.47) / 0.85, y, 0];
-          const Tp = add(add(B, mul(Fn, len)), mul(U, -len * 0.22)), M = add(add(B, mul(Fn, len * 0.5)), mul(U, len * 0.1));
-          const Lf = add(add(B, mul(Fn, len * 0.42)), mul(Sd, -len * 0.36)), Rt = add(add(B, mul(Fn, len * 0.42)), mul(Sd, len * 0.36));
-          const o = { tex: T.leaf, ds: true, cut: true };
-          R.tri(B, Lf, M, { ...o, uv: [[0.5, 1], [0, 0.55], [0.5, 0.55]] });
-          R.tri(Lf, Tp, M, { ...o, uv: [[0, 0.55], [0.5, 0], [0.5, 0.55]] });
-          R.tri(B, M, Rt, { ...o, uv: [[0.5, 1], [0.5, 0.55], [1, 0.55]] });
-          R.tri(M, Tp, Rt, { ...o, uv: [[0.5, 0.55], [0.5, 0], [1, 0.55]] });
-        }
-      });
+      sc.draw(t);
       candles.forEach((c, i) => {
         const y0 = c.top || 0;
         prism(R, c.x, c.z, y0, y0 + c.h, 0.085, 0.075, 6, { tex: T.wax }, [236, 226, 200], i);
-        const fl = still ? 1 : 1 + 0.18 * Math.sin(t * 13 + c.ph) + 0.1 * Math.sin(t * 29 + c.ph);
+        const fl = 1 + 0.18 * Math.sin(t * 13 + c.ph) + 0.1 * Math.sin(t * 29 + c.ph);
         billboard(R, [c.x, y0 + c.h + 0.1 * fl, c.z], 0.05, 0.1 * fl, { tex: T.flame, emis: true, nofog: true, cut: true });
       });
-      // the essence above the bush: the chapter's molecule, slowly turning
-      const my = 2.85 + (still ? 0 : Math.sin(t * 0.9) * 0.06), yaw = still ? 0.8 : t * 0.5, ca = Math.cos(yaw), sa = Math.sin(yaw);
-      if (mol) {
-        const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [q[0] * 0.15, my + q[1] * 0.135 + q[2] * 0.03, q[2] * 0.15]; });
-        mol.bonds.forEach(([a, b]) => rod(R, MP[a], MP[b], 0.012, { col: [170, 120, 230], emis: true }, 3));
-        mol.atoms.split('').forEach((el, i) => ball(R, MP[i], el === 'O' ? 0.06 : 0.045, { col: el === 'O' ? [240, 70, 60] : [214, 190, 255], emis: true }));
-      }
       R.draw();
       // the halos of the flames, added before the colour is cut down: the dither turns them into rings
       x.globalCompositeOperation = 'lighter';
@@ -529,8 +683,7 @@ window.BasilGrimoire = (() => {
         x.fillStyle = gg; x.fillRect(p[0] - r, p[1] - r, r * 2, r * 2);
       };
       candles.forEach(c => halo([c.x, (c.top || 0) + c.h + 0.1, c.z], 0.42, 'rgba(255,150,60,.34)', 'rgba(255,120,40,0)'));
-      halo([0, my, 0], 0.5, 'rgba(155,107,214,.26)', 'rgba(155,107,214,0)');
-      // sparks from the candles, and the reader's puffs from the bush
+      // a spark of fire (life 0…1 fades it), a dot of any colour, a streak (a drop falling)
       const spark = (p3, life, big) => {
         const v = R.view(p3);
         if (v[2] < 0.3) return;
@@ -538,11 +691,26 @@ window.BasilGrimoire = (() => {
         x.fillStyle = `rgba(255,${150 + (life * 60) | 0},70,${(1 - life) * 0.9})`;
         x.fillRect(p[0], p[1], s, s);
       };
+      const dot = (p3, col, size = 0) => {
+        const v = R.view(p3);
+        if (v[2] < 0.3) return;
+        const p = R.proj(v), s = size || (v[2] < 4 ? 2 : 1);
+        x.fillStyle = col;
+        x.fillRect(p[0], p[1], s, s);
+      };
+      const streak = (p3, len, col) => {
+        const v = R.view(p3);
+        if (v[2] < 0.3) return;
+        const p = R.proj(v), l = Math.max(2, Math.round(R.C.focal * len / v[2]));
+        x.fillStyle = col;
+        x.fillRect(p[0], p[1], 1, l);
+      };
+      if (sc.fx) sc.fx(t, { halo, spark, dot, streak });
       embers.forEach(e => {
-        const c = candles[e.k], life = still ? e.a : (e.a + t * e.s * 0.25) % 1;
+        const c = candles[e.k], life = (e.a + t * e.s * 0.25) % 1;
         spark([c.x + e.dx * life * 8, (c.top || 0) + c.h + 0.15 + life * 1.6, c.z + e.dz * life * 8], life);
       });
-      ptr.puffs = ptr.puffs.filter(p => t - p.t < 2.2);
+      ptr.puffs = ptr.puffs.filter(p => t - p.t < 2.2 && t >= p.t);
       ptr.puffs.forEach(p => {
         const life = (t - p.t) / 2.2;
         for (let i = 0; i < 18; i++) {
@@ -573,6 +741,681 @@ window.BasilGrimoire = (() => {
       }
     };
   }
+
+  // Главная: basil in a clay pot on the stone altar, two candles beside it, the molecule of linalool turning above
+  scene('glavnaya', S => {
+    const { R, T } = S, mol = molShape('lin');
+    let my = 2.85;
+    return {
+      fill: 0.25,
+      candles: [{ x: -0.74, z: 0.4, h: 0.26, ph: 4.2, top: 1.09 }, { x: 0.74, z: -0.4, h: 0.2, ph: 2.2, top: 1.09 }],
+      draw(t) {
+        const top = altarStone(R, T), earth = pot(R, T, 0, 0, top);
+        bush(R, T, [0, earth, 0], t);
+        my = 2.85 + Math.sin(t * 0.9) * 0.06;
+        if (mol) essence(R, mol, [0, my, 0], 0.8 + t * 0.5);
+      },
+      fx(t, F) { F.halo([0, my, 0], 0.5, 'rgba(155,107,214,.26)', 'rgba(155,107,214,0)'); }
+    };
+  });
+  // Прищипка и сбор: a pot on an old stump, the top of the stem growing; a sickle circling it like a crescent moon
+  // comes down and cuts the top above a pair of leaves; the top falls to the floor, and two new shoots come out of that
+  // pair, so the bush grows wide instead of tall; then time goes back in a violet shimmer and it begins again. A tap
+  // swings the sickle
+  scene('formirovka', S => {
+    const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
+    let off = 0, cut = [0, 2.1, 0], sick = [1, 2.5, 0], tip = null, phase = 0;
+    // the moment of the cycle: the sickle cuts at SW; a tap, once the top has grown, moves the cycle to the swing
+    const at = t => (((t + off) % CYCLE) + CYCLE) % CYCLE;
+    // the main stem: three nodes with their pairs, the cut above the third
+    const NODES = [[0.2, 0.42, 0.12], [0.42, 0.36, 0], [0.62, 0.3, -0.12]];
+    const pairAt = (b, h, len, pitch, k, t, g = 1) => {
+      for (let j = 0; j < 2; j++) {
+        const yaw = k * Math.PI / 2 + j * Math.PI + 0.3 + Math.sin(t * 1.3 + k + j) * 0.05;
+        leaf(R, [b[0], b[1] + h, b[2]], norm([Math.cos(yaw) * Math.cos(pitch), -Math.sin(pitch) * 0.6 + 0.1, Math.sin(yaw) * Math.cos(pitch)]), len * s * g, T.leaf);
+      }
+    };
+    // the top above the cut: a stem and two pairs, grown g
+    const topShoot = (R2, c, g, t) => {
+      if (g <= 0) return;
+      const h = 0.34 * s * g;
+      rod(R2, c, [c[0], c[1] + h, c[2]], 0.02 * s, { col: [86, 146, 56] });
+      [[0.45, 0.26, -0.15, 3], [0.95, 0.16, -0.6, 4]].forEach(([f, len, pitch, k]) => {
+        for (let j = 0; j < 2; j++) {
+          const yaw = k * Math.PI / 2 + j * Math.PI + 0.3 + Math.sin(t * 1.3 + k + j) * 0.05;
+          leaf(R2, [c[0], c[1] + h * f, c[2]], norm([Math.cos(yaw) * Math.cos(pitch), -Math.sin(pitch) * 0.6 + 0.1, Math.sin(yaw) * Math.cos(pitch)]), len * s * g, T.leaf);
+        }
+      });
+    };
+    return {
+      glow: [176, 192, 255], near: 4.4, look: [0, 1.6, 0], still: 7.5,
+      tap(t) { const u = at(t); if (u > 1.5 && u < SW - 0.6) off += SW - 0.6 - u; },
+      tick(t) {
+        const u = at(t);
+        phase = u;
+        // the sickle: round the altar, then down through the stem and away
+        const idle = [Math.cos(t * 0.6) * 1.05, 2.55 + Math.sin(t * 1.1) * 0.08, Math.sin(t * 0.6) * 1.05];
+        const w = smooth((u - SW + 0.9) / 0.6) * (1 - smooth((u - SW - 0.3) / 0.8)), k = smooth((u - SW + 0.3) / 0.6);
+        const A = add(cut, [-0.5, 0.12, 0.05]), B = add(cut, [0.5, 0.02, -0.05]);
+        sick = mix3(idle, mix3(A, B, k), w);
+        tip = { w, spin: t * 1.4 * (1 - w) };
+      },
+      lights() { return [{ p: add(sick, [0, 0.25, 0.2]), col: [0.75, 0.8, 1], i: 1.1, fall: 0.5 }]; },
+      draw(t) {
+        // a stump with its rings, the pot on it
+        const top = 0.92;
+        prism(R, 0, 0, 0, top, 0.66, 0.56, 9, { col: [86, 58, 40] });
+        disc(R, 0, 0, top, 0.56, 9, { col: [176, 136, 92] });
+        [0.18, 0.34, 0.48].forEach(r => ringTop(R, 0, 0, top + 0.002, r, r + 0.025, 9, { col: [128, 92, 60] }));
+        [0, 1, 2, 3].forEach(i => { const q = i * 1.6 + 0.4; prism(R, Math.cos(q) * 0.6, Math.sin(q) * 0.6, 0, 0.14, 0.12, 0.05, 5, { col: [80, 54, 38] }); });
+        const earth = pot(R, T, 0, 0, top), b = [0, earth, 0], u = phase;
+        const H = 0.62 * 0.85 * s;
+        cut = [0, earth + H + 0.02, 0];
+        rod(R, b, cut, 0.03 * s, { col: [70, 128, 48] });
+        NODES.forEach(([f, len, pitch], k) => pairAt(b, 0.85 * s * f, len, pitch, k, t));
+        // the top: growing before the cut, falling after it, lying on the floor till time turns back
+        if (u < SW) topShoot(R, cut, smooth(u / (SW - 0.8)), t);
+        else if (u < 10.6) {
+          const f = smooth((u - SW) / 1.6), land = [0.9, 0.06, 0.35];
+          topShoot(turned(R, add(cut, [0, 0.15, 0]), [0.3, 0, 1], -f * 1.45, mul(sub(land, cut), f)), cut, 1, t);
+        }
+        // the two new shoots from the axils of the last pair
+        const gs = u < SW ? 0 : u < 10.6 ? smooth((u - SW - 0.4) / 3.2) : 1 - smooth((u - 10.6) / 1.2);
+        if (gs > 0) for (let j = 0; j < 2; j++) {
+          const yaw = 2 * Math.PI / 2 + j * Math.PI + 0.3, d = norm([Math.cos(yaw) * 0.6, 0.8, Math.sin(yaw) * 0.6]);
+          const base = [0, earth + 0.85 * s * 0.62, 0], end = add(base, mul(d, 0.34 * s * gs));
+          rod(R, base, end, 0.018 * s, { col: [92, 150, 60] });
+          for (let i = 0; i < 2; i++) {
+            const q = yaw + Math.PI / 2 + i * Math.PI;
+            leaf(R, end, norm([Math.cos(q), 0.25, Math.sin(q)]), 0.22 * s * gs, T.leaf);
+          }
+          leaf(R, end, norm(add(d, [0, 0.4, 0])), 0.12 * s * gs, T.leafLemon, { w: 0.4 });
+        }
+        // the sickle: a crescent of iron and its haft
+        const q = tip.spin, U = [Math.cos(q), 0, Math.sin(q)], V = norm(mix3([0, 1, 0], [-Math.sin(q), 0, Math.cos(q)], tip.w * 0.85));
+        const P = (a, r, off) => add(add(sick, mul(U, Math.cos(a) * r + off)), mul(V, Math.sin(a) * r));
+        for (let i = 0; i < 9; i++) {
+          const a0 = -0.4 + i / 9 * 2.9, a1 = -0.4 + (i + 1) / 9 * 2.9;
+          quad(R, P(a0, 0.4, 0), P(a1, 0.4, 0), P(a1, 0.32, 0.09), P(a0, 0.32, 0.09), { col: [206, 208, 228], ds: true });
+          // the edge: a line of cold light
+          rod(R, P(a0, 0.4, 0), P(a1, 0.4, 0), 0.012, { col: [236, 240, 255], emis: true, nofog: true }, 3);
+        }
+        const end = P(2.5, 0.36, 0.045);
+        rod(R, end, add(end, mul(norm(sub(end, P(2.3, 0.36, 0.045))), 0.3)), 0.032, { col: [120, 76, 42] });
+      },
+      fx(t, F) {
+        const u = phase;
+        F.halo(sick, 0.55, 'rgba(190,200,255,.3)', 'rgba(190,200,255,0)');
+        // the cut: sap and bits of leaf flying
+        if (u > SW - 0.05 && u < SW + 0.7) for (let i = 0; i < 14; i++) {
+          const l = (u - SW + 0.05) / 0.75, q = i * 0.45;
+          F.dot([cut[0] + Math.cos(q) * l * 0.5, cut[1] + Math.sin(i * 1.7) * l * 0.3 + l * 0.1, cut[2] + Math.sin(q) * l * 0.4], `rgba(170,230,110,${1 - l})`, 2);
+        }
+        // time going back
+        if (u > 10.5) for (let i = 0; i < 22; i++) { const l = (u - 10.5) / 1.5, q = i * 0.9 + t * 2; F.dot([Math.cos(q) * (0.3 + l * 0.4), cut[1] - 0.3 + (i % 7) * 0.1, Math.sin(q) * (0.3 + l * 0.4)], `rgba(200,150,255,${0.9 * Math.sin(l * Math.PI)})`, 2); }
+      }
+    };
+  });
+  // Гидропоника: a glass tank of water with a cold light in it, the bush in a net cup on its lid, white roots hanging
+  // down into the water and swaying like weed, bubbles rising from the stone of the air pump. A tap lets out a burst
+  // of bubbles
+  scene('gidro', S => {
+    const { R, T } = S, TOP = 0.92, LID = 1.12;
+    const ROOTS = [...Array(9)].map((_, i) => ({ q: i / 9 * Math.PI * 2 + 0.3, r: 0.03 + (i % 3) * 0.035, len: 0.55 + ((i * 7) % 5) / 14, ph: i * 1.3 }));
+    const BUB = [...Array(22)].map((_, i) => ({ a: (i * 0.618) % 1, s: 0.35 + (i % 5) / 9, dx: ((i * 37) % 11 - 5) / 70, dz: ((i * 23) % 11 - 5) / 90 }));
+    let bursts = [];
+    const glass = { col: [70, 110, 130], emis: true, nofog: true, add: 0.12, layer: 2 };
+    return {
+      glow: [70, 200, 255], near: 4.2, look: [0, 1.15, 0], still: 3,
+      tap(t) { bursts.push(t); if (bursts.length > 3) bursts.shift(); },
+      lights(t) { return [{ p: [0, 0.5, 0.1], col: [0.3, 0.8, 1], i: 1 + 0.15 * Math.sin(t * 2.1), fall: 0.7 }]; },
+      draw(t) {
+        // the water: its far walls first, then its near ones and its surface, light added to what is behind
+        box(R, [0, TOP / 2 + 0.01, 0], [0.6, TOP / 2, 0.4], { col: [24, 90, 130], emis: true, nofog: true, add: 0.3, inv: true, layer: 2 });
+        box(R, [0, TOP / 2 + 0.01, 0], [0.6, TOP / 2, 0.4], { col: [30, 110, 150], emis: true, nofog: true, add: 0.26, layer: 2 });
+        box(R, [0, 0.55, 0], [0.63, 0.55, 0.43], glass);
+        // the frame of the tank: its twelve edges
+        const X = 0.63, Y = 1.1, Z = 0.43, E = { col: [150, 170, 180] };
+        [[-X, -Z], [X, -Z], [X, Z], [-X, Z]].forEach(([x, z]) => rod(R, [x, 0, z], [x, Y, z], 0.014, E, 3));
+        [0, Y].forEach(y => { rod(R, [-X, y, -Z], [X, y, -Z], 0.014, E, 3); rod(R, [-X, y, Z], [X, y, Z], 0.014, E, 3); rod(R, [-X, y, -Z], [-X, y, Z], 0.014, E, 3); rod(R, [X, y, -Z], [X, y, Z], 0.014, E, 3); });
+        // the lid, the net cup with its clay pebbles, the bush
+        box(R, [0, LID, 0], [0.66, 0.025, 0.46], { col: [44, 40, 52] });
+        prism(R, 0, 0, LID - 0.2, LID + 0.06, 0.13, 0.17, 8, { col: [64, 62, 72] }, [150, 92, 60]);
+        bush(R, T, [0, LID + 0.06, 0], t, { s: 1.1 });
+        // the roots: white threads from the cup into the water, swaying
+        ROOTS.forEach(r => {
+          let p = [Math.cos(r.q) * r.r, LID - 0.2, Math.sin(r.q) * r.r];
+          for (let j = 1; j <= 6; j++) {
+            const f = j / 6, sw = Math.sin(t * 0.9 + r.ph + j * 0.7) * 0.045 * f;
+            const q = [Math.cos(r.q) * (r.r + f * 0.16) + sw, LID - 0.2 - f * r.len, Math.sin(r.q) * (r.r + f * 0.12) + Math.cos(t * 0.7 + r.ph + j) * 0.03 * f];
+            rod(R, p, q, 0.014 * (1.2 - f * 0.6), { col: [226, 216, 190] }, 3);
+            p = q;
+          }
+        });
+        // the air stone and its tube out to the pump on the floor
+        box(R, [0.32, 0.04, 0.1], [0.07, 0.03, 0.05], { col: [110, 104, 116] });
+        rod(R, [0.38, 0.05, 0.1], [0.58, 0.05, 0.1], 0.012, { col: [60, 140, 120] }, 3);
+        rod(R, [0.58, 0.05, 0.1], [0.58, 1.16, 0.1], 0.012, { col: [60, 140, 120] }, 3);
+        rod(R, [0.58, 1.16, 0.1], [1.05, 0.14, 0.4], 0.012, { col: [60, 140, 120] }, 3);
+        box(R, [1.05, 0.1, 0.4], [0.16, 0.1, 0.1], { col: [56, 52, 66] });
+      },
+      fx(t, F) {
+        const up = (b, k, x0) => [x0 + b.dx * (1 + Math.sin(t * 3 + b.a * 9)), 0.08 + k * (TOP - 0.12), 0.1 + b.dz];
+        BUB.forEach(b => { const k = (b.a + t * b.s * 0.4) % 1; F.dot(up(b, k, 0.32), `rgba(210,245,255,${0.4 + 0.5 * k})`); });
+        bursts = bursts.filter(s => t - s < 2.2 && t >= s);
+        bursts.forEach(s => {
+          for (let i = 0; i < 26; i++) {
+            const k = (t - s) / 2 - (i % 8) * 0.04;
+            if (k <= 0 || k >= 1) continue;
+            F.dot([((i * 0.37) % 1 - 0.5) * 0.9, 0.1 + k * (TOP - 0.15), ((i * 0.61) % 1 - 0.5) * 0.5], 'rgba(230,250,255,.9)', 2);
+          }
+        });
+        // the shimmer of the surface
+        for (let i = 0; i < 10; i++) F.dot([Math.sin(i * 1.7 + t * 0.8) * 0.5, TOP, Math.cos(i * 2.3 + t * 0.6) * 0.32], 'rgba(170,230,255,.55)');
+      }
+    };
+  });
+  // Мой базилик: your own bush on a sill under an arched window; outside it the sun goes over and the night comes with
+  // its stars and moon; beside the pot an hourglass runs down the time to the next task and turns itself over. A tap
+  // turns the hourglass now
+  scene('moy', S => {
+    const { R, T } = S, DAY = 18, RUN = 7.8, FLIP = 0.8, EVERY = 9.2, SILL = 0.965, Z = -0.4;
+    const HG = [0.5, 0.04];
+    let off = 0, sun = [0, 1.6, Z + 0.02], day = 1, sand = 0, flip = 0;
+    const at = t => (((t + off) % EVERY) + EVERY) % EVERY;
+    return {
+      glow: [230, 110, 200], orbit: [Math.PI / 2, 0.4], rad: 4.3, near: 3.6, look: [0, 1.5, 0], still: 4,
+      tap(t) { const u = at(t); if (u < RUN) off += RUN - u; },
+      tick(t) {
+        const s = (t % DAY) / DAY, a = s < 0.6 ? s / 0.6 * Math.PI : (s - 0.6) / 0.4 * Math.PI;
+        day = s < 0.6 ? Math.sin(a) : 0;
+        sun = [-Math.cos(a) * 0.38, 1.35 + Math.sin(a) * 0.8, Z + 0.03];
+        const u = at(t);
+        sand = Math.min(1, u / RUN);
+        flip = u < RUN ? 0 : smooth((u - RUN) / FLIP);
+      },
+      lights() { return [{ p: [sun[0], sun[1], 0.1], col: day > 0 ? [1, 0.8, 0.5] : [0.55, 0.65, 1], i: day > 0 ? 0.5 + 0.8 * day : 0.55, fall: 0.5 }]; },
+      draw(t) {
+        // the wall under the window, the sill, the posts and the arch
+        box(R, [0, 0.45, Z + 0.05], [0.95, 0.45, 0.12], { tex: T.stone });
+        box(R, [0, SILL - 0.035, -0.1], [1.0, 0.035, 0.34], { tex: T.stone });
+        box(R, [-0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
+        box(R, [0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
+        const C = [0, 2.28, Z + 0.17], n = 7;
+        for (let i = 0; i < n; i++) {
+          const a0 = i / n * Math.PI, a1 = (i + 1) / n * Math.PI;
+          const P = (a, r, dz) => [C[0] + Math.cos(a) * r, C[1] + Math.sin(a) * r, C[2] + dz];
+          quad(R, P(a0, 0.76, 0), P(a0, 0.56, 0), P(a1, 0.56, 0), P(a1, 0.76, 0), { tex: T.stone, ds: true }, 0, 1, i / n, (i + 1) / n);
+          quad(R, P(a0, 0.56, 0), P(a0, 0.56, -0.24), P(a1, 0.56, -0.24), P(a1, 0.56, 0), { tex: T.stone, ds: true }, 0, 1, 0, 0.3);
+          quad(R, P(a0, 0.76, 0), P(a1, 0.76, 0), P(a1, 0.76, -0.24), P(a0, 0.76, -0.24), { tex: T.stone, ds: true }, 0, 1, 0, 0.3);
+        }
+        // the sky in the window: the night, and the day added over it while the sun is up
+        const sky = (o, lift = 0) => {
+          quad(R, [-0.56, SILL, Z + lift], [0.56, SILL, Z + lift], [0.56, 2.28, Z + lift], [-0.56, 2.28, Z + lift], o, 0, 1, 0.35, 1);
+          for (let i = 0; i < 6; i++) {
+            const a0 = i / 6 * Math.PI, a1 = (i + 1) / 6 * Math.PI;
+            R.tri([0, 2.28, Z + lift], [Math.cos(a0) * 0.56, 2.28 + Math.sin(a0) * 0.56, Z + lift], [Math.cos(a1) * 0.56, 2.28 + Math.sin(a1) * 0.56, Z + lift], { ...o, uv: [[0.5, 0.35], [0.5 + Math.cos(a0) / 2, 0.35 - Math.sin(a0) * 0.35], [0.5 + Math.cos(a1) / 2, 0.35 - Math.sin(a1) * 0.35]] });
+          }
+        };
+        sky({ tex: T.sky, emis: true, nofog: true, ds: true });
+        if (day > 0) sky({ col: [96, 120, 200], emis: true, nofog: true, ds: true, add: 0.75 * day }, 0.005);
+        ball(R, sun, day > 0 ? 0.1 : 0.075, { col: day > 0 ? [255, 214, 120] : [214, 222, 255], emis: true, nofog: true });
+        // the pot and its bush
+        const earth = pot(R, T, -0.3, 0.02, SILL, 0.85);
+        bush(R, T, [-0.3, earth, 0.02], t, { s: 0.95 });
+        // the hourglass: two plates, three posts, the glass, the sand running down; turned over when it has run out
+        const K = 1.5, y = v => SILL + v * K, M = [HG[0], y(0.21), HG[1]], H = turned(R, M, [0, 0, 1], flip * Math.PI);
+        const [x, z] = HG, wood = { col: [112, 70, 42] }, f = flip > 0 ? 1 : sand;
+        prism(H, x, z, y(0), y(0.025), 0.1 * K, 0.1 * K, 6, wood, [96, 60, 36]);
+        prism(H, x, z, y(0.395), y(0.42), 0.1 * K, 0.1 * K, 6, wood, [96, 60, 36]);
+        for (let i = 0; i < 3; i++) { const q = i / 3 * Math.PI * 2 + 0.5; rod(H, [x + Math.cos(q) * 0.082 * K, y(0.02), z + Math.sin(q) * 0.082 * K], [x + Math.cos(q) * 0.082 * K, y(0.4), z + Math.sin(q) * 0.082 * K], 0.012, wood, 3); }
+        const gold = { col: [226, 180, 84] };
+        if (f > 0.02) prism(H, x, z, y(0.025), y(0.025 + 0.15 * f), 0.062 * K, (0.062 * (1 - f) + 0.004) * K, 7, gold);
+        if (f < 0.98) prism(H, x, z, y(0.215), y(0.215 + 0.15 * (1 - f)), 0.006 * K, (0.012 + 0.05 * (1 - f)) * K, 7, gold, [236, 196, 100]);
+        if (!flip && f > 0 && f < 1) rod(H, [x, y(0.215), z], [x, y(0.03 + 0.15 * f), z], 0.005, { col: [236, 196, 100], emis: true }, 3);
+        const glass = { col: [140, 150, 170], emis: true, nofog: true, add: 0.2, layer: 2 };
+        prism(H, x, z, y(0.025), y(0.21), 0.075 * K, 0.012 * K, 7, glass);
+        prism(H, x, z, y(0.21), y(0.395), 0.012 * K, 0.075 * K, 7, glass);
+      },
+      fx(t, F) {
+        F.halo(sun, day > 0 ? 0.45 : 0.3, day > 0 ? `rgba(255,190,90,${0.2 + 0.25 * day})` : 'rgba(150,170,255,.24)', 'rgba(150,170,255,0)');
+        // the stars in the window twinkle at night
+        if (day < 0.3) for (let i = 0; i < 12; i++) {
+          const x = ((i * 0.618) % 1 - 0.5) * 1, y = SILL + 0.35 + ((i * 0.37) % 1) * 1.4;
+          if (Math.abs(x) < 0.5 && (y < 2.28 || Math.hypot(x, y - 2.28) < 0.5)) F.dot([x, y, Z + 0.02], `rgba(240,230,255,${(0.3 + 0.6 * Math.abs(Math.sin(t * 1.7 + i * 2.3))) * (1 - day / 0.3)})`, 1);
+        }
+      }
+    };
+  });
+  // Посадка: a seed comes down glowing into a well of earth and sinks; a sprout comes up — the hook, the two seed
+  // leaves opening, the first true pair, the second — then goes back to the earth as sparks. Around the well six cups
+  // of peat with seedlings, each a step behind the other; a tap sows again
+  scene('posadka', S => {
+    const { R, T } = S, CYCLE = 10, EARTH = 0.36;
+    let sown = 0, seed = null, burst = -1;
+    // a sprout at the base b, grown g (0…1), of the size s
+    function sprout(b, g, s, t) {
+      if (g <= 0) return;
+      const hook = 1 - smooth((g - 0.12) / 0.2), open = smooth((g - 0.3) / 0.2);
+      const h = s * (0.06 + 0.28 * smooth(g / 0.45) + 0.24 * smooth((g - 0.5) / 0.5));
+      const mid = [b[0], b[1] + h * 0.6, b[2]];
+      // the hook: the top of the stem bent down, straightening as the seed leaves come out
+      const bend = hook * 2.3, tip = add(mid, [Math.sin(bend) * h * 0.4, Math.cos(bend) * h * 0.4, 0]);
+      rod(R, b, mid, 0.018 * s, { col: [150, 190, 96] });
+      rod(R, mid, tip, 0.015 * s, { col: [150, 190, 96] });
+      const sw = Math.sin(t * 1.4) * 0.06;
+      for (let j = 0; j < 2; j++) {
+        const yaw = j * Math.PI + 0.4 + sw, pitch = (1 - open) * 1.25 + hook * 1.6;
+        const F = norm([Math.cos(yaw) * Math.cos(pitch), Math.sin(pitch) * (hook > 0.5 ? -1 : 1), Math.sin(yaw) * Math.cos(pitch)]);
+        leaf(R, tip, F, s * 0.12 * (0.5 + 0.5 * open), T.leafLemon, { w: 0.55, curl: 0 });
+      }
+      // the true leaves: the first pair across the seed leaves, the second across the first
+      [[0.5, 0.2, 0], [0.78, 0.15, Math.PI / 2]].forEach(([g0, len, turn]) => {
+        const k = smooth((g - g0) / 0.2);
+        if (k <= 0) return;
+        for (let j = 0; j < 2; j++) {
+          const yaw = turn + j * Math.PI + 0.4 + Math.PI / 2 + sw;
+          leaf(R, tip, norm([Math.cos(yaw), 0.35, Math.sin(yaw)]), s * len * k, T.leaf, { w: 0.4 });
+        }
+      });
+    }
+    const CUPS = [...Array(6)].map((_, i) => { const q = i / 6 * Math.PI * 2 + 0.26; return [Math.cos(q) * 1.55, Math.sin(q) * 1.55]; });
+    return {
+      glow: [255, 150, 50], rad: 4.6, near: 3.7, look: [0, 0.6, 0], still: 6.2,
+      tap(t) { sown = t; },
+      // a warm light over the well, and the seed's own while it comes down
+      lights() { return [{ p: [0.2, 1.3, 0.5], col: [1, 0.72, 0.42], i: 0.9, fall: 0.7 }].concat(seed ? [{ p: seed, col: [1, 0.8, 0.4], i: 0.8, fall: 2 }] : []); },
+      draw(t) {
+        // the well: a ring of stone filled with earth
+        prism(R, 0, 0, 0, EARTH, 0.74, 0.7, 10, { tex: T.stone });
+        ringTop(R, 0, 0, EARTH, 0.62, 0.7, 10, { tex: T.stone });
+        prism(R, 0, 0, EARTH - 0.12, EARTH, 0.62, 0.62, 10, { col: [44, 34, 40], inv: true });
+        disc(R, 0, 0, EARTH - 0.04, 0.62, 10, { tex: T.soil });
+        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        // the seed: down in a spiral, then into the earth
+        seed = null;
+        if (u < 2.4) {
+          const k = smooth(u / 1.8), q = u * 3.2, r = 0.45 * (1 - k);
+          const y = u < 1.8 ? 2.9 - (2.9 - EARTH - 0.03) * k : EARTH + 0.03 - (u - 1.8) / 0.6 * 0.08;
+          seed = [Math.cos(q) * r, y, Math.sin(q) * r];
+          egg(R, seed, [0.05, 0.035, 0.035], q, { col: [120, 78, 44] });
+        }
+        const g = (u - 2.4) / 5.6;
+        if (u < 9.5) sprout([0, EARTH - 0.04, 0], Math.min(1, g), 1.7, t);
+        burst = u >= 9.3 ? (u - 9.3) / 0.7 : -1;
+        // the cups of peat around: each seedling a step behind the one before it
+        CUPS.forEach(([x, z], i) => {
+          prism(R, x, z, 0, 0.2, 0.15, 0.19, 6, { col: [110, 70, 44] }, [52, 34, 24]);
+          sprout([x, 0.19, z], ((t / CYCLE + i / 6) % 1) * 1.25, 0.75, t + i);
+        });
+      },
+      fx(t, F) {
+        if (seed) {
+          F.halo(seed, 0.32, 'rgba(255,200,90,.4)', 'rgba(255,160,60,0)');
+          for (let i = 0; i < 6; i++) F.spark([seed[0], seed[1] + 0.05 + i * 0.07, seed[2]], i / 6);
+        }
+        // a puff of earth as the seed goes in, the sprout going back to it as sparks
+        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        if (u > 1.8 && u < 2.6) for (let i = 0; i < 10; i++) { const q = i * 0.63, l = (u - 1.8) / 0.8; F.dot([Math.cos(q) * l * 0.3, EARTH + Math.sin(l * Math.PI) * 0.15, Math.sin(q) * l * 0.3], 'rgba(150,104,64,.9)'); }
+        if (burst >= 0) for (let i = 0; i < 24; i++) { const q = i * 0.9, l = burst; F.spark([Math.cos(q) * (0.1 + l * 0.5), EARTH + 0.1 + (i % 6) * 0.09 + l * 0.8, Math.sin(q) * (0.1 + l * 0.5)], l, true); }
+      }
+    };
+  });
+  // Проблемы: the bush on the altar under siege — beetles creep in round the circle towards it and are thrown back by
+  // the ward with a red flash, a spider comes down on its thread and climbs back, one lower leaf has gone yellow with
+  // brown spots. A tap raises the ward: every beetle is thrown back at once
+  scene('problemy', S => {
+    const { R, T } = S, N = 6, OUT = 2.45, IN = 1.25, CRAWL = 9;
+    let warded = -99, flash = 0, bugs = [], spider = [0.3, 3, 0.12];
+    return {
+      glow: [255, 44, 44], near: 4.8, still: 5.3,
+      glowAdd(t) { return 0.3 + 0.18 * Math.sin(t * 1.4) + flash * 0.6; },
+      tap(t) { warded = t; },
+      tick(t) {
+        // each beetle creeps in along a spiral and is flung back at the ward; a tap flings them all
+        const l = (t - warded) / 1.4, push = l < 0 || l > 1 ? 0 : l < 0.15 ? l / 0.15 : 1 - (l - 0.15) / 0.85;
+        flash = push;
+        bugs = [...Array(N)].map((_, i) => {
+          const k = ((t / CRAWL + i / N) % 1), r = OUT - (OUT - IN) * k * (1 - 0.85 * push);
+          const q = i / N * Math.PI * 2 + t * 0.14 + k * 1.2;
+          if (k > 0.95) flash = Math.max(flash, (k - 0.95) / 0.05);
+          return { x: Math.cos(q) * r, z: Math.sin(q) * r, yaw: q + Math.PI / 2 + 0.35, k, i };
+        });
+        const d = 0.5 - 0.5 * Math.cos(t * 0.45);
+        spider = [0.36, 3.15 - d * 0.75, 0.16];
+      },
+      lights() { return [{ p: [0, 0.6, 0], col: [1, 0.25, 0.2], i: 0.5 + flash * 1.6, fall: 0.25 }, { p: [spider[0] + 0.3, spider[1] + 0.2, spider[2] + 0.4], col: [0.7, 0.6, 1], i: 0.6, fall: 1.2 }]; },
+      draw(t) {
+        const top = altarStone(R, T), earth = pot(R, T, 0, 0, top);
+        bush(R, T, [0, earth, 0], t, { texAt: k => (k === 0 ? T.leafSick : T.leaf) });
+        // the beetles: a shell, a head, six legs walking
+        bugs.forEach(b => {
+          const c = [b.x, 0.1, b.z], f = [Math.cos(b.yaw), 0, Math.sin(b.yaw)], sd = [-f[2], 0, f[0]];
+          egg(R, c, [0.21, 0.1, 0.14], b.yaw, { col: [128, 100, 160] });
+          egg(R, add(c, mul(f, 0.2)), [0.075, 0.07, 0.075], b.yaw, { col: [70, 54, 84] });
+          for (let j = 0; j < 6; j++) {
+            const side = j < 3 ? 1 : -1, along = ((j % 3) - 1) * 0.09, st = Math.sin(t * 14 + j * 2.1 + b.i) * 0.04;
+            const hip = add(add(c, mul(f, along)), mul(sd, side * 0.08)), foot = add(add(add(c, mul(f, along * 1.5 + st)), mul(sd, side * 0.22)), [0, -0.1, 0]);
+            rod(R, hip, foot, 0.013, { col: [44, 32, 50] }, 3);
+          }
+        });
+        // the spider on its thread
+        rod(R, [spider[0], 4.4, spider[2]], spider, 0.005, { col: [210, 210, 220], emis: true }, 3);
+        ball(R, spider, 0.08, { col: [90, 66, 110] });
+        ball(R, add(spider, [0, 0.1, 0]), 0.05, { col: [70, 52, 86] });
+        for (let j = 0; j < 8; j++) {
+          const q = j / 8 * Math.PI * 2 + 0.2, kick = Math.sin(t * 6 + j) * 0.03;
+          const knee = add(spider, [Math.cos(q) * 0.15, 0.09 + kick, Math.sin(q) * 0.15]), foot = add(spider, [Math.cos(q) * 0.24, -0.08, Math.sin(q) * 0.24]);
+          rod(R, spider, knee, 0.01, { col: [60, 44, 72] }, 3);
+          rod(R, knee, foot, 0.009, { col: [60, 44, 72] }, 3);
+        }
+      },
+      fx(t, F) {
+        // the beetles' red eyes, and the sparks where the ward strikes one
+        bugs.forEach(b => {
+          const f = [Math.cos(b.yaw), 0, Math.sin(b.yaw)];
+          F.dot([b.x + f[0] * 0.27, 0.16, b.z + f[2] * 0.27], 'rgba(255,60,50,.95)', 2);
+          if (b.k > 0.93) for (let i = 0; i < 10; i++) { const l = (b.k - 0.93) / 0.07, q = i * 0.63; F.spark([b.x + Math.cos(q) * l * 0.4, 0.1 + l * 0.5 * Math.abs(Math.sin(i)), b.z + Math.sin(q) * l * 0.4], l, true); }
+        });
+        F.dot(add(spider, [0.04, 0.03, 0.07]), 'rgba(255,60,50,.95)', 2);
+        if (t - warded >= 0 && t - warded < 1.4) {
+          const l = (t - warded) / 1.4;
+          for (let i = 0; i < 40; i++) { const q = i / 40 * Math.PI * 2; F.spark([Math.cos(q) * (IN + l * 1.2), 0.05 + l * 0.3, Math.sin(q) * (IN + l * 1.2)], l, true); }
+        }
+      }
+    };
+  });
+  // Сорта: five sorts on a turning table, as the screen where a game's hero is chosen — the chosen one comes to the
+  // front, rises into a beam of light and turns itself; the table turns on to the next by itself, or at a tap
+  scene('sorta', S => {
+    const { R, T } = S, N = 5, STEP = 3.6, RAD = 1.2;
+    const KINDS = [
+      { tex: T.leaf, col: [84, 150, 56], leaf: 1.2 },                                       // «Генуэзский»: big leaves
+      { tex: T.leafOpal, col: [98, 38, 96], stem: [96, 40, 98] },                           // «Тёмный опал»: purple
+      { tex: T.leaf, col: [84, 150, 56], ball: true },                                      // «Греческий»: a ball of small leaves
+      { tex: T.leafThai, col: [62, 124, 48], stem: [112, 48, 116], spike: true, leaf: 0.85 }, // «Тайский»: purple stem and flowers
+      { tex: T.leafLemon, col: [156, 196, 84], w: 0.24, leaf: 1.05 }                        // «Лимонный»: narrow and pale
+    ];
+    // the little leaves of the Greek one, spread over a ball
+    const BALL = [...Array(20)].map((_, i) => { const y = 1 - (i + 0.5) / 20 * 1.6, r = Math.sqrt(Math.max(0, 1 - y * y)), q = i * 2.4; return norm([Math.cos(q) * r, y, Math.sin(q) * r]); });
+    // a small bush has four pairs
+    const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
+    let taps = 0, pos = 0, last = null, chosen = [0, 0, 0];
+    const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
+    return {
+      glow: [176, 110, 255], orbit: [0.75, 0.42], rad: 5, near: 4.2, look: [0, 1.15, 0], still: 1,
+      tap() { taps++; },
+      tick(t) {
+        const target = Math.floor(t / STEP) + taps;
+        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3.2);
+        last = t;
+      },
+      lights() { return [{ p: [chosen[0], 2.3, chosen[2]], col: [0.75, 0.62, 1], i: 1.4, fall: 0.35 }]; },
+      draw(t) {
+        KINDS.forEach((k, i) => {
+          const d = wrap(i - pos), w = Math.max(0, 1 - Math.abs(d) * 1.4), q = S.ang + d * Math.PI * 2 / N;
+          const x = Math.cos(q) * RAD, z = Math.sin(q) * RAD, lift = smooth(w) * 0.22;
+          if (w > 0.5) chosen = [x, 0, z];
+          // the ones at the back, small in the fog, have leaves of one colour
+          const flat = Math.abs(d) > 0.6 ? k.col : null;
+          box(R, [x, 0.2, z], [0.2, 0.2, 0.2], { tex: T.stone });
+          const earth = pot(R, T, x, z, 0.4 + lift, 0.72, undefined, 6), b = [x, earth, z], yaw = w * t * 0.9;
+          if (k.ball) {
+            rod(R, b, [x, earth + 0.2, z], 0.02, { col: [70, 128, 48] });
+            BALL.forEach((F, j) => leaf(R, add([x, earth + 0.34, z], mul(F, 0.08)), norm(add(F, [Math.sin(t * 1.3 + j) * 0.08, 0, 0])), 0.16, T.leaf, { w: 0.46, flat }));
+          } else {
+            const top = bush(R, T, b, t + i, { s: 0.74, tex: k.tex, stem: k.stem, leaf: k.leaf, w: k.w, yaw, pairs: SMALL, flat });
+            if (k.spike) {
+              prism(R, top[0], top[2], top[1], top[1] + 0.26, 0.035, 0.004, 5, { col: [150, 70, 176] });
+              for (let j = 0; j < 4; j++) ball(R, [top[0], top[1] + 0.04 + j * 0.06, top[2]], 0.035 - j * 0.005, { col: [196, 120, 220] });
+            }
+          }
+          // the beam over the chosen one
+          if (w > 0.05) prism(R, x, z, 0.4, 3.4, 0.34, 0.1, 6, { col: [120, 86, 210], emis: true, nofog: true, add: 0.12 * w });
+        });
+      },
+      fx(t, F) {
+        F.halo([chosen[0], 1.2, chosen[2]], 0.6, 'rgba(160,120,255,.22)', 'rgba(160,120,255,0)');
+        for (let i = 0; i < 14; i++) {
+          const life = (i / 14 + t * 0.22) % 1, q = i * 2.4 + t;
+          F.dot([chosen[0] + Math.cos(q) * 0.3, 0.5 + life * 2.4, chosen[2] + Math.sin(q) * 0.3], `rgba(214,190,255,${(1 - life) * 0.8})`);
+        }
+      }
+    };
+  });
+  // Справка: the grimoire itself — open on a stone lectern, its pages turning one by one in their own time, runes of
+  // light circling it, a quill in its inkpot beside. A tap turns the page now
+  scene('spravka', S => {
+    const { R, T } = S, EVERY = 5, TURN = 1.5, TILT = 0.5, O = [0, 1.0, 0];
+    let off = 0, phi = 0;
+    const at = t => (((t + off) % EVERY) + EVERY) % EVERY;
+    // a page from the spine: three strips, the outer ones lagging behind the turn, a little bow along it
+    function pageStrips(B, ang, tex, flip) {
+      let p = [0, 0, 0], q0 = 0;
+      for (let i = 0; i < 3; i++) {
+        const a = ang + (ang > 0 && ang < Math.PI ? Math.sin(ang) * 0.35 * (i / 2) : 0);
+        const d = [Math.cos(a) * 0.16, Math.sin(a) * 0.16 + (i === 0 ? 0.012 : i === 2 ? -0.012 : 0), 0];
+        const n = add(p, d), q1 = (i + 1) / 3;
+        const u0 = flip ? 1 - q1 : q0, u1 = flip ? 1 - q0 : q1;
+        quad(B, add(add(p, [0, 0.06, 0]), [0, 0, 0.33]), add(add(n, [0, 0.06, 0]), [0, 0, 0.33]), add(add(n, [0, 0.06, 0]), [0, 0, -0.33]), add(add(p, [0, 0.06, 0]), [0, 0, -0.33]), { tex, ds: true }, flip ? u1 : u0, flip ? u0 : u1, 0, 1);
+        p = n; q0 = q1;
+      }
+    }
+    return {
+      glow: [240, 190, 90], orbit: [Math.PI / 2, 0.38], rad: 4.2, near: 3.5, look: [0, 1.25, 0], still: 3.9,
+      tap(t) { const u = at(t); if (u < EVERY - TURN - 0.2) off += EVERY - TURN - u; },
+      tick(t) { phi = Math.PI * smooth((at(t) - (EVERY - TURN)) / TURN); },
+      lights(t) { return [{ p: [0, 1.7, 0.3], col: [1, 0.8, 0.45], i: 0.7 + 0.1 * Math.sin(t * 2), fall: 0.8 }]; },
+      draw(t) {
+        box(R, [0, 0.42, 0], [0.18, 0.42, 0.18], { tex: T.stone });
+        box(R, [0, 0.06, 0], [0.34, 0.06, 0.34], { tex: T.stone });
+        // the board, the book and its pages, turned to the slope of the lectern; the book's spine along its slope
+        const Bk = turned(R, [0, 0, 0], [1, 0, 0], TILT, O);
+        box(Bk, [0, -0.04, 0], [0.8, 0.03, 0.44], { tex: T.stone });
+        box(Bk, [0, 0.005, 0], [0.54, 0.012, 0.37], { tex: T.leather });
+        box(Bk, [-0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
+        box(Bk, [0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
+        pageStrips(Bk, Math.PI, T.pageL, true);
+        pageStrips(Bk, 0, T.pageR, false);
+        if (phi > 0 && phi < Math.PI) pageStrips(Bk, phi, phi < Math.PI / 2 ? T.pageR : T.pageL, phi >= Math.PI / 2);
+        // the inkpot and its quill on the corner of the board
+        prism(Bk, 0.66, 0.24, -0.01, 0.1, 0.07, 0.06, 6, { col: [34, 28, 44] }, [12, 8, 18]);
+        const qb = [0.66, 0.08, 0.24], qt = [0.8, 0.5, 0.12];
+        rod(Bk, qb, qt, 0.008, { col: [226, 214, 196] }, 3);
+        leaf(Bk, add(qb, mul(sub(qt, qb), 0.35)), norm(sub(qt, qb)), 0.36, T.feather, { w: 0.22, curl: 0.1, side: [0, 0, 1] });
+        // the runes round the book
+        for (let k = 0; k < 8; k++) {
+          const q = t * 0.35 + k / 8 * Math.PI * 2;
+          billboard(R, [Math.cos(q) * 1, 1.5 + Math.sin(t * 1.1 + k) * 0.12, Math.sin(q) * 0.75], 0.065, 0.065, { tex: T.runes[k % 6], emis: true, nofog: true, cut: true });
+        }
+      },
+      fx(t, F) {
+        for (let k = 0; k < 8; k++) {
+          const q = t * 0.35 + k / 8 * Math.PI * 2;
+          F.halo([Math.cos(q) * 1, 1.5 + Math.sin(t * 1.1 + k) * 0.12, Math.sin(q) * 0.75], 0.16, 'rgba(255,200,110,.3)', 'rgba(255,200,110,0)');
+        }
+        // dust of gold off a turning page
+        if (phi > 0 && phi < Math.PI) for (let i = 0; i < 12; i++) {
+          const l = (i / 12 + t * 0.8) % 1;
+          F.dot([Math.cos(phi) * 0.3 + Math.sin(i * 2) * 0.1, 1.15 + l * 0.6 + Math.sin(phi) * 0.15, 0.05 + Math.cos(i * 3) * 0.1], `rgba(255,214,130,${0.9 * (1 - l)})`);
+        }
+      }
+    };
+  });
+  // Удобрения: three flasks of the elements, N, P and K, on their stones round the altar, bubbling. In turn each sends
+  // a drop of its light in an arc into the pot; the light climbs the stem and the leaves take its colour. A tap sends
+  // the next one now
+  scene('udobreniya', S => {
+    const { R, T } = S, EVERY = 3.6, FLY = 1.3, CLIMB = 1.1;
+    const COL = [[120, 140, 255], [255, 112, 64], [255, 206, 80]];
+    const FL = [0, 1, 2].map(i => { const q = Math.PI / 2 + i / 3 * Math.PI * 2; return [Math.cos(q) * 1.15, Math.sin(q) * 1.15]; });
+    let taps = [], drop = null, climb = null, earthY = 1.47;
+    // the drop in flight: from the neck of its flask up and over into the earth
+    const path = (k, u) => {
+      const a = [FL[k][0], 1.12, FL[k][1]], b = [0, earthY + 0.02, 0], m = mul(add(a, b), 0.5);
+      return [a[0] + (b[0] - a[0]) * u, m[1] + 0.95 - 0.95 * (2 * u - 1) ** 2 + (b[1] - a[1]) * (u - 0.5), a[2] + (b[2] - a[2]) * u];
+    };
+    return {
+      glow: [140, 255, 96], near: 4.5, look: [0, 1.3, 0], still: 1.9,
+      tap(t) { taps.push({ t, k: (taps.length + 1 + Math.floor(t / EVERY)) % 3 }); if (taps.length > 3) taps.shift(); },
+      tick(t) {
+        // the sends: one every few seconds by itself, in turn, and one at each tap
+        const n = Math.floor(t / EVERY);
+        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }].concat(taps).filter(s => s.t <= t).sort((a, b) => b.t - a.t);
+        drop = climb = null;
+        for (const s of sends) {
+          const u = t - s.t;
+          if (!drop && u < FLY) drop = { k: s.k, p: path(s.k, smooth(u / FLY)) };
+          else if (!climb && u >= FLY && u < FLY + CLIMB) climb = { k: s.k, f: (u - FLY) / CLIMB };
+        }
+      },
+      lights(t) {
+        const L = FL.map(([x, z], i) => ({ p: [x, 0.72, z], col: COL[i].map(v => v / 255), i: 0.55 + 0.1 * Math.sin(t * 3 + i), fall: 0.9 }));
+        if (drop) L.push({ p: drop.p, col: COL[drop.k].map(v => v / 255), i: 1, fall: 0.8 });
+        if (climb) L.push({ p: [0, earthY + 0.1 + climb.f * 0.9, 0.12], col: COL[climb.k].map(v => v / 255), i: 1.6 * Math.sin(climb.f * Math.PI), fall: 1.4 });
+        return L;
+      },
+      draw(t) {
+        const top = altarStone(R, T);
+        earthY = pot(R, T, 0, 0, top);
+        bush(R, T, [0, earthY, 0], t);
+        FL.forEach(([x, z], i) => {
+          box(R, [x, 0.25, z], [0.17, 0.25, 0.17], { tex: T.stone, texFront: T.letters[i] });
+          // the flask: a bulb of glass round its glowing liquid, a neck
+          ball(R, [x, 0.66, z], 0.12, { col: COL[i], emis: true });
+          ball(R, [x, 0.7, z], 0.17, { col: [90, 110, 130], emis: true, nofog: true, add: 0.22, layer: 2 });
+          prism(R, x, z, 0.83, 1.06, 0.05, 0.045, 6, { col: [90, 110, 130], emis: true, add: 0.25, layer: 2 });
+          prism(R, x, z, 1.04, 1.1, 0.06, 0.06, 6, { col: [120, 84, 50] }, [80, 56, 34]);
+        });
+        if (drop) ball(R, drop.p, 0.06, { col: COL[drop.k], emis: true, nofog: true });
+        if (climb) rod(R, [0, earthY, 0], [0, earthY + climb.f * 0.8, 0], 0.032, { col: COL[climb.k], emis: true, nofog: true });
+      },
+      fx(t, F) {
+        FL.forEach(([x, z], i) => {
+          F.halo([x, 0.68, z], 0.34, `rgba(${COL[i]},.26)`, `rgba(${COL[i]},0)`);
+          for (let j = 0; j < 4; j++) { const k = (t * 0.7 + j / 4 + i * 0.3) % 1; F.dot([x + Math.sin(j * 2 + t * 3) * 0.05, 0.6 + k * 0.42, z], `rgba(255,255,255,${0.8 * (1 - k)})`, 1); }
+        });
+        if (drop) {
+          F.halo(drop.p, 0.3, `rgba(${COL[drop.k]},.5)`, `rgba(${COL[drop.k]},0)`);
+          for (let j = 1; j < 7; j++) F.dot(add(drop.p, [0, j * 0.03, 0]), `rgba(${COL[drop.k]},${0.7 - j * 0.1})`);
+        }
+        if (climb) F.halo([0, earthY + climb.f * 0.8, 0], 0.4, `rgba(${COL[climb.k]},.4)`, `rgba(${COL[climb.k]},0)`);
+      }
+    };
+  });
+  // Уход: the four the chapter is about. A sun crosses the vault and the bush turns after it, then a pale moon; a cloud
+  // comes in and rains on the pot, the earth goes dark with the water and pales as it dries; the candles keep it
+  // warm. A tap calls the rain now
+  scene('uhod', S => {
+    const { R, T } = S, DAY = 16, RAIN = 5;
+    let rainAt = -99, tapped = -99, orb = [0, 3, 0], day = 1, cloud = null, wet = 0, lean = [0, 0];
+    const EARTH_DRY = [112, 82, 56], EARTH_WET = [34, 22, 18];
+    const sky = t => {
+      const s = (t % DAY) / DAY;
+      day = s < 0.72 ? Math.sin(s / 0.72 * Math.PI) : 0;
+      const a = s < 0.72 ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI;
+      // across the circle from east to west, a little behind the bush
+      orb = [-Math.cos(a) * 2.3, 1.7 + Math.sin(a) * 1.7, -0.7];
+      return s < 0.72;
+    };
+    return {
+      glow: [255, 196, 80], near: 4.6, look: [0, 1.7, 0], still: 4,
+      tap(t) { tapped = t; },
+      tick(t) {
+        const sun = sky(t);
+        R.key = sun ? { dir: norm(sub(orb, [0, 1.4, 0])), i: 0.25 + 0.7 * day, col: [1, 0.86, 0.6] } : { dir: norm(sub(orb, [0, 1.4, 0])), i: 0.3, col: [0.5, 0.6, 1] };
+        // the bush leans after the sun, slowly, and stands up straight at night
+        const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
+        lean = mix3([lean[0], lean[1], 0], [want[0], want[1], 0], 0.04).slice(0, 2);
+        if (reduce.matches) lean = want;
+        // the rain: by itself once a day, or when tapped; the earth dries over the rest of the day
+        const auto = Math.floor((t - 5) / DAY) * DAY + 5;
+        rainAt = Math.max(auto, tapped);
+        const r = t - rainAt;
+        cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.6 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.6 * smooth((r - RAIN + 1.2) / 1.2) : 0, rain: r > 1 && r < RAIN - 1 } : null;
+        wet = r < 0 ? 0 : r < RAIN ? Math.min(1, Math.max(0, r - 1.2) / 2) : Math.max(0, 1 - (r - RAIN) / 9);
+      },
+      lights() {
+        return [{ p: orb, col: day > 0 ? [1, 0.82, 0.5] : [0.6, 0.7, 1], i: day > 0 ? 0.6 + day : 0.5, fall: 0.12 }];
+      },
+      draw(t) {
+        box(R, [0, 0.36, 0], [0.46, 0.36, 0.46], { tex: T.stone, texFront: T.altar });
+        const earth = pot(R, T, 0, 0, 0.72, 1.15, mix3(EARTH_DRY, EARTH_WET, wet).map(Math.round));
+        bush(R, T, [0, earth, 0], t, { s: 1.2, lean });
+        // the sun (or the moon) itself: it gives light, nothing lights it
+        ball(R, orb, day > 0 ? 0.2 : 0.14, { col: day > 0 ? [255, 214, 120] : [210, 220, 255], emis: true, nofog: true });
+        if (cloud) [[0, 0, 0.26], [0.22, -0.05, 0.2], [-0.24, -0.04, 0.2], [0.1, 0.1, 0.18], [-0.1, 0.08, 0.17]]
+          .forEach(([dx, dy, r]) => ball(R, [cloud.x + dx, 2.85 + dy, dx * 0.3], r, { col: [78, 72, 104] }));
+      },
+      fx(t, F) {
+        F.halo(orb, day > 0 ? 1.1 : 0.6, day > 0 ? `rgba(255,190,90,${0.2 + 0.25 * day})` : 'rgba(150,170,255,.22)', 'rgba(255,190,90,0)');
+        if (cloud && cloud.rain) for (let i = 0; i < 30; i++) {
+          const k = ((t * 1.6 + i * 0.37) % 1), x = cloud.x + ((i * 0.61) % 1 - 0.5) * 0.7, z = ((i * 0.43) % 1 - 0.5) * 0.5;
+          F.streak([x, 2.7 - k * 1.2, z], 0.12, 'rgba(140,190,255,.85)');
+        }
+        // the splashes on the earth while it rains
+        if (cloud && cloud.rain) for (let i = 0; i < 6; i++) { const q = i + t * 5; F.dot([Math.cos(q) * 0.3, 1.2, Math.sin(q * 1.3) * 0.3], 'rgba(190,220,255,.8)'); }
+      }
+    };
+  });
+  // Вкус и кухня: pesto made as a rite — a stone mortar on a kitchen table, the pestle grinding round in it, leaves of basil
+  // falling into the green, garlic, pine nuts and a phial of oil beside it; out of the mortar rises the aroma, a
+  // molecule of eugenol going up and fading. A tap throws in a handful of leaves
+  scene('vkus', S => {
+    const { R, T } = S, mol = molShape('eug');
+    let top = 1.08, hands = [];
+    const FALL = [...Array(7)].map((_, i) => ({ a: i / 7, x: ((i * 0.61) % 1 - 0.5) * 0.5, z: ((i * 0.37) % 1 - 0.5) * 0.4, s: 0.7 + (i % 3) * 0.12 }));
+    // a leaf tumbling down from above into the mortar, k — how far it has fallen
+    const falling = (x, z, k, spin) => {
+      const y = 3.1 - k * (3.1 - top - 0.28);
+      const F = norm([Math.cos(spin), Math.sin(spin * 0.7) * 0.8, Math.sin(spin)]);
+      leaf(R, [x * (1 - k * 0.6), y, z * (1 - k * 0.6)], F, 0.26, T.leaf, { side: [Math.sin(spin * 1.3), 0.5, Math.cos(spin * 1.3)] });
+    };
+    return {
+      glow: [200, 236, 96], near: 4.4, look: [0, 1.7, 0], still: 2.4,
+      tap(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
+      lights(t) { return [{ p: [0.2, top + 1.1, 0.5], col: [1, 0.8, 0.5], i: 1 + 0.1 * Math.sin(t * 2), fall: 0.6 }, { p: [0, top + 0.5, 0], col: [0.6, 1, 0.4], i: 0.5, fall: 2 }]; },
+      draw(t) {
+        // a kitchen table of old wood
+        top = 1.06;
+        box(R, [0, top - 0.04, 0], [0.88, 0.04, 0.58], { col: [124, 80, 46] });
+        [[-0.74, -0.46], [0.74, -0.46], [0.74, 0.46], [-0.74, 0.46]].forEach(([x, z]) => box(R, [x, (top - 0.08) / 2, z], [0.06, (top - 0.08) / 2, 0.06], { col: [96, 60, 34] }));
+        const y0 = top, y1 = top + 0.42;
+        // the mortar: its outer wall, the rim, the far inner wall, the green inside
+        prism(R, 0, 0, y0, y1, 0.36, 0.48, 10, { tex: T.stone });
+        ringTop(R, 0, 0, y1, 0.38, 0.48, 10, { tex: T.stone });
+        prism(R, 0, 0, y0 + 0.16, y1, 0.28, 0.38, 10, { col: [92, 82, 98], inv: true });
+        disc(R, 0, 0, y0 + 0.2, 0.31, 10, { tex: T.paste });
+        // the pestle grinding round
+        const a = t * 1.7, b = [Math.cos(a) * 0.13, y0 + 0.25, Math.sin(a) * 0.13], q = [Math.cos(a) * 0.36, y0 + 0.92, Math.sin(a) * 0.36];
+        rod(R, b, q, 0.05, { col: [184, 172, 160] }, 6);
+        ball(R, b, 0.07, { col: [184, 172, 160] });
+        // the garlic, the pine nuts, the oil
+        [[0, 0, 0.07], [0.06, -0.01, 0.05], [-0.05, -0.01, 0.05], [0.01, 0.02, 0.05]].forEach(([dx, dz, r]) => egg(R, [0.66 + dx, top + r * 0.9, 0.3 + dz], [r, r * 1.1, r], 0, { col: [232, 222, 202] }));
+        for (let i = 0; i < 6; i++) egg(R, [0.6 + (i % 3) * 0.06, top + 0.02, -0.34 + (i >> 1 & 1) * 0.06 + (i > 3 ? 0.06 : 0)], [0.028, 0.018, 0.016], i, { col: [228, 204, 150] });
+        prism(R, -0.66, -0.26, top, top + 0.26, 0.09, 0.08, 6, { col: [196, 150, 40], emis: true, add: 0.6 });
+        prism(R, -0.66, -0.26, top + 0.26, top + 0.38, 0.03, 0.028, 5, { col: [196, 150, 40], emis: true, add: 0.5 });
+        prism(R, -0.66, -0.26, top + 0.37, top + 0.42, 0.035, 0.035, 5, { col: [110, 70, 40] }, [90, 56, 32]);
+        // the leaves falling in: a steady few, and a handful at a tap
+        FALL.forEach((f, i) => { const k = (f.a + t * 0.22) % 1; falling(f.x, f.z, smooth(k), t * f.s * 2 + i); });
+        hands = hands.filter(h => t - h < 1.6 && t >= h);
+        hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(Math.cos(i * 1.1) * 0.35, Math.sin(i * 1.1) * 0.3, k, t * 2 + i); } });
+        // the aroma: the molecule going up out of the mortar and fading as it goes
+        if (mol) {
+          const k = (t * 0.11) % 1;
+          essence(R, mol, [0, y1 + 0.35 + k * 1.2, 0], t * 0.6, 1.2, Math.sin(k * Math.PI) * 0.9);
+        }
+      },
+      fx(t, F) {
+        const k = (t * 0.11) % 1, my = top + 0.42 + 0.35 + k * 1.2;
+        F.halo([0, my, 0], 0.5, `rgba(155,107,214,${0.26 * Math.sin(k * Math.PI)})`, 'rgba(155,107,214,0)');
+        for (let i = 0; i < 16; i++) {
+          const l = (i / 16 + t * 0.18) % 1, q = i * 2.4 + t * 0.5;
+          F.dot([Math.cos(q) * (0.1 + l * 0.3), top + 0.5 + l * 1.4, Math.sin(q) * (0.1 + l * 0.3)], `rgba(${i % 2 ? '210,236,120' : '236,214,140'},${0.75 * (1 - l)})`);
+        }
+      }
+    };
+  });
   /* ------------------------------------------------------------------ */
   /* the crypt behind the page: fog of old blood and violet, ash and      */
   /* sparks drifting up, at a fifth of the resolution                     */

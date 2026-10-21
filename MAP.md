@@ -247,10 +247,20 @@
 
 **grimoire.js**
 - `src/js/grimoire/00-core.js` (34 стр.): BAYER
-- `src/js/grimoire/01-raster.js` (184 стр.): SHADED, ICO
-- `src/js/grimoire/02-textures.js` (116 стр.)
+- `src/js/grimoire/01-raster.js` (203 стр.): SHADED, ICO
+- `src/js/grimoire/02-textures.js` (183 стр.): FLOORS, GLYPH
 - `src/js/grimoire/03-mol.js` (78 стр.): SHAPES, MOLBUF, drawMol
-- `src/js/grimoire/04-altar.js` (160 стр.): ALTAR_MOL
+- `src/js/grimoire/04-altar.js` (259 стр.): SCENES, PAIRS
+- `src/js/grimoire/04-scene-formirovka.js` (98 стр.)
+- `src/js/grimoire/04-scene-gidro.js` (59 стр.)
+- `src/js/grimoire/04-scene-moy.js` (72 стр.)
+- `src/js/grimoire/04-scene-posadka.js` (74 стр.)
+- `src/js/grimoire/04-scene-problemy.js` (64 стр.)
+- `src/js/grimoire/04-scene-sorta.js` (58 стр.)
+- `src/js/grimoire/04-scene-spravka.js` (59 стр.)
+- `src/js/grimoire/04-scene-udobreniya.js` (61 стр.)
+- `src/js/grimoire/04-scene-uhod.js` (55 стр.)
+- `src/js/grimoire/04-scene-vkus.js` (58 стр.)
 - `src/js/grimoire/05-crypt.js` (54 стр.)
 - `src/js/grimoire/06-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
 - `src/js/grimoire/07-start.js` (45 стр.)

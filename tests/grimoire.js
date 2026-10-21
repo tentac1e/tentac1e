@@ -1,7 +1,8 @@
 /* Оформление «Гримуар» на телефоне и компьютере: включается свечой в шапке и запоминается, а пока выключено, его файл
    (assets/js/grimoire.js) не грузится. Каждая страница в нём открывается уже тёмной (data-skin и data-theme стоят
-   к DOMContentLoaded), без ошибок и ничего не шире экрана: алтарь нарисован в шапке каждой главы и на главной, склеп
-   за страницей, оранжерея и её небо спрятаны, заголовки — шрифтом приставки. Рисунки — через пиксельный фильтр,
+   к DOMContentLoaded), без ошибок и ничего не шире экрана: алтарь нарисован в шапке каждой главы и на главной, у каждой
+   главы — своя сцена, и касание её меняет и ничего не ломает; склеп за страницей, оранжерея и её небо спрятаны,
+   заголовки — шрифтом приставки. Рисунки — через пиксельный фильтр,
    подписи в них остаются вне фильтра; молекула рисуется в манере PS1 и крутится пальцем; экран ЭЛТ выключается
    в подвале и помнит это; в шторке «Заглянуть» — та же тема, но без алтаря и склепа. Выключили — всё как было,
    и тема, выбранная луной, вернулась. Проверяет сборку в корне репозитория. */
@@ -18,6 +19,7 @@ function state() {
     loaded: !!window.BasilGrimoire, on: !!(window.BasilGrimoire && window.BasilGrimoire.on),
     heroes: document.querySelectorAll('.ch-hero').length + (document.querySelector('.view-home .hero-art') ? 1 : 0),
     stages: stages.length, drawn: stages.filter(s => s.classList.contains('is-drawn')).length,
+    scene: stages.map(s => s.dataset.scene).join(','), view: (document.querySelector('[data-view]') || { dataset: {} }).dataset.view || null,
     crypt: !!document.getElementById('psx-crypt'), field: vis(document.getElementById('leaf-field')), art: vis(document.querySelector('.ch-hero-art')),
     face: h1 ? getComputedStyle(h1).fontFamily : '', wide: document.documentElement.scrollWidth - innerWidth,
     meta: document.querySelector('meta[name="theme-color"]').content, moon: vis(document.getElementById('theme-toggle'))
@@ -53,7 +55,9 @@ function state() {
       tag(`the candle switches it on: dark, the scenes in place, the moon aside, remembered ${JSON.stringify({ ...s, asked: asked.length, saved })}`));
     await page.close();
 
-    // every page opens in it: dark before the first paint, its scenes drawn, nothing wider than the screen
+    // every page opens in it: dark before the first paint, its scenes drawn, nothing wider than the screen;
+    // every chapter has a scene of its own, and a tap on it changes the picture without an error
+    const scenes = new Set();
     for (const f of FILES) {
       page = await ctx.newPage();
       watch(page, errs);
@@ -62,6 +66,19 @@ function state() {
       s = await page.evaluate(state);
       ok(s.dcl && s.dcl.skin === 'grimoire' && s.dcl.theme === 'dark' && s.on && s.stages === s.heroes && s.heroes > 0 && s.drawn >= 1 && s.crypt && !s.field && /Tiny5/.test(s.face) && s.wide <= 0,
         tag(`${f}: in the theme from the start, ${s.stages} altar(s) drawn, the crypt behind ${JSON.stringify({ dcl: s.dcl, stages: s.stages, drawn: s.drawn, heroes: s.heroes, wide: s.wide })}`));
+      const own = f === 'index.html' ? 'glavnaya' : s.view;
+      scenes.add(s.scene);
+      const tap = await page.evaluate(async () => {
+        const st = document.querySelector('.psx-stage'), cv = st.querySelector('canvas'), r = st.getBoundingClientRect();
+        const grab = () => { const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let h = 0; for (let i = 0; i < d.length; i += 4 * 7) h = (h * 31 + d[i] + d[i + 1] * 3 + d[i + 2] * 7) >>> 0; return h; };
+        const at = { clientX: r.left + r.width * 0.6, clientY: r.top + Math.min(r.height, 250) * 0.45, bubbles: true, pointerId: 1 };
+        const a = grab();
+        st.dispatchEvent(new PointerEvent('pointerdown', at));
+        dispatchEvent(new PointerEvent('pointerup', at));
+        await new Promise(res => setTimeout(res, 700));
+        return { changed: a !== grab() };
+      });
+      ok(s.scene === own && tap.changed, tag(`${f}: the scene of its own chapter (${s.scene}), a tap on it goes on drawing ${JSON.stringify(tap)}`));
       // the pictures: through the pixel filter, their captions outside it
       const pics = await page.evaluate(async () => {
         const list = [...document.querySelectorAll('.panel.is-active [data-ill], [data-view] > .wrap [data-ill]')].slice(0, 8);
@@ -76,6 +93,8 @@ function state() {
       if (pics.shown) ok(pics.done === pics.shown && pics.filtered === pics.shown && !pics.textIn, tag(`${f}: ${pics.shown} drawings at the console's pixels, their captions sharp ${JSON.stringify(pics)}`));
       await page.close();
     }
+
+    ok(scenes.size === FILES.length, tag(`a scene for each page: ${[...scenes].join(', ')}`));
 
     // the molecule: drawn by the theme, still turned by a finger or the mouse
     page = await ctx.newPage();

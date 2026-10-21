@@ -1,6 +1,7 @@
   /* ------------------------------------------------------------------ */
   /* textures, drawn pixel by pixel: the circle on the floor, stone, the  */
-  /* altar's sigil, the pot, wax, a leaf of basil, a flame                */
+  /* altar's sigil, the pot, wax, leaves of basil, a flame, earth, pages, */
+  /* runes, letters, the night sky                                        */
   /* ------------------------------------------------------------------ */
   function tex(w, h, fn) {
     const c = doc.createElement('canvas');
@@ -29,10 +30,10 @@
     x.putImageData(img, 0, 0);
     return c;
   }
-  // the circle of the floor: two rings, a seven-pointed star, runes between the rings, the leaf of basil in the middle
-  function ritual(t, glow) {
+  // the circle of the floor: two rings, a seven-pointed star, runes between the rings, the leaf of basil in the middle;
+  // red — the colour of its lines, gold — of its runes
+  function ritual(t, red, gold) {
     const { put, line, w } = t, c = w / 2;
-    const red = glow ? [255, 70, 50] : [150, 28, 36], gold = glow ? [255, 170, 80] : [140, 104, 48];
     const ring = (r, col) => { for (let a = 0; a < 720; a++) { const q = a / 720 * Math.PI * 2; put(c + Math.cos(q) * r, c + Math.sin(q) * r, col); } };
     ring(c - 3, red); ring(c - 6, red); ring(c * 0.34, red);
     const P = [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return [c + Math.cos(q) * (c - 18), c + Math.sin(q) * (c - 18)]; });
@@ -54,15 +55,8 @@
     if (TX) return TX;
     const R0 = rng(11);
     const noise = (v, a) => clamp(v + (R0() - 0.5) * 2 * a, 0, 255);
+    const leaf = (pal, spots) => leafTex(pal, spots, noise);
     TX = {
-      floor: tex(128, 128, t => {
-        for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
-          const v = x % 32 === 0 || y % 32 === 0 ? 12 : 26;
-          t.put(x, y, [noise(v, 5), noise(v * 0.78, 4), noise(v * 1.25, 6)]);
-        }
-        ritual(t, false);
-      }),
-      glow: tex(128, 128, t => ritual(t, true)),
       stone: tex(32, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
           const row = y >> 4, joint = y % 16 === 0 || (x + (row ? 16 : 0)) % 32 === 8;
@@ -91,18 +85,25 @@
         for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) t.put(x, y, [noise(222 - y * 2, 5), noise(208 - y * 2.2, 5), noise(176 - y * 2.4, 5)]);
         for (let i = 0; i < 4; i++) { const x = 1 + i * 4, l = 6 + (i * 7) % 11; t.line(x, 0, x, l, [246, 236, 210]); }
       }),
-      // a leaf of basil with its veins, cut out of the square: the diamond of two triangles shows a rounded blade
-      leaf: tex(32, 32, t => {
-        for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
-          const u = (x + 0.5) / 32, v = (y + 0.5) / 32;
-          const s = v < 0.55 ? v / 0.55 * 0.5 : 0.5 + (v - 0.55) / 0.45 * 0.5;
-          const hw = 0.5 * Math.pow(Math.sin(Math.PI * s), 0.7), du = Math.abs(u - 0.5);
-          if (du > hw * 0.97) continue;
-          const edge = hw - du < 0.05, mid = du < 0.035, vein = ((v + du * 1.2) * 6) % 1 < 0.14 && du < hw * 0.8;
-          const k = 1 - Math.pow(du / (hw || 1), 2) * 0.28;
-          t.put(x, y, edge ? [38, 82, 30] : mid ? [168, 224, 118] : vein ? [128, 196, 86] : [noise(84 * k, 5), noise(150 * k, 6), noise(56 * k, 5)]);
-        }
-      }),
+      // the leaves of the sorts: green, the purple of «Тёмный опал», the lemon's pale, the Thai's purple midrib, one sick
+      // with brown spots, and a quill's feather of the same cut
+      leaf: leaf([[38, 82, 30], [168, 224, 118], [128, 196, 86], [84, 150, 56]]),
+      leafOpal: leaf([[34, 12, 36], [176, 96, 176], [134, 64, 136], [98, 38, 96]]),
+      leafLemon: leaf([[78, 108, 30], [228, 244, 156], [196, 226, 116], [156, 196, 84]]),
+      leafThai: leaf([[26, 64, 26], [176, 96, 186], [104, 170, 78], [62, 124, 48]]),
+      leafSick: leaf([[112, 92, 30], [214, 204, 120], [200, 188, 96], [176, 164, 64]], true),
+      feather: leaf([[150, 140, 132], [252, 246, 236], [222, 214, 200], [208, 200, 188]]),
+      // earth with its crumbs, and the green of pesto in the mortar
+      soil: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = R0(); t.put(x, y, r < 0.12 ? [96, 66, 42] : r < 0.24 ? [30, 20, 14] : [noise(58, 6), noise(38, 5), noise(26, 4)]); } }),
+      paste: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const r = R0(); t.put(x, y, r < 0.14 ? [140, 190, 80] : r < 0.24 ? [228, 210, 150] : [noise(54, 6), noise(104, 8), noise(36, 5)]); } }),
+      // the pages of the book: lines of a hand, a drawn leaf on the right one, a circle of runes on the left
+      pageL: tex(24, 32, t => page(t, noise, false)),
+      pageR: tex(24, 32, t => page(t, noise, true)),
+      leather: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) t.put(x, y, x === 1 || y === 1 || x === 14 || y === 14 ? [176, 132, 58] : [noise(86, 8), noise(24, 4), noise(30, 4)]); }),
+      // the night outside the window: violet going dark upwards, a few stars
+      sky: tex(32, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) { const k = y / 31; t.put(x, y, R0() < 0.025 && k < 0.7 ? [236, 226, 255] : [noise(14 + 44 * k, 3), noise(10 + 18 * k, 3), noise(34 + 40 * k, 4)]); } }),
+      runes: [...Array(6)].map((_, i) => tex(8, 8, t => runeGlyph(t, i))),
+      letters: ['N', 'P', 'K'].map(ch => tex(16, 16, t => letter(t, ch, noise))),
       flame: tex(16, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) {
           const u = (x + 0.5) / 16, v = (y + 0.5) / 32, du = Math.abs(u - 0.5);
@@ -113,4 +114,70 @@
       })
     };
     return TX;
+  }
+  // a leaf with its veins, cut out of the square: the diamond of two triangles shows a rounded blade.
+  // pal: the edge, the midrib, the veins, the blade; spots — the brown spots of a sick leaf with their yellow halo
+  function leafTex(pal, spots, noise) {
+    const [edgeC, midC, veinC, bladeC] = pal, R1 = rng(23);
+    const dots = spots ? [...Array(5)].map(() => [8 + R1() * 16, 8 + R1() * 16, 1.4 + R1() * 1.6]) : [];
+    return tex(32, 32, t => {
+      for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
+        const u = (x + 0.5) / 32, v = (y + 0.5) / 32;
+        const s = v < 0.55 ? v / 0.55 * 0.5 : 0.5 + (v - 0.55) / 0.45 * 0.5;
+        const hw = 0.5 * Math.pow(Math.sin(Math.PI * s), 0.7), du = Math.abs(u - 0.5);
+        if (du > hw * 0.97) continue;
+        const edge = hw - du < 0.05, mid = du < 0.035, vein = ((v + du * 1.2) * 6) % 1 < 0.14 && du < hw * 0.8;
+        const k = 1 - Math.pow(du / (hw || 1), 2) * 0.28;
+        const spot = dots.reduce((m, [sx, sy, r]) => Math.min(m, Math.hypot(x - sx, y - sy) / r), 9);
+        t.put(x, y, spot < 1 ? [86, 52, 26] : spot < 1.6 ? [204, 178, 70] : edge ? edgeC : mid ? midC : vein ? veinC : [noise(bladeC[0] * k, 5), noise(bladeC[1] * k, 6), noise(bladeC[2] * k, 5)]);
+      }
+    });
+  }
+  // the floor of the circle and its glow, in the colour of a chapter (made once for each colour)
+  const FLOORS = new Map();
+  function floorTex(col, glow) {
+    const key = col.join(',') + (glow ? '+' : '');
+    if (FLOORS.has(key)) return FLOORS.get(key);
+    const R2 = rng(11), noise = (v, a) => clamp(v + (R2() - 0.5) * 2 * a, 0, 255);
+    const gold = col.map((v, i) => Math.min(255, Math.round(v * 0.4 + [255, 234, 100][i] * 0.6)));
+    const c = tex(128, 128, t => {
+      if (!glow) for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
+        const v = x % 32 === 0 || y % 32 === 0 ? 12 : 26;
+        t.put(x, y, [noise(v, 5), noise(v * 0.78, 4), noise(v * 1.25, 6)]);
+      }
+      ritual(t, glow ? col : col.map(v => v * 0.55), glow ? gold : gold.map(v => v * 0.55));
+    });
+    FLOORS.set(key, c);
+    return c;
+  }
+  // a page of the grimoire: parchment, lines of writing, and a drawing — a leaf (right) or a circle of runes (left)
+  function page(t, noise, right) {
+    const { put, line } = t, ink = [74, 46, 34];
+    for (let y = 0; y < 32; y++) for (let x = 0; x < 24; x++) put(x, y, [noise(222 - y * 0.8, 6), noise(204 - y * 0.8, 6), noise(160 - y, 6)]);
+    const R3 = rng(right ? 41 : 43);
+    for (let y = 3; y < 30; y += 3) {
+      if (right ? y > 9 && y < 22 : y > 15 && y < 27) continue;
+      let x = 3;
+      while (x < 21) { const l = 1 + (R3() * 5 | 0); line(x, y, Math.min(20, x + l), y, ink); x += l + 2; }
+    }
+    if (right) {
+      for (let k = -5; k <= 5; k++) { const hw = Math.round(3.4 * Math.sin((k + 6) / 12 * Math.PI)); put(12 - hw, 16 + k, [60, 112, 46]); put(12 + hw, 16 + k, [60, 112, 46]); }
+      line(12, 10, 12, 22, [60, 112, 46]);
+    } else {
+      for (let a = 0; a < 60; a++) { const q = a / 60 * Math.PI * 2; put(12 + Math.cos(q) * 5, 21 + Math.sin(q) * 5, [150, 30, 36]); }
+      for (let i = 0; i < 5; i++) { const q = -Math.PI / 2 + i / 5 * Math.PI * 2, q2 = q + 4 * Math.PI / 5; line(12 + Math.cos(q) * 4, 21 + Math.sin(q) * 4, 12 + Math.cos(q2) * 4, 21 + Math.sin(q2) * 4, [150, 30, 36]); }
+    }
+  }
+  // a rune of light (the glyphs that circle the book): a few strokes on a grid of three by four, nothing around them
+  function runeGlyph(t, i) {
+    const R4 = rng(61 + i * 7), g = [255, 204, 112], P = [[1, 1], [6, 1], [1, 6], [6, 6], [3, 1], [3, 6], [1, 3], [6, 3], [3, 3]];
+    const n = 2 + (R4() * 2 | 0);
+    for (let k = 0; k < n; k++) { const a = P[R4() * P.length | 0], b = P[R4() * P.length | 0]; t.line(a[0], a[1], b[0], b[1], g); }
+    t.line(3, 1, 3, 6, g);
+  }
+  // a letter of gold carved into a stone: the element a flask holds
+  const GLYPH = { N: ['1001', '1101', '1011', '1001', '1001'], P: ['1110', '1001', '1110', '1000', '1000'], K: ['1001', '1010', '1100', '1010', '1001'] };
+  function letter(t, ch, noise) {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) t.put(x, y, y === 0 || x === 0 || y === 15 || x === 15 ? [30, 25, 34] : [noise(70, 9), noise(62, 8), noise(78, 10)]);
+    GLYPH[ch].forEach((row, y) => [...row].forEach((b, x) => { if (b === '1') for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) t.put(4 + x * 2 + dx, 3 + y * 2 + dy, [226, 182, 84]); }));
   }
