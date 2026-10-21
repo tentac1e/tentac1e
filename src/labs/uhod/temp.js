@@ -13,7 +13,7 @@
         const pts = f => { const a = []; for (let t = 5; t <= 42; t += 0.5) a.push([t, f(t)]); return a; };
         const P = h.plot({ w, h: hh, clip: true, x: [5, 42], y: [-0.6, 1.1], xticks: [5, 10, 15, 20, 25, 30, 35, 40], yticks: [-0.5, 0, 0.5, 1], fx: v => v + '°', fy: v => v === 0 ? '0' : v === 1 ? 'макс' : v > 0 ? '½' : '−½', xlab: 'температура, °C',
           vbands: [{ x0: 20, x1: 28, cls: 'is-good', label: 'оптимум' }],
-          series: [{ pts: pts(Pt), cls: 's1', label: 'фотосинтез', labelAt: 16, ldy: -8 }, { pts: pts(t => Pt(t) - Rt(t)), cls: 's2', label: 'прирост', labelAt: 12, ldy: 16 }, { pts: pts(Rt), cls: 's3', label: 'дыхание', labelAt: 38, ldy: -8 }],
+          series: [{ pts: pts(Pt), cls: 's1', label: 'фотосинтез', labelAt: 16, ldy: -8 }, { pts: pts(t => Pt(t) - Rt(t)), cls: 's2', label: 'прирост', labelAt: 24, ldy: 18 }, { pts: pts(Rt), cls: 's3', label: 'дыхание', labelAt: 38, ldy: -8 }],
           marker: { x: T, dots: [{ y: Pt(T), cls: 's1' }, { y: Pt(T) - Rt(T), cls: 's2' }, { y: Rt(T), cls: 's3' }] }, hover });
         let s = P.s + `<line class="zero" x1="${P.p.l}" x2="${P.p.l + P.iw}" y1="${P.Y(0)}" y2="${P.Y(0)}"/>`;
         if (hover != null) s += h.tip(P.X(hover), P.p.t + 4, w, [`${fmt(hover)} °C`, `фотосинтез ${pct(Pt(hover))}`, `дыхание ${pct(Rt(hover))}`, `прирост ${pct(Pt(hover) - Rt(hover))}`]);

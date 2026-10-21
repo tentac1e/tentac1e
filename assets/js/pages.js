@@ -821,12 +821,12 @@ window.BASIL_PAGES = {
   "labs": {
    "sorta": "48fb635c",
    "posadka": "822ac97a",
-   "uhod": "5d83f303",
+   "uhod": "30172f10",
    "udobreniya": "fec08694",
    "gidro": "7851625e",
    "formirovka": "907d6bbb",
    "vkus": "e056550f",
-   "problemy": "b6cf55d9",
+   "problemy": "90db03f7",
    "moy": "9600ef4e"
   },
   "lib": {
