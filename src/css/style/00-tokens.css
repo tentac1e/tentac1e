@@ -223,3 +223,80 @@
   color-scheme: dark;
 }
 
+
+/* The theme «Гримуар» (data-skin="grimoire"): the guide as a PS1 game of the occult — a crypt by candlelight.
+   It always lies over the dark theme (01-theme.js puts data-theme="dark" with it), so a token it leaves alone
+   keeps its dark value. Bone text, old blood and tarnished gold; menu windows with a bone rim and a hard shadow;
+   the console's bitmap face for big headings, a pixel-grid face for names and numbers, Church Slavonic letters
+   for the hand notes, a 19th-century book face for the text (27-grimoire.css dresses the components) */
+:root[data-skin="grimoire"] {
+  --bg: #0B0910;
+  --bg-deep: #07060A;
+  --surface: #15101B;
+  --surface-2: #1E1625;
+  --glass: rgba(17, 12, 22, .9);
+  --glass-strong: rgba(17, 12, 22, .97);
+  --ink: #EBE1C8;
+  --ink-2: #BDB094;
+  --ink-3: #958A75;
+  --line: #3A2E38;
+  --line-strong: #5A4852;
+  --basil: #8FD45A;
+  --basil-deep: #B8EE86;
+  --on-basil: #0B0910;
+  --leaf: #8FD45A;
+  --leaf-soft: #2A1522;
+  --opal: #B98BE8;
+  --opal-soft: #2A1D36;
+  --oil: #D6AD52;
+  --oil-bright: #E8C063;
+  --oil-soft: #2E2414;
+  --danger: #E0474F;
+  --danger-soft: #3A1218;
+  --n: #7CC552;
+  --p: #A77EE0;
+  --k: #D6AD52;
+  --stem: #4F8A32;
+  --soil: #2A1A16;
+  --clay: #9C3B2C;
+  --clay-rim: #B8513A;
+  --water: #1D3E4A;
+  --root: #D9CBA6;
+  --halo-a: rgba(198, 43, 53, .18);
+  --halo-b: rgba(155, 107, 214, .05);
+
+  /* the theme's own: the rim of a window, its two colours, the blood of the sigils, candlelight, the hard shadow */
+  --rim: #CDBF9E;
+  --rim-d: #4A3C42;
+  --win-a: #3B1321;
+  --win-b: #110C17;
+  --blood: #C62B35;
+  --blood-d: #5E1219;
+  --ember: #EE8A32;
+  --gold: #D6AD52;
+  --venom: #8FD45A;
+  --hexa: #9B6BD6;
+  --ghost: #6CC0D2;
+  --shade: #000000;
+  --scan: rgba(0, 0, 0, .2);
+  --vig: rgba(0, 0, 0, .5);
+  --scrim: rgba(11, 9, 16, .74);
+  --fog: #1C1122;
+
+  --shadow-rgb: 0 0 0;
+  --shadow-sm: 3px 3px 0 var(--shade);
+  --shadow-float: 5px 5px 0 var(--shade);
+  --shadow-lift: 6px 6px 0 var(--shade);
+
+  --font-display: "Handjet", "Manrope", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Old Standard TT", "Times New Roman", Georgia, serif;
+  --font-mono: "Handjet", "JetBrains Mono", "Arial Narrow", ui-monospace, monospace;
+  --font-hand: "Ponomar", "Old Standard TT", Georgia, serif;
+  --font-pixel: "Tiny5", "Handjet", ui-monospace, monospace;
+  --font-rune: "Ponomar", "Old Standard TT", Georgia, serif;
+
+  --radius-leaf: 5px;
+  --radius: 5px;
+  --radius-sm: 4px;
+  color-scheme: dark;
+}

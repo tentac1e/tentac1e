@@ -148,3 +148,36 @@
 /* picking a tissue: the rest steps back */
 .mic-t { transition: opacity .25s; }
 .has-sel .mic-t:not(.is-sel), .has-sel .mic-label:not(.is-sel) { opacity: .3; }
+
+/* the theme «Гримуар» (data-skin="grimoire", always over the dark theme): the leaf under the microscope, by candlelight */
+:root[data-skin="grimoire"] {
+  --mic-air: #0F1826;
+  --mic-air-2: #111A18;
+  --mic-gas: #121C1A;
+  --mic-wall: #6E905E;
+  --mic-wall-soft: rgba(110, 144, 94, .4);
+  --mic-cut: #B38338;
+  --mic-epi: #1B241F;
+  --mic-epi-2: #1F2D23;
+  --mic-pal: #26461F;
+  --mic-pal-2: #2F5426;
+  --mic-spo: #1F341C;
+  --mic-spo-2: #243D20;
+  --mic-chl: #709C46;
+  --mic-chl-hi: #9BAE6F;
+  --mic-nuc: #8F76BE;
+  --mic-sec: #3F3521;
+  --mic-sec-2: #4D4028;
+  --mic-oil: #C08720;
+  --mic-oil-hi: #D6CCAE;
+  --mic-oil-deep: #9B6104;
+  --mic-xyl: #C06193;
+  --mic-xyl-lumen: #271422;
+  --mic-phl: #678AC6;
+  --mic-phl-soft: #19263D;
+  --mic-sheath: #263A21;
+  --mic-guard: #577E48;
+  --mic-hair: #252D26;
+  --mic-label-bg: rgba(21, 16, 27, .9);
+  --mic-sel: #B8EE86;
+}

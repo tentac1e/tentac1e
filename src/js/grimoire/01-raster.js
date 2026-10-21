@@ -1,0 +1,184 @@
+  /* ------------------------------------------------------------------ */
+  /* a small rasterizer of the PS1 kind on a 2D canvas                    */
+  /* ------------------------------------------------------------------ */
+  /* Low resolution, vertices snapped to whole pixels (the wobble), textures mapped affinely per triangle (the swim),
+     no filtering, the painter's order by layer and depth, fog, then a few levels a colour channel with an ordered
+     dither between them — the console's look, nothing of it a shader */
+  class Raster {
+    constructor(canvas, o) {
+      this.c = canvas;
+      this.x = canvas.getContext('2d', { willReadFrequently: true });
+      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [] }, o);
+      this.W = this.H = 0;
+    }
+    // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across)
+    size() {
+      const cw = this.c.clientWidth || 300, ch = this.c.clientHeight || 200, s = Math.max(this.px, cw / this.maxW);
+      return this.sizeTo(Math.round(cw / s), Math.round(ch / s));
+    }
+    sizeTo(w, h) {
+      this.W = Math.max(24, w); this.H = Math.max(20, h);
+      if (this.c.width !== this.W || this.c.height !== this.H) { this.c.width = this.W; this.c.height = this.H; }
+      this.x.imageSmoothingEnabled = false;
+      return this;
+    }
+    cam(eye, target, focal, cx = 0.5, cy = 0.5) {
+      const f = norm(sub(target, eye)), r = norm(cross(f, [0, 1, 0])), u = cross(r, f);
+      this.C = { eye, f, r, u, focal: focal * this.H, cx: cx * this.W, cy: cy * this.H };
+      this.list = [];
+    }
+    view(p) { const C = this.C, d = sub(p, C.eye); return [dot(d, C.r), dot(d, C.u), dot(d, C.f)]; }
+    proj(v) { const C = this.C; return [Math.round(C.cx + v[0] * C.focal / v[2]), Math.round(C.cy - v[1] * C.focal / v[2])]; }
+    shade(n, m, ds) {
+      let [r, g, b] = this.amb;
+      if (this.key) {
+        let k = dot(n, this.key.dir);
+        if (ds) k = Math.abs(k);
+        k = Math.max(0, k) * this.key.i;
+        r += k * this.key.col[0]; g += k * this.key.col[1]; b += k * this.key.col[2];
+      }
+      for (const L of this.lights) {
+        const d = sub(L.p, m), dist = Math.hypot(d[0], d[1], d[2]) || 1;
+        let k = dot(n, d) / dist;
+        if (ds) k = Math.abs(k);
+        k = Math.max(0, k) * L.i / (1 + dist * dist * L.fall);
+        r += k * L.col[0]; g += k * L.col[1]; b += k * L.col[2];
+      }
+      return [Math.min(1.25, r), Math.min(1.25, g), Math.min(1.25, b)];
+    }
+    // one triangle in the world: culled when it faces away (solids say where their inside is: ctr or an axis)
+    tri(a, b, c, o) {
+      let n = norm(cross(sub(b, a), sub(c, a)));
+      const m = mul(add(add(a, b), c), 1 / 3);
+      if (o.ctr || o.axis) {
+        let out;
+        if (o.axis) { const w = sub(m, o.axis[0]); out = sub(w, mul(o.axis[1], dot(w, o.axis[1]))); } else out = sub(m, o.ctr);
+        if (dot(n, out) < 0) n = mul(n, -1);
+        if (dot(n, sub(this.C.eye, m)) <= 0) return;
+      }
+      const va = this.view(a), vb = this.view(b), vc = this.view(c);
+      if (va[2] < this.near || vb[2] < this.near || vc[2] < this.near) return;
+      const p = [this.proj(va), this.proj(vb), this.proj(vc)];
+      const xs = [p[0][0], p[1][0], p[2][0]], ys = [p[0][1], p[1][1], p[2][1]];
+      if (Math.max(...xs) < 0 || Math.min(...xs) > this.W || Math.max(...ys) < 0 || Math.min(...ys) > this.H) return;
+      this.list.push({ p, z: (va[2] + vb[2] + vc[2]) / 3, o, l: o.emis ? null : this.shade(n, m, o.ds) });
+    }
+    draw() {
+      const x = this.x, F = this.fog;
+      this.list.sort((A, B) => (A.o.layer || 1) - (B.o.layer || 1) || B.z - A.z);
+      for (const t of this.list) {
+        const o = t.o, [a, b, c] = t.p;
+        const f = o.nofog ? 0 : clamp((t.z - this.fogNear) / (this.fogFar - this.fogNear), 0, 1) ** 1.15;
+        // the triangle grown by half a pixel: neighbours meet without cracks
+        const cx = (a[0] + b[0] + c[0]) / 3, cy = (a[1] + b[1] + c[1]) / 3;
+        const g = q => { const dx = q[0] - cx, dy = q[1] - cy, L = Math.hypot(dx, dy) || 1; return [q[0] + dx / L * 0.6, q[1] + dy / L * 0.6]; };
+        const A = g(a), B = g(b), C = g(c);
+        if (o.tex) {
+          x.save();
+          x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath(); x.clip();
+          const w = o.tex.width, h = o.tex.height, uv = o.uv;
+          const u0 = uv[0][0] * w, v0 = uv[0][1] * h, u1 = uv[1][0] * w, v1 = uv[1][1] * h, u2 = uv[2][0] * w, v2 = uv[2][1] * h;
+          const det = (u1 - u0) * (v2 - v0) - (u2 - u0) * (v1 - v0);
+          if (det) {
+            const ta = ((b[0] - a[0]) * (v2 - v0) - (c[0] - a[0]) * (v1 - v0)) / det, tb = ((b[1] - a[1]) * (v2 - v0) - (c[1] - a[1]) * (v1 - v0)) / det;
+            const tc = ((c[0] - a[0]) * (u1 - u0) - (b[0] - a[0]) * (u2 - u0)) / det, td = ((c[1] - a[1]) * (u1 - u0) - (b[1] - a[1]) * (u2 - u0)) / det;
+            if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
+            x.setTransform(ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0);
+            x.drawImage(o.cut && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F) : o.tex, 0, 0);
+            x.setTransform(1, 0, 0, 1, 0, 0);
+            x.globalAlpha = 1;
+            if (o.add == null && !o.cut) {
+              if (t.l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, t.l[0] * 255) | 0},${Math.min(255, t.l[1] * 255) | 0},${Math.min(255, t.l[2] * 255) | 0})`; x.fill(); }
+              if (f > 0.01) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; x.fill(); }
+            }
+            x.globalCompositeOperation = 'source-over';
+          }
+          x.restore();
+        } else {
+          const col = o.col, l = t.l || [1, 1, 1];
+          const r = col[0] * l[0] * (1 - f) + F[0] * f, gg = col[1] * l[1] * (1 - f) + F[1] * f, bb = col[2] * l[2] * (1 - f) + F[2] * f;
+          if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
+          x.fillStyle = `rgb(${Math.min(255, r) | 0},${Math.min(255, gg) | 0},${Math.min(255, bb) | 0})`;
+          x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath(); x.fill();
+          x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
+        }
+      }
+    }
+    // the colour depth of the console: a few levels a channel, an ordered (Bayer) dither between them
+    post(levels = this.levels) {
+      const img = this.x.getImageData(0, 0, this.W, this.H), d = img.data, W = this.W, step = 255 / (levels - 1);
+      for (let y = 0, i = 0; y < this.H; y++) for (let xx = 0; xx < W; xx++, i += 4) {
+        const t = (BAYER[(y & 3) * 4 + (xx & 3)] / 16 - 0.47) * step;
+        d[i] = Math.round((d[i] + t) / step) * step;
+        d[i + 1] = Math.round((d[i + 1] + t) / step) * step;
+        d[i + 2] = Math.round((d[i + 2] + t) / step) * step;
+      }
+      this.x.putImageData(img, 0, 0);
+    }
+  }
+
+  // a cut-out texture (a leaf, a flame) lit and fogged, kept for the next triangle in the same light
+  const SHADED = new Map();
+  let texId = 0;
+  function shaded(tx, l, f, F) {
+    const q = v => Math.round(Math.min(1.2, v) * 10);
+    if (!tx.psxId) tx.psxId = ++texId;
+    const key = tx.psxId + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
+    let c = SHADED.get(key);
+    if (c) return c;
+    if (SHADED.size > 600) SHADED.clear();
+    c = doc.createElement('canvas');
+    c.width = tx.width; c.height = tx.height;
+    const x = c.getContext('2d');
+    x.drawImage(tx, 0, 0);
+    if (l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, q(l[0]) * 25.5) | 0},${Math.min(255, q(l[1]) * 25.5) | 0},${Math.min(255, q(l[2]) * 25.5) | 0})`; x.fillRect(0, 0, c.width, c.height); }
+    const ff = Math.round(f * 12) / 12;
+    if (ff > 0) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${ff})`; x.fillRect(0, 0, c.width, c.height); }
+    x.globalCompositeOperation = 'destination-in';
+    x.drawImage(tx, 0, 0);
+    SHADED.set(key, c);
+    return c;
+  }
+
+  // shapes: a quad (two triangles), a box, a prism (pot, candle), a low ball (an atom), a rod (a bond, a stem), a billboard
+  function quad(R, a, b, c, d, o, u0 = 0, u1 = 1, v0 = 0, v1 = 1) {
+    R.tri(a, b, c, { ...o, uv: [[u0, v1], [u1, v1], [u1, v0]] });
+    R.tri(a, c, d, { ...o, uv: [[u0, v1], [u1, v0], [u0, v0]] });
+  }
+  function box(R, c, s, o) {
+    const [x, y, z] = c, [a, b, d] = s;
+    const v = [[x - a, y - b, z - d], [x + a, y - b, z - d], [x + a, y + b, z - d], [x - a, y + b, z - d], [x - a, y - b, z + d], [x + a, y - b, z + d], [x + a, y + b, z + d], [x - a, y + b, z + d]];
+    [[0, 1, 2, 3, 1], [5, 4, 7, 6, 1], [4, 0, 3, 7, 0], [1, 5, 6, 2, 0], [3, 2, 6, 7, 0], [4, 5, 1, 0, 0]]
+      .forEach(f => quad(R, v[f[0]], v[f[1]], v[f[2]], v[f[3]], { ...o, tex: f[4] && o.texFront ? o.texFront : o.tex, ctr: c }));
+  }
+  function prism(R, cx, cz, y0, y1, r0, r1, n, o, cap, rot = 0) {
+    const ctr = [cx, (y0 + y1) / 2, cz];
+    for (let i = 0; i < n; i++) {
+      const a0 = rot + i / n * Math.PI * 2, a1 = rot + (i + 1) / n * Math.PI * 2;
+      const p00 = [cx + Math.cos(a0) * r0, y0, cz + Math.sin(a0) * r0], p10 = [cx + Math.cos(a1) * r0, y0, cz + Math.sin(a1) * r0];
+      const p01 = [cx + Math.cos(a0) * r1, y1, cz + Math.sin(a0) * r1], p11 = [cx + Math.cos(a1) * r1, y1, cz + Math.sin(a1) * r1];
+      quad(R, p00, p10, p11, p01, { ...o, axis: [[cx, y0, cz], [0, 1, 0]] }, i / n, (i + 1) / n, 0, 1);
+      if (cap) R.tri([cx, y1, cz], p01, p11, { col: cap, ctr });
+    }
+  }
+  const ICO = (() => {
+    const t = (1 + Math.sqrt(5)) / 2;
+    const v = [[-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0], [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t], [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]].map(norm);
+    const f = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]];
+    return { v, f };
+  })();
+  function ball(R, c, r, o) { ICO.f.forEach(([a, b, d]) => R.tri(add(c, mul(ICO.v[a], r)), add(c, mul(ICO.v[b], r)), add(c, mul(ICO.v[d], r)), { ...o, ctr: c })); }
+  function rod(R, p, q, r, o, n = 4) {
+    const d = norm(sub(q, p)), up = Math.abs(d[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
+    const s = norm(cross(d, up)), t = cross(d, s);
+    for (let i = 0; i < n; i++) {
+      const a0 = i / n * Math.PI * 2 + 0.4, a1 = (i + 1) / n * Math.PI * 2 + 0.4;
+      const o0 = add(mul(s, Math.cos(a0) * r), mul(t, Math.sin(a0) * r)), o1 = add(mul(s, Math.cos(a1) * r), mul(t, Math.sin(a1) * r));
+      R.tri(add(p, o0), add(p, o1), add(q, o1), { ...o, axis: [p, d] });
+      R.tri(add(p, o0), add(q, o1), add(q, o0), { ...o, axis: [p, d] });
+    }
+  }
+  function billboard(R, c, w, h, o) {
+    const r = mul(R.C.r, w), u = mul(R.C.u, h);
+    quad(R, sub(sub(c, r), u), sub(add(c, r), u), add(add(c, r), u), add(sub(c, r), u), o);
+  }

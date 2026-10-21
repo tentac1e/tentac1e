@@ -6,6 +6,7 @@
    node tests/labs.js --phone | --desktop   один размер экрана (телефон — iPhone 13 mini)
    node tests/labs.js --shots               ещё и снимки в tests/out/<экран>-<модель>.png
    node tests/labs.js --dark                тёмная тема
+   node tests/labs.js --grimoire            оформление «Гримуар» (свои шрифты и пиксельные рисунки)
    Проверяет сборку в корне репозитория (python3 scripts/build.py). */
 const fs = require('fs');
 const path = require('path');
@@ -16,6 +17,7 @@ const only = (args.find(a => !a.startsWith('--')) || '').split(',').filter(Boole
 const modes = args.includes('--phone') ? ['phone'] : args.includes('--desktop') ? ['desktop'] : ['phone', 'desktop'];
 const shots = args.includes('--shots');
 const dark = args.includes('--dark');
+const grimoire = args.includes('--grimoire');
 
 // what counts as broken, measured in the page
 function audit(sel) {
@@ -143,6 +145,7 @@ async function check(ctx, mode, f, errs) {
       ...(mode === 'phone' ? { ...devices['iPhone 13 Mini'], deviceScaleFactor: 2 } : { viewport: { width: 1280, height: 900 } }),
       colorScheme: dark ? 'dark' : 'light', reducedMotion: 'reduce'
     });
+    if (grimoire) await ctx[mode].addInitScript(() => { try { localStorage.setItem('basil-skin', '"grimoire"'); } catch (e) { /* the theme stays off */ } });
   }
   const jobs = [];
   for (const mode of modes) for (const f of FILES) jobs.push({ mode, f });

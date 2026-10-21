@@ -8,7 +8,7 @@
 
 ### app.js
 - `src/js/app/00-core.js`: `$` 6, `$$` 7, `clamp` 9, `f1` 10, `esc` 11, `nb` 26, `plural` 28, `fmtNum` 37, `addDays` 42, `fd` 43, `fr` 44, `toISO` 49, `fromISO` 50, `today` 54, `dayDiff` 55, `icon` 56, `chapterById` 57, `paintIll` 60, `pageOf` 69, `aliasOf` 77, `urlFor` 79, `fixLinks` 88, `smooth` 98, `toast` 101, `copyText` 110
-- `src/js/app/01-theme.js`: `initTheme` 4
+- `src/js/app/01-theme.js`: `initTheme` 8, `loadGrimoire` 52
 - `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 76, `jump` 103, `rowTop` 111, `scrollAfter` 118, `route` 160, `navigate` 193, `initRouter` 201, `initPagers` 224, `initScrollChrome` 267
 - `src/js/app/03-peek.js`: `decodeSafe` 10, `placeOf` 15, `placeUrl` 27, `frameSrc` 28, `peekable` 31, `peekShow` 48, `peekLoad` 62, `resetFrame` 69, `openPeek` 78, `goToPlace` 94, `peekPop` 110, `onPeekClosed` 119, `sendTheme` 129, `onPeekMessage` 133, `initPeek` 154, `toParent` 207, `markPeek` 210, `initPeekFrame` 240
 - `src/js/app/03-sheets.js`: `openSheet` 8, `closeSheet` 30, `dragSheet` 57, `tocFold` 127, `tocPane` 132, `tocOpen` 137, `tocButton` 162, `initToc` 170, `initSheets` 193
@@ -95,6 +95,23 @@
 ### data.js
 - `src/js/data/10-experiments.js`: `expDay` 4
 
+### grimoire.js
+- `src/js/grimoire/00-core.js`: `$` 5, `clamp` 6, `skinOn` 8, `rng` 11, `sub` 17, `add` 18, `mul` 19, `dot` 20, `cross` 21, `norm` 22, `psxLoop` 25
+- `src/js/grimoire/01-raster.js`: `shaded` 123, `quad` 144, `box` 148, `prism` 154, `ICO` 164, `ball` 170, `rod` 171, `billboard` 181
+- `src/js/grimoire/02-textures.js`: `tex` 5, `ritual` 33, `textures` 53
+- `src/js/grimoire/03-mol.js`: `molShape` 6, `drawMol` 44
+- `src/js/grimoire/04-altar.js`: `altar` 9
+- `src/js/grimoire/05-crypt.js`: `crypt` 5
+- `src/js/grimoire/06-ills.js`: `cellFilter` 16, `fitCell` 43, `pixelate` 53, `pixelateIn` 73, `refit` 81, `onToggle` 82, `onPanel` 83, `onResize` 84
+- `src/js/grimoire/07-start.js`: `start` 6, `stop` 25
+
+Общие помощники grimoire.js — кто зовёт:
+- `clamp` (00-core.js:6) — 3: 01-raster, 02-textures, 04-altar
+- `add` (00-core.js:18) — 3: 01-raster, 03-mol, 04-altar
+- `mul` (00-core.js:19) — 3: 01-raster, 03-mol, 04-altar
+- `cross` (00-core.js:21) — 3: 01-raster, 03-mol, 04-altar
+- `altar` (04-altar.js:9) — 3: 02-textures, 03-mol, 07-start
+
 ### Отдельные файлы
 - `src/js/haptics.js`: `iosTap` 20, `play` 34, `watchSnap` 69, `initSnaps` 82, `initSwitch` 94, `set` 103, `dragTicker` 106
 - `src/labs/_frame.js`: `r1` 8, `pct` 9, `set` 12, `doyToday` 13, `doyLabel` 14, `citiesChips` 15
@@ -144,6 +161,7 @@
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 - `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
+- `src/css/style/27-grimoire.css`: `.subnav-*`, `.ch-hero-*`, `.toc-*`, `.chip`, `.seg`, `.crt-*`, `.search-*`, `.btn-*`, `.psx-*`, `.pager`, `.tab-*`, `.range` · анимации: `psx-flicker`, `psx-point`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
@@ -161,6 +179,7 @@
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
 - `src/css/lab/14-paint.css`: `.plant-*`, `.lab-*`, `.is-off`, `.pl-stems`, `.osm-*`, `.xylem`, `.phloem`, `.barrel-*`, `.nc-flow`, `.germ-*`
 - `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.hap-*`, `.ico`, `.continue`, `.is-shown`, `.is-bar` · анимации: `resume-mark`
+- `src/css/lab/16-grimoire.css`: `.deep-*`, `.lab-*`, `.deeper-*`, `.range`, `.sci-*`, `.resume-*`, `.panel-*`, `.eq`, `.num-*`, `.chip`, `.mol-*`, `.recipe-*`
 
 ### стили моделей и глав
 - `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
@@ -206,10 +225,10 @@
 
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
-- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:275`, `src/js/science/06-labs-loader.js:186`
+- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:275`, `src/js/grimoire/07-start.js:20`, `src/js/science/06-labs-loader.js:186`
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:238`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:130`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
-- `basil:theme` — шлёт: `src/js/app/01-theme.js:18`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:487`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:302`, `src/labs/vkus/pesto.js:67`
+- `basil:theme` — шлёт: `src/js/app/01-theme.js:30`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/grimoire/07-start.js:43`, `src/js/scene/04-background.js:491`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/labs/vkus/pesto.js:67`
 - `basil:view` — шлёт: `src/js/app/02-router.js:184`; слушают: `src/js/app/02-router.js:263`, `src/js/app/02-router.js:293`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:132`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
@@ -217,6 +236,7 @@
 
 Ключи `localStorage` (и база IndexedDB `basil-photos`) — в каких файлах встречаются, с первой строкой.
 
+- `basil-crt` — `src/js/grimoire/07-start.js:41`
 - `basil-detour` — `src/js/app/22-reading-pos.js:355`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
@@ -226,7 +246,8 @@
 - `basil-photos` — `src/js/app/22-garden-photos.js:5`
 - `basil-pos` — `src/js/app/22-reading-pos.js:8`
 - `basil-recent` — `src/js/app/04-search.js:322`
-- `basil-theme` — `src/js/app/01-theme.js:8`
+- `basil-skin` — `src/js/app/01-theme.js:39`
+- `basil-theme` — `src/js/app/01-theme.js:14`
 - `basil-weather` — `src/js/app/22-garden-weather.js:7`
 
 ## Ширины экрана
@@ -241,11 +262,11 @@
 - `max-width: 760px` — 7: 06-lab-tools.css, 12-steps.css, 26-hydro.css, _shared.css, drift.css, flows.css, kratky.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
-- `max-width: 700px` — 4: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css
+- `max-width: 700px` — 5: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css, 27-grimoire.css
+- `max-width: 899px` — 4: 03-header.css, 24-toc.css ×2, 27-grimoire.css
 - `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
 - `max-width: 820px` — 3: 14-care.css, 15-fertilizers.css ×2
-- `max-width: 899px` — 3: 03-header.css, 24-toc.css ×2
 - `min-width: 900px` — 3: 11-deep-footer.css, 24-toc.css, pairing.css
 - `max-width: 940px` — 3: 15-fertilizers.css, 18-problems.css ×2
 - `max-width: 1279px` — 3: 21-sheets.css ×3
@@ -262,16 +283,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1272`
-- `{{description}}` в `src/layout.html` — `build.py:1272`
-- `{{pwa}}` в `src/layout.html` — `build.py:1288`
-- `{{fonts}}` в `src/layout.html` — `build.py:1287`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1269`
-- `{{content}}` в `src/layout.html` — `build.py:1267`
-- `{{toc}}` в `src/layout.html` — `build.py:1269`
-- `{{scripts}}` в `src/layout.html` — `build.py:1286`
-- `{{version}}` в `src/sw.js` — `build.py:1402`
-- `{{precache}}` в `src/sw.js` — `build.py:1402`
+- `{{title}}` в `src/layout.html` — `build.py:1273`
+- `{{description}}` в `src/layout.html` — `build.py:1273`
+- `{{pwa}}` в `src/layout.html` — `build.py:1290`
+- `{{fonts}}` в `src/layout.html` — `build.py:1289`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1270`
+- `{{content}}` в `src/layout.html` — `build.py:1268`
+- `{{toc}}` в `src/layout.html` — `build.py:1270`
+- `{{scripts}}` в `src/layout.html` — `build.py:1288`
+- `{{version}}` в `src/sw.js` — `build.py:1405`
+- `{{precache}}` в `src/sw.js` — `build.py:1405`
 
 ## Проверки
 
@@ -283,6 +304,7 @@
 - `tests/gallery.js` — Every illustration of a chapter on one sheet, to look at them together: the pictures the page shows · корень · index.html
 - `tests/garden.js` — «Мой базилик» на телефоне и компьютере: пустой блок, куст через форму, дела на неделю, «Сделано», · корень · index.html, sorta.html, moy.html
 - `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html, udobreniya.html, posadka.html, formirovka.html
+- `tests/grimoire.js` — Оформление «Гримуар» на телефоне и компьютере: включается свечой в шапке и запоминается, а пока выключено, его файл · корень · все страницы
 - `tests/ills.js` — Картинки (data-ill) на каждой вкладке каждой страницы. · сервер + корень · все страницы
 - `tests/labs.js` — Каждая модель на своей странице: запускается без ошибок, ничего не вылезает за край, · корень · все страницы
 - `tests/nav.js` — Навигация на телефоне и компьютере: страница открывается сверху (и страница из памяти для «Назад» тоже, одним · сервер

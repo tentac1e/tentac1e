@@ -555,6 +555,7 @@ window.BasilScene = (() => {
     let prevTs = 0, ema = 16.7, warm = 0;
     const L = loop(frame);
     function frame(ts) {
+      if (skinned()) { L.stop(); return; }
       L.next();
       // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps.
       // Only while active: calm frames are slow on purpose, and a pause is not a missed frame
@@ -576,8 +577,11 @@ window.BasilScene = (() => {
     }
     perf.listeners.push(() => { resize(); });
 
+    // the theme «Гримуар» has a crypt of its own behind the page (assets/js/grimoire.js): the greenhouse rests
+    const skinned = () => document.documentElement.getAttribute('data-skin') === 'grimoire';
     function start() {
       L.stop();
+      if (skinned()) return;
       if (reduce.matches) { render(now(), 0); return; }
       last = performance.now() / 1000;
       prevTs = 0;
@@ -625,7 +629,7 @@ window.BasilScene = (() => {
     document.addEventListener('pointerleave', () => { ptr.x = ptr.y = -9999; });
     window.addEventListener('pointerup', e => { if (e.pointerType === 'touch') setTimeout(() => { ptr.x = ptr.y = -9999; }, 400); }, { passive: true });
     window.addEventListener('pointerdown', e => {
-      if (reduce.matches || e.button > 0) return;
+      if (reduce.matches || e.button > 0 || skinned()) return;
       if (e.target.closest('a, button, input, select, textarea, label, summary, dialog, canvas, svg, [role="button"], .pane, .card, .lab-tool, .deep')) return;
       burst(e.clientX, e.clientY);
     }, { passive: true });
@@ -644,7 +648,8 @@ window.BasilScene = (() => {
       buildBeams();
       motes = []; flies = [];
       populate();
-      if (reduce.matches) render(now(), 0);
+      if (reduce.matches && !skinned()) render(now(), 0);
+      if (!skinned() && !L.on) start();
     });
     document.addEventListener('visibilitychange', () => { if (document.hidden) L.stop(); else start(); });
     if (reduce.addEventListener) reduce.addEventListener('change', start);

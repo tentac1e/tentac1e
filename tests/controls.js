@@ -120,6 +120,8 @@ async function check(ctx, mode, f, errs) {
   const errs = [];
   const ctx = {};
   for (const mode of modes) ctx[mode] = await browser.newContext({ ...(mode === 'phone' ? { ...devices['iPhone 13 Mini'], deviceScaleFactor: 1 } : { viewport: { width: 1280, height: 900 } }), reducedMotion: 'reduce' });
+  // --grimoire: the same checks in the theme «Гримуар» (its own faces and pixel pictures)
+  if (args.includes('--grimoire')) for (const mode of modes) await ctx[mode].addInitScript(() => { try { localStorage.setItem('basil-skin', '"grimoire"'); } catch (e) { /* the theme stays off */ } });
   const jobs = [];
   for (const mode of modes) for (const f of FILES) if (!only.length || only.includes(f)) jobs.push({ mode, f });
   let next = 0;

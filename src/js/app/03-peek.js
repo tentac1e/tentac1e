@@ -128,7 +128,7 @@
   }
   function sendTheme() {
     const w = peek.frame && peek.frame.contentWindow;
-    if (w) w.postMessage({ basil: 'theme', theme: document.documentElement.getAttribute('data-theme') }, '*');
+    if (w) w.postMessage({ basil: 'theme', theme: document.documentElement.getAttribute('data-theme'), skin: document.documentElement.getAttribute('data-skin') }, '*');
   }
   function onPeekMessage(e) {
     if (!peek.frame || e.source !== peek.frame.contentWindow) return;
@@ -259,5 +259,6 @@
     addEventListener('message', e => {
       if (e.source !== window.parent || !e.data || e.data.basil !== 'theme') return;
       if (e.data.theme) root.setAttribute('data-theme', e.data.theme); else root.removeAttribute('data-theme');
+      if (e.data.skin) root.setAttribute('data-skin', e.data.skin); else root.removeAttribute('data-skin');
     });
   }

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="assets/css/lab.css">
 </head>
 <body>
-<script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}try{if(JSON.parse(localStorage.getItem('basil-skin'))==='grimoire'){var r=document.documentElement;r.setAttribute('data-skin','grimoire');r.setAttribute('data-theme','dark');if(JSON.parse(localStorage.getItem('basil-crt'))===false)r.classList.add('no-crt')}}catch(e){}</script>
 
 <!-- ================= SVG SPRITE ================= -->
 <svg class="sprite" aria-hidden="true" focusable="false">
@@ -55,6 +55,24 @@
       <path class="pl-shine" d="M-4 -20 C -19 -27 -24 -46 -21 -62 C -18 -78 -9 -92 -2 -101 C -7 -82 -10 -52 -4 -20 Z"/>
       <path class="pl-vein" d="M0 -11 Q 1.6 -58 0 -105 M0.4 -28 Q 12 -32 21 -45 M0.4 -28 Q -12 -32 -21 -45 M0.6 -46 Q 11 -51 18 -64 M0.6 -46 Q -11 -51 -18 -64 M0.5 -64 Q 8 -69 12 -80 M0.5 -64 Q -8 -69 -12 -80 M0.4 -80 Q 5 -85 7 -93 M0.4 -80 Q -5 -85 -7 -93"/>
     </g>
+    <!-- the theme «Гримуар»: every drawing at the console's resolution — one sample a 4 px cell, an ordered (Bayer)
+         dither, eight levels a channel (27-grimoire.css puts it on the pictures) -->
+    <filter id="psx-pix" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feFlood x="1" y="1" width="2" height="2" flood-color="#000" result="dot"/>
+      <feComposite in="dot" x="0" y="0" width="4" height="4" result="cell"/>
+      <feTile in="cell" result="grid"/>
+      <feComposite in="SourceGraphic" in2="grid" operator="in" result="sample"/>
+      <feMorphology in="sample" operator="dilate" radius="2" result="pix"/>
+      <feImage x="0" y="0" width="16" height="16" preserveAspectRatio="none" result="bayer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAPElEQVR42mNgAIIOIFACglVAwECGwBkgcAGCd0CQBgTkCBgDwW4gEASCmUBAjsB/ICgHgrtAEAoEZAgAAPqUf4F4u+hGAAAAAElFTkSuQmCC"/>
+      <feTile in="bayer" result="bayers"/>
+      <feComposite in="pix" in2="bayers" operator="arithmetic" k1="0" k2="1" k3="0.14" k4="-0.07" result="dith"/>
+      <feComponentTransfer in="dith">
+        <feFuncR type="discrete" tableValues="0 .14 .29 .43 .57 .71 .86 1"/>
+        <feFuncG type="discrete" tableValues="0 .14 .29 .43 .57 .71 .86 1"/>
+        <feFuncB type="discrete" tableValues="0 .14 .29 .43 .57 .71 .86 1"/>
+        <feFuncA type="discrete" tableValues="0 1"/>
+      </feComponentTransfer>
+    </filter>
     <g id="leaf-shape">
       <path d="M0 0 L0 -7" fill="none" stroke-width="2"/>
       <path d="M0 -6 C 20 -14 27 -44 0 -68 C -27 -44 -20 -14 0 -6 Z" stroke-width="1.3"/>
@@ -72,6 +90,7 @@
   <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M5.5 20.5v-6.8c0-1.2 1-2.2 2.2-2.2h8.6c1.2 0 2.2 1 2.2 2.2v6.8"/><path d="M5.5 15.4c1.1 1.1 2.1 1.1 3.2 0s2.1-1.1 3.3 0 2.1 1.1 3.2 0 2.1-1.1 3.3 0"/><path d="M12 11.5V8.5"/><path d="M12 8.5c-1.8-.4-2.6-1.8-2.2-3.6 1.8.4 2.6 1.8 2.2 3.6zm0 0c1.8-.4 2.6-1.8 2.2-3.6-1.8.4-2.6 1.8-2.2 3.6z"/></symbol>
   <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17.5h6M9.8 20.5h4.4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1 1.4 1 2.2v1.5h5.2V16c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M12 7.2v3.2"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-candle" viewBox="0 0 24 24"><path d="M12 2.8c-1.7 2-2.4 3.3-2.4 4.4a2.4 2.4 0 0 0 4.8 0c0-1.1-.7-2.4-2.4-4.4z"/><path d="M12 9.6v1.6"/><path d="M9.2 21V11.2h5.6V21"/><path d="M6.5 21h11"/><path d="M14.8 14.5c-.9.4-1.2 1.2-1.2 2.2"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
   <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.2c-3.4 4.3-6 7.7-6 10.9a6 6 0 0 0 12 0c0-3.2-2.6-6.6-6-10.9z"/><path d="M9.2 14.6a3 3 0 0 0 2.4 2.6"/></symbol>
   <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4 4 0 1 1-4 0z"/><path d="M12 9v7.5"/></symbol>
@@ -280,6 +299,7 @@
 
 <canvas id="leaf-field" aria-hidden="true"></canvas>
 <div class="aura" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="crt" aria-hidden="true"></div>
 
 <div class="page">
 
@@ -295,6 +315,9 @@
     <a class="icon-btn garden-btn" href="#moy" data-garden-link aria-label="Мой базилик"><svg class="ico"><use href="#i-sprout"/></svg><b class="garden-badge" hidden></b></a>
     <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
       <svg class="ico"><use href="#i-search"/></svg><span>Поиск</span><kbd>/</kbd>
+    </button>
+    <button class="icon-btn skin-btn" id="skin-toggle" type="button" aria-pressed="false" aria-label="Включить оформление «Гримуар»">
+      <svg class="ico"><use href="#i-candle"/></svg>
     </button>
     <button class="icon-btn" id="theme-toggle" type="button" aria-label="Сменить тему">
       <svg class="ico"><use href="#i-moon"/></svg>
@@ -316,6 +339,7 @@
     <div class="footer-end">
       <p class="hand">Растите с удовольствием и ешьте песто ✿</p>
       <button class="hap-row" type="button" role="switch" aria-checked="true" data-haptics hidden><span class="hap-switch" aria-hidden="true"></span><span>Отклик вибрацией</span></button>
+      <button class="hap-row crt-row" type="button" role="switch" aria-checked="true" data-crt><span class="hap-switch" aria-hidden="true"></span><span>Экран ЭЛТ</span></button>
     </div>
   </div>
 </footer>

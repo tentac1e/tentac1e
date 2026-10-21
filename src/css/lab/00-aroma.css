@@ -94,3 +94,65 @@
   --fd-coco: #7A5534;
   --fd-coco-f: #F8F5EC;
 }
+
+/* the theme «Гримуар» (data-skin="grimoire", always over the dark theme): the food in crypt light; the molecules in the colours of the crypt */
+:root[data-skin="grimoire"] {
+  --fd-hi: #D6CEBC;
+  --fd-dark: #261C1F;
+  --fd-leaf: #3D752D;
+  --fd-leaf-d: #25521B;
+  --fd-tomato: #C22D22;
+  --fd-tomato-d: #941C14;
+  --fd-straw: #C4253D;
+  --fd-straw-d: #941328;
+  --fd-seed: #C69950;
+  --fd-lemon: #C89924;
+  --fd-lemon-d: #AC760A;
+  --fd-peach: #CD7653;
+  --fd-peach-b: #C24149;
+  --fd-cori: #AE8470;
+  --fd-cori-d: #7F573C;
+  --fd-fennel: #D2CCB5;
+  --fd-fennel-d: #939878;
+  --fd-fennel-g: #64863C;
+  --fd-bay: #567436;
+  --fd-clove: #683622;
+  --fd-pepper: #32262C;
+  --fd-pepper-hi: #654F56;
+  --fd-rosemary: #465F41;
+  --fd-stem: #664E2F;
+  --fd-mint: #33843D;
+  --fd-mint-d: #22622B;
+  --fd-choc: #4E261E;
+  --fd-choc-hi: #6E3C30;
+  --fd-oil: #B28321;
+  --fd-oil-d: #8D620E;
+  --fd-olive: #5B611E;
+  --fd-melon: #CC3D58;
+  --fd-rind: #30692F;
+  --fd-cuke: #2E612A;
+  --fd-cuke-f: #A8AC8E;
+  --fd-cheese: #D4CCB9;
+  --fd-cheese-d: #AE989E;
+  --fd-parm: #C49E6C;
+  --fd-parm-d: #AD7F3C;
+  --fd-rind-p: #996A29;
+  --fd-garlic: #D4CCB8;
+  --fd-garlic-d: #AE96A1;
+  --fd-garlic-p: #9470AE;
+  --fd-chili: #BC2120;
+  --fd-coco: #673E2B;
+  --fd-coco-f: #D4CDB9;
+  --m-lin: #8FD45A;
+  --m-cin: #6CC0D2;
+  --m-cit: #C9D24A;
+  --m-cam: #8AB4D0;
+  --m-est: #B98BE8;
+  --m-eug: #E0607E;
+  --m-meu: #C6A6EE;
+  --m-mci: #EE8A32;
+  --m-car: #D6AD52;
+  --m-ber: #E8C886;
+  --m-hex: #6FA8E0;
+  --m-rest: #3A2E38;
+}

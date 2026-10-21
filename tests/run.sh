@@ -20,6 +20,9 @@ if [ "$1" = "--one" ]; then
   case "$t" in
     ills) set -- tests/ills.js --no-net ;;
     ills-net) set -- tests/ills.js --net ;;
+    # the theme «Гримуар»: its own checks, and the models and the pictures' captions again in its faces
+    grimoire-labs) set -- tests/labs.js --grimoire --phone ;;
+    grimoire-overlap) set -- tests/overlap.js --grimoire ;;
     *) set -- "tests/$t.js" ;;
   esac
   s=$(date +%s)
@@ -28,14 +31,15 @@ if [ "$1" = "--one" ]; then
   exit 0
 fi
 
-ALL="pages clean nav peek labs overlap controls gestures ills garden agronom pwa perf single"
+ALL="pages clean nav peek labs overlap controls gestures ills garden agronom grimoire pwa perf single"
 # the suites a changed file concerns (the first pattern that fits); a file the table does not know — all of them
 suites_for() {
   case "$1" in
     tests/run.sh|tests/lib.js|scripts/build.py|scripts/serve.py|scripts/bundle.py) echo "$ALL" ;;
     tests/gallery.js) echo "" ;;
     tests/*.js) basename "$1" .js ;;
-    src/labs/*) echo "labs overlap controls ills single" ;;
+    src/js/grimoire/*|src/css/style/27-grimoire.css|src/css/lab/16-grimoire.css|src/fonts/*) echo "grimoire" ;;
+    src/labs/*) echo "labs overlap controls ills single grimoire" ;;
     src/pages/moy/*) echo "garden agronom controls pwa" ;;
     src/js/app/22-garden*|src/js/data/08-*|src/js/data/09-*|src/js/data/10-*) echo "garden agronom controls" ;;
     src/sw.js|src/sw-off.js|src/js/app/22-install.js|src/icons/*) echo "pwa clean" ;;
@@ -43,7 +47,7 @@ suites_for() {
     src/js/app/02-router.js|src/js/app/03-sheets.js|src/js/app/22-reading-pos.js|src/js/data/00-nav.js|src/layout.html|src/js/haptics.js) echo "nav peek pages clean gestures single" ;;
     src/pages/glavnaya.html|src/js/app/07-home.js) echo "peek pages overlap controls ills gestures single" ;;
     src/js/app/04-search*) echo "nav pages" ;;
-    src/css/*) echo "overlap controls gestures ills pages peek" ;;
+    src/css/*) echo "overlap controls gestures ills pages peek grimoire" ;;
     src/pages/udobreniya/*|src/pages/spravka/*) echo "peek pages nav clean overlap controls ills single" ;;
     src/pages/*) echo "pages overlap controls ills single" ;;
     src/js/scene/*) echo "perf ills" ;;
@@ -86,9 +90,10 @@ wait $b2 || { cat tests/out/run-build-clean.log; exit 1; }
 
 # the pool: the longest first, so that the short ones fill the gaps at the end
 pool="" tail=""
-for t in ills labs nav peek controls agronom overlap garden gestures pages clean single pwa; do
+for t in ills labs nav peek controls agronom overlap garden grimoire gestures pages clean single pwa; do
   case " $list " in *" $t "*) pool="$pool $t" ;; esac
 done
+case " $list " in *" grimoire "*) pool="$pool grimoire-labs grimoire-overlap" ;; esac
 case " $list " in *" ills "*) tail="$tail ills-net" ;; esac
 case " $list " in *" perf "*) tail="$tail perf" ;; esac
 for t in $pool $tail; do rm -f "tests/out/run-$t.code"; done
@@ -97,7 +102,7 @@ for t in $tail; do sh tests/run.sh --one "$t"; done
 
 status=0
 for t in $list; do
-  for part in $t $( [ "$t" = ills ] && echo ills-net ); do
+  for part in $t $( [ "$t" = ills ] && echo ills-net ) $( [ "$t" = grimoire ] && echo grimoire-labs grimoire-overlap ); do
     read -r code secs 2> /dev/null < "tests/out/run-$part.code" || { code=1; secs=0; }
     echo "== $part  $secs с"
     [ "$code" -eq 0 ] || status=1

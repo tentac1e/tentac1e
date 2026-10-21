@@ -312,3 +312,69 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+
+/* the theme «Гримуар»: the science in the colours of the crypt — chemistry the violet of a sigil, physics a ghost's
+   blue, biology the green of basil, taste the gold of a censer */
+:root[data-skin="grimoire"] {
+  --sci-chem: #B98BE8;
+  --sci-phys: #6CC0D2;
+  --sci-bio: #8FD45A;
+  --sci-taste: #D6AD52;
+  --sci-chem-soft: #231930;
+  --sci-phys-soft: #122630;
+  --sci-bio-soft: #172414;
+  --sci-taste-soft: #2A2112;
+  --paper-line: rgba(205, 191, 158, .05);
+  --paper-line-strong: rgba(205, 191, 158, .09);
+  --hover-light: rgba(198, 43, 53, .1);
+  --ser-1: #8FD45A;
+  --ser-2: #B98BE8;
+  --ser-3: #D6AD52;
+  --ser-4: #6CC0D2;
+  --ser-muted: #3A2E38;
+  --band-good: rgba(143, 212, 90, .1);
+  --band-cold: rgba(108, 192, 210, .1);
+  --tip-bg: #EBE1C8;
+  --tip-ink: #0B0910;
+  --pl-a: #2A5A22;
+  --pl-b: #5C9B38;
+  --pl-c: #8CCF5A;
+  --pl-back-a: #16301A;
+  --pl-back-b: #2A4F1C;
+  --pl-stem-a: #2A4F1C;
+  --pl-stem-b: #5C9B38;
+  --pl-pet: #4F8A32;
+  --pot-a: #6E2418;
+  --pot-b: #9C3B2C;
+  --pot-rim: #84301F;
+  --soil-top: #2A1A16;
+  --soil-grain: #4F3024;
+  --tag-bg: #D9CBA6;
+  --tag-ink: #2A1A16;
+  --stick: #6B4A2E;
+  --mol-c: #CFC4A8;
+  --mol-c-hi: #F2EAD3;
+  --mol-o: #C62B35;
+  --mol-o-hi: #F07A70;
+  --mol-bond: #8A7C6C;
+  --mol-edge: rgba(0, 0, 0, .55);
+  --z0: #1D3E4A;
+  --z1: #1F3A2A;
+  --z2: #2F5A1E;
+  --z3: #5A4418;
+  --z4: #5E1A1F;
+  --wx-cold: #6CC0D2;
+  --wx-frost: #A99BE8;
+  --wx-hot: #EE8A32;
+  --wx-rain: #6FA8E0;
+  --wx-cold-soft: #122630;
+  --wx-hot-soft: #2E1A10;
+  --sun-light: rgba(238, 138, 50, .24);
+  --sun-disc: #EE8A32;
+  --water-fill: rgba(58, 111, 134, .42);
+  --water-line: #6CC0D2;
+  --wood-a: #5A3A22;
+  --wood-b: #7E5534;
+  --hoop: #6E6470;
+  --glass-edge: rgba(205, 191, 158, .45);
+}

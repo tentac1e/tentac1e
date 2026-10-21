@@ -882,6 +882,7 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "746d28a1"
+  "search": "746d28a1",
+  "grimoire": "4dc984d0"
  }
 };

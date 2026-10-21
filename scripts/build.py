@@ -9,7 +9,8 @@
     src/layout.html                 общий каркас: шапка, спрайт, фон, подвал, поиск, меню
     src/pages/<глава>/              глава по кускам: _head.html (обложка и вкладки), 1-<вкладка>.html …, _foot.html
     src/pages/<глава>.html          глава без вкладок (главная, календарь) — одним файлом
-    src/js/<модуль>/_frame.js + NN-*.js   → assets/js/<модуль>.js (app, science, scene, data)
+    src/js/<модуль>/_frame.js + NN-*.js   → assets/js/<модуль>.js (app, science, scene, data, grimoire — тема «Гримуар»,
+                                    страница грузит её, только пока тема включена)
     src/js/haptics.js               → assets/js/haptics.js как есть
     src/css/style/NN-*.css          → assets/css/style.css
     src/css/lab/NN-*.css            → assets/css/lab.css; на месте /*@labs*/ — стили моделей
@@ -187,7 +188,7 @@ PREFIXES = {'dis-': 'problemy', 'pest-': 'problemy', 'g-': 'spravka', 'ck-': 'sp
 SCRIPTS = ['haptics.js', 'data.js', 'pages.js', 'scene.js', 'science.js', 'app.js']
 
 # the one-file book has no assets folder: it keeps loading its fonts from Google, as the site did before
-GOOGLE_FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>'
+GOOGLE_FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Handjet:wght@400;500;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Ponomar&family=Tiny5&display=swap">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Handjet:wght@400;500;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Ponomar&family=Tiny5&display=swap" media="print" onload="this.media=\'all\'">\n<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Handjet:wght@400;500;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Ponomar&family=Tiny5&display=swap"></noscript>'
 # asked for at once, before the stylesheet finds them: the text font is on every line of every page
 PRELOAD_FONTS = ['manrope-normal-cyrillic.woff2', 'manrope-normal-latin.woff2',
                  # the headings' face, on every page's first screen (the latin part holds the space and the digits)
@@ -727,7 +728,7 @@ def assemble(src_pages, assets):
             return first[:-2].rstrip() + '. ' + BANNER.format(src=src) + ' */\n' + rest
         return f'/* {BANNER.format(src=src)} */\n' + text
 
-    for mod in ('data', 'scene', 'science', 'app'):
+    for mod in ('data', 'scene', 'science', 'app', 'grimoire'):
         d = SRC / 'js' / mod
         frame = (d / '_frame.js').read_text(encoding='utf-8')
         body = ''.join(f.read_text(encoding='utf-8') for f in numbered(d, '.js'))
@@ -880,7 +881,7 @@ def write_map(src_pages, CH):
             out.append(f"- `{rel(f)}`: " + ', '.join(f'`{n}`' for n in names))
     out.append('')
     out += ['## Скрипты (src/js/)', '']
-    for mod in ('app', 'science', 'scene', 'data'):
+    for mod in ('app', 'science', 'scene', 'data', 'grimoire'):
         out.append(f'**{mod}.js**')
         for f in numbered(SRC / 'js' / mod, '.js'):
             text = f.read_text(encoding='utf-8')
@@ -932,7 +933,7 @@ def write_code_map():
     out += ['## Функции', '',
             'Имена верхнего уровня каждого куска с номером строки. Куски одного модуля (`src/js/<модуль>/NN-*.js`) — одна область '
             'видимости: имя, объявленное в одном, видно во всех следующих.', '']
-    for mod in ('app', 'science', 'scene', 'data'):
+    for mod in ('app', 'science', 'scene', 'data', 'grimoire'):
         files = numbered(SRC / 'js' / mod, '.js')
         texts = {f: f.read_text(encoding='utf-8') for f in files}
         decl = {f: declared(t, '  ') for f, t in texts.items()}
@@ -1223,7 +1224,7 @@ def main():
         # after an update browsers fetch the new files instead of mixing them with cached old ones
         ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
         pages_js['v'] = {'labs': {v: ver(js / 'labs' / f'{v}.js') for v in bundles}, 'lib': {x: ver(js / 'labs' / f'lib-{x}.js') for x in libs},
-                         'deps': lib_deps, 'search': ver(js / 'search-index.js')}
+                         'deps': lib_deps, 'search': ver(js / 'search-index.js'), 'grimoire': ver(js / 'grimoire.js')}
         (js / 'pages.js').write_text(
             '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
             'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
@@ -1271,7 +1272,8 @@ def main():
         out = out.replace('<div class="chapters" id="chapters"></div>', typeset(chapters_home_html(nav)))
         out = out.replace('{{title}}', escape(title)).replace('{{description}}', attr(desc))
         out = rewrite_links(out, here)
-        scripts = '\n'.join(f'<script src="assets/js/{s}" defer></script>' for s in SCRIPTS if not (single and s == 'pages.js'))
+        # the theme «Гримуар» is fetched when it is switched on (01-theme.js); the one-file book carries it inline
+        scripts = '\n'.join(f'<script src="assets/js/{s}" defer></script>' for s in (SCRIPTS[:-1] + ['grimoire.js', 'app.js'] if single else SCRIPTS) if not (single and s == 'pages.js'))
         # a chapter whose pictures stand on the page from the start brings its picture files with it: they run right
         # after science.js, before the interface starts, so the pictures on the screen are drawn at DOMContentLoaded
         if not single and here in eager:
@@ -1356,6 +1358,7 @@ def write_pwa(out_dir, v, no_sw):
     found.update(f'assets/js/labs/{n}.js?v={h}' for n, h in v['labs'].items())
     found.update(f'assets/js/labs/lib-{n}.js?v={h}' for n, h in v['lib'].items())
     found.add(f'assets/js/search-index.js?v={v["search"]}')
+    found.add(f'assets/js/grimoire.js?v={v["grimoire"]}')
     ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
     icon = lambda n: f'assets/icons/{n}?v={ver(out_dir / "assets" / "icons" / n)}'
     icons = [icon(n) for n in ('icon-192.png', 'icon-512.png', 'icon-maskable-512.png')]

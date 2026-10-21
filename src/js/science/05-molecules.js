@@ -199,6 +199,9 @@
     }
     function draw() {
       if (!W) return;
+      // the theme «Гримуар» draws the same molecule, turned the same way, in the manner of the PS1 (grimoire.js)
+      const G = window.BasilGrimoire;
+      if (G && G.on) { G.drawMol(ctx, mol, P, R, W, H); return; }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
       const maxR = Math.max(...P.map(p => Math.hypot(p[0], p[1], p[2]))) || 1;

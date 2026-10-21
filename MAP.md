@@ -179,9 +179,9 @@
 
 **app.js**
 - `src/js/app/00-core.js` (128 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES, PEEK
-- `src/js/app/01-theme.js` (29 стр.): initTheme
+- `src/js/app/01-theme.js` (63 стр.): SKIN, initTheme
 - `src/js/app/02-router.js` (297 стр.): ENTRY, initRouter, initPagers, initScrollChrome
-- `src/js/app/03-peek.js` (263 стр.): PEEK_SKIP, initPeek, initPeekFrame
+- `src/js/app/03-peek.js` (264 стр.): PEEK_SKIP, initPeek, initPeekFrame
 - `src/js/app/03-sheets.js` (212 стр.): initToc, initSheets
 - `src/js/app/04-search-words.js` (137 стр.): AS_IS, LAYOUT_EN, SYNONYMS
 - `src/js/app/04-search.js` (428 стр.): SEARCH_GROUPS, SEARCH_SKIP, SEARCH_BOX, SEARCH_STOP, FOUND_KEY, RECENT_KEY, initSearch
@@ -218,7 +218,7 @@
 - `src/js/science/02-controls.js` (30 стр.)
 - `src/js/science/03-charts.js` (153 стр.)
 - `src/js/science/04-astronomy.js` (22 стр.): CITIES
-- `src/js/science/05-molecules.js` (312 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, TILT, MolViewer
+- `src/js/science/05-molecules.js` (315 стр.): FAM, MOLS, EXTRA, CHEMO, CHEMO_COLS, PAIRS, TILT, MolViewer
 - `src/js/science/06-labs-loader.js` (233 стр.): SELF, draw, HIDDEN, drawDue
 - `src/js/science/07-deep.js` (134 стр.): KIND, EASE, ANIMATED, initDeepAll, initDeep, initHomeMolecule, init
 
@@ -227,7 +227,7 @@
 - `src/js/scene/01-budget.js` (99 стр.): CALM, CALM_FPS
 - `src/js/scene/02-noise.js` (22 стр.)
 - `src/js/scene/03-wind.js` (22 стр.)
-- `src/js/scene/04-background.js` (499 стр.): SPR_L, initBackground
+- `src/js/scene/04-background.js` (504 стр.): SPR_L, initBackground
 - `src/js/scene/05-plant.js` (49 стр.)
 - `src/js/scene/06-plant-bitmaps.js` (382 стр.): LEAF_D, LEAF_BOX, LEAF_FILLS, Plant
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
@@ -245,8 +245,18 @@
 - `src/js/data/09-weather.js` (35 стр.): WEATHER
 - `src/js/data/10-experiments.js` (50 стр.): EXPERIMENTS
 
+**grimoire.js**
+- `src/js/grimoire/00-core.js` (34 стр.): BAYER
+- `src/js/grimoire/01-raster.js` (184 стр.): SHADED, ICO
+- `src/js/grimoire/02-textures.js` (116 стр.)
+- `src/js/grimoire/03-mol.js` (78 стр.): SHAPES, MOLBUF, drawMol
+- `src/js/grimoire/04-altar.js` (160 стр.): ALTAR_MOL
+- `src/js/grimoire/05-crypt.js` (54 стр.)
+- `src/js/grimoire/06-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
+- `src/js/grimoire/07-start.js` (45 стр.)
+
 ## Стили (src/css/)
 
-**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`
-**lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-kinds.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`
+**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`, `27-grimoire.css`
+**lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-kinds.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`, `16-grimoire.css`
 

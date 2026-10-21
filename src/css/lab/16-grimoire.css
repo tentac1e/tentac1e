@@ -1,0 +1,79 @@
+/* ================= the theme «Гримуар»: the science layer as pages of a grimoire =================
+   (the components of the interface: style/27-grimoire.css). A dive is a menu window tinted by its discipline,
+   its icon in an inventory slot; a model a framed slate; «Подробнее» a crypt box; the facts pinned notes. Charts
+   keep their shapes and lose their smoothing; the molecules are drawn by grimoire.js in low polygons */
+[data-skin="grimoire"] .deep-zone-label { font-family: var(--font-rune); font-style: normal; font-weight: 400; font-size: 2rem; color: var(--sci-chem); text-shadow: 2px 2px 0 var(--shade); }
+[data-skin="grimoire"] .deep-zone-label::after { height: 4px; background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAAGElEQVR42mPwsnH6D8IMMHBM2xTMgUkAAJNyCUKf5QyMAAAAAElFTkSuQmCC") left / 8px 4px repeat-x; image-rendering: pixelated; }
+[data-skin="grimoire"] .deep-all { border: 2px solid var(--sci-chem); border-radius: 3px; background: var(--surface); color: var(--sci-chem); font: 400 .8rem/1 var(--font-pixel); letter-spacing: .12em; box-shadow: 3px 3px 0 var(--shade); }
+[data-skin="grimoire"] .deep-all:hover { color: var(--ink); border-color: var(--rim); }
+
+/* a dive: the window of its discipline */
+[data-skin="grimoire"] .deep { border: 2px solid var(--rim); border-radius: 5px; background-color: var(--win-b); box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 5px 5px 0 var(--shade); }
+[data-skin="grimoire"] .deep:hover { border-color: var(--gold); }
+[data-skin="grimoire"] .deep[open] { box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 7px 7px 0 var(--shade); }
+[data-skin="grimoire"] .deep > summary { background-color: transparent; background-image: linear-gradient(165deg, color-mix(in srgb, var(--k) 16%, var(--win-b)), var(--win-b) 72%); background-size: auto; transition: none; }
+[data-skin="grimoire"] .deep > summary:hover { background-position: 0 0; }
+[data-skin="grimoire"] .deep-ico { border-radius: 3px; background: var(--bg); box-shadow: inset 0 0 0 2px var(--k), inset 0 0 0 4px var(--bg); transition: none; }
+[data-skin="grimoire"] .deep-ico::after { display: none; }
+[data-skin="grimoire"] .deep > summary:hover .deep-ico { transform: none; border-radius: 3px; }
+[data-skin="grimoire"] .deep-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 1.75rem); line-height: 1.04; text-shadow: 2px 2px 0 var(--shade); }
+[data-skin="grimoire"] .deep-sub { font-size: .98rem; color: var(--ink-2); }
+[data-skin="grimoire"] .deep-plus { border-radius: 0; border: 2px solid var(--k); background: var(--bg); transition: transform .3s steps(3), background-color .3s steps(3); }
+[data-skin="grimoire"] .deep-plus::before, [data-skin="grimoire"] .deep-plus::after { border-radius: 0; }
+[data-skin="grimoire"] .deep-fact { border-radius: 0; border-left: 4px solid var(--k); background: var(--bg); font-family: var(--font-body); font-style: italic; color: var(--ink); }
+[data-skin="grimoire"] .deep-body { border-top: 2px dashed var(--rim-d); background-color: var(--win-b); background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAOklEQVR42mNgQAAFKOaAYg0oJqzAAIoFoNgCiiWgmLACHijWgWIWKFaBYsIKbKBYBopNoFgEivErAABw9QeBoOZpAwAAAABJRU5ErkJggg=="); background-size: 8px 8px; }
+[data-skin="grimoire"] .deep-text p { color: var(--ink-2); }
+[data-skin="grimoire"] .deep-facts li, [data-skin="grimoire"] .faq-here { border-radius: 3px; }
+
+/* the stone tablet of an equation, the figures in the margin */
+[data-skin="grimoire"] .eq { border-radius: 3px; border: 2px solid var(--rim-d); background: var(--surface-2); box-shadow: inset 0 0 0 2px var(--bg); }
+[data-skin="grimoire"] .eq-label { font-family: var(--font-pixel); font-weight: 400; color: var(--gold); }
+[data-skin="grimoire"] .eq p { font-family: var(--font-mono); font-size: 1.08rem; font-weight: 600; }
+[data-skin="grimoire"] .num-note { border-left-width: 4px; }
+[data-skin="grimoire"] .num-note b { font-family: var(--font-display); font-size: 1.7rem; text-shadow: 2px 2px 0 var(--shade); }
+[data-skin="grimoire"] .margin-note { font-family: var(--font-hand); rotate: 0deg; }
+
+/* «Подробнее»: a crypt box inside the dive */
+[data-skin="grimoire"] .deeper { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--bg); box-shadow: 3px 3px 0 var(--shade); }
+[data-skin="grimoire"] .deeper-k { font-family: var(--font-pixel); font-weight: 400; letter-spacing: .14em; }
+[data-skin="grimoire"] .deeper-k::before { content: "▼▼ "; }
+[data-skin="grimoire"] .deeper-t { font-family: var(--font-display); font-weight: 700; font-style: normal; font-size: 1.3rem; }
+[data-skin="grimoire"] .deeper-plus { border-radius: 0; border-style: solid; }
+[data-skin="grimoire"] .deep-src-h { font-family: var(--font-pixel); font-weight: 400; }
+
+/* a model: a framed slate in the colour of its discipline */
+[data-skin="grimoire"] .lab-tool { border: 2px solid var(--k); border-radius: 4px; background-color: var(--surface); background-image: none; box-shadow: inset 0 0 0 2px var(--bg), 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] .lab-tool:empty { background-image: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--k) 10%, transparent) 50%, transparent 70%); background-size: 200% 100%; }
+[data-skin="grimoire"] .lab-kicker { font-family: var(--font-pixel); font-weight: 400; font-size: .72rem; letter-spacing: .14em; }
+[data-skin="grimoire"] .lab-title { font-family: var(--font-display); font-weight: 700; font-size: 1.55rem; text-shadow: 2px 2px 0 var(--shade); }
+[data-skin="grimoire"] .lab-label { font-family: var(--font-pixel); font-weight: 400; font-size: .74rem; letter-spacing: .12em; color: var(--gold); }
+[data-skin="grimoire"] .lab-chips .chip { padding: .38em .85em .38em 26px; font-size: 1rem; }
+[data-skin="grimoire"] .lab-tool .chip[aria-pressed="true"], [data-skin="grimoire"] .lab-tool .seg button[aria-pressed="true"] { background: color-mix(in srgb, var(--k) 30%, var(--bg)); border-color: var(--k); color: var(--ink); }
+[data-skin="grimoire"] .lab-tool input[type="range"].range::-webkit-slider-runnable-track { background: var(--bg-deep); }
+[data-skin="grimoire"] .lab-tool input[type="range"].range::-moz-range-track { background: var(--bg-deep); }
+[data-skin="grimoire"] .lab-tool input[type="range"].range::-webkit-slider-thumb { background: var(--k); }
+[data-skin="grimoire"] .lab-tool input[type="range"].range::-moz-range-thumb { background: var(--k); }
+/* the charts of the models: the same lines, without their smoothing — the stairs of the console's pixels */
+[data-skin="grimoire"] .lab-tool svg :is(path, line, polyline, polygon, rect) { shape-rendering: crispEdges; }
+[data-skin="grimoire"] .mol-stage, [data-skin="grimoire"] .mol-canvas { border-radius: 3px; background: var(--bg-deep); box-shadow: inset 0 0 0 2px var(--rim-d); image-rendering: pixelated; }
+
+/* «Любопытно»: notes pinned in the crypt */
+[data-skin="grimoire"] .sci-note { border: 2px solid var(--rim-d); border-radius: 3px; background: var(--surface); box-shadow: 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] .sci-note::after { border-radius: 0; background: color-mix(in srgb, var(--k) 40%, var(--bg)); }
+[data-skin="grimoire"] .sci-note-k .hand { font-family: var(--font-rune); }
+[data-skin="grimoire"] .sci-note-link { font-family: var(--font-mono); font-size: .95rem; }
+
+/* recipes, the home page's science, the plates of the way back */
+[data-skin="grimoire"] .recipe-card { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface); box-shadow: 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] .recipe-card[open] { border-color: var(--rim); }
+[data-skin="grimoire"] .science-home { border: 2px solid var(--rim); border-radius: 5px; background-color: var(--win-b); background-image: linear-gradient(165deg, var(--win-a), var(--win-b) 74%); box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 5px 5px 0 var(--shade); }
+[data-skin="grimoire"] .sh-kinds li { border-radius: 3px; border-width: 2px; }
+[data-skin="grimoire"] .sh-mol figcaption b { font-family: var(--font-display); font-weight: 700; }
+[data-skin="grimoire"] .resume-pill, [data-skin="grimoire"] .back-pill { border: 2px solid var(--rim); border-radius: 4px; background: var(--win-b); box-shadow: 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] .resume-go .ico, [data-skin="grimoire"] .panel-next .ico { border-radius: 2px; background: var(--blood); color: var(--ink); }
+[data-skin="grimoire"] .panel-next { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface); box-shadow: 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] .panel-next small { font-family: var(--font-pixel); color: var(--gold); }
+[data-skin="grimoire"] .resume-mark i { border-radius: 0; background: color-mix(in srgb, var(--blood) 40%, transparent); }
+[data-skin="grimoire"] .resume-mark i.is-bar { border-radius: 0; background: var(--blood); }
+/* no soft light under the mouse: the crypt has candles, not a lamp */
+[data-skin="grimoire"] .q-card, [data-skin="grimoire"] .tool, [data-skin="grimoire"] .rule, [data-skin="grimoire"] .world-card { --hover-light: transparent; }
