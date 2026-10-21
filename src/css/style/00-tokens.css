@@ -303,3 +303,80 @@
   --radius-sm: 4px;
   color-scheme: dark;
 }
+/* The skin «Друид» (data-skin="druid"): the guide as a night grove of a northern game — moss, bark and birch bark,
+   amber light of a fire, the cold light of runes on the stones, rowan berries for danger. It always lies over the
+   dark theme, so a token it leaves alone keeps its dark value. Windows of bark in a frame of bound twigs, soft deep
+   shadows; a rough hand for titles, labels and numbers (Underdog), a calm text face (Philosopher), notes in a
+   quick hand (Caveat), runes and ogham for ornament (28-druid.css dresses the components) */
+:root[data-skin="druid"] {
+  --bg: #0B120D;
+  --bg-deep: #070C09;
+  --surface: #142019;
+  --surface-2: #1B2A20;
+  --glass: rgba(14, 22, 17, .9);
+  --glass-strong: rgba(14, 22, 17, .97);
+  --ink: #E8E2CF;
+  --ink-2: #BDBDA5;
+  --ink-3: #8F9581;
+  --line: #2C3D2D;
+  --line-strong: #3F563F;
+  --basil: #8FC85A;
+  --basil-deep: #B5E07E;
+  --on-basil: #0B120D;
+  --leaf: #78A848;
+  --leaf-soft: #1D2F21;
+  --opal: #B99ADB;
+  --opal-soft: #241F2E;
+  --oil: #E2A43B;
+  --oil-bright: #F0BD5C;
+  --oil-soft: #2E2410;
+  --danger: #D9473A;
+  --danger-soft: #3A1612;
+  --n: #8FC85A;
+  --p: #B99ADB;
+  --k: #E2A43B;
+  --stem: #4E8634;
+  --soil: #241A12;
+  --clay: #8C4A2E;
+  --clay-rim: #A85E3A;
+  --water: #173A3A;
+  --root: #DDD6BE;
+  --halo-a: rgba(143, 232, 198, .12);
+  --halo-b: rgba(226, 164, 59, .05);
+
+  /* the skin's own: bark and its dark, birch, moss, amber, rowan, the light of the runes, the fog of the grove */
+  --bark: #6B4A30;
+  --bark-d: #3A281B;
+  --bark-hi: #8A6440;
+  --birch: #E8E2CF;
+  --moss: #78A848;
+  --moss-d: #2F4A26;
+  --amber: #E2A43B;
+  --berry: #C9382D;
+  --rune: #8FE8C6;
+  --rune-glow: rgba(143, 232, 198, .45);
+  --fog: #1C2B22;
+  --scrim: rgba(11, 18, 13, .74);
+  --shade: rgba(0, 0, 0, .55);
+  --stage-vig: rgba(2, 6, 4, .6);
+
+  --shadow-rgb: 0 0 0;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, .35), 0 8px 20px -8px rgba(0, 0, 0, .55);
+  --shadow-float: 0 4px 12px rgba(0, 0, 0, .4), 0 22px 44px -16px rgba(0, 0, 0, .7);
+  --shadow-lift: 0 6px 16px rgba(0, 0, 0, .45), 0 30px 60px -20px rgba(0, 0, 0, .75);
+
+  --font-display: "Underdog", "Philosopher", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Philosopher", "Trebuchet MS", system-ui, sans-serif;
+  --font-mono: "Underdog", "Philosopher", ui-monospace, monospace;
+  --font-hand: "Caveat", "Caveat Fallback", cursive;
+  --font-title: "Underdog", "Philosopher", system-ui, sans-serif;
+  --font-label: "Underdog", "Philosopher", system-ui, sans-serif;
+  --font-rune: "Noto Sans Runic", "Segoe UI Historic", sans-serif;
+  --font-ogham: "Noto Sans Ogham", "Segoe UI Historic", sans-serif;
+
+  --radius-leaf: 14px 4px 14px 4px;
+  --radius: 8px;
+  --radius-sm: 6px;
+  color-scheme: dark;
+}
+

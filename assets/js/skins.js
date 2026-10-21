@@ -47,7 +47,7 @@ window.BasilSkins = (() => {
      dither — the same low polygons, lit and fogged, as a game of today draws them */
   class Raster {
     constructor(canvas, o) {
-      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1 }, o);
+      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1, maxPx: 0 }, o);
       this.c = canvas;
       // the console's colour is cut down by reading the pixels back; a smooth picture is never read and stays on the GPU
       this.x = canvas.getContext('2d', this.smooth ? { alpha: false } : { willReadFrequently: true });
@@ -55,10 +55,16 @@ window.BasilSkins = (() => {
       this.unit = 1;
     }
     // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across), or, smooth,
-    // scale canvas pixels a CSS pixel. unit — the canvas pixels of one console pixel (the size of a spark, a dot)
+    // scale canvas pixels a CSS pixel, but no more than maxPx in all (a wide head of a chapter is drawn a little under
+    // the screen's resolution and drawn up smooth: the cost of a frame goes with its pixels). unit — the canvas pixels
+    // of one console pixel (the size of a spark, a dot)
     size() {
       const cw = this.c.clientWidth || 300, ch = this.c.clientHeight || 200;
-      if (this.smooth) { this.unit = 2.2 * this.scale; return this.sizeTo(Math.round(cw * this.scale), Math.round(ch * this.scale)); }
+      if (this.smooth) {
+        const s = this.maxPx ? Math.min(this.scale, Math.sqrt(this.maxPx / (cw * ch))) : this.scale;
+        this.unit = 2.2 * s;
+        return this.sizeTo(Math.round(cw * s), Math.round(ch * s));
+      }
       const s = Math.max(this.px, cw / this.maxW);
       return this.sizeTo(Math.round(cw / s), Math.round(ch / s));
     }
@@ -126,26 +132,42 @@ window.BasilSkins = (() => {
         const g = q => { const dx = q[0] - cx, dy = q[1] - cy, L = Math.hypot(dx, dy) || 1; return [q[0] + dx / L * 0.6, q[1] + dy / L * 0.6]; };
         const A = g(a), B = g(b), C = g(c);
         if (o.tex) {
-          x.save();
-          x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath(); x.clip();
+          // the texture's pixels onto the triangle: the affine map that takes its uv to the screen
           const w = o.tex.width, h = o.tex.height, uv = o.uv;
           const u0 = uv[0][0] * w, v0 = uv[0][1] * h, u1 = uv[1][0] * w, v1 = uv[1][1] * h, u2 = uv[2][0] * w, v2 = uv[2][1] * h;
           const det = (u1 - u0) * (v2 - v0) - (u2 - u0) * (v1 - v0);
           if (det) {
             const ta = ((b[0] - a[0]) * (v2 - v0) - (c[0] - a[0]) * (v1 - v0)) / det, tb = ((b[1] - a[1]) * (v2 - v0) - (c[1] - a[1]) * (v1 - v0)) / det;
             const tc = ((c[0] - a[0]) * (u1 - u0) - (b[0] - a[0]) * (u2 - u0)) / det, td = ((c[1] - a[1]) * (u1 - u0) - (b[1] - a[1]) * (u2 - u0)) / det;
+            const M = [ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0];
+            // smooth: every texture lit and fogged ahead, in fine steps of light (a blend of multiplying over a large
+            // face costs more than the rest of the frame where the canvas is drawn without the graphics card); the
+            // console: only the cut-outs, the rest multiplied by its light here
+            const ahead = this.smooth ? (o.cut || o.add == null) : o.cut;
+            const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10) : o.tex;
             if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
-            x.setTransform(ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0);
-            x.drawImage(o.cut && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F) : o.tex, 0, 0);
-            x.setTransform(1, 0, 0, 1, 0, 0);
+            x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath();
+            if (this.smooth) {
+              // smooth: the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many
+              // times cheaper where the canvas is drawn without the graphics card
+              const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
+              pat.setTransform(new DOMMatrix(M));
+              x.fillStyle = pat;
+              x.fill();
+            } else {
+              x.save();
+              x.clip();
+              x.setTransform(...M);
+              x.drawImage(src, 0, 0);
+              x.restore();
+            }
             x.globalAlpha = 1;
-            if (o.add == null && !o.cut) {
+            if (o.add == null && !ahead) {
               if (t.l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, t.l[0] * 255) | 0},${Math.min(255, t.l[1] * 255) | 0},${Math.min(255, t.l[2] * 255) | 0})`; x.fill(); }
               if (f > 0.01) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; x.fill(); }
             }
             x.globalCompositeOperation = 'source-over';
           }
-          x.restore();
         } else {
           const col = o.col, l = t.l || [1, 1, 1];
           const r = col[0] * l[0] * (1 - f) + F[0] * f, gg = col[1] * l[1] * (1 - f) + F[1] * f, bb = col[2] * l[2] * (1 - f) + F[2] * f;
@@ -169,21 +191,22 @@ window.BasilSkins = (() => {
     }
   }
 
-  // a cut-out texture (a leaf, a flame) lit and fogged, kept for the next triangle in the same light
+  // a texture lit and fogged (a cut-out one — a leaf, a flame — keeps its outline), kept for the next triangle in the
+  // same light: the light in k steps to one
   const SHADED = new Map();
   let texId = 0;
-  function shaded(tx, l, f, F) {
-    const q = v => Math.round(Math.min(1.2, v) * 10);
+  function shaded(tx, l, f, F, k = 10) {
+    const q = v => Math.round(Math.min(1.2, v) * k);
     if (!tx.psxId) tx.psxId = ++texId;
-    const key = tx.psxId + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
+    const key = tx.psxId + ':' + k + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
     let c = SHADED.get(key);
     if (c) return c;
-    if (SHADED.size > 600) SHADED.clear();
+    if (SHADED.size > 900) SHADED.clear();
     c = doc.createElement('canvas');
     c.width = tx.width; c.height = tx.height;
     const x = c.getContext('2d');
     x.drawImage(tx, 0, 0);
-    if (l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, q(l[0]) * 25.5) | 0},${Math.min(255, q(l[1]) * 25.5) | 0},${Math.min(255, q(l[2]) * 25.5) | 0})`; x.fillRect(0, 0, c.width, c.height); }
+    if (l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, q(l[0]) * 255 / k) | 0},${Math.min(255, q(l[1]) * 255 / k) | 0},${Math.min(255, q(l[2]) * 255 / k) | 0})`; x.fillRect(0, 0, c.width, c.height); }
     const ff = Math.round(f * 12) / 12;
     if (ff > 0) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${ff})`; x.fillRect(0, 0, c.width, c.height); }
     x.globalCompositeOperation = 'destination-in';
@@ -221,12 +244,14 @@ window.BasilSkins = (() => {
     const f = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]];
     return { v, f };
   })();
-  function ball(R, c, r, o) { ICO.f.forEach(([a, b, d]) => R.tri(add(c, mul(ICO.v[a], r)), add(c, mul(ICO.v[b], r)), add(c, mul(ICO.v[d], r)), { ...o, ctr: c })); }
+  // eight faces instead of twenty (o.lo): a berry, a pebble, a pad of moss — small enough that nobody counts its faces
+  const OCT = { v: [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]], f: [[0, 2, 4], [4, 2, 1], [1, 2, 5], [5, 2, 0], [0, 4, 3], [4, 1, 3], [1, 5, 3], [5, 0, 3]] };
+  function ball(R, c, r, o) { const M = o.lo ? OCT : ICO; M.f.forEach(([a, b, d]) => R.tri(add(c, mul(M.v[a], r)), add(c, mul(M.v[b], r)), add(c, mul(M.v[d], r)), { ...o, ctr: c })); }
   // a ball stretched along its own axes (r: three radii) and turned by yaw about the vertical
   function egg(R, c, r, yaw, o) {
-    const cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const cy = Math.cos(yaw), sy = Math.sin(yaw), M = o.lo ? OCT : ICO;
     const P = v => { const x = v[0] * r[0], z = v[2] * r[2]; return [c[0] + x * cy - z * sy, c[1] + v[1] * r[1], c[2] + x * sy + z * cy]; };
-    ICO.f.forEach(([a, b, d]) => R.tri(P(ICO.v[a]), P(ICO.v[b]), P(ICO.v[d]), { ...o, ctr: c }));
+    M.f.forEach(([a, b, d]) => R.tri(P(M.v[a]), P(M.v[b]), P(M.v[d]), { ...o, ctr: c }));
   }
   function rod(R, p, q, r, o, n = 4) {
     const d = norm(sub(q, p)), up = Math.abs(d[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
@@ -520,10 +545,11 @@ window.BasilSkins = (() => {
   /* the chapter's own scene in the middle (05-grimoire-*.js,             */
   /* 06-druid-*.js)                                                       */
   /* ------------------------------------------------------------------ */
-  /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t) }): the options of its
-     rasterizer, its textures, its key light, the three colours of its sky, what its scenes have unless they say
-     otherwise, make — what stands round every scene of it ({ draw(t), lights(t), fx(t, F) }: a floor, candles, trees),
-     post — what is done to the finished picture (the console's colours, a glow).
+  /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t), overlay(holder, R) }):
+     the options of its rasterizer, its textures, its key light, the three colours of its sky, what its scenes have
+     unless they say otherwise, make — what stands round every scene of it ({ draw(t), lights(t), fx(t, F) }: a floor,
+     candles, trees), post — what is done to the finished picture (the console's colours, a glow), overlay — what it
+     lays over the canvas in the page (a layer of the glow, blended by the browser).
      A scene is scene(skin, view, S => ({ … })): S.R — the rasterizer, S.T — the textures, S.ang — where the camera
      stands (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
      tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
@@ -600,6 +626,45 @@ window.BasilSkins = (() => {
     }
   }
 
+  // a sprout at the base b, grown g (0…1), of the size s: the hook, the two seed leaves opening, the first true pair,
+  // the second
+  function sprout(R, T, b, g, s, t) {
+    if (g <= 0) return;
+    const hook = 1 - smooth((g - 0.12) / 0.2), open = smooth((g - 0.3) / 0.2);
+    const h = s * (0.06 + 0.28 * smooth(g / 0.45) + 0.24 * smooth((g - 0.5) / 0.5));
+    const mid = [b[0], b[1] + h * 0.6, b[2]];
+    // the hook: the top of the stem bent down, straightening as the seed leaves come out
+    const bend = hook * 2.3, tip = add(mid, [Math.sin(bend) * h * 0.4, Math.cos(bend) * h * 0.4, 0]);
+    rod(R, b, mid, 0.018 * s, { col: [150, 190, 96] });
+    rod(R, mid, tip, 0.015 * s, { col: [150, 190, 96] });
+    const sw = Math.sin(t * 1.4) * 0.06;
+    for (let j = 0; j < 2; j++) {
+      const yaw = j * Math.PI + 0.4 + sw, pitch = (1 - open) * 1.25 + hook * 1.6;
+      const F = norm([Math.cos(yaw) * Math.cos(pitch), Math.sin(pitch) * (hook > 0.5 ? -1 : 1), Math.sin(yaw) * Math.cos(pitch)]);
+      leaf(R, tip, F, s * 0.12 * (0.5 + 0.5 * open), T.leafLemon, { w: 0.55, curl: 0 });
+    }
+    // the true leaves: the first pair across the seed leaves, the second across the first
+    [[0.5, 0.2, 0], [0.78, 0.15, Math.PI / 2]].forEach(([g0, len, turn]) => {
+      const k = smooth((g - g0) / 0.2);
+      if (k <= 0) return;
+      for (let j = 0; j < 2; j++) {
+        const yaw = turn + j * Math.PI + 0.4 + Math.PI / 2 + sw;
+        leaf(R, tip, norm([Math.cos(yaw), 0.35, Math.sin(yaw)]), s * len * k, T.leaf, { w: 0.4 });
+      }
+    });
+  }
+
+  // a molecule of the aroma, small and glowing: its atoms at the centre c, turned by yaw; a — how much of it is seen;
+  // pal — its colours (the bonds, oxygen, carbon) and lo — atoms of eight faces: violet in «Гримуар», berries and twigs
+  // in «Друид»
+  const ESSENCE = { bond: [170, 120, 230], O: [240, 70, 60], C: [214, 190, 255] };
+  function essence(R, mol, c, yaw, k = 1, a = null, pal = ESSENCE) {
+    const ca = Math.cos(yaw), sa = Math.sin(yaw);
+    const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [c[0] + q[0] * 0.15 * k, c[1] + q[1] * 0.135 * k + q[2] * 0.03 * k, c[2] + q[2] * 0.15 * k]; });
+    mol.bonds.forEach(([i, j]) => rod(R, MP[i], MP[j], 0.012 * k, { col: pal.bond, emis: true, add: a }, 3));
+    mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? pal.O : pal.C, emis: true, add: a, lo: pal.lo }));
+  }
+
   // sparks and halos over the finished picture, in the raster's own pixels: square on the console, round when smooth
   function fxKit(R) {
     const x = R.x, u = R.unit, round = R.smooth;
@@ -650,6 +715,8 @@ window.BasilSkins = (() => {
     host.insertBefore(holder, host.firstChild);
     const T = W.textures();
     const R = new Raster(cv, W.raster());
+    // what the world lays over its canvas (a glow the page itself adds over it)
+    if (W.overlay) W.overlay(holder, R);
     const S = { R, T, view, ang: 0.6 };
     const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);
@@ -1074,32 +1141,6 @@ window.BasilSkins = (() => {
   scene('grimoire', 'posadka', S => {
     const { R, T } = S, CYCLE = 10, EARTH = 0.36;
     let sown = 0, seed = null, burst = -1;
-    // a sprout at the base b, grown g (0…1), of the size s
-    function sprout(b, g, s, t) {
-      if (g <= 0) return;
-      const hook = 1 - smooth((g - 0.12) / 0.2), open = smooth((g - 0.3) / 0.2);
-      const h = s * (0.06 + 0.28 * smooth(g / 0.45) + 0.24 * smooth((g - 0.5) / 0.5));
-      const mid = [b[0], b[1] + h * 0.6, b[2]];
-      // the hook: the top of the stem bent down, straightening as the seed leaves come out
-      const bend = hook * 2.3, tip = add(mid, [Math.sin(bend) * h * 0.4, Math.cos(bend) * h * 0.4, 0]);
-      rod(R, b, mid, 0.018 * s, { col: [150, 190, 96] });
-      rod(R, mid, tip, 0.015 * s, { col: [150, 190, 96] });
-      const sw = Math.sin(t * 1.4) * 0.06;
-      for (let j = 0; j < 2; j++) {
-        const yaw = j * Math.PI + 0.4 + sw, pitch = (1 - open) * 1.25 + hook * 1.6;
-        const F = norm([Math.cos(yaw) * Math.cos(pitch), Math.sin(pitch) * (hook > 0.5 ? -1 : 1), Math.sin(yaw) * Math.cos(pitch)]);
-        leaf(R, tip, F, s * 0.12 * (0.5 + 0.5 * open), T.leafLemon, { w: 0.55, curl: 0 });
-      }
-      // the true leaves: the first pair across the seed leaves, the second across the first
-      [[0.5, 0.2, 0], [0.78, 0.15, Math.PI / 2]].forEach(([g0, len, turn]) => {
-        const k = smooth((g - g0) / 0.2);
-        if (k <= 0) return;
-        for (let j = 0; j < 2; j++) {
-          const yaw = turn + j * Math.PI + 0.4 + Math.PI / 2 + sw;
-          leaf(R, tip, norm([Math.cos(yaw), 0.35, Math.sin(yaw)]), s * len * k, T.leaf, { w: 0.4 });
-        }
-      });
-    }
     const CUPS = [...Array(6)].map((_, i) => { const q = i / 6 * Math.PI * 2 + 0.26; return [Math.cos(q) * 1.55, Math.sin(q) * 1.55]; });
     return {
       glow: [255, 150, 50], rad: 4.6, near: 3.7, look: [0, 0.6, 0], still: 6.2,
@@ -1122,12 +1163,12 @@ window.BasilSkins = (() => {
           egg(R, seed, [0.05, 0.035, 0.035], q, { col: [120, 78, 44] });
         }
         const g = (u - 2.4) / 5.6;
-        if (u < 9.5) sprout([0, EARTH - 0.04, 0], Math.min(1, g), 1.7, t);
+        if (u < 9.5) sprout(R, T, [0, EARTH - 0.04, 0], Math.min(1, g), 1.7, t);
         burst = u >= 9.3 ? (u - 9.3) / 0.7 : -1;
         // the cups of peat around: each seedling a step behind the one before it
         CUPS.forEach(([x, z], i) => {
           prism(R, x, z, 0, 0.2, 0.15, 0.19, 6, { col: [110, 70, 44] }, [52, 34, 24]);
-          sprout([x, 0.19, z], ((t / CYCLE + i / 6) % 1) * 1.25, 0.75, t + i);
+          sprout(R, T, [x, 0.19, z], ((t / CYCLE + i / 6) % 1) * 1.25, 0.75, t + i);
         });
       },
       fx(t, F) {
@@ -1561,13 +1602,6 @@ window.BasilSkins = (() => {
     box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
     return 1.08;
   }
-  // a molecule of the aroma, small and glowing: its atoms at the centre c, turned by yaw; a — how much of it is seen
-  function essence(R, mol, c, yaw, k = 1, a = null) {
-    const ca = Math.cos(yaw), sa = Math.sin(yaw);
-    const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [c[0] + q[0] * 0.15 * k, c[1] + q[1] * 0.135 * k + q[2] * 0.03 * k, c[2] + q[2] * 0.15 * k]; });
-    mol.bonds.forEach(([i, j]) => rod(R, MP[i], MP[j], 0.012 * k, { col: [170, 120, 230], emis: true, add: a }, 3));
-    mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? [240, 70, 60] : [214, 190, 255], emis: true, add: a }));
-  }
   // the signs of alchemy, pixel by pixel (16 × 16, nothing around them): mercury, sulphur, salt, saturn, earth, air
   function glyphTex(kind, col) {
     return tex(16, 16, t => {
@@ -1581,6 +1615,942 @@ window.BasilSkins = (() => {
       if (kind === 5) { line(2, 13, 8, 2, col); line(8, 2, 14, 13, col); line(2, 13, 14, 13, col); line(4, 9, 12, 9, col); }
     });
   }
+  // Прищипка и сбор: куст на старом пне, его верхушка растёт; золотой серп друида кружит рядом, как молодой месяц,
+  // спускается и срезает верхушку над парой листьев. Верхушка падает в мох, а из пазух той пары выходят два побега —
+  // куст растёт вширь, а не вверх. Потом мох забирает срезанное, и всё снова. Касание — взмах серпа
+  scene('druid', 'formirovka', S => {
+    const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
+    let off = 0, cut = [0, 1.6, 0], sick = [1, 2, 0], tip = null, phase = 0, top = 0.5;
+    const at = t => (((t + off) % CYCLE) + CYCLE) % CYCLE;
+    // the main stem: three nodes with their pairs, the cut above the third
+    const NODES = [[0.2, 0.42, 0.12], [0.42, 0.36, 0], [0.62, 0.3, -0.12]];
+    const pair = (R2, c, len, pitch, k, t, g = 1) => {
+      for (let j = 0; j < 2; j++) {
+        const yaw = k * Math.PI / 2 + j * Math.PI + 0.3 + Math.sin(t * 1.3 + k + j) * 0.05;
+        leaf(R2, c, norm([Math.cos(yaw) * Math.cos(pitch), -Math.sin(pitch) * 0.6 + 0.1, Math.sin(yaw) * Math.cos(pitch)]), len * s * g, T.leaf);
+      }
+    };
+    // the top above the cut: a stem and two pairs, grown g
+    const topShoot = (R2, c, g, t) => {
+      if (g <= 0) return;
+      const h = 0.34 * s * g;
+      rod(R2, c, [c[0], c[1] + h, c[2]], 0.02 * s, { col: [86, 146, 56] });
+      pair(R2, [c[0], c[1] + h * 0.45, c[2]], 0.26, -0.15, 3, t, g);
+      pair(R2, [c[0], c[1] + h * 0.95, c[2]], 0.16, -0.6, 4, t, g);
+    };
+    return {
+      near: 4.4, look: [0, 1.15, 0], still: 7.5, clear: 1.6,
+      tap(t) { const u = at(t); if (u > 1.5 && u < SW - 0.6) off += SW - 0.6 - u; },
+      tick(t) {
+        const u = at(t);
+        phase = u;
+        // the sickle: round the bush, then down through the stem and away
+        const idle = [Math.cos(t * 0.6) * 1.05, cut[1] + 0.45 + Math.sin(t * 1.1) * 0.08, Math.sin(t * 0.6) * 1.05];
+        const w = smooth((u - SW + 0.9) / 0.6) * (1 - smooth((u - SW - 0.3) / 0.8)), k = smooth((u - SW + 0.3) / 0.6);
+        sick = mix3(idle, mix3(add(cut, [-0.5, 0.12, 0.05]), add(cut, [0.5, 0.02, -0.05]), k), w);
+        tip = { w, spin: t * 1.4 * (1 - w) };
+      },
+      lights() { return [{ p: add(sick, [0, 0.25, 0.2]), col: [1, 0.86, 0.5], i: 1.1, fall: 0.5 }]; },
+      draw(t) {
+        top = stump(R, T, 0, 0, 0.5, 0.5);
+        disc(R, 0, 0, top + 0.004, 0.36, 9, { col: [58, 40, 28] });
+        const b = [0, top, 0], u = phase;
+        cut = [0, top + 0.62 * 0.85 * s + 0.02, 0];
+        rod(R, b, cut, 0.03 * s, { col: [70, 128, 48] });
+        NODES.forEach(([f, len, pitch], k) => pair(R, [0, top + 0.85 * s * f, 0], len, pitch, k, t));
+        // the top: growing before the cut, falling after it, lying in the moss till the moss takes it
+        if (u < SW) topShoot(R, cut, smooth(u / (SW - 0.8)), t);
+        else if (u < 10.6) {
+          const f = smooth((u - SW) / 1.6), land = [0.95, 0.06, 0.4];
+          topShoot(turned(R, add(cut, [0, 0.15, 0]), [0.3, 0, 1], -f * 1.45, mul(sub(land, cut), f)), cut, 1 - smooth((u - 9.4) / 1.2), t);
+        }
+        // the two new shoots from the axils of the last pair
+        const gs = u < SW ? 0 : u < 10.6 ? smooth((u - SW - 0.4) / 3.2) : 1 - smooth((u - 10.6) / 1.2);
+        if (gs > 0) for (let j = 0; j < 2; j++) {
+          const yaw = Math.PI + j * Math.PI + 0.3, d = norm([Math.cos(yaw) * 0.6, 0.8, Math.sin(yaw) * 0.6]);
+          const base = [0, top + 0.85 * s * 0.62, 0], end = add(base, mul(d, 0.34 * s * gs));
+          rod(R, base, end, 0.018 * s, { col: [92, 150, 60] });
+          for (let i = 0; i < 2; i++) { const q = yaw + Math.PI / 2 + i * Math.PI; leaf(R, end, norm([Math.cos(q), 0.25, Math.sin(q)]), 0.22 * s * gs, T.leaf); }
+          leaf(R, end, norm(add(d, [0, 0.4, 0])), 0.12 * s * gs, T.leafLemon, { w: 0.4 });
+        }
+        // the sickle: a crescent of gold, its edge bright, a haft of oak bound with a cord
+        const q = tip.spin, U = [Math.cos(q), 0, Math.sin(q)], V = norm(mix3([0, 1, 0], [-Math.sin(q), 0, Math.cos(q)], tip.w * 0.85));
+        const P = (a, r, o) => add(add(sick, mul(U, Math.cos(a) * r + o)), mul(V, Math.sin(a) * r));
+        for (let i = 0; i < 9; i++) {
+          const a0 = -0.4 + i / 9 * 2.9, a1 = -0.4 + (i + 1) / 9 * 2.9;
+          quad(R, P(a0, 0.4, 0), P(a1, 0.4, 0), P(a1, 0.32, 0.09), P(a0, 0.32, 0.09), { col: [226, 180, 76], ds: true });
+          rod(R, P(a0, 0.4, 0), P(a1, 0.4, 0), 0.012, { col: [255, 236, 170], emis: true, nofog: true }, 3);
+        }
+        const end = P(2.5, 0.36, 0.045), dir = norm(sub(end, P(2.3, 0.36, 0.045)));
+        rod(R, end, add(end, mul(dir, 0.3)), 0.032, { col: [110, 78, 50] });
+        rod(R, add(end, mul(dir, 0.04)), add(end, mul(dir, 0.1)), 0.036, { col: [196, 176, 132] });
+      },
+      fx(t, F) {
+        const u = phase;
+        F.halo(sick, 0.55, 'rgba(255,220,140,.3)', 'rgba(255,220,140,0)');
+        // the cut: sap and bits of leaf flying
+        if (u > SW - 0.05 && u < SW + 0.7) for (let i = 0; i < 14; i++) {
+          const l = (u - SW + 0.05) / 0.75, q = i * 0.45;
+          F.dot([cut[0] + Math.cos(q) * l * 0.5, cut[1] + Math.sin(i * 1.7) * l * 0.3 + l * 0.1, cut[2] + Math.sin(q) * l * 0.4], `rgba(190,240,120,${1 - l})`, 2);
+        }
+        // the moss taking the cut top: a cold light going up out of it
+        if (u > 9.2 && u < 10.8) for (let i = 0; i < 14; i++) { const l = (u - 9.2) / 1.6, q = i * 0.9; F.dot([0.95 + Math.cos(q) * 0.2, 0.05 + l * 0.6 + (i % 4) * 0.05, 0.4 + Math.sin(q) * 0.2], `rgba(143,232,198,${Math.sin(l * Math.PI)})`, 1.6); }
+      }
+    };
+  });
+  // Гидропоника: родник между двух камней наполняет тихую заводь; посреди неё плавает коряга, на ней растёт куст, и его
+  // белые корни висят в прозрачной воде. Со дна поднимаются пузырьки, по воде расходятся круги. Касание — круги
+  // и пузырьки
+  scene('druid', 'gidro', S => {
+    const { R, T } = S, POOL = 1.15, SP = -2.5;
+    // the spring: where the water falls in, the two stones on either side of it
+    const IN = [Math.cos(SP) * POOL * 0.92, Math.sin(SP) * POOL * 0.92], TOP = [Math.cos(SP) * 1.42, 0.5, Math.sin(SP) * 1.42];
+    const ROOTS = [...Array(9)].map((_, i) => ({ q: i * 2.4, r: 0.1 + (i % 3) * 0.09, d: 0.22 + (i % 4) * 0.06 }));
+    let taps = [], y = 0.06;
+    return {
+      rad: 4.8, near: 4.5, look: [0, 0.7, 0], still: 3, clear: 1.8,
+      noGrass: (x, z) => Math.hypot(x - TOP[0], z - TOP[2]) < 0.6,
+      tap(t) { taps.push(t); if (taps.length > 3) taps.shift(); },
+      lights() { return [{ p: [0, 0.3, 0], col: [0.5, 0.9, 1], i: 0.7, fall: 0.8 }]; },
+      draw(t) {
+        // the bottom of the pool seen through the water, the bank of stones round it, the face of the water
+        disc(R, 0, 0, 0.004, POOL, 14, { col: [12, 34, 38], layer: 0.5 });
+        disc(R, 0, 0, 0.008, POOL * 0.68, 14, { col: [20, 54, 58], layer: 0.55 });
+        disc(R, 0, 0, 0.012, POOL, 14, { col: [70, 140, 150], emis: true, add: 0.12, layer: 0.6 });
+        for (let i = 0; i < 18; i++) { const q = i / 18 * Math.PI * 2 + 0.2; egg(R, [Math.cos(q) * (POOL + 0.06), 0.03, Math.sin(q) * (POOL + 0.06)], [0.13, 0.07, 0.1], q, { col: [80 + (i % 3) * 8, 86 + (i % 3) * 8, 90], lo: true }); }
+        [-0.32, 0.32].forEach((d, i) => { const q = SP + d; egg(R, [Math.cos(q) * 1.5, 0.28, Math.sin(q) * 1.5], [0.3, 0.42 - i * 0.08, 0.26], q, { col: [90, 94, 98] }); egg(R, [Math.cos(q) * 1.5, 0.56 - i * 0.08, Math.sin(q) * 1.5], [0.22, 0.1, 0.2], q, { col: [62, 98, 46] }); });
+        // the stream of the spring falling from between the stones into the pool
+        const sd = [-Math.sin(SP), 0, Math.cos(SP)], bot = [IN[0], 0.02, IN[1]];
+        quad(R, add(TOP, mul(sd, -0.05)), add(TOP, mul(sd, 0.05)), add(bot, mul(sd, 0.08)), add(bot, mul(sd, -0.08)), { col: [150, 210, 224], emis: true, add: 0.4, ds: true, layer: 1.2 });
+        // the rings on the water: two always going out from the driftwood, two more at each tap, small ones where the
+        // spring falls in
+        const rings = [(t * 0.3) % 1, (t * 0.3 + 0.5) % 1].concat(...taps.map(h => [(t - h) / 2.4, (t - h) / 2.4 - 0.2]));
+        rings.forEach(k => { if (k <= 0 || k >= 1) return; const r = 0.5 + k * (POOL - 0.55); ringTop(R, 0, 0, 0.014, r, r + 0.025, 22, { col: [170, 230, 240], emis: true, add: 0.55 * (1 - k), layer: 0.65 }); });
+        [(t * 0.9) % 1, (t * 0.9 + 0.5) % 1].forEach(k => { const r = 0.05 + k * 0.3; ringTop(R, IN[0], IN[1], 0.014, r, r + 0.02, 12, { col: [190, 236, 246], emis: true, add: 0.5 * (1 - k), layer: 0.65 }); });
+        // the driftwood rocking on the water, a pad of moss on it, the bush, its roots hanging down into the clear water
+        y = 0.06 + Math.sin(t * 1.1) * 0.022;
+        const roll = Math.sin(t * 0.8) * 0.03, a = [-0.62, y - roll, -0.14], b = [0.62, y + roll, 0.14];
+        rod(R, a, b, 0.1, { col: [104, 80, 58] }, 6);
+        rod(R, [0.3, y + 0.02, 0.07], [0.52, y + 0.2, -0.12], 0.035, { col: [96, 74, 52] }, 4);
+        egg(R, [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46], lo: true });
+        bush(R, T, [0, y + 0.1, 0], t, { s: 1 });
+        ROOTS.forEach((r, i) => {
+          const w = Math.sin(t * 0.9 + i) * 0.03, m = [Math.cos(r.q) * r.r * 0.5 + w, -r.d * 0.45, Math.sin(r.q) * r.r * 0.5];
+          rod(R, [Math.cos(r.q) * 0.06, y - 0.06, Math.sin(r.q) * 0.06], m, 0.012, { col: [196, 214, 204] }, 3);
+          rod(R, m, [Math.cos(r.q) * r.r + w * 2, -r.d, Math.sin(r.q) * r.r], 0.008, { col: [176, 204, 200] }, 3);
+        });
+      },
+      fx(t, F) {
+        // the bubbles rising from the bottom round the roots, many more after a tap; the shine of the moon on the water
+        const more = taps.some(h => t >= h && t - h < 2) ? 26 : 10;
+        for (let i = 0; i < more; i++) {
+          const k = (t * (0.35 + (i % 4) * 0.08) + i * 0.37) % 1, q = i * 2.4, r = 0.15 + (i % 5) * 0.12;
+          F.dot([Math.cos(q) * r + Math.sin(t * 2 + i) * 0.02, -0.32 + k * 0.33, Math.sin(q) * r], `rgba(210,250,255,${0.85 * (1 - k * 0.5)})`, 1.2);
+        }
+        F.halo([0.35, 0.02, 0.45], 0.45, 'rgba(200,230,255,.14)', 'rgba(200,230,255,0)');
+        F.halo([IN[0], 0.1, IN[1]], 0.3, 'rgba(190,236,246,.22)', 'rgba(190,236,246,0)');
+        for (let i = 0; i < 10; i++) { const k = (t * 1.4 + i / 10) % 1; F.streak(add(mix3(TOP, [IN[0], 0.02, IN[1]], k), [-Math.sin(SP) * ((i % 3) - 1) * 0.03, 0, Math.cos(SP) * ((i % 3) - 1) * 0.03]), 0.06, 'rgba(220,245,255,.6)'); }
+      }
+    };
+  });
+  // Главная: роща — на старом пне в середине круга растёт базилик, над ним медленно кружит венок из веточек с белыми
+  // ягодами омелы, вокруг падают листья, летают светлячки. Касание — руны на камнях вспыхивают, по кругу проходит порыв
+  // ветра, и листья кружатся быстрее
+  scene('druid', 'glavnaya', S => {
+    const { R, T } = S;
+    let gust = -99;
+    const g = t => (t >= gust ? Math.max(0, 1 - (t - gust) / 1.6) : 0);
+    return {
+      look: [0, 1.25, 0], near: 5.2, rad: 5.4, still: 3,
+      tap(t) { gust = t; },
+      rune: t => 0.5 + 0.15 * Math.sin(t * 1.1) + g(t) * 1.1,
+      gust: t => g(t),
+      lights(t) { return [{ p: [0, 2.3, 0], col: [1, 0.84, 0.55], i: 0.85 + 0.08 * Math.sin(t * 3), fall: 0.7 }]; },
+      draw(t) {
+        const top = stump(R, T, 0, 0, 0.46, 0.5);
+        bush(R, T, [0, top, 0], t, { s: 1.15 });
+        wreath(R, T, [0, 2.45, 0], 0.5, t * 0.22);
+        // leaves falling round the circle, faster in a gust
+        const k = g(t);
+        for (let i = 0; i < 8; i++) {
+          const l = (i / 8 + t * 0.06) % 1, q = i * 1.9 + t * (0.2 + k * 2), r = 1.2 + (i % 3) * 0.7;
+          leaf(R, [Math.cos(q) * r, 3.4 - l * 3.3, Math.sin(q) * r], norm([Math.cos(t + i), Math.sin(t * 1.3 + i), Math.sin(t + i * 2)]), 0.14, i % 2 ? T.leafLemon : T.leaf, { side: [Math.sin(t * 2 + i), 0.4, Math.cos(t * 2 + i)] });
+        }
+      },
+      fx(t, F) { F.halo([0, 2.4, 0], 0.8, 'rgba(255,220,150,.16)', 'rgba(255,220,150,0)'); }
+    };
+  });
+  // Мой базилик: куст читателя в горшке у плетня, на горшке — бирка. Над плетнём дугой лунный календарь, восемь фаз луны;
+  // нынешняя больше и ярче всех, и куст стоит в её свете: в полнолуние светлее, в новолуние темнее. Фазы идут сами;
+  // касание — следующая
+  scene('druid', 'moy', S => {
+    const { R, T } = S, N = 8, STEP = 3, FR = 1.15, A = 0.9, BACK = A + Math.PI;
+    // the wattle: stakes on an arc behind the pot (on the far side from the camera), withies woven in and out of them
+    const STAKES = [...Array(11)].map((_, i) => BACK - 1.05 + i / 10 * 2.1);
+    const at = (q, r, y) => [Math.cos(q) * r, y, Math.sin(q) * r];
+    const MOONS = [...Array(N)].map((_, i) => { const q = BACK - 0.95 + i / (N - 1) * 1.9, c = (i - (N - 1) / 2) / ((N - 1) / 2); return at(q, FR + 0.05, 1.42 + 0.22 * (1 - c * c)); });
+    let taps = 0, pos = 0, last = null, frac = 0;
+    const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
+    return {
+      orbit: [A, 0.35], near: 4.1, rad: 4.5, look: [0, 0.95, 0], still: 13, clear: 1.6,
+      tap() { taps++; },
+      tick(t) {
+        const target = Math.floor(t / STEP) + taps;
+        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3);
+        last = t;
+        // the moonlight on the bush: as much as the moon of the moment is lit
+        const p = ((Math.round(pos) % N) + N) % N;
+        frac = (1 - Math.cos(p / N * Math.PI * 2)) / 2;
+        R.key = { dir: R.key.dir, col: R.key.col, i: 0.25 + 0.65 * frac };
+      },
+      lights() { return [{ p: [0, 1.2, 0.3], col: [0.8, 0.92, 1], i: 0.3 + 0.7 * frac, fall: 0.7 }]; },
+      draw(t) {
+        STAKES.forEach((q, i) => rod(R, at(q, FR, -0.02), at(q, FR, 0.78 + (i % 2) * 0.06), 0.03, { col: [104, 78, 52] }, 5));
+        [0.16, 0.32, 0.48, 0.64].forEach((y, row) => {
+          for (let i = 0; i < STAKES.length - 1; i++) {
+            const k = (i + row) % 2 ? 0.035 : -0.035;
+            rod(R, at(STAKES[i], FR + k, y), at(STAKES[i + 1], FR - k, y + 0.02), 0.022, { col: [128 - row * 6, 98 - row * 4, 64] }, 4);
+          }
+        });
+        // the pot with the reader's bush and its little wooden tag
+        const earth = pot(R, T, 0, 0, 0, 1.1);
+        bush(R, T, [0, earth, 0], t, { s: 1.1 });
+        rod(R, [0.2, earth - 0.05, 0.12], [0.2, earth + 0.2, 0.12], 0.008, { col: [150, 116, 78] }, 3);
+        box(R, [0.2, earth + 0.2, 0.12], [0.07, 0.035, 0.008], { col: [190, 156, 108] });
+        // the moons of the calendar, the one of the moment big and bright
+        MOONS.forEach((c, i) => {
+          const w = Math.max(0, 1 - Math.abs(wrap(i - pos)) * 1.5);
+          billboard(R, c, 0.09 + 0.07 * smooth(w), 0.09 + 0.07 * smooth(w), { tex: T.phases[i], emis: true, nofog: true, cut: true, add: 0.55 + 0.45 * w });
+        });
+      },
+      fx(t, F) {
+        MOONS.forEach((c, i) => {
+          const w = Math.max(0, 1 - Math.abs(wrap(i - pos)) * 1.5);
+          if (w > 0.05) F.halo(c, 0.42 * w, `rgba(200,230,240,${0.18 + 0.3 * frac})`, 'rgba(200,230,240,0)');
+        });
+        // the dew of the night on the leaves, more under a full moon
+        for (let i = 0; i < 8; i++) { const q = i * 2.3, y = 0.72 + (i % 4) * 0.15; F.dot([Math.cos(q) * 0.28, y, Math.sin(q) * 0.28], `rgba(220,240,255,${frac * (0.4 + 0.4 * Math.sin(t * 2 + i))})`, 1); }
+      }
+    };
+  });
+  // Посадка: семя падает в лунку у корней старого пня и уходит в землю; из лунки поднимается росток —
+  // крючок, две семядоли, первая пара настоящих листьев, вторая — и снова уходит в землю светом. Вокруг во мху всходы,
+  // каждый на шаг позади другого. Касание — посеять снова
+  scene('druid', 'posadka', S => {
+    const { R, T } = S, CYCLE = 10;
+    let sown = 0, seed = null, burst = -1;
+    // the camera stands on one side; the old stump behind the hole, its roots going round it into the moss
+    const A = 0.5, D = [Math.cos(A), 0, Math.sin(A)], ST = mul(D, -0.85);
+    const KIDS = [...Array(5)].map((_, i) => { const q = A - 1.5 + i / 4 * 3; return [Math.cos(q) * 1.2, Math.sin(q) * 1.2]; });
+    const ROOTS = [-1.1, -0.45, 0.5, 1.15].map(d => { const q = A + Math.PI + d; return [0, 1, 2, 3].map(k => { const r = 0.42 + k * 0.32, b = d * k * 0.12; return [ST[0] + Math.cos(q - b) * r, 0.07 - k * 0.03, ST[2] + Math.sin(q - b) * r]; }); });
+    return {
+      orbit: [A, 0.4], rad: 4.4, near: 3.9, look: [0, 0.5, 0], still: 6.2, clear: 1.9,
+      tap(t) { sown = t; },
+      lights() { return [{ p: [0.3, 1.2, 0.6], col: [1, 0.86, 0.6], i: 0.7, fall: 0.6 }].concat(seed ? [{ p: seed, col: [1, 0.86, 0.5], i: 1, fall: 2 }] : []); },
+      draw(t) {
+        // the hole: a ring of dark earth in the moss
+        disc(R, 0, 0, 0.012, 0.36, 10, { col: [40, 28, 19], layer: 0.5 });
+        ringTop(R, 0, 0, 0.03, 0.36, 0.48, 10, { col: [52, 38, 26] });
+        stump(R, T, ST[0], ST[2], 0.42, 0.62);
+        ROOTS.forEach(P => P.slice(1).forEach((p, k) => rod(R, P[k], p, 0.06 - k * 0.015, { col: [76 - k * 3, 56 - k * 2, 38] }, 5)));
+        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        seed = null;
+        if (u < 2.4) {
+          const k = smooth(u / 1.8), q = u * 3, r = 0.5 * (1 - k);
+          const y = u < 1.8 ? 3 - (3 - 0.06) * k : 0.06 - (u - 1.8) / 0.6 * 0.1;
+          seed = [Math.cos(q) * r, y, Math.sin(q) * r];
+          egg(R, seed, [0.05, 0.07, 0.05], q, { col: [150, 104, 52] });
+          egg(R, add(seed, [0, 0.05, 0]), [0.055, 0.03, 0.055], q, { col: [96, 70, 40] });
+        }
+        if (u < 9.5) sprout(R, T, [0, 0.02, 0], Math.min(1, (u - 2.4) / 5.6), 1.8, t);
+        burst = u >= 9.3 ? (u - 9.3) / 0.7 : -1;
+        // the seedlings in the moss round the hole, each on its own little mound
+        KIDS.forEach(([x, z], i) => {
+          egg(R, [x, 0.0, z], [0.16, 0.05, 0.16], i, { col: [46, 34, 24], lo: true });
+          sprout(R, T, [x, 0.04, z], ((t / CYCLE + i / 5) % 1) * 1.25, 0.8, t + i);
+        });
+      },
+      fx(t, F) {
+        if (seed) {
+          F.halo(seed, 0.36, 'rgba(255,214,120,.42)', 'rgba(255,190,90,0)');
+          for (let i = 0; i < 6; i++) F.dot([seed[0], seed[1] + 0.06 + i * 0.07, seed[2]], `rgba(255,220,140,${0.8 - i * 0.12})`, 1);
+        }
+        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        if (u > 1.8 && u < 2.6) for (let i = 0; i < 10; i++) { const q = i * 0.63, l = (u - 1.8) / 0.8; F.dot([Math.cos(q) * l * 0.3, 0.04 + Math.sin(l * Math.PI) * 0.15, Math.sin(q) * l * 0.3], 'rgba(150,110,70,.9)'); }
+        if (burst >= 0) for (let i = 0; i < 24; i++) { const q = i * 0.9, l = burst; F.dot([Math.cos(q) * (0.1 + l * 0.5), 0.1 + (i % 6) * 0.09 + l * 0.8, Math.sin(q) * (0.1 + l * 0.5)], `rgba(170,255,200,${1 - l})`, 1.5); }
+      }
+    };
+  });
+  // Беды и защита: к кусту ползут слизни и жуки, но круг из ягод рябины их не пускает: у круга они останавливаются,
+  // ягоды вспыхивают, и вредители поворачивают назад. На сухой ветке сидит ворон и вертит головой. Касание — ворон
+  // взлетает и делает круг над поляной, а вредители разбегаются
+  scene('druid', 'problemy', S => {
+    const { R, T } = S, WARD = 0.82, Z = 1.4;
+    const PERCH = [1.02, 1.62, -0.66], BUGS = [...Array(6)].map((_, i) => ({ q: i / 6 * Math.PI * 2 + 0.3, slug: i % 2 === 0, ph: i * 1.9 }));
+    let scare = -99, shine = [];
+    // the fright: up at once, held, going off slowly
+    const fear = t => { const u = t - scare; return u < 0 ? 0 : u < 0.8 ? smooth(u / 0.8) : Math.max(0, 1 - (u - 0.8) / 3.5); };
+    // how far a bug is from the middle: it comes up to the ring, stops, goes back, comes again
+    const reach = (b, t) => WARD + 0.14 + smooth(0.5 + 0.5 * Math.cos(t * 0.42 + b.ph)) * 0.75 + fear(t) * 0.8;
+    // where the raven is: on its branch, or on a round over the glade after a tap
+    const raven = t => {
+      const u = t - scare;
+      if (u < 0 || u > 6.5) return { p: PERCH, fly: 0, dir: [-1, 0, 0.2] };
+      const w = smooth(u / 0.9) * (1 - smooth((u - 5.4) / 1.1)), th = Math.atan2(PERCH[2], PERCH[0]) + u * 1.1;
+      const P = v => mix3(PERCH, [Math.cos(th + v) * 2.1, 2.5 + Math.sin(u * 2) * 0.2, Math.sin(th + v) * 2.1], w);
+      return { p: P(0), fly: w, dir: norm(sub(P(0.05), P(0))) };
+    };
+    return {
+      rad: 4.6, near: 4.3, look: [0, 0.8, 0], still: 5, clear: 1.7,
+      tap(t) { if (t - scare > 6.5) scare = t; },
+      // the warm light of the ring lies on whatever comes up to it
+      lights() { return [{ p: [0, 0.5, 0], col: [1, 0.62, 0.5], i: 1.5, fall: 0.6 }]; },
+      draw(t) {
+        const top = stump(R, T, 0, 0, 0.34, 0.26);
+        disc(R, 0, 0, top + 0.004, 0.27, 9, { col: [58, 40, 28] });
+        bush(R, T, [0, top, 0], t, { s: 1 });
+        // the ring of rowan: clusters of red berries on the moss
+        for (let i = 0; i < 20; i++) {
+          const q = i / 20 * Math.PI * 2;
+          for (let k = 0; k < 3; k++) ball(R, [Math.cos(q + k * 0.04) * (WARD + (k === 1 ? 0.04 : 0)), 0.035 + (k === 2 ? 0.04 : 0), Math.sin(q + k * 0.04) * (WARD + (k === 1 ? 0.04 : 0))], 0.035, { col: [210, 52, 34], lo: true });
+        }
+        // the slugs and the beetles, each facing the way it goes
+        // the slugs and the beetles, each facing the way it goes; B — a point of the bug: f along it, w across, y up
+        shine = [];
+        BUGS.forEach(b => {
+          const r = reach(b, t), r1 = reach(b, t + 0.05), out = r1 > r, q = b.q + Math.sin(t * 0.3 + b.ph) * 0.15;
+          const c = [Math.cos(q) * r, 0, Math.sin(q) * r], yaw = q + (out ? 0 : Math.PI), d = [Math.cos(yaw), 0, Math.sin(yaw)], sd = [-d[2], 0, d[0]];
+          const moving = Math.abs(r1 - r) > 0.002, B = (f, w, y) => add(c, add(add(mul(d, f * Z), mul(sd, w * Z)), [0, y * Z, 0]));
+          if (b.slug) {
+            const st = moving ? 1 + 0.12 * Math.sin(t * 5 + b.ph) : 1;
+            egg(R, B(0, 0, 0.06), [0.2 * st * Z, 0.065 * Z, 0.085 * Z], yaw, { col: [186, 132, 72] });
+            [-1, 1].forEach(k => { const h = B(0.16 * st, k * 0.03, 0.08), e = B(0.2 * st, k * 0.035, 0.17); rod(R, h, e, 0.009 * Z, { col: [196, 146, 86] }, 3); ball(R, e, 0.016 * Z, { col: [40, 30, 24], lo: true }); });
+            shine.push(B(0.02, 0, 0.13));
+          } else {
+            egg(R, B(0, 0, 0.065), [0.12 * Z, 0.07 * Z, 0.09 * Z], yaw, { col: [52, 112, 96] });
+            ball(R, B(0.12, 0, 0.055), 0.045 * Z, { col: [26, 34, 30] });
+            for (let k = 0; k < 3; k++) for (const w of [-1, 1]) {
+              const f = (k - 1) * 0.065, wig = moving ? Math.sin(t * 14 + k * 2 + w) * 0.025 : 0;
+              rod(R, B(f, 0, 0.04), B(f * 2 + wig, w * 0.13, 0), 0.008 * Z, { col: [24, 28, 24] }, 3);
+            }
+            shine.push(B(-0.02, 0.03, 0.135));
+          }
+        });
+        // the dead branch and the raven on it, or in the air
+        rod(R, [1.3, -0.02, -0.72], [1.3, 1.5, -0.7], 0.05, { col: [96, 86, 76] }, 5);
+        rod(R, [1.3, 1.36, -0.7], [0.9, 1.6, -0.64], 0.03, { col: [96, 86, 76] }, 4);
+        rod(R, [1.3, 1.1, -0.7], [1.55, 1.35, -0.9], 0.02, { col: [96, 86, 76] }, 3);
+        const rv = raven(t), d = rv.dir, side = norm(cross(d, [0, 1, 0])), p = add(rv.p, [0, 0.1, 0]), look = rv.fly ? 0 : Math.sin(t * 0.9) * 0.6;
+        egg(R, p, [0.16, 0.09, 0.08], Math.atan2(d[2], d[0]), { col: [22, 24, 30] });
+        const hd = add(add(p, mul(d, 0.15)), [0, 0.07, 0]), hl = norm(add(d, mul(side, look)));
+        ball(R, hd, 0.06, { col: [26, 28, 34] });
+        R.tri(add(hd, add(mul(hl, 0.04), [0, 0.012, 0])), add(hd, add(mul(hl, 0.04), [0, -0.016, 0])), add(hd, mul(hl, 0.13)), { col: [70, 70, 76], ds: true });
+        R.tri(add(p, mul(d, -0.12)), add(add(p, mul(d, -0.3)), mul(side, 0.06)), add(add(p, mul(d, -0.3)), mul(side, -0.06)), { col: [18, 20, 26], ds: true });
+        // the wings: folded along the body on the branch, beating in the air
+        const flap = rv.fly ? Math.sin(t * 13) * 0.9 * rv.fly + 0.2 : -1.1;
+        [-1, 1].forEach(sd => {
+          const sh = add(p, [0, 0.04, 0]), out = add(mul(side, sd * Math.cos(flap) * 0.34), [0, Math.sin(flap) * 0.3, 0]);
+          R.tri(add(sh, mul(d, 0.08)), add(sh, mul(d, -0.12)), add(add(sh, out), mul(d, -0.08)), { col: [28, 30, 38], ds: true });
+        });
+      },
+      fx(t, F) {
+        // the berries flaring where a bug has come up to the ring
+        BUGS.forEach(b => {
+          const near = 1 - (reach(b, t) - WARD - 0.14) / 0.3;
+          if (near > 0) F.halo([Math.cos(b.q) * WARD, 0.08, Math.sin(b.q) * WARD], 0.28, `rgba(255,90,60,${0.5 * near})`, 'rgba(255,90,60,0)');
+        });
+        // the wet shine on the slugs' backs and the beetles' shells
+        shine.forEach(p => F.dot(p, 'rgba(255,244,214,.55)', 1.3));
+        const k = fear(t);
+        if (k > 0) for (let i = 0; i < 20; i++) { const q = i / 20 * Math.PI * 2; F.dot([Math.cos(q) * WARD, 0.1 + k * 0.3, Math.sin(q) * WARD], `rgba(255,120,90,${k * 0.8})`, 1.4); }
+      }
+    };
+  });
+  // Сорта: пять сортов на пнях вокруг старого дуба. Выбранный стоит в столбе лунного света и светится; по кругу
+  // выходит вперёд следующий — сам или по касанию
+  scene('druid', 'sorta', S => {
+    const { R, T } = S, N = 5, STEP = 3.8, RAD = 1.5, A = 0.75, O = [-Math.cos(A) * 0.5, 0, -Math.sin(A) * 0.5];
+    const KINDS = [
+      { tex: T.leaf, col: [84, 150, 56], leaf: 1.2 },                                       // «Генуэзский»: big leaves
+      { tex: T.leafOpal, col: [98, 38, 96], stem: [96, 40, 98] },                           // «Тёмный опал»: purple
+      { tex: T.leaf, col: [84, 150, 56], ball: true },                                      // «Греческий»: a ball of small leaves
+      { tex: T.leafThai, col: [62, 124, 48], stem: [112, 48, 116], spike: true, leaf: 0.85 }, // «Тайский»: purple stem and flowers
+      { tex: T.leafLemon, col: [156, 196, 84], w: 0.24, leaf: 1.05 }                        // «Лимонный»: narrow and pale
+    ];
+    const BALL = [...Array(20)].map((_, i) => { const y = 1 - (i + 0.5) / 20 * 1.6, r = Math.sqrt(Math.max(0, 1 - y * y)), q = i * 2.4; return norm([Math.cos(q) * r, y, Math.sin(q) * r]); });
+    const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
+    let taps = 0, pos = 0, last = null, chosen = [0, 0, 0];
+    const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
+    return {
+      // the camera looks at the place in front where the chosen sort stands, the oak behind it
+      orbit: [A, 0.4], rad: 4.6, near: 4.3, look: [Math.cos(A) * 0.6, 0.95, Math.sin(A) * 0.6], still: 1, clear: 2.1,
+      tap() { taps++; },
+      tick(t) {
+        const target = Math.floor(t / STEP) + taps;
+        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3);
+        last = t;
+      },
+      lights() { return [{ p: [chosen[0], 1.9, chosen[2]], col: [0.75, 0.9, 1], i: 1.3, fall: 0.5 }]; },
+      draw(t) {
+        // the old oak in the middle of the ring, a little behind: a thick trunk, its roots, a dark crown above
+        prism(R, O[0], O[2], 0, 2.9, 0.38, 0.26, 8, { tex: T.bark });
+        [0, 1.3, 2.5, 3.8, 5.1].forEach(q => rod(R, [O[0] + Math.cos(q) * 0.4, 0.2, O[2] + Math.sin(q) * 0.4], [O[0] + Math.cos(q) * 0.9, -0.02, O[2] + Math.sin(q) * 0.9], 0.08, { col: [72, 52, 36] }, 5));
+        [[0, 3.5, 0, 1.3], [0.8, 3.1, 0.4, 0.9], [-0.8, 3.2, -0.3, 0.95], [0.2, 3.3, -0.9, 0.85], [-0.3, 3.2, 0.9, 0.85]].forEach(([x, y, z, r], i) => egg(R, [O[0] + x, y, O[2] + z], [r, r * 0.7, r], i, { col: [28 + i * 3, 52 + i * 3, 34] }));
+        KINDS.forEach((k, i) => {
+          const d = wrap(i - pos), w = Math.max(0, 1 - Math.abs(d) * 1.4), q = A + d * Math.PI * 2 / N, sz = 0.78 + 0.22 * smooth(w);
+          const x = O[0] + Math.cos(q) * RAD, z = O[2] + Math.sin(q) * RAD;
+          if (w > 0.5) chosen = [x, 0, z];
+          const flat = Math.abs(d) > 0.6 ? k.col : null;
+          const top = stump(R, T, x, z, 0.26, 0.32 + smooth(w) * 0.06), b = [x, top, z], yaw = w * t * 0.8;
+          if (k.ball) {
+            rod(R, b, [x, top + 0.2, z], 0.02, { col: [70, 128, 48] });
+            BALL.forEach((F, j) => leaf(R, add([x, top + 0.34 * sz, z], mul(F, 0.08 * sz)), norm(add(F, [Math.sin(t * 1.3 + j) * 0.08, 0, 0])), 0.16 * sz, T.leaf, { w: 0.46, flat }));
+          } else {
+            const tp = bush(R, T, b, t + i, { s: sz, tex: k.tex, stem: k.stem, leaf: k.leaf, w: k.w, yaw, pairs: SMALL, flat });
+            if (k.spike) {
+              prism(R, tp[0], tp[2], tp[1], tp[1] + 0.26, 0.035, 0.004, 5, { col: [150, 70, 176] });
+              for (let j = 0; j < 4; j++) ball(R, [tp[0], tp[1] + 0.04 + j * 0.06, tp[2]], 0.035 - j * 0.005, { col: [196, 120, 220], lo: true });
+            }
+          }
+        });
+      },
+      fx(t, F) {
+        shaft(R, [chosen[0] + 0.5, 6, chosen[2] - 0.3], [chosen[0], 0, chosen[2]], 0.45, 0.16);
+        F.halo([chosen[0], 0.9, chosen[2]], 0.7, 'rgba(190,230,255,.2)', 'rgba(190,230,255,0)');
+        for (let i = 0; i < 12; i++) {
+          const life = (i / 12 + t * 0.2) % 1, q = i * 2.4 + t;
+          F.dot([chosen[0] + Math.cos(q) * 0.32, 0.4 + life * 2.2, chosen[2] + Math.sin(q) * 0.32], `rgba(214,240,255,${(1 - life) * 0.8})`, 1);
+        }
+      }
+    };
+  });
+  // Справка: высокий камень с огамической надписью вдоль ребра. Зарубки загораются одна за другой снизу вверх, как
+  // строка, которую читают, и руны на камнях круга разгораются вместе с ней; строка прочитана — гаснет, и начинается
+  // следующая. У подножия растёт куст. Касание — следующая строка
+  scene('druid', 'spravka', S => {
+    const { R, T } = S, H = 2.3, ANG = 0.7, STEP = 0.5, N = 9, DUR = N * STEP + 1.8;
+    const r0 = 0.42, r1 = 0.26, rAt = y => r0 + (r1 - r0) * y / H;
+    // the lines: letters of one to five strokes — on the face to the right of the edge (0), to the left (1), across the
+    // edge (2), notches on the edge itself (3)
+    const LINES = [...Array(4)].map((_, l) => { const r = rng(31 + l * 7); return [...Array(N)].map(() => ({ kind: r() * 4 | 0, n: 1 + (r() * 5 | 0) })); });
+    const E = [Math.cos(ANG), 0, Math.sin(ANG)];
+    const along = a => norm([Math.cos(ANG + a) - Math.cos(ANG), 0, Math.sin(ANG + a) - Math.sin(ANG)]);
+    const FA = along(Math.PI / 2), FB = along(-Math.PI / 2);
+    const OA = [Math.cos(ANG + Math.PI / 4), 0, Math.sin(ANG + Math.PI / 4)], OB = [Math.cos(ANG - Math.PI / 4), 0, Math.sin(ANG - Math.PI / 4)];
+    let line = 0, start = 0, u = 0, read = 0;
+    const edge = y => mul([E[0], y / rAt(y), E[2]], rAt(y));
+    return {
+      orbit: [ANG, 0.45], near: 4.6, rad: 5, look: [0, 1.2, 0], still: 4, clear: 1.4,
+      rune: () => 0.35 + read * 0.6,
+      tap(t) { line++; start = t; },
+      tick(t) {
+        while (t - start > DUR) { start += DUR; line++; }
+        u = t - start;
+        read = clamp(u / (N * STEP), 0, 1) * (1 - smooth((u - N * STEP - 1.2) / 0.6));
+      },
+      lights() { const y = 0.35 + Math.min(N - 1, Math.floor(u / STEP)) * 0.2; return [{ p: add(mul(E, 0.9), [0, y, 0]), col: [0.55, 1, 0.82], i: 0.9 * read + 0.2, fall: 1.2 }]; },
+      draw(t) {
+        prism(R, 0, 0, -0.05, H, r0, r1, 4, { tex: T.menhir }, [88, 92, 96], ANG);
+        // the strokes, cut into the stone: dark, lit one letter after another
+        const out = 1 - smooth((u - N * STEP - 1.2) / 0.6);
+        LINES[line % LINES.length].forEach((L, j) => {
+          const lit = clamp((u - j * STEP) / 0.3, 0, 1) * out, col = lit ? { col: mix3([46, 50, 54], [150, 255, 214], lit), emis: true, nofog: true } : { col: [46, 50, 54] };
+          for (let k = 0; k < L.n; k++) {
+            const y = 0.35 + j * 0.2 + (k - (L.n - 1) / 2) * 0.034, p = edge(y);
+            if (L.kind === 0) rod(R, add(p, mul(OA, 0.012)), add(add(p, mul(FA, 0.11)), mul(OA, 0.012)), 0.01, col, 3);
+            else if (L.kind === 1) rod(R, add(p, mul(OB, 0.012)), add(add(p, mul(FB, 0.11)), mul(OB, 0.012)), 0.01, col, 3);
+            else if (L.kind === 2) rod(R, add(add(p, mul(FA, 0.08)), [0, 0.03, 0]), add(add(p, mul(FB, 0.08)), [0, -0.03, 0]), 0.01, col, 3);
+            else ball(R, add(p, mul(E, 0.01)), 0.018, { ...col, lo: true });
+          }
+        });
+        // the stem line of the writing along the edge
+        rod(R, add(edge(0.2), mul(E, 0.008)), add(edge(0.35 + N * 0.2), mul(E, 0.008)), 0.006, { col: read ? mix3([46, 50, 54], [120, 220, 190], read) : [46, 50, 54], emis: !!read }, 3);
+        // the bush at the foot of the stone, on its mound of earth
+        const bq = ANG - 0.95, bx = Math.cos(bq) * 0.8, bz = Math.sin(bq) * 0.8;
+        egg(R, [bx, 0, bz], [0.24, 0.08, 0.24], 0, { col: [56, 40, 28], lo: true });
+        bush(R, T, [bx, 0.06, bz], t, { s: 0.85 });
+      },
+      fx(t, F) {
+        LINES[line % LINES.length].forEach((L, j) => {
+          const lit = clamp((u - j * STEP) / 0.3, 0, 1) * (1 - smooth((u - N * STEP - 1.2) / 0.6));
+          if (lit > 0.05) F.halo(add(edge(0.35 + j * 0.2), mul(E, 0.04)), 0.16 + 0.06 * (j === Math.floor(u / STEP) ? 1 : 0), `rgba(143,232,198,${0.32 * lit})`, 'rgba(143,232,198,0)');
+        });
+      }
+    };
+  });
+  // Удобрения: три котла на камнях вокруг куста, над каждым в пару висит его руна — ᚾ, ᛈ и ᚲ, азот, фосфор и калий.
+  // По очереди котёл отдаёт свой свет земле: свет уходит под мох и бежит по корню к кусту, корень за ним светится,
+  // потом свет поднимается по стеблю. Касание — следующий котёл сейчас
+  scene('druid', 'udobreniya', S => {
+    const { R, T } = S, EVERY = 3.8, FLOW = 1.5, CLIMB = 1.1, ROOT = [76, 56, 38];
+    const COL = [[130, 196, 255], [255, 128, 82], [255, 210, 92]];
+    const CA = [0, 1, 2].map(i => { const q = Math.PI / 2 + i / 3 * Math.PI * 2; return [Math.cos(q) * 1.4, Math.sin(q) * 1.4]; });
+    // the root from the foot of a cauldron to the bush, just over the moss and bending a little: u 0…1 along it
+    const root = (i, u) => {
+      const [x, z] = CA[i], s = Math.sin(u * Math.PI) * 0.22 / 1.4, f = (1 - u) * 0.86;
+      return [x * f - z * s, 0.025, z * f + x * s];
+    };
+    let taps = [], flow = null, climb = null, top = 0.3;
+    return {
+      rad: 5, near: 4.6, look: [0, 0.9, 0], still: 2.2, clear: 2,
+      rune: t => 0.5 + 0.15 * Math.sin(t * 1.1) + (climb ? 0.6 * Math.sin(climb.f * Math.PI) : 0),
+      tap(t) { taps.push({ t, k: (taps.length + 1 + Math.floor(t / EVERY)) % 3 }); if (taps.length > 3) taps.shift(); },
+      tick(t) {
+        // the sends: one every few seconds by itself, in turn, and one at each tap
+        const n = Math.floor(t / EVERY);
+        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }].concat(taps).filter(s => s.t <= t).sort((a, b) => b.t - a.t);
+        flow = climb = null;
+        for (const s of sends) {
+          const u = t - s.t;
+          if (!flow && u < FLOW) flow = { k: s.k, f: u / FLOW };
+          else if (!climb && u >= FLOW && u < FLOW + CLIMB) climb = { k: s.k, f: (u - FLOW) / CLIMB };
+        }
+      },
+      lights(t) {
+        const L = CA.map(([x, z], i) => ({ p: [x, 0.6, z], col: COL[i].map(v => v / 255), i: 0.4 + 0.08 * Math.sin(t * 3 + i), fall: 1.2 }));
+        if (flow) L.push({ p: add(root(flow.k, flow.f), [0, 0.15, 0]), col: COL[flow.k].map(v => v / 255), i: 1, fall: 1.4 });
+        if (climb) L.push({ p: [0, top + 0.1 + climb.f * 0.9, 0.12], col: COL[climb.k].map(v => v / 255), i: 1.6 * Math.sin(climb.f * Math.PI), fall: 1.4 });
+        return L;
+      },
+      draw(t) {
+        top = stump(R, T, 0, 0, 0.38, 0.3);
+        disc(R, 0, 0, top + 0.004, 0.3, 9, { col: [58, 40, 28] });
+        bush(R, T, [0, top, 0], t, { s: 1.05 });
+        if (climb) rod(R, [0, top, 0], [0, top + climb.f * 0.8, 0], 0.03, { col: COL[climb.k], emis: true, nofog: true });
+        CA.forEach(([x, z], i) => {
+          // the root to the bush, lit behind the light running along it and going dark again
+          for (let j = 0; j < 8; j++) {
+            const u0 = j / 8, u1 = (j + 1) / 8, lit = flow && flow.k === i && flow.f >= u1 ? clamp(1 - (flow.f - u1) * 2, 0, 1) : 0;
+            rod(R, root(i, u0), root(i, u1), 0.03 - j * 0.002, lit ? { col: mix3(ROOT, COL[i], lit), emis: true } : { col: ROOT }, 4);
+          }
+          // three stones under the cauldron, the embers between them
+          for (let k = 0; k < 3; k++) { const q = k / 3 * Math.PI * 2 + i; egg(R, [x + Math.cos(q) * 0.2, 0.06, z + Math.sin(q) * 0.2], [0.09, 0.07, 0.08], q, { col: [88, 90, 94], lo: true }); }
+          for (let k = 0; k < 4; k++) ball(R, [x + Math.cos(k * 1.7) * 0.07, 0.04, z + Math.sin(k * 1.7) * 0.07], 0.035, { col: [255, 120 + 40 * Math.sin(t * 6 + k) | 0, 40], emis: true, lo: true });
+          // the cauldron: a belly of black iron, its rim, the liquid of its element; its rune floating in the steam
+          prism(R, x, z, 0.12, 0.3, 0.13, 0.25, 9, { col: [38, 40, 44] });
+          prism(R, x, z, 0.3, 0.44, 0.25, 0.21, 9, { col: [44, 46, 50] });
+          ringTop(R, x, z, 0.44, 0.19, 0.235, 9, { col: [60, 62, 66] });
+          disc(R, x, z, 0.42, 0.19, 9, { col: COL[i], emis: true });
+          billboard(R, [x, 0.98 + Math.sin(t * 1.3 + i * 2) * 0.05, z], 0.13, 0.13, { tex: T.npk[i], emis: true, nofog: true, cut: true, add: flow && flow.k === i ? 1 : 0.6 });
+        });
+        if (flow) ball(R, root(flow.k, flow.f), 0.05, { col: COL[flow.k], emis: true, nofog: true });
+      },
+      fx(t, F) {
+        CA.forEach(([x, z], i) => {
+          F.halo([x, 0.46, z], 0.32, `rgba(${COL[i]},.3)`, `rgba(${COL[i]},0)`);
+          F.halo([x, 0.98, z], 0.22, `rgba(${COL[i]},${flow && flow.k === i ? 0.45 : 0.2})`, `rgba(${COL[i]},0)`);
+          for (let j = 0; j < 6; j++) { const k = (t * 0.5 + j / 6 + i * 0.3) % 1; F.dot([x + Math.sin(j * 2 + t * 1.5) * 0.08 * (1 + k), 0.46 + k * 0.5, z + Math.cos(j * 3 + t) * 0.06], `rgba(220,236,230,${0.5 * (1 - k)})`, 1.6); }
+        });
+        if (flow) F.halo(root(flow.k, flow.f), 0.3, `rgba(${COL[flow.k]},.55)`, `rgba(${COL[flow.k]},0)`);
+        if (climb) F.halo([0, top + climb.f * 0.8, 0], 0.4, `rgba(${COL[climb.k]},.4)`, `rgba(${COL[climb.k]},0)`);
+      }
+    };
+  });
+  // Уход: над кругом камней идёт солнце, и куст поворачивается за ним, а его тень на мху — от солнца; потом луна.
+  // Раз в день приходит туча и поливает куст, на листьях блестит роса. Касание — дождь сейчас
+  scene('druid', 'uhod', S => {
+    const { R, T } = S, DAY = 16, RAIN = 5;
+    let tapped = -99, orb = [0, 3, 0], day = 1, cloud = null, wet = 0, lean = [0, 0];
+    return {
+      rad: 4.9, near: 4.6, look: [0, 1.2, 0], still: 4, shafts: false,
+      tap(t) { tapped = t; },
+      tick(t) {
+        const s = (t % DAY) / DAY, sun = s < 0.72;
+        day = sun ? Math.sin(s / 0.72 * Math.PI) : 0;
+        const a = sun ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI;
+        orb = [-Math.cos(a) * 2.6, 1.6 + Math.sin(a) * 2, -0.9];
+        R.key = sun ? { dir: norm(sub(orb, [0, 1, 0])), i: 0.3 + 0.75 * day, col: [1, 0.88, 0.66] } : { dir: norm(sub(orb, [0, 1, 0])), i: 0.4, col: [0.55, 0.7, 1] };
+        const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
+        lean = reduce.matches ? want : [lean[0] + (want[0] - lean[0]) * 0.04, 0];
+        const rainAt = Math.max(Math.floor((t - 5) / DAY) * DAY + 5, tapped), r = t - rainAt;
+        cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.8 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.8 * smooth((r - RAIN + 1.2) / 1.2) : 0, rain: r > 1 && r < RAIN - 1 } : null;
+        wet = r < 0 ? 0 : r < RAIN ? Math.min(1, Math.max(0, r - 1.2) / 2) : Math.max(0, 1 - (r - RAIN) / 9);
+      },
+      lights() { return [{ p: orb, col: day > 0 ? [1, 0.86, 0.55] : [0.6, 0.72, 1], i: day > 0 ? 0.6 + day : 0.5, fall: 0.1 }]; },
+      draw(t) {
+        // the shadow of the bush on the moss, away from the sun
+        const sh = [-orb[0] * 0.18, 0, -orb[2] * 0.18], k = day > 0 ? 0.6 * day : 0.2;
+        for (let i = 0; i < 10; i++) { const a0 = i / 10 * Math.PI * 2, a1 = (i + 1) / 10 * Math.PI * 2; R.tri([sh[0], 0.01, sh[2]], [sh[0] + Math.cos(a0) * 0.7, 0.01, sh[2] + Math.sin(a0) * 0.4], [sh[0] + Math.cos(a1) * 0.7, 0.01, sh[2] + Math.sin(a1) * 0.4], { col: [10 * (1 - k) + 8, 16 * (1 - k) + 10, 12 * (1 - k) + 8], layer: 0.5, ds: true, emis: true }); }
+        const top = stump(R, T, 0, 0, 0.42, 0.36);
+        disc(R, 0, 0, top + 0.005, 0.3, 9, { col: [64 - wet * 30, 46 - wet * 22, 30 - wet * 14] });
+        bush(R, T, [0, top, 0], t, { s: 1.2, lean });
+        ball(R, orb, day > 0 ? 0.22 : 0.16, { col: day > 0 ? [255, 222, 140] : [220, 230, 255], emis: true, nofog: true });
+        if (cloud) [[0, 0, 0.3], [0.26, -0.06, 0.24], [-0.28, -0.05, 0.24], [0.12, 0.12, 0.2], [-0.12, 0.1, 0.2]].forEach(([dx, dy, r]) => ball(R, [cloud.x + dx, 3 + dy, dx * 0.3], r, { col: [86, 96, 104] }));
+      },
+      fx(t, F) {
+        F.halo(orb, day > 0 ? 1.3 : 0.7, day > 0 ? `rgba(255,214,140,${0.22 + 0.3 * day})` : 'rgba(170,190,255,.24)', 'rgba(255,214,140,0)');
+        if (cloud && cloud.rain) for (let i = 0; i < 32; i++) {
+          const k = (t * 1.6 + i * 0.37) % 1, x = cloud.x + ((i * 0.61) % 1 - 0.5) * 0.8, z = ((i * 0.43) % 1 - 0.5) * 0.6;
+          F.streak([x, 2.85 - k * 1.5, z], 0.14, 'rgba(170,210,255,.7)');
+        }
+        // the dew on the leaves, brighter just after the rain
+        if (wet > 0.05) for (let i = 0; i < 10; i++) { const q = i * 2.1 + 0.4, y = 0.55 + (i % 5) * 0.16; F.dot([Math.cos(q) * 0.3, y, Math.sin(q) * 0.3], `rgba(220,245,255,${wet * (0.5 + 0.5 * Math.sin(t * 3 + i))})`, 1); }
+      }
+    };
+  });
+  // Вкус и кухня: котёл на треноге над костром, в нём зелёное варево; в котёл падают листья базилика, из пара поднимается
+  // аромат — молекула эвгенола, ягоды омелы и рябины на веточках — и тает. Касание — горсть листьев
+  scene('druid', 'vkus', S => {
+    const { R, T } = S, mol = molShape('eug'), RIM = 0.98;
+    const PAL = { bond: [168, 124, 76], O: [236, 70, 52], C: [244, 240, 222], lo: true };
+    const FALL = [...Array(6)].map((_, i) => ({ a: i / 6, x: ((i * 0.61) % 1 - 0.5) * 0.6, z: ((i * 0.37) % 1 - 0.5) * 0.5, s: 0.7 + (i % 3) * 0.12 }));
+    let hands = [];
+    // a leaf tumbling down from above into the cauldron, k — how far it has fallen
+    const falling = (x, z, k, spin) => {
+      const y = 3 - k * (3 - RIM - 0.02);
+      leaf(R, [x * (1 - k * 0.7), y, z * (1 - k * 0.7)], norm([Math.cos(spin), Math.sin(spin * 0.7) * 0.8, Math.sin(spin)]), 0.24, T.leaf, { side: [Math.sin(spin * 1.3), 0.5, Math.cos(spin * 1.3)] });
+    };
+    return {
+      near: 4.6, look: [0, 1.2, 0], still: 2.4, clear: 1.6, shafts: false,
+      tap(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
+      lights(t) { return [{ p: [0, 0.4, 0.1], col: [1, 0.62, 0.3], i: 1.5 + 0.25 * Math.sin(t * 9) + 0.15 * Math.sin(t * 23), fall: 0.5 }, { p: [0, RIM + 0.3, 0], col: [0.6, 1, 0.5], i: 0.4, fall: 2 }]; },
+      draw(t) {
+        campfire(R, T, 0, 0, 1.25, t);
+        // the tripod of three poles, the chain, the bail of the cauldron
+        for (let k = 0; k < 3; k++) { const q = k / 3 * Math.PI * 2 + 0.5; rod(R, [Math.cos(q) * 0.85, -0.02, Math.sin(q) * 0.85], [Math.cos(q) * 0.05, 1.95, Math.sin(q) * 0.05], 0.035, { col: [90, 66, 44] }, 5); }
+        rod(R, [0, 1.9, 0], [0, RIM + 0.26, 0], 0.01, { col: [80, 80, 84] }, 3);
+        for (let k = 0; k < 6; k++) { const a0 = k / 6 * Math.PI, a1 = (k + 1) / 6 * Math.PI; rod(R, [Math.cos(a0) * 0.37, RIM + Math.sin(a0) * 0.26, 0], [Math.cos(a1) * 0.37, RIM + Math.sin(a1) * 0.26, 0], 0.012, { col: [70, 70, 74] }, 3); }
+        // the cauldron of black iron and the green in it
+        prism(R, 0, 0, 0.5, 0.74, 0.18, 0.4, 10, { col: [36, 38, 42] });
+        prism(R, 0, 0, 0.74, RIM, 0.4, 0.34, 10, { col: [42, 44, 48] });
+        ringTop(R, 0, 0, RIM, 0.31, 0.37, 10, { col: [62, 64, 68] });
+        disc(R, 0, 0, RIM - 0.03, 0.32, 10, { tex: T.paste });
+        // the leaves falling in: a steady few, and a handful at a tap
+        FALL.forEach((f, i) => { const k = (f.a + t * 0.2) % 1; falling(f.x, f.z, smooth(k), t * f.s * 2 + i); });
+        hands = hands.filter(h => t - h < 1.6 && t >= h);
+        hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(Math.cos(i * 1.1) * 0.4, Math.sin(i * 1.1) * 0.35, k, t * 2 + i); } });
+        // the aroma: the molecule going up out of the steam and fading as it goes
+        if (mol) { const k = (t * 0.11) % 1; essence(R, mol, [0, RIM + 0.4 + k * 1.2, 0], t * 0.6, 1.25, Math.sin(k * Math.PI) * 0.95, PAL); }
+      },
+      fx(t, F) {
+        const k = (t * 0.11) % 1;
+        F.halo([0, RIM + 0.4 + k * 1.2, 0], 0.5, `rgba(255,236,190,${0.2 * Math.sin(k * Math.PI)})`, 'rgba(255,236,190,0)');
+        F.halo([0, 0.3, 0], 0.9, 'rgba(255,150,70,.24)', 'rgba(255,150,70,0)');
+        // the steam over the green, the sparks of the fire going up round the cauldron
+        for (let i = 0; i < 14; i++) {
+          const l = (i / 14 + t * 0.16) % 1, q = i * 2.4 + t * 0.5;
+          F.dot([Math.cos(q) * (0.1 + l * 0.35), RIM + 0.05 + l * 1.3, Math.sin(q) * (0.1 + l * 0.35)], `rgba(214,232,220,${0.5 * (1 - l)})`, 2);
+        }
+        for (let i = 0; i < 10; i++) { const l = (i / 10 + t * 0.5) % 1, q = i * 1.7; F.spark([Math.cos(q) * (0.45 + l * 0.2), 0.3 + l * 1.4, Math.sin(q) * (0.45 + l * 0.2)], l); }
+      }
+    };
+  });
+  /* ------------------------------------------------------------------ */
+  /* «Друид»: a night grove of a northern game round every scene — moss  */
+  /* with a ring of ogham, hills of the forest floor, grass in the wind,  */
+  /* standing stones with runes of a cold light, firs and birches in the  */
+  /* fog, shafts of moonlight, fireflies; drawn smooth at the screen's    */
+  /* resolution, the bright parts glowing                                 */
+  /* ------------------------------------------------------------------ */
+  // the textures of the grove: moss with its ring of ogham and a triskele (and the same lines alone, to glow), bark of
+  // oak and of birch, a standing stone with moss on its foot, runes of a cold light; the basil's own leaves beside them
+  let GROVE = null;
+  function groveTextures() {
+    if (GROVE) return GROVE;
+    const R0 = rng(77), noise = (v, a) => clamp(v + (R0() - 0.5) * 2 * a, 0, 255);
+    const lines = (t, col) => {
+      const { put, line, w } = t, c = w / 2;
+      const ring = r => { for (let a = 0; a < 720; a++) { const q = a / 720 * Math.PI * 2; put(c + Math.cos(q) * r, c + Math.sin(q) * r, col); } };
+      ring(c - 4); ring(c - 15); ring(c - 9.5);
+      // ogham between the rings: groups of one to five strokes across the stem line
+      const RR = rng(9);
+      for (let i = 0; i < 40; i++) {
+        const q = i / 40 * Math.PI * 2, n = 1 + (RR() * 5 | 0), kind = RR() * 3 | 0;
+        for (let s = 0; s < n; s++) {
+          const qq = q + (s - n / 2) * 0.022, r0 = kind === 0 ? c - 9.5 : c - 12, r1 = kind === 1 ? c - 7 : c - 9.5;
+          line(c + Math.cos(qq) * r0, c + Math.sin(qq) * r0, c + Math.cos(qq) * r1, c + Math.sin(qq) * r1, col);
+        }
+      }
+      // the triskele in the middle: three spirals out of one point
+      for (let k = 0; k < 3; k++) for (let s = 0; s < 140; s++) {
+        const f = s / 140, q = k / 3 * Math.PI * 2 + f * Math.PI * 2.2, r = 3 + f * 19;
+        put(c + Math.cos(q) * r, c + Math.sin(q) * r, col);
+      }
+    };
+    GROVE = {
+      ...textures(),
+      moss: tex(128, 128, t => {
+        for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) { const r = R0(); t.put(x, y, r < 0.08 ? [74, 100, 44] : r < 0.14 ? [22, 32, 20] : [noise(38, 6), noise(56, 8), noise(32, 5)]); }
+        lines(t, [92, 118, 76]);
+      }),
+      glowMoss: tex(128, 128, t => lines(t, [120, 255, 196])),
+      // the cut of an old stump: pale wood, its rings, the dark edge of the bark; nothing outside the circle
+      stumpTop: tex(32, 32, t => {
+        for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
+          const r = Math.hypot(x - 15.5, y - 15.5) / 15.5;
+          if (r > 1) continue;
+          const ring = [0.3, 0.6, 0.84].some(k => Math.abs(r - k) < 0.045);
+          t.put(x, y, r > 0.93 ? [72, 52, 36] : ring ? [112, 82, 56] : [noise(150, 6), noise(116, 6), noise(80, 5)]);
+        }
+      }),
+      bark: tex(16, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) { const s = (x * 7 + (y >> 2) * 3) % 5 === 0; t.put(x, y, s ? [34, 24, 18] : [noise(80, 10), noise(58, 8), noise(42, 6)]); } }),
+      birch: tex(16, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) { const d = (y * 5 + (x >> 2) * 11) % 9 === 0 && x % 8 < 5; t.put(x, y, d ? [30, 28, 26] : [noise(222, 8), noise(218, 8), noise(204, 8)]); } }),
+      menhir: tex(32, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) { const m = y > 23 || (R0() < 0.14 && y > 15); t.put(x, y, m ? [noise(54, 8), noise(82, 10), noise(42, 6)] : [noise(96, 10), noise(98, 10), noise(102, 10)]); } }),
+      gRunes: [...Array(8)].map((_, i) => tex(16, 16, t => {
+        const R4 = rng(91 + i * 5), g = [150, 255, 214], P = [[2, 2], [13, 2], [2, 13], [13, 13], [7, 2], [7, 13], [2, 7], [13, 7]];
+        t.line(7, 1, 7, 14, g); t.line(8, 1, 8, 14, g);
+        for (let k = 0; k < 2; k++) { const a = P[R4() * P.length | 0], y0 = 4 + k * 5; t.line(7, y0, a[0], a[1], g); t.line(8, y0, a[0] + 1, a[1], g); }
+      })),
+      // the runes of the three elements: ᚾ (naudiz) for N, ᛈ (perthro) for P, ᚲ (kaunan) for K, two pixels thick
+      npk: [
+        [[6, 1, 6, 14], [3, 5, 10, 10]],
+        [[4, 1, 4, 14], [4, 1, 8, 5], [8, 5, 12, 1], [4, 14, 8, 10], [8, 10, 12, 14]],
+        [[11, 2, 5, 7], [5, 7, 11, 12]]
+      ].map((strokes, i) => tex(16, 16, t => strokes.forEach(([x0, y0, x1, y1]) => { const c = [[170, 214, 255], [255, 168, 120], [255, 226, 140]][i]; t.line(x0, y0, x1, y1, c); t.line(x0 + 1, y0, x1 + 1, y1, c); }))),
+      // the moon in its eight phases, from the new one round to the waning crescent: the lit part pale with its seas,
+      // the dark one in the faint light of the earth
+      phases: [...Array(8)].map((_, i) => tex(32, 32, t => {
+        const k = Math.cos(i / 8 * Math.PI * 2), wax = i <= 4;
+        for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
+          const u = (x - 15.5) / 14, v = (y - 15.5) / 14;
+          if (u * u + v * v > 1) continue;
+          const w = Math.sqrt(1 - v * v), lit = wax ? u > k * w : u < -k * w, sea = Math.hypot(u + 0.25, v + 0.2) < 0.3 || Math.hypot(u - 0.3, v - 0.25) < 0.2;
+          t.put(x, y, lit ? (sea ? [176, 190, 186] : [noise(230, 6), noise(236, 6), noise(226, 6)]) : [38, 52, 54]);
+        }
+      }))
+    };
+    return GROVE;
+  }
+
+  // a ring of the floor between the radii r0 and r1 (a disc when r0 is nought), its texture laid flat on it as on the
+  // square of the floor, FL to either side of the middle
+  const FL = 3.3;
+  function flatRing(R, r0, r1, n, o) {
+    const P = (a, r) => [Math.cos(a) * r, 0.001, Math.sin(a) * r], U = p => [0.5 + p[0] / (2 * FL), 0.5 + p[2] / (2 * FL)];
+    for (let i = 0; i < n; i++) {
+      const a0 = i / n * Math.PI * 2, a1 = (i + 1) / n * Math.PI * 2, A = P(a0, r1), B = P(a1, r1);
+      if (!r0) { R.tri([0, 0.001, 0], A, B, { ...o, uv: [[0.5, 0.5], U(A), U(B)] }); continue; }
+      const C = P(a1, r0), D = P(a0, r0);
+      R.tri(A, B, C, { ...o, uv: [U(A), U(B), U(C)] });
+      R.tri(A, C, D, { ...o, uv: [U(A), U(C), U(D)] });
+    }
+  }
+  // the ground beyond the moss: hills of the forest floor rising away from the circle, the same at every visit
+  const groundY = (x, z) => {
+    const r = Math.hypot(x, z), q = Math.atan2(z, x);
+    if (r < 3.3) return 0;
+    const k = r - 3.3;
+    return Math.pow(k, 1.25) * 0.13 + Math.sin(q * 3 + 1.2) * 0.16 * Math.min(1, k / 3) + Math.sin(q * 7 + r) * 0.05 * Math.min(1, k / 2);
+  };
+  // a fir: three tiers of cones on a trunk, dark blue-green in the fog
+  function fir(R, x, z, h, s = 1) {
+    const y = groundY(x, z);
+    prism(R, x, z, y, y + h * 0.3, 0.12 * s, 0.09 * s, 4, { col: [58, 42, 30] });
+    [[0.18, 0.62, 0.95], [0.42, 0.86, 0.75], [0.64, 1.06, 0.52]].forEach(([y0, y1, r], k) => prism(R, x, z, y + h * y0, y + h * y1, r * s, 0.02, 6, { col: [24 + k * 4, 46 + k * 6, 40 + k * 3] }, null, x + k));
+  }
+  // a birch: a white trunk with its black marks, a crown of small leaves gone pale in the moonlight
+  function birchTree(R, T, x, z, h) {
+    const y = groundY(x, z);
+    prism(R, x, z, y, y + h, 0.13, 0.08, 6, { tex: T.birch });
+    [[0, 0.82, 0, 0.7], [0.35, 0.7, 0.2, 0.5]].forEach(([dx, f, dz, r]) => egg(R, [x + dx, y + h * f, z + dz], [r, r * 0.8, r], x, { col: [66, 92, 46] }));
+  }
+  // a standing stone with its rune on the side towards the middle; k — how bright the rune burns
+  function menhir(R, T, x, z, h, q, i, k) {
+    const y = groundY(x, z);
+    prism(R, x, z, y - 0.05, y + h, 0.3, 0.17, 5, { tex: T.menhir }, [88, 92, 96], q + 0.3);
+    const d = [-Math.cos(q), 0, -Math.sin(q)], tg = [-Math.sin(q), 0, Math.cos(q)], c = add([x, y + h * 0.55, z], mul(d, 0.2)), a = 0.11;
+    quad(R, add(sub(c, mul(tg, a)), [0, -a, 0]), add(add(c, mul(tg, a)), [0, -a, 0]), add(add(c, mul(tg, a)), [0, a, 0]), add(sub(c, mul(tg, a)), [0, a, 0]), { tex: T.gRunes[i % 8], emis: true, nofog: true, cut: true, ds: true, add: clamp(0.55 + k * 0.45, 0, 1) });
+  }
+  // an old stump with its rings and its moss: gives the height of its top
+  function stump(R, T, x, z, r, h) {
+    prism(R, x, z, -0.02, h, r * 1.18, r, 7, { tex: T.bark });
+    quad(R, [x - r, h, z + r], [x + r, h, z + r], [x + r, h, z - r], [x - r, h, z - r], { tex: T.stumpTop, cut: true, ds: true });
+    for (let k = 0; k < 3; k++) { const q = k * 2.1 + 0.3; egg(R, [x + Math.cos(q) * r, h - 0.02, z + Math.sin(q) * r], [r * 0.26, r * 0.1, r * 0.22], q, { col: [64, 104, 46], lo: true }); }
+    [0, 2.1, 4.2].forEach(q => rod(R, [x + Math.cos(q) * r, 0.06, z + Math.sin(q) * r], [x + Math.cos(q) * (r + 0.35), -0.02, z + Math.sin(q) * (r + 0.35)], 0.05, { col: [70, 50, 34] }, 3));
+    return h;
+  }
+  // a boulder with moss on its back
+  function boulder(R, x, z, r, seed) {
+    const y = groundY(x, z);
+    egg(R, [x, y + r * 0.35, z], [r, r * 0.62, r * 0.85], seed, { col: [84, 88, 92] });
+    egg(R, [x, y + r * 0.62, z], [r * 0.78, r * 0.3, r * 0.64], seed + 0.4, { col: [58, 92, 44], lo: true });
+  }
+  // a wreath of twigs bound in a ring, leaves, white berries of mistletoe; hung on four threads
+  function wreath(R, T, c, r, yaw) {
+    for (let k = 0; k < 12; k++) {
+      const a0 = yaw + k / 12 * Math.PI * 2, a1 = yaw + (k + 1.3) / 12 * Math.PI * 2;
+      rod(R, [c[0] + Math.cos(a0) * r, c[1], c[2] + Math.sin(a0) * r], [c[0] + Math.cos(a1) * r, c[1] + 0.02, c[2] + Math.sin(a1) * r], 0.02, { col: [110, 78, 48] }, 3);
+      if (k % 2 === 0) leaf(R, [c[0] + Math.cos(a0) * r, c[1], c[2] + Math.sin(a0) * r], norm([Math.cos(a0 + 0.6), -0.4, Math.sin(a0 + 0.6)]), 0.16, T.leafLemon, { w: 0.34 });
+      if (k % 3 === 0) ball(R, [c[0] + Math.cos(a0 + 0.2) * (r + 0.02), c[1] - 0.05, c[2] + Math.sin(a0 + 0.2) * (r + 0.02)], 0.032, { col: [240, 236, 220], lo: true });
+    }
+    for (let k = 0; k < 4; k++) { const a = yaw + k / 4 * Math.PI * 2; rod(R, [c[0] + Math.cos(a) * r, c[1], c[2] + Math.sin(a) * r], [c[0], c[1] + 1.6, c[2]], 0.004, { col: [180, 170, 150] }, 3); }
+  }
+  // a fire of logs with its flames: lights it gives are the scene's to add
+  function campfire(R, T, x, z, s, t) {
+    for (let k = 0; k < 5; k++) { const q = k / 5 * Math.PI * 2 + 0.3; rod(R, [x + Math.cos(q) * 0.32 * s, 0.03, z + Math.sin(q) * 0.32 * s], [x + Math.cos(q) * 0.04, 0.22 * s, z + Math.sin(q) * 0.04], 0.045 * s, { col: [74, 52, 34] }, 3); }
+    for (let k = 0; k < 7; k++) { const q = k * 0.9; ball(R, [x + Math.cos(q) * 0.42 * s, 0.03, z + Math.sin(q) * 0.42 * s], 0.06 * s, { col: [92, 96, 98], lo: true }); }
+    for (let k = 0; k < 3; k++) {
+      const fl = 1 + 0.25 * Math.sin(t * 12 + k * 2) + 0.12 * Math.sin(t * 27 + k);
+      billboard(R, [x + Math.cos(k * 2.1) * 0.06 * s, (0.2 + 0.14 * fl) * s, z + Math.sin(k * 2.1) * 0.06 * s], 0.11 * s, 0.24 * s * fl, { tex: T.flame, emis: true, nofog: true, cut: true });
+    }
+  }
+  // a shaft of moonlight: a soft band from the sky down to the ground, added over the picture
+  function shaft(R, top, foot, w, a) {
+    const vt = R.view(top), vf = R.view(foot);
+    if (vt[2] < 0.3 || vf[2] < 0.3) return;
+    const p = R.proj(vt), q = R.proj(vf), wt = R.C.focal * w * 1.6 / vt[2], wf = R.C.focal * w / vf[2], x = R.x;
+    const g = x.createLinearGradient(p[0], p[1], q[0], q[1]);
+    g.addColorStop(0, `rgba(190,230,255,${a * 0.2})`); g.addColorStop(0.6, `rgba(190,230,255,${a})`); g.addColorStop(1, 'rgba(190,230,255,0)');
+    x.fillStyle = g;
+    x.beginPath(); x.moveTo(p[0] - wt, p[1]); x.lineTo(p[0] + wt, p[1]); x.lineTo(q[0] + wf, q[1]); x.lineTo(q[0] - wf, q[1]); x.closePath(); x.fill();
+  }
+
+  // the light of the bright parts spread round them (a picture at a sixth, its dark pressed down by multiplying it with
+  // itself, laid back over the picture), and the edges sinking into the dark: the look of a game of today, on a 2D canvas.
+  // On a stage the small picture is a canvas of its own over the scene (glowLayer), drawn up and added by the browser,
+  // and the dark edges are the stage's CSS: two passes over the whole picture fewer every frame
+  const BLOOM = new WeakMap();
+  function glowLayer(holder, R) {
+    const c1 = doc.createElement('canvas');
+    c1.className = 'psx-glow';
+    holder.appendChild(c1);
+    const c2 = doc.createElement('canvas');
+    BLOOM.set(R, { c1, c2, x1: c1.getContext('2d'), x2: c2.getContext('2d'), page: true });
+  }
+  function glowPost(R) {
+    let b = BLOOM.get(R);
+    if (!b) {
+      const c1 = doc.createElement('canvas'), c2 = doc.createElement('canvas');
+      b = { c1, c2, x1: c1.getContext('2d'), x2: c2.getContext('2d') };
+      BLOOM.set(R, b);
+    }
+    const w = Math.max(16, Math.round(R.W / 6)), h = Math.max(12, Math.round(R.H / 6));
+    [b.c1, b.c2].forEach(c => { if (c.width !== w || c.height !== h) { c.width = w; c.height = h; } });
+    const { x1, x2 } = b, x = R.x;
+    x1.imageSmoothingEnabled = x2.imageSmoothingEnabled = true;
+    x1.globalCompositeOperation = 'copy'; x1.drawImage(R.c, 0, 0, w, h);
+    x2.globalCompositeOperation = 'copy'; x2.drawImage(b.c1, 0, 0);
+    x1.globalCompositeOperation = 'multiply'; x1.drawImage(b.c2, 0, 0); x1.drawImage(b.c2, 0, 0);
+    if (b.page) return;
+    x.save();
+    x.imageSmoothingEnabled = true;
+    x.globalCompositeOperation = 'lighter'; x.globalAlpha = 0.7;
+    x.drawImage(b.c1, 0, 0, R.W, R.H);
+    x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
+    const v = x.createRadialGradient(R.W / 2, R.H * 0.45, Math.min(R.W, R.H) * 0.32, R.W / 2, R.H * 0.45, Math.max(R.W, R.H) * 0.78);
+    v.addColorStop(0, 'rgba(2,6,4,0)'); v.addColorStop(1, 'rgba(2,6,4,.6)');
+    x.fillStyle = v; x.fillRect(0, 0, R.W, R.H);
+    x.restore();
+  }
+
+  world('druid', {
+    raster: () => ({ smooth: true, scale: Math.min(1.5, window.devicePixelRatio || 1) * 0.72, maxPx: 170000, fog: [13, 25, 20], fogNear: 4.5, fogFar: 17, amb: [0.17, 0.21, 0.2] }),
+    textures: () => groveTextures(),
+    key: { dir: norm([-0.45, 0.85, 0.3]), i: 0.62, col: [0.62, 0.76, 0.95] },
+    fillCol: [0.72, 0.86, 0.8],
+    sky: ['#040A08', '#0D1C17', '#0A140F'],
+    defaults: { glow: [143, 232, 198], fill: 0.5 },
+    make(S, sc) {
+      const { R, T } = S, RR = rng(404);
+      const clear = sc.clear || 1.3;
+      // the ground: rings of triangles from the moss out to the trees, each a little different in its green
+      const RINGS = [3.2, 4.4, 5.8, 7.4, 9.4, 12], SEG = 16;
+      const P = RINGS.map(r => [...Array(SEG)].map((_, i) => { const q = i / SEG * Math.PI * 2 + r * 0.17; const x = Math.cos(q) * r, z = Math.sin(q) * r; return [x, groundY(x, z), z]; }));
+      const TRIS = [];
+      for (let k = 0; k < RINGS.length - 1; k++) for (let i = 0; i < SEG; i++) {
+        const a = P[k][i], b = P[k][(i + 1) % SEG], c = P[k + 1][(i + 1) % SEG], d = P[k + 1][i];
+        const v = RR() * 10 - 5, col = [24 + v + k * 1.5, 40 + v + k * 1.2, 28 + v];
+        TRIS.push([a, b, c, col], [a, c, d, [col[0] + 3, col[1] + 4, col[2] + 2]]);
+      }
+      // the grass: tufts of three blades, none in the middle where the scene stands
+      const TUFTS = [];
+      while (TUFTS.length < 90) {
+        const r = clear + RR() * (5.2 - clear), q = RR() * Math.PI * 2, x = Math.cos(q) * r, z = Math.sin(q) * r;
+        if (sc.noGrass && sc.noGrass(x, z)) continue;
+        TUFTS.push({ x, z, y: groundY(x, z), h: 0.14 + RR() * 0.2, ph: RR() * 6, col: [50 + RR() * 30, 84 + RR() * 40, 38 + RR() * 18], yaw: RR() * 3 });
+      }
+      const STONES = sc.stones === false ? [] : [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2 + 0.22; return { x: Math.cos(q) * 3.05, z: Math.sin(q) * 3.05, q, h: 1.1 + ((i * 37) % 10) / 14 }; });
+      const TREES = [...Array(14)].map((_, i) => { const q = 0.2 + i / 14 * Math.PI * 2 + ((i * 13) % 7) / 18, r = 6.2 + ((i * 29) % 10) / 3.2; return { x: Math.cos(q) * r, z: Math.sin(q) * r, birch: i % 4 === 1, h: 4.4 + (i % 5) * 0.55 }; });
+      const ROCKS = [[2.2, 1.9, 0.32], [-2.4, 1.4, 0.26], [1.4, -2.5, 0.22], [-1.7, -2.3, 0.3]].filter(([x, z]) => !(sc.noGrass && sc.noGrass(x, z)));
+      const FLIES = [...Array(26)].map((_, i) => ({ a: i * 2.4, r: 1.2 + (i % 7) * 0.5, h: 0.3 + (i % 5) * 0.4, s: 0.18 + (i % 4) * 0.06 }));
+      const MIST = [...Array(4)].map((_, i) => ({ q: i / 4 * Math.PI * 2 + 0.5, r: 2.4 + (i % 3) * 1.3 }));
+      let rune = 0.5;
+      return {
+        // the moon over the trees, where it always is on the screen, and its light round it
+        back(t, x) {
+          const mx = R.W * 0.8, my = R.H * 0.17, mr = Math.max(4, R.H * 0.045);
+          const g = x.createRadialGradient(mx, my, 0, mx, my, mr * 7);
+          g.addColorStop(0, 'rgba(200,225,240,.34)'); g.addColorStop(1, 'rgba(200,225,240,0)');
+          x.fillStyle = g; x.fillRect(mx - mr * 7, my - mr * 7, mr * 14, mr * 14);
+          x.fillStyle = '#E6EEE8'; x.beginPath(); x.arc(mx, my, mr, 0, Math.PI * 2); x.fill();
+          x.fillStyle = 'rgba(150,170,170,.35)'; x.beginPath(); x.arc(mx - mr * 0.3, my - mr * 0.2, mr * 0.28, 0, Math.PI * 2); x.arc(mx + mr * 0.35, my + mr * 0.3, mr * 0.18, 0, Math.PI * 2); x.fill();
+        },
+        lights(t) {
+          rune = (sc.rune ? sc.rune(t) : 0.5 + 0.15 * Math.sin(t * 1.1));
+          return [{ p: [0, 0.35, 0], col: [0.45, 1, 0.82], i: 0.35 * rune, fall: 0.06 }];
+        },
+        draw(t) {
+          // the moss and its circle; the glow of its lines laid only where they are — the ring of ogham and the triskele
+          const glowA = sc.glowAdd ? sc.glowAdd(t) : 0.16 + 0.2 * rune, G = { tex: T.glowMoss, layer: 0, add: glowA, ds: true, emis: true };
+          disc(R, 0, 0, 0, FL, 16, { tex: T.moss, layer: 0 });
+          flatRing(R, FL * 0.74, FL * 0.95, 24, G);
+          flatRing(R, 0, FL * 0.36, 8, G);
+          TRIS.forEach(([a, b, c, col]) => R.tri(a, b, c, { col, layer: 0, ds: true }));
+          // the grass bends with the wind, more in a gust
+          const gust = sc.gust ? sc.gust(t) : 0;
+          TUFTS.forEach(g => {
+            const w = Math.sin(t * 1.7 + g.x * 0.9 + g.z * 0.7) * 0.07 + gust * 0.18;
+            for (let k = 0; k < 3; k++) {
+              const q = g.yaw + k * 2.1, bx = g.x + Math.cos(q) * 0.04, bz = g.z + Math.sin(q) * 0.04, sx = -Math.sin(q) * 0.028, sz = Math.cos(q) * 0.028, h = g.h * (0.75 + k * 0.15);
+              R.tri([bx - sx, g.y, bz - sz], [bx + sx, g.y, bz + sz], [bx + Math.cos(q) * 0.05 + w * h * 2, g.y + h, bz + Math.sin(q) * 0.05 + w * h], { col: [g.col[0] + k * 6, g.col[1] + k * 8, g.col[2]], ds: true });
+            }
+          });
+          STONES.forEach((s, i) => menhir(R, T, s.x, s.z, s.h, s.q, i, rune - 0.5));
+          TREES.forEach(tr => (tr.birch ? birchTree(R, T, tr.x, tr.z, tr.h) : fir(R, tr.x, tr.z, tr.h, 1.15)));
+          ROCKS.forEach(([x, z, r], i) => boulder(R, x, z, r, i * 1.7));
+        },
+        fx(t, F) {
+          // the mist lying low, the shafts of moonlight, the fireflies, the glow of the runes
+          MIST.forEach((m, i) => { const q = m.q + t * 0.02; F.halo([Math.cos(q) * m.r, 0.25, Math.sin(q) * m.r], 1.6, 'rgba(160,200,190,.05)', 'rgba(160,200,190,0)'); });
+          if (sc.shafts !== false) [[-1.4, 0.6, 0.5], [0.9, -1.2, 0.4], [2.2, 1.1, 0.35]].forEach(([x, z, w], i) => shaft(R, [x + 2.4, 6.2, z - 1.6], [x, 0, z], w, 0.07 + 0.025 * Math.sin(t * 0.6 + i * 2)));
+          FLIES.forEach((f, i) => {
+            const q = f.a + t * f.s, blink = Math.max(0, Math.sin(t * 2.1 + i * 1.7));
+            const p = [Math.cos(q) * f.r, f.h + Math.sin(t * 0.8 + i) * 0.25, Math.sin(q * 1.3) * f.r];
+            if (blink > 0.15) { F.dot(p, `rgba(214,255,140,${blink})`, 1.2); if (i % 3 === 0) F.halo(p, 0.2, `rgba(200,255,140,${0.28 * blink})`, 'rgba(200,255,140,0)'); }
+          });
+          STONES.forEach(s => F.halo([s.x * 0.94, groundY(s.x, s.z) + s.h * 0.55, s.z * 0.94], 0.32, `rgba(143,232,198,${0.16 * rune})`, 'rgba(143,232,198,0)'));
+        }
+      };
+    },
+    post: R => glowPost(R),
+    overlay: glowLayer
+  });
+
+  /* The molecule viewer in «Друид»: the same molecule, turned the same way — carbon white berries of mistletoe,
+     oxygen red berries of rowan, the bonds twigs with a leaf on every other one; drawn smooth, a little under the
+     screen's resolution, and glowing */
+  const GROVEMOL = new WeakMap();
+  MOLDRAW.druid = function molGrove(ctx, mol, P, R3, W, H) {
+    let b = GROVEMOL.get(ctx.canvas);
+    if (!b) {
+      const cv = doc.createElement('canvas');
+      b = { cv, R: new Raster(cv, { smooth: true, fog: [10, 18, 14], fogNear: 9, fogFar: 17, amb: [0.22, 0.26, 0.22] }) };
+      b.R.key = { dir: norm([-0.5, 0.7, -0.6]), i: 0.95, col: [1, 0.96, 0.86] };
+      b.R.lights = [{ p: [3, 3, -5], col: [0.55, 1, 0.75], i: 0.55, fall: 0.02 }];
+      GROVEMOL.set(ctx.canvas, b);
+    }
+    const q = Math.min(2, window.devicePixelRatio || 1) * 0.8, T = groveTextures();
+    const R = b.R.sizeTo(Math.round(W * q), Math.round(H * q)), w = R.W, h = R.H;
+    R.cam([0, 0, -13], [0, 0, 0], 1.45 * Math.min(1, w / h));
+    const x = R.x, g = x.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.7);
+    g.addColorStop(0, '#1C2B20'); g.addColorStop(1, '#070C09');
+    x.fillStyle = g; x.fillRect(0, 0, w, h);
+    const [r0, r1, r2] = R3;
+    const Q0 = P.map(([px, py, pz]) => [-(r0[0] * px + r0[1] * py + r0[2] * pz), -(r1[0] * px + r1[1] * py + r1[2] * pz), -(r2[0] * px + r2[1] * py + r2[2] * pz)]);
+    const ext = Math.max(...Q0.map(p => Math.hypot(p[0], p[1], p[2]))) || 1, k = 3.6 / ext, Q = Q0.map(p => mul(p, k)), s = k / 1.2;
+    // a whole berry or twig at a time, from the far side to the near one
+    const items = mol.bonds.map(([a, c, o], n) => ({ z: (Q[a][2] + Q[c][2]) / 2, draw: o2 => {
+      rod(R, Q[a], Q[c], (o === 2 ? 0.15 : 0.1) * s, { ...o2, col: [112, 78, 48] }, 5);
+      if (n % 2 === 0) { const m = mul(add(Q[a], Q[c]), 0.5), d = norm(sub(Q[c], Q[a])), up = norm(cross(d, [0, 0, 1])); leaf(R, m, norm(add(up, mul(d, 0.3))), 0.72 * s, T.leaf, { ...o2, w: 0.4 }); }
+    } })).concat(mol.atoms.split('').map((el, i) => ({ z: Q[i][2] - 0.3, draw: o2 => ball(R, Q[i], (el === 'O' ? 0.44 : 0.36) * s, { ...o2, col: el === 'O' ? [214, 54, 42] : [236, 232, 210] }) })));
+    items.sort((u, v) => v.z - u.z).forEach((it, i) => it.draw({ layer: 2 + i }));
+    R.draw();
+    glowPost(R);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.drawImage(b.cv, 0, 0, ctx.canvas.width, ctx.canvas.height);
+  };
   /* ------------------------------------------------------------------ */
   /* the crypt behind the page: fog of old blood and violet, ash and      */
   /* sparks drifting up, at a fifth of the resolution                     */
@@ -1636,9 +2606,93 @@ window.BasilSkins = (() => {
     };
   }
   /* ------------------------------------------------------------------ */
-  /* the forest behind the page of «Друид»                               */
+  /* the forest behind the page of «Друид»: a night sky with the moon,   */
+  /* three rows of firs going into the fog, the nearer moving more with  */
+  /* the scroll, mist and fireflies; at a third of the resolution, drawn  */
+  /* back up smooth                                                       */
   /* ------------------------------------------------------------------ */
-  function forest() { return { destroy() {} }; }
+  function forest() {
+    const cv = doc.createElement('canvas');
+    cv.id = 'psx-forest';
+    cv.setAttribute('aria-hidden', 'true');
+    const page = $('.page');
+    (page ? page.parentNode : doc.body).insertBefore(cv, page);
+    const x = cv.getContext('2d');
+    // the rows of firs: drawn once for each size of the screen, wider than it, so that they can slide
+    const ROWS = [{ k: 0.04, base: 0.62, col: '#13261F', fog: 0.5, n: 26, h: 0.2 }, { k: 0.09, base: 0.74, col: '#0D1C16', fog: 0.3, n: 20, h: 0.28 }, { k: 0.16, base: 0.88, col: '#070F0B', fog: 0, n: 14, h: 0.4 }];
+    const FLIES = [...Array(50)].map((_, i) => ({ x: (i * 0.618) % 1, y: 0.45 + ((i * 0.37) % 1) * 0.5, s: 0.4 + (i % 7) / 7, ph: i * 1.7 }));
+    let W = 0, H = 0, layers = [];
+    function build() {
+      W = Math.max(60, Math.round(innerWidth / 3)); H = Math.max(60, Math.round(innerHeight / 3));
+      cv.width = W; cv.height = H;
+      const R1 = rng(17);
+      layers = ROWS.map(row => {
+        const c = doc.createElement('canvas'), w = Math.round(W * 1.4);
+        c.width = w; c.height = H;
+        const lx = c.getContext('2d');
+        lx.fillStyle = row.col;
+        lx.fillRect(0, H * row.base, w, H);
+        // the trees of one stretch (a period of 0.4 of the screen), drawn again and again along the row: it slides seamlessly
+        const per = W * 0.4, n = Math.max(3, Math.round(row.n * 0.4));
+        for (let i = 0; i < n; i++) {
+          const tx0 = (i + R1() * 0.6) / n * per, th = H * row.h * (0.7 + R1() * 0.6), tw = th * 0.34, ty = H * row.base + 2;
+          for (let m = -1; m < 5; m++) for (let k = 0; k < 4; k++) {
+            const tx = tx0 + m * per, y0 = ty - th * (k / 4), y1 = ty - th * ((k + 1.35) / 4), hw = tw * (1 - k * 0.2);
+            lx.beginPath(); lx.moveTo(tx - hw, y0); lx.lineTo(tx + hw, y0); lx.lineTo(tx, y1); lx.closePath(); lx.fill();
+          }
+        }
+        return { c, row };
+      });
+    }
+    let scroll0 = scrollY;
+    const t0 = performance.now();
+    function frame(now) {
+      const still = reduce.matches, t = still ? 4 : (now - t0) / 1000;
+      if (cv.width !== Math.max(60, Math.round(innerWidth / 3))) build();
+      const g = x.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#040A08'); g.addColorStop(0.5, '#0C1915'); g.addColorStop(1, '#0B120D');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      // the moon and its light
+      const mx = W * 0.78, my = H * 0.16, mr = Math.max(3, H * 0.035), mg = x.createRadialGradient(mx, my, 0, mx, my, mr * 9);
+      mg.addColorStop(0, 'rgba(200,225,240,.28)'); mg.addColorStop(1, 'rgba(200,225,240,0)');
+      x.fillStyle = mg; x.fillRect(0, 0, W, H);
+      x.fillStyle = '#DCE6E0'; x.beginPath(); x.arc(mx, my, mr, 0, Math.PI * 2); x.fill();
+      // the rows of firs, each with the fog in front of it
+      const sc = still ? 0 : (scrollY - scroll0) / Math.max(1, innerHeight);
+      layers.forEach(({ c, row }, i) => {
+        const off = ((sc * row.k * W + t * (i + 1) * 0.4) % (W * 0.4) + W * 0.4) % (W * 0.4);  // the row slides, a period at a time
+        x.drawImage(c, -off, -Math.min(H * 0.2, sc * row.k * H * 0.5));
+        if (row.fog) { const f = x.createLinearGradient(0, H * (row.base - 0.25), 0, H); f.addColorStop(0, 'rgba(40,64,54,0)'); f.addColorStop(0.5, `rgba(40,64,54,${row.fog * 0.5})`); f.addColorStop(1, 'rgba(40,64,54,0)'); x.fillStyle = f; x.fillRect(0, 0, W, H); }
+      });
+      // the fireflies over the forest floor
+      FLIES.forEach(f => {
+        const b = Math.max(0, Math.sin(t * 1.3 + f.ph));
+        if (b < 0.2) return;
+        const px = ((f.x + Math.sin(t * 0.1 * f.s + f.ph) * 0.03) % 1) * W, py = (((f.y - t * 0.003 * f.s) % 1) + 1) % 1 * H;
+        x.fillStyle = `rgba(210,255,130,${b * 0.85})`;
+        x.beginPath(); x.arc(px, py, 0.7, 0, Math.PI * 2); x.fill();
+      });
+    }
+    build();
+    const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 15);
+    L.start();
+    const onScroll = () => { if (!L.on && !reduce.matches) L.start(); };
+    const vis = () => { if (!doc.hidden) { scroll0 = scrollY; L.start(); } };
+    let rz = 0;
+    const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { build(); frame(performance.now()); }, 120); };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onResize);
+    doc.addEventListener('visibilitychange', vis);
+    return {
+      destroy() {
+        L.stop();
+        removeEventListener('scroll', onScroll);
+        removeEventListener('resize', onResize);
+        doc.removeEventListener('visibilitychange', vis);
+        cv.remove();
+      }
+    };
+  }
   /* ------------------------------------------------------------------ */
   /* the drawings of the guide at the console's resolution               */
   /* ------------------------------------------------------------------ */

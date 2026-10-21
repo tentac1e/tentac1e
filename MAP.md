@@ -247,29 +247,41 @@
 
 **skins.js**
 - `src/js/skins/00-core.js` (36 стр.): SKINS, BAYER
-- `src/js/skins/01-raster.js` (213 стр.): SHADED, ICO
+- `src/js/skins/01-raster.js` (238 стр.): SHADED, ICO, OCT
 - `src/js/skins/02-textures.js` (183 стр.): FLOORS, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
-- `src/js/skins/04-stage.js` (223 стр.): WORLDS, PAIRS
+- `src/js/skins/04-stage.js` (265 стр.): WORLDS, PAIRS, ESSENCE
 - `src/js/skins/05-grimoire-formirovka.js` (98 стр.)
 - `src/js/skins/05-grimoire-gidro.js` (59 стр.)
 - `src/js/skins/05-grimoire-glavnaya.js` (102 стр.)
 - `src/js/skins/05-grimoire-moy.js` (72 стр.)
-- `src/js/skins/05-grimoire-posadka.js` (74 стр.)
+- `src/js/skins/05-grimoire-posadka.js` (48 стр.)
 - `src/js/skins/05-grimoire-problemy.js` (64 стр.)
 - `src/js/skins/05-grimoire-sorta.js` (58 стр.)
 - `src/js/skins/05-grimoire-spravka.js` (59 стр.)
 - `src/js/skins/05-grimoire-udobreniya.js` (61 стр.)
 - `src/js/skins/05-grimoire-uhod.js` (55 стр.)
 - `src/js/skins/05-grimoire-vkus.js` (58 стр.)
-- `src/js/skins/05-grimoire.js` (84 стр.)
+- `src/js/skins/05-grimoire.js` (77 стр.)
+- `src/js/skins/06-druid-formirovka.js` (83 стр.)
+- `src/js/skins/06-druid-gidro.js` (55 стр.)
+- `src/js/skins/06-druid-glavnaya.js` (27 стр.)
+- `src/js/skins/06-druid-moy.js` (53 стр.)
+- `src/js/skins/06-druid-posadka.js` (48 стр.)
+- `src/js/skins/06-druid-problemy.js` (85 стр.)
+- `src/js/skins/06-druid-sorta.js` (58 стр.)
+- `src/js/skins/06-druid-spravka.js` (54 стр.)
+- `src/js/skins/06-druid-udobreniya.js` (68 стр.)
+- `src/js/skins/06-druid-uhod.js` (42 стр.)
+- `src/js/skins/06-druid-vkus.js` (47 стр.)
+- `src/js/skins/06-druid.js` (316 стр.): BLOOM, GROVEMOL
 - `src/js/skins/07-crypt.js` (54 стр.)
-- `src/js/skins/07-forest.js` (4 стр.)
+- `src/js/skins/07-forest.js` (88 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
 - `src/js/skins/09-start.js` (53 стр.): BACKS
 
 ## Стили (src/css/)
 
-**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`, `27-grimoire.css`
-**lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-kinds.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`, `16-grimoire.css`
+**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`, `27-grimoire.css`, `28-druid.css`
+**lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-kinds.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`, `16-grimoire.css`, `17-druid.css`
 

@@ -8,7 +8,7 @@
      dither — the same low polygons, lit and fogged, as a game of today draws them */
   class Raster {
     constructor(canvas, o) {
-      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1 }, o);
+      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1, maxPx: 0 }, o);
       this.c = canvas;
       // the console's colour is cut down by reading the pixels back; a smooth picture is never read and stays on the GPU
       this.x = canvas.getContext('2d', this.smooth ? { alpha: false } : { willReadFrequently: true });
@@ -16,10 +16,16 @@
       this.unit = 1;
     }
     // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across), or, smooth,
-    // scale canvas pixels a CSS pixel. unit — the canvas pixels of one console pixel (the size of a spark, a dot)
+    // scale canvas pixels a CSS pixel, but no more than maxPx in all (a wide head of a chapter is drawn a little under
+    // the screen's resolution and drawn up smooth: the cost of a frame goes with its pixels). unit — the canvas pixels
+    // of one console pixel (the size of a spark, a dot)
     size() {
       const cw = this.c.clientWidth || 300, ch = this.c.clientHeight || 200;
-      if (this.smooth) { this.unit = 2.2 * this.scale; return this.sizeTo(Math.round(cw * this.scale), Math.round(ch * this.scale)); }
+      if (this.smooth) {
+        const s = this.maxPx ? Math.min(this.scale, Math.sqrt(this.maxPx / (cw * ch))) : this.scale;
+        this.unit = 2.2 * s;
+        return this.sizeTo(Math.round(cw * s), Math.round(ch * s));
+      }
       const s = Math.max(this.px, cw / this.maxW);
       return this.sizeTo(Math.round(cw / s), Math.round(ch / s));
     }
@@ -87,26 +93,42 @@
         const g = q => { const dx = q[0] - cx, dy = q[1] - cy, L = Math.hypot(dx, dy) || 1; return [q[0] + dx / L * 0.6, q[1] + dy / L * 0.6]; };
         const A = g(a), B = g(b), C = g(c);
         if (o.tex) {
-          x.save();
-          x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath(); x.clip();
+          // the texture's pixels onto the triangle: the affine map that takes its uv to the screen
           const w = o.tex.width, h = o.tex.height, uv = o.uv;
           const u0 = uv[0][0] * w, v0 = uv[0][1] * h, u1 = uv[1][0] * w, v1 = uv[1][1] * h, u2 = uv[2][0] * w, v2 = uv[2][1] * h;
           const det = (u1 - u0) * (v2 - v0) - (u2 - u0) * (v1 - v0);
           if (det) {
             const ta = ((b[0] - a[0]) * (v2 - v0) - (c[0] - a[0]) * (v1 - v0)) / det, tb = ((b[1] - a[1]) * (v2 - v0) - (c[1] - a[1]) * (v1 - v0)) / det;
             const tc = ((c[0] - a[0]) * (u1 - u0) - (b[0] - a[0]) * (u2 - u0)) / det, td = ((c[1] - a[1]) * (u1 - u0) - (b[1] - a[1]) * (u2 - u0)) / det;
+            const M = [ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0];
+            // smooth: every texture lit and fogged ahead, in fine steps of light (a blend of multiplying over a large
+            // face costs more than the rest of the frame where the canvas is drawn without the graphics card); the
+            // console: only the cut-outs, the rest multiplied by its light here
+            const ahead = this.smooth ? (o.cut || o.add == null) : o.cut;
+            const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10) : o.tex;
             if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
-            x.setTransform(ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0);
-            x.drawImage(o.cut && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F) : o.tex, 0, 0);
-            x.setTransform(1, 0, 0, 1, 0, 0);
+            x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath();
+            if (this.smooth) {
+              // smooth: the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many
+              // times cheaper where the canvas is drawn without the graphics card
+              const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
+              pat.setTransform(new DOMMatrix(M));
+              x.fillStyle = pat;
+              x.fill();
+            } else {
+              x.save();
+              x.clip();
+              x.setTransform(...M);
+              x.drawImage(src, 0, 0);
+              x.restore();
+            }
             x.globalAlpha = 1;
-            if (o.add == null && !o.cut) {
+            if (o.add == null && !ahead) {
               if (t.l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, t.l[0] * 255) | 0},${Math.min(255, t.l[1] * 255) | 0},${Math.min(255, t.l[2] * 255) | 0})`; x.fill(); }
               if (f > 0.01) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; x.fill(); }
             }
             x.globalCompositeOperation = 'source-over';
           }
-          x.restore();
         } else {
           const col = o.col, l = t.l || [1, 1, 1];
           const r = col[0] * l[0] * (1 - f) + F[0] * f, gg = col[1] * l[1] * (1 - f) + F[1] * f, bb = col[2] * l[2] * (1 - f) + F[2] * f;
@@ -130,21 +152,22 @@
     }
   }
 
-  // a cut-out texture (a leaf, a flame) lit and fogged, kept for the next triangle in the same light
+  // a texture lit and fogged (a cut-out one — a leaf, a flame — keeps its outline), kept for the next triangle in the
+  // same light: the light in k steps to one
   const SHADED = new Map();
   let texId = 0;
-  function shaded(tx, l, f, F) {
-    const q = v => Math.round(Math.min(1.2, v) * 10);
+  function shaded(tx, l, f, F, k = 10) {
+    const q = v => Math.round(Math.min(1.2, v) * k);
     if (!tx.psxId) tx.psxId = ++texId;
-    const key = tx.psxId + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
+    const key = tx.psxId + ':' + k + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
     let c = SHADED.get(key);
     if (c) return c;
-    if (SHADED.size > 600) SHADED.clear();
+    if (SHADED.size > 900) SHADED.clear();
     c = doc.createElement('canvas');
     c.width = tx.width; c.height = tx.height;
     const x = c.getContext('2d');
     x.drawImage(tx, 0, 0);
-    if (l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, q(l[0]) * 25.5) | 0},${Math.min(255, q(l[1]) * 25.5) | 0},${Math.min(255, q(l[2]) * 25.5) | 0})`; x.fillRect(0, 0, c.width, c.height); }
+    if (l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, q(l[0]) * 255 / k) | 0},${Math.min(255, q(l[1]) * 255 / k) | 0},${Math.min(255, q(l[2]) * 255 / k) | 0})`; x.fillRect(0, 0, c.width, c.height); }
     const ff = Math.round(f * 12) / 12;
     if (ff > 0) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${ff})`; x.fillRect(0, 0, c.width, c.height); }
     x.globalCompositeOperation = 'destination-in';
@@ -182,12 +205,14 @@
     const f = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]];
     return { v, f };
   })();
-  function ball(R, c, r, o) { ICO.f.forEach(([a, b, d]) => R.tri(add(c, mul(ICO.v[a], r)), add(c, mul(ICO.v[b], r)), add(c, mul(ICO.v[d], r)), { ...o, ctr: c })); }
+  // eight faces instead of twenty (o.lo): a berry, a pebble, a pad of moss — small enough that nobody counts its faces
+  const OCT = { v: [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]], f: [[0, 2, 4], [4, 2, 1], [1, 2, 5], [5, 2, 0], [0, 4, 3], [4, 1, 3], [1, 5, 3], [5, 0, 3]] };
+  function ball(R, c, r, o) { const M = o.lo ? OCT : ICO; M.f.forEach(([a, b, d]) => R.tri(add(c, mul(M.v[a], r)), add(c, mul(M.v[b], r)), add(c, mul(M.v[d], r)), { ...o, ctr: c })); }
   // a ball stretched along its own axes (r: three radii) and turned by yaw about the vertical
   function egg(R, c, r, yaw, o) {
-    const cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const cy = Math.cos(yaw), sy = Math.sin(yaw), M = o.lo ? OCT : ICO;
     const P = v => { const x = v[0] * r[0], z = v[2] * r[2]; return [c[0] + x * cy - z * sy, c[1] + v[1] * r[1], c[2] + x * sy + z * cy]; };
-    ICO.f.forEach(([a, b, d]) => R.tri(P(ICO.v[a]), P(ICO.v[b]), P(ICO.v[d]), { ...o, ctr: c }));
+    M.f.forEach(([a, b, d]) => R.tri(P(M.v[a]), P(M.v[b]), P(M.v[d]), { ...o, ctr: c }));
   }
   function rod(R, p, q, r, o, n = 4) {
     const d = norm(sub(q, p)), up = Math.abs(d[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];

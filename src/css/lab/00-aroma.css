@@ -156,3 +156,65 @@
   --m-hex: #6FA8E0;
   --m-rest: #3A2E38;
 }
+/* the skin «Друид» (data-skin="druid", always over the dark theme): the food by moonlight; the molecules in the colours of the grove */
+:root[data-skin="druid"] {
+  --fd-hi: #D5D1C3;
+  --fd-dark: #201F19;
+  --fd-leaf: #387829;
+  --fd-leaf-d: #225519;
+  --fd-tomato: #A53620;
+  --fd-tomato-d: #7D2314;
+  --fd-straw: #A62E35;
+  --fd-straw-d: #7C1B23;
+  --fd-seed: #AFA149;
+  --fd-lemon: #AFA127;
+  --fd-lemon-d: #967C10;
+  --fd-peach: #B37E4A;
+  --fd-peach-b: #A74A3F;
+  --fd-cori: #998B60;
+  --fd-cori-d: #6F5D35;
+  --fd-fennel: #D1CEBB;
+  --fd-fennel-d: #849F66;
+  --fd-fennel-g: #5A8A36;
+  --fd-bay: #4D7830;
+  --fd-clove: #593B1F;
+  --fd-pepper: #2B2A24;
+  --fd-pepper-hi: #585548;
+  --fd-rosemary: #3F6438;
+  --fd-stem: #595329;
+  --fd-mint: #318735;
+  --fd-mint-d: #206425;
+  --fd-choc: #432B1A;
+  --fd-choc-hi: #5F422A;
+  --fd-oil: #9C8A23;
+  --fd-oil-d: #7B6812;
+  --fd-olive: #50651D;
+  --fd-melon: #AF464B;
+  --fd-rind: #2C6C29;
+  --fd-cuke: #2A6425;
+  --fd-cuke-f: #96B379;
+  --fd-cheese: #D4CFBF;
+  --fd-cheese-d: #9BA084;
+  --fd-parm: #ADA65F;
+  --fd-parm-d: #978638;
+  --fd-rind-p: #857128;
+  --fd-garlic: #D3CEBE;
+  --fd-garlic-d: #9A9E87;
+  --fd-garlic-p: #83788E;
+  --fd-chili: #9F291E;
+  --fd-coco: #594326;
+  --fd-coco-f: #D4CFC0;
+  --m-lin: #8FC85A;
+  --m-cin: #8FE8C6;
+  --m-cit: #D6D45A;
+  --m-cam: #9FC2C8;
+  --m-est: #B99ADB;
+  --m-eug: #D9644F;
+  --m-meu: #C8B6E8;
+  --m-mci: #E2A43B;
+  --m-car: #C9A24E;
+  --m-ber: #E6CF8E;
+  --m-hex: #7FB8C9;
+  --m-rest: #2C3D2D;
+}
+

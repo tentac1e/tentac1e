@@ -62,13 +62,6 @@
     box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
     return 1.08;
   }
-  // a molecule of the aroma, small and glowing: its atoms at the centre c, turned by yaw; a — how much of it is seen
-  function essence(R, mol, c, yaw, k = 1, a = null) {
-    const ca = Math.cos(yaw), sa = Math.sin(yaw);
-    const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [c[0] + q[0] * 0.15 * k, c[1] + q[1] * 0.135 * k + q[2] * 0.03 * k, c[2] + q[2] * 0.15 * k]; });
-    mol.bonds.forEach(([i, j]) => rod(R, MP[i], MP[j], 0.012 * k, { col: [170, 120, 230], emis: true, add: a }, 3));
-    mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? [240, 70, 60] : [214, 190, 255], emis: true, add: a }));
-  }
   // the signs of alchemy, pixel by pixel (16 × 16, nothing around them): mercury, sulphur, salt, saturn, earth, air
   function glyphTex(kind, col) {
     return tex(16, 16, t => {

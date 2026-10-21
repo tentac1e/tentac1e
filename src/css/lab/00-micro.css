@@ -181,3 +181,36 @@
   --mic-label-bg: rgba(21, 16, 27, .9);
   --mic-sel: #B8EE86;
 }
+/* the skin «Друид» (data-skin="druid", always over the dark theme): the leaf under the microscope, by moonlight */
+:root[data-skin="druid"] {
+  --mic-air: #0C1B1E;
+  --mic-air-2: #0E1D13;
+  --mic-gas: #0F1F15;
+  --mic-wall: #639551;
+  --mic-wall-soft: rgba(99, 149, 81, .4);
+  --mic-cut: #9C8A35;
+  --mic-epi: #172719;
+  --mic-epi-2: #1B301D;
+  --mic-pal: #22491B;
+  --mic-pal-2: #2A5721;
+  --mic-spo: #1B3718;
+  --mic-spo-2: #20401C;
+  --mic-chl: #65A03F;
+  --mic-chl-hi: #8BB460;
+  --mic-nuc: #7F7E9B;
+  --mic-sec: #36391C;
+  --mic-sec-2: #434523;
+  --mic-oil: #A88E23;
+  --mic-oil-hi: #D5CEB5;
+  --mic-oil-deep: #86670B;
+  --mic-xyl: #A76A7A;
+  --mic-xyl-lumen: #21181B;
+  --mic-phl: #5E90A1;
+  --mic-phl-soft: #162930;
+  --mic-sheath: #223D1D;
+  --mic-guard: #4F823F;
+  --mic-hair: #20311F;
+  --mic-label-bg: rgba(20, 32, 25, .9);
+  --mic-sel: #B5E07E;
+}
+

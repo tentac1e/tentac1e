@@ -157,6 +157,68 @@
   --m-hex: #6FA8E0;
   --m-rest: #3A2E38;
 }
+/* the skin «Друид» (data-skin="druid", always over the dark theme): the food by moonlight; the molecules in the colours of the grove */
+:root[data-skin="druid"] {
+  --fd-hi: #D5D1C3;
+  --fd-dark: #201F19;
+  --fd-leaf: #387829;
+  --fd-leaf-d: #225519;
+  --fd-tomato: #A53620;
+  --fd-tomato-d: #7D2314;
+  --fd-straw: #A62E35;
+  --fd-straw-d: #7C1B23;
+  --fd-seed: #AFA149;
+  --fd-lemon: #AFA127;
+  --fd-lemon-d: #967C10;
+  --fd-peach: #B37E4A;
+  --fd-peach-b: #A74A3F;
+  --fd-cori: #998B60;
+  --fd-cori-d: #6F5D35;
+  --fd-fennel: #D1CEBB;
+  --fd-fennel-d: #849F66;
+  --fd-fennel-g: #5A8A36;
+  --fd-bay: #4D7830;
+  --fd-clove: #593B1F;
+  --fd-pepper: #2B2A24;
+  --fd-pepper-hi: #585548;
+  --fd-rosemary: #3F6438;
+  --fd-stem: #595329;
+  --fd-mint: #318735;
+  --fd-mint-d: #206425;
+  --fd-choc: #432B1A;
+  --fd-choc-hi: #5F422A;
+  --fd-oil: #9C8A23;
+  --fd-oil-d: #7B6812;
+  --fd-olive: #50651D;
+  --fd-melon: #AF464B;
+  --fd-rind: #2C6C29;
+  --fd-cuke: #2A6425;
+  --fd-cuke-f: #96B379;
+  --fd-cheese: #D4CFBF;
+  --fd-cheese-d: #9BA084;
+  --fd-parm: #ADA65F;
+  --fd-parm-d: #978638;
+  --fd-rind-p: #857128;
+  --fd-garlic: #D3CEBE;
+  --fd-garlic-d: #9A9E87;
+  --fd-garlic-p: #83788E;
+  --fd-chili: #9F291E;
+  --fd-coco: #594326;
+  --fd-coco-f: #D4CFC0;
+  --m-lin: #8FC85A;
+  --m-cin: #8FE8C6;
+  --m-cit: #D6D45A;
+  --m-cam: #9FC2C8;
+  --m-est: #B99ADB;
+  --m-eug: #D9644F;
+  --m-meu: #C8B6E8;
+  --m-mci: #E2A43B;
+  --m-car: #C9A24E;
+  --m-ber: #E6CF8E;
+  --m-hex: #7FB8C9;
+  --m-rest: #2C3D2D;
+}
+
 /* Illustrations of plants, symptoms and pests: physical colours, the same in both themes;
    only the paper under the picture follows the theme. */
 :root {
@@ -398,6 +460,115 @@
   --ill-skin-d: #A26555;
   --ill-nail: #D4C8B4;
 }
+/* the skin «Друид» (data-skin="druid", always over the dark theme): the same pictures by moonlight in the grove —
+   darker, a shadow of moss, whites turned to birch bark (the drawings stay smooth: no pixel filter) */
+:root[data-skin="druid"] {
+  --ill-bg: #16221A;
+  --ill-bg-2: #1D2C21;
+  --ill-line: rgba(232, 226, 207, .14);
+  --ill-leaf: #5E9A3C;
+  --ill-leaf-hi: #8FC85A;
+  --ill-leaf-d: #2F5A24;
+  --ill-vein: #A8D87C;
+  --ill-under: #6F9758;
+  --ill-under-vein: #98B187;
+  --ill-yellow: #9B9C2E;
+  --ill-yellow-pale: #A7AD6A;
+  --ill-lime: #839A33;
+  --ill-brown: #66481F;
+  --ill-brown-d: #432F15;
+  --ill-spot: #23241B;
+  --ill-water: #2F422B;
+  --ill-purple: #50335A;
+  --ill-silver: #D1CEC0;
+  --ill-fuzz: #666874;
+  --ill-mold: #6F7C6A;
+  --ill-mold-d: #505C4D;
+  --ill-stem: #4E8634;
+  --ill-stem-d: #294A1E;
+  --ill-flower: #D3CEC2;
+  --ill-flower-d: #CEC7BE;
+  --ill-soil: #4E3B25;
+  --ill-soil-d: #372A1A;
+  --ill-pot: #8C4A2E;
+  --ill-pot-d: #53291A;
+  --ill-pot-hi: #B5714A;
+  --ill-crust: #D2CEBF;
+  --ill-root: #D3CDBD;
+  --ill-root-d: #9A9D7F;
+  --ill-rot: #4E3B22;
+  --ill-aphid: #5A8C31;
+  --ill-aphid-d: #38641E;
+  --ill-mite: #9C963D;
+  --ill-mite-d: #423C18;
+  --ill-white: #DFD9C4;
+  --ill-thrips: #4E4123;
+  --ill-slug: #656146;
+  --ill-slug-d: #45412D;
+  --ill-slime: rgba(207, 204, 192, .7);
+  --ill-gnat: #202420;
+  --ill-wing: rgba(135, 157, 152, .55);
+  --ill-larva: #D3CEBE;
+  --ill-eye: #C9382D;
+  --ill-spore: #504761;
+  --ill-hypha: #D3CEC0;
+  --ill-bact: #926C27;
+  --ill-hi: #E8E2CF;
+  --ill-leaf-deep: #2D6023;
+  --ill-leaf-deep-d: #1A4215;
+  --ill-vein-deep: #194115;
+  --ill-leaf-purple: #432449;
+  --ill-leaf-purple-d: #2C1530;
+  --ill-vein-purple: #231028;
+  --ill-stem-purple: #4F2D53;
+  --ill-leaf-lime: #749738;
+  --ill-leaf-lime-d: #4F6F1E;
+  --ill-vein-lime: #4C6C1D;
+  --ill-flower-purple: #705689;
+  --ill-flower-purple-d: #4F3769;
+  --ill-flower-pink: #A78D97;
+  --ill-flower-pink-d: #896276;
+  --ill-plastic: #233127;
+  --ill-plastic-hi: #36483B;
+  --ill-perlite: #D3CEC0;
+  --ill-seed: #201E17;
+  --ill-gel: rgba(206, 204, 192, .85);
+  --ill-glass: #CECDC0;
+  --ill-glass-d: #628685;
+  --ill-water-c: #81A8A5;
+  --ill-metal: #92A297;
+  --ill-metal-d: #495B58;
+  --ill-grip: #9F4429;
+  --ill-cut: #9F3529;
+  --ill-lamp: #F8DFA0;
+  --ill-light: #F2C46A;
+  --ill-paper: #2B3426;
+  --ill-paper-d: #46523A;
+  --ill-kraft: #948153;
+  --ill-kraft-d: #715F37;
+  --ill-wood: #8B6E3F;
+  --ill-wood-d: #604622;
+  --ill-sky: #1E3A3A;
+  --ill-sky-2: #2A4A46;
+  --ill-frame: #D3CFC0;
+  --ill-frame-d: #809282;
+  --ill-radiator: #D0CCBE;
+  --ill-oil: #A49534;
+  --ill-pesto: #436D1F;
+  --ill-salt: #D4D0C2;
+  --ill-ice: #D0CEC2;
+  --ill-straw: #9B935F;
+  --ill-film: #D0CEC1;
+  --ill-box: #5A794F;
+  --ill-box-d: #415E39;
+  --ill-label: #DDD6BE;
+  --ill-dark: #26352B;
+  --ill-tomato: #9F3821;
+  --ill-skin: #A8906B;
+  --ill-skin-d: #8D6D4A;
+  --ill-nail: #D3CABA;
+}
+
 /* Micro-anatomy palette: leaf sections and zoomed-in views (trichomes, stomata, disease under the lens).
    Colours of a fresh, unstained section under a light microscope; lignin is shown crimson as after safranin. */
 :root {
@@ -581,6 +752,39 @@
   --mic-label-bg: rgba(21, 16, 27, .9);
   --mic-sel: #B8EE86;
 }
+/* the skin «Друид» (data-skin="druid", always over the dark theme): the leaf under the microscope, by moonlight */
+:root[data-skin="druid"] {
+  --mic-air: #0C1B1E;
+  --mic-air-2: #0E1D13;
+  --mic-gas: #0F1F15;
+  --mic-wall: #639551;
+  --mic-wall-soft: rgba(99, 149, 81, .4);
+  --mic-cut: #9C8A35;
+  --mic-epi: #172719;
+  --mic-epi-2: #1B301D;
+  --mic-pal: #22491B;
+  --mic-pal-2: #2A5721;
+  --mic-spo: #1B3718;
+  --mic-spo-2: #20401C;
+  --mic-chl: #65A03F;
+  --mic-chl-hi: #8BB460;
+  --mic-nuc: #7F7E9B;
+  --mic-sec: #36391C;
+  --mic-sec-2: #434523;
+  --mic-oil: #A88E23;
+  --mic-oil-hi: #D5CEB5;
+  --mic-oil-deep: #86670B;
+  --mic-xyl: #A76A7A;
+  --mic-xyl-lumen: #21181B;
+  --mic-phl: #5E90A1;
+  --mic-phl-soft: #162930;
+  --mic-sheath: #223D1D;
+  --mic-guard: #4F823F;
+  --mic-hair: #20311F;
+  --mic-label-bg: rgba(20, 32, 25, .9);
+  --mic-sel: #B5E07E;
+}
+
 /* Научный слой: живая сцена, развороты «Для любопытных» как страницы лабораторного журнала,
    модели и глава «Вкус». Цвет дисциплины: химия — антоциан, физика — вода и свет,
    биология — лист, вкус — оливковое масло. */
@@ -961,6 +1165,72 @@ body::after {
   --hoop: #6E6470;
   --glass-edge: rgba(205, 191, 158, .45);
 }
+/* the skin «Друид» (data-skin="druid", always over the dark theme): the models by moonlight in the grove —
+   moss, amber, the cold light of the runes, berries of rowan for oxygen */
+:root[data-skin="druid"] {
+  --sci-chem: #B99ADB;
+  --sci-phys: #8FE8C6;
+  --sci-bio: #8FC85A;
+  --sci-taste: #E2A43B;
+  --sci-chem-soft: #1F1E2C;
+  --sci-phys-soft: #13281F;
+  --sci-bio-soft: #172615;
+  --sci-taste-soft: #2A2210;
+  --paper-line: rgba(232, 226, 207, .05);
+  --paper-line-strong: rgba(232, 226, 207, .09);
+  --hover-light: rgba(143, 232, 198, .08);
+  --ser-1: #8FC85A;
+  --ser-2: #B99ADB;
+  --ser-3: #E2A43B;
+  --ser-4: #8FE8C6;
+  --ser-muted: #2C3D2D;
+  --band-good: rgba(143, 200, 90, .1);
+  --band-cold: rgba(143, 232, 198, .1);
+  --tip-bg: #E8E2CF;
+  --tip-ink: #0B120D;
+  --pl-a: #2A5622;
+  --pl-b: #5E9A3C;
+  --pl-c: #8FC85A;
+  --pl-back-a: #15301A;
+  --pl-back-b: #294A1E;
+  --pl-stem-a: #294A1E;
+  --pl-stem-b: #5E9A3C;
+  --pl-pet: #4E8634;
+  --pot-a: #5A2E1C;
+  --pot-b: #8C4A2E;
+  --pot-rim: #74391F;
+  --soil-top: #261C14;
+  --soil-grain: #4A3826;
+  --tag-bg: #DDD6BE;
+  --tag-ink: #22180F;
+  --stick: #6B4A30;
+  --mol-c: #E8E2CF;
+  --mol-c-hi: #FFFBEB;
+  --mol-o: #C9382D;
+  --mol-o-hi: #EE7A62;
+  --mol-bond: #7A5634;
+  --mol-edge: rgba(0, 0, 0, .5);
+  --z0: #173A3A;
+  --z1: #1C3A26;
+  --z2: #2E5A20;
+  --z3: #5A4A1A;
+  --z4: #5A2118;
+  --wx-cold: #8FE8C6;
+  --wx-frost: #B9C8E8;
+  --wx-hot: #E2A43B;
+  --wx-rain: #7FB8C9;
+  --wx-cold-soft: #13281F;
+  --wx-hot-soft: #2E2210;
+  --sun-light: rgba(226, 164, 59, .22);
+  --sun-disc: #E2A43B;
+  --water-fill: rgba(70, 130, 125, .4);
+  --water-line: #8FE8C6;
+  --wood-a: #4E3420;
+  --wood-b: #6B4A30;
+  --hoop: #5E6A5A;
+  --glass-edge: rgba(232, 226, 207, .42);
+}
+
 /* ================= hero: a living basil in a pot ================= */
 .hero-art { min-height: 540px; }
 .plant-stage {
@@ -1808,3 +2078,73 @@ body::after {
 [data-skin="grimoire"] .resume-mark i.is-bar { border-radius: 0; background: var(--blood); }
 /* no soft light under the mouse: the crypt has candles, not a lamp */
 [data-skin="grimoire"] .q-card, [data-skin="grimoire"] .tool, [data-skin="grimoire"] .rule, [data-skin="grimoire"] .world-card { --hover-light: transparent; }
+/* ================= the skin «Друид»: the science layer as a lore of the grove =================
+   (the components of the interface: style/28-druid.css). A dive is a window of bark tinted by its discipline, its
+   icon on a round stone; «Подробнее» a hollow in the wood; the facts notes in a quick hand; «Для любопытных» written
+   by hand between two lines of ogham. Charts keep their shapes and their smoothing; the molecules are drawn by
+   skins.js — berries and twigs */
+[data-skin="druid"] .deep-zone-label { font-family: var(--font-hand); font-style: normal; font-weight: 600; font-size: 2.1rem; color: var(--rune); text-shadow: 0 0 14px var(--rune-glow); }
+[data-skin="druid"] .deep-zone-label span::before, [data-skin="druid"] .deep-zone-label span::after { content: "\169B\1681\1682\1683\169C"; margin: 0 .4em; font: 400 .55em/1 var(--font-ogham); color: var(--amber); letter-spacing: .08em; vertical-align: .18em; text-shadow: none; }
+[data-skin="druid"] .deep-zone-label::after { height: 2px; background: linear-gradient(90deg, var(--moss-d), transparent); }
+[data-skin="druid"] .deep-all { border: 1px solid var(--bark-d); border-radius: 6px; background: var(--plank); color: var(--birch); font: 400 1rem/1 var(--font-label); letter-spacing: .04em; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3), var(--shadow-sm); }
+@media (hover: hover) { [data-skin="druid"] .deep-all:hover { color: var(--birch); border-color: var(--rune); } }
+
+/* a dive: a window of bark, tinted by its discipline */
+[data-skin="druid"] .deep { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--twig-tl) left top / 22px no-repeat, var(--twig-tr) right top / 22px no-repeat, var(--twig-bl) left bottom / 22px no-repeat, var(--twig-br) right bottom / 22px no-repeat, var(--bark-face); box-shadow: var(--shadow-float); }
+@media (hover: hover) { [data-skin="druid"] .deep:hover { border-color: color-mix(in srgb, var(--k) 50%, var(--bark-d)); } }
+[data-skin="druid"] .deep[open] { box-shadow: 0 0 0 1px color-mix(in srgb, var(--k) 30%, transparent), var(--shadow-lift); }
+[data-skin="druid"] .deep > summary { background-color: transparent; background-image: linear-gradient(165deg, color-mix(in srgb, var(--k) 12%, transparent), transparent 72%); }
+[data-skin="druid"] .deep-ico { border-radius: 50%; background: radial-gradient(circle at 40% 35%, color-mix(in srgb, var(--ink-3) 30%, var(--surface-2)), var(--bg) 75%); box-shadow: inset 0 0 0 1px var(--k), 0 0 12px color-mix(in srgb, var(--k) 30%, transparent); }
+[data-skin="druid"] .deep-title { font-family: var(--font-title); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 1.75rem); line-height: 1.12; }
+[data-skin="druid"] .deep-sub { font-size: .98rem; color: var(--ink-2); }
+[data-skin="druid"] .deep-plus { border: 1px solid var(--k); background: var(--bg); }
+[data-skin="druid"] .deep-fact { border-left: 3px solid var(--k); background: color-mix(in srgb, var(--bg) 60%, transparent); font-family: var(--font-hand); font-size: 1.2rem; font-weight: 600; color: var(--ink); }
+[data-skin="druid"] .deep-body { border-top: 1px solid var(--bark-d); background: color-mix(in srgb, var(--bg) 35%, transparent); }
+[data-skin="druid"] .deep-text p { color: var(--ink-2); }
+
+/* a stone of an equation, the figures in the margin */
+[data-skin="druid"] .eq { border-radius: 10px; border: 1px solid var(--line-strong); background: radial-gradient(ellipse at 30% 20%, color-mix(in srgb, var(--ink-3) 14%, var(--surface-2)), var(--surface) 70%); box-shadow: inset 0 2px 8px rgba(0, 0, 0, .4); }
+[data-skin="druid"] .eq-label { font-family: var(--font-label); font-weight: 400; color: var(--amber); }
+[data-skin="druid"] .eq p { font-family: var(--font-mono); font-size: 1.1rem; }
+[data-skin="druid"] .num-note { border-left-width: 3px; }
+[data-skin="druid"] .num-note b { font-family: var(--font-display); font-weight: 400; font-size: 1.8rem; }
+[data-skin="druid"] .margin-note { font-family: var(--font-hand); font-size: 1.2rem; }
+
+/* «Подробнее»: a hollow in the wood inside the dive */
+[data-skin="druid"] .deeper { border: 1px solid var(--bark-d); border-radius: 8px; background: color-mix(in srgb, var(--bg-deep) 70%, transparent); box-shadow: inset 0 2px 10px rgba(0, 0, 0, .45); }
+[data-skin="druid"] .deeper-k { font-family: var(--font-label); font-weight: 400; letter-spacing: .06em; color: var(--amber); }
+[data-skin="druid"] .deeper-k::before { content: "\16BE  "; font-family: var(--font-rune); color: var(--rune); }
+[data-skin="druid"] .deeper-t { font-family: var(--font-display); font-weight: 400; font-style: normal; font-size: 1.28rem; }
+[data-skin="druid"] .deep-src-h { font-family: var(--font-label); font-weight: 400; }
+
+/* a model: a board in the colour of its discipline */
+[data-skin="druid"] .lab-tool { border: 1px solid color-mix(in srgb, var(--k) 45%, var(--bark-d)); border-radius: 10px; background: var(--bark-face); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--birch) 5%, transparent), var(--shadow-float); }
+[data-skin="druid"] .lab-tool:empty { background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--k) 10%, transparent) 50%, transparent 70%), var(--surface); background-size: 200% 100%, auto; }
+[data-skin="druid"] .lab-kicker { font-family: var(--font-label); font-weight: 400; font-size: .92rem; letter-spacing: .06em; }
+[data-skin="druid"] .lab-title { font-family: var(--font-title); font-weight: 400; font-size: 1.55rem; }
+[data-skin="druid"] .lab-label { font-family: var(--font-label); font-weight: 400; font-size: .96rem; letter-spacing: .04em; color: var(--amber); }
+[data-skin="druid"] .lab-tool .chip[aria-pressed="true"], [data-skin="druid"] .lab-tool .seg button[aria-pressed="true"] { background: color-mix(in srgb, var(--k) 22%, var(--surface)); border-color: var(--k); color: var(--ink); }
+[data-skin="druid"] .lab-tool input[type="range"].range::-webkit-slider-thumb { background: radial-gradient(circle at 35% 35%, var(--birch), var(--k) 60%); }
+[data-skin="druid"] .lab-tool input[type="range"].range::-moz-range-thumb { background: var(--k); }
+[data-skin="druid"] .mol-stage, [data-skin="druid"] .mol-canvas { border-radius: 10px; background: radial-gradient(circle at 50% 45%, var(--surface-2), var(--bg-deep) 75%); box-shadow: inset 0 0 0 1px var(--bark-d), inset 0 4px 18px rgba(0, 0, 0, .5); }
+
+/* «Любопытно»: notes pinned to the bark */
+[data-skin="druid"] .sci-note { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
+[data-skin="druid"] .sci-note::after { background: color-mix(in srgb, var(--k) 40%, var(--bg)); }
+[data-skin="druid"] .sci-note-k .hand { font-family: var(--font-hand); }
+[data-skin="druid"] .sci-note-link { font-family: var(--font-label); font-size: .98rem; }
+
+/* recipes, the home page's science, the plates of the way back */
+[data-skin="druid"] .recipe-card { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
+[data-skin="druid"] .recipe-card[open] { border-color: var(--moss); }
+[data-skin="druid"] .science-home { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--twig-tl) left top / 22px no-repeat, var(--twig-tr) right top / 22px no-repeat, var(--twig-bl) left bottom / 22px no-repeat, var(--twig-br) right bottom / 22px no-repeat, linear-gradient(165deg, color-mix(in srgb, var(--rune) 7%, var(--surface)), var(--surface) 74%); box-shadow: var(--shadow-float); }
+[data-skin="druid"] .sh-kinds li { border-radius: 14px 4px 14px 4px; }
+[data-skin="druid"] .sh-mol figcaption b { font-family: var(--font-title); font-weight: 400; }
+[data-skin="druid"] .resume-pill, [data-skin="druid"] .back-pill { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--bark-face), var(--surface); box-shadow: var(--shadow-float); }
+[data-skin="druid"] .resume-go .ico, [data-skin="druid"] .panel-next .ico { border-radius: 50%; background: var(--moss-d); color: var(--birch); }
+[data-skin="druid"] .panel-next { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
+[data-skin="druid"] .panel-next small { font-family: var(--font-label); color: var(--amber); }
+[data-skin="druid"] .resume-mark i { background: color-mix(in srgb, var(--rune) 30%, transparent); }
+[data-skin="druid"] .resume-mark i.is-bar { background: var(--rune); }
+/* the light under the mouse: the cold light of the runes */
+[data-skin="druid"] .q-card, [data-skin="druid"] .tool, [data-skin="druid"] .rule, [data-skin="druid"] .world-tag { --hover-light: rgba(143, 232, 198, .07); }

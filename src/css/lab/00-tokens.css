@@ -378,3 +378,69 @@ body::after {
   --hoop: #6E6470;
   --glass-edge: rgba(205, 191, 158, .45);
 }
+/* the skin «Друид» (data-skin="druid", always over the dark theme): the models by moonlight in the grove —
+   moss, amber, the cold light of the runes, berries of rowan for oxygen */
+:root[data-skin="druid"] {
+  --sci-chem: #B99ADB;
+  --sci-phys: #8FE8C6;
+  --sci-bio: #8FC85A;
+  --sci-taste: #E2A43B;
+  --sci-chem-soft: #1F1E2C;
+  --sci-phys-soft: #13281F;
+  --sci-bio-soft: #172615;
+  --sci-taste-soft: #2A2210;
+  --paper-line: rgba(232, 226, 207, .05);
+  --paper-line-strong: rgba(232, 226, 207, .09);
+  --hover-light: rgba(143, 232, 198, .08);
+  --ser-1: #8FC85A;
+  --ser-2: #B99ADB;
+  --ser-3: #E2A43B;
+  --ser-4: #8FE8C6;
+  --ser-muted: #2C3D2D;
+  --band-good: rgba(143, 200, 90, .1);
+  --band-cold: rgba(143, 232, 198, .1);
+  --tip-bg: #E8E2CF;
+  --tip-ink: #0B120D;
+  --pl-a: #2A5622;
+  --pl-b: #5E9A3C;
+  --pl-c: #8FC85A;
+  --pl-back-a: #15301A;
+  --pl-back-b: #294A1E;
+  --pl-stem-a: #294A1E;
+  --pl-stem-b: #5E9A3C;
+  --pl-pet: #4E8634;
+  --pot-a: #5A2E1C;
+  --pot-b: #8C4A2E;
+  --pot-rim: #74391F;
+  --soil-top: #261C14;
+  --soil-grain: #4A3826;
+  --tag-bg: #DDD6BE;
+  --tag-ink: #22180F;
+  --stick: #6B4A30;
+  --mol-c: #E8E2CF;
+  --mol-c-hi: #FFFBEB;
+  --mol-o: #C9382D;
+  --mol-o-hi: #EE7A62;
+  --mol-bond: #7A5634;
+  --mol-edge: rgba(0, 0, 0, .5);
+  --z0: #173A3A;
+  --z1: #1C3A26;
+  --z2: #2E5A20;
+  --z3: #5A4A1A;
+  --z4: #5A2118;
+  --wx-cold: #8FE8C6;
+  --wx-frost: #B9C8E8;
+  --wx-hot: #E2A43B;
+  --wx-rain: #7FB8C9;
+  --wx-cold-soft: #13281F;
+  --wx-hot-soft: #2E2210;
+  --sun-light: rgba(226, 164, 59, .22);
+  --sun-disc: #E2A43B;
+  --water-fill: rgba(70, 130, 125, .4);
+  --water-line: #8FE8C6;
+  --wood-a: #4E3420;
+  --wood-b: #6B4A30;
+  --hoop: #5E6A5A;
+  --glass-edge: rgba(232, 226, 207, .42);
+}
+

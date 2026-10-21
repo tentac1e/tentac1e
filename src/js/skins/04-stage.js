@@ -4,10 +4,11 @@
   /* the chapter's own scene in the middle (05-grimoire-*.js,             */
   /* 06-druid-*.js)                                                       */
   /* ------------------------------------------------------------------ */
-  /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t) }): the options of its
-     rasterizer, its textures, its key light, the three colours of its sky, what its scenes have unless they say
-     otherwise, make — what stands round every scene of it ({ draw(t), lights(t), fx(t, F) }: a floor, candles, trees),
-     post — what is done to the finished picture (the console's colours, a glow).
+  /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t), overlay(holder, R) }):
+     the options of its rasterizer, its textures, its key light, the three colours of its sky, what its scenes have
+     unless they say otherwise, make — what stands round every scene of it ({ draw(t), lights(t), fx(t, F) }: a floor,
+     candles, trees), post — what is done to the finished picture (the console's colours, a glow), overlay — what it
+     lays over the canvas in the page (a layer of the glow, blended by the browser).
      A scene is scene(skin, view, S => ({ … })): S.R — the rasterizer, S.T — the textures, S.ang — where the camera
      stands (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
      tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
@@ -84,6 +85,45 @@
     }
   }
 
+  // a sprout at the base b, grown g (0…1), of the size s: the hook, the two seed leaves opening, the first true pair,
+  // the second
+  function sprout(R, T, b, g, s, t) {
+    if (g <= 0) return;
+    const hook = 1 - smooth((g - 0.12) / 0.2), open = smooth((g - 0.3) / 0.2);
+    const h = s * (0.06 + 0.28 * smooth(g / 0.45) + 0.24 * smooth((g - 0.5) / 0.5));
+    const mid = [b[0], b[1] + h * 0.6, b[2]];
+    // the hook: the top of the stem bent down, straightening as the seed leaves come out
+    const bend = hook * 2.3, tip = add(mid, [Math.sin(bend) * h * 0.4, Math.cos(bend) * h * 0.4, 0]);
+    rod(R, b, mid, 0.018 * s, { col: [150, 190, 96] });
+    rod(R, mid, tip, 0.015 * s, { col: [150, 190, 96] });
+    const sw = Math.sin(t * 1.4) * 0.06;
+    for (let j = 0; j < 2; j++) {
+      const yaw = j * Math.PI + 0.4 + sw, pitch = (1 - open) * 1.25 + hook * 1.6;
+      const F = norm([Math.cos(yaw) * Math.cos(pitch), Math.sin(pitch) * (hook > 0.5 ? -1 : 1), Math.sin(yaw) * Math.cos(pitch)]);
+      leaf(R, tip, F, s * 0.12 * (0.5 + 0.5 * open), T.leafLemon, { w: 0.55, curl: 0 });
+    }
+    // the true leaves: the first pair across the seed leaves, the second across the first
+    [[0.5, 0.2, 0], [0.78, 0.15, Math.PI / 2]].forEach(([g0, len, turn]) => {
+      const k = smooth((g - g0) / 0.2);
+      if (k <= 0) return;
+      for (let j = 0; j < 2; j++) {
+        const yaw = turn + j * Math.PI + 0.4 + Math.PI / 2 + sw;
+        leaf(R, tip, norm([Math.cos(yaw), 0.35, Math.sin(yaw)]), s * len * k, T.leaf, { w: 0.4 });
+      }
+    });
+  }
+
+  // a molecule of the aroma, small and glowing: its atoms at the centre c, turned by yaw; a — how much of it is seen;
+  // pal — its colours (the bonds, oxygen, carbon) and lo — atoms of eight faces: violet in «Гримуар», berries and twigs
+  // in «Друид»
+  const ESSENCE = { bond: [170, 120, 230], O: [240, 70, 60], C: [214, 190, 255] };
+  function essence(R, mol, c, yaw, k = 1, a = null, pal = ESSENCE) {
+    const ca = Math.cos(yaw), sa = Math.sin(yaw);
+    const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [c[0] + q[0] * 0.15 * k, c[1] + q[1] * 0.135 * k + q[2] * 0.03 * k, c[2] + q[2] * 0.15 * k]; });
+    mol.bonds.forEach(([i, j]) => rod(R, MP[i], MP[j], 0.012 * k, { col: pal.bond, emis: true, add: a }, 3));
+    mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? pal.O : pal.C, emis: true, add: a, lo: pal.lo }));
+  }
+
   // sparks and halos over the finished picture, in the raster's own pixels: square on the console, round when smooth
   function fxKit(R) {
     const x = R.x, u = R.unit, round = R.smooth;
@@ -134,6 +174,8 @@
     host.insertBefore(holder, host.firstChild);
     const T = W.textures();
     const R = new Raster(cv, W.raster());
+    // what the world lays over its canvas (a glow the page itself adds over it)
+    if (W.overlay) W.overlay(holder, R);
     const S = { R, T, view, ang: 0.6 };
     const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);

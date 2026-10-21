@@ -4,32 +4,6 @@
   scene('grimoire', 'posadka', S => {
     const { R, T } = S, CYCLE = 10, EARTH = 0.36;
     let sown = 0, seed = null, burst = -1;
-    // a sprout at the base b, grown g (0…1), of the size s
-    function sprout(b, g, s, t) {
-      if (g <= 0) return;
-      const hook = 1 - smooth((g - 0.12) / 0.2), open = smooth((g - 0.3) / 0.2);
-      const h = s * (0.06 + 0.28 * smooth(g / 0.45) + 0.24 * smooth((g - 0.5) / 0.5));
-      const mid = [b[0], b[1] + h * 0.6, b[2]];
-      // the hook: the top of the stem bent down, straightening as the seed leaves come out
-      const bend = hook * 2.3, tip = add(mid, [Math.sin(bend) * h * 0.4, Math.cos(bend) * h * 0.4, 0]);
-      rod(R, b, mid, 0.018 * s, { col: [150, 190, 96] });
-      rod(R, mid, tip, 0.015 * s, { col: [150, 190, 96] });
-      const sw = Math.sin(t * 1.4) * 0.06;
-      for (let j = 0; j < 2; j++) {
-        const yaw = j * Math.PI + 0.4 + sw, pitch = (1 - open) * 1.25 + hook * 1.6;
-        const F = norm([Math.cos(yaw) * Math.cos(pitch), Math.sin(pitch) * (hook > 0.5 ? -1 : 1), Math.sin(yaw) * Math.cos(pitch)]);
-        leaf(R, tip, F, s * 0.12 * (0.5 + 0.5 * open), T.leafLemon, { w: 0.55, curl: 0 });
-      }
-      // the true leaves: the first pair across the seed leaves, the second across the first
-      [[0.5, 0.2, 0], [0.78, 0.15, Math.PI / 2]].forEach(([g0, len, turn]) => {
-        const k = smooth((g - g0) / 0.2);
-        if (k <= 0) return;
-        for (let j = 0; j < 2; j++) {
-          const yaw = turn + j * Math.PI + 0.4 + Math.PI / 2 + sw;
-          leaf(R, tip, norm([Math.cos(yaw), 0.35, Math.sin(yaw)]), s * len * k, T.leaf, { w: 0.4 });
-        }
-      });
-    }
     const CUPS = [...Array(6)].map((_, i) => { const q = i / 6 * Math.PI * 2 + 0.26; return [Math.cos(q) * 1.55, Math.sin(q) * 1.55]; });
     return {
       glow: [255, 150, 50], rad: 4.6, near: 3.7, look: [0, 0.6, 0], still: 6.2,
@@ -52,12 +26,12 @@
           egg(R, seed, [0.05, 0.035, 0.035], q, { col: [120, 78, 44] });
         }
         const g = (u - 2.4) / 5.6;
-        if (u < 9.5) sprout([0, EARTH - 0.04, 0], Math.min(1, g), 1.7, t);
+        if (u < 9.5) sprout(R, T, [0, EARTH - 0.04, 0], Math.min(1, g), 1.7, t);
         burst = u >= 9.3 ? (u - 9.3) / 0.7 : -1;
         // the cups of peat around: each seedling a step behind the one before it
         CUPS.forEach(([x, z], i) => {
           prism(R, x, z, 0, 0.2, 0.15, 0.19, 6, { col: [110, 70, 44] }, [52, 34, 24]);
-          sprout([x, 0.19, z], ((t / CYCLE + i / 6) % 1) * 1.25, 0.75, t + i);
+          sprout(R, T, [x, 0.19, z], ((t / CYCLE + i / 6) % 1) * 1.25, 0.75, t + i);
         });
       },
       fx(t, F) {
