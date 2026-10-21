@@ -1,11 +1,13 @@
   /* ------------------------------------------------------------------ */
-  /* the theme «Гримуар»: what every scene of it uses                    */
+  /* the skins «Гримуар» and «Друид»: what every scene of them uses       */
   /* ------------------------------------------------------------------ */
   const doc = document, root = doc.documentElement;
   const $ = (s, r = doc) => r.querySelector(s), $$ = (s, r = doc) => [...r.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const skinOn = () => root.getAttribute('data-skin') === 'grimoire';
+  // the skin on the page (data-skin of <html>), if it is one of these
+  const SKINS = ['grimoire', 'druid'];
+  const skinNow = () => { const s = root.getAttribute('data-skin'); return SKINS.includes(s) ? s : null; };
   const SC = window.BasilScene;
   // a seeded random: the same scene at every visit
   function rng(seed) {

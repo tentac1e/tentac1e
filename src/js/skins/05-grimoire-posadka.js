@@ -1,7 +1,7 @@
   // Посадка: a seed comes down glowing into a well of earth and sinks; a sprout comes up — the hook, the two seed
   // leaves opening, the first true pair, the second — then goes back to the earth as sparks. Around the well six cups
   // of peat with seedlings, each a step behind the other; a tap sows again
-  scene('posadka', S => {
+  scene('grimoire', 'posadka', S => {
     const { R, T } = S, CYCLE = 10, EARTH = 0.36;
     let sown = 0, seed = null, burst = -1;
     // a sprout at the base b, grown g (0…1), of the size s

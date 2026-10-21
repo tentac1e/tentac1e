@@ -1,7 +1,7 @@
   // Вкус и кухня: pesto made as a rite — a stone mortar on a kitchen table, the pestle grinding round in it, leaves of basil
   // falling into the green, garlic, pine nuts and a phial of oil beside it; out of the mortar rises the aroma, a
   // molecule of eugenol going up and fading. A tap throws in a handful of leaves
-  scene('vkus', S => {
+  scene('grimoire', 'vkus', S => {
     const { R, T } = S, mol = molShape('eug');
     let top = 1.08, hands = [];
     const FALL = [...Array(7)].map((_, i) => ({ a: i / 7, x: ((i * 0.61) % 1 - 0.5) * 0.5, z: ((i * 0.37) % 1 - 0.5) * 0.4, s: 0.7 + (i % 3) * 0.12 }));

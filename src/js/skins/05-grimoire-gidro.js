@@ -1,7 +1,7 @@
   // Гидропоника: a glass tank of water with a cold light in it, the bush in a net cup on its lid, white roots hanging
   // down into the water and swaying like weed, bubbles rising from the stone of the air pump. A tap lets out a burst
   // of bubbles
-  scene('gidro', S => {
+  scene('grimoire', 'gidro', S => {
     const { R, T } = S, TOP = 0.92, LID = 1.12;
     const ROOTS = [...Array(9)].map((_, i) => ({ q: i / 9 * Math.PI * 2 + 0.3, r: 0.03 + (i % 3) * 0.035, len: 0.55 + ((i * 7) % 5) / 14, ph: i * 1.3 }));
     const BUB = [...Array(22)].map((_, i) => ({ a: (i * 0.618) % 1, s: 0.35 + (i % 5) / 9, dx: ((i * 37) % 11 - 5) / 70, dz: ((i * 23) % 11 - 5) / 90 }));

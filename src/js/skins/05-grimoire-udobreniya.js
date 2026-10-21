@@ -1,7 +1,7 @@
   // Удобрения: three flasks of the elements, N, P and K, on their stones round the altar, bubbling. In turn each sends
   // a drop of its light in an arc into the pot; the light climbs the stem and the leaves take its colour. A tap sends
   // the next one now
-  scene('udobreniya', S => {
+  scene('grimoire', 'udobreniya', S => {
     const { R, T } = S, EVERY = 3.6, FLY = 1.3, CLIMB = 1.1;
     const COL = [[120, 140, 255], [255, 112, 64], [255, 206, 80]];
     const FL = [0, 1, 2].map(i => { const q = Math.PI / 2 + i / 3 * Math.PI * 2; return [Math.cos(q) * 1.15, Math.sin(q) * 1.15]; });

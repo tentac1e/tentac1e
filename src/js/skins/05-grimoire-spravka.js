@@ -1,6 +1,6 @@
   // Справка: the grimoire itself — open on a stone lectern, its pages turning one by one in their own time, runes of
   // light circling it, a quill in its inkpot beside. A tap turns the page now
-  scene('spravka', S => {
+  scene('grimoire', 'spravka', S => {
     const { R, T } = S, EVERY = 5, TURN = 1.5, TILT = 0.5, O = [0, 1.0, 0];
     let off = 0, phi = 0;
     const at = t => (((t + off) % EVERY) + EVERY) % EVERY;

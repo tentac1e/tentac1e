@@ -179,7 +179,7 @@
 
 **app.js**
 - `src/js/app/00-core.js` (128 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES, PEEK
-- `src/js/app/01-theme.js` (63 стр.): SKIN, initTheme
+- `src/js/app/01-theme.js` (96 стр.): SKINS, initTheme
 - `src/js/app/02-router.js` (297 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-peek.js` (264 стр.): PEEK_SKIP, initPeek, initPeekFrame
 - `src/js/app/03-sheets.js` (212 стр.): initToc, initSheets
@@ -245,25 +245,28 @@
 - `src/js/data/09-weather.js` (35 стр.): WEATHER
 - `src/js/data/10-experiments.js` (50 стр.): EXPERIMENTS
 
-**grimoire.js**
-- `src/js/grimoire/00-core.js` (34 стр.): BAYER
-- `src/js/grimoire/01-raster.js` (203 стр.): SHADED, ICO
-- `src/js/grimoire/02-textures.js` (183 стр.): FLOORS, GLYPH
-- `src/js/grimoire/03-mol.js` (78 стр.): SHAPES, MOLBUF, drawMol
-- `src/js/grimoire/04-altar.js` (259 стр.): SCENES, PAIRS
-- `src/js/grimoire/04-scene-formirovka.js` (98 стр.)
-- `src/js/grimoire/04-scene-gidro.js` (59 стр.)
-- `src/js/grimoire/04-scene-moy.js` (72 стр.)
-- `src/js/grimoire/04-scene-posadka.js` (74 стр.)
-- `src/js/grimoire/04-scene-problemy.js` (64 стр.)
-- `src/js/grimoire/04-scene-sorta.js` (58 стр.)
-- `src/js/grimoire/04-scene-spravka.js` (59 стр.)
-- `src/js/grimoire/04-scene-udobreniya.js` (61 стр.)
-- `src/js/grimoire/04-scene-uhod.js` (55 стр.)
-- `src/js/grimoire/04-scene-vkus.js` (58 стр.)
-- `src/js/grimoire/05-crypt.js` (54 стр.)
-- `src/js/grimoire/06-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
-- `src/js/grimoire/07-start.js` (45 стр.)
+**skins.js**
+- `src/js/skins/00-core.js` (36 стр.): SKINS, BAYER
+- `src/js/skins/01-raster.js` (213 стр.): SHADED, ICO
+- `src/js/skins/02-textures.js` (183 стр.): FLOORS, GLYPH
+- `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
+- `src/js/skins/04-stage.js` (222 стр.): WORLDS, PAIRS
+- `src/js/skins/05-grimoire-formirovka.js` (98 стр.)
+- `src/js/skins/05-grimoire-gidro.js` (59 стр.)
+- `src/js/skins/05-grimoire-glavnaya.js` (102 стр.)
+- `src/js/skins/05-grimoire-moy.js` (72 стр.)
+- `src/js/skins/05-grimoire-posadka.js` (74 стр.)
+- `src/js/skins/05-grimoire-problemy.js` (64 стр.)
+- `src/js/skins/05-grimoire-sorta.js` (58 стр.)
+- `src/js/skins/05-grimoire-spravka.js` (59 стр.)
+- `src/js/skins/05-grimoire-udobreniya.js` (61 стр.)
+- `src/js/skins/05-grimoire-uhod.js` (55 стр.)
+- `src/js/skins/05-grimoire-vkus.js` (58 стр.)
+- `src/js/skins/05-grimoire.js` (84 стр.)
+- `src/js/skins/07-crypt.js` (54 стр.)
+- `src/js/skins/07-forest.js` (4 стр.)
+- `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
+- `src/js/skins/09-start.js` (53 стр.): BACKS
 
 ## Стили (src/css/)
 

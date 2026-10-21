@@ -8,7 +8,7 @@
 
 ### app.js
 - `src/js/app/00-core.js`: `$` 6, `$$` 7, `clamp` 9, `f1` 10, `esc` 11, `nb` 26, `plural` 28, `fmtNum` 37, `addDays` 42, `fd` 43, `fr` 44, `toISO` 49, `fromISO` 50, `today` 54, `dayDiff` 55, `icon` 56, `chapterById` 57, `paintIll` 60, `pageOf` 69, `aliasOf` 77, `urlFor` 79, `fixLinks` 88, `smooth` 98, `toast` 101, `copyText` 110
-- `src/js/app/01-theme.js`: `initTheme` 8, `loadGrimoire` 52
+- `src/js/app/01-theme.js`: `initTheme` 10, `loadSkins` 85
 - `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 76, `jump` 103, `rowTop` 111, `scrollAfter` 118, `route` 160, `navigate` 193, `initRouter` 201, `initPagers` 224, `initScrollChrome` 267
 - `src/js/app/03-peek.js`: `decodeSafe` 10, `placeOf` 15, `placeUrl` 27, `frameSrc` 28, `peekable` 31, `peekShow` 48, `peekLoad` 62, `resetFrame` 69, `openPeek` 78, `goToPlace` 94, `peekPop` 110, `onPeekClosed` 119, `sendTheme` 129, `onPeekMessage` 133, `initPeek` 154, `toParent` 207, `markPeek` 210, `initPeekFrame` 240
 - `src/js/app/03-sheets.js`: `openSheet` 8, `closeSheet` 30, `dragSheet` 57, `tocFold` 127, `tocPane` 132, `tocOpen` 137, `tocButton` 162, `initToc` 170, `initSheets` 193
@@ -95,40 +95,44 @@
 ### data.js
 - `src/js/data/10-experiments.js`: `expDay` 4
 
-### grimoire.js
-- `src/js/grimoire/00-core.js`: `$` 5, `clamp` 6, `skinOn` 8, `rng` 11, `sub` 17, `add` 18, `mul` 19, `dot` 20, `cross` 21, `norm` 22, `psxLoop` 25
-- `src/js/grimoire/01-raster.js`: `shaded` 126, `quad` 148, `box` 152, `prism` 159, `ICO` 169, `ball` 175, `egg` 177, `rod` 182, `billboard` 192, `turned` 198
-- `src/js/grimoire/02-textures.js`: `tex` 6, `ritual` 35, `textures` 54, `leafTex` 120, `floorTex` 138, `page` 154, `runeGlyph` 172, `letter` 180
-- `src/js/grimoire/03-mol.js`: `molShape` 6, `drawMol` 44
-- `src/js/grimoire/04-altar.js`: `scene` 17, `smooth` 18, `mix3` 19, `leaf` 24, `bush` 42, `pot` 60, `ringTop` 66, `disc` 74, `altarStone` 81, `essence` 87, `altar` 94
-- `src/js/grimoire/05-crypt.js`: `crypt` 5
-- `src/js/grimoire/06-ills.js`: `cellFilter` 16, `fitCell` 43, `pixelate` 53, `pixelateIn` 73, `refit` 81, `onToggle` 82, `onPanel` 83, `onResize` 84
-- `src/js/grimoire/07-start.js`: `start` 6, `stop` 25
+### skins.js
+- `src/js/skins/00-core.js`: `$` 5, `clamp` 6, `skinNow` 10, `rng` 13, `sub` 19, `add` 20, `mul` 21, `dot` 22, `cross` 23, `norm` 24, `psxLoop` 27
+- `src/js/skins/01-raster.js`: `shaded` 136, `quad` 158, `box` 162, `prism` 169, `ICO` 179, `ball` 185, `egg` 187, `rod` 192, `billboard` 202, `turned` 208
+- `src/js/skins/02-textures.js`: `tex` 6, `ritual` 35, `textures` 54, `leafTex` 120, `floorTex` 138, `page` 154, `runeGlyph` 172, `letter` 180
+- `src/js/skins/03-mol.js`: `molShape` 6, `drawMol` 45
+- `src/js/skins/04-stage.js`: `world` 22, `scene` 23, `smooth` 24, `mix3` 25, `leaf` 30, `bush` 48, `pot` 66, `ringTop` 72, `disc` 80, `fxKit` 88, `stage` 125
+- `src/js/skins/05-grimoire.js`: `altarStone` 60, `essence` 66, `glyphTex` 73
+- `src/js/skins/07-crypt.js`: `crypt` 5
+- `src/js/skins/07-forest.js`: `forest` 4
+- `src/js/skins/08-ills.js`: `cellFilter` 16, `fitCell` 43, `pixelate` 53, `pixelateIn` 73, `refit` 81, `onToggle` 82, `onPanel` 83, `onResize` 84
+- `src/js/skins/09-start.js`: `start` 9, `stop` 33
 
-Общие помощники grimoire.js — кто зовёт:
-- `clamp` (00-core.js:6) — 3: 01-raster, 02-textures, 04-altar
-- `sub` (00-core.js:17) — 5: 01-raster, 03-mol, 04-scene-formirovka …
-- `add` (00-core.js:18) — 12: 01-raster, 03-mol, 04-altar …
-- `mul` (00-core.js:19) — 8: 01-raster, 03-mol, 04-altar …
-- `cross` (00-core.js:21) — 3: 01-raster, 03-mol, 04-altar
-- `norm` (00-core.js:22) — 8: 03-mol, 04-altar, 04-scene-formirovka …
-- `quad` (01-raster.js:148) — 4: 04-altar, 04-scene-formirovka, 04-scene-moy …
-- `box` (01-raster.js:152) — 9: 04-altar, 04-scene-gidro, 04-scene-moy …
-- `prism` (01-raster.js:159) — 9: 04-altar, 04-scene-formirovka, 04-scene-gidro …
-- `ball` (01-raster.js:175) — 8: 03-mol, 04-altar, 04-scene-moy …
-- `egg` (01-raster.js:177) — 3: 04-scene-posadka, 04-scene-problemy, 04-scene-vkus
-- `rod` (01-raster.js:182) — 11: 03-mol, 04-altar, 04-scene-formirovka …
-- `turned` (01-raster.js:198) — 6: 03-mol, 04-altar, 04-scene-formirovka …
-- `tex` (02-textures.js:6) — 7: 01-raster, 04-scene-moy, 04-scene-posadka …
-- `page` (02-textures.js:154) — 5: 00-core, 01-raster, 04-altar …
-- `scene` (04-altar.js:17) — 11: 00-core, 04-scene-formirovka, 04-scene-gidro …
-- `smooth` (04-altar.js:18) — 8: 04-scene-formirovka, 04-scene-moy, 04-scene-posadka …
-- `leaf` (04-altar.js:24) — 8: 01-raster, 02-textures, 04-scene-formirovka …
-- `bush` (04-altar.js:42) — 7: 04-scene-formirovka, 04-scene-gidro, 04-scene-moy …
-- `pot` (04-altar.js:60) — 7: 02-textures, 04-scene-formirovka, 04-scene-moy …
-- `ringTop` (04-altar.js:66) — 3: 04-scene-formirovka, 04-scene-posadka, 04-scene-vkus
-- `disc` (04-altar.js:74) — 3: 04-scene-formirovka, 04-scene-posadka, 04-scene-vkus
-- `altar` (04-altar.js:94) — 6: 02-textures, 03-mol, 04-scene-formirovka …
+Общие помощники skins.js — кто зовёт:
+- `clamp` (00-core.js:6) — 3: 01-raster, 02-textures, 04-stage
+- `sub` (00-core.js:19) — 6: 01-raster, 03-mol, 05-grimoire-formirovka …
+- `add` (00-core.js:20) — 14: 01-raster, 03-mol, 04-stage …
+- `mul` (00-core.js:21) — 9: 01-raster, 03-mol, 04-stage …
+- `dot` (00-core.js:22) — 3: 01-raster, 04-stage, 08-ills
+- `cross` (00-core.js:23) — 3: 01-raster, 03-mol, 04-stage
+- `norm` (00-core.js:24) — 10: 03-mol, 04-stage, 05-grimoire-formirovka …
+- `quad` (01-raster.js:158) — 6: 04-stage, 05-grimoire-formirovka, 05-grimoire-glavnaya …
+- `box` (01-raster.js:162) — 10: 05-grimoire-gidro, 05-grimoire-glavnaya, 05-grimoire-moy …
+- `prism` (01-raster.js:169) — 11: 04-stage, 05-grimoire-formirovka, 05-grimoire-gidro …
+- `ball` (01-raster.js:185) — 9: 03-mol, 05-grimoire-glavnaya, 05-grimoire-moy …
+- `egg` (01-raster.js:187) — 4: 05-grimoire-glavnaya, 05-grimoire-posadka, 05-grimoire-problemy …
+- `rod` (01-raster.js:192) — 13: 03-mol, 04-stage, 05-grimoire-formirovka …
+- `billboard` (01-raster.js:202) — 3: 05-grimoire-glavnaya, 05-grimoire-spravka, 05-grimoire
+- `turned` (01-raster.js:208) — 6: 03-mol, 05-grimoire-formirovka, 05-grimoire-moy …
+- `tex` (02-textures.js:6) — 9: 01-raster, 05-grimoire-glavnaya, 05-grimoire-moy …
+- `textures` (02-textures.js:54) — 3: 01-raster, 04-stage, 05-grimoire
+- `page` (02-textures.js:154) — 6: 00-core, 01-raster, 04-stage …
+- `scene` (04-stage.js:23) — 14: 00-core, 05-grimoire-formirovka, 05-grimoire-gidro …
+- `smooth` (04-stage.js:24) — 10: 05-grimoire-formirovka, 05-grimoire-glavnaya, 05-grimoire-moy …
+- `leaf` (04-stage.js:30) — 8: 01-raster, 02-textures, 05-grimoire-formirovka …
+- `bush` (04-stage.js:48) — 8: 05-grimoire-formirovka, 05-grimoire-gidro, 05-grimoire-glavnaya …
+- `pot` (04-stage.js:66) — 8: 02-textures, 05-grimoire-formirovka, 05-grimoire-glavnaya …
+- `ringTop` (04-stage.js:72) — 3: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus
+- `disc` (04-stage.js:80) — 3: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus
 
 ### Отдельные файлы
 - `src/js/haptics.js`: `iosTap` 20, `play` 34, `watchSnap` 69, `initSnaps` 82, `initSwitch` 94, `set` 103, `dragTicker` 106
@@ -155,7 +159,7 @@
 ### style.css
 - `src/css/style/01-base.css`: `.skip`, `.eyebrow`, `.num`, `.mono`, `.muted`, `.ico`, `.sprite`, `.lead`, `.hand`
 - `src/css/style/02-ambient.css`: `.aura`, `.sky-*`, `.is-off`, `.is-asleep`, `.page`, `.wrap` · анимации: `drift`, `sky-breathe`, `sky-sway`, `sky-moon`
-- `src/css/style/03-header.css`: `.search-*`, `.tab-*`, `.garden-*`, `.brand`, `.topbar-*`, `.is-active`, `.progress`, `.ico`, `.icon-*`, `.tabbar`
+- `src/css/style/03-header.css`: `.skin-*`, `.search-*`, `.tab-*`, `.garden-*`, `.brand`, `.topbar-*`, `.ico`, `.is-active`, `.progress`, `.icon-*`, `.tabbar`
 - `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.g-link`, `.table-*`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
 - `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
 - `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
@@ -179,7 +183,7 @@
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 - `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
-- `src/css/style/27-grimoire.css`: `.subnav-*`, `.ch-hero-*`, `.toc-*`, `.chip`, `.seg`, `.search-*`, `.btn-*`, `.psx-*`, `.crt-*`, `.pager`, `.tab-*`, `.range` · анимации: `psx-flicker`, `psx-point`
+- `src/css/style/27-grimoire.css`: `.subnav-*`, `.ch-hero-*`, `.toc-*`, `.skin-*`, `.chip`, `.seg`, `.search-*`, `.btn-*`, `.psx-*`, `.crt-*`, `.pager`, `.tab-*` · анимации: `psx-flicker`, `psx-point`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
@@ -243,10 +247,10 @@
 
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
-- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:275`, `src/js/grimoire/07-start.js:20`, `src/js/science/06-labs-loader.js:186`
+- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:275`, `src/js/science/06-labs-loader.js:186`, `src/js/skins/09-start.js:27`
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:238`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:130`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
-- `basil:theme` — шлёт: `src/js/app/01-theme.js:30`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/grimoire/07-start.js:43`, `src/js/scene/04-background.js:491`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/labs/vkus/pesto.js:67`
+- `basil:theme` — шлёт: `src/js/app/01-theme.js:33`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:491`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/js/skins/09-start.js:51`, `src/labs/vkus/pesto.js:67`
 - `basil:view` — шлёт: `src/js/app/02-router.js:184`; слушают: `src/js/app/02-router.js:263`, `src/js/app/02-router.js:293`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:132`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
@@ -254,7 +258,7 @@
 
 Ключи `localStorage` (и база IndexedDB `basil-photos`) — в каких файлах встречаются, с первой строкой.
 
-- `basil-crt` — `src/js/grimoire/07-start.js:41`
+- `basil-crt` — `src/js/skins/09-start.js:49`
 - `basil-detour` — `src/js/app/22-reading-pos.js:355`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
@@ -264,8 +268,8 @@
 - `basil-photos` — `src/js/app/22-garden-photos.js:5`
 - `basil-pos` — `src/js/app/22-reading-pos.js:8`
 - `basil-recent` — `src/js/app/04-search.js:322`
-- `basil-skin` — `src/js/app/01-theme.js:39`
-- `basil-theme` — `src/js/app/01-theme.js:14`
+- `basil-skin` — `src/js/app/01-theme.js:42`
+- `basil-theme` — `src/js/app/01-theme.js:16`
 - `basil-weather` — `src/js/app/22-garden-weather.js:7`
 
 ## Ширины экрана

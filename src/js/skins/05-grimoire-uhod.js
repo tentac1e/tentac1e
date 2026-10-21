@@ -1,7 +1,7 @@
   // Уход: the four the chapter is about. A sun crosses the vault and the bush turns after it, then a pale moon; a cloud
   // comes in and rains on the pot, the earth goes dark with the water and pales as it dries; the candles keep it
   // warm. A tap calls the rain now
-  scene('uhod', S => {
+  scene('grimoire', 'uhod', S => {
     const { R, T } = S, DAY = 16, RAIN = 5;
     let rainAt = -99, tapped = -99, orb = [0, 3, 0], day = 1, cloud = null, wet = 0, lean = [0, 0];
     const EARTH_DRY = [112, 82, 56], EARTH_WET = [34, 22, 18];

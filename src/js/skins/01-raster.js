@@ -3,23 +3,30 @@
   /* ------------------------------------------------------------------ */
   /* Low resolution, vertices snapped to whole pixels (the wobble), textures mapped affinely per triangle (the swim),
      no filtering, the painter's order by layer and depth, fog, then a few levels a colour channel with an ordered
-     dither between them — the console's look, nothing of it a shader */
+     dither between them — the console's look, nothing of it a shader. With smooth (the skin «Друид»): the canvas at
+     the screen's own resolution (scale canvas pixels a CSS pixel), vertices where they fall, textures filtered, no
+     dither — the same low polygons, lit and fogged, as a game of today draws them */
   class Raster {
     constructor(canvas, o) {
+      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1 }, o);
       this.c = canvas;
-      this.x = canvas.getContext('2d', { willReadFrequently: true });
-      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [] }, o);
+      // the console's colour is cut down by reading the pixels back; a smooth picture is never read and stays on the GPU
+      this.x = canvas.getContext('2d', this.smooth ? { alpha: false } : { willReadFrequently: true });
       this.W = this.H = 0;
+      this.unit = 1;
     }
-    // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across)
+    // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across), or, smooth,
+    // scale canvas pixels a CSS pixel. unit — the canvas pixels of one console pixel (the size of a spark, a dot)
     size() {
-      const cw = this.c.clientWidth || 300, ch = this.c.clientHeight || 200, s = Math.max(this.px, cw / this.maxW);
+      const cw = this.c.clientWidth || 300, ch = this.c.clientHeight || 200;
+      if (this.smooth) { this.unit = 2.2 * this.scale; return this.sizeTo(Math.round(cw * this.scale), Math.round(ch * this.scale)); }
+      const s = Math.max(this.px, cw / this.maxW);
       return this.sizeTo(Math.round(cw / s), Math.round(ch / s));
     }
     sizeTo(w, h) {
       this.W = Math.max(24, w); this.H = Math.max(20, h);
       if (this.c.width !== this.W || this.c.height !== this.H) { this.c.width = this.W; this.c.height = this.H; }
-      this.x.imageSmoothingEnabled = false;
+      this.x.imageSmoothingEnabled = this.smooth;
       return this;
     }
     cam(eye, target, focal, cx = 0.5, cy = 0.5) {
@@ -28,7 +35,10 @@
       this.list = [];
     }
     view(p) { const C = this.C, d = sub(p, C.eye); return [dot(d, C.r), dot(d, C.u), dot(d, C.f)]; }
-    proj(v) { const C = this.C; return [Math.round(C.cx + v[0] * C.focal / v[2]), Math.round(C.cy - v[1] * C.focal / v[2])]; }
+    proj(v) {
+      const C = this.C, x = C.cx + v[0] * C.focal / v[2], y = C.cy - v[1] * C.focal / v[2];
+      return this.smooth ? [x, y] : [Math.round(x), Math.round(y)];
+    }
     shade(n, m, ds) {
       let [r, g, b] = this.amb;
       if (this.key) {

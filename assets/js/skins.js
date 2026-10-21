@@ -1,14 +1,16 @@
-/* Гид по базилику — оформление «Гримуар»: сцены в манере PS1 (склеп за страницей, алтарь с кустом, молекулы); страница грузит этот файл, только пока тема включена. Файл собирает scripts/build.py из src/js/grimoire/ — правьте там */
-window.BasilGrimoire = (() => {
+/* Гид по базилику — оформления «Гримуар» и «Друид»: их сцены (склеп и лес за страницей, сцены в шапке глав и на главной, молекулы); страница грузит этот файл, только пока оформление включено. Файл собирает scripts/build.py из src/js/skins/ — правьте там */
+window.BasilSkins = (() => {
   'use strict';
   /* ------------------------------------------------------------------ */
-  /* the theme «Гримуар»: what every scene of it uses                    */
+  /* the skins «Гримуар» and «Друид»: what every scene of them uses       */
   /* ------------------------------------------------------------------ */
   const doc = document, root = doc.documentElement;
   const $ = (s, r = doc) => r.querySelector(s), $$ = (s, r = doc) => [...r.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const skinOn = () => root.getAttribute('data-skin') === 'grimoire';
+  // the skin on the page (data-skin of <html>), if it is one of these
+  const SKINS = ['grimoire', 'druid'];
+  const skinNow = () => { const s = root.getAttribute('data-skin'); return SKINS.includes(s) ? s : null; };
   const SC = window.BasilScene;
   // a seeded random: the same scene at every visit
   function rng(seed) {
@@ -40,23 +42,30 @@ window.BasilGrimoire = (() => {
   /* ------------------------------------------------------------------ */
   /* Low resolution, vertices snapped to whole pixels (the wobble), textures mapped affinely per triangle (the swim),
      no filtering, the painter's order by layer and depth, fog, then a few levels a colour channel with an ordered
-     dither between them — the console's look, nothing of it a shader */
+     dither between them — the console's look, nothing of it a shader. With smooth (the skin «Друид»): the canvas at
+     the screen's own resolution (scale canvas pixels a CSS pixel), vertices where they fall, textures filtered, no
+     dither — the same low polygons, lit and fogged, as a game of today draws them */
   class Raster {
     constructor(canvas, o) {
+      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1 }, o);
       this.c = canvas;
-      this.x = canvas.getContext('2d', { willReadFrequently: true });
-      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [] }, o);
+      // the console's colour is cut down by reading the pixels back; a smooth picture is never read and stays on the GPU
+      this.x = canvas.getContext('2d', this.smooth ? { alpha: false } : { willReadFrequently: true });
       this.W = this.H = 0;
+      this.unit = 1;
     }
-    // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across)
+    // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across), or, smooth,
+    // scale canvas pixels a CSS pixel. unit — the canvas pixels of one console pixel (the size of a spark, a dot)
     size() {
-      const cw = this.c.clientWidth || 300, ch = this.c.clientHeight || 200, s = Math.max(this.px, cw / this.maxW);
+      const cw = this.c.clientWidth || 300, ch = this.c.clientHeight || 200;
+      if (this.smooth) { this.unit = 2.2 * this.scale; return this.sizeTo(Math.round(cw * this.scale), Math.round(ch * this.scale)); }
+      const s = Math.max(this.px, cw / this.maxW);
       return this.sizeTo(Math.round(cw / s), Math.round(ch / s));
     }
     sizeTo(w, h) {
       this.W = Math.max(24, w); this.H = Math.max(20, h);
       if (this.c.width !== this.W || this.c.height !== this.H) { this.c.width = this.W; this.c.height = this.H; }
-      this.x.imageSmoothingEnabled = false;
+      this.x.imageSmoothingEnabled = this.smooth;
       return this;
     }
     cam(eye, target, focal, cx = 0.5, cy = 0.5) {
@@ -65,7 +74,10 @@ window.BasilGrimoire = (() => {
       this.list = [];
     }
     view(p) { const C = this.C, d = sub(p, C.eye); return [dot(d, C.r), dot(d, C.u), dot(d, C.f)]; }
-    proj(v) { const C = this.C; return [Math.round(C.cx + v[0] * C.focal / v[2]), Math.round(C.cy - v[1] * C.focal / v[2])]; }
+    proj(v) {
+      const C = this.C, x = C.cx + v[0] * C.focal / v[2], y = C.cy - v[1] * C.focal / v[2];
+      return this.smooth ? [x, y] : [Math.round(x), Math.round(y)];
+    }
     shade(n, m, ds) {
       let [r, g, b] = this.amb;
       if (this.key) {
@@ -460,11 +472,14 @@ window.BasilGrimoire = (() => {
     return SHAPES[id];
   }
 
-  /* The molecule viewer of the guide (MolViewer, science.js) draws through here while the theme is on: the same
-     molecule, turned the same way, rendered at a third of the size — atoms twenty flat faces, bonds four-sided rods,
-     vertices snapped to the console's pixels — and drawn back up without smoothing */
+  /* The molecule viewer of the guide (MolViewer, science.js) draws through here while a skin is on (drawMol picks the
+     skin's own way, MOLDRAW): the same molecule, turned the same way. In «Гримуар» rendered at a third of the size —
+     atoms twenty flat faces, bonds four-sided rods, vertices snapped to the console's pixels — and drawn back up
+     without smoothing */
+  const MOLDRAW = {};
+  function drawMol(ctx, mol, P, R3, W, H) { (MOLDRAW[skinNow()] || MOLDRAW.grimoire)(ctx, mol, P, R3, W, H); }
   const MOLBUF = new WeakMap();
-  function drawMol(ctx, mol, P, R3, W, H) {
+  MOLDRAW.grimoire = function molCrypt(ctx, mol, P, R3, W, H) {
     let b = MOLBUF.get(ctx.canvas);
     if (!b) {
       const cv = doc.createElement('canvas');
@@ -498,24 +513,30 @@ window.BasilGrimoire = (() => {
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.drawImage(b.cv, 0, 0, ctx.canvas.width, ctx.canvas.height);
-  }
+  };
   /* ------------------------------------------------------------------ */
-  /* the altar of every chapter: a circle of runes on the floor, pillars  */
-  /* in the dark, seven candles on the points of the star — and in the    */
-  /* middle the chapter's own scene (04-scene-*.js), at the head of every */
-  /* chapter and in the hero of the home page                             */
+  /* the stage at the head of every chapter and in the hero of the home  */
+  /* page: the world of the skin around (05-grimoire.js, 06-druid.js) and */
+  /* the chapter's own scene in the middle (05-grimoire-*.js,             */
+  /* 06-druid-*.js)                                                       */
   /* ------------------------------------------------------------------ */
-  /* A scene is scene(view, S => ({ … })): S.R — the rasterizer, S.T — the textures, S.ang — where the camera stands
-     (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
+  /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t) }): the options of its
+     rasterizer, its textures, its key light, the three colours of its sky, what its scenes have unless they say
+     otherwise, make — what stands round every scene of it ({ draw(t), lights(t), fx(t, F) }: a floor, candles, trees),
+     post — what is done to the finished picture (the console's colours, a glow).
+     A scene is scene(skin, view, S => ({ … })): S.R — the rasterizer, S.T — the textures, S.ang — where the camera
+     stands (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
      tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
-     point lights, fill — how strong the soft light from the camera's side is, fx(t, F) — sparks and halos over the picture (F.spark, F.halo, F.dot, F.streak), tap(t) — what
-     a tap on the altar does; candles — its own candles; glow — the colour of the circle; glowAdd(t) — how bright it
-     burns; look, rad, near — the camera (the point it looks at, how far it stands beside the text of a wide
-     screen, how far in the middle of a narrow one);
-     orbit [angle, swing] — a camera that swings in front of the scene instead of going round it; still — the
-     moment shown when the reader asked for less motion */
-  const SCENES = {};
-  const scene = (view, make) => { SCENES[view] = make; };
+     point lights, fill — how strong the soft light from the camera's side is, fx(t, F) — sparks and halos over the
+     picture (F.spark, F.halo, F.dot, F.streak), tap(t) — what a tap does; candles — its own candles; glow — the
+     colour of the circle; glowAdd(t) — how bright it burns; look, rad, near — the camera (the point it looks at, how
+     far it stands beside the text of a wide screen, how far in the middle of a narrow one); orbit [angle, swing] — a
+     camera that swings in front of the scene instead of going round it; still — the moment shown when the reader asked
+     for less motion; bare — it draws its whole world itself (the world's floor, its candles and the rest stay away);
+     sky — its own three colours of the sky */
+  const WORLDS = {}, SCENES = {};
+  const world = (skin, w) => { WORLDS[skin] = w; SCENES[skin] = SCENES[skin] || {}; };
+  const scene = (skin, view, make) => { (SCENES[skin] = SCENES[skin] || {})[view] = make; };
   const smooth = v => { v = clamp(v, 0, 1); return v * v * (3 - 2 * v); };
   const mix3 = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
 
@@ -578,38 +599,61 @@ window.BasilGrimoire = (() => {
       R.tri([cx, y, cz], [cx + Math.cos(a0) * r, y, cz + Math.sin(a0) * r], [cx + Math.cos(a1) * r, y, cz + Math.sin(a1) * r], { ...o, ds: true, uv: [[0.5, 0.5], [0.5 + Math.cos(a0) / 2, 0.5 + Math.sin(a0) / 2], [0.5 + Math.cos(a1) / 2, 0.5 + Math.sin(a1) / 2]] });
     }
   }
-  // the stone altar with its sigil: gives the height of its top
-  function altarStone(R, T) {
-    box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar });
-    box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
-    return 1.08;
-  }
-  // a molecule of the aroma, small and glowing: its atoms at the centre c, turned by yaw; a — how much of it is seen
-  function essence(R, mol, c, yaw, k = 1, a = null) {
-    const ca = Math.cos(yaw), sa = Math.sin(yaw);
-    const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [c[0] + q[0] * 0.15 * k, c[1] + q[1] * 0.135 * k + q[2] * 0.03 * k, c[2] + q[2] * 0.15 * k]; });
-    mol.bonds.forEach(([i, j]) => rod(R, MP[i], MP[j], 0.012 * k, { col: [170, 120, 230], emis: true, add: a }, 3));
-    mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? [240, 70, 60] : [214, 190, 255], emis: true, add: a }));
+
+  // sparks and halos over the finished picture, in the raster's own pixels: square on the console, round when smooth
+  function fxKit(R) {
+    const x = R.x, u = R.unit, round = R.smooth;
+    const put = (p, s, col) => {
+      x.fillStyle = col;
+      if (round) { x.beginPath(); x.arc(p[0], p[1], s * 0.5, 0, Math.PI * 2); x.fill(); } else x.fillRect(p[0], p[1], s, s);
+    };
+    return {
+      halo(p3, r3, c0, c1) {
+        const v = R.view(p3);
+        if (v[2] < 0.3) return;
+        const p = R.proj(v), r = R.C.focal * r3 / v[2], g = x.createRadialGradient(p[0], p[1], 0, p[0], p[1], r);
+        g.addColorStop(0, c0); g.addColorStop(1, c1);
+        x.fillStyle = g; x.fillRect(p[0] - r, p[1] - r, r * 2, r * 2);
+      },
+      // a spark of fire (life 0…1 fades it)
+      spark(p3, life, big) {
+        const v = R.view(p3);
+        if (v[2] < 0.3) return;
+        put(R.proj(v), (big || v[2] < 4 ? 2 : 1) * u, `rgba(255,${150 + (life * 60) | 0},70,${(1 - life) * 0.9})`);
+      },
+      // a dot of any colour
+      dot(p3, col, size = 0) {
+        const v = R.view(p3);
+        if (v[2] < 0.3) return;
+        put(R.proj(v), (size || (v[2] < 4 ? 2 : 1)) * u, col);
+      },
+      // a streak: a drop falling
+      streak(p3, len, col) {
+        const v = R.view(p3);
+        if (v[2] < 0.3) return;
+        const p = R.proj(v), l = Math.max(2 * u, R.C.focal * len / v[2]);
+        x.fillStyle = col;
+        x.fillRect(p[0], p[1], Math.max(1, u * 0.7), l);
+      }
+    };
   }
 
-  function altar(host, view) {
-    const stage = doc.createElement('div');
-    stage.className = 'psx-stage';
-    stage.dataset.scene = SCENES[view] ? view : 'glavnaya';
-    stage.setAttribute('aria-hidden', 'true');
+  function stage(host, view, skin) {
+    const W = WORLDS[skin], set = SCENES[skin];
+    const holder = doc.createElement('div');
+    holder.className = 'psx-stage';
+    holder.dataset.scene = set[view] ? view : 'glavnaya';
+    holder.dataset.skin = skin;
+    holder.setAttribute('aria-hidden', 'true');
     const cv = doc.createElement('canvas');
-    stage.appendChild(cv);
-    host.insertBefore(stage, host.firstChild);
-    const T = textures();
-    const R = new Raster(cv, { px: 3, maxW: 400, levels: 16, fogNear: 3.5, fogFar: 15, amb: [0.13, 0.1, 0.17] });
-    const KEY = { dir: norm([-0.35, 0.85, -0.4]), i: 0.42, col: [0.55, 0.5, 0.85] };
+    holder.appendChild(cv);
+    host.insertBefore(holder, host.firstChild);
+    const T = W.textures();
+    const R = new Raster(cv, W.raster());
     const S = { R, T, view, ang: 0.6 };
-    const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, glow: [255, 70, 50], ...(SCENES[view] || SCENES.glavnaya)(S) };
-    const FLOOR = floorTex(sc.glow, false), GLOW = floorTex(sc.glow, true);
-    const candles = [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; }).concat(sc.candles || []);
-    const embers = [...Array(46)].map((_, i) => ({ k: i % candles.length, a: (i * 0.37) % 1, s: 0.3 + (i * 13 % 10) / 22, dx: ((i * 29) % 11 - 5) / 60, dz: ((i * 17) % 11 - 5) / 60 }));
-    const pillars = [...Array(8)].map((_, i) => { const q = 0.35 + i / 8 * Math.PI * 2; return { x: Math.cos(q) * 7.4, z: Math.sin(q) * 7.4, h: 1.6 + ((i * 53) % 10) / 4 }; });
-    // the reader turns the altar with a finger or the mouse; a tap does what the scene does (a puff of sparks by default)
+    const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, ...W.defaults, ...(set[view] || set.glavnaya)(S) };
+    const env = W.make(S, sc);
+    // the reader turns the scene with a finger or the mouse; a tap does what the scene does (a puff of sparks by default)
     const ptr = { turn: 0, lift: 0, drag: null, puffs: [] };
     const t0 = performance.now();
     const clock = () => (reduce.matches ? sc.still : (performance.now() - t0) / 1000);
@@ -630,7 +674,7 @@ window.BasilGrimoire = (() => {
       }
       ptr.drag = null;
     };
-    stage.addEventListener('pointerdown', onDown);
+    holder.addEventListener('pointerdown', onDown);
     addEventListener('pointermove', onMove, { passive: true });
     addEventListener('pointerup', onUp);
     addEventListener('pointercancel', onUp);
@@ -645,88 +689,39 @@ window.BasilGrimoire = (() => {
       const rad = wide ? sc.rad : sc.near;
       S.ang = ang;
       R.cam([look[0] + Math.cos(ang) * rad, eyeY, look[2] + Math.sin(ang) * rad], look, wide ? 1.25 : 1.05, wide ? 0.68 : 0.5, wide ? 0.44 : 0.4);
-      R.key = KEY;
+      R.key = W.key;
       if (sc.tick) sc.tick(t);
-      R.lights = candles.map(c => ({ p: [c.x, (c.top || 0) + c.h + 0.14, c.z], col: [1, 0.6, 0.28], i: 0.5 + 0.12 * Math.sin(t * 11 + c.ph) + 0.08 * Math.sin(t * 23 + c.ph * 2), fall: 0.55 }))
-        .concat(sc.fill ? [{ p: [look[0] + Math.cos(ang) * 2.2, look[1] + 1.5, look[2] + Math.sin(ang) * 2.2], col: [0.78, 0.62, 0.95], i: sc.fill, fall: 0.16 }] : [], sc.lights ? sc.lights(t) : []);
-      const x = R.x, g = x.createLinearGradient(0, 0, 0, R.H);
-      g.addColorStop(0, '#07050B'); g.addColorStop(0.55, '#1C1122'); g.addColorStop(1, '#120B17');
+      R.lights = env.lights(t)
+        .concat(sc.fill ? [{ p: [look[0] + Math.cos(ang) * 2.2, look[1] + 1.5, look[2] + Math.sin(ang) * 2.2], col: W.fillCol || [0.78, 0.62, 0.95], i: sc.fill, fall: 0.16 }] : [], sc.lights ? sc.lights(t) : []);
+      const x = R.x, g = x.createLinearGradient(0, 0, 0, R.H), sky = sc.sky || W.sky;
+      g.addColorStop(0, sky[0]); g.addColorStop(0.55, sky[1]); g.addColorStop(1, sky[2]);
       x.fillStyle = g; x.fillRect(0, 0, R.W, R.H);
-      // the floor and its circle: a layer of their own, under everything
-      const FL = 4.4, N = 2, glowA = sc.glowAdd ? sc.glowAdd(t) : 0.32 + 0.22 * Math.sin(t * 1.4);
-      for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
-        const x0 = -FL + i * FL * 2 / N, x1 = x0 + FL * 2 / N, z0 = -FL + j * FL * 2 / N, z1 = z0 + FL * 2 / N;
-        quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: FLOOR, layer: 0, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
-        quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: GLOW, layer: 0, add: glowA, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
-      }
-      for (let k = 0; k < 4; k++) {
-        const q = k * Math.PI / 2, far = 16, s = [Math.cos(q), Math.sin(q)], tn = [-s[1], s[0]];
-        const p = (a, b) => [s[0] * a + tn[0] * b, 0, s[1] * a + tn[1] * b];
-        quad(R, p(FL, -FL), p(far, -far), p(far, far), p(FL, FL), { col: [30, 22, 36], layer: 0, ds: true });
-      }
-      pillars.forEach(p => box(R, [p.x, p.h / 2, p.z], [0.32, p.h / 2, 0.32], { tex: T.stone }));
+      if (env.back) env.back(t, x);
+      env.draw(t);
       sc.draw(t);
-      candles.forEach((c, i) => {
-        const y0 = c.top || 0;
-        prism(R, c.x, c.z, y0, y0 + c.h, 0.085, 0.075, 6, { tex: T.wax }, [236, 226, 200], i);
-        const fl = 1 + 0.18 * Math.sin(t * 13 + c.ph) + 0.1 * Math.sin(t * 29 + c.ph);
-        billboard(R, [c.x, y0 + c.h + 0.1 * fl, c.z], 0.05, 0.1 * fl, { tex: T.flame, emis: true, nofog: true, cut: true });
-      });
       R.draw();
-      // the halos of the flames, added before the colour is cut down: the dither turns them into rings
+      // the halos and sparks, added before the picture is finished (the console's dither turns them into rings)
       x.globalCompositeOperation = 'lighter';
-      const halo = (p3, r3, c0, c1) => {
-        const v = R.view(p3);
-        if (v[2] < 0.3) return;
-        const p = R.proj(v), r = R.C.focal * r3 / v[2], gg = x.createRadialGradient(p[0], p[1], 0, p[0], p[1], r);
-        gg.addColorStop(0, c0); gg.addColorStop(1, c1);
-        x.fillStyle = gg; x.fillRect(p[0] - r, p[1] - r, r * 2, r * 2);
-      };
-      candles.forEach(c => halo([c.x, (c.top || 0) + c.h + 0.1, c.z], 0.42, 'rgba(255,150,60,.34)', 'rgba(255,120,40,0)'));
-      // a spark of fire (life 0…1 fades it), a dot of any colour, a streak (a drop falling)
-      const spark = (p3, life, big) => {
-        const v = R.view(p3);
-        if (v[2] < 0.3) return;
-        const p = R.proj(v), s = big || v[2] < 4 ? 2 : 1;
-        x.fillStyle = `rgba(255,${150 + (life * 60) | 0},70,${(1 - life) * 0.9})`;
-        x.fillRect(p[0], p[1], s, s);
-      };
-      const dot = (p3, col, size = 0) => {
-        const v = R.view(p3);
-        if (v[2] < 0.3) return;
-        const p = R.proj(v), s = size || (v[2] < 4 ? 2 : 1);
-        x.fillStyle = col;
-        x.fillRect(p[0], p[1], s, s);
-      };
-      const streak = (p3, len, col) => {
-        const v = R.view(p3);
-        if (v[2] < 0.3) return;
-        const p = R.proj(v), l = Math.max(2, Math.round(R.C.focal * len / v[2]));
-        x.fillStyle = col;
-        x.fillRect(p[0], p[1], 1, l);
-      };
-      if (sc.fx) sc.fx(t, { halo, spark, dot, streak });
-      embers.forEach(e => {
-        const c = candles[e.k], life = (e.a + t * e.s * 0.25) % 1;
-        spark([c.x + e.dx * life * 8, (c.top || 0) + c.h + 0.15 + life * 1.6, c.z + e.dz * life * 8], life);
-      });
+      const F = fxKit(R);
+      env.fx(t, F);
+      if (sc.fx) sc.fx(t, F);
       ptr.puffs = ptr.puffs.filter(p => t - p.t < 2.2 && t >= p.t);
       ptr.puffs.forEach(p => {
         const life = (t - p.t) / 2.2;
         for (let i = 0; i < 18; i++) {
           const q = i / 18 * Math.PI * 2, r = 0.2 + life * 0.9;
-          spark([Math.cos(q) * r * 0.6, 2.1 + life * 1.3 + Math.sin(i * 7) * 0.1, Math.sin(q) * r * 0.6], life, true);
+          F.spark([Math.cos(q) * r * 0.6, 2.1 + life * 1.3 + Math.sin(i * 7) * 0.1, Math.sin(q) * r * 0.6], life, true);
         }
       });
       x.globalCompositeOperation = 'source-over';
-      R.post(16);
-      stage.classList.add('is-drawn');
+      W.post(R, t);
+      holder.classList.add('is-drawn');
     }
     // runs while on the screen, by the page's frame budget; one still frame with reduced motion
     let seen = false;
-    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); });
+    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30);
     const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); if (seen) L.start(); else L.stop(); }) : null;
-    if (io) io.observe(stage); else { seen = true; L.start(); }
+    if (io) io.observe(holder); else { seen = true; L.start(); }
     const vis = () => { if (!doc.hidden && seen) L.start(); };
     doc.addEventListener('visibilitychange', vis);
     return {
@@ -737,32 +732,15 @@ window.BasilGrimoire = (() => {
         removeEventListener('pointermove', onMove);
         removeEventListener('pointerup', onUp);
         removeEventListener('pointercancel', onUp);
-        stage.remove();
+        holder.remove();
       }
     };
   }
-
-  // Главная: basil in a clay pot on the stone altar, two candles beside it, the molecule of linalool turning above
-  scene('glavnaya', S => {
-    const { R, T } = S, mol = molShape('lin');
-    let my = 2.85;
-    return {
-      fill: 0.25,
-      candles: [{ x: -0.74, z: 0.4, h: 0.26, ph: 4.2, top: 1.09 }, { x: 0.74, z: -0.4, h: 0.2, ph: 2.2, top: 1.09 }],
-      draw(t) {
-        const top = altarStone(R, T), earth = pot(R, T, 0, 0, top);
-        bush(R, T, [0, earth, 0], t);
-        my = 2.85 + Math.sin(t * 0.9) * 0.06;
-        if (mol) essence(R, mol, [0, my, 0], 0.8 + t * 0.5);
-      },
-      fx(t, F) { F.halo([0, my, 0], 0.5, 'rgba(155,107,214,.26)', 'rgba(155,107,214,0)'); }
-    };
-  });
   // Прищипка и сбор: a pot on an old stump, the top of the stem growing; a sickle circling it like a crescent moon
   // comes down and cuts the top above a pair of leaves; the top falls to the floor, and two new shoots come out of that
   // pair, so the bush grows wide instead of tall; then time goes back in a violet shimmer and it begins again. A tap
   // swings the sickle
-  scene('formirovka', S => {
+  scene('grimoire', 'formirovka', S => {
     const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
     let off = 0, cut = [0, 2.1, 0], sick = [1, 2.5, 0], tip = null, phase = 0;
     // the moment of the cycle: the sickle cuts at SW; a tap, once the top has grown, moves the cycle to the swing
@@ -859,7 +837,7 @@ window.BasilGrimoire = (() => {
   // Гидропоника: a glass tank of water with a cold light in it, the bush in a net cup on its lid, white roots hanging
   // down into the water and swaying like weed, bubbles rising from the stone of the air pump. A tap lets out a burst
   // of bubbles
-  scene('gidro', S => {
+  scene('grimoire', 'gidro', S => {
     const { R, T } = S, TOP = 0.92, LID = 1.12;
     const ROOTS = [...Array(9)].map((_, i) => ({ q: i / 9 * Math.PI * 2 + 0.3, r: 0.03 + (i % 3) * 0.035, len: 0.55 + ((i * 7) % 5) / 14, ph: i * 1.3 }));
     const BUB = [...Array(22)].map((_, i) => ({ a: (i * 0.618) % 1, s: 0.35 + (i % 5) / 9, dx: ((i * 37) % 11 - 5) / 70, dz: ((i * 23) % 11 - 5) / 90 }));
@@ -915,10 +893,112 @@ window.BasilGrimoire = (() => {
       }
     };
   });
+  // Главная: плантация алхимика — грядки в каменных рамах под железными арками оранжереи, на ближних кустах —
+  // стеклянные колпаки; в конце дорожки перегонный куб на печи, змеевик, приёмник с зелёным эликсиром. По медной трубе
+  // от приёмника к грядкам бежит капля, и куст, к которому она пришла, вспыхивает. Над грядками висят знаки алхимии.
+  // Круга, свечей и колонн нет: главная не похожа на главы. Касание — капля сейчас
+  scene('grimoire', 'glavnaya', S => {
+    const { R, T } = S;
+    R.fog = [14, 10, 20]; R.fogNear = 3.5; R.fogFar = 12; R.amb = [0.22, 0.18, 0.28];
+    const BEDS = [];
+    for (const z of [1.45, 0.1, -1.25]) for (const x of [-1.1, 1.1]) BEDS.push({ x, z });
+    const ARCH = [-2.05, -0.7, 0.65, 2.0];
+    const GLYPH = [0, 1, 2, 3, 4, 5].map(k => glyphTex(k, [236, 196, 96]));
+    const SMALLP = [[0.22, 0.4, 0.1], [0.5, 0.32, -0.05], [0.78, 0.22, -0.35], [0.95, 0.13, -0.6]];
+    const FLASK = [0.98, 0.14, -1.9], EVERY = 1.5, RUN = 1.7;
+    let taps = [], glow = BEDS.map(() => 0), drop = null, lastT = 0;
+    // the way of a drop: from the receiver along the edge of the path to its bed, then into the earth
+    const route = i => {
+      const b = BEDS[i], ex = b.x < 0 ? -0.56 : 0.56;
+      return [FLASK, [ex, 0.08, -1.9], [ex, 0.08, b.z], [b.x * 0.75, 0.3, b.z]];
+    };
+    const along = (pts, u) => {
+      const L = pts.slice(1).map((p, k) => Math.hypot(...sub(p, pts[k]))), tot = L.reduce((a, b) => a + b, 0);
+      let d = u * tot;
+      for (let k = 0; k < L.length; k++) { if (d <= L[k]) return add(pts[k], mul(sub(pts[k + 1], pts[k]), d / L[k])); d -= L[k]; }
+      return pts[pts.length - 1];
+    };
+    return {
+      bare: true, fill: 0.8, orbit: [Math.PI / 2, 0.3], rad: 5.6, near: 5.2, look: [0, 0.75, -0.3], still: 2.2,
+      sky: ['#05040A', '#120E1C', '#0C0912'],
+      tap(t) { taps.push(t); if (taps.length > 4) taps.shift(); },
+      tick(t) {
+        const dt = Math.max(0, Math.min(0.2, t - lastT)); lastT = t;
+        const n = Math.floor(t / EVERY), sends = [n * EVERY].concat(taps).filter(s => s <= t);
+        drop = null;
+        for (const s of sends) {
+          const u = (t - s) / RUN, i = (taps.includes(s) ? taps.indexOf(s) * 5 + 3 + n : Math.round(s / EVERY)) % BEDS.length;
+          if (u < 1 && !drop) drop = { p: along(route(i), smooth(u)), i };
+          if (u >= 1 && u < 1 + dt / RUN + 0.02) glow[i] = 1;
+        }
+        glow = glow.map(g => (reduce.matches ? g : Math.max(0, g - dt * 0.9)));
+        R.key = { dir: norm([0.2, 1, 0.4]), i: 0.5, col: [0.6, 0.65, 1] };
+      },
+      lights(t) {
+        const L = [{ p: [0, 0.45, -1.85], col: [1, 0.55, 0.22], i: 1.3 + 0.2 * Math.sin(t * 9), fall: 0.5 }, { p: add(FLASK, [0, 0.25, 0]), col: [0.45, 1, 0.4], i: 0.9, fall: 1 }];
+        if (drop) L.push({ p: drop.p, col: [0.5, 1, 0.4], i: 0.9, fall: 2 });
+        glow.map((g, i) => [g, i]).sort((a, b) => b[0] - a[0]).slice(0, 2).forEach(([g, i]) => { if (g > 0.05) L.push({ p: [BEDS[i].x, 0.9, BEDS[i].z], col: [0.5, 1, 0.45], i: 1.4 * g, fall: 1.2 }); });
+        return L;
+      },
+      draw(t) {
+        // the ground of the greenhouse and its path of flags
+        for (let i = 0; i < 8; i++) for (let j = 0; j < 8; j++) {
+          const x0 = -4 + i, z0 = -4 + j, v = ((i * 7 + j * 3) % 5) * 2;
+          quad(R, [x0, 0, z0 + 1], [x0 + 1, 0, z0 + 1], [x0 + 1, 0, z0], [x0, 0, z0], { col: [30 + v, 22 + v, 26 + v], layer: 0, ds: true });
+        }
+        for (let k = 0; k < 6; k++) { const z0 = -2.2 + k * 0.82; quad(R, [-0.38, 0.004, z0 + 0.76], [0.38, 0.004, z0 + 0.76], [0.38, 0.004, z0], [-0.38, 0.004, z0], { tex: T.stone, layer: 0.5, ds: true }); }
+        // the beds: a frame of stone, earth, two bushes each; the near ones under bell jars
+        BEDS.forEach((b, i) => {
+          box(R, [b.x, 0.14, b.z], [0.46, 0.14, 0.58], { tex: T.stone });
+          quad(R, [b.x - 0.4, 0.285, b.z + 0.52], [b.x + 0.4, 0.285, b.z + 0.52], [b.x + 0.4, 0.285, b.z - 0.52], [b.x - 0.4, 0.285, b.z - 0.52], { tex: T.soil, ds: true });
+          const far = b.z < -0.5;
+          [-0.24, 0.24].forEach((dz, j) => {
+            const base = [b.x, 0.285, b.z + dz];
+            bush(R, T, base, t + i * 1.7 + j, { s: 0.62, pairs: SMALLP, flat: far ? [70, 128, 50] : null, yaw: i + j });
+            if (b.z > 1) egg(R, add(base, [0, 0.3, 0]), [0.24, 0.36, 0.24], 0, { col: [120, 150, 170], emis: true, nofog: true, add: 0.12 });
+          });
+          // the sign over the bed
+          billboard(R, [b.x, 1.55 + Math.sin(t * 1.2 + i) * 0.06, b.z], 0.1, 0.1, { tex: GLYPH[i], emis: true, nofog: true, cut: true });
+        });
+        // the iron arches of the greenhouse, their ridge, a little glass between them
+        const arcP = (z, a) => [Math.cos(a) * 2.25, Math.sin(a) * 2.25, z];
+        ARCH.forEach(z => { for (let k = 0; k < 8; k++) rod(R, arcP(z, k / 8 * Math.PI), arcP(z, (k + 1) / 8 * Math.PI), 0.03, { col: [58, 52, 70] }, 3); });
+        [2, 4, 6].forEach(k => rod(R, arcP(ARCH[0], k / 8 * Math.PI), arcP(ARCH[3], k / 8 * Math.PI), 0.022, { col: [58, 52, 70] }, 3));
+        for (let g = 0; g < 3; g++) for (let k = 1; k < 7; k++) quad(R, arcP(ARCH[g], k / 8 * Math.PI), arcP(ARCH[g + 1], k / 8 * Math.PI), arcP(ARCH[g + 1], (k + 1) / 8 * Math.PI), arcP(ARCH[g], (k + 1) / 8 * Math.PI), { col: [70, 90, 120], emis: true, nofog: true, add: 0.035, ds: true });
+        // the still: a furnace with its fire, a copper pot, the swan's neck, the coil, the receiver
+        box(R, [0, 0.32, -2.3], [0.42, 0.32, 0.4], { tex: T.stone });
+        const fl = 0.8 + 0.2 * Math.sin(t * 13);
+        quad(R, [-0.16, 0.06, -1.895], [0.16, 0.06, -1.895], [0.16, 0.34, -1.895], [-0.16, 0.34, -1.895], { col: [255, 130 * fl + 40, 40], emis: true, nofog: true });
+        ball(R, [0, 0.95, -2.3], 0.36, { col: [196, 118, 64] });
+        prism(R, 0, -2.3, 1.22, 1.62, 0.11, 0.05, 6, { col: [196, 118, 64] });
+        rod(R, [0, 1.62, -2.3], [0.35, 1.72, -2.3], 0.035, { col: [196, 118, 64] }, 4);
+        rod(R, [0.35, 1.72, -2.3], [0.92, 1.05, -2.3], 0.03, { col: [196, 118, 64] }, 4);
+        prism(R, 0.98, -2.3, 0, 0.78, 0.22, 0.24, 8, { col: [112, 72, 44] }, [70, 46, 30]);
+        for (let k = 0; k < 16; k++) { const a0 = k * 0.9, a1 = (k + 1) * 0.9, y0 = 1.02 - k * 0.045, y1 = y0 - 0.045; rod(R, [0.98 + Math.cos(a0) * 0.27, y0, -2.3 + Math.sin(a0) * 0.27], [0.98 + Math.cos(a1) * 0.27, y1, -2.3 + Math.sin(a1) * 0.27], 0.018, { col: [206, 128, 70] }, 3); }
+        rod(R, [0.98, 0.3, -2.05], add(FLASK, [0, 0.14, 0]), 0.016, { col: [206, 128, 70] }, 3);
+        ball(R, FLASK, 0.09, { col: [120, 255, 110], emis: true, nofog: true });
+        ball(R, FLASK, 0.13, { col: [120, 150, 170], emis: true, nofog: true, add: 0.2 });
+        // the pipe along the path, both sides
+        [-0.56, 0.56].forEach(x => rod(R, [x, 0.08, -1.9], [x, 0.08, 1.9], 0.02, { col: [176, 104, 56] }, 3));
+        if (drop) ball(R, drop.p, 0.04, { col: [150, 255, 120], emis: true, nofog: true });
+      },
+      fx(t, F) {
+        F.halo([0, 0.25, -1.88], 0.5, 'rgba(255,140,50,.32)', 'rgba(255,120,40,0)');
+        F.halo(FLASK, 0.35, 'rgba(120,255,110,.35)', 'rgba(120,255,110,0)');
+        if (drop) F.halo(drop.p, 0.22, 'rgba(150,255,120,.5)', 'rgba(150,255,120,0)');
+        BEDS.forEach((b, i) => {
+          F.halo([b.x, 1.55, b.z], 0.2, 'rgba(255,210,110,.25)', 'rgba(255,210,110,0)');
+          if (glow[i] > 0.05) for (let k = 0; k < 8; k++) { const l = (k / 8 + t * 0.6) % 1; F.dot([b.x + Math.sin(k * 2.3) * 0.3, 0.35 + l * 0.9, b.z + Math.cos(k * 1.7) * 0.4], `rgba(170,255,140,${glow[i] * (1 - l)})`); }
+        });
+        // steam over the pot
+        for (let k = 0; k < 10; k++) { const l = (k / 10 + t * 0.25) % 1; F.dot([Math.sin(k + t) * 0.1 * l, 1.7 + l * 0.9, -2.3], `rgba(200,190,220,${0.5 * (1 - l)})`); }
+      }
+    };
+  });
   // Мой базилик: your own bush on a sill under an arched window; outside it the sun goes over and the night comes with
   // its stars and moon; beside the pot an hourglass runs down the time to the next task and turns itself over. A tap
   // turns the hourglass now
-  scene('moy', S => {
+  scene('grimoire', 'moy', S => {
     const { R, T } = S, DAY = 18, RUN = 7.8, FLIP = 0.8, EVERY = 9.2, SILL = 0.965, Z = -0.4;
     const HG = [0.5, 0.04];
     let off = 0, sun = [0, 1.6, Z + 0.02], day = 1, sand = 0, flip = 0;
@@ -990,7 +1070,7 @@ window.BasilGrimoire = (() => {
   // Посадка: a seed comes down glowing into a well of earth and sinks; a sprout comes up — the hook, the two seed
   // leaves opening, the first true pair, the second — then goes back to the earth as sparks. Around the well six cups
   // of peat with seedlings, each a step behind the other; a tap sows again
-  scene('posadka', S => {
+  scene('grimoire', 'posadka', S => {
     const { R, T } = S, CYCLE = 10, EARTH = 0.36;
     let sown = 0, seed = null, burst = -1;
     // a sprout at the base b, grown g (0…1), of the size s
@@ -1064,7 +1144,7 @@ window.BasilGrimoire = (() => {
   // Проблемы: the bush on the altar under siege — beetles creep in round the circle towards it and are thrown back by
   // the ward with a red flash, a spider comes down on its thread and climbs back, one lower leaf has gone yellow with
   // brown spots. A tap raises the ward: every beetle is thrown back at once
-  scene('problemy', S => {
+  scene('grimoire', 'problemy', S => {
     const { R, T } = S, N = 6, OUT = 2.45, IN = 1.25, CRAWL = 9;
     let warded = -99, flash = 0, bugs = [], spider = [0.3, 3, 0.12];
     return {
@@ -1127,7 +1207,7 @@ window.BasilGrimoire = (() => {
   });
   // Сорта: five sorts on a turning table, as the screen where a game's hero is chosen — the chosen one comes to the
   // front, rises into a beam of light and turns itself; the table turns on to the next by itself, or at a tap
-  scene('sorta', S => {
+  scene('grimoire', 'sorta', S => {
     const { R, T } = S, N = 5, STEP = 3.6, RAD = 1.2;
     const KINDS = [
       { tex: T.leaf, col: [84, 150, 56], leaf: 1.2 },                                       // «Генуэзский»: big leaves
@@ -1185,7 +1265,7 @@ window.BasilGrimoire = (() => {
   });
   // Справка: the grimoire itself — open on a stone lectern, its pages turning one by one in their own time, runes of
   // light circling it, a quill in its inkpot beside. A tap turns the page now
-  scene('spravka', S => {
+  scene('grimoire', 'spravka', S => {
     const { R, T } = S, EVERY = 5, TURN = 1.5, TILT = 0.5, O = [0, 1.0, 0];
     let off = 0, phi = 0;
     const at = t => (((t + off) % EVERY) + EVERY) % EVERY;
@@ -1245,7 +1325,7 @@ window.BasilGrimoire = (() => {
   // Удобрения: three flasks of the elements, N, P and K, on their stones round the altar, bubbling. In turn each sends
   // a drop of its light in an arc into the pot; the light climbs the stem and the leaves take its colour. A tap sends
   // the next one now
-  scene('udobreniya', S => {
+  scene('grimoire', 'udobreniya', S => {
     const { R, T } = S, EVERY = 3.6, FLY = 1.3, CLIMB = 1.1;
     const COL = [[120, 140, 255], [255, 112, 64], [255, 206, 80]];
     const FL = [0, 1, 2].map(i => { const q = Math.PI / 2 + i / 3 * Math.PI * 2; return [Math.cos(q) * 1.15, Math.sin(q) * 1.15]; });
@@ -1306,7 +1386,7 @@ window.BasilGrimoire = (() => {
   // Уход: the four the chapter is about. A sun crosses the vault and the bush turns after it, then a pale moon; a cloud
   // comes in and rains on the pot, the earth goes dark with the water and pales as it dries; the candles keep it
   // warm. A tap calls the rain now
-  scene('uhod', S => {
+  scene('grimoire', 'uhod', S => {
     const { R, T } = S, DAY = 16, RAIN = 5;
     let rainAt = -99, tapped = -99, orb = [0, 3, 0], day = 1, cloud = null, wet = 0, lean = [0, 0];
     const EARTH_DRY = [112, 82, 56], EARTH_WET = [34, 22, 18];
@@ -1361,7 +1441,7 @@ window.BasilGrimoire = (() => {
   // Вкус и кухня: pesto made as a rite — a stone mortar on a kitchen table, the pestle grinding round in it, leaves of basil
   // falling into the green, garlic, pine nuts and a phial of oil beside it; out of the mortar rises the aroma, a
   // molecule of eugenol going up and fading. A tap throws in a handful of leaves
-  scene('vkus', S => {
+  scene('grimoire', 'vkus', S => {
     const { R, T } = S, mol = molShape('eug');
     let top = 1.08, hands = [];
     const FALL = [...Array(7)].map((_, i) => ({ a: i / 7, x: ((i * 0.61) % 1 - 0.5) * 0.5, z: ((i * 0.37) % 1 - 0.5) * 0.4, s: 0.7 + (i % 3) * 0.12 }));
@@ -1417,6 +1497,90 @@ window.BasilGrimoire = (() => {
     };
   });
   /* ------------------------------------------------------------------ */
+  /* «Гримуар»: the crypt by candlelight round every scene — a circle of  */
+  /* runes on the floor in the colour of the chapter, pillars in the dark, */
+  /* seven candles on the points of the star; drawn at the console's      */
+  /* resolution and cut down to its colours                               */
+  /* ------------------------------------------------------------------ */
+  world('grimoire', {
+    raster: () => ({ px: 3, maxW: 400, levels: 16, fogNear: 3.5, fogFar: 15, amb: [0.13, 0.1, 0.17] }),
+    textures: () => textures(),
+    key: { dir: norm([-0.35, 0.85, -0.4]), i: 0.42, col: [0.55, 0.5, 0.85] },
+    sky: ['#07050B', '#1C1122', '#120B17'],
+    defaults: { glow: [255, 70, 50] },
+    make(S, sc) {
+      const { R, T } = S;
+      const FLOOR = floorTex(sc.glow, false), GLOW = floorTex(sc.glow, true);
+      const ring = sc.bare ? [] : [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; });
+      const candles = ring.concat(sc.candles || []);
+      const embers = [...Array(candles.length ? 46 : 0)].map((_, i) => ({ k: i % candles.length, a: (i * 0.37) % 1, s: 0.3 + (i * 13 % 10) / 22, dx: ((i * 29) % 11 - 5) / 60, dz: ((i * 17) % 11 - 5) / 60 }));
+      const pillars = [...Array(8)].map((_, i) => { const q = 0.35 + i / 8 * Math.PI * 2; return { x: Math.cos(q) * 7.4, z: Math.sin(q) * 7.4, h: 1.6 + ((i * 53) % 10) / 4 }; });
+      return {
+        lights: t => candles.map(c => ({ p: [c.x, (c.top || 0) + c.h + 0.14, c.z], col: [1, 0.6, 0.28], i: 0.5 + 0.12 * Math.sin(t * 11 + c.ph) + 0.08 * Math.sin(t * 23 + c.ph * 2), fall: 0.55 })),
+        draw(t) {
+          if (!sc.bare) {
+            // the floor and its circle: a layer of their own, under everything
+            const FL = 4.4, N = 2, glowA = sc.glowAdd ? sc.glowAdd(t) : 0.32 + 0.22 * Math.sin(t * 1.4);
+            for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+              const x0 = -FL + i * FL * 2 / N, x1 = x0 + FL * 2 / N, z0 = -FL + j * FL * 2 / N, z1 = z0 + FL * 2 / N;
+              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: FLOOR, layer: 0, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
+              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: GLOW, layer: 0, add: glowA, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
+            }
+            for (let k = 0; k < 4; k++) {
+              const q = k * Math.PI / 2, far = 16, s = [Math.cos(q), Math.sin(q)], tn = [-s[1], s[0]];
+              const p = (a, b) => [s[0] * a + tn[0] * b, 0, s[1] * a + tn[1] * b];
+              quad(R, p(FL, -FL), p(far, -far), p(far, far), p(FL, FL), { col: [30, 22, 36], layer: 0, ds: true });
+            }
+            pillars.forEach(p => box(R, [p.x, p.h / 2, p.z], [0.32, p.h / 2, 0.32], { tex: T.stone }));
+          }
+          candles.forEach((c, i) => {
+            const y0 = c.top || 0;
+            prism(R, c.x, c.z, y0, y0 + c.h, 0.085, 0.075, 6, { tex: T.wax }, [236, 226, 200], i);
+            const fl = 1 + 0.18 * Math.sin(t * 13 + c.ph) + 0.1 * Math.sin(t * 29 + c.ph);
+            billboard(R, [c.x, y0 + c.h + 0.1 * fl, c.z], 0.05, 0.1 * fl, { tex: T.flame, emis: true, nofog: true, cut: true });
+          });
+        },
+        // the halos of the flames and the sparks going up from them
+        fx(t, F) {
+          candles.forEach(c => F.halo([c.x, (c.top || 0) + c.h + 0.1, c.z], 0.42, 'rgba(255,150,60,.34)', 'rgba(255,120,40,0)'));
+          embers.forEach(e => {
+            const c = candles[e.k], life = (e.a + t * e.s * 0.25) % 1;
+            F.spark([c.x + e.dx * life * 8, (c.top || 0) + c.h + 0.15 + life * 1.6, c.z + e.dz * life * 8], life);
+          });
+        }
+      };
+    },
+    // the colour depth of the console
+    post: R => R.post(16)
+  });
+
+  // the stone altar with its sigil: gives the height of its top
+  function altarStone(R, T) {
+    box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar });
+    box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
+    return 1.08;
+  }
+  // a molecule of the aroma, small and glowing: its atoms at the centre c, turned by yaw; a — how much of it is seen
+  function essence(R, mol, c, yaw, k = 1, a = null) {
+    const ca = Math.cos(yaw), sa = Math.sin(yaw);
+    const MP = mol.P.map(p => { const q = [p[0] * ca + p[2] * sa, p[1], -p[0] * sa + p[2] * ca]; return [c[0] + q[0] * 0.15 * k, c[1] + q[1] * 0.135 * k + q[2] * 0.03 * k, c[2] + q[2] * 0.15 * k]; });
+    mol.bonds.forEach(([i, j]) => rod(R, MP[i], MP[j], 0.012 * k, { col: [170, 120, 230], emis: true, add: a }, 3));
+    mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? [240, 70, 60] : [214, 190, 255], emis: true, add: a }));
+  }
+  // the signs of alchemy, pixel by pixel (16 × 16, nothing around them): mercury, sulphur, salt, saturn, earth, air
+  function glyphTex(kind, col) {
+    return tex(16, 16, t => {
+      const { put, line } = t;
+      const ring = (cx, cy, r) => { for (let a = 0; a < 64; a++) { const q = a / 64 * Math.PI * 2; put(cx + Math.cos(q) * r, cy + Math.sin(q) * r, col); } };
+      if (kind === 0) { ring(8, 7, 3.2); line(8, 11, 8, 15, col); line(6, 13, 10, 13, col); for (let a = 0; a < 20; a++) { const q = Math.PI + a / 20 * Math.PI; put(8 + Math.cos(q) * 3.5, 2.5 + Math.sin(q) * 1.8, col); } }
+      if (kind === 1) { line(3, 9, 8, 1, col); line(8, 1, 13, 9, col); line(3, 9, 13, 9, col); line(8, 9, 8, 15, col); line(5, 12, 11, 12, col); }
+      if (kind === 2) { ring(8, 8, 5.5); line(2, 8, 14, 8, col); }
+      if (kind === 3) { line(6, 1, 6, 12, col); line(3, 4, 9, 4, col); line(6, 8, 10, 8, col); line(10, 8, 11, 12, col); line(11, 12, 9, 15, col); }
+      if (kind === 4) { line(2, 3, 14, 3, col); line(2, 3, 8, 14, col); line(14, 3, 8, 14, col); line(4, 7, 12, 7, col); }
+      if (kind === 5) { line(2, 13, 8, 2, col); line(8, 2, 14, 13, col); line(2, 13, 14, 13, col); line(4, 9, 12, 9, col); }
+    });
+  }
+  /* ------------------------------------------------------------------ */
   /* the crypt behind the page: fog of old blood and violet, ash and      */
   /* sparks drifting up, at a fifth of the resolution                     */
   /* ------------------------------------------------------------------ */
@@ -1470,6 +1634,10 @@ window.BasilGrimoire = (() => {
       }
     };
   }
+  /* ------------------------------------------------------------------ */
+  /* the forest behind the page of «Друид»                               */
+  /* ------------------------------------------------------------------ */
+  function forest() { return { destroy() {} }; }
   /* ------------------------------------------------------------------ */
   /* the drawings of the guide at the console's resolution               */
   /* ------------------------------------------------------------------ */
@@ -1555,32 +1723,40 @@ window.BasilGrimoire = (() => {
   const onPanel = () => refit();
   const onResize = () => refit();
   /* ------------------------------------------------------------------ */
-  /* on and off: the crypt, the altars, the screen of the CRT             */
+  /* on and off: the background of the skin, the scenes, its drawings,   */
+  /* the screen of the CRT                                                */
   /* ------------------------------------------------------------------ */
-  let started = false;
+  // what stands behind the page in each skin
+  const BACKS = { grimoire: () => crypt(), druid: () => forest() };
+  let started = null;
   const mounted = [];
   function start() {
-    if (!skinOn()) { stop(); return; }
-    if (started) return;
-    started = true;
-    // a page shown in the sheet of another (?peek=1) is only its place: no crypt, no altar, the molecules as here
+    const skin = skinNow();
+    if (!skin) { stop(); return; }
+    if (started === skin) return;
+    if (started) stop();
+    started = skin;
+    // a page shown in the sheet of another (?peek=1) is only its place: no background, no scene, the molecules as here
     if (!root.classList.contains('is-peek')) {
-      mounted.push(crypt());
-      $$('.ch-hero').forEach(h => { const v = h.closest('[data-view]'); mounted.push(altar(h, v && v.dataset.view)); });
+      mounted.push(BACKS[skin]());
+      $$('.ch-hero').forEach(h => { const v = h.closest('[data-view]'); mounted.push(stage(h, v && v.dataset.view, skin)); });
       const art = $('.view-home .hero-art');
-      if (art) mounted.push(altar(art, 'glavnaya'));
+      if (art) mounted.push(stage(art, 'glavnaya', skin));
     }
-    $$('svg.ill').forEach(pixelate);
-    illWatch.observe(doc.body, { childList: true, subtree: true });
-    doc.addEventListener('toggle', onToggle, true);
-    doc.addEventListener('basil:panel', onPanel);
-    addEventListener('resize', onResize);
+    // the drawings of «Гримуар» go to the console's pixels; «Друид» keeps them smooth and only colours them
+    if (skin === 'grimoire') {
+      $$('svg.ill').forEach(pixelate);
+      illWatch.observe(doc.body, { childList: true, subtree: true });
+      doc.addEventListener('toggle', onToggle, true);
+      doc.addEventListener('basil:panel', onPanel);
+      addEventListener('resize', onResize);
+    }
     root.classList.add('psx-on');
     $$('[data-crt]').forEach(b => b.setAttribute('aria-checked', String(!root.classList.contains('no-crt'))));
   }
   function stop() {
     if (!started) return;
-    started = false;
+    started = null;
     mounted.splice(0).forEach(m => m.destroy());
     illWatch.disconnect();
     doc.removeEventListener('toggle', onToggle, true);
@@ -1596,9 +1772,9 @@ window.BasilGrimoire = (() => {
     b.setAttribute('aria-checked', String(on));
     try { localStorage.setItem('basil-crt', JSON.stringify(on)); } catch (err) { /* the switch still works for this visit */ }
   });
-  doc.addEventListener('basil:theme', () => { if (skinOn()) start(); else stop(); });
+  doc.addEventListener('basil:theme', () => { if (skinNow()) start(); else stop(); });
 
-  const api = { start, stop, drawMol, get on() { return skinOn(); } };
+  const api = { start, stop, drawMol, get on() { return !!skinNow(); }, get skin() { return skinNow(); } };
 
   return api;
 })();

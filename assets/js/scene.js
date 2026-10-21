@@ -577,8 +577,8 @@ window.BasilScene = (() => {
     }
     perf.listeners.push(() => { resize(); });
 
-    // the theme «Гримуар» has a crypt of its own behind the page (assets/js/grimoire.js): the greenhouse rests
-    const skinned = () => document.documentElement.getAttribute('data-skin') === 'grimoire';
+    // a skin («Гримуар», «Друид») has a background of its own behind the page (assets/js/skins.js): the greenhouse rests
+    const skinned = () => document.documentElement.hasAttribute('data-skin');
     function start() {
       L.stop();
       if (skinned()) return;

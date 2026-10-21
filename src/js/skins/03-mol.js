@@ -37,11 +37,14 @@
     return SHAPES[id];
   }
 
-  /* The molecule viewer of the guide (MolViewer, science.js) draws through here while the theme is on: the same
-     molecule, turned the same way, rendered at a third of the size — atoms twenty flat faces, bonds four-sided rods,
-     vertices snapped to the console's pixels — and drawn back up without smoothing */
+  /* The molecule viewer of the guide (MolViewer, science.js) draws through here while a skin is on (drawMol picks the
+     skin's own way, MOLDRAW): the same molecule, turned the same way. In «Гримуар» rendered at a third of the size —
+     atoms twenty flat faces, bonds four-sided rods, vertices snapped to the console's pixels — and drawn back up
+     without smoothing */
+  const MOLDRAW = {};
+  function drawMol(ctx, mol, P, R3, W, H) { (MOLDRAW[skinNow()] || MOLDRAW.grimoire)(ctx, mol, P, R3, W, H); }
   const MOLBUF = new WeakMap();
-  function drawMol(ctx, mol, P, R3, W, H) {
+  MOLDRAW.grimoire = function molCrypt(ctx, mol, P, R3, W, H) {
     let b = MOLBUF.get(ctx.canvas);
     if (!b) {
       const cv = doc.createElement('canvas');
@@ -75,4 +78,4 @@
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.drawImage(b.cv, 0, 0, ctx.canvas.width, ctx.canvas.height);
-  }
+  };

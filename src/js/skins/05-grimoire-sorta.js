@@ -1,6 +1,6 @@
   // Сорта: five sorts on a turning table, as the screen where a game's hero is chosen — the chosen one comes to the
   // front, rises into a beam of light and turns itself; the table turns on to the next by itself, or at a tap
-  scene('sorta', S => {
+  scene('grimoire', 'sorta', S => {
     const { R, T } = S, N = 5, STEP = 3.6, RAD = 1.2;
     const KINDS = [
       { tex: T.leaf, col: [84, 150, 56], leaf: 1.2 },                                       // «Генуэзский»: big leaves

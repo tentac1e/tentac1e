@@ -1,7 +1,7 @@
   // Мой базилик: your own bush on a sill under an arched window; outside it the sun goes over and the night comes with
   // its stars and moon; beside the pot an hourglass runs down the time to the next task and turns itself over. A tap
   // turns the hourglass now
-  scene('moy', S => {
+  scene('grimoire', 'moy', S => {
     const { R, T } = S, DAY = 18, RUN = 7.8, FLIP = 0.8, EVERY = 9.2, SILL = 0.965, Z = -0.4;
     const HG = [0.5, 0.04];
     let off = 0, sun = [0, 1.6, Z + 0.02], day = 1, sand = 0, flip = 0;

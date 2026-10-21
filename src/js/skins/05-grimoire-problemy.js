@@ -1,7 +1,7 @@
   // Проблемы: the bush on the altar under siege — beetles creep in round the circle towards it and are thrown back by
   // the ward with a red flash, a spider comes down on its thread and climbs back, one lower leaf has gone yellow with
   // brown spots. A tap raises the ward: every beetle is thrown back at once
-  scene('problemy', S => {
+  scene('grimoire', 'problemy', S => {
     const { R, T } = S, N = 6, OUT = 2.45, IN = 1.25, CRAWL = 9;
     let warded = -99, flash = 0, bugs = [], spider = [0.3, 3, 0.12];
     return {

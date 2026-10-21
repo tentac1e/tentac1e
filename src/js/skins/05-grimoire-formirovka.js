@@ -2,7 +2,7 @@
   // comes down and cuts the top above a pair of leaves; the top falls to the floor, and two new shoots come out of that
   // pair, so the bush grows wide instead of tall; then time goes back in a violet shimmer and it begins again. A tap
   // swings the sickle
-  scene('formirovka', S => {
+  scene('grimoire', 'formirovka', S => {
     const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
     let off = 0, cut = [0, 2.1, 0], sick = [1, 2.5, 0], tip = null, phase = 0;
     // the moment of the cycle: the sickle cuts at SW; a tap, once the top has grown, moves the cycle to the swing

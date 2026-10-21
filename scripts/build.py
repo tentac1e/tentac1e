@@ -9,8 +9,8 @@
     src/layout.html                 общий каркас: шапка, спрайт, фон, подвал, поиск, меню
     src/pages/<глава>/              глава по кускам: _head.html (обложка и вкладки), 1-<вкладка>.html …, _foot.html
     src/pages/<глава>.html          глава без вкладок (главная, календарь) — одним файлом
-    src/js/<модуль>/_frame.js + NN-*.js   → assets/js/<модуль>.js (app, science, scene, data, grimoire — тема «Гримуар»,
-                                    страница грузит её, только пока тема включена)
+    src/js/<модуль>/_frame.js + NN-*.js   → assets/js/<модуль>.js (app, science, scene, data, skins — оформления
+                                    «Гримуар» и «Друид», страница грузит их, только пока оформление включено)
     src/js/haptics.js               → assets/js/haptics.js как есть
     src/css/style/NN-*.css          → assets/css/style.css
     src/css/lab/NN-*.css            → assets/css/lab.css; на месте /*@labs*/ — стили моделей
@@ -728,7 +728,7 @@ def assemble(src_pages, assets):
             return first[:-2].rstrip() + '. ' + BANNER.format(src=src) + ' */\n' + rest
         return f'/* {BANNER.format(src=src)} */\n' + text
 
-    for mod in ('data', 'scene', 'science', 'app', 'grimoire'):
+    for mod in ('data', 'scene', 'science', 'app', 'skins'):
         d = SRC / 'js' / mod
         frame = (d / '_frame.js').read_text(encoding='utf-8')
         body = ''.join(f.read_text(encoding='utf-8') for f in numbered(d, '.js'))
@@ -881,7 +881,7 @@ def write_map(src_pages, CH):
             out.append(f"- `{rel(f)}`: " + ', '.join(f'`{n}`' for n in names))
     out.append('')
     out += ['## Скрипты (src/js/)', '']
-    for mod in ('app', 'science', 'scene', 'data', 'grimoire'):
+    for mod in ('app', 'science', 'scene', 'data', 'skins'):
         out.append(f'**{mod}.js**')
         for f in numbered(SRC / 'js' / mod, '.js'):
             text = f.read_text(encoding='utf-8')
@@ -933,7 +933,7 @@ def write_code_map():
     out += ['## Функции', '',
             'Имена верхнего уровня каждого куска с номером строки. Куски одного модуля (`src/js/<модуль>/NN-*.js`) — одна область '
             'видимости: имя, объявленное в одном, видно во всех следующих.', '']
-    for mod in ('app', 'science', 'scene', 'data', 'grimoire'):
+    for mod in ('app', 'science', 'scene', 'data', 'skins'):
         files = numbered(SRC / 'js' / mod, '.js')
         texts = {f: f.read_text(encoding='utf-8') for f in files}
         decl = {f: declared(t, '  ') for f, t in texts.items()}
@@ -1224,7 +1224,7 @@ def main():
         # after an update browsers fetch the new files instead of mixing them with cached old ones
         ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
         pages_js['v'] = {'labs': {v: ver(js / 'labs' / f'{v}.js') for v in bundles}, 'lib': {x: ver(js / 'labs' / f'lib-{x}.js') for x in libs},
-                         'deps': lib_deps, 'search': ver(js / 'search-index.js'), 'grimoire': ver(js / 'grimoire.js')}
+                         'deps': lib_deps, 'search': ver(js / 'search-index.js'), 'skins': ver(js / 'skins.js')}
         (js / 'pages.js').write_text(
             '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
             'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
@@ -1273,7 +1273,7 @@ def main():
         out = out.replace('{{title}}', escape(title)).replace('{{description}}', attr(desc))
         out = rewrite_links(out, here)
         # the theme «Гримуар» is fetched when it is switched on (01-theme.js); the one-file book carries it inline
-        scripts = '\n'.join(f'<script src="assets/js/{s}" defer></script>' for s in (SCRIPTS[:-1] + ['grimoire.js', 'app.js'] if single else SCRIPTS) if not (single and s == 'pages.js'))
+        scripts = '\n'.join(f'<script src="assets/js/{s}" defer></script>' for s in (SCRIPTS[:-1] + ['skins.js', 'app.js'] if single else SCRIPTS) if not (single and s == 'pages.js'))
         # a chapter whose pictures stand on the page from the start brings its picture files with it: they run right
         # after science.js, before the interface starts, so the pictures on the screen are drawn at DOMContentLoaded
         if not single and here in eager:
@@ -1358,7 +1358,7 @@ def write_pwa(out_dir, v, no_sw):
     found.update(f'assets/js/labs/{n}.js?v={h}' for n, h in v['labs'].items())
     found.update(f'assets/js/labs/lib-{n}.js?v={h}' for n, h in v['lib'].items())
     found.add(f'assets/js/search-index.js?v={v["search"]}')
-    found.add(f'assets/js/grimoire.js?v={v["grimoire"]}')
+    found.add(f'assets/js/skins.js?v={v["skins"]}')
     ver = lambda path: hashlib.sha1(path.read_bytes()).hexdigest()[:8]
     icon = lambda n: f'assets/icons/{n}?v={ver(out_dir / "assets" / "icons" / n)}'
     icons = [icon(n) for n in ('icon-192.png', 'icon-512.png', 'icon-maskable-512.png')]

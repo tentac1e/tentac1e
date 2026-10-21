@@ -1,5 +1,5 @@
 /* Оформление «Гримуар» на телефоне и компьютере: включается свечой в шапке и запоминается, а пока выключено, его файл
-   (assets/js/grimoire.js) не грузится. Каждая страница в нём открывается уже тёмной (data-skin и data-theme стоят
+   (assets/js/skins.js) не грузится. Каждая страница в нём открывается уже тёмной (data-skin и data-theme стоят
    к DOMContentLoaded), без ошибок и ничего не шире экрана: алтарь нарисован в шапке каждой главы и на главной, у каждой
    главы — своя сцена, и касание её меняет и ничего не ломает; склеп за страницей, оранжерея и её небо спрятаны,
    заголовки — шрифтом приставки. Рисунки — через пиксельный фильтр,
@@ -16,7 +16,7 @@ function state() {
   const h1 = document.querySelector('[data-view] h1');
   return {
     skin: root.dataset.skin || null, theme: root.dataset.theme || null, dcl: window.__dcl || null,
-    loaded: !!window.BasilGrimoire, on: !!(window.BasilGrimoire && window.BasilGrimoire.on),
+    loaded: !!window.BasilSkins, on: !!(window.BasilSkins && window.BasilSkins.on),
     heroes: document.querySelectorAll('.ch-hero').length + (document.querySelector('.view-home .hero-art') ? 1 : 0),
     stages: stages.length, drawn: stages.filter(s => s.classList.contains('is-drawn')).length,
     scene: stages.map(s => s.dataset.scene).join(','), view: (document.querySelector('[data-view]') || { dataset: {} }).dataset.view || null,
@@ -38,7 +38,7 @@ function state() {
     const ctx = await browser.newContext(opts);
     await ctx.addInitScript(() => { document.addEventListener('DOMContentLoaded', () => { const r = document.documentElement; window.__dcl = { skin: r.dataset.skin || null, theme: r.dataset.theme || null, crt: r.classList.contains('no-crt') }; }); });
     const asked = [];
-    ctx.on('request', r => { if (/grimoire\.js/.test(r.url())) asked.push(r.url()); });
+    ctx.on('request', r => { if (/skins\.js/.test(r.url())) asked.push(r.url()); });
     let page = await ctx.newPage();
     watch(page, errs);
     await page.goto(fileUrl('uhod.html'), { waitUntil: 'load' });
@@ -47,7 +47,8 @@ function state() {
     await page.waitForTimeout(800);
     let s = await page.evaluate(state);
     ok(!s.skin && s.theme === 'light' && !asked.length && !s.loaded && s.field && s.art && s.moon, tag(`off: the theme's file is not fetched, the greenhouse and the chapter's art stand ${JSON.stringify(s)}`));
-    await page.click('#skin-toggle');
+    await page.click('#skin-btn');
+    await page.click('#skin-menu [data-skin="grimoire"]');
     await page.waitForTimeout(1500);
     s = await page.evaluate(state);
     const saved = await page.evaluate(() => localStorage.getItem('basil-skin'));
@@ -134,7 +135,8 @@ function state() {
 
     // off again: everything as it was, and the moon's own choice back
     await page.evaluate(() => scrollTo(0, 0));
-    await page.click('#skin-toggle');
+    await page.click('#skin-btn');
+    await page.click('#skin-menu [data-skin=""]');
     await page.waitForTimeout(900);
     s = await page.evaluate(state);
     ok(!s.skin && s.theme === 'light' && !s.on && !s.stages && !s.crypt && s.field && s.art && s.moon && await page.evaluate(() => !document.querySelector('.psx-g') || getComputedStyle(document.querySelector('.psx-g')).filter === 'none'),

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="assets/css/lab.css">
 </head>
 <body>
-<script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}try{if(JSON.parse(localStorage.getItem('basil-skin'))==='grimoire'){var r=document.documentElement;r.setAttribute('data-skin','grimoire');r.setAttribute('data-theme','dark');if(JSON.parse(localStorage.getItem('basil-crt'))===false)r.classList.add('no-crt')}}catch(e){}</script>
+<script>document.documentElement.classList.add('js');if(/[?&]peek=/.test(location.search))document.documentElement.classList.add('is-peek');if('scrollRestoration' in history)history.scrollRestoration='manual';try{var t=JSON.parse(localStorage.getItem('basil-theme'));if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}try{var s=JSON.parse(localStorage.getItem('basil-skin'));if(s==='grimoire'||s==='druid'){var r=document.documentElement;r.setAttribute('data-skin',s);r.setAttribute('data-theme','dark');if(JSON.parse(localStorage.getItem('basil-crt'))===false)r.classList.add('no-crt')}}catch(e){}</script>
 
 <!-- ================= SVG SPRITE ================= -->
 <svg class="sprite" aria-hidden="true" focusable="false">
@@ -91,6 +91,8 @@
   <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17.5h6M9.8 20.5h4.4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1 1.4 1 2.2v1.5h5.2V16c0-.8.4-1.6 1-2.2A6 6 0 0 0 12 3z"/><path d="M12 7.2v3.2"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
   <symbol id="i-candle" viewBox="0 0 24 24"><path d="M12 2.8c-1.7 2-2.4 3.3-2.4 4.4a2.4 2.4 0 0 0 4.8 0c0-1.1-.7-2.4-2.4-4.4z"/><path d="M12 9.6v1.6"/><path d="M9.2 21V11.2h5.6V21"/><path d="M6.5 21h11"/><path d="M14.8 14.5c-.9.4-1.2 1.2-1.2 2.2"/></symbol>
+  <symbol id="i-skin" viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.2 0 1.8-.8 1.8-1.7 0-1.4-1.2-1.6-1.2-2.9 0-1 .8-1.6 1.8-1.6h2.2a3.9 3.9 0 0 0 3.9-3.9C20.5 6.6 16.7 3.5 12 3.5z"/><circle cx="7.6" cy="11.2" r="1.2"/><circle cx="10.4" cy="7.4" r="1.2"/><circle cx="15" cy="7.6" r="1.2"/></symbol>
+  <symbol id="i-rune" viewBox="0 0 24 24"><path d="M12 21V4"/><path d="M12 11.5 6.5 5.5M12 11.5l5.5-6"/><path d="M8.6 15.4 12 18.2"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
   <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.2c-3.4 4.3-6 7.7-6 10.9a6 6 0 0 0 12 0c0-3.2-2.6-6.6-6-10.9z"/><path d="M9.2 14.6a3 3 0 0 0 2.4 2.6"/></symbol>
   <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4 4 0 1 1-4 0z"/><path d="M12 9v7.5"/></symbol>
@@ -316,9 +318,16 @@
     <button class="search-btn" type="button" data-open="sheet-search" aria-label="Поиск по гиду">
       <svg class="ico"><use href="#i-search"/></svg><span>Поиск</span><kbd>/</kbd>
     </button>
-    <button class="icon-btn skin-btn" id="skin-toggle" type="button" aria-pressed="false" aria-label="Включить оформление «Гримуар»">
-      <svg class="ico"><use href="#i-candle"/></svg>
-    </button>
+    <div class="skin-pick">
+      <button class="icon-btn skin-btn" id="skin-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="skin-menu" aria-label="Оформление гида: обычное">
+        <svg class="ico"><use href="#i-skin"/></svg>
+      </button>
+      <div class="skin-menu" id="skin-menu" role="menu" aria-label="Оформление гида" hidden>
+        <button type="button" role="menuitemradio" aria-checked="true" data-skin=""><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg><span><b>Обычное</b><small>светлое или тёмное — луной</small></span></button>
+        <button type="button" role="menuitemradio" aria-checked="false" data-skin="grimoire"><svg class="ico" aria-hidden="true"><use href="#i-candle"/></svg><span><b>Гримуар</b><small>игра на приставке, оккультное</small></span></button>
+        <button type="button" role="menuitemradio" aria-checked="false" data-skin="druid"><svg class="ico" aria-hidden="true"><use href="#i-rune"/></svg><span><b>Друид</b><small>ночная роща, руны</small></span></button>
+      </div>
+    </div>
     <button class="icon-btn" id="theme-toggle" type="button" aria-label="Сменить тему">
       <svg class="ico"><use href="#i-moon"/></svg>
     </button>
