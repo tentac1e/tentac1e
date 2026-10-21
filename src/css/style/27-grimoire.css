@@ -19,8 +19,8 @@
 [data-skin="grimoire"] .crt { display: block; position: fixed; inset: 0; z-index: 95; pointer-events: none; background: repeating-linear-gradient(to bottom, var(--scan) 0 1px, transparent 1px 3px); }
 [data-skin="grimoire"] .crt::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 58%, var(--vig) 100%); }
 [data-skin="grimoire"].no-crt .crt { display: none; }
-.crt-row { display: none; }
-[data-skin="grimoire"] .crt-row { display: inline-flex; }
+/* (the row of the switch is a .hap-row of lab.css, which comes later: hidden with more weight than its display) */
+:root:not([data-skin="grimoire"]) .crt-row { display: none; }
 
 /* ---- type: the bitmap face for the big headings, a pixel grid for names, Church Slavonic for the eyebrows ---- */
 [data-skin="grimoire"] h1, [data-skin="grimoire"] h2 { font-family: var(--font-pixel); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; text-shadow: 2px 2px 0 var(--blood-d), 4px 4px 0 var(--shade); }
