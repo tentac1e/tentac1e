@@ -129,9 +129,10 @@ function audit() {
 }
 
 // one page in one mode: every tab walked through, then measured; the lines it reports
-async function check(ctx, mode, f, errs) {
+async function check(ctx, mode, f, errs, opened = () => {}) {
   // a fresh tab for every page: one tab walked through all of them stalls after a while
   const page = await ctx.newPage();
+  opened(page);
   watch(page, errs);
   const out = [];
   await page.goto(fileUrl(f), { waitUntil: 'load' });
@@ -153,6 +154,24 @@ async function check(ctx, mode, f, errs) {
   return out;
 }
 
+// a page whose renderer stops answering (now and then, under the load of a full run, an evaluate never returns) is
+// closed and checked once more in a fresh tab, and the run says so; a second stall fails that page instead of the whole
+// run waiting for its 30 minutes
+const STALL = 150000;
+async function guarded(ctx, mode, f, errs) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let page = null, timer = 0;
+    const work = check(ctx, mode, f, errs, p => { page = p; });
+    const out = await Promise.race([work, new Promise(res => { timer = setTimeout(() => res(null), STALL); })]);
+    clearTimeout(timer);
+    if (out) return out;
+    work.catch(() => { /* the stalled tab is closed below */ });
+    if (page) await Promise.race([page.close().catch(() => {}), new Promise(res => setTimeout(res, 10000))]);
+    console.log(`NOTE ${mode.padEnd(7)} ${f}: no answer for ${STALL / 1000} s${attempt ? '' : ', checked again in a fresh tab'}`);
+  }
+  return [[false, `${mode.padEnd(7)} ${f}: no answer for ${STALL / 1000} s, twice`]];
+}
+
 // other checks measure their own pages with the same audit: require('./overlap').audit
 module.exports = { audit };
 if (require.main === module) (async () => {
@@ -167,7 +186,7 @@ if (require.main === module) (async () => {
   for (const mode of modes) for (const f of FILES) if (!only.length || only.includes(f)) jobs.push({ mode, f });
   // four pages at a time; the lines come out in the usual order
   let next = 0;
-  const worker = async () => { while (next < jobs.length) { const j = jobs[next++]; j.out = await check(ctx[j.mode], j.mode, j.f, errs); } };
+  const worker = async () => { while (next < jobs.length) { const j = jobs[next++]; j.out = await guarded(ctx[j.mode], j.mode, j.f, errs); } };
   await Promise.all([1, 2, 3, 4].map(worker));
   jobs.forEach(j => j.out.forEach(([good, msg]) => ok(good, msg)));
   await browser.close();

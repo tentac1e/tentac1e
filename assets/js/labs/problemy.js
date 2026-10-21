@@ -175,8 +175,8 @@
   /* ---------- pests, big ---------- */
   function aphidBig() {
     const w = 240, hh = 170;
-    let s = I.aphid(92, 90, 8, 8) + I.aphid(176, 108, -20, 3.4) + I.aphid(186, 64, 40, 3.8, true);
-    s += I.label(192, 16, 'крылатая') + I.label(176, 158, 'личинка') + I.scale(58, 20, 44, '1 мм');
+    let s = I.aphid(92, 90, 8, 8) + I.aphid(176, 108, -20, 3.4) + I.aphid(188, 74, 72, 3.8, true);
+    s += I.label(184, 21, 'крылатая') + I.label(176, 158, 'личинка') + I.scale(58, 20, 44, '1 мм');
     return I.svg(w, hh, bg(w, hh) + s, 'Тля крупно: бескрылая самка, личинка и крылатая особь');
   }
   function miteBig() {

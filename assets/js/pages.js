@@ -826,7 +826,7 @@ window.BASIL_PAGES = {
    "gidro": "7851625e",
    "formirovka": "907d6bbb",
    "vkus": "e056550f",
-   "problemy": "90db03f7",
+   "problemy": "7000594b",
    "moy": "9600ef4e"
   },
   "lib": {
