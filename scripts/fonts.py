@@ -24,11 +24,18 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'src' / 'fonts'
 CSS = ('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600'
        '&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800'
-       # the theme «Гримуар»: the console's bitmap face, a pixel-grid face for names and numbers, old Church Slavonic
-       # letters and a 19th-century book face. A page asks for them only while the theme is on
-       '&family=Handjet:wght@400;500;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Ponomar&family=Tiny5&display=swap')
+       # the skin «Гримуар»: the faces of an esoteric book (Cormorant Unicase for the titles, Cormorant SC for labels and
+       # buttons, the Garamond above for the text) and a pixel-grid face for numbers (Handjet); the signs of alchemy
+       '&family=Cormorant+Unicase:wght@500;700&family=Cormorant+SC:wght@500;600;700&family=Handjet:wght@400;500;600;700'
+       '&family=Noto+Sans+Symbols'
+       # the skin «Друид»: a rough hand for titles and labels, a calm text face, the runes and the ogham of the stones
+       '&family=Underdog&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Runic&family=Noto+Sans+Ogham'
+       # a page asks for these only while its skin is on
+       '&display=swap')
 # alphabets the guide never writes in (Handjet brings them): not downloaded
 SKIP_SUBSETS = {'arabic', 'armenian', 'hebrew'}
+# the faces of signs: only their own signs (the alchemy, the runes, the ogham), not their letters
+ONLY_SUBSETS = {'Noto Sans Symbols': {'symbols'}, 'Noto Sans Runic': {'runic'}, 'Noto Sans Ogham': {'ogham'}}
 # a current browser: Google answers with woff2 files and unicode-range subsets
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36'
 
@@ -42,13 +49,15 @@ def main():
     css = get(CSS).decode('utf-8')
     # Google lists every weight separately, all pointing at one variable file: one rule per file with the range
     # of weights (the same faces, a third of the text — it goes into the <head> of every page)
-    # a face without a variable file (Old Standard TT) has one file per weight: its weight goes into the name
+    # a face without a variable file (Cormorant SC) has one file per weight: its weight goes into the name
     by_url = {}
     for m in re.finditer(r'/\* ([a-z-]+) \*/\s*@font-face \{(.*?)\}', css, re.S):
         subset, body = m.group(1), m.group(2)
         if subset in SKIP_SUBSETS:
             continue
         family = re.search(r"font-family: '([^']+)'", body).group(1)
+        if family in ONLY_SUBSETS and subset not in ONLY_SUBSETS[family]:
+            continue
         style = re.search(r'font-style: (\w+)', body).group(1)
         weight = int(re.search(r'font-weight: (\d+)', body).group(1))
         url = re.search(r'url\((https://[^)]+)\)', body).group(1)

@@ -228,8 +228,9 @@
 /* The theme «Гримуар» (data-skin="grimoire"): the guide as a PS1 game of the occult — a crypt by candlelight.
    It always lies over the dark theme (01-theme.js puts data-theme="dark" with it), so a token it leaves alone
    keeps its dark value. Bone text, old blood and tarnished gold; menu windows with a bone rim and a hard shadow;
-   the console's bitmap face for big headings, a pixel-grid face for names and numbers, Church Slavonic letters
-   for the hand notes, a 19th-century book face for the text (27-grimoire.css dresses the components) */
+   the faces of an esoteric book — Cormorant Unicase for titles and names, Cormorant SC for labels and buttons,
+   Cormorant Garamond for the text and, in italics, the hand notes — and a pixel-grid face for numbers and fields
+   (27-grimoire.css dresses the components) */
 :root[data-skin="grimoire"] {
   --bg: #0B0910;
   --bg-deep: #07060A;
@@ -289,12 +290,14 @@
   --shadow-float: 5px 5px 0 var(--shade);
   --shadow-lift: 6px 6px 0 var(--shade);
 
-  --font-display: "Handjet", "Manrope", "Arial Narrow", system-ui, sans-serif;
-  --font-body: "Old Standard TT", "Times New Roman", Georgia, serif;
+  --font-display: "Cormorant Unicase", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  --font-body: "Cormorant Garamond", "Cormorant Garamond Fallback", "Times New Roman", Georgia, serif;
   --font-mono: "Handjet", "JetBrains Mono", "Arial Narrow", ui-monospace, monospace;
-  --font-hand: "Ponomar", "Old Standard TT", Georgia, serif;
-  --font-pixel: "Tiny5", "Handjet", ui-monospace, monospace;
-  --font-rune: "Ponomar", "Old Standard TT", Georgia, serif;
+  --font-hand: "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  /* the theme's own: the title face, the face of labels and buttons, the signs of alchemy for ornament */
+  --font-title: "Cormorant Unicase", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  --font-label: "Cormorant SC", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  --font-sign: "Noto Sans Symbols", "Segoe UI Symbol", "Apple Symbols", sans-serif;
 
   --radius-leaf: 5px;
   --radius: 5px;
@@ -3036,12 +3039,12 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 /* ================= the theme «Гримуар»: the guide as a PS1 game of the occult =================
    data-skin="grimoire" on <html> (01-theme.js, the inline script in layout.html), always over the dark theme.
    Its colours are the tokens of 00-tokens.css; here the components put on its clothes: menu windows with a bone
-   rim, old blood fading to the crypt and a hard shadow; menus with the pointing hand; the console's bitmap face on
-   the big headings. The scenes (the crypt behind the page, the altar at the head of a chapter) are canvases of
+   rim, old blood fading to the crypt and a hard shadow; menus with the pointing hand; the faces of an esoteric
+   book for the type. The scenes (the crypt behind the page, the altar at the head of a chapter) are canvases of
    assets/js/grimoire.js; until it comes, their frames already stand in their place */
 
 /* ---- the page: the greenhouse and its sky step aside for the crypt ---- */
-[data-skin="grimoire"] body { font-size: 1.08rem; line-height: 1.64; -webkit-font-smoothing: auto; }
+[data-skin="grimoire"] body { font-size: 1.18rem; line-height: 1.62; font-weight: 500; }
 [data-skin="grimoire"] #leaf-field, [data-skin="grimoire"] .aura, [data-skin="grimoire"] .sky-layer { display: none !important; }
 #psx-crypt { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; image-rendering: pixelated; }
 [data-skin="grimoire"] ::selection { background: var(--blood); color: var(--ink); }
@@ -3057,17 +3060,17 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 /* (the row of the switch is a .hap-row of lab.css, which comes later: hidden with more weight than its display) */
 :root:not([data-skin="grimoire"]) .crt-row { display: none; }
 
-/* ---- type: the bitmap face for the big headings, a pixel grid for names, Church Slavonic for the eyebrows ---- */
-[data-skin="grimoire"] h1, [data-skin="grimoire"] h2 { font-family: var(--font-pixel); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; text-shadow: 2px 2px 0 var(--blood-d), 4px 4px 0 var(--shade); }
-[data-skin="grimoire"] h1 em, [data-skin="grimoire"] h2 em { font-style: normal; font-weight: 400; color: var(--basil); }
+/* ---- type: the faces of an esoteric book — unicase titles, small capitals for labels, italics for the eyebrows ---- */
+[data-skin="grimoire"] h1, [data-skin="grimoire"] h2 { font-family: var(--font-title); font-weight: 700; letter-spacing: .005em; text-shadow: 2px 2px 0 var(--blood-d), 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] h1 em, [data-skin="grimoire"] h2 em { font-style: normal; font-weight: 700; color: var(--basil); }
 [data-skin="grimoire"] :is(.card, .pane, .sheet, .lab-tool, .deep-body) h2 { font-size: clamp(1.25rem, 4.4vw, 1.8rem); line-height: 1.1; }
 [data-skin="grimoire"] h3, [data-skin="grimoire"] h4 { font-family: var(--font-display); font-weight: 700; letter-spacing: .01em; text-shadow: 2px 2px 0 var(--shade); }
 [data-skin="grimoire"] h3 { font-size: 1.5rem; line-height: 1.08; }
 [data-skin="grimoire"] h4 { font-size: 1.2rem; }
-[data-skin="grimoire"] .eyebrow { font-family: var(--font-rune); font-size: 1.2rem; font-weight: 400; letter-spacing: .03em; text-transform: none; color: var(--gold); text-shadow: 2px 2px 0 var(--shade); }
+[data-skin="grimoire"] .eyebrow { font-family: var(--font-hand); font-style: italic; font-size: 1.24rem; font-weight: 600; letter-spacing: .02em; text-transform: none; color: var(--gold); text-shadow: 2px 2px 0 var(--shade); }
 [data-skin="grimoire"] .eyebrow::before { background: var(--blood); box-shadow: 2px 2px 0 var(--shade); }
 [data-skin="grimoire"] .lead { color: var(--ink); }
-[data-skin="grimoire"] .hand { font-family: var(--font-hand); font-weight: 400; color: var(--gold); }
+[data-skin="grimoire"] .hand { font-family: var(--font-hand); font-style: italic; font-weight: 600; color: var(--gold); }
 [data-skin="grimoire"] .num, [data-skin="grimoire"] .mono { font-family: var(--font-mono); letter-spacing: .01em; }
 [data-skin="grimoire"] .muted { color: var(--ink-3); }
 
@@ -3075,27 +3078,27 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
    pictures are shapes, not boxes, and keep their roundness) */
 [data-skin="grimoire"] *, [data-skin="grimoire"] *::before, [data-skin="grimoire"] *::after { border-radius: 3px !important; }
 [data-skin="grimoire"] :is(.ico, svg, canvas, img, i, kbd, .spr) { border-radius: 0 !important; }
-/* the small capitals that label things — a column, a fact, a part of a model — in the console's bitmap face */
+/* the small capitals that label things — a column, a fact, a part of a model */
 [data-skin="grimoire"] :is(.brand small, .table-wrap thead th, .table-wrap td[data-label]::before, .mini-table th, .mini-table.stack td[data-label]::before,
   .passport-kicker, .passport dt, .pager small, .vt-specs dt, .vd-specs dt, .quiz-count, .params dt, .w-month, .w-center-a, .el-section h4,
   .stage-info dt, .myth-label, .stat span, .diag-group h4, .ref-card dt, .peek-title small, .sr-gh, .g-sec h4, .exp-h, .toc-group h3, .tools-gh,
   .hy-when, .lab-read dt, .world-tag, .rc-cat, .rc-sci-k, .panel-next small, .hy-gauge-h span, .dr-h span, .hc-st, .hm-k, .exp-past h5, .nc-zone, .pw-zone) {
-  font-family: var(--font-pixel);
-  font-weight: 400;
-  letter-spacing: .1em;
+  font-family: var(--font-label);
+  font-weight: 700;
+  letter-spacing: .07em;
   color: var(--gold);
   text-shadow: none;
 }
 
 /* ---- the header: a crypt band with a bone rule and a blood line under it ---- */
 [data-skin="grimoire"] .topbar { background: linear-gradient(var(--surface), var(--bg)); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 2px solid var(--rim-d); box-shadow: 0 2px 0 var(--blood-d); }
-[data-skin="grimoire"] .brand span { font-family: var(--font-rune); font-weight: 400; font-size: 1.55rem; letter-spacing: .02em; color: var(--ink); }
-[data-skin="grimoire"] .brand small { font-family: var(--font-pixel); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+[data-skin="grimoire"] .brand span { font-family: var(--font-title); font-weight: 700; font-size: 1.55rem; letter-spacing: .01em; color: var(--ink); }
+[data-skin="grimoire"] .brand small { font-family: var(--font-label); font-weight: 700; font-size: .78rem; letter-spacing: .12em; color: var(--gold); }
 [data-skin="grimoire"] .icon-btn, [data-skin="grimoire"] .search-btn { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface-2); color: var(--ink-2); box-shadow: 3px 3px 0 var(--shade); transition: none; }
 @media (hover: hover) { [data-skin="grimoire"] .icon-btn:hover, [data-skin="grimoire"] .search-btn:hover { border-color: var(--rim); color: var(--ink); transform: none; } }
 [data-skin="grimoire"] .icon-btn:active, [data-skin="grimoire"] .search-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shade); }
-[data-skin="grimoire"] .search-btn span { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 600; }
-[data-skin="grimoire"] .search-btn kbd { border-radius: 2px; border-color: var(--rim-d); background: var(--bg); font-family: var(--font-pixel); }
+[data-skin="grimoire"] .search-btn span { font-family: var(--font-label); font-size: 1.08rem; font-weight: 700; }
+[data-skin="grimoire"] .search-btn kbd { border-radius: 2px; border-color: var(--rim-d); background: var(--bg); font-family: var(--font-mono); }
 /* the button of the skins shows a lit candle; its menu is a window of the console */
 [data-skin="grimoire"] .skin-btn { color: var(--ember); border-color: var(--rim); }
 [data-skin="grimoire"] .skin-menu { border: 2px solid var(--rim); border-radius: 5px; background: var(--win-b); box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 5px 5px 0 var(--shade); }
@@ -3107,12 +3110,12 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .skin-btn .ico { animation: psx-flicker 1.6s steps(2) infinite; }
 @keyframes psx-flicker { 50% { opacity: .72; } }
 [data-skin="grimoire"] .progress span { background: var(--blood); }
-[data-skin="grimoire"] .garden-badge { border-radius: 2px; background: var(--blood); color: var(--ink); font-family: var(--font-pixel); }
-[data-skin="grimoire"] .toc-btn { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface-2); box-shadow: 3px 3px 0 var(--shade); font-family: var(--font-mono); font-size: 1.08rem; font-weight: 600; }
+[data-skin="grimoire"] .garden-badge { border-radius: 2px; background: var(--blood); color: var(--ink); font-family: var(--font-mono); }
+[data-skin="grimoire"] .toc-btn { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface-2); box-shadow: 3px 3px 0 var(--shade); font-family: var(--font-label); font-size: 1.1rem; font-weight: 700; }
 @media (hover: hover) { [data-skin="grimoire"] .toc-btn:hover { border-color: var(--rim); transform: none; } }
 @media (max-width: 899px) {
   [data-skin="grimoire"] .tabbar { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; border-top: 2px solid var(--rim-d); box-shadow: 0 -2px 0 var(--blood-d); }
-  [data-skin="grimoire"] .tab-item { border-radius: 3px; font: 600 .86rem/1.1 var(--font-mono); color: var(--ink-3); }
+  [data-skin="grimoire"] .tab-item { border-radius: 3px; font: 700 .9rem/1.1 var(--font-label); color: var(--ink-3); }
   [data-skin="grimoire"] .tab-item.is-active { background: var(--win-a); color: var(--ink); box-shadow: inset 0 0 0 2px var(--rim-d); }
 }
 
@@ -3138,17 +3141,17 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .q-ico, [data-skin="grimoire"] .rule-ico, [data-skin="grimoire"] .t-ico, [data-skin="grimoire"] .toc-art, [data-skin="grimoire"] .toc-ico { border-radius: 3px; background: var(--bg); box-shadow: inset 0 0 0 2px var(--rim-d); color: var(--gold); }
 
 /* ---- buttons, chips and segments: menu items; the chosen one has the hand ---- */
-[data-skin="grimoire"] .btn { border-radius: 4px; border: 2px solid var(--rim-d); font: 700 1.1rem/1.1 var(--font-mono); letter-spacing: .02em; box-shadow: 3px 3px 0 var(--shade); transition: transform .16s steps(2), box-shadow .16s steps(2); }
+[data-skin="grimoire"] .btn { border-radius: 4px; border: 2px solid var(--rim-d); font: 700 1.12rem/1.1 var(--font-label); letter-spacing: .05em; box-shadow: 3px 3px 0 var(--shade); transition: transform .16s steps(2), box-shadow .16s steps(2); }
 [data-skin="grimoire"] .btn-primary { background: var(--blood); border-color: var(--rim); color: var(--ink); }
 @media (hover: hover) { [data-skin="grimoire"] .btn-primary:hover { color: var(--ink); background: color-mix(in srgb, var(--blood) 84%, var(--ink)); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--shade); } }
 [data-skin="grimoire"] .btn-ghost { background: var(--surface-2); color: var(--ink); border-color: var(--rim-d); }
 @media (hover: hover) { [data-skin="grimoire"] .btn-ghost:hover { color: var(--ink); border-color: var(--rim); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--shade); } }
 [data-skin="grimoire"] .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shade); }
-[data-skin="grimoire"] .chip { position: relative; border-radius: 3px; border: 2px solid var(--rim-d); background: var(--surface); color: var(--ink-2); font: 600 1.04rem/1.2 var(--font-mono); padding: .4em .95em .4em 26px; transition: none; }
+[data-skin="grimoire"] .chip { position: relative; border-radius: 3px; border: 2px solid var(--rim-d); background: var(--surface); color: var(--ink-2); font: 700 1.06rem/1.2 var(--font-label); letter-spacing: .04em; padding: .4em .95em .4em 26px; transition: none; }
 @media (hover: hover) { [data-skin="grimoire"] .chip:hover { transform: none; border-color: var(--rim); color: var(--ink); } }
 [data-skin="grimoire"] .chip[aria-pressed="true"] { background: var(--win-a); border-color: var(--rim); color: var(--ink); box-shadow: 3px 3px 0 var(--shade); }
 [data-skin="grimoire"] .seg { border-radius: 4px; border: 2px solid var(--rim-d); background: var(--bg); padding: 3px; }
-[data-skin="grimoire"] .seg button { position: relative; border-radius: 2px; font: 600 1.04rem/1.2 var(--font-mono); color: var(--ink-2); padding: 8px 12px 8px 26px; transition: none; }
+[data-skin="grimoire"] .seg button { position: relative; border-radius: 2px; font: 700 1.06rem/1.2 var(--font-label); letter-spacing: .04em; color: var(--ink-2); padding: 8px 12px 8px 26px; transition: none; }
 [data-skin="grimoire"] .seg button[aria-pressed="true"] { background: var(--win-a); color: var(--ink); box-shadow: inset 0 0 0 2px var(--rim-d); }
 /* the pointing hand of the console's menus: by the chosen item, and by the one under the mouse */
 [data-skin="grimoire"] .chip::before, [data-skin="grimoire"] .seg button::before, [data-skin="grimoire"] .subnav a::before {
@@ -3169,18 +3172,18 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 @keyframes psx-point { 50% { translate: -3px 0; } }
 
 [data-skin="grimoire"] .vtype.is-open { border-color: var(--gold); }
-[data-skin="grimoire"] .tabs .tab { border: 2px solid var(--rim-d); background: var(--surface); color: var(--ink-2); box-shadow: none; font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600; transition: none; }
+[data-skin="grimoire"] .tabs .tab { border: 2px solid var(--rim-d); background: var(--surface); color: var(--ink-2); box-shadow: none; font-family: var(--font-label); font-size: 1.12rem; font-weight: 700; letter-spacing: .04em; transition: none; }
 @media (hover: hover) { [data-skin="grimoire"] .tabs .tab:hover { transform: none; border-color: var(--rim); color: var(--ink); } }
 [data-skin="grimoire"] .tabs .tab[aria-selected="true"] { background: var(--win-a); border-color: var(--rim); color: var(--ink); box-shadow: 3px 3px 0 var(--shade); }
 
 /* the questions: a plus in a slot, turned to a cross when open — as the dives */
 [data-skin="grimoire"] .faq details, [data-skin="grimoire"] .faq details:first-child { border-color: var(--rim-d); border-width: 2px; border-style: dotted; border-left: 0; border-right: 0; }
 @media (hover: hover) { [data-skin="grimoire"] .faq summary:hover { color: var(--gold); } }
-[data-skin="grimoire"] .faq summary::after { content: "+"; display: grid; place-items: center; border: 2px solid var(--rim-d); background: var(--bg); color: var(--gold); font: 400 1rem/1 var(--font-pixel); transition: rotate .3s steps(3); }
+[data-skin="grimoire"] .faq summary::after { content: "+"; display: grid; place-items: center; border: 2px solid var(--rim-d); background: var(--bg); color: var(--gold); font: 600 1.1rem/1 var(--font-mono); transition: rotate .3s steps(3); }
 [data-skin="grimoire"] .faq details[open] summary::after { rotate: 45deg; background: var(--blood); color: var(--ink); }
 
 /* ---- fields: dark slots with a rim ---- */
-[data-skin="grimoire"] .field > label, [data-skin="grimoire"] .field > .label, [data-skin="grimoire"] .field legend.label { font: 400 .78rem/1.2 var(--font-pixel); letter-spacing: .12em; color: var(--gold); }
+[data-skin="grimoire"] .field > label, [data-skin="grimoire"] .field > .label, [data-skin="grimoire"] .field legend.label { font: 700 .98rem/1.2 var(--font-label); letter-spacing: .06em; color: var(--gold); }
 [data-skin="grimoire"] .field label b { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: var(--ink); }
 [data-skin="grimoire"] select, [data-skin="grimoire"] input[type="date"], [data-skin="grimoire"] input[type="number"], [data-skin="grimoire"] input[type="search"], [data-skin="grimoire"] input[type="text"], [data-skin="grimoire"] textarea {
   border: 2px solid var(--rim-d);
@@ -3200,7 +3203,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 
 /* ---- tables and rows of figures: dotted rules, the figures in gold ---- */
 [data-skin="grimoire"] .table-wrap { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface); box-shadow: 4px 4px 0 var(--shade); }
-[data-skin="grimoire"] th { font-family: var(--font-pixel); font-weight: 400; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+[data-skin="grimoire"] th { font-family: var(--font-label); font-weight: 700; font-size: .98rem; letter-spacing: .06em; text-transform: none; color: var(--gold); }
 [data-skin="grimoire"] td { border-color: var(--rim-d); }
 [data-skin="grimoire"] .data-rows div { border-bottom: 2px dotted var(--rim-d); }
 [data-skin="grimoire"] .data-rows dd { font-family: var(--font-mono); font-size: 1.12rem; font-weight: 600; color: var(--gold); }
@@ -3244,7 +3247,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 /* ---- the chapter's tabs: the hand by the open one, a blood bar under it ---- */
 [data-skin="grimoire"] .subnav-wrap, [data-skin="grimoire"] .subnav-wrap.is-stuck { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 2px solid var(--rim-d); }
 [data-skin="grimoire"] .subnav { box-shadow: none; }
-[data-skin="grimoire"] .subnav a { padding: 12px 12px 12px 28px; border-radius: 0; font: 600 1.14rem/1 var(--font-mono); color: var(--ink-3); transition: none; }
+[data-skin="grimoire"] .subnav a { padding: 12px 12px 12px 28px; border-radius: 0; font: 700 1.14rem/1 var(--font-label); letter-spacing: .04em; color: var(--ink-3); transition: none; }
 [data-skin="grimoire"] .subnav a:first-child { margin-left: -8px; }
 @media (hover: hover) { [data-skin="grimoire"] .subnav a:hover { background: none; color: var(--ink); } }
 [data-skin="grimoire"] .subnav a[aria-current="true"] { color: var(--ink); }
@@ -3253,7 +3256,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 /* ---- the pager and «Дальше в главе» ---- */
 [data-skin="grimoire"] .pager a { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface); box-shadow: 4px 4px 0 var(--shade); transition: transform .16s steps(2); }
 @media (hover: hover) { [data-skin="grimoire"] .pager a:hover { border-color: var(--rim); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shade); } }
-[data-skin="grimoire"] .pager small { font-family: var(--font-pixel); color: var(--gold); }
+[data-skin="grimoire"] .pager small { font-family: var(--font-label); font-weight: 700; color: var(--gold); }
 [data-skin="grimoire"] .pager b { font-family: var(--font-display); font-weight: 700; }
 
 /* ---- sheets: the search, the contents, «Заглянуть» are menu windows too ---- */
@@ -3264,11 +3267,11 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .sr-item:focus-visible { background: var(--win-a); border-radius: 2px; }
 @media (hover: hover) { [data-skin="grimoire"] .sr-item:hover, [data-skin="grimoire"] .toc-link:hover, [data-skin="grimoire"] .toc-tool:hover { background: var(--win-a); border-radius: 2px; } }
 [data-skin="grimoire"] .toc-t, [data-skin="grimoire"] .sr-item b { font-family: var(--font-display); font-size: 1.12rem; }
-[data-skin="grimoire"] .tools-gh, [data-skin="grimoire"] .sr-gh { font-family: var(--font-pixel); font-weight: 400; color: var(--gold); }
+[data-skin="grimoire"] .tools-gh, [data-skin="grimoire"] .sr-gh { font-family: var(--font-label); font-weight: 700; color: var(--gold); }
 
 /* ---- the footer ---- */
 [data-skin="grimoire"] .footer { background: var(--surface); border-top: 2px solid var(--rim-d); box-shadow: 0 -2px 0 var(--blood-d); }
-[data-skin="grimoire"] .footer .brand { font-family: var(--font-rune); font-weight: 400; font-size: 1.5rem; }
+[data-skin="grimoire"] .footer .brand { font-family: var(--font-title); font-weight: 700; font-size: 1.5rem; }
 [data-skin="grimoire"] .hap-switch { border-radius: 2px; background: var(--rim-d); }
 [data-skin="grimoire"] .hap-switch::after { border-radius: 0; background: var(--ink-2); }
 [data-skin="grimoire"] .hap-row[aria-checked="true"] .hap-switch { background: var(--blood); }

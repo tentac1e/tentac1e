@@ -250,7 +250,7 @@
 - `src/js/skins/01-raster.js` (213 стр.): SHADED, ICO
 - `src/js/skins/02-textures.js` (183 стр.): FLOORS, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
-- `src/js/skins/04-stage.js` (222 стр.): WORLDS, PAIRS
+- `src/js/skins/04-stage.js` (223 стр.): WORLDS, PAIRS
 - `src/js/skins/05-grimoire-formirovka.js` (98 стр.)
 - `src/js/skins/05-grimoire-gidro.js` (59 стр.)
 - `src/js/skins/05-grimoire-glavnaya.js` (102 стр.)

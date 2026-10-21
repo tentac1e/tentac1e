@@ -65,7 +65,7 @@ function state() {
       await page.goto(fileUrl(f), { waitUntil: 'load' });
       await page.waitForTimeout(1300);
       s = await page.evaluate(state);
-      ok(s.dcl && s.dcl.skin === 'grimoire' && s.dcl.theme === 'dark' && s.on && s.stages === s.heroes && s.heroes > 0 && s.drawn >= 1 && s.crypt && !s.field && /Tiny5/.test(s.face) && s.wide <= 0,
+      ok(s.dcl && s.dcl.skin === 'grimoire' && s.dcl.theme === 'dark' && s.on && s.stages === s.heroes && s.heroes > 0 && s.drawn >= 1 && s.crypt && !s.field && /Cormorant Unicase/.test(s.face) && s.wide <= 0,
         tag(`${f}: in the theme from the start, ${s.stages} altar(s) drawn, the crypt behind ${JSON.stringify({ dcl: s.dcl, stages: s.stages, drawn: s.drawn, heroes: s.heroes, wide: s.wide })}`));
       const own = f === 'index.html' ? 'glavnaya' : s.view;
       scenes.add(s.scene);

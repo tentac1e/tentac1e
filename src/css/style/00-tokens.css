@@ -227,8 +227,9 @@
 /* The theme «Гримуар» (data-skin="grimoire"): the guide as a PS1 game of the occult — a crypt by candlelight.
    It always lies over the dark theme (01-theme.js puts data-theme="dark" with it), so a token it leaves alone
    keeps its dark value. Bone text, old blood and tarnished gold; menu windows with a bone rim and a hard shadow;
-   the console's bitmap face for big headings, a pixel-grid face for names and numbers, Church Slavonic letters
-   for the hand notes, a 19th-century book face for the text (27-grimoire.css dresses the components) */
+   the faces of an esoteric book — Cormorant Unicase for titles and names, Cormorant SC for labels and buttons,
+   Cormorant Garamond for the text and, in italics, the hand notes — and a pixel-grid face for numbers and fields
+   (27-grimoire.css dresses the components) */
 :root[data-skin="grimoire"] {
   --bg: #0B0910;
   --bg-deep: #07060A;
@@ -288,12 +289,14 @@
   --shadow-float: 5px 5px 0 var(--shade);
   --shadow-lift: 6px 6px 0 var(--shade);
 
-  --font-display: "Handjet", "Manrope", "Arial Narrow", system-ui, sans-serif;
-  --font-body: "Old Standard TT", "Times New Roman", Georgia, serif;
+  --font-display: "Cormorant Unicase", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  --font-body: "Cormorant Garamond", "Cormorant Garamond Fallback", "Times New Roman", Georgia, serif;
   --font-mono: "Handjet", "JetBrains Mono", "Arial Narrow", ui-monospace, monospace;
-  --font-hand: "Ponomar", "Old Standard TT", Georgia, serif;
-  --font-pixel: "Tiny5", "Handjet", ui-monospace, monospace;
-  --font-rune: "Ponomar", "Old Standard TT", Georgia, serif;
+  --font-hand: "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  /* the theme's own: the title face, the face of labels and buttons, the signs of alchemy for ornament */
+  --font-title: "Cormorant Unicase", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  --font-label: "Cormorant SC", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
+  --font-sign: "Noto Sans Symbols", "Segoe UI Symbol", "Apple Symbols", sans-serif;
 
   --radius-leaf: 5px;
   --radius: 5px;

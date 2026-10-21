@@ -163,8 +163,9 @@
     addEventListener('pointerup', onUp);
     addEventListener('pointercancel', onUp);
     function frame(now) {
-      // the clock of the scene: stands at its chosen moment when the reader asked for less motion
-      const t = reduce.matches ? sc.still : (now - t0) / 1000;
+      // the clock of the scene: stands at its chosen moment when the reader asked for less motion; never below nought
+      // (the first frame's time may come a little before the stage was made)
+      const t = reduce.matches ? sc.still : Math.max(0, (now - t0) / 1000);
       R.size();
       // wide: the chapter's text on the left, the scene to the right of it; else the scene in the middle, closer
       const wide = R.W > R.H * 1.45;
