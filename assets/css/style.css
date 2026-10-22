@@ -361,15 +361,26 @@
   --scrim: rgba(11, 18, 13, .74);
   --shade: rgba(0, 0, 0, .55);
   --stage-vig: rgba(2, 6, 4, .6);
-  /* the grove behind the page: its night, the moon's haze, the glow of moss at the foot, twigs, needles, leaves, ferns,
-     the fireflies and their light */
+  /* the grove behind the page: its night, the moon's haze, the glow of moss at the foot; the bark of the stump, the log
+     and the branch, its grooves and the wood of a cut, moss, bracket fungi, twigs, lianas and their leaves, ferns, the
+     runes and mushrooms that glow, the fireflies and their light */
   --forest-sky: #050B08;
   --forest-haze: rgba(150, 196, 190, .08);
   --forest-floor: rgba(52, 96, 58, .16);
+  --forest-bark: #17241B;
+  --forest-bark-d: #0D1610;
+  --forest-ring: #25332A;
+  --forest-moss: #1E3922;
+  --forest-moss-l: #294C2D;
+  --forest-fungus: #2A281D;
+  --forest-fungus-l: #3A3626;
   --forest-twig: #16271B;
-  --forest-needle: #1B3021;
+  --forest-vine: #18301F;
   --forest-leaf: #213826;
+  --forest-leaf-l: #28452E;
   --forest-fern: #1A2F1F;
+  --forest-rune: #8FE8C6;
+  --forest-cap: #9EEAD2;
   --forest-fly: #EEFFB0;
   --forest-fly-glow: rgba(196, 240, 120, .38);
 
@@ -3428,9 +3439,10 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] body { font-size: 1.06rem; line-height: 1.66; }
 [data-skin="druid"] #leaf-field, [data-skin="druid"] .aura, [data-skin="druid"] .sky-layer { display: none !important; }
 /* the grove behind the page (07-forest.js): the night is a still gradient with the moon's haze in a corner and a glow
-   of moss at the foot; boughs and a birch twig hang in from the corners and sway on their roots, ferns rise at the foot,
-   fireflies wander and glow on a small canvas — nothing follows the scroll. The layer is as tall as the screen with its
-   bars hidden (lvh), so it does not jump when a phone's bars come and go */
+   of moss at the foot; an old stump with its roots and runes stands in the lower left corner over ferns, a mossy fallen
+   log in the lower right, a gnarled branch reaches in at the top left and ivy runs along the top on the right; lianas
+   hang from them and sway, the runes smoulder, fireflies wander — nothing follows the scroll. The layer is as tall as the
+   screen with its bars hidden (lvh), so it does not jump when a phone's bars come and go */
 #psx-forest {
   position: fixed; left: 0; top: 0; z-index: 0; width: 100%; height: 100vh; height: 100lvh; overflow: hidden; pointer-events: none; contain: strict;
   will-change: transform; /* a layer of its own: the page scrolls over it without painting it again */
@@ -3439,18 +3451,33 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
     radial-gradient(ellipse 110% 36% at 40% 104%, var(--forest-floor), transparent 74%),
     linear-gradient(180deg, var(--forest-sky), var(--bg) 48%, var(--bg-deep));
 }
-/* a twig: a picture of 07-forest.js (its drawing's frame starts above or beside its root — the offsets below put the
-   root where it hangs). The twigs stand still: a running CSS animation, even of four of them, costs the browser a new
-   pass over the styles at every frame the page draws */
+/* a picture of 07-forest.js: its box holds the picture's shape (aspect-ratio, set by the script) and its place is here.
+   The pictures stand still: a running CSS animation, even of four of them, costs the browser a new pass over the styles
+   at every frame the page draws — what moves is drawn on the canvases */
 #psx-forest .tw { position: absolute; width: var(--w); }
-#psx-forest .tw img { display: block; width: 100%; height: auto; }
-#psx-forest .tw-fir-tl { --w: clamp(230px, 40vw, 600px); left: -2vw; top: calc(-1vh - var(--w) * .128); }
-#psx-forest .tw-fir-r { --w: clamp(170px, 30vw, 460px); right: -3vw; top: calc(34vh - var(--w) * .038); }
-#psx-forest .tw-birch { --w: clamp(84px, 12vw, 180px); right: clamp(40px, 13vw, 260px); top: -2vh; }
-#psx-forest .tw-fern { --w: clamp(234px, 32vw, 488px); left: calc(1vw - var(--w) * .312); bottom: 0; }
-/* the fireflies: a canvas over the whole layer, drawn by 07-forest.js — a layer of its own, so that its frames do not
-   paint the twigs again */
-#psx-forest canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; will-change: transform; }
+#psx-forest .tw img { display: block; width: 100%; height: 100%; }
+#psx-forest .tw-fern { --w: clamp(190px, 25vw, 430px); left: calc(var(--w) * -.2); bottom: 0; }
+#psx-forest .tw-stump { --w: clamp(160px, 20vw, 380px); left: calc(var(--w) * -.1); bottom: calc(var(--w) * -.03); }
+#psx-forest .tw-log { --w: clamp(210px, 27vw, 520px); right: calc(var(--w) * -.12); bottom: calc(var(--w) * -.05); }
+#psx-forest .tw-branch { --w: clamp(220px, 30vw, 580px); left: calc(var(--w) * -.02); top: calc(var(--w) * -.07); }
+#psx-forest .tw-ivy { --w: clamp(150px, 19vw, 360px); right: 0; top: -2px; }
+/* the canvases: the fireflies over the whole layer, the lianas and the glows of the runes only where they are (the
+   script places them) — each a layer of its own, so that its frames do not paint the pictures again */
+#psx-forest canvas { position: absolute; display: block; will-change: transform; }
+#psx-forest canvas.fly { inset: 0; width: 100%; height: 100%; }
+/* on a narrow screen the text takes all but the edges: the grove keeps to the corners, small */
+@media (max-width: 600px) {
+  #psx-forest .tw-branch { --w: 150px; }
+  #psx-forest .tw-ivy { --w: 120px; }
+  #psx-forest .tw-stump { --w: 140px; }
+  #psx-forest .tw-log { --w: 180px; }
+  #psx-forest .tw-fern { --w: 170px; }
+}
+/* where the header stays at the top of the screen, the branch and the ivy hang below it */
+@media (min-width: 900px) {
+  #psx-forest .tw-branch { top: calc(var(--header-h, 64px) - var(--w) * .05); }
+  #psx-forest .tw-ivy { top: calc(var(--header-h, 64px) - 6px); }
+}
 [data-skin="druid"] ::selection { background: var(--moss-d); color: var(--birch); }
 [data-skin="druid"] :focus-visible { outline: 2px solid var(--rune); outline-offset: 2px; border-radius: 4px; }
 [data-skin="druid"] a { color: var(--rune); text-decoration-thickness: 1px; text-underline-offset: .18em; text-decoration-color: color-mix(in srgb, var(--rune) 45%, transparent); }

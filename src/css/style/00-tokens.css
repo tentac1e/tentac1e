@@ -360,15 +360,26 @@
   --scrim: rgba(11, 18, 13, .74);
   --shade: rgba(0, 0, 0, .55);
   --stage-vig: rgba(2, 6, 4, .6);
-  /* the grove behind the page: its night, the moon's haze, the glow of moss at the foot, twigs, needles, leaves, ferns,
-     the fireflies and their light */
+  /* the grove behind the page: its night, the moon's haze, the glow of moss at the foot; the bark of the stump, the log
+     and the branch, its grooves and the wood of a cut, moss, bracket fungi, twigs, lianas and their leaves, ferns, the
+     runes and mushrooms that glow, the fireflies and their light */
   --forest-sky: #050B08;
   --forest-haze: rgba(150, 196, 190, .08);
   --forest-floor: rgba(52, 96, 58, .16);
+  --forest-bark: #17241B;
+  --forest-bark-d: #0D1610;
+  --forest-ring: #25332A;
+  --forest-moss: #1E3922;
+  --forest-moss-l: #294C2D;
+  --forest-fungus: #2A281D;
+  --forest-fungus-l: #3A3626;
   --forest-twig: #16271B;
-  --forest-needle: #1B3021;
+  --forest-vine: #18301F;
   --forest-leaf: #213826;
+  --forest-leaf-l: #28452E;
   --forest-fern: #1A2F1F;
+  --forest-rune: #8FE8C6;
+  --forest-cap: #9EEAD2;
   --forest-fly: #EEFFB0;
   --forest-fly-glow: rgba(196, 240, 120, .38);
 

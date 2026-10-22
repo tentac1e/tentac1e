@@ -276,7 +276,7 @@
 - `src/js/skins/06-druid-vkus.js` (47 стр.)
 - `src/js/skins/06-druid.js` (516 стр.): PHASE_TODAY, BLOOM, GROVEMOL
 - `src/js/skins/07-crypt.js` (54 стр.)
-- `src/js/skins/07-forest.js` (168 стр.)
+- `src/js/skins/07-forest.js` (422 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
 - `src/js/skins/08-words.js` (147 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
 - `src/js/skins/09-start.js` (57 стр.): BACKS

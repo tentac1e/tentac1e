@@ -104,7 +104,7 @@
 - `src/js/skins/05-grimoire.js`: `altarStone` 63, `glyphTex` 69
 - `src/js/skins/06-druid.js`: `groveTextures` 11, `mossFloor` 122, `groundY` 228, `fir` 235, `birchTree` 241, `menhir` 247, `stump` 254, `boulder` 262, `wreath` 268, `campfire` 278, `moonLit` 289, `shaft` 298, `glowLayer` 316, `glowPost` 323
 - `src/js/skins/07-crypt.js`: `crypt` 5
-- `src/js/skins/07-forest.js`: `forest` 9
+- `src/js/skins/07-forest.js`: `forest` 12
 - `src/js/skins/08-ills.js`: `cellFilter` 16, `fitCell` 43, `pixelate` 53, `pixelateIn` 73, `refit` 81, `onToggle` 82, `onPanel` 83, `onResize` 84
 - `src/js/skins/08-words.js`: `roman` 11, `say` 102, `wordNode` 109, `putWords` 110, `wordsOn` 136, `wordsOff` 142
 - `src/js/skins/09-start.js`: `start` 9, `stop` 36
@@ -133,15 +133,16 @@
 - `page` (02-textures.js:156) — 9: 00-core, 01-raster, 04-stage …
 - `world` (04-stage.js:27) — 4: 01-raster, 05-grimoire, 06-druid-uhod …
 - `scene` (04-stage.js:28) — 27: 00-core, 01-raster, 05-grimoire-formirovka …
-- `smooth` (04-stage.js:29) — 19: 05-grimoire-formirovka, 05-grimoire-glavnaya, 05-grimoire-moy …
+- `smooth` (04-stage.js:29) — 20: 05-grimoire-formirovka, 05-grimoire-glavnaya, 05-grimoire-moy …
 - `mix3` (04-stage.js:30) — 8: 05-grimoire-formirovka, 05-grimoire-uhod, 06-druid-formirovka …
 - `leaf` (04-stage.js:35) — 13: 01-raster, 02-textures, 05-grimoire-formirovka …
 - `bush` (04-stage.js:66) — 17: 05-grimoire-formirovka, 05-grimoire-gidro, 05-grimoire-glavnaya …
 - `pot` (04-stage.js:84) — 9: 02-textures, 05-grimoire-formirovka, 05-grimoire-glavnaya …
 - `ringTop` (04-stage.js:90) — 7: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus …
 - `disc` (04-stage.js:98) — 10: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus …
+- `sprout` (04-stage.js:107) — 3: 05-grimoire-posadka, 06-druid-posadka, 07-forest
 - `glider` (04-stage.js:147) — 3: 05-grimoire-sorta, 06-druid-moy, 06-druid-sorta
-- `stump` (06-druid.js:254) — 9: 01-raster, 05-grimoire-formirovka, 06-druid-formirovka …
+- `stump` (06-druid.js:254) — 10: 01-raster, 05-grimoire-formirovka, 06-druid-formirovka …
 
 ### Отдельные файлы
 - `src/js/haptics.js`: `iosTap` 20, `play` 34, `watchSnap` 69, `initSnaps` 82, `initSwitch` 94, `set` 103, `dragTicker` 106
@@ -297,10 +298,10 @@
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
 - `max-width: 899px` — 5: 03-header.css, 24-toc.css ×2, 27-grimoire.css, 28-druid.css
+- `min-width: 900px` — 4: 11-deep-footer.css, 24-toc.css, 28-druid.css, pairing.css
 - `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
 - `max-width: 820px` — 3: 14-care.css, 15-fertilizers.css ×2
-- `min-width: 900px` — 3: 11-deep-footer.css, 24-toc.css, pairing.css
 - `max-width: 940px` — 3: 15-fertilizers.css, 18-problems.css ×2
 - `max-width: 1279px` — 3: 21-sheets.css ×3
 - `min-width: 941px` — 2: 18-problems.css ×2
@@ -308,6 +309,7 @@
 - `min-width: 1280px` — 2: 21-sheets.css ×2
 - `min-width: 481px` — 1: 12-steps.css
 - `min-width: 561px` — 1: 23-garden.css
+- `max-width: 600px` — 1: 28-druid.css
 - `max-width: 800px` — 1: molecules.css
 - `max-width: 1099px` — 1: 03-header.css
 - `min-width: 1100px` — 1: 24-toc.css
