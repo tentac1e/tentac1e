@@ -188,6 +188,8 @@
     holder.dataset.scene = set[view] ? view : 'glavnaya';
     holder.dataset.skin = skin;
     holder.setAttribute('aria-hidden', 'true');
+    // the home's scene is the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
+    if (backdrop) holder.dataset.bg = '';
     const cv = doc.createElement('canvas');
     holder.appendChild(cv);
     host.insertBefore(holder, host.firstChild);
