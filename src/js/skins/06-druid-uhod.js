@@ -5,6 +5,8 @@
     let orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
     return {
       rad: 4.9, near: 4.6, look: [0, 1.2, 0], still: 4, shafts: false,
+      // its own sun and moon cross the sky: no moon of the world beside them
+      moon: false,
       tick(t) {
         const s = (t % DAY) / DAY, sun = s < 0.72, a = sun ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI, up = Math.sin(a);
         day = sun ? up : 0;

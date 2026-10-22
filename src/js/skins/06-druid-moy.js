@@ -12,6 +12,8 @@
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       orbit: [A, 0.35], near: 4.1, rad: 4.5, look: [0, 0.95, 0], still: 13, clear: 1.6,
+      // the moon in the sky is the one of the moment of the calendar (its phases go from the new moon round)
+      moonPhase: () => ((pos % N) + N) % N / N,
       tick(t) {
         const target = Math.floor(t / STEP);
         pos = glide(target, t);

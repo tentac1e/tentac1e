@@ -209,7 +209,7 @@
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
 - `src/js/app/22-garden.js` (138 стр.): GARDEN_KEY
 - `src/js/app/22-install.js` (96 стр.): initInstall
-- `src/js/app/22-reading-pos.js` (487 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/22-reading-pos.js` (498 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (24 стр.)
 
 **science.js**
@@ -266,19 +266,20 @@
 - `src/js/skins/06-druid-formirovka.js` (85 стр.)
 - `src/js/skins/06-druid-gidro.js` (55 стр.)
 - `src/js/skins/06-druid-glavnaya.js` (25 стр.)
-- `src/js/skins/06-druid-moy.js` (51 стр.)
+- `src/js/skins/06-druid-moy.js` (53 стр.)
 - `src/js/skins/06-druid-posadka.js` (47 стр.)
 - `src/js/skins/06-druid-problemy.js` (85 стр.)
 - `src/js/skins/06-druid-sorta.js` (58 стр.)
 - `src/js/skins/06-druid-spravka.js` (53 стр.)
 - `src/js/skins/06-druid-udobreniya.js` (67 стр.)
-- `src/js/skins/06-druid-uhod.js` (44 стр.)
+- `src/js/skins/06-druid-uhod.js` (46 стр.)
 - `src/js/skins/06-druid-vkus.js` (47 стр.)
-- `src/js/skins/06-druid.js` (465 стр.): BLOOM, GROVEMOL
+- `src/js/skins/06-druid.js` (516 стр.): PHASE_TODAY, BLOOM, GROVEMOL
 - `src/js/skins/07-crypt.js` (54 стр.)
 - `src/js/skins/07-forest.js` (168 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
-- `src/js/skins/09-start.js` (54 стр.): BACKS
+- `src/js/skins/08-words.js` (141 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
+- `src/js/skins/09-start.js` (57 стр.): BACKS
 
 ## Стили (src/css/)
 

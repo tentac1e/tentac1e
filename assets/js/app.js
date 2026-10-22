@@ -4333,6 +4333,17 @@
     });
   }
   const normText = t => t.replace(/\s+/g, ' ').trim();
+  // the words of a block as the guide has them: a skin may have put its own on the labels (keeping the plain ones in
+  // data-plain, src/js/skins/08-words.js) — the place of reading must not move with the skin
+  const plainText = el => {
+    if (el.dataset.plain == null && !el.querySelector('[data-plain]')) return el.textContent;
+    const c = el.cloneNode(true);
+    [c, ...c.querySelectorAll('[data-plain]')].forEach(x => {
+      const n = x.dataset.plain != null && [...x.childNodes].find(k => k.nodeType === 3 && k.data.trim());
+      if (n) n.data = x.dataset.plain;
+    });
+    return c.textContent;
+  };
   // a sentence ends with . ! ? … (and a closing » or bracket); the next one starts with a capital, « or a digit
   const SENT_END = /[.!?…][»")\]]*[\s ]+(?=[«"(\[]?[A-ZА-ЯЁ0-9])/g;
   function sentenceStart(text, k) {
@@ -4422,7 +4433,7 @@
       rg.setEndBefore(el);
       ch = sentenceStart(b.textContent, rg.toString().length);
     }
-    const t = b.textContent, a = headingBefore(b, scope);
+    const t = plainText(b), a = headingBefore(b, scope);
     return { panel: panel ? panel.id : null, anchor: a ? a.id : null, label: a ? labelOf(a) : (panel && panel.dataset.title) || '',
              n: blocks.indexOf(b), sig: normText(t).slice(0, 40), ch, ss: normText(t.slice(ch, ch + 40)).slice(0, 24), dy: 0, y: Math.round(window.scrollY), t: Date.now() };
   }
@@ -4431,7 +4442,7 @@
   function findSpot(pos, scope) {
     if (pos.sig == null || pos.n == null) return null;
     const blocks = readBlocks(scope);
-    const same = el => normText(el.textContent).slice(0, 40) === pos.sig;
+    const same = el => normText(plainText(el)).slice(0, 40) === pos.sig;
     let b = blocks[pos.n] && same(blocks[pos.n]) ? blocks[pos.n] : null;
     if (!b) {
       let best = Infinity;
@@ -4545,7 +4556,7 @@
     const a = s ? headingBefore(s.b, scope) : currentAnchor();
     const pos = { panel: panel ? panel.id : null, anchor: a ? a.id : null, label: a ? labelOf(a) : '', y, t: Date.now() };
     if (s) {
-      const t = s.b.textContent;
+      const t = plainText(s.b);
       Object.assign(pos, { n: s.n, sig: normText(t).slice(0, 40), ch: s.ch, ss: normText(t.slice(s.ch, s.ch + 40)).slice(0, 24), dy: s.dy });
     }
     return pos;

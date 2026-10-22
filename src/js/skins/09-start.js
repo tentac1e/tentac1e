@@ -12,6 +12,8 @@
     if (started === skin) return;
     if (started) stop();
     started = skin;
+    // its words on the labels of the guide (08-words.js), the sheet's page too
+    wordsOn(skin);
     // a page shown in the sheet of another (?peek=1) is only its place: no background, no scene, the molecules as here
     if (!root.classList.contains('is-peek')) {
       mounted.push(BACKS[skin]());
@@ -35,6 +37,7 @@
     if (!started) return;
     started = null;
     mounted.splice(0).forEach(m => m.destroy());
+    wordsOff();
     illWatch.disconnect();
     doc.removeEventListener('toggle', onToggle, true);
     doc.removeEventListener('basil:panel', onPanel);
@@ -51,4 +54,4 @@
   });
   doc.addEventListener('basil:theme', () => { if (skinNow()) start(); else stop(); });
 
-  const api = { start, stop, drawMol, get on() { return !!skinNow(); }, get skin() { return skinNow(); } };
+  const api = { start, stop, drawMol, say, get on() { return !!skinNow(); }, get skin() { return skinNow(); } };

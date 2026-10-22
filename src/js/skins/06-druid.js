@@ -283,6 +283,16 @@
       billboard(R, [x + Math.cos(k * 2.1) * 0.06 * s, (0.2 + 0.14 * fl) * s, z + Math.sin(k * 2.1) * 0.06 * s], 0.11 * s, 0.24 * s * fl, { tex: T.flame, emis: true, nofog: true, cut: true });
     }
   }
+  // the phase of the moon today (0 the new moon, ½ the full one), from a new moon of 2000 and the length of the moon's
+  // month; and the lit part of a moon at the phase p as a path (the right side lit while it waxes, as seen from the north)
+  const PHASE_TODAY = (((Date.now() / 864e5 - Date.UTC(2000, 0, 6, 18, 14) / 864e5) / 29.530588853) % 1 + 1) % 1;
+  function moonLit(x, cx, cy, r, p) {
+    const k = Math.cos(p * Math.PI * 2), rx = Math.max(0.01, Math.abs(k) * r);
+    x.beginPath();
+    if (p < 0.5) { x.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2, false); x.ellipse(cx, cy, rx, r, 0, Math.PI / 2, -Math.PI / 2, k > 0); }
+    else { x.arc(cx, cy, r, Math.PI / 2, Math.PI * 1.5, false); x.ellipse(cx, cy, rx, r, 0, Math.PI * 1.5, Math.PI / 2, k > 0); }
+    x.closePath();
+  }
   // a shaft of moonlight: a soft band from the sky down to the ground, added over the picture
   // soft light, so it goes into the glow where the picture has one: a big band filled at a sixth of the pixels
   function shaft(R, top, foot, w, a) {
@@ -372,24 +382,65 @@
         TUFTS.push({ x, z, y: groundY(x, z), h: 0.1 + RR() * 0.14, ph: RR() * 6, col: [50 + RR() * 30, 84 + RR() * 40, 38 + RR() * 18], yaw: RR() * 3 });
       }
       const STONES = sc.stones === false ? [] : [...Array(6)].map((_, i) => { const q = CA + Math.PI + (i / 5 - 0.5) * 2.7; return { x: Math.cos(q) * 3.05, z: Math.sin(q) * 3.05, q, h: 1.1 + ((i * 37) % 10) / 14 }; });
-      const TREES = [...Array(14)].map((_, i) => { const q = CA + Math.PI + (i / 13 - 0.5) * 4.3 + ((i * 13) % 7) / 30, r = 6.2 + ((i * 29) % 10) / 3.2; return { x: Math.cos(q) * r, z: Math.sin(q) * r, birch: i % 4 === 1, h: 4.4 + (i % 5) * 0.55 }; });
+      // the moon: far off in one direction of the world, so it goes across the sky as the camera turns, like everything
+      // else, and does not hang glued to the screen: a little right of the scene as the camera sees it in the middle of
+      // its swing, and low over the horizon (the camera looks a little down: only the lowest few degrees of the sky are
+      // in the frame). It shows today's phase (a scene of its own phases shows the one of its moment: moonPhase; a scene
+      // with a sun and a moon of its own goes without it: moon: false)
+      const MOON = sc.moon === false ? null : Math.atan2(-Math.sin(CA), -Math.cos(CA)) + 0.16;
+      // the trees on its side stand apart and leave it a clearing to shine through all the swing long: none where the
+      // eye, wherever the swing takes it, would see one of them in front of the moon
+      const clearing = (() => {
+        if (MOON == null) return () => 0;
+        const hx = Math.cos(MOON), hz = Math.sin(MOON), nx = -hz, nz = hx;
+        let lo = Infinity, hi = -Infinity;
+        [sc.rad, sc.near].forEach(rad => { for (let i = 0; i <= 24; i++) { const a = CA + (i / 12 - 1) * sc.orbit[1], o = Math.cos(a) * rad * nx + Math.sin(a) * rad * nz; lo = Math.min(lo, o); hi = Math.max(hi, o); } });
+        // which way a tree at (x, z) has to go out of the way, or 0 when it stands clear of it
+        return (x, z) => { const o = x * nx + z * nz; return x * hx + z * hz > 0 && o > lo - 1.5 && o < hi + 1.5 ? (o > (lo + hi) / 2 ? 1 : -1) : 0; };
+      })();
+      const TREES = [...Array(14)].map((_, i) => {
+        let q = CA + Math.PI + (i / 13 - 0.5) * 4.3 + ((i * 13) % 7) / 30;
+        const r = 6.2 + ((i * 29) % 10) / 3.2, side = clearing(Math.cos(q) * r, Math.sin(q) * r);
+        if (side) while (clearing(Math.cos(q) * r, Math.sin(q) * r)) q += side * 0.04;
+        return { x: Math.cos(q) * r, z: Math.sin(q) * r, birch: i % 4 === 1, h: 4.4 + (i % 5) * 0.55 };
+      });
       const ROCKS = [[0.5, 2.6, 0.32], [-0.6, 2.8, 0.26], [1.25, 2.4, 0.22], [-1.3, 2.5, 0.3]].map(([d, r, s]) => { const q = CA + Math.PI + d; return [Math.cos(q) * r, Math.sin(q) * r, s]; }).filter(([x, z]) => !(sc.noGrass && sc.noGrass(x, z)));
       const FLIES = [...Array(26)].map((_, i) => ({ a: i * 2.4, r: 1.2 + (i % 7) * 0.5, h: 0.3 + (i % 5) * 0.4, s: 0.18 + (i % 4) * 0.06 }));
       const MIST = [...Array(4)].map((_, i) => ({ q: i / 4 * Math.PI * 2 + 0.5, r: 2.4 + (i % 3) * 1.3 }));
       let rune = 0.5;
+      // how high the moon stands for this size of the stage: its lower edge just over the horizon, its upper one in the
+      // frame while the camera bobs up and down
+      const sky = { key: '', dir: null };
+      const moonDir = wide => {
+        const C = R.C, rad = wide ? sc.rad : sc.near, mr = Math.max(4, R.H * 0.045) / C.focal;
+        const top = Math.atan(C.cy / C.focal) - Math.atan(1.1 / rad), el = Math.max(mr * 0.8, Math.min(top - mr * 1.6, mr + 0.004));
+        return [Math.cos(MOON) * Math.cos(el), Math.sin(el), Math.sin(MOON) * Math.cos(el)];
+      };
       return {
-        // the moon over the trees, where it always is on the screen, and its light round it
+        // the moon in its place in the sky, its phase, its light round it and its glow
         back(t, x) {
           R.glowStart();
-          const mx = R.W * 0.8, my = R.H * 0.17, mr = Math.max(4, R.H * 0.045);
+          if (MOON == null) return;
+          const C = R.C, wide = R.W > R.H * 1.45, key = `${wide}:${R.W}x${R.H}`;
+          if (sky.key !== key) { sky.key = key; sky.dir = moonDir(wide); }
+          const d = sky.dir, vz = dot(d, C.f);
+          if (vz < 0.1) return;
+          const mx = C.cx + dot(d, C.r) * C.focal / vz, my = C.cy - dot(d, C.u) * C.focal / vz, mr = Math.max(4, R.H * 0.045);
+          if (mx < -mr * 7 || mx > R.W + mr * 7 || my < -mr * 7 || my > R.H) return;
+          const p = sc.moonPhase ? sc.moonPhase(t) : PHASE_TODAY, lit = (1 - Math.cos(p * Math.PI * 2)) / 2;
           const g = x.createRadialGradient(mx, my, 0, mx, my, mr * 7);
-          g.addColorStop(0, 'rgba(200,225,240,.34)'); g.addColorStop(1, 'rgba(200,225,240,0)');
+          g.addColorStop(0, `rgba(200,225,240,${0.06 + 0.28 * lit})`); g.addColorStop(1, 'rgba(200,225,240,0)');
           x.fillStyle = g; x.fillRect(mx - mr * 7, my - mr * 7, mr * 14, mr * 14);
-          x.fillStyle = '#E6EEE8'; x.beginPath(); x.arc(mx, my, mr, 0, Math.PI * 2); x.fill();
+          // the dark of it faintly seen, the lit part with its seas
+          x.fillStyle = 'rgba(44,58,62,.6)'; x.beginPath(); x.arc(mx, my, mr, 0, Math.PI * 2); x.fill();
+          x.save();
+          moonLit(x, mx, my, mr, p); x.clip();
+          x.fillStyle = '#E6EEE8'; x.fillRect(mx - mr, my - mr, mr * 2, mr * 2);
           x.fillStyle = 'rgba(150,170,170,.35)'; x.beginPath(); x.arc(mx - mr * 0.3, my - mr * 0.2, mr * 0.28, 0, Math.PI * 2); x.arc(mx + mr * 0.35, my + mr * 0.3, mr * 0.18, 0, Math.PI * 2); x.fill();
-          // the moon glows: its disc into the glow (raised to the cube, as all of it)
-          // (the ground in front of it darkens the glow again where it hides the moon: Raster.draw)
-          if (R.B) { const bx = R.B.x; bx.fillStyle = '#8E9A93'; bx.beginPath(); bx.arc(mx, my, mr * 0.9, 0, Math.PI * 2); bx.fill(); }
+          x.restore();
+          // its lit part glows (raised to the cube, as all of it); the ground in front darkens the glow again where it
+          // hides the moon (Raster.draw)
+          if (R.B) { const bx = R.B.x; bx.fillStyle = '#8E9A93'; moonLit(bx, mx, my, mr * 0.9, p); bx.fill(); }
         },
         lights(t) {
           rune = (sc.rune ? sc.rune(t) : 0.5 + 0.15 * Math.sin(t * 1.1));
