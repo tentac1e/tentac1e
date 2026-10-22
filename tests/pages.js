@@ -1,5 +1,7 @@
 /* Сборка в корне репозитория (ссылки вида sorta.html), открытая как файлы:
-   каждая страница, переходы между главами, поиск, глубина чтения, «Продолжить», ленивые модели;
+   каждая страница, переходы между главами, поиск, глубина чтения, «Продолжить», ленивые модели; глава говорит сама
+   за себя (в тексте нет ссылок в другие главы — они в «Связано с этим», наука из текста — «почему так?» к разворотам
+   своей вкладки), карта всех разворотов в «Справке»;
    карта кода CODE-MAP.md не врёт (функции на своих строках, события и ключи есть в коде).
    node tests/pages.js */
 const fs = require('fs');
@@ -217,15 +219,49 @@ function codeMap() {
   const z2 = await zone();
   ok(!z0.header && z0.n >= 2 && z0.open === 0 && z0.label === 'Раскрыть все' && z1.open === z1.n && z1.other === z1.n && z1.label === 'Свернуть все' && z2.open === 0 && z2.label === 'Раскрыть все',
     '«Раскрыть все» opens the tab\'s dives and only them, then closes them ' + JSON.stringify([z0, z1, z2]));
-  // «Любопытно»: each fact stands once in its chapter — in its dive's heading or at the top of «Для любопытных» — and once more
-  // in Справка, signed with its tab; none is left in the chapters' text
+  // «Для любопытных» in Справка: the map of the science — every dive of every chapter once, by chapter and tab, and every
+  // fact once, in its dive's heading or at the top of its tab's «Для любопытных»; none is left as a card in the chapters
   const chapter = FILES.filter(f => !['index.html', 'moy.html', 'spravka.html'].includes(f)).map(f => fs.readFileSync(path.join(ROOT, f), 'utf8'));
   const facts = chapter.reduce((n, h) => n + (h.match(/<span class="deep-fact">/g) || []).length + (h.match(/<ul class="deep-facts"[^>]*>[\s\S]*?<\/ul>/g) || []).reduce((k, ul) => k + (ul.match(/<li /g) || []).length, 0), 0);
+  const dives = chapter.reduce((n, h) => n + (h.match(/<details class="deep" id="/g) || []).length, 0);
   const left = FILES.filter(f => f !== 'spravka.html' && /class="sci-note"/.test(fs.readFileSync(path.join(ROOT, f), 'utf8')));
   await page.goto(fileUrl('spravka.html') + '#' + encodeURIComponent('любопытно'), { waitUntil: 'load' });
   await page.waitForTimeout(500);
-  const coll = await page.evaluate(() => { const all = document.querySelector('.panel.is-active .facts-all'); return { active: document.querySelector('.panel.is-active').id, cards: all.querySelectorAll('.sci-note').length, chapters: all.querySelectorAll('.facts-ch h3').length, signed: [...all.querySelectorAll('.sci-note .hand')].every(x => x.textContent.trim()) }; });
-  ok(facts >= 30 && coll.cards === facts && coll.chapters === 8 && coll.signed && !left.length && /любопытно|lyubopytno/.test(coll.active), `«Любопытно»: ${facts} facts in the chapters, all in Справка ` + JSON.stringify({ coll, left }));
+  const map = await page.evaluate(() => {
+    const m = document.querySelector('.panel.is-active .curious-map'), links = [...m.querySelectorAll('.cmap-deep > a')].map(a => decodeURIComponent(new URL(a.href).hash.slice(1)));
+    return { active: document.querySelector('.panel.is-active').id, title: document.querySelector('.panel.is-active').dataset.title, folds: m.querySelectorAll('details.cmap-ch').length,
+      open: m.querySelectorAll('details.cmap-ch[open]').length, dives: links.length, unique: new Set(links).size, facts: m.querySelectorAll('.cmap-fact').length,
+      named: [...m.querySelectorAll('.cmap-tab-h')].every(x => x.textContent.trim()) };
+  });
+  ok(facts >= 30 && dives >= 50 && map.dives === dives && map.unique === dives && map.facts === facts && map.folds === 8 && !map.open && map.named && !left.length && /любопытно|lyubopytno/.test(map.active) && map.title === 'Для любопытных',
+    `«Для любопытных» in Справка: all ${dives} dives and ${facts} facts of the chapters on one map, a fold for each chapter ` + JSON.stringify({ map, left }));
+
+  // a chapter speaks for itself: the text of its tabs leads nowhere outside it (that is «Связано с этим», signed with the
+  // chapter), and the science opens from the text only by «почему так?» — to a dive of the same tab, every dive having one.
+  // Links between chapters' science stand inside the dives (and a recipe's note); the line «Для любопытных» leads to the map
+  const order = [];
+  for (const f of FILES.filter(f => !['index.html', 'moy.html', 'spravka.html'].includes(f))) {
+    await page.goto(fileUrl(f), { waitUntil: 'load' });
+    await page.waitForTimeout(250);
+    order.push(await page.evaluate(f => {
+      const here = f.replace('.html', ''), out = [], doors = new Set(), rel = [], maps = [];
+      document.querySelectorAll('[data-panel]').forEach(tab => {
+        tab.querySelectorAll('a[href]').forEach(a => {
+          const u = new URL(a.href, location.href), page = u.pathname.split('/').pop().replace('.html', '') || here;
+          const id = decodeURIComponent(u.hash.slice(1)), el = page === here ? document.getElementById(id) : null;
+          if (a.closest('.related')) { if (page === here) rel.push(id); return; }
+          if (a.matches('.deep-map')) { maps.push(page === 'spravka' && id === 'cmap-' + here); return; }
+          if (a.closest('.deep-zone, .faq-here, .lab-tool, .recipe-card')) return;
+          if (page !== here) out.push(`${tab.id}: «${a.textContent.trim()}» → ${page}#${id}`);
+          else if (el && el.matches('details.deep')) { if (el.closest('[data-panel]') === tab) doors.add(el.id); else out.push(`${tab.id}: «${a.textContent.trim()}» → a dive of ${el.closest('[data-panel]').id}`); }
+        });
+      });
+      const zones = document.querySelectorAll('[data-panel] .deep-zone').length;
+      return { f, out, rel, nodoor: [...document.querySelectorAll('details.deep')].map(d => d.id).filter(i => !doors.has(i)), maps: maps.filter(Boolean).length, zones };
+    }, f));
+  }
+  const wrong = order.filter(o => o.out.length || o.rel.length || o.nodoor.length || o.maps !== o.zones);
+  ok(!wrong.length, `each chapter speaks for itself: no link out of it in the text, «почему так?» to each dive of the tab, «Все развороты главы» in each «Для любопытных» ` + JSON.stringify(wrong));
 
   // continue reading
   await page.goto(fileUrl('formirovka.html#цветение'), { waitUntil: 'load' });

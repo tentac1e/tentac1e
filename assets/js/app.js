@@ -4294,7 +4294,7 @@
   const absTop = el => el.getBoundingClientRect().top + window.scrollY;
   const labelOf = el => {
     const t = el.matches('details.deep') ? $('.deep-title', el) : el.matches('.recipe-card') ? $('.rc-title', el)
-      : el.matches('summary') && $('.deeper-t, .rc-title', el) ? $('.deeper-t, .rc-title', el) : el;
+      : el.matches('summary') && $('.deeper-t, .rc-title, .cmap-ch-t', el) ? $('.deeper-t, .rc-title, .cmap-ch-t', el) : el;
     const s = (t ? t.textContent : '').replace(/\s+/g, ' ').trim();
     return s.length > 56 ? s.slice(0, 54).trim() + '…' : s;
   };
