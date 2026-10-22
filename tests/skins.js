@@ -160,9 +160,13 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
         await page.click('[data-crt]');
         await page.waitForTimeout(200);
         const crt = await page.evaluate(() => ({ off: document.documentElement.classList.contains('no-crt'), shown: getComputedStyle(document.querySelector('.crt')).display, saved: localStorage.getItem('basil-crt'), checked: document.querySelector('[data-crt]').getAttribute('aria-checked') }));
-        await page.reload({ waitUntil: 'load' });
-        await page.waitForTimeout(400);
-        const crt2 = await page.evaluate(() => window.__dcl);
+        // the next page with what the switch saved: off before the first paint. Not by a reload — Chromium here now
+        // and then loses a write to localStorage of a file:// page on its way to the next one (never over http)
+        const next = await sctx.newPage();
+        await next.addInitScript(v => localStorage.setItem('basil-crt', v), crt.saved);
+        await next.goto(fileUrl('vkus.html'), { waitUntil: 'load' });
+        const crt2 = await next.evaluate(() => window.__dcl);
+        await next.close();
         ok(crt.off && crt.shown === 'none' && crt.saved === 'false' && crt.checked === 'false' && crt2 && crt2.crt, tag(`${sk}: the CRT's lines go off in the footer and stay off ${JSON.stringify({ crt, crt2 })}`));
         await page.evaluate(() => document.querySelector('[data-crt]').click());
       } else {
