@@ -31,7 +31,10 @@
         const idle = [Math.cos(t * 0.6) * 1.05, cut[1] + 0.45 + Math.sin(t * 1.1) * 0.08, Math.sin(t * 0.6) * 1.05];
         const w = smooth((u - SW + 0.9) / 0.6) * (1 - smooth((u - SW - 0.3) / 0.8)), k = smooth((u - SW + 0.3) / 0.6);
         sick = mix3(idle, mix3(add(cut, [-0.5, 0.12, 0.05]), add(cut, [0.5, 0.02, -0.05]), k), w);
-        tip = { w, spin: t * 1.4 * (1 - w) };
+        // it turns as it circles and turns to its cut during the swing: to the whole turn nearest to where it stood when the
+        // swing began (a turn by t·(1 − w) would spin it round dozens of times in the swing, a minute into the page)
+        const turns = Math.round((t - u + SW - 0.9) * 1.4 / (Math.PI * 2)) * Math.PI * 2;
+        tip = { w, spin: t * 1.4 * (1 - w) + turns * w };
       },
       lights() { return [{ p: add(sick, [0, 0.25, 0.2]), col: [1, 0.86, 0.5], i: 1.1, fall: 0.5 }]; },
       draw(t) {

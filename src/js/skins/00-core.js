@@ -22,10 +22,10 @@
   const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
   const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
   const norm = a => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
-  // one loop on the page's frame budget (scene.js): the console's 30 frames a second at most, fewer when calm,
-  // none asleep; without scene.js — requestAnimationFrame at that pace
-  function psxLoop(frame, fps = 30) {
-    const gate = SC && SC.gate ? SC.gate(fps, Math.min(fps, 20)) : (() => { let p = 0; return ts => (ts - p >= 1000 / fps - 3 ? (p = ts, true) : false); })();
+  // one loop on the page's frame budget (scene.js): fps frames a second at most (lo on a touch screen or a page that
+  // struggles), fewer when calm, none asleep; without scene.js — requestAnimationFrame at that pace
+  function psxLoop(frame, fps = 30, lo = Math.min(fps, 20)) {
+    const gate = SC && SC.gate ? SC.gate(fps, lo) : (() => { let p = 0; return ts => (ts - p >= 1000 / fps - 3 ? (p = ts, true) : false); })();
     if (SC && SC.loop) {
       const L = SC.loop(ts => { L.next(); if (gate(ts)) frame(ts); });
       return L;

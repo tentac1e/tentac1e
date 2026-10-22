@@ -13,10 +13,13 @@
     make(S, sc) {
       const { R, T } = S;
       const FLOOR = floorTex(sc.glow, false), GLOW = floorTex(sc.glow, true);
-      const ring = sc.bare ? [] : [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; });
+      // the candles and the pillars on the camera's side stay away: next to the lens they would stand big and dark at
+      // the edge of the picture
+      const off = q => Math.abs(((q - sc.orbit[0]) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI);
+      const ring = sc.bare ? [] : [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { q, x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; }).filter(c => off(c.q) > 0.8);
       const candles = ring.concat(sc.candles || []);
       const embers = [...Array(candles.length ? 46 : 0)].map((_, i) => ({ k: i % candles.length, a: (i * 0.37) % 1, s: 0.3 + (i * 13 % 10) / 22, dx: ((i * 29) % 11 - 5) / 60, dz: ((i * 17) % 11 - 5) / 60 }));
-      const pillars = [...Array(8)].map((_, i) => { const q = 0.35 + i / 8 * Math.PI * 2; return { x: Math.cos(q) * 7.4, z: Math.sin(q) * 7.4, h: 1.6 + ((i * 53) % 10) / 4 }; });
+      const pillars = [...Array(8)].map((_, i) => { const q = 0.35 + i / 8 * Math.PI * 2; return { q, x: Math.cos(q) * 7.4, z: Math.sin(q) * 7.4, h: 1.6 + ((i * 53) % 10) / 4 }; }).filter(p => off(p.q) > 1.1);
       return {
         lights: t => candles.map(c => ({ p: [c.x, (c.top || 0) + c.h + 0.14, c.z], col: [1, 0.6, 0.28], i: 0.5 + 0.12 * Math.sin(t * 11 + c.ph) + 0.08 * Math.sin(t * 23 + c.ph * 2), fall: 0.55 })),
         draw(t) {

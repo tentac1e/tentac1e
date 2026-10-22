@@ -41,7 +41,7 @@
         rod(R, add(edge(0.2), mul(E, 0.008)), add(edge(0.35 + N * 0.2), mul(E, 0.008)), 0.006, { col: read ? mix3([46, 50, 54], [120, 220, 190], read) : [46, 50, 54], emis: !!read }, 3);
         // the bush at the foot of the stone, on its mound of earth
         const bq = ANG - 0.95, bx = Math.cos(bq) * 0.8, bz = Math.sin(bq) * 0.8;
-        egg(R, [bx, 0, bz], [0.24, 0.08, 0.24], 0, { col: [56, 40, 28], lo: true });
+        egg(R, [bx, 0, bz], [0.24, 0.08, 0.24], 0, { col: [56, 40, 28] });
         bush(R, T, [bx, 0.06, bz], t, { s: 0.85 });
       },
       fx(t, F) {

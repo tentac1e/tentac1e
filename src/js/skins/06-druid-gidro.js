@@ -17,7 +17,7 @@
         disc(R, 0, 0, 0.004, POOL, 14, { col: [12, 34, 38], layer: 0.5 });
         disc(R, 0, 0, 0.008, POOL * 0.68, 14, { col: [20, 54, 58], layer: 0.55 });
         disc(R, 0, 0, 0.012, POOL, 14, { col: [70, 140, 150], emis: true, add: 0.12, layer: 0.6 });
-        for (let i = 0; i < 18; i++) { const q = i / 18 * Math.PI * 2 + 0.2; egg(R, [Math.cos(q) * (POOL + 0.06), 0.03, Math.sin(q) * (POOL + 0.06)], [0.13, 0.07, 0.1], q, { col: [80 + (i % 3) * 8, 86 + (i % 3) * 8, 90], lo: true }); }
+        for (let i = 0; i < 18; i++) { const q = i / 18 * Math.PI * 2 + 0.2; egg(R, [Math.cos(q) * (POOL + 0.06), 0.03, Math.sin(q) * (POOL + 0.06)], [0.13, 0.07, 0.1], q, { col: [80 + (i % 3) * 8, 86 + (i % 3) * 8, 90] }); }
         [-0.32, 0.32].forEach((d, i) => { const q = SP + d; egg(R, [Math.cos(q) * 1.5, 0.28, Math.sin(q) * 1.5], [0.3, 0.42 - i * 0.08, 0.26], q, { col: [90, 94, 98] }); egg(R, [Math.cos(q) * 1.5, 0.56 - i * 0.08, Math.sin(q) * 1.5], [0.22, 0.1, 0.2], q, { col: [62, 98, 46] }); });
         // the stream of the spring falling from between the stones into the pool
         const sd = [-Math.sin(SP), 0, Math.cos(SP)], bot = [IN[0], 0.02, IN[1]];
@@ -32,7 +32,7 @@
         const roll = Math.sin(t * 0.8) * 0.03, a = [-0.62, y - roll, -0.14], b = [0.62, y + roll, 0.14];
         rod(R, a, b, 0.1, { col: [104, 80, 58] }, 6);
         rod(R, [0.3, y + 0.02, 0.07], [0.52, y + 0.2, -0.12], 0.035, { col: [96, 74, 52] }, 4);
-        egg(R, [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46], lo: true });
+        egg(R, [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46] });
         bush(R, T, [0, y + 0.1, 0], t, { s: 1 });
         ROOTS.forEach((r, i) => {
           const w = Math.sin(t * 0.9 + i) * 0.03, m = [Math.cos(r.q) * r.r * 0.5 + w, -r.d * 0.45, Math.sin(r.q) * r.r * 0.5];

@@ -44,7 +44,7 @@
             rod(R, root(i, u0), root(i, u1), 0.03 - j * 0.002, lit ? { col: mix3(ROOT, COL[i], lit), emis: true } : { col: ROOT }, 4);
           }
           // three stones under the cauldron, the embers between them
-          for (let k = 0; k < 3; k++) { const q = k / 3 * Math.PI * 2 + i; egg(R, [x + Math.cos(q) * 0.2, 0.06, z + Math.sin(q) * 0.2], [0.09, 0.07, 0.08], q, { col: [88, 90, 94], lo: true }); }
+          for (let k = 0; k < 3; k++) { const q = k / 3 * Math.PI * 2 + i; egg(R, [x + Math.cos(q) * 0.2, 0.06, z + Math.sin(q) * 0.2], [0.09, 0.07, 0.08], q, { col: [88, 90, 94] }); }
           for (let k = 0; k < 4; k++) ball(R, [x + Math.cos(k * 1.7) * 0.07, 0.04, z + Math.sin(k * 1.7) * 0.07], 0.035, { col: [255, 120 + 40 * Math.sin(t * 6 + k) | 0, 40], emis: true, lo: true });
           // the cauldron: a belly of black iron, its rim, the liquid of its element; its rune floating in the steam
           prism(R, x, z, 0.12, 0.3, 0.13, 0.25, 9, { col: [38, 40, 44] });

@@ -2,23 +2,22 @@
   // нынешняя больше и ярче всех, и куст стоит в её свете: в полнолуние светлее, в новолуние темнее. Фазы идут сами;
   // касание — следующая
   scene('druid', 'moy', S => {
-    const { R, T } = S, N = 8, STEP = 3, FR = 1.15, A = 0.9, BACK = A + Math.PI;
+    const { R, T } = S, N = 8, STEP = 4, FR = 1.15, A = 0.9, BACK = A + Math.PI;
     // the wattle: stakes on an arc behind the pot (on the far side from the camera), withies woven in and out of them
     const STAKES = [...Array(11)].map((_, i) => BACK - 1.05 + i / 10 * 2.1);
     const at = (q, r, y) => [Math.cos(q) * r, y, Math.sin(q) * r];
     const MOONS = [...Array(N)].map((_, i) => { const q = BACK - 0.95 + i / (N - 1) * 1.9, c = (i - (N - 1) / 2) / ((N - 1) / 2); return at(q, FR + 0.05, 1.42 + 0.22 * (1 - c * c)); });
-    let taps = 0, pos = 0, last = null, frac = 0;
+    const glide = glider(1.4);
+    let taps = 0, pos = 0, frac = 0;
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       orbit: [A, 0.35], near: 4.1, rad: 4.5, look: [0, 0.95, 0], still: 13, clear: 1.6,
       tap() { taps++; },
       tick(t) {
         const target = Math.floor(t / STEP) + taps;
-        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3);
-        last = t;
-        // the moonlight on the bush: as much as the moon of the moment is lit
-        const p = ((Math.round(pos) % N) + N) % N;
-        frac = (1 - Math.cos(p / N * Math.PI * 2)) / 2;
+        pos = glide(target, t);
+        // the moonlight on the bush: as much as the moon of the moment is lit, going over smoothly to the next one
+        frac = (1 - Math.cos(pos / N * Math.PI * 2)) / 2;
         R.key = { dir: R.key.dir, col: R.key.col, i: 0.25 + 0.65 * frac };
       },
       lights() { return [{ p: [0, 1.2, 0.3], col: [0.8, 0.92, 1], i: 0.3 + 0.7 * frac, fall: 0.7 }]; },

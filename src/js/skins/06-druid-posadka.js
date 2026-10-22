@@ -31,7 +31,7 @@
         burst = u >= 9.3 ? (u - 9.3) / 0.7 : -1;
         // the seedlings in the moss round the hole, each on its own little mound
         KIDS.forEach(([x, z], i) => {
-          egg(R, [x, 0.0, z], [0.16, 0.05, 0.16], i, { col: [46, 34, 24], lo: true });
+          egg(R, [x, 0.0, z], [0.16, 0.05, 0.16], i, { col: [46, 34, 24] });
           sprout(R, T, [x, 0.04, z], ((t / CYCLE + i / 5) % 1) * 1.25, 0.8, t + i);
         });
       },

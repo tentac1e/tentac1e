@@ -25,10 +25,10 @@ window.BasilSkins = (() => {
   const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
   const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
   const norm = a => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
-  // one loop on the page's frame budget (scene.js): the console's 30 frames a second at most, fewer when calm,
-  // none asleep; without scene.js — requestAnimationFrame at that pace
-  function psxLoop(frame, fps = 30) {
-    const gate = SC && SC.gate ? SC.gate(fps, Math.min(fps, 20)) : (() => { let p = 0; return ts => (ts - p >= 1000 / fps - 3 ? (p = ts, true) : false); })();
+  // one loop on the page's frame budget (scene.js): fps frames a second at most (lo on a touch screen or a page that
+  // struggles), fewer when calm, none asleep; without scene.js — requestAnimationFrame at that pace
+  function psxLoop(frame, fps = 30, lo = Math.min(fps, 20)) {
+    const gate = SC && SC.gate ? SC.gate(fps, lo) : (() => { let p = 0; return ts => (ts - p >= 1000 / fps - 3 ? (p = ts, true) : false); })();
     if (SC && SC.loop) {
       const L = SC.loop(ts => { L.next(); if (gate(ts)) frame(ts); });
       return L;
@@ -559,7 +559,9 @@ window.BasilSkins = (() => {
      far it stands beside the text of a wide screen, how far in the middle of a narrow one); orbit [angle, swing] — a
      camera that swings in front of the scene instead of going round it; still — the moment shown when the reader asked
      for less motion; bare — it draws its whole world itself (the world's floor, its candles and the rest stay away);
-     sky — its own three colours of the sky */
+     sky — its own three colours of the sky.
+     The camera never goes all the way round: it swings slowly before the scene (orbit, by default [0.6, 0.35]), so that
+     the whole picture never slides fast — at the frames a phone draws a fast slide judders */
   const WORLDS = {}, SCENES = {};
   const world = (skin, w) => { WORLDS[skin] = w; SCENES[skin] = SCENES[skin] || {}; };
   const scene = (skin, view, make) => { (SCENES[skin] = SCENES[skin] || {})[view] = make; };
@@ -665,6 +667,17 @@ window.BasilSkins = (() => {
     mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? pal.O : pal.C, emis: true, add: a, lo: pal.lo }));
   }
 
+  // a value that goes over to each new target smoothly, starting slowly and stopping slowly (an easing by a part of the
+  // way left each frame starts with its biggest step — a jerk): glide(target, t) gives where it is at the time t
+  function glider(dur = 0.9) {
+    let from = null, to = null, since = 0;
+    return (target, t) => {
+      if (to == null) { from = to = target; since = t; }
+      if (target !== to) { from += (to - from) * smooth((t - since) / dur); to = target; since = t; }
+      return reduce.matches ? to : from + (to - from) * smooth((t - since) / dur);
+    };
+  }
+
   // sparks and halos over the finished picture, in the raster's own pixels: square on the console, round when smooth
   function fxKit(R) {
     const x = R.x, u = R.unit, round = R.smooth;
@@ -703,10 +716,11 @@ window.BasilSkins = (() => {
     };
   }
 
-  function stage(host, view, skin) {
+  // backdrop: the scene as a background of its block (the home page) — no finger turns it, no tap; it goes on by itself
+  function stage(host, view, skin, backdrop = false) {
     const W = WORLDS[skin], set = SCENES[skin];
     const holder = doc.createElement('div');
-    holder.className = 'psx-stage';
+    holder.className = 'psx-stage' + (backdrop ? ' is-backdrop' : '');
     holder.dataset.scene = set[view] ? view : 'glavnaya';
     holder.dataset.skin = skin;
     holder.setAttribute('aria-hidden', 'true');
@@ -718,12 +732,15 @@ window.BasilSkins = (() => {
     // what the world lays over its canvas (a glow the page itself adds over it)
     if (W.overlay) W.overlay(holder, R);
     const S = { R, T, view, ang: 0.6 };
-    const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, ...W.defaults, ...(set[view] || set.glavnaya)(S) };
+    const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, orbit: [0.6, 0.35], ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);
     // the reader turns the scene with a finger or the mouse; a tap does what the scene does (a puff of sparks by default)
     const ptr = { turn: 0, lift: 0, drag: null, puffs: [] };
-    const t0 = performance.now();
-    const clock = () => (reduce.matches ? sc.still : (performance.now() - t0) / 1000);
+    // the scene's own clock: it goes on by the frames drawn, a long frame or a pause (off the screen, asleep, another
+    // tab) counts as a tenth of a second at most — the picture never jumps ahead when it wakes
+    let now0 = null, time = 0;
+    const tick = now => { if (now0 != null) time += clamp((now - now0) / 1000, 0, 0.1); now0 = now; return time; };
+    const clock = () => (reduce.matches ? sc.still : time);
     const onDown = e => { ptr.drag = { x: e.clientX, y: e.clientY, turn: ptr.turn, lift: ptr.lift, moved: false }; };
     const onMove = e => {
       if (!ptr.drag) return;
@@ -741,18 +758,19 @@ window.BasilSkins = (() => {
       }
       ptr.drag = null;
     };
-    holder.addEventListener('pointerdown', onDown);
-    addEventListener('pointermove', onMove, { passive: true });
-    addEventListener('pointerup', onUp);
-    addEventListener('pointercancel', onUp);
+    if (!backdrop) {
+      holder.addEventListener('pointerdown', onDown);
+      addEventListener('pointermove', onMove, { passive: true });
+      addEventListener('pointerup', onUp);
+      addEventListener('pointercancel', onUp);
+    }
     function frame(now) {
-      // the clock of the scene: stands at its chosen moment when the reader asked for less motion; never below nought
-      // (the first frame's time may come a little before the stage was made)
-      const t = reduce.matches ? sc.still : Math.max(0, (now - t0) / 1000);
+      // the clock of the scene: stands at its chosen moment when the reader asked for less motion
+      const t = reduce.matches ? sc.still : tick(now);
       R.size();
       // wide: the chapter's text on the left, the scene to the right of it; else the scene in the middle, closer
       const wide = R.W > R.H * 1.45;
-      const ang = (sc.orbit ? sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1] : 0.6 + t * 0.11) + ptr.turn;
+      const ang = sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1] + ptr.turn;
       const look = sc.look, eyeY = look[1] + 1.1 + Math.sin(t * 0.3) * 0.15 + ptr.lift;
       const rad = wide ? sc.rad : sc.near;
       S.ang = ang;
@@ -765,6 +783,8 @@ window.BasilSkins = (() => {
       g.addColorStop(0, sky[0]); g.addColorStop(0.55, sky[1]); g.addColorStop(1, sky[2]);
       x.fillStyle = g; x.fillRect(0, 0, R.W, R.H);
       if (env.back) env.back(t, x);
+      // a floor the world lays straight on the canvas, under every shape (a plane drawn row by row, true in perspective)
+      if (env.floor) env.floor(t, x);
       env.draw(t);
       sc.draw(t);
       R.draw();
@@ -787,7 +807,8 @@ window.BasilSkins = (() => {
     }
     // runs while on the screen, by the page's frame budget; one still frame with reduced motion
     let seen = false;
-    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30);
+    // as many frames on a phone as anywhere: at 20 the scenes judder
+    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30, W.fps || 30);
     const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); if (seen) L.start(); else L.stop(); }) : null;
     if (io) io.observe(holder); else { seen = true; L.start(); }
     const vis = () => { if (!doc.hidden && seen) L.start(); };
@@ -844,7 +865,10 @@ window.BasilSkins = (() => {
         const w = smooth((u - SW + 0.9) / 0.6) * (1 - smooth((u - SW - 0.3) / 0.8)), k = smooth((u - SW + 0.3) / 0.6);
         const A = add(cut, [-0.5, 0.12, 0.05]), B = add(cut, [0.5, 0.02, -0.05]);
         sick = mix3(idle, mix3(A, B, k), w);
-        tip = { w, spin: t * 1.4 * (1 - w) };
+        // it turns as it circles and turns to its cut during the swing: to the whole turn nearest to where it stood when the
+        // swing began (a turn by t·(1 − w) would spin it round dozens of times in the swing, a minute into the page)
+        const turns = Math.round((t - u + SW - 0.9) * 1.4 / (Math.PI * 2)) * Math.PI * 2;
+        tip = { w, spin: t * 1.4 * (1 - w) + turns * w };
       },
       lights() { return [{ p: add(sick, [0, 0.25, 0.2]), col: [0.75, 0.8, 1], i: 1.1, fall: 0.5 }]; },
       draw(t) {
@@ -1250,7 +1274,7 @@ window.BasilSkins = (() => {
   // Сорта: five sorts on a turning table, as the screen where a game's hero is chosen — the chosen one comes to the
   // front, rises into a beam of light and turns itself; the table turns on to the next by itself, or at a tap
   scene('grimoire', 'sorta', S => {
-    const { R, T } = S, N = 5, STEP = 3.6, RAD = 1.2;
+    const { R, T } = S, N = 5, STEP = 6, RAD = 1.2;
     const KINDS = [
       { tex: T.leaf, col: [84, 150, 56], leaf: 1.2 },                                       // «Генуэзский»: big leaves
       { tex: T.leafOpal, col: [98, 38, 96], stem: [96, 40, 98] },                           // «Тёмный опал»: purple
@@ -1262,15 +1286,15 @@ window.BasilSkins = (() => {
     const BALL = [...Array(20)].map((_, i) => { const y = 1 - (i + 0.5) / 20 * 1.6, r = Math.sqrt(Math.max(0, 1 - y * y)), q = i * 2.4; return norm([Math.cos(q) * r, y, Math.sin(q) * r]); });
     // a small bush has four pairs
     const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
-    let taps = 0, pos = 0, last = null, chosen = [0, 0, 0];
+    const glide = glider(1.6);
+    let taps = 0, pos = 0, chosen = [0, 0, 0];
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       glow: [176, 110, 255], orbit: [0.75, 0.42], rad: 5, near: 4.2, look: [0, 1.15, 0], still: 1,
       tap() { taps++; },
       tick(t) {
         const target = Math.floor(t / STEP) + taps;
-        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3.2);
-        last = t;
+        pos = glide(target, t);
       },
       lights() { return [{ p: [chosen[0], 2.3, chosen[2]], col: [0.75, 0.62, 1], i: 1.4, fall: 0.35 }]; },
       draw(t) {
@@ -1281,7 +1305,8 @@ window.BasilSkins = (() => {
           // the ones at the back, small in the fog, have leaves of one colour
           const flat = Math.abs(d) > 0.6 ? k.col : null;
           box(R, [x, 0.2, z], [0.2, 0.2, 0.2], { tex: T.stone });
-          const earth = pot(R, T, x, z, 0.4 + lift, 0.72, undefined, 6), b = [x, earth, z], yaw = w * t * 0.9;
+          // every sort turns slowly in its pot at one speed (a turn by w·t would spin the one coming forward round in a moment)
+          const earth = pot(R, T, x, z, 0.4 + lift, 0.72, undefined, 6), b = [x, earth, z], yaw = t * 0.35 + i * 1.3;
           if (k.ball) {
             rod(R, b, [x, earth + 0.2, z], 0.02, { col: [70, 128, 48] });
             BALL.forEach((F, j) => leaf(R, add([x, earth + 0.34, z], mul(F, 0.08)), norm(add(F, [Math.sin(t * 1.3 + j) * 0.08, 0, 0])), 0.16, T.leaf, { w: 0.46, flat }));
@@ -1429,15 +1454,16 @@ window.BasilSkins = (() => {
   // comes in and rains on the pot, the earth goes dark with the water and pales as it dries; the candles keep it
   // warm. A tap calls the rain now
   scene('grimoire', 'uhod', S => {
-    const { R, T } = S, DAY = 16, RAIN = 5;
-    let rainAt = -99, tapped = -99, orb = [0, 3, 0], day = 1, cloud = null, wet = 0, lean = [0, 0];
+    const { R, T } = S, DAY = 24, RAIN = 5;
+    let rainAt = -99, tapped = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
     const EARTH_DRY = [112, 82, 56], EARTH_WET = [34, 22, 18];
     const sky = t => {
-      const s = (t % DAY) / DAY;
-      day = s < 0.72 ? Math.sin(s / 0.72 * Math.PI) : 0;
-      const a = s < 0.72 ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI;
+      const s = (t % DAY) / DAY, a = s < 0.72 ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI, up = Math.sin(a);
+      day = s < 0.72 ? up : 0;
+      // the sun and the moon go down into the horizon and come up out of it: small there, never jumping across
+      rise = smooth(up / 0.3);
       // across the circle from east to west, a little behind the bush
-      orb = [-Math.cos(a) * 2.3, 1.7 + Math.sin(a) * 1.7, -0.7];
+      orb = [-Math.cos(a) * 2.3, 1.7 + up * 1.7, -0.7];
       return s < 0.72;
     };
     return {
@@ -1445,7 +1471,8 @@ window.BasilSkins = (() => {
       tap(t) { tapped = t; },
       tick(t) {
         const sun = sky(t);
-        R.key = sun ? { dir: norm(sub(orb, [0, 1.4, 0])), i: 0.25 + 0.7 * day, col: [1, 0.86, 0.6] } : { dir: norm(sub(orb, [0, 1.4, 0])), i: 0.3, col: [0.5, 0.6, 1] };
+        // the light of the sky goes over from the moon's to the sun's and back without a jump
+        R.key = { dir: norm(sub(orb, [0, 1.4, 0])), i: 0.22 + (sun ? 0.7 * day : 0.1 * rise), col: mix3([0.5, 0.6, 1], [1, 0.86, 0.6], sun ? smooth(day / 0.3) : 0) };
         // the bush leans after the sun, slowly, and stands up straight at night
         const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
         lean = mix3([lean[0], lean[1], 0], [want[0], want[1], 0], 0.04).slice(0, 2);
@@ -1454,23 +1481,24 @@ window.BasilSkins = (() => {
         const auto = Math.floor((t - 5) / DAY) * DAY + 5;
         rainAt = Math.max(auto, tapped);
         const r = t - rainAt;
-        cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.6 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.6 * smooth((r - RAIN + 1.2) / 1.2) : 0, rain: r > 1 && r < RAIN - 1 } : null;
+        // the cloud comes in and goes, swelling out of nothing and melting away at the side
+        cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.6 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.6 * smooth((r - RAIN + 1.2) / 1.2) : 0, k: smooth(r / 0.7) * (1 - smooth((r - RAIN + 0.7) / 0.7)), rain: r > 1 && r < RAIN - 1 } : null;
         wet = r < 0 ? 0 : r < RAIN ? Math.min(1, Math.max(0, r - 1.2) / 2) : Math.max(0, 1 - (r - RAIN) / 9);
       },
       lights() {
-        return [{ p: orb, col: day > 0 ? [1, 0.82, 0.5] : [0.6, 0.7, 1], i: day > 0 ? 0.6 + day : 0.5, fall: 0.12 }];
+        return [{ p: orb, col: day > 0 ? [1, 0.82, 0.5] : [0.6, 0.7, 1], i: rise * (day > 0 ? 0.6 + day : 0.5), fall: 0.12 }];
       },
       draw(t) {
         box(R, [0, 0.36, 0], [0.46, 0.36, 0.46], { tex: T.stone, texFront: T.altar });
         const earth = pot(R, T, 0, 0, 0.72, 1.15, mix3(EARTH_DRY, EARTH_WET, wet).map(Math.round));
         bush(R, T, [0, earth, 0], t, { s: 1.2, lean });
         // the sun (or the moon) itself: it gives light, nothing lights it
-        ball(R, orb, day > 0 ? 0.2 : 0.14, { col: day > 0 ? [255, 214, 120] : [210, 220, 255], emis: true, nofog: true });
-        if (cloud) [[0, 0, 0.26], [0.22, -0.05, 0.2], [-0.24, -0.04, 0.2], [0.1, 0.1, 0.18], [-0.1, 0.08, 0.17]]
-          .forEach(([dx, dy, r]) => ball(R, [cloud.x + dx, 2.85 + dy, dx * 0.3], r, { col: [78, 72, 104] }));
+        if (rise > 0.02) ball(R, orb, (day > 0 ? 0.2 : 0.14) * rise, { col: day > 0 ? [255, 214, 120] : [210, 220, 255], emis: true, nofog: true });
+        if (cloud && cloud.k > 0.02) [[0, 0, 0.26], [0.22, -0.05, 0.2], [-0.24, -0.04, 0.2], [0.1, 0.1, 0.18], [-0.1, 0.08, 0.17]]
+          .forEach(([dx, dy, r]) => ball(R, [cloud.x + dx * cloud.k, 2.85 + dy * cloud.k, dx * 0.3], r * cloud.k, { col: [78, 72, 104] }));
       },
       fx(t, F) {
-        F.halo(orb, day > 0 ? 1.1 : 0.6, day > 0 ? `rgba(255,190,90,${0.2 + 0.25 * day})` : 'rgba(150,170,255,.22)', 'rgba(255,190,90,0)');
+        if (rise > 0.02) F.halo(orb, (day > 0 ? 1.1 : 0.6) * rise, day > 0 ? `rgba(255,190,90,${(0.2 + 0.25 * day) * rise})` : `rgba(150,170,255,${0.22 * rise})`, 'rgba(255,190,90,0)');
         if (cloud && cloud.rain) for (let i = 0; i < 30; i++) {
           const k = ((t * 1.6 + i * 0.37) % 1), x = cloud.x + ((i * 0.61) % 1 - 0.5) * 0.7, z = ((i * 0.43) % 1 - 0.5) * 0.5;
           F.streak([x, 2.7 - k * 1.2, z], 0.12, 'rgba(140,190,255,.85)');
@@ -1553,10 +1581,13 @@ window.BasilSkins = (() => {
     make(S, sc) {
       const { R, T } = S;
       const FLOOR = floorTex(sc.glow, false), GLOW = floorTex(sc.glow, true);
-      const ring = sc.bare ? [] : [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; });
+      // the candles and the pillars on the camera's side stay away: next to the lens they would stand big and dark at
+      // the edge of the picture
+      const off = q => Math.abs(((q - sc.orbit[0]) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI);
+      const ring = sc.bare ? [] : [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2; return { q, x: Math.cos(q) * 2.95, z: Math.sin(q) * 2.95, h: 0.38 + ((i * 37) % 10) / 22, ph: i * 1.7 }; }).filter(c => off(c.q) > 0.8);
       const candles = ring.concat(sc.candles || []);
       const embers = [...Array(candles.length ? 46 : 0)].map((_, i) => ({ k: i % candles.length, a: (i * 0.37) % 1, s: 0.3 + (i * 13 % 10) / 22, dx: ((i * 29) % 11 - 5) / 60, dz: ((i * 17) % 11 - 5) / 60 }));
-      const pillars = [...Array(8)].map((_, i) => { const q = 0.35 + i / 8 * Math.PI * 2; return { x: Math.cos(q) * 7.4, z: Math.sin(q) * 7.4, h: 1.6 + ((i * 53) % 10) / 4 }; });
+      const pillars = [...Array(8)].map((_, i) => { const q = 0.35 + i / 8 * Math.PI * 2; return { q, x: Math.cos(q) * 7.4, z: Math.sin(q) * 7.4, h: 1.6 + ((i * 53) % 10) / 4 }; }).filter(p => off(p.q) > 1.1);
       return {
         lights: t => candles.map(c => ({ p: [c.x, (c.top || 0) + c.h + 0.14, c.z], col: [1, 0.6, 0.28], i: 0.5 + 0.12 * Math.sin(t * 11 + c.ph) + 0.08 * Math.sin(t * 23 + c.ph * 2), fall: 0.55 })),
         draw(t) {
@@ -1648,7 +1679,10 @@ window.BasilSkins = (() => {
         const idle = [Math.cos(t * 0.6) * 1.05, cut[1] + 0.45 + Math.sin(t * 1.1) * 0.08, Math.sin(t * 0.6) * 1.05];
         const w = smooth((u - SW + 0.9) / 0.6) * (1 - smooth((u - SW - 0.3) / 0.8)), k = smooth((u - SW + 0.3) / 0.6);
         sick = mix3(idle, mix3(add(cut, [-0.5, 0.12, 0.05]), add(cut, [0.5, 0.02, -0.05]), k), w);
-        tip = { w, spin: t * 1.4 * (1 - w) };
+        // it turns as it circles and turns to its cut during the swing: to the whole turn nearest to where it stood when the
+        // swing began (a turn by t·(1 − w) would spin it round dozens of times in the swing, a minute into the page)
+        const turns = Math.round((t - u + SW - 0.9) * 1.4 / (Math.PI * 2)) * Math.PI * 2;
+        tip = { w, spin: t * 1.4 * (1 - w) + turns * w };
       },
       lights() { return [{ p: add(sick, [0, 0.25, 0.2]), col: [1, 0.86, 0.5], i: 1.1, fall: 0.5 }]; },
       draw(t) {
@@ -1717,7 +1751,7 @@ window.BasilSkins = (() => {
         disc(R, 0, 0, 0.004, POOL, 14, { col: [12, 34, 38], layer: 0.5 });
         disc(R, 0, 0, 0.008, POOL * 0.68, 14, { col: [20, 54, 58], layer: 0.55 });
         disc(R, 0, 0, 0.012, POOL, 14, { col: [70, 140, 150], emis: true, add: 0.12, layer: 0.6 });
-        for (let i = 0; i < 18; i++) { const q = i / 18 * Math.PI * 2 + 0.2; egg(R, [Math.cos(q) * (POOL + 0.06), 0.03, Math.sin(q) * (POOL + 0.06)], [0.13, 0.07, 0.1], q, { col: [80 + (i % 3) * 8, 86 + (i % 3) * 8, 90], lo: true }); }
+        for (let i = 0; i < 18; i++) { const q = i / 18 * Math.PI * 2 + 0.2; egg(R, [Math.cos(q) * (POOL + 0.06), 0.03, Math.sin(q) * (POOL + 0.06)], [0.13, 0.07, 0.1], q, { col: [80 + (i % 3) * 8, 86 + (i % 3) * 8, 90] }); }
         [-0.32, 0.32].forEach((d, i) => { const q = SP + d; egg(R, [Math.cos(q) * 1.5, 0.28, Math.sin(q) * 1.5], [0.3, 0.42 - i * 0.08, 0.26], q, { col: [90, 94, 98] }); egg(R, [Math.cos(q) * 1.5, 0.56 - i * 0.08, Math.sin(q) * 1.5], [0.22, 0.1, 0.2], q, { col: [62, 98, 46] }); });
         // the stream of the spring falling from between the stones into the pool
         const sd = [-Math.sin(SP), 0, Math.cos(SP)], bot = [IN[0], 0.02, IN[1]];
@@ -1732,7 +1766,7 @@ window.BasilSkins = (() => {
         const roll = Math.sin(t * 0.8) * 0.03, a = [-0.62, y - roll, -0.14], b = [0.62, y + roll, 0.14];
         rod(R, a, b, 0.1, { col: [104, 80, 58] }, 6);
         rod(R, [0.3, y + 0.02, 0.07], [0.52, y + 0.2, -0.12], 0.035, { col: [96, 74, 52] }, 4);
-        egg(R, [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46], lo: true });
+        egg(R, [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46] });
         bush(R, T, [0, y + 0.1, 0], t, { s: 1 });
         ROOTS.forEach((r, i) => {
           const w = Math.sin(t * 0.9 + i) * 0.03, m = [Math.cos(r.q) * r.r * 0.5 + w, -r.d * 0.45, Math.sin(r.q) * r.r * 0.5];
@@ -1753,16 +1787,14 @@ window.BasilSkins = (() => {
       }
     };
   });
-  // Главная: роща — на старом пне в середине круга растёт базилик, над ним медленно кружит венок из веточек с белыми
-  // ягодами омелы, вокруг падают листья, летают светлячки. Касание — руны на камнях вспыхивают, по кругу проходит порыв
-  // ветра, и листья кружатся быстрее
+  // Главная, фоном всего первого экрана: роща — на старом пне в середине круга растёт базилик, над ним медленно кружит
+  // венок из веточек с белыми ягодами омелы, вокруг падают листья, летают светлячки. Раз в четырнадцать секунд по кругу
+  // проходит порыв ветра: руны на камнях вспыхивают, листья кружатся быстрее
   scene('druid', 'glavnaya', S => {
-    const { R, T } = S;
-    let gust = -99;
-    const g = t => (t >= gust ? Math.max(0, 1 - (t - gust) / 1.6) : 0);
+    const { R, T } = S, EVERY = 14;
+    const g = t => { const u = (t % EVERY) - (EVERY - 1.6); return u > 0 ? 1 - u / 1.6 : 0; };
     return {
       look: [0, 1.25, 0], near: 5.2, rad: 5.4, still: 3,
-      tap(t) { gust = t; },
       rune: t => 0.5 + 0.15 * Math.sin(t * 1.1) + g(t) * 1.1,
       gust: t => g(t),
       lights(t) { return [{ p: [0, 2.3, 0], col: [1, 0.84, 0.55], i: 0.85 + 0.08 * Math.sin(t * 3), fall: 0.7 }]; },
@@ -1773,7 +1805,7 @@ window.BasilSkins = (() => {
         // leaves falling round the circle, faster in a gust
         const k = g(t);
         for (let i = 0; i < 8; i++) {
-          const l = (i / 8 + t * 0.06) % 1, q = i * 1.9 + t * (0.2 + k * 2), r = 1.2 + (i % 3) * 0.7;
+          const l = (i / 8 + t * 0.06) % 1, q = i * 1.9 + t * 0.2 + k * 0.9, r = 1.2 + (i % 3) * 0.7;
           leaf(R, [Math.cos(q) * r, 3.4 - l * 3.3, Math.sin(q) * r], norm([Math.cos(t + i), Math.sin(t * 1.3 + i), Math.sin(t + i * 2)]), 0.14, i % 2 ? T.leafLemon : T.leaf, { side: [Math.sin(t * 2 + i), 0.4, Math.cos(t * 2 + i)] });
         }
       },
@@ -1784,23 +1816,22 @@ window.BasilSkins = (() => {
   // нынешняя больше и ярче всех, и куст стоит в её свете: в полнолуние светлее, в новолуние темнее. Фазы идут сами;
   // касание — следующая
   scene('druid', 'moy', S => {
-    const { R, T } = S, N = 8, STEP = 3, FR = 1.15, A = 0.9, BACK = A + Math.PI;
+    const { R, T } = S, N = 8, STEP = 4, FR = 1.15, A = 0.9, BACK = A + Math.PI;
     // the wattle: stakes on an arc behind the pot (on the far side from the camera), withies woven in and out of them
     const STAKES = [...Array(11)].map((_, i) => BACK - 1.05 + i / 10 * 2.1);
     const at = (q, r, y) => [Math.cos(q) * r, y, Math.sin(q) * r];
     const MOONS = [...Array(N)].map((_, i) => { const q = BACK - 0.95 + i / (N - 1) * 1.9, c = (i - (N - 1) / 2) / ((N - 1) / 2); return at(q, FR + 0.05, 1.42 + 0.22 * (1 - c * c)); });
-    let taps = 0, pos = 0, last = null, frac = 0;
+    const glide = glider(1.4);
+    let taps = 0, pos = 0, frac = 0;
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       orbit: [A, 0.35], near: 4.1, rad: 4.5, look: [0, 0.95, 0], still: 13, clear: 1.6,
       tap() { taps++; },
       tick(t) {
         const target = Math.floor(t / STEP) + taps;
-        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3);
-        last = t;
-        // the moonlight on the bush: as much as the moon of the moment is lit
-        const p = ((Math.round(pos) % N) + N) % N;
-        frac = (1 - Math.cos(p / N * Math.PI * 2)) / 2;
+        pos = glide(target, t);
+        // the moonlight on the bush: as much as the moon of the moment is lit, going over smoothly to the next one
+        frac = (1 - Math.cos(pos / N * Math.PI * 2)) / 2;
         R.key = { dir: R.key.dir, col: R.key.col, i: 0.25 + 0.65 * frac };
       },
       lights() { return [{ p: [0, 1.2, 0.3], col: [0.8, 0.92, 1], i: 0.3 + 0.7 * frac, fall: 0.7 }]; },
@@ -1866,7 +1897,7 @@ window.BasilSkins = (() => {
         burst = u >= 9.3 ? (u - 9.3) / 0.7 : -1;
         // the seedlings in the moss round the hole, each on its own little mound
         KIDS.forEach(([x, z], i) => {
-          egg(R, [x, 0.0, z], [0.16, 0.05, 0.16], i, { col: [46, 34, 24], lo: true });
+          egg(R, [x, 0.0, z], [0.16, 0.05, 0.16], i, { col: [46, 34, 24] });
           sprout(R, T, [x, 0.04, z], ((t / CYCLE + i / 5) % 1) * 1.25, 0.8, t + i);
         });
       },
@@ -1969,7 +2000,7 @@ window.BasilSkins = (() => {
   // Сорта: пять сортов на пнях вокруг старого дуба. Выбранный стоит в столбе лунного света и светится; по кругу
   // выходит вперёд следующий — сам или по касанию
   scene('druid', 'sorta', S => {
-    const { R, T } = S, N = 5, STEP = 3.8, RAD = 1.5, A = 0.75, O = [-Math.cos(A) * 0.5, 0, -Math.sin(A) * 0.5];
+    const { R, T } = S, N = 5, STEP = 6, RAD = 1.5, A = 0.75, O = [-Math.cos(A) * 0.5, 0, -Math.sin(A) * 0.5];
     const KINDS = [
       { tex: T.leaf, col: [84, 150, 56], leaf: 1.2 },                                       // «Генуэзский»: big leaves
       { tex: T.leafOpal, col: [98, 38, 96], stem: [96, 40, 98] },                           // «Тёмный опал»: purple
@@ -1979,7 +2010,8 @@ window.BasilSkins = (() => {
     ];
     const BALL = [...Array(20)].map((_, i) => { const y = 1 - (i + 0.5) / 20 * 1.6, r = Math.sqrt(Math.max(0, 1 - y * y)), q = i * 2.4; return norm([Math.cos(q) * r, y, Math.sin(q) * r]); });
     const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
-    let taps = 0, pos = 0, last = null, chosen = [0, 0, 0];
+    const glide = glider(1.6);
+    let taps = 0, pos = 0, chosen = [0, 0, 0];
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       // the camera looks at the place in front where the chosen sort stands, the oak behind it
@@ -1987,8 +2019,7 @@ window.BasilSkins = (() => {
       tap() { taps++; },
       tick(t) {
         const target = Math.floor(t / STEP) + taps;
-        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3);
-        last = t;
+        pos = glide(target, t);
       },
       lights() { return [{ p: [chosen[0], 1.9, chosen[2]], col: [0.75, 0.9, 1], i: 1.3, fall: 0.5 }]; },
       draw(t) {
@@ -2001,7 +2032,8 @@ window.BasilSkins = (() => {
           const x = O[0] + Math.cos(q) * RAD, z = O[2] + Math.sin(q) * RAD;
           if (w > 0.5) chosen = [x, 0, z];
           const flat = Math.abs(d) > 0.6 ? k.col : null;
-          const top = stump(R, T, x, z, 0.26, 0.32 + smooth(w) * 0.06), b = [x, top, z], yaw = w * t * 0.8;
+          // every sort turns slowly on its stump at one speed (a turn by w·t would spin the one coming forward round in a moment)
+          const top = stump(R, T, x, z, 0.26, 0.32 + smooth(w) * 0.06), b = [x, top, z], yaw = t * 0.35 + i * 1.3;
           if (k.ball) {
             rod(R, b, [x, top + 0.2, z], 0.02, { col: [70, 128, 48] });
             BALL.forEach((F, j) => leaf(R, add([x, top + 0.34 * sz, z], mul(F, 0.08 * sz)), norm(add(F, [Math.sin(t * 1.3 + j) * 0.08, 0, 0])), 0.16 * sz, T.leaf, { w: 0.46, flat }));
@@ -2067,7 +2099,7 @@ window.BasilSkins = (() => {
         rod(R, add(edge(0.2), mul(E, 0.008)), add(edge(0.35 + N * 0.2), mul(E, 0.008)), 0.006, { col: read ? mix3([46, 50, 54], [120, 220, 190], read) : [46, 50, 54], emis: !!read }, 3);
         // the bush at the foot of the stone, on its mound of earth
         const bq = ANG - 0.95, bx = Math.cos(bq) * 0.8, bz = Math.sin(bq) * 0.8;
-        egg(R, [bx, 0, bz], [0.24, 0.08, 0.24], 0, { col: [56, 40, 28], lo: true });
+        egg(R, [bx, 0, bz], [0.24, 0.08, 0.24], 0, { col: [56, 40, 28] });
         bush(R, T, [bx, 0.06, bz], t, { s: 0.85 });
       },
       fx(t, F) {
@@ -2124,7 +2156,7 @@ window.BasilSkins = (() => {
             rod(R, root(i, u0), root(i, u1), 0.03 - j * 0.002, lit ? { col: mix3(ROOT, COL[i], lit), emis: true } : { col: ROOT }, 4);
           }
           // three stones under the cauldron, the embers between them
-          for (let k = 0; k < 3; k++) { const q = k / 3 * Math.PI * 2 + i; egg(R, [x + Math.cos(q) * 0.2, 0.06, z + Math.sin(q) * 0.2], [0.09, 0.07, 0.08], q, { col: [88, 90, 94], lo: true }); }
+          for (let k = 0; k < 3; k++) { const q = k / 3 * Math.PI * 2 + i; egg(R, [x + Math.cos(q) * 0.2, 0.06, z + Math.sin(q) * 0.2], [0.09, 0.07, 0.08], q, { col: [88, 90, 94] }); }
           for (let k = 0; k < 4; k++) ball(R, [x + Math.cos(k * 1.7) * 0.07, 0.04, z + Math.sin(k * 1.7) * 0.07], 0.035, { col: [255, 120 + 40 * Math.sin(t * 6 + k) | 0, 40], emis: true, lo: true });
           // the cauldron: a belly of black iron, its rim, the liquid of its element; its rune floating in the steam
           prism(R, x, z, 0.12, 0.3, 0.13, 0.25, 9, { col: [38, 40, 44] });
@@ -2149,24 +2181,27 @@ window.BasilSkins = (() => {
   // Уход: над кругом камней идёт солнце, и куст поворачивается за ним, а его тень на мху — от солнца; потом луна.
   // Раз в день приходит туча и поливает куст, на листьях блестит роса. Касание — дождь сейчас
   scene('druid', 'uhod', S => {
-    const { R, T } = S, DAY = 16, RAIN = 5;
-    let tapped = -99, orb = [0, 3, 0], day = 1, cloud = null, wet = 0, lean = [0, 0];
+    const { R, T } = S, DAY = 24, RAIN = 5;
+    let tapped = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
     return {
       rad: 4.9, near: 4.6, look: [0, 1.2, 0], still: 4, shafts: false,
       tap(t) { tapped = t; },
       tick(t) {
-        const s = (t % DAY) / DAY, sun = s < 0.72;
-        day = sun ? Math.sin(s / 0.72 * Math.PI) : 0;
-        const a = sun ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI;
-        orb = [-Math.cos(a) * 2.6, 1.6 + Math.sin(a) * 2, -0.9];
-        R.key = sun ? { dir: norm(sub(orb, [0, 1, 0])), i: 0.3 + 0.75 * day, col: [1, 0.88, 0.66] } : { dir: norm(sub(orb, [0, 1, 0])), i: 0.4, col: [0.55, 0.7, 1] };
+        const s = (t % DAY) / DAY, sun = s < 0.72, a = sun ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI, up = Math.sin(a);
+        day = sun ? up : 0;
+        // the sun and the moon go down into the horizon and come up out of it: small there, never jumping across; the
+        // light of the sky goes over from the moon's to the sun's and back without a jump
+        rise = smooth(up / 0.3);
+        orb = [-Math.cos(a) * 2.6, 1.6 + up * 2, -0.9];
+        R.key = { dir: norm(sub(orb, [0, 1, 0])), i: 0.3 + (sun ? 0.75 * day : 0.12 * rise), col: mix3([0.55, 0.7, 1], [1, 0.88, 0.66], sun ? smooth(day / 0.3) : 0) };
         const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
         lean = reduce.matches ? want : [lean[0] + (want[0] - lean[0]) * 0.04, 0];
         const rainAt = Math.max(Math.floor((t - 5) / DAY) * DAY + 5, tapped), r = t - rainAt;
-        cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.8 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.8 * smooth((r - RAIN + 1.2) / 1.2) : 0, rain: r > 1 && r < RAIN - 1 } : null;
+        // the cloud comes in and goes, swelling out of nothing and melting away at the side
+        cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.8 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.8 * smooth((r - RAIN + 1.2) / 1.2) : 0, k: smooth(r / 0.7) * (1 - smooth((r - RAIN + 0.7) / 0.7)), rain: r > 1 && r < RAIN - 1 } : null;
         wet = r < 0 ? 0 : r < RAIN ? Math.min(1, Math.max(0, r - 1.2) / 2) : Math.max(0, 1 - (r - RAIN) / 9);
       },
-      lights() { return [{ p: orb, col: day > 0 ? [1, 0.86, 0.55] : [0.6, 0.72, 1], i: day > 0 ? 0.6 + day : 0.5, fall: 0.1 }]; },
+      lights() { return [{ p: orb, col: day > 0 ? [1, 0.86, 0.55] : [0.6, 0.72, 1], i: rise * (day > 0 ? 0.6 + day : 0.5), fall: 0.1 }]; },
       draw(t) {
         // the shadow of the bush on the moss, away from the sun
         const sh = [-orb[0] * 0.18, 0, -orb[2] * 0.18], k = day > 0 ? 0.6 * day : 0.2;
@@ -2174,11 +2209,11 @@ window.BasilSkins = (() => {
         const top = stump(R, T, 0, 0, 0.42, 0.36);
         disc(R, 0, 0, top + 0.005, 0.3, 9, { col: [64 - wet * 30, 46 - wet * 22, 30 - wet * 14] });
         bush(R, T, [0, top, 0], t, { s: 1.2, lean });
-        ball(R, orb, day > 0 ? 0.22 : 0.16, { col: day > 0 ? [255, 222, 140] : [220, 230, 255], emis: true, nofog: true });
-        if (cloud) [[0, 0, 0.3], [0.26, -0.06, 0.24], [-0.28, -0.05, 0.24], [0.12, 0.12, 0.2], [-0.12, 0.1, 0.2]].forEach(([dx, dy, r]) => ball(R, [cloud.x + dx, 3 + dy, dx * 0.3], r, { col: [86, 96, 104] }));
+        if (rise > 0.02) ball(R, orb, (day > 0 ? 0.22 : 0.16) * rise, { col: day > 0 ? [255, 222, 140] : [220, 230, 255], emis: true, nofog: true });
+        if (cloud && cloud.k > 0.02) [[0, 0, 0.3], [0.26, -0.06, 0.24], [-0.28, -0.05, 0.24], [0.12, 0.12, 0.2], [-0.12, 0.1, 0.2]].forEach(([dx, dy, r]) => ball(R, [cloud.x + dx * cloud.k, 3 + dy * cloud.k, dx * 0.3], r * cloud.k, { col: [86, 96, 104] }));
       },
       fx(t, F) {
-        F.halo(orb, day > 0 ? 1.3 : 0.7, day > 0 ? `rgba(255,214,140,${0.22 + 0.3 * day})` : 'rgba(170,190,255,.24)', 'rgba(255,214,140,0)');
+        if (rise > 0.02) F.halo(orb, (day > 0 ? 1.3 : 0.7) * rise, day > 0 ? `rgba(255,214,140,${(0.22 + 0.3 * day) * rise})` : `rgba(170,190,255,${0.24 * rise})`, 'rgba(255,214,140,0)');
         if (cloud && cloud.rain) for (let i = 0; i < 32; i++) {
           const k = (t * 1.6 + i * 0.37) % 1, x = cloud.x + ((i * 0.61) % 1 - 0.5) * 0.8, z = ((i * 0.43) % 1 - 0.5) * 0.6;
           F.streak([x, 2.85 - k * 1.5, z], 0.14, 'rgba(170,210,255,.7)');
@@ -2248,32 +2283,55 @@ window.BasilSkins = (() => {
   function groveTextures() {
     if (GROVE) return GROVE;
     const R0 = rng(77), noise = (v, a) => clamp(v + (R0() - 0.5) * 2 * a, 0, 255);
-    const lines = (t, col) => {
-      const { put, line, w } = t, c = w / 2;
-      const ring = r => { for (let a = 0; a < 720; a++) { const q = a / 720 * Math.PI * 2; put(c + Math.cos(q) * r, c + Math.sin(q) * r, col); } };
-      ring(c - 4); ring(c - 15); ring(c - 9.5);
-      // ogham between the rings: groups of one to five strokes across the stem line
+    // the lines of the circle drawn smooth — strokes of the canvas, not pixels: close to the camera they stay lines, not
+    // steps — on a canvas of its own (to glow, 512 pixels, nothing round them) or over the moss
+    const glowLines = (w, col = 'rgb(120,255,196)', cv = null) => {
+      if (!cv) { cv = doc.createElement('canvas'); cv.width = cv.height = w; }
+      const x = cv.getContext('2d'), c = w / 2, sc = w / 128;
+      x.strokeStyle = col; x.lineCap = 'round'; x.lineWidth = 1.2 * sc;
+      [4, 15, 9.5].forEach(d => { x.beginPath(); x.arc(c, c, c - d * sc, 0, Math.PI * 2); x.stroke(); });
       const RR = rng(9);
+      x.beginPath();
       for (let i = 0; i < 40; i++) {
         const q = i / 40 * Math.PI * 2, n = 1 + (RR() * 5 | 0), kind = RR() * 3 | 0;
         for (let s = 0; s < n; s++) {
-          const qq = q + (s - n / 2) * 0.022, r0 = kind === 0 ? c - 9.5 : c - 12, r1 = kind === 1 ? c - 7 : c - 9.5;
-          line(c + Math.cos(qq) * r0, c + Math.sin(qq) * r0, c + Math.cos(qq) * r1, c + Math.sin(qq) * r1, col);
+          const qq = q + (s - n / 2) * 0.022, r0 = (kind === 0 ? c - 9.5 * sc : c - 12 * sc), r1 = (kind === 1 ? c - 7 * sc : c - 9.5 * sc);
+          x.moveTo(c + Math.cos(qq) * r0, c + Math.sin(qq) * r0); x.lineTo(c + Math.cos(qq) * r1, c + Math.sin(qq) * r1);
         }
       }
-      // the triskele in the middle: three spirals out of one point
-      for (let k = 0; k < 3; k++) for (let s = 0; s < 140; s++) {
-        const f = s / 140, q = k / 3 * Math.PI * 2 + f * Math.PI * 2.2, r = 3 + f * 19;
-        put(c + Math.cos(q) * r, c + Math.sin(q) * r, col);
+      x.stroke();
+      for (let j = 0; j < 3; j++) {
+        x.beginPath();
+        for (let s = 0; s <= 80; s++) { const f = s / 80, q = j / 3 * Math.PI * 2 + f * Math.PI * 2.2, r = (3 + f * 19) * sc; if (s) x.lineTo(c + Math.cos(q) * r, c + Math.sin(q) * r); else x.moveTo(c + Math.cos(q) * r, c + Math.sin(q) * r); }
+        x.stroke();
       }
+      return cv;
+    };
+    // soft blotches of the moss: noise in cells of a few pixels, smoothed, the same at every visit
+    const blotch = (w, cell, seed) => {
+      const n = Math.ceil(w / cell) + 2, R2 = rng(seed), G = [...Array(n * n)].map(() => R2());
+      return (x, y) => {
+        const gx = x / cell, gy = y / cell, ix = gx | 0, iy = gy | 0, fx = gx - ix, fy = gy - iy, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+        const v = (i, j) => G[(iy + j) % n * n + (ix + i) % n];
+        return (v(0, 0) * (1 - sx) + v(1, 0) * sx) * (1 - sy) + (v(0, 1) * (1 - sx) + v(1, 1) * sx) * sy;
+      };
     };
     GROVE = {
       ...textures(),
-      moss: tex(128, 128, t => {
-        for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) { const r = R0(); t.put(x, y, r < 0.08 ? [74, 100, 44] : r < 0.14 ? [22, 32, 20] : [noise(38, 6), noise(56, 8), noise(32, 5)]); }
-        lines(t, [92, 118, 76]);
-      }),
-      glowMoss: tex(128, 128, t => lines(t, [120, 255, 196])),
+      // the moss of the circle, 256 pixels across its 6.6 units: large soft blotches and small light tips, the lines of
+      // the circle pressed into it, its edge going over into the green of the ground round it
+      moss: glowLines(256, 'rgba(70,92,62,.85)', tex(256, 256, t => {
+        const big = blotch(256, 22, 5), small = blotch(256, 6, 6);
+        for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) {
+          const r = Math.hypot(x - 127.5, y - 127.5) / 127.5;
+          if (r > 1) continue;
+          const b = big(x, y) * 0.65 + small(x, y) * 0.35, tip = R0() < 0.05;
+          const col = tip ? [78, 104, 50] : [30 + b * 22, 46 + b * 30, 27 + b * 14];
+          const e = clamp((r - 0.86) / 0.14, 0, 1);
+          t.put(x, y, [col[0] + (26 - col[0]) * e, col[1] + (41 - col[1]) * e, col[2] + (29 - col[2]) * e]);
+        }
+      })),
+      glowMoss: glowLines(512),
       // the cut of an old stump: pale wood, its rings, the dark edge of the bark; nothing outside the circle
       stumpTop: tex(32, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
@@ -2312,18 +2370,88 @@ window.BasilSkins = (() => {
     return GROVE;
   }
 
-  // a ring of the floor between the radii r0 and r1 (a disc when r0 is nought), its texture laid flat on it as on the
-  // square of the floor, FL to either side of the middle
+  // the floor of the circle — the moss and the glowing lines on it — laid straight on the canvas, a few rows of the
+  // screen at a time. The camera never leans, so along a row of the screen the ground lies at one depth: each strip
+  // takes its texture by a single affine map — true in perspective, crisp, never bent at the seams of triangles. The
+  // moss is lit once for the whole floor (the moon falls the same on all of it), the low lights of the scene lie on it as
+  // pools of their colour, the fog goes by the depth of each strip; the glow only in the ring and in the middle
   const FL = 3.3;
-  function flatRing(R, r0, r1, n, o) {
-    const P = (a, r) => [Math.cos(a) * r, 0.001, Math.sin(a) * r], U = p => [0.5 + p[0] / (2 * FL), 0.5 + p[2] / (2 * FL)];
-    for (let i = 0; i < n; i++) {
-      const a0 = i / n * Math.PI * 2, a1 = (i + 1) / n * Math.PI * 2, A = P(a0, r1), B = P(a1, r1);
-      if (!r0) { R.tri([0, 0.001, 0], A, B, { ...o, uv: [[0.5, 0.5], U(A), U(B)] }); continue; }
-      const C = P(a1, r0), D = P(a0, r0);
-      R.tri(A, B, C, { ...o, uv: [U(A), U(B), U(C)] });
-      R.tri(A, C, D, { ...o, uv: [U(A), U(C), U(D)] });
+  function mossFloor(R, T, x, glowA) {
+    const C = R.C, fc = C.focal, W = R.W, H = R.H, F = R.fog, k = T.moss.width / (2 * FL);
+    const key = R.key, kd = key ? Math.max(0, key.dir[1]) * key.i : 0;
+    const moss = shaded(T.moss, [0, 1, 2].map(i => R.amb[i] + (key ? kd * key.col[i] : 0)), 0, F, 24);
+    const pat = c => c.psxPat || (c.psxPat = x.createPattern(c, 'repeat'));
+    const step = Math.max(2, Math.round(H / 120));
+    // the ground under the screen's row y: the point Q under its middle (x = cx), S — how far one pixel along it goes,
+    // s — its depth
+    const row = y => {
+      const b = -(y - C.cy) / fc, dy = C.u[1] * b + C.f[1];
+      if (dy > -1e-3) return null;
+      const s = -C.eye[1] / dy;
+      return { s, Q: [C.eye[0] + s * (C.u[0] * b + C.f[0]), C.eye[2] + s * (C.u[2] * b + C.f[2])], S: [s * C.r[0] / fc, s * C.r[2] / fc] };
+    };
+    // where along the row the ground is within the radius r: [x0, x1] on the screen, or null
+    const chord = (g, r) => {
+      const A2 = g.S[0] ** 2 + g.S[1] ** 2, B2 = 2 * (g.Q[0] * g.S[0] + g.Q[1] * g.S[1]), D = B2 * B2 - 4 * A2 * (g.Q[0] ** 2 + g.Q[1] ** 2 - r * r);
+      if (D <= 0) return null;
+      const q = Math.sqrt(D);
+      return [C.cx + (-B2 - q) / (2 * A2), C.cx + (-B2 + q) / (2 * A2)];
+    };
+    const span = (y, a0, a1) => { const p0 = Math.max(0, Math.floor(a0)), p1 = Math.min(W, Math.ceil(a1)); if (p1 > p0) x.fillRect(p0, y, p1 - p0, step); };
+    x.save();
+    for (let y = 0; y < H; y += step) {
+      const ym = y + step / 2, g = row(ym), g1 = row(ym + 1);
+      if (!g || !g1) continue;
+      const c = chord(g, FL);
+      if (!c) continue;
+      // the strip's map from the texture to the screen, taken at the middle of its chord
+      const xm = (Math.max(0, c[0]) + Math.min(W, c[1])) / 2, a = xm - C.cx;
+      const P = [g.Q[0] + a * g.S[0], g.Q[1] + a * g.S[1]], P1 = [g1.Q[0] + a * g1.S[0], g1.Q[1] + a * g1.S[1]];
+      const j11 = g.S[0] * k, j21 = g.S[1] * k, j12 = (P1[0] - P[0]) * k, j22 = (P1[1] - P[1]) * k, det = j11 * j22 - j12 * j21;
+      if (!det) continue;
+      const Tu = (P[0] + FL) * k, Tv = (P[1] + FL) * k, i11 = j22 / det, i12 = -j12 / det, i21 = -j21 / det, i22 = j11 / det;
+      const M = new DOMMatrix([i11, i21, i12, i22, xm - i11 * Tu - i12 * Tv, ym - i21 * Tu - i22 * Tv]);
+      const pm = pat(moss);
+      pm.setTransform(M);
+      x.fillStyle = pm;
+      span(y, c[0], c[1]);
+      const f = clamp((g.s - R.fogNear) / (R.fogFar - R.fogNear), 0, 1) ** 1.15;
+      if (f > 0.01) { x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; span(y, c[0], c[1]); }
+      if (glowA > 0) {
+        const pg = pat(T.glowMoss), o = chord(g, FL * 0.96), i = chord(g, FL * 0.72), m = chord(g, FL * 0.37);
+        pg.setTransform(M.scale(T.moss.width / T.glowMoss.width));
+        x.globalCompositeOperation = 'lighter';
+        x.globalAlpha = clamp(glowA * 1.4 * (1 - f * 0.6), 0, 1);
+        x.fillStyle = pg;
+        if (o) { if (i) { span(y, o[0], i[0]); span(y, i[1], o[1]); } else span(y, o[0], o[1]); }
+        if (m) span(y, m[0], m[1]);
+        x.globalCompositeOperation = 'source-over';
+        x.globalAlpha = 1;
+      }
     }
+    // the pools of the low lights: a soft ellipse of each one's colour round the point under it, as wide as its light
+    // reaches over the moss
+    x.globalCompositeOperation = 'lighter';
+    const fwd = norm([C.f[0], 0, C.f[2]]);
+    R.lights.forEach(L => {
+      const h = Math.max(0.15, L.p[1]), i0 = L.i / (1 + h * h * L.fall);
+      if (L.p[1] > 2.8 || i0 < 0.05) return;
+      let r = 0.3;
+      while (r < 2.6 && L.i * (h / Math.hypot(r, h)) / (1 + (r * r + h * h) * L.fall) > i0 * 0.2) r += 0.1;
+      const g = [L.p[0], 0, L.p[2]], vg = R.view(g), vf = R.view(add(g, mul(fwd, r))), vb = R.view(add(g, mul(fwd, -r)));
+      if (vg[2] < 0.5 || vf[2] < 0.3 || vb[2] < 0.3) return;
+      const c0 = R.proj(vg), rx = Math.abs(R.proj(R.view(add(g, mul(C.r, r))))[0] - c0[0]), ry = Math.abs(R.proj(vb)[1] - R.proj(vf)[1]) / 2;
+      const col = L.col.map(v => Math.min(255, v * 150) | 0), al = Math.min(0.5, i0 * 0.35);
+      x.save();
+      x.translate(c0[0], c0[1]);
+      x.scale(Math.max(1, rx), Math.max(1, ry));
+      const gr = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+      gr.addColorStop(0, `rgba(${col},${al})`); gr.addColorStop(1, `rgba(${col},0)`);
+      x.fillStyle = gr;
+      x.fillRect(-1, -1, 2, 2);
+      x.restore();
+    });
+    x.restore();
   }
   // the ground beyond the moss: hills of the forest floor rising away from the circle, the same at every visit
   const groundY = (x, z) => {
@@ -2355,7 +2483,7 @@ window.BasilSkins = (() => {
   function stump(R, T, x, z, r, h) {
     prism(R, x, z, -0.02, h, r * 1.18, r, 7, { tex: T.bark });
     quad(R, [x - r, h, z + r], [x + r, h, z + r], [x + r, h, z - r], [x - r, h, z - r], { tex: T.stumpTop, cut: true, ds: true });
-    for (let k = 0; k < 3; k++) { const q = k * 2.1 + 0.3; egg(R, [x + Math.cos(q) * r, h - 0.02, z + Math.sin(q) * r], [r * 0.26, r * 0.1, r * 0.22], q, { col: [64, 104, 46], lo: true }); }
+    for (let k = 0; k < 3; k++) { const q = k * 2.1 + 0.3; egg(R, [x + Math.cos(q) * r, h - 0.02, z + Math.sin(q) * r], [r * 0.26, r * 0.1, r * 0.22], q, { col: [64, 104, 46] }); }
     [0, 2.1, 4.2].forEach(q => rod(R, [x + Math.cos(q) * r, 0.06, z + Math.sin(q) * r], [x + Math.cos(q) * (r + 0.35), -0.02, z + Math.sin(q) * (r + 0.35)], 0.05, { col: [70, 50, 34] }, 3));
     return h;
   }
@@ -2363,7 +2491,7 @@ window.BasilSkins = (() => {
   function boulder(R, x, z, r, seed) {
     const y = groundY(x, z);
     egg(R, [x, y + r * 0.35, z], [r, r * 0.62, r * 0.85], seed, { col: [84, 88, 92] });
-    egg(R, [x, y + r * 0.62, z], [r * 0.78, r * 0.3, r * 0.64], seed + 0.4, { col: [58, 92, 44], lo: true });
+    egg(R, [x, y + r * 0.62, z], [r * 0.78, r * 0.3, r * 0.64], seed + 0.4, { col: [58, 92, 44] });
   }
   // a wreath of twigs bound in a ring, leaves, white berries of mistletoe; hung on four threads
   function wreath(R, T, c, r, yaw) {
@@ -2378,7 +2506,7 @@ window.BasilSkins = (() => {
   // a fire of logs with its flames: lights it gives are the scene's to add
   function campfire(R, T, x, z, s, t) {
     for (let k = 0; k < 5; k++) { const q = k / 5 * Math.PI * 2 + 0.3; rod(R, [x + Math.cos(q) * 0.32 * s, 0.03, z + Math.sin(q) * 0.32 * s], [x + Math.cos(q) * 0.04, 0.22 * s, z + Math.sin(q) * 0.04], 0.045 * s, { col: [74, 52, 34] }, 3); }
-    for (let k = 0; k < 7; k++) { const q = k * 0.9; ball(R, [x + Math.cos(q) * 0.42 * s, 0.03, z + Math.sin(q) * 0.42 * s], 0.06 * s, { col: [92, 96, 98], lo: true }); }
+    for (let k = 0; k < 7; k++) { const q = k * 0.9; ball(R, [x + Math.cos(q) * 0.42 * s, 0.03, z + Math.sin(q) * 0.42 * s], 0.06 * s, { col: [92, 96, 98] }); }
     for (let k = 0; k < 3; k++) {
       const fl = 1 + 0.25 * Math.sin(t * 12 + k * 2) + 0.12 * Math.sin(t * 27 + k);
       billboard(R, [x + Math.cos(k * 2.1) * 0.06 * s, (0.2 + 0.14 * fl) * s, z + Math.sin(k * 2.1) * 0.06 * s], 0.11 * s, 0.24 * s * fl, { tex: T.flame, emis: true, nofog: true, cut: true });
@@ -2443,6 +2571,10 @@ window.BasilSkins = (() => {
     make(S, sc) {
       const { R, T } = S, RR = rng(404);
       const clear = sc.clear || 1.3;
+      // where the camera stands (it swings about this angle, so far from the middle): stones, boulders and trees keep to
+      // the far side and the flanks, the grass to the inside of the circle — nothing big and dark in front of the lens
+      const CA = sc.orbit[0], CR = Math.min(sc.rad, sc.near);
+      const off = q => Math.abs(((q - CA) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI);
       // the ground: rings of triangles from the moss out to the trees, each a little different in its green
       const RINGS = [3.2, 4.4, 5.8, 7.4, 9.4, 12], SEG = 16;
       const P = RINGS.map(r => [...Array(SEG)].map((_, i) => { const q = i / SEG * Math.PI * 2 + r * 0.17; const x = Math.cos(q) * r, z = Math.sin(q) * r; return [x, groundY(x, z), z]; }));
@@ -2454,14 +2586,15 @@ window.BasilSkins = (() => {
       }
       // the grass: tufts of three blades, none in the middle where the scene stands
       const TUFTS = [];
+      const GR = Math.max(clear + 0.6, Math.min(5.2, CR - 1.4));
       while (TUFTS.length < 90) {
-        const r = clear + RR() * (5.2 - clear), q = RR() * Math.PI * 2, x = Math.cos(q) * r, z = Math.sin(q) * r;
-        if (sc.noGrass && sc.noGrass(x, z)) continue;
-        TUFTS.push({ x, z, y: groundY(x, z), h: 0.14 + RR() * 0.2, ph: RR() * 6, col: [50 + RR() * 30, 84 + RR() * 40, 38 + RR() * 18], yaw: RR() * 3 });
+        const r = clear + RR() * (GR - clear), q = RR() * Math.PI * 2, x = Math.cos(q) * r, z = Math.sin(q) * r;
+        if ((sc.noGrass && sc.noGrass(x, z)) || (off(q) < 1.1 && r > 1.8)) continue;
+        TUFTS.push({ x, z, y: groundY(x, z), h: 0.1 + RR() * 0.14, ph: RR() * 6, col: [50 + RR() * 30, 84 + RR() * 40, 38 + RR() * 18], yaw: RR() * 3 });
       }
-      const STONES = sc.stones === false ? [] : [...Array(7)].map((_, i) => { const q = -Math.PI / 2 + i / 7 * Math.PI * 2 + 0.22; return { x: Math.cos(q) * 3.05, z: Math.sin(q) * 3.05, q, h: 1.1 + ((i * 37) % 10) / 14 }; });
-      const TREES = [...Array(14)].map((_, i) => { const q = 0.2 + i / 14 * Math.PI * 2 + ((i * 13) % 7) / 18, r = 6.2 + ((i * 29) % 10) / 3.2; return { x: Math.cos(q) * r, z: Math.sin(q) * r, birch: i % 4 === 1, h: 4.4 + (i % 5) * 0.55 }; });
-      const ROCKS = [[2.2, 1.9, 0.32], [-2.4, 1.4, 0.26], [1.4, -2.5, 0.22], [-1.7, -2.3, 0.3]].filter(([x, z]) => !(sc.noGrass && sc.noGrass(x, z)));
+      const STONES = sc.stones === false ? [] : [...Array(6)].map((_, i) => { const q = CA + Math.PI + (i / 5 - 0.5) * 2.7; return { x: Math.cos(q) * 3.05, z: Math.sin(q) * 3.05, q, h: 1.1 + ((i * 37) % 10) / 14 }; });
+      const TREES = [...Array(14)].map((_, i) => { const q = CA + Math.PI + (i / 13 - 0.5) * 4.3 + ((i * 13) % 7) / 30, r = 6.2 + ((i * 29) % 10) / 3.2; return { x: Math.cos(q) * r, z: Math.sin(q) * r, birch: i % 4 === 1, h: 4.4 + (i % 5) * 0.55 }; });
+      const ROCKS = [[0.5, 2.6, 0.32], [-0.6, 2.8, 0.26], [1.25, 2.4, 0.22], [-1.3, 2.5, 0.3]].map(([d, r, s]) => { const q = CA + Math.PI + d; return [Math.cos(q) * r, Math.sin(q) * r, s]; }).filter(([x, z]) => !(sc.noGrass && sc.noGrass(x, z)));
       const FLIES = [...Array(26)].map((_, i) => ({ a: i * 2.4, r: 1.2 + (i % 7) * 0.5, h: 0.3 + (i % 5) * 0.4, s: 0.18 + (i % 4) * 0.06 }));
       const MIST = [...Array(4)].map((_, i) => ({ q: i / 4 * Math.PI * 2 + 0.5, r: 2.4 + (i % 3) * 1.3 }));
       let rune = 0.5;
@@ -2479,12 +2612,8 @@ window.BasilSkins = (() => {
           rune = (sc.rune ? sc.rune(t) : 0.5 + 0.15 * Math.sin(t * 1.1));
           return [{ p: [0, 0.35, 0], col: [0.45, 1, 0.82], i: 0.35 * rune, fall: 0.06 }];
         },
+        floor(t, x) { mossFloor(R, T, x, sc.glowAdd ? sc.glowAdd(t) : 0.16 + 0.2 * rune); },
         draw(t) {
-          // the moss and its circle; the glow of its lines laid only where they are — the ring of ogham and the triskele
-          const glowA = sc.glowAdd ? sc.glowAdd(t) : 0.16 + 0.2 * rune, G = { tex: T.glowMoss, layer: 0, add: glowA, ds: true, emis: true };
-          disc(R, 0, 0, 0, FL, 16, { tex: T.moss, layer: 0 });
-          flatRing(R, FL * 0.74, FL * 0.95, 24, G);
-          flatRing(R, 0, FL * 0.36, 8, G);
           TRIS.forEach(([a, b, c, col]) => R.tri(a, b, c, { col, layer: 0, ds: true }));
           // the grass bends with the wind, more in a gust
           const gust = sc.gust ? sc.gust(t) : 0;
@@ -2795,8 +2924,9 @@ window.BasilSkins = (() => {
     if (!root.classList.contains('is-peek')) {
       mounted.push(BACKS[skin]());
       $$('.ch-hero').forEach(h => { const v = h.closest('[data-view]'); mounted.push(stage(h, v && v.dataset.view, skin)); });
-      const art = $('.view-home .hero-art');
-      if (art) mounted.push(stage(art, 'glavnaya', skin));
+      // the home page: the scene is the background of its hero, by itself, without a finger
+      const hero = $('.view-home .hero');
+      if (hero) mounted.push(stage(hero, 'glavnaya', skin, true));
     }
     // the drawings of «Гримуар» go to the console's pixels; «Друид» keeps them smooth and only colours them
     if (skin === 'grimoire') {

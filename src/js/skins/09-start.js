@@ -16,8 +16,9 @@
     if (!root.classList.contains('is-peek')) {
       mounted.push(BACKS[skin]());
       $$('.ch-hero').forEach(h => { const v = h.closest('[data-view]'); mounted.push(stage(h, v && v.dataset.view, skin)); });
-      const art = $('.view-home .hero-art');
-      if (art) mounted.push(stage(art, 'glavnaya', skin));
+      // the home page: the scene is the background of its hero, by itself, without a finger
+      const hero = $('.view-home .hero');
+      if (hero) mounted.push(stage(hero, 'glavnaya', skin, true));
     }
     // the drawings of «Гримуар» go to the console's pixels; «Друид» keeps them smooth and only colours them
     if (skin === 'grimoire') {

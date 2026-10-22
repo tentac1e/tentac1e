@@ -1,7 +1,7 @@
   // Сорта: пять сортов на пнях вокруг старого дуба. Выбранный стоит в столбе лунного света и светится; по кругу
   // выходит вперёд следующий — сам или по касанию
   scene('druid', 'sorta', S => {
-    const { R, T } = S, N = 5, STEP = 3.8, RAD = 1.5, A = 0.75, O = [-Math.cos(A) * 0.5, 0, -Math.sin(A) * 0.5];
+    const { R, T } = S, N = 5, STEP = 6, RAD = 1.5, A = 0.75, O = [-Math.cos(A) * 0.5, 0, -Math.sin(A) * 0.5];
     const KINDS = [
       { tex: T.leaf, col: [84, 150, 56], leaf: 1.2 },                                       // «Генуэзский»: big leaves
       { tex: T.leafOpal, col: [98, 38, 96], stem: [96, 40, 98] },                           // «Тёмный опал»: purple
@@ -11,7 +11,8 @@
     ];
     const BALL = [...Array(20)].map((_, i) => { const y = 1 - (i + 0.5) / 20 * 1.6, r = Math.sqrt(Math.max(0, 1 - y * y)), q = i * 2.4; return norm([Math.cos(q) * r, y, Math.sin(q) * r]); });
     const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
-    let taps = 0, pos = 0, last = null, chosen = [0, 0, 0];
+    const glide = glider(1.6);
+    let taps = 0, pos = 0, chosen = [0, 0, 0];
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       // the camera looks at the place in front where the chosen sort stands, the oak behind it
@@ -19,8 +20,7 @@
       tap() { taps++; },
       tick(t) {
         const target = Math.floor(t / STEP) + taps;
-        pos = last == null || reduce.matches ? target : pos + (target - pos) * Math.min(1, (t - last) * 3);
-        last = t;
+        pos = glide(target, t);
       },
       lights() { return [{ p: [chosen[0], 1.9, chosen[2]], col: [0.75, 0.9, 1], i: 1.3, fall: 0.5 }]; },
       draw(t) {
@@ -33,7 +33,8 @@
           const x = O[0] + Math.cos(q) * RAD, z = O[2] + Math.sin(q) * RAD;
           if (w > 0.5) chosen = [x, 0, z];
           const flat = Math.abs(d) > 0.6 ? k.col : null;
-          const top = stump(R, T, x, z, 0.26, 0.32 + smooth(w) * 0.06), b = [x, top, z], yaw = w * t * 0.8;
+          // every sort turns slowly on its stump at one speed (a turn by w·t would spin the one coming forward round in a moment)
+          const top = stump(R, T, x, z, 0.26, 0.32 + smooth(w) * 0.06), b = [x, top, z], yaw = t * 0.35 + i * 1.3;
           if (k.ball) {
             rod(R, b, [x, top + 0.2, z], 0.02, { col: [70, 128, 48] });
             BALL.forEach((F, j) => leaf(R, add([x, top + 0.34 * sz, z], mul(F, 0.08 * sz)), norm(add(F, [Math.sin(t * 1.3 + j) * 0.08, 0, 0])), 0.16 * sz, T.leaf, { w: 0.46, flat }));

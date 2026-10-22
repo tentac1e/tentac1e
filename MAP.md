@@ -250,35 +250,35 @@
 - `src/js/skins/01-raster.js` (238 стр.): SHADED, ICO, OCT
 - `src/js/skins/02-textures.js` (183 стр.): FLOORS, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
-- `src/js/skins/04-stage.js` (265 стр.): WORLDS, PAIRS, ESSENCE
-- `src/js/skins/05-grimoire-formirovka.js` (98 стр.)
+- `src/js/skins/04-stage.js` (286 стр.): WORLDS, PAIRS, ESSENCE
+- `src/js/skins/05-grimoire-formirovka.js` (101 стр.)
 - `src/js/skins/05-grimoire-gidro.js` (59 стр.)
 - `src/js/skins/05-grimoire-glavnaya.js` (102 стр.)
 - `src/js/skins/05-grimoire-moy.js` (72 стр.)
 - `src/js/skins/05-grimoire-posadka.js` (48 стр.)
 - `src/js/skins/05-grimoire-problemy.js` (64 стр.)
-- `src/js/skins/05-grimoire-sorta.js` (58 стр.)
+- `src/js/skins/05-grimoire-sorta.js` (59 стр.)
 - `src/js/skins/05-grimoire-spravka.js` (59 стр.)
 - `src/js/skins/05-grimoire-udobreniya.js` (61 стр.)
-- `src/js/skins/05-grimoire-uhod.js` (55 стр.)
+- `src/js/skins/05-grimoire-uhod.js` (58 стр.)
 - `src/js/skins/05-grimoire-vkus.js` (58 стр.)
-- `src/js/skins/05-grimoire.js` (77 стр.)
-- `src/js/skins/06-druid-formirovka.js` (83 стр.)
+- `src/js/skins/05-grimoire.js` (80 стр.)
+- `src/js/skins/06-druid-formirovka.js` (86 стр.)
 - `src/js/skins/06-druid-gidro.js` (55 стр.)
-- `src/js/skins/06-druid-glavnaya.js` (27 стр.)
-- `src/js/skins/06-druid-moy.js` (53 стр.)
+- `src/js/skins/06-druid-glavnaya.js` (25 стр.)
+- `src/js/skins/06-druid-moy.js` (52 стр.)
 - `src/js/skins/06-druid-posadka.js` (48 стр.)
 - `src/js/skins/06-druid-problemy.js` (85 стр.)
-- `src/js/skins/06-druid-sorta.js` (58 стр.)
+- `src/js/skins/06-druid-sorta.js` (59 стр.)
 - `src/js/skins/06-druid-spravka.js` (54 стр.)
 - `src/js/skins/06-druid-udobreniya.js` (68 стр.)
-- `src/js/skins/06-druid-uhod.js` (42 стр.)
+- `src/js/skins/06-druid-uhod.js` (45 стр.)
 - `src/js/skins/06-druid-vkus.js` (47 стр.)
-- `src/js/skins/06-druid.js` (316 стр.): BLOOM, GROVEMOL
+- `src/js/skins/06-druid.js` (410 стр.): BLOOM, GROVEMOL
 - `src/js/skins/07-crypt.js` (54 стр.)
 - `src/js/skins/07-forest.js` (88 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
-- `src/js/skins/09-start.js` (53 стр.): BACKS
+- `src/js/skins/09-start.js` (54 стр.): BACKS
 
 ## Стили (src/css/)
 

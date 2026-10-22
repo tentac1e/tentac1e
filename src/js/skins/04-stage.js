@@ -18,7 +18,9 @@
      far it stands beside the text of a wide screen, how far in the middle of a narrow one); orbit [angle, swing] — a
      camera that swings in front of the scene instead of going round it; still — the moment shown when the reader asked
      for less motion; bare — it draws its whole world itself (the world's floor, its candles and the rest stay away);
-     sky — its own three colours of the sky */
+     sky — its own three colours of the sky.
+     The camera never goes all the way round: it swings slowly before the scene (orbit, by default [0.6, 0.35]), so that
+     the whole picture never slides fast — at the frames a phone draws a fast slide judders */
   const WORLDS = {}, SCENES = {};
   const world = (skin, w) => { WORLDS[skin] = w; SCENES[skin] = SCENES[skin] || {}; };
   const scene = (skin, view, make) => { (SCENES[skin] = SCENES[skin] || {})[view] = make; };
@@ -124,6 +126,17 @@
     mol.atoms.split('').forEach((el, i) => ball(R, MP[i], (el === 'O' ? 0.06 : 0.045) * k, { col: el === 'O' ? pal.O : pal.C, emis: true, add: a, lo: pal.lo }));
   }
 
+  // a value that goes over to each new target smoothly, starting slowly and stopping slowly (an easing by a part of the
+  // way left each frame starts with its biggest step — a jerk): glide(target, t) gives where it is at the time t
+  function glider(dur = 0.9) {
+    let from = null, to = null, since = 0;
+    return (target, t) => {
+      if (to == null) { from = to = target; since = t; }
+      if (target !== to) { from += (to - from) * smooth((t - since) / dur); to = target; since = t; }
+      return reduce.matches ? to : from + (to - from) * smooth((t - since) / dur);
+    };
+  }
+
   // sparks and halos over the finished picture, in the raster's own pixels: square on the console, round when smooth
   function fxKit(R) {
     const x = R.x, u = R.unit, round = R.smooth;
@@ -162,10 +175,11 @@
     };
   }
 
-  function stage(host, view, skin) {
+  // backdrop: the scene as a background of its block (the home page) — no finger turns it, no tap; it goes on by itself
+  function stage(host, view, skin, backdrop = false) {
     const W = WORLDS[skin], set = SCENES[skin];
     const holder = doc.createElement('div');
-    holder.className = 'psx-stage';
+    holder.className = 'psx-stage' + (backdrop ? ' is-backdrop' : '');
     holder.dataset.scene = set[view] ? view : 'glavnaya';
     holder.dataset.skin = skin;
     holder.setAttribute('aria-hidden', 'true');
@@ -177,12 +191,15 @@
     // what the world lays over its canvas (a glow the page itself adds over it)
     if (W.overlay) W.overlay(holder, R);
     const S = { R, T, view, ang: 0.6 };
-    const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, ...W.defaults, ...(set[view] || set.glavnaya)(S) };
+    const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, orbit: [0.6, 0.35], ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);
     // the reader turns the scene with a finger or the mouse; a tap does what the scene does (a puff of sparks by default)
     const ptr = { turn: 0, lift: 0, drag: null, puffs: [] };
-    const t0 = performance.now();
-    const clock = () => (reduce.matches ? sc.still : (performance.now() - t0) / 1000);
+    // the scene's own clock: it goes on by the frames drawn, a long frame or a pause (off the screen, asleep, another
+    // tab) counts as a tenth of a second at most — the picture never jumps ahead when it wakes
+    let now0 = null, time = 0;
+    const tick = now => { if (now0 != null) time += clamp((now - now0) / 1000, 0, 0.1); now0 = now; return time; };
+    const clock = () => (reduce.matches ? sc.still : time);
     const onDown = e => { ptr.drag = { x: e.clientX, y: e.clientY, turn: ptr.turn, lift: ptr.lift, moved: false }; };
     const onMove = e => {
       if (!ptr.drag) return;
@@ -200,18 +217,19 @@
       }
       ptr.drag = null;
     };
-    holder.addEventListener('pointerdown', onDown);
-    addEventListener('pointermove', onMove, { passive: true });
-    addEventListener('pointerup', onUp);
-    addEventListener('pointercancel', onUp);
+    if (!backdrop) {
+      holder.addEventListener('pointerdown', onDown);
+      addEventListener('pointermove', onMove, { passive: true });
+      addEventListener('pointerup', onUp);
+      addEventListener('pointercancel', onUp);
+    }
     function frame(now) {
-      // the clock of the scene: stands at its chosen moment when the reader asked for less motion; never below nought
-      // (the first frame's time may come a little before the stage was made)
-      const t = reduce.matches ? sc.still : Math.max(0, (now - t0) / 1000);
+      // the clock of the scene: stands at its chosen moment when the reader asked for less motion
+      const t = reduce.matches ? sc.still : tick(now);
       R.size();
       // wide: the chapter's text on the left, the scene to the right of it; else the scene in the middle, closer
       const wide = R.W > R.H * 1.45;
-      const ang = (sc.orbit ? sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1] : 0.6 + t * 0.11) + ptr.turn;
+      const ang = sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1] + ptr.turn;
       const look = sc.look, eyeY = look[1] + 1.1 + Math.sin(t * 0.3) * 0.15 + ptr.lift;
       const rad = wide ? sc.rad : sc.near;
       S.ang = ang;
@@ -224,6 +242,8 @@
       g.addColorStop(0, sky[0]); g.addColorStop(0.55, sky[1]); g.addColorStop(1, sky[2]);
       x.fillStyle = g; x.fillRect(0, 0, R.W, R.H);
       if (env.back) env.back(t, x);
+      // a floor the world lays straight on the canvas, under every shape (a plane drawn row by row, true in perspective)
+      if (env.floor) env.floor(t, x);
       env.draw(t);
       sc.draw(t);
       R.draw();
@@ -246,7 +266,10 @@
     }
     // runs while on the screen, by the page's frame budget; one still frame with reduced motion
     let seen = false;
-    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30);
+    // as many frames on a phone as anywhere: at 20 the scenes judder
+    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30, W.fps || 30);
+    // a check that draws the scene frame by frame itself (tests/motion.js) sets window.BASIL_STAGES = [] before the page
+    if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame, R, stop: () => L.stop() });
     const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); if (seen) L.start(); else L.stop(); }) : null;
     if (io) io.observe(holder); else { seen = true; L.start(); }
     const vis = () => { if (!doc.hidden && seen) L.start(); };

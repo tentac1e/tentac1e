@@ -200,8 +200,6 @@
 
 /* ---- the home page: the grove in place of the living bush ---- */
 [data-skin="druid"] .view-home .hero h1 { font-size: clamp(2.3rem, 5.4vw, 4.1rem); line-height: 1.06; }
-[data-skin="druid"] .view-home .hero-art { min-height: clamp(300px, 38vw, 480px); border: 12px solid transparent; border-image: var(--twig-frame) 14 round; border-radius: 0; overflow: hidden; background: linear-gradient(var(--bg-deep), var(--fog)) padding-box; box-shadow: var(--shadow-float); }
-[data-skin="druid"] .view-home .hero-art > :not(.psx-stage) { visibility: hidden; }
 [data-skin="druid"] .continue { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
 
 /* ---- the chapter's tabs: a rune by the open one, a line of moss under it ---- */
