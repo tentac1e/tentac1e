@@ -75,8 +75,15 @@
   text-shadow: none;
 }
 
-/* ---- the header: a band of dark bark with a line of moss under it ---- */
-[data-skin="druid"] .topbar { background: linear-gradient(color-mix(in srgb, var(--bark-d) 40%, var(--bg)), var(--bg)); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 1px solid var(--bark-d); box-shadow: 0 1px 0 var(--moss-d), 0 8px 24px -12px var(--shade); }
+/* ---- the header: a bed of dark bark under its row, fading out beyond it towards the edges of the screen and below —
+   no band and no line across a wide screen ---- */
+[data-skin="druid"] .topbar { --band-fade: max(16px, calc(50vw - 760px)); background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 0; }
+[data-skin="druid"] .topbar::before {
+  content: ""; position: absolute; inset: 0 0 -20px; z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--bark-d) 40%, var(--bg)), var(--bg) calc(100% - 20px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
+}
 [data-skin="druid"] .brand span { font-family: var(--font-title); font-size: 1.5rem; letter-spacing: .01em; color: var(--birch); }
 [data-skin="druid"] .brand small { font-size: .8rem; letter-spacing: .1em; color: var(--amber); }
 [data-skin="druid"] .icon-btn, [data-skin="druid"] .search-btn { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--plank); color: var(--birch); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3), var(--shadow-sm); }
@@ -203,7 +210,6 @@
 [data-skin="druid"] .continue { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
 
 /* ---- the chapter's tabs: a rune by the open one, a line of moss under it ---- */
-[data-skin="druid"] .subnav-wrap, [data-skin="druid"] .subnav-wrap.is-stuck { background: color-mix(in srgb, var(--bg) 94%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-bottom: 1px solid var(--bark-d); }
 [data-skin="druid"] .subnav { box-shadow: none; }
 [data-skin="druid"] .subnav a { padding: 12px 12px 12px 28px; font: 400 1.12rem/1 var(--font-label); letter-spacing: .03em; color: var(--ink-3); }
 [data-skin="druid"] .subnav a:first-child { margin-left: -8px; }
@@ -227,7 +233,9 @@
 [data-skin="druid"] .tools-gh, [data-skin="druid"] .sr-gh { color: var(--amber); }
 
 /* ---- the footer ---- */
-[data-skin="druid"] .footer { background: linear-gradient(var(--bg), color-mix(in srgb, var(--bark-d) 36%, var(--bg))); border-top: 1px solid var(--bark-d); box-shadow: 0 -1px 0 var(--moss-d); }
+/* the footer: the grove goes on under it — a soft bed of bark under its text, and a rule only as long as the column */
+[data-skin="druid"] .footer { position: relative; background: radial-gradient(ellipse min(760px, 70%) 100% at 50% 100%, color-mix(in srgb, var(--bark-d) 36%, var(--bg)), transparent 100%); border-top: 0; box-shadow: none; }
+[data-skin="druid"] .footer::before { content: ""; position: absolute; top: 0; left: 50%; width: min(1100px, calc(100% - 32px)); height: 1px; transform: translateX(-50%); background: linear-gradient(90deg, transparent, var(--bark-d) 18%, var(--moss-d) 50%, var(--bark-d) 82%, transparent); }
 [data-skin="druid"] .footer .brand { font-family: var(--font-title); font-size: 1.5rem; }
 [data-skin="druid"] .hap-switch { background: var(--bark-d); }
 [data-skin="druid"] .hap-switch::after { background: var(--ink-2); }
