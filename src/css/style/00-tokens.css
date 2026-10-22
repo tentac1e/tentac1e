@@ -359,6 +359,17 @@
   --scrim: rgba(11, 18, 13, .74);
   --shade: rgba(0, 0, 0, .55);
   --stage-vig: rgba(2, 6, 4, .6);
+  /* the grove behind the page: its night, the moon's haze, the glow of moss at the foot, twigs, needles, leaves, ferns,
+     the fireflies and their light */
+  --forest-sky: #050B08;
+  --forest-haze: rgba(150, 196, 190, .08);
+  --forest-floor: rgba(52, 96, 58, .16);
+  --forest-twig: #16271B;
+  --forest-needle: #1B3021;
+  --forest-leaf: #213826;
+  --forest-fern: #1A2F1F;
+  --forest-fly: #EEFFB0;
+  --forest-fly-glow: rgba(196, 240, 120, .38);
 
   --shadow-rgb: 0 0 0;
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, .35), 0 8px 20px -8px rgba(0, 0, 0, .55);

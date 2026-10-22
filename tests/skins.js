@@ -129,6 +129,38 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
       }
       ok(scenes.size === FILES.length, tag(`${sk}: a scene for each page: ${[...scenes].join(', ')}`));
 
+      // «Друид»: the grove behind the page is still twigs and fireflies on a canvas — no CSS animation in it (a running one
+      // would restyle the page at every frame), the twigs drawn, fireflies lit, and the layer standing where it is while
+      // the page scrolls under it
+      if (sk === 'druid') {
+        page = await sctx.newPage();
+        watch(page, errs);
+        await page.goto(fileUrl('uhod.html'), { waitUntil: 'load' });
+        await page.waitForTimeout(1500);
+        const grove = await page.evaluate(async () => {
+          const el = document.getElementById('psx-forest'), cv = el.querySelector('canvas');
+          const lit = () => { const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 40) n++; return n; };
+          const a = lit(), top0 = el.getBoundingClientRect().top;
+          scrollTo({ top: 1500, behavior: 'instant' });
+          await new Promise(r => setTimeout(r, 600));
+          return { twigs: [...el.querySelectorAll('.tw img')].filter(i => i.complete && i.naturalWidth).length, anims: el.getAnimations({ subtree: true }).length, lit: a, lit2: lit(), top0, top1: el.getBoundingClientRect().top, fixed: getComputedStyle(el).position };
+        });
+        ok(grove.twigs === 4 && !grove.anims && grove.lit > 0 && grove.lit2 > 0 && grove.top0 === 0 && grove.top1 === 0 && grove.fixed === 'fixed',
+          tag(`druid: the grove behind the page — four still twigs, fireflies lit on their canvas, no CSS animation, the layer stands while the page scrolls ${JSON.stringify(grove)}`));
+        // with «less motion» a few fireflies stand lit, and nothing moves
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        const still = await page.evaluate(async () => {
+          const cv = document.querySelector('#psx-forest canvas');
+          const look = () => { const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let h = 0, n = 0; for (let i = 3; i < d.length; i += 4) { if (d[i] > 40) n++; h = (h * 31 + d[i]) >>> 0; } return [h, n]; };
+          await new Promise(r => setTimeout(r, 300));
+          const a = look();
+          await new Promise(r => setTimeout(r, 1200));
+          return { lit: a[1], same: a[0] === look()[0] };
+        });
+        ok(still.lit > 0 && still.same, tag(`druid: with reduced motion the fireflies stand lit and still ${JSON.stringify(still)}`));
+        await page.close();
+      }
+
       // the molecule: drawn by the skin, still turned by a finger or the mouse
       page = await sctx.newPage();
       watch(page, errs);

@@ -276,7 +276,7 @@
 - `src/js/skins/06-druid-vkus.js` (47 стр.)
 - `src/js/skins/06-druid.js` (410 стр.): BLOOM, GROVEMOL
 - `src/js/skins/07-crypt.js` (54 стр.)
-- `src/js/skins/07-forest.js` (88 стр.)
+- `src/js/skins/07-forest.js` (168 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
 - `src/js/skins/09-start.js` (54 стр.): BACKS
 

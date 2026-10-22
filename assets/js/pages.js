@@ -883,6 +883,6 @@ window.BASIL_PAGES = {
    ]
   },
   "search": "746d28a1",
-  "skins": "0f28eaa4"
+  "skins": "6277e308"
  }
 };

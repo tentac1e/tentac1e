@@ -360,6 +360,17 @@
   --scrim: rgba(11, 18, 13, .74);
   --shade: rgba(0, 0, 0, .55);
   --stage-vig: rgba(2, 6, 4, .6);
+  /* the grove behind the page: its night, the moon's haze, the glow of moss at the foot, twigs, needles, leaves, ferns,
+     the fireflies and their light */
+  --forest-sky: #050B08;
+  --forest-haze: rgba(150, 196, 190, .08);
+  --forest-floor: rgba(52, 96, 58, .16);
+  --forest-twig: #16271B;
+  --forest-needle: #1B3021;
+  --forest-leaf: #213826;
+  --forest-fern: #1A2F1F;
+  --forest-fly: #EEFFB0;
+  --forest-fly-glow: rgba(196, 240, 120, .38);
 
   --shadow-rgb: 0 0 0;
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, .35), 0 8px 20px -8px rgba(0, 0, 0, .55);
@@ -3377,7 +3388,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
    data-skin="druid" on <html> (01-theme.js, the inline script in layout.html), always over the dark theme. Its
    colours are the tokens of 00-tokens.css; here the components put on their clothes: windows of bark with twigs
    bound at the corners, planks for buttons, a rune lit by the open tab, soft deep shadows; a rough hand for titles
-   and labels. The scenes (the forest behind the page, the grove at the head of a chapter) are canvases of
+   and labels. The grove behind the page (twigs and fireflies) and the scenes at the head of a chapter come from
    assets/js/skins.js — smooth, without pixels; until they come, their frames already stand in their place */
 
 /* the pictures of the skin: twigs bound at the four corners of a window, a whole frame of twigs for the screens */
@@ -3393,10 +3404,33 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
   --plank-moss: repeating-linear-gradient(90deg, var(--moss-d) 0 6px, color-mix(in srgb, var(--moss-d) 80%, var(--moss)) 6px 9px, color-mix(in srgb, var(--moss-d) 86%, var(--bg)) 9px 14px);
 }
 
-/* ---- the page: the greenhouse and its sky step aside for the forest ---- */
+/* ---- the page: the greenhouse and its sky step aside for the grove ---- */
 [data-skin="druid"] body { font-size: 1.06rem; line-height: 1.66; }
 [data-skin="druid"] #leaf-field, [data-skin="druid"] .aura, [data-skin="druid"] .sky-layer { display: none !important; }
-#psx-forest { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+/* the grove behind the page (07-forest.js): the night is a still gradient with the moon's haze in a corner and a glow
+   of moss at the foot; boughs and a birch twig hang in from the corners and sway on their roots, ferns rise at the foot,
+   fireflies wander and glow on a small canvas — nothing follows the scroll. The layer is as tall as the screen with its
+   bars hidden (lvh), so it does not jump when a phone's bars come and go */
+#psx-forest {
+  position: fixed; left: 0; top: 0; z-index: 0; width: 100%; height: 100vh; height: 100lvh; overflow: hidden; pointer-events: none; contain: strict;
+  will-change: transform; /* a layer of its own: the page scrolls over it without painting it again */
+  background:
+    radial-gradient(ellipse 60% 42% at 84% -4%, var(--forest-haze), transparent 72%),
+    radial-gradient(ellipse 110% 36% at 40% 104%, var(--forest-floor), transparent 74%),
+    linear-gradient(180deg, var(--forest-sky), var(--bg) 48%, var(--bg-deep));
+}
+/* a twig: a picture of 07-forest.js (its drawing's frame starts above or beside its root — the offsets below put the
+   root where it hangs). The twigs stand still: a running CSS animation, even of four of them, costs the browser a new
+   pass over the styles at every frame the page draws */
+#psx-forest .tw { position: absolute; width: var(--w); }
+#psx-forest .tw img { display: block; width: 100%; height: auto; }
+#psx-forest .tw-fir-tl { --w: clamp(230px, 40vw, 600px); left: -2vw; top: calc(-1vh - var(--w) * .128); }
+#psx-forest .tw-fir-r { --w: clamp(170px, 30vw, 460px); right: -3vw; top: calc(34vh - var(--w) * .038); }
+#psx-forest .tw-birch { --w: clamp(84px, 12vw, 180px); right: clamp(40px, 13vw, 260px); top: -2vh; }
+#psx-forest .tw-fern { --w: clamp(234px, 32vw, 488px); left: calc(1vw - var(--w) * .312); bottom: 0; }
+/* the fireflies: a canvas over the whole layer, drawn by 07-forest.js — a layer of its own, so that its frames do not
+   paint the twigs again */
+#psx-forest canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; will-change: transform; }
 [data-skin="druid"] ::selection { background: var(--moss-d); color: var(--birch); }
 [data-skin="druid"] :focus-visible { outline: 2px solid var(--rune); outline-offset: 2px; border-radius: 4px; }
 [data-skin="druid"] a { color: var(--rune); text-decoration-thickness: 1px; text-underline-offset: .18em; text-decoration-color: color-mix(in srgb, var(--rune) 45%, transparent); }
