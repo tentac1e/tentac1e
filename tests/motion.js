@@ -1,5 +1,6 @@
-/* Сцены оформлений идут без рывков: каждая сцена каждой страницы в «Гримуаре» и «Друиде» — 8 секунд по 30 кадров,
-   кадр за кадром на собственных часах сцены. Ничто не выскакивает на один кадр (вторая разность во времени средней
+/* Сцены оформлений идут без рывков: каждая сцена каждой страницы в «Гримуаре» и «Друиде» — 12 секунд по 30 кадров,
+   кадр за кадром на собственных часах сцены, с минуты на странице (то, что вертится по «время × меняющаяся величина»,
+   к этому времени уже прыгает на обороты за кадр). Ничто не выскакивает на один кадр (вторая разность во времени средней
    яркости клеток сетки 32 × 18 — большая, где предмет прыгнул и вернулся, малая при любом плавном движении) и ничто не
    проносится слишком быстро (разница соседних кадров). Светлячок или искра на сетку почти не влияют: среднее берётся по
    всем точкам клетки. Худшие места каждой сцены — в выводе. Проверяет сборку в корне репозитория.
@@ -10,7 +11,7 @@ const args = process.argv.slice(2);
 const only = (args.find(a => !a.startsWith('--')) || '').split(',').filter(Boolean).map(f => (f.endsWith('.html') ? f : f + '.html'));
 const skinArg = args.find(a => a.startsWith('--skin='));
 const skins = skinArg ? [skinArg.slice(7)] : SKINS;
-const SEC = +((args.find(a => a.startsWith('--s=')) || '--s=8').slice(4));
+const SEC = +((args.find(a => a.startsWith('--s=')) || '--s=12').slice(4));
 // a pop: a cell of the grid away from both its neighbours in time, in the same direction, by this much of 255
 const POP = 40;
 // a slide: the biggest change of a cell from one frame to the next, in 95 frames of 100
@@ -30,10 +31,11 @@ function measure(N) {
     for (let i = 0; i < o.length; i++) o[i] /= n[i];
     return o;
   };
-  // a second into the scene first, then the frames
+  // a minute into the scene first, then the frames
   let now = 1e6;
   st.frame(now);
-  for (let k = 0; k < 10; k++) st.frame(now += 100);
+  st.seek(60);
+  for (let k = 0; k < 3; k++) st.frame(now += 100);
   const G = [], pops = [], slides = [];
   for (let i = 0; i < N; i++) {
     st.frame(now += 1000 / 30);

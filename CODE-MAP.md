@@ -100,7 +100,7 @@
 - `src/js/skins/01-raster.js`: `shaded` 159, `quad` 181, `box` 185, `prism` 192, `ICO` 202, `ball` 210, `egg` 212, `rod` 217, `billboard` 227, `turned` 233
 - `src/js/skins/02-textures.js`: `tex` 6, `ritual` 35, `textures` 54, `leafTex` 120, `floorTex` 138, `page` 154, `runeGlyph` 172, `letter` 180
 - `src/js/skins/03-mol.js`: `molShape` 6, `drawMol` 45
-- `src/js/skins/04-stage.js`: `world` 25, `scene` 26, `smooth` 27, `mix3` 28, `leaf` 33, `bush` 51, `pot` 69, `ringTop` 75, `disc` 83, `sprout` 92, `essence` 122, `glider` 131, `fxKit` 141, `stage` 179
+- `src/js/skins/04-stage.js`: `world` 25, `scene` 26, `smooth` 27, `mix3` 28, `leaf` 33, `bush` 51, `pot` 69, `ringTop` 75, `disc` 83, `sprout` 92, `essence` 122, `glider` 132, `fxKit` 146, `stage` 184
 - `src/js/skins/05-grimoire.js`: `altarStone` 63, `glyphTex` 69
 - `src/js/skins/06-druid.js`: `groveTextures` 11, `mossFloor` 107, `groundY` 185, `fir` 192, `birchTree` 198, `menhir` 204, `stump` 211, `boulder` 219, `wreath` 225, `campfire` 235, `shaft` 244, `glowLayer` 259, `glowPost` 266
 - `src/js/skins/07-crypt.js`: `crypt` 5
@@ -138,7 +138,7 @@
 - `pot` (04-stage.js:69) — 9: 02-textures, 05-grimoire-formirovka, 05-grimoire-glavnaya …
 - `ringTop` (04-stage.js:75) — 7: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus …
 - `disc` (04-stage.js:83) — 10: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus …
-- `glider` (04-stage.js:131) — 3: 05-grimoire-sorta, 06-druid-moy, 06-druid-sorta
+- `glider` (04-stage.js:132) — 3: 05-grimoire-sorta, 06-druid-moy, 06-druid-sorta
 - `stump` (06-druid.js:211) — 8: 05-grimoire-formirovka, 06-druid-formirovka, 06-druid-glavnaya …
 
 ### Отдельные файлы
@@ -337,6 +337,7 @@
 - `tests/gestures.js` — Жесты: молекула крутится пальцем в любую сторону, страница под ней стоит; мимо молекулы страница листается. · корень · index.html, vkus.html, udobreniya.html, posadka.html, formirovka.html
 - `tests/ills.js` — Картинки (data-ill) на каждой вкладке каждой страницы. · сервер + корень · все страницы
 - `tests/labs.js` — Каждая модель на своей странице: запускается без ошибок, ничего не вылезает за край, · корень · все страницы
+- `tests/motion.js` — Сцены оформлений идут без рывков: каждая сцена каждой страницы в «Гримуаре» и «Друиде» — 12 секунд по 30 кадров, · корень · все страницы
 - `tests/nav.js` — Навигация на телефоне и компьютере: страница открывается сверху (и страница из памяти для «Назад» тоже, одним · сервер
 - `tests/overlap.js` — Текст не лезет на картинку — на каждой вкладке каждой страницы, на телефоне и на компьютере. · корень · все страницы
 - `tests/pages.js` — Сборка в корне репозитория (ссылки вида sorta.html), открытая как файлы: · корень · все страницы

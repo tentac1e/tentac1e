@@ -668,12 +668,17 @@ window.BasilSkins = (() => {
   }
 
   // a value that goes over to each new target smoothly, starting slowly and stopping slowly (an easing by a part of the
-  // way left each frame starts with its biggest step — a jerk): glide(target, t) gives where it is at the time t
+  // way left each frame starts with its biggest step — a jerk): glide(target, t) gives where it is at the time t. A target
+  // more than two steps away (many taps at once) is reached by its last step only, never spun through in a moment
   function glider(dur = 0.9) {
     let from = null, to = null, since = 0;
     return (target, t) => {
       if (to == null) { from = to = target; since = t; }
-      if (target !== to) { from += (to - from) * smooth((t - since) / dur); to = target; since = t; }
+      if (target !== to) {
+        from += (to - from) * smooth((t - since) / dur);
+        if (Math.abs(target - from) > 2) from = target - Math.sign(target - from);
+        to = target; since = t;
+      }
       return reduce.matches ? to : from + (to - from) * smooth((t - since) / dur);
     };
   }
@@ -809,6 +814,9 @@ window.BasilSkins = (() => {
     let seen = false;
     // as many frames on a phone as anywhere: at 20 the scenes judder
     const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30, W.fps || 30);
+    // a check that draws the scene frame by frame itself (tests/motion.js) sets window.BASIL_STAGES = [] before the page;
+    // seek sets the scene's clock, a minute into the page in a moment
+    if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame, R, stop: () => L.stop(), seek: s => { time = s; now0 = null; } });
     const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); if (seen) L.start(); else L.stop(); }) : null;
     if (io) io.observe(holder); else { seen = true; L.start(); }
     const vis = () => { if (!doc.hidden && seen) L.start(); };
