@@ -247,10 +247,10 @@
 
 **skins.js**
 - `src/js/skins/00-core.js` (36 стр.): SKINS, BAYER
-- `src/js/skins/01-raster.js` (238 стр.): SHADED, ICO, OCT
-- `src/js/skins/02-textures.js` (183 стр.): FLOORS, GLYPH
+- `src/js/skins/01-raster.js` (286 стр.): SHADED, ICO, OCT
+- `src/js/skins/02-textures.js` (185 стр.): FLOORS, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
-- `src/js/skins/04-stage.js` (264 стр.): WORLDS, PAIRS, ESSENCE
+- `src/js/skins/04-stage.js` (288 стр.): WORLDS, PAIRS, ESSENCE
 - `src/js/skins/05-grimoire-formirovka.js` (99 стр.)
 - `src/js/skins/05-grimoire-gidro.js` (59 стр.)
 - `src/js/skins/05-grimoire-glavnaya.js` (101 стр.)
@@ -274,7 +274,7 @@
 - `src/js/skins/06-druid-udobreniya.js` (67 стр.)
 - `src/js/skins/06-druid-uhod.js` (44 стр.)
 - `src/js/skins/06-druid-vkus.js` (47 стр.)
-- `src/js/skins/06-druid.js` (410 стр.): BLOOM, GROVEMOL
+- `src/js/skins/06-druid.js` (465 стр.): BLOOM, GROVEMOL
 - `src/js/skins/07-crypt.js` (54 стр.)
 - `src/js/skins/07-forest.js` (168 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG

@@ -14,6 +14,25 @@
       this.x = canvas.getContext('2d', this.smooth ? { alpha: false } : { willReadFrequently: true });
       this.W = this.H = 0;
       this.unit = 1;
+      // the glow of what shines (glowTo): a small picture of its own, a part `bloom` of the size, laid over the scene
+      this.B = null;
+    }
+    // the glow of the bright parts, drawn as the picture is: each shining triangle (emis) goes also into this small
+    // canvas in its colour, raised to the cube so that only the bright stays (a texture as it is); what else shines —
+    // the moon, the lines of a circle — the world adds itself through R.B. The picture is never read back for it
+    glowTo(canvas, k) { this.B = { c: canvas, x: canvas.getContext('2d', { alpha: false }), k }; }
+    glowStart() {
+      const B = this.B;
+      if (!B) return;
+      const w = Math.max(8, Math.round(this.W * B.k)), h = Math.max(6, Math.round(this.H * B.k));
+      if (B.c.width !== w || B.c.height !== h) { B.c.width = w; B.c.height = h; }
+      const x = B.x;
+      x.setTransform(1, 0, 0, 1, 0, 0);
+      x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
+      x.fillStyle = '#000'; x.fillRect(0, 0, w, h);
+      // what is drawn into it from now on is in the picture's own pixels, added up
+      x.setTransform(w / this.W, 0, 0, h / this.H, 0, 0);
+      x.globalCompositeOperation = 'lighter';
     }
     // the canvas on the page: its CSS size divided into console pixels (3 px or more, at most maxW across), or, smooth,
     // scale canvas pixels a CSS pixel, but no more than maxPx in all (a wide head of a chapter is drawn a little under
@@ -83,6 +102,19 @@
     }
     draw() {
       const x = this.x, F = this.fog;
+      // the glow of plain shining triangles: those of one shape (a bubble, a ring) go into it as one path, one fill;
+      // whatever solid stands in front (not a cut-out leaf, not added light) darkens it again where it hides what shines
+      // — the ground the moon sets behind, a stump over the lines of the circle — the triangles in a row in one fill
+      const bx = this.B && this.B.x, cube = v => Math.min(255, (v / 255) ** 3 * 255) | 0;
+      const solid = o => !o.emis && !o.cut && o.add == null && o.occlude !== false;
+      const dark = (A, B, C) => { if (!run || run.o !== 'dark') { flush(); run = { o: 'dark', a: 1, col: '#000' }; bx.beginPath(); } bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath(); };
+      let run = null;
+      const flush = () => {
+        if (!run) return;
+        bx.globalAlpha = run.a; bx.fillStyle = run.col;
+        if (run.o === 'dark') { bx.globalCompositeOperation = 'source-over'; bx.fill(); bx.globalCompositeOperation = 'lighter'; } else bx.fill();
+        bx.globalAlpha = 1; run = null;
+      };
       const lay = o => (o.layer == null ? 1 : o.layer);
       this.list.sort((A, B) => lay(A.o) - lay(B.o) || B.z - A.z);
       for (const t of this.list) {
@@ -123,6 +155,16 @@
               x.restore();
             }
             x.globalAlpha = 1;
+            if (bx && solid(o)) dark(A, B, C);
+            if (bx && o.emis) {
+              flush();
+              const bp = src.psxBPat || (src.psxBPat = bx.createPattern(src, 'repeat'));
+              bp.setTransform(new DOMMatrix(M));
+              bx.globalAlpha = (o.add == null ? 1 : o.add) * (1 - f);
+              bx.fillStyle = bp;
+              bx.beginPath(); bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath(); bx.fill();
+              bx.globalAlpha = 1;
+            }
             if (o.add == null && !ahead) {
               if (t.l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, t.l[0] * 255) | 0},${Math.min(255, t.l[1] * 255) | 0},${Math.min(255, t.l[2] * 255) | 0})`; x.fill(); }
               if (f > 0.01) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; x.fill(); }
@@ -136,8 +178,14 @@
           x.fillStyle = `rgb(${Math.min(255, r) | 0},${Math.min(255, gg) | 0},${Math.min(255, bb) | 0})`;
           x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath(); x.fill();
           x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
+          if (bx && solid(o)) dark(A, B, C);
+          else if (bx && o.emis) {
+            if (!run || run.o !== o) { flush(); run = { o, a: (o.add == null ? 1 : o.add) * (1 - f), col: `rgb(${cube(r)},${cube(gg)},${cube(bb)})` }; bx.beginPath(); }
+            bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath();
+          }
         }
       }
+      if (bx) flush();
     }
     // the colour depth of the console: a few levels a channel, an ordered (Bayer) dither between them
     post(levels = this.levels) {

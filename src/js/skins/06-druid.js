@@ -60,6 +60,12 @@
         }
       })),
       glowMoss: glowLines(512),
+      // the leaves drawn smooth at twice the console's size: the edge of the blade stays clean close up
+      leaf: leafTex([[38, 82, 30], [168, 224, 118], [128, 196, 86], [84, 150, 56]], false, noise, 64),
+      leafOpal: leafTex([[34, 12, 36], [176, 96, 176], [134, 64, 136], [98, 38, 96]], false, noise, 64),
+      leafLemon: leafTex([[78, 108, 30], [228, 244, 156], [196, 226, 116], [156, 196, 84]], false, noise, 64),
+      leafThai: leafTex([[26, 64, 26], [176, 96, 186], [104, 170, 78], [62, 124, 48]], false, noise, 64),
+      leafSick: leafTex([[112, 92, 30], [214, 204, 120], [200, 188, 96], [176, 164, 64]], true, noise, 64),
       // the cut of an old stump: pale wood, its rings, the dark edge of the bark; nothing outside the circle
       stumpTop: tex(32, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
@@ -69,7 +75,16 @@
           t.put(x, y, r > 0.93 ? [72, 52, 36] : ring ? [112, 82, 56] : [noise(150, 6), noise(116, 6), noise(80, 5)]);
         }
       }),
-      bark: tex(16, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) { const s = (x * 7 + (y >> 2) * 3) % 5 === 0; t.put(x, y, s ? [34, 24, 18] : [noise(80, 10), noise(58, 8), noise(42, 6)]); } }),
+      // bark: ridges up and down between wandering dark grooves, soft blotches over them — drawn large enough to stay
+      // bark close up, not a grid of pixels
+      bark: tex(64, 128, t => {
+        const big = blotch(128, 16, 31), fine = blotch(128, 5, 32);
+        for (let y = 0; y < 128; y++) for (let x = 0; x < 64; x++) {
+          const wob = Math.sin(y * 0.11 + x * 0.25) * 1.6 + big(x * 2, y) * 7, f = ((x + wob) % 16 + 16) % 16;
+          const groove = f < 2.6 ? 1 - f / 2.6 : 0, b = fine(x * 2, y) * 0.55 + big(x * 2, y) * 0.45, k = 1 - groove * 0.62;
+          t.put(x, y, [(58 + b * 36) * k, (41 + b * 25) * k, (29 + b * 17) * k]);
+        }
+      }),
       birch: tex(16, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) { const d = (y * 5 + (x >> 2) * 11) % 9 === 0 && x % 8 < 5; t.put(x, y, d ? [30, 28, 26] : [noise(222, 8), noise(218, 8), noise(204, 8)]); } }),
       menhir: tex(32, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) { const m = y > 23 || (R0() < 0.14 && y > 15); t.put(x, y, m ? [noise(54, 8), noise(82, 10), noise(42, 6)] : [noise(96, 10), noise(98, 10), noise(102, 10)]); } }),
       gRunes: [...Array(8)].map((_, i) => tex(16, 16, t => {
@@ -107,7 +122,8 @@
   function mossFloor(R, T, x, glowA) {
     const C = R.C, fc = C.focal, W = R.W, H = R.H, F = R.fog, k = T.moss.width / (2 * FL);
     const key = R.key, kd = key ? Math.max(0, key.dir[1]) * key.i : 0;
-    const moss = shaded(T.moss, [0, 1, 2].map(i => R.amb[i] + (key ? kd * key.col[i] : 0)), 0, F, 24);
+    // the moss lit once, its fog baked in too (twelve steps of it, cached): one pass over the floor, not two
+    const lit = [0, 1, 2].map(i => R.amb[i] + (key ? kd * key.col[i] : 0));
     const pat = c => c.psxPat || (c.psxPat = x.createPattern(c, 'repeat'));
     const step = Math.max(2, Math.round(H / 120));
     // the ground under the screen's row y: the point Q under its middle (x = cx), S — how far one pixel along it goes,
@@ -125,10 +141,14 @@
       const q = Math.sqrt(D);
       return [C.cx + (-B2 - q) / (2 * A2), C.cx + (-B2 + q) / (2 * A2)];
     };
-    const span = (y, a0, a1) => { const p0 = Math.max(0, Math.floor(a0)), p1 = Math.min(W, Math.ceil(a1)); if (p1 > p0) x.fillRect(p0, y, p1 - p0, step); };
+    let st = step;
+    const span = (y, a0, a1) => { const p0 = Math.max(0, Math.floor(a0)), p1 = Math.min(W, Math.ceil(a1)); if (p1 > p0) x.fillRect(p0, y, p1 - p0, st); };
     x.save();
-    for (let y = 0; y < H; y += step) {
-      const ym = y + step / 2, g = row(ym), g1 = row(ym + 1);
+    // the strips are finer where the ground goes far and lies thin on the screen: the lines there stay whole, not dashes
+    for (let y = 0; y < H; y += st) {
+      const g0 = row(y + 0.5);
+      st = !g0 ? step : g0.s > 6.5 ? 1 : g0.s > 5 ? Math.min(2, step) : step;
+      const ym = y + st / 2, g = row(ym), g1 = row(ym + 1);
       if (!g || !g1) continue;
       const c = chord(g, FL);
       if (!c) continue;
@@ -139,12 +159,11 @@
       if (!det) continue;
       const Tu = (P[0] + FL) * k, Tv = (P[1] + FL) * k, i11 = j22 / det, i12 = -j12 / det, i21 = -j21 / det, i22 = j11 / det;
       const M = new DOMMatrix([i11, i21, i12, i22, xm - i11 * Tu - i12 * Tv, ym - i21 * Tu - i22 * Tv]);
-      const pm = pat(moss);
+      const f = clamp((g.s - R.fogNear) / (R.fogFar - R.fogNear), 0, 1) ** 1.15;
+      const pm = pat(shaded(T.moss, lit, f, F, 24));
       pm.setTransform(M);
       x.fillStyle = pm;
       span(y, c[0], c[1]);
-      const f = clamp((g.s - R.fogNear) / (R.fogFar - R.fogNear), 0, 1) ** 1.15;
-      if (f > 0.01) { x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; span(y, c[0], c[1]); }
       if (glowA > 0) {
         const pg = pat(T.glowMoss), o = chord(g, FL * 0.96), i = chord(g, FL * 0.72), m = chord(g, FL * 0.37);
         pg.setTransform(M.scale(T.moss.width / T.glowMoss.width));
@@ -156,6 +175,30 @@
         x.globalCompositeOperation = 'source-over';
         x.globalAlpha = 1;
       }
+    }
+    // the lines of the circle glow: the same strips of them, as coarse as the glow's own pixels, into the glow
+    if (R.B && glowA > 0) {
+      const bx = R.B.x, bstep = Math.max(step, Math.round(1 / R.B.k)), pg = T.glowMoss.psxBPat || (T.glowMoss.psxBPat = bx.createPattern(T.glowMoss, 'repeat'));
+      const bspan = (y, a0, a1) => { const p0 = Math.max(0, Math.floor(a0)), p1 = Math.min(W, Math.ceil(a1)); if (p1 > p0) bx.fillRect(p0, y, p1 - p0, bstep); };
+      for (let y = 0; y < H; y += bstep) {
+        const ym = y + bstep / 2, g = row(ym), g1 = row(ym + 1);
+        if (!g || !g1) continue;
+        const o = chord(g, FL * 0.96);
+        if (!o) continue;
+        const xm = (Math.max(0, o[0]) + Math.min(W, o[1])) / 2, a = xm - C.cx;
+        const P = [g.Q[0] + a * g.S[0], g.Q[1] + a * g.S[1]], P1 = [g1.Q[0] + a * g1.S[0], g1.Q[1] + a * g1.S[1]];
+        const j11 = g.S[0] * k, j21 = g.S[1] * k, j12 = (P1[0] - P[0]) * k, j22 = (P1[1] - P[1]) * k, det = j11 * j22 - j12 * j21;
+        if (!det) continue;
+        const Tu = (P[0] + FL) * k, Tv = (P[1] + FL) * k, i11 = j22 / det, i12 = -j12 / det, i21 = -j21 / det, i22 = j11 / det;
+        pg.setTransform(new DOMMatrix([i11, i21, i12, i22, xm - i11 * Tu - i12 * Tv, ym - i21 * Tu - i22 * Tv]).scale(T.moss.width / T.glowMoss.width));
+        const f = clamp((g.s - R.fogNear) / (R.fogFar - R.fogNear), 0, 1) ** 1.15, i = chord(g, FL * 0.72), m = chord(g, FL * 0.37);
+        // far off the lines of the circle are thinner than a pixel of the glow and would break into dashes: they fade
+        bx.globalAlpha = clamp(glowA * 1.6 * (1 - f * 0.6), 0, 1) * clamp((11 - g.s) / 5, 0, 1);
+        bx.fillStyle = pg;
+        if (i) { bspan(y, o[0], i[0]); bspan(y, i[1], o[1]); } else bspan(y, o[0], o[1]);
+        if (m) bspan(y, m[0], m[1]);
+      }
+      bx.globalAlpha = 1;
     }
     // the pools of the low lights: a soft ellipse of each one's colour round the point under it, as wide as its light
     // reaches over the moss
@@ -241,30 +284,35 @@
     }
   }
   // a shaft of moonlight: a soft band from the sky down to the ground, added over the picture
+  // soft light, so it goes into the glow where the picture has one: a big band filled at a sixth of the pixels
   function shaft(R, top, foot, w, a) {
     const vt = R.view(top), vf = R.view(foot);
     if (vt[2] < 0.3 || vf[2] < 0.3) return;
-    const p = R.proj(vt), q = R.proj(vf), wt = R.C.focal * w * 1.6 / vt[2], wf = R.C.focal * w / vf[2], x = R.x;
+    const p = R.proj(vt), q = R.proj(vf), wt = R.C.focal * w * 1.6 / vt[2], wf = R.C.focal * w / vf[2], x = R.B ? R.B.x : R.x;
+    if (R.B) a = Math.min(1, a * 1.15);
     const g = x.createLinearGradient(p[0], p[1], q[0], q[1]);
     g.addColorStop(0, `rgba(190,230,255,${a * 0.2})`); g.addColorStop(0.6, `rgba(190,230,255,${a})`); g.addColorStop(1, 'rgba(190,230,255,0)');
     x.fillStyle = g;
     x.beginPath(); x.moveTo(p[0] - wt, p[1]); x.lineTo(p[0] + wt, p[1]); x.lineTo(q[0] + wf, q[1]); x.lineTo(q[0] - wf, q[1]); x.closePath(); x.fill();
   }
 
-  // the light of the bright parts spread round them (a picture at a sixth, its dark pressed down by multiplying it with
-  // itself, laid back over the picture), and the edges sinking into the dark: the look of a game of today, on a 2D canvas.
-  // On a stage the small picture is a canvas of its own over the scene (glowLayer), drawn up and added by the browser,
-  // and the dark edges are the stage's CSS: two passes over the whole picture fewer every frame
+  // the light of the bright parts spread round them, and the edges sinking into the dark: the look of a game of today,
+  // on a 2D canvas. On a stage the glow is a small canvas of its own over the scene (glowLayer), drawn up and added by
+  // the browser: what shines is drawn into it as the picture is drawn (Raster.glowTo — the moon, the runes, the fire,
+  // the lines of the circle), so the picture is never read back from the graphics card for it, and the dark edges are
+  // the stage's CSS. The molecule viewer, a picture now and then, still takes its glow from the picture itself (a
+  // picture at a sixth, its dark pressed down by multiplying it with itself, laid back over it)
   const BLOOM = new WeakMap();
   function glowLayer(holder, R) {
     const c1 = doc.createElement('canvas');
     c1.className = 'psx-glow';
     holder.appendChild(c1);
-    const c2 = doc.createElement('canvas');
-    BLOOM.set(R, { c1, c2, x1: c1.getContext('2d'), x2: c2.getContext('2d'), page: true });
+    R.glowTo(c1, 1 / 6);
+    BLOOM.set(R, { page: true });
   }
   function glowPost(R) {
     let b = BLOOM.get(R);
+    if (b && b.page) return;
     if (!b) {
       const c1 = doc.createElement('canvas'), c2 = doc.createElement('canvas');
       b = { c1, c2, x1: c1.getContext('2d'), x2: c2.getContext('2d') };
@@ -277,7 +325,6 @@
     x1.globalCompositeOperation = 'copy'; x1.drawImage(R.c, 0, 0, w, h);
     x2.globalCompositeOperation = 'copy'; x2.drawImage(b.c1, 0, 0);
     x1.globalCompositeOperation = 'multiply'; x1.drawImage(b.c2, 0, 0); x1.drawImage(b.c2, 0, 0);
-    if (b.page) return;
     x.save();
     x.imageSmoothingEnabled = true;
     x.globalCompositeOperation = 'lighter'; x.globalAlpha = 0.7;
@@ -290,7 +337,9 @@
   }
 
   world('druid', {
-    raster: () => ({ smooth: true, scale: Math.min(1.5, window.devicePixelRatio || 1) * 0.72, maxPx: 170000, fog: [13, 25, 20], fogNear: 4.5, fogFar: 17, amb: [0.17, 0.21, 0.2] }),
+    // the screen's own pixels, up to two to a CSS pixel and 420 000 in all (a phone gets them all; the wide head of a
+    // chapter on a computer about one to one)
+    raster: () => ({ smooth: true, scale: Math.min(2, window.devicePixelRatio || 1), maxPx: 420000, fog: [13, 25, 20], fogNear: 4.5, fogFar: 17, amb: [0.17, 0.21, 0.2] }),
     textures: () => groveTextures(),
     key: { dir: norm([-0.45, 0.85, 0.3]), i: 0.62, col: [0.62, 0.76, 0.95] },
     fillCol: [0.72, 0.86, 0.8],
@@ -309,8 +358,10 @@
       const TRIS = [];
       for (let k = 0; k < RINGS.length - 1; k++) for (let i = 0; i < SEG; i++) {
         const a = P[k][i], b = P[k][(i + 1) % SEG], c = P[k + 1][(i + 1) % SEG], d = P[k + 1][i];
-        const v = RR() * 10 - 5, col = [24 + v + k * 1.5, 40 + v + k * 1.2, 28 + v];
-        TRIS.push([a, b, c, col], [a, c, d, [col[0] + 3, col[1] + 4, col[2] + 2]]);
+        // one shade for the two triangles of a patch, and little between patches: far off, their edges would read as
+        // a dotted grid
+        const v = RR() * 5 - 2.5, col = [24 + v + k * 1.5, 40 + v + k * 1.2, 28 + v];
+        TRIS.push([a, b, c, col], [a, c, d, col]);
       }
       // the grass: tufts of three blades, none in the middle where the scene stands
       const TUFTS = [];
@@ -329,12 +380,16 @@
       return {
         // the moon over the trees, where it always is on the screen, and its light round it
         back(t, x) {
+          R.glowStart();
           const mx = R.W * 0.8, my = R.H * 0.17, mr = Math.max(4, R.H * 0.045);
           const g = x.createRadialGradient(mx, my, 0, mx, my, mr * 7);
           g.addColorStop(0, 'rgba(200,225,240,.34)'); g.addColorStop(1, 'rgba(200,225,240,0)');
           x.fillStyle = g; x.fillRect(mx - mr * 7, my - mr * 7, mr * 14, mr * 14);
           x.fillStyle = '#E6EEE8'; x.beginPath(); x.arc(mx, my, mr, 0, Math.PI * 2); x.fill();
           x.fillStyle = 'rgba(150,170,170,.35)'; x.beginPath(); x.arc(mx - mr * 0.3, my - mr * 0.2, mr * 0.28, 0, Math.PI * 2); x.arc(mx + mr * 0.35, my + mr * 0.3, mr * 0.18, 0, Math.PI * 2); x.fill();
+          // the moon glows: its disc into the glow (raised to the cube, as all of it)
+          // (the ground in front of it darkens the glow again where it hides the moon: Raster.draw)
+          if (R.B) { const bx = R.B.x; bx.fillStyle = '#8E9A93'; bx.beginPath(); bx.arc(mx, my, mr * 0.9, 0, Math.PI * 2); bx.fill(); }
         },
         lights(t) {
           rune = (sc.rune ? sc.rune(t) : 0.5 + 0.15 * Math.sin(t * 1.1));
@@ -358,7 +413,7 @@
         },
         fx(t, F) {
           // the mist lying low, the shafts of moonlight, the fireflies, the glow of the runes
-          MIST.forEach((m, i) => { const q = m.q + t * 0.02; F.halo([Math.cos(q) * m.r, 0.25, Math.sin(q) * m.r], 1.6, 'rgba(160,200,190,.05)', 'rgba(160,200,190,0)'); });
+          MIST.forEach((m, i) => { const q = m.q + t * 0.02; F.soft([Math.cos(q) * m.r, 0.25, Math.sin(q) * m.r], 1.6, 'rgba(160,200,190,.055)', 'rgba(160,200,190,0)'); });
           if (sc.shafts !== false) [[-1.4, 0.6, 0.5], [0.9, -1.2, 0.4], [2.2, 1.1, 0.35]].forEach(([x, z, w], i) => shaft(R, [x + 2.4, 6.2, z - 1.6], [x, 0, z], w, 0.07 + 0.025 * Math.sin(t * 0.6 + i * 2)));
           FLIES.forEach((f, i) => {
             const q = f.a + t * f.s, blink = Math.max(0, Math.sin(t * 2.1 + i * 1.7));

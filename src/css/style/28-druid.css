@@ -195,7 +195,7 @@
 [data-skin="druid"] .psx-stage canvas { image-rendering: auto; }
 /* the glow of the bright parts — a small canvas over the scene, drawn up smooth and added to it by the browser — and
    the edges of the picture sinking into the dark */
-[data-skin="druid"] .psx-stage .psx-glow { position: absolute; inset: 0; opacity: .7; mix-blend-mode: screen; mix-blend-mode: plus-lighter; pointer-events: none; }
+[data-skin="druid"] .psx-stage .psx-glow { position: absolute; inset: 0; opacity: .9; mix-blend-mode: screen; mix-blend-mode: plus-lighter; pointer-events: none; }
 [data-skin="druid"] .psx-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 85% 95% at 50% 45%, transparent 42%, var(--stage-vig) 100%); }
 
 /* ---- the home page: the grove in place of the living bush ---- */

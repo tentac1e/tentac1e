@@ -117,16 +117,18 @@
   }
   // a leaf with its veins, cut out of the square: the diamond of two triangles shows a rounded blade.
   // pal: the edge, the midrib, the veins, the blade; spots — the brown spots of a sick leaf with their yellow halo
-  function leafTex(pal, spots, noise) {
-    const [edgeC, midC, veinC, bladeC] = pal, R1 = rng(23);
-    const dots = spots ? [...Array(5)].map(() => [8 + R1() * 16, 8 + R1() * 16, 1.4 + R1() * 1.6]) : [];
-    return tex(32, 32, t => {
-      for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) {
-        const u = (x + 0.5) / 32, v = (y + 0.5) / 32;
+  // a leaf of n pixels square (32 for the console; «Друид» draws its own at 64, smooth): the blade's outline in its
+  // alpha — round shoulders, a pointed tip — the midrib, the veins, spots if it is sick
+  function leafTex(pal, spots, noise, n = 32) {
+    const [edgeC, midC, veinC, bladeC] = pal, R1 = rng(23), z = n / 32;
+    const dots = spots ? [...Array(5)].map(() => [(8 + R1() * 16) * z, (8 + R1() * 16) * z, (1.4 + R1() * 1.6) * z]) : [];
+    return tex(n, n, t => {
+      for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+        const u = (x + 0.5) / n, v = (y + 0.5) / n;
         const s = v < 0.55 ? v / 0.55 * 0.5 : 0.5 + (v - 0.55) / 0.45 * 0.5;
         const hw = 0.5 * Math.pow(Math.sin(Math.PI * s), 0.7), du = Math.abs(u - 0.5);
         if (du > hw * 0.97) continue;
-        const edge = hw - du < 0.05, mid = du < 0.035, vein = ((v + du * 1.2) * 6) % 1 < 0.14 && du < hw * 0.8;
+        const edge = hw - du < 0.05 / Math.sqrt(z), mid = du < 0.035 / Math.sqrt(z), vein = ((v + du * 1.2) * 6) % 1 < 0.14 && du < hw * 0.8;
         const k = 1 - Math.pow(du / (hw || 1), 2) * 0.28;
         const spot = dots.reduce((m, [sx, sy, r]) => Math.min(m, Math.hypot(x - sx, y - sy) / r), 9);
         t.put(x, y, spot < 1 ? [86, 52, 26] : spot < 1.6 ? [204, 178, 70] : edge ? edgeC : mid ? midC : vein ? veinC : [noise(bladeC[0] * k, 5), noise(bladeC[1] * k, 6), noise(bladeC[2] * k, 5)]);

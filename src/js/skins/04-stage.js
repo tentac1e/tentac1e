@@ -29,9 +29,9 @@
   const smooth = v => { v = clamp(v, 0, 1); return v * v * (3 - 2 * v); };
   const mix3 = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
 
-  // a leaf of basil from its base B along F, its blade spread along S (across F when not given): four triangles of
-  // the cut-out texture; o.w — how wide, o.curl — how much its tip bends down, o.flat — one colour instead of the
-  // texture (a leaf far off in the fog, a kite of four flat triangles: cheaper)
+  // a leaf of basil from its base B along F, its blade spread along S (across F when not given): eight triangles of
+  // the cut-out texture, its outline the texture's; o.w — how wide, o.curl — how much its tip bends down, o.flat — one
+  // colour instead of the texture (a leaf far off in the fog, a kite of four flat triangles: cheaper)
   function leaf(R, B, F, len, tex, o = {}) {
     let S = o.side || cross(F, [0, 1, 0]);
     if (Math.hypot(S[0], S[1], S[2]) < 1e-3) S = [1, 0, 0];
@@ -39,11 +39,24 @@
     const U = cross(S, F), w = o.w || 0.36, curl = o.curl == null ? 0.22 : o.curl;
     const Tp = add(add(B, mul(F, len)), mul(U, -len * curl)), M = add(add(B, mul(F, len * 0.5)), mul(U, len * 0.1));
     const Lf = add(add(B, mul(F, len * 0.42)), mul(S, -len * w)), Rt = add(add(B, mul(F, len * 0.42)), mul(S, len * w));
-    const q = o.flat ? { col: o.flat, ds: true, layer: o.layer, add: o.add } : { tex, ds: true, cut: true, layer: o.layer, add: o.add };
-    R.tri(B, Lf, M, { ...q, uv: [[0.5, 1], [0, 0.55], [0.5, 0.55]] });
-    R.tri(Lf, Tp, M, { ...q, uv: [[0, 0.55], [0.5, 0], [0.5, 0.55]] });
-    R.tri(B, M, Rt, { ...q, uv: [[0.5, 1], [0.5, 0.55], [1, 0.55]] });
-    R.tri(M, Tp, Rt, { ...q, uv: [[0.5, 0.55], [0.5, 0], [1, 0.55]] });
+    if (o.flat) {
+      // one colour: the blade itself is the shape, a diamond of four triangles folded along the midrib
+      const q = { col: o.flat, ds: true, layer: o.layer, add: o.add };
+      R.tri(B, Lf, M, q); R.tri(Lf, Tp, M, q); R.tri(B, M, Rt, q); R.tri(M, Tp, Rt, q);
+      return;
+    }
+    // a texture: each half of the blade covers its half of the picture whole, so the outline is the picture's — round
+    // shoulders, a pointed tip — folded along the midrib, the tip curling; the corners outside the blade are clear
+    const q = { tex, ds: true, cut: true, layer: o.layer, add: o.add }, side = mul(S, len * w);
+    const BL = sub(B, side), TL = sub(Tp, side), BR = add(B, side), TR = add(Tp, side);
+    R.tri(BL, B, M, { ...q, uv: [[0, 1], [0.5, 1], [0.5, 0.55]] });
+    R.tri(BL, M, Lf, { ...q, uv: [[0, 1], [0.5, 0.55], [0, 0.55]] });
+    R.tri(Lf, M, Tp, { ...q, uv: [[0, 0.55], [0.5, 0.55], [0.5, 0]] });
+    R.tri(Lf, Tp, TL, { ...q, uv: [[0, 0.55], [0.5, 0], [0, 0]] });
+    R.tri(B, BR, M, { ...q, uv: [[0.5, 1], [1, 1], [0.5, 0.55]] });
+    R.tri(M, BR, Rt, { ...q, uv: [[0.5, 0.55], [1, 1], [1, 0.55]] });
+    R.tri(M, Rt, Tp, { ...q, uv: [[0.5, 0.55], [1, 0.55], [0.5, 0]] });
+    R.tri(Tp, Rt, TR, { ...q, uv: [[0.5, 0], [1, 0.55], [1, 0]] });
   }
   // the bush: a stem and pairs of leaves, each pair a quarter turn from the one below. o: s — its size, tex — the
   // leaves (texAt(k) — of the k-th pair; flat — one colour), stem — its colour, lean [x, z] — where its top bends,
@@ -146,10 +159,12 @@
 
   // sparks and halos over the finished picture, in the raster's own pixels: square on the console, round when smooth
   function fxKit(R) {
-    const x = R.x, u = R.unit, round = R.smooth;
+    // where the picture keeps a glow of its own (R.B, «Друид»), every halo, dot and spark shines into it too
+    const x = R.x, u = R.unit, round = R.smooth, bx = R.B && R.B.x;
     const put = (p, s, col) => {
       x.fillStyle = col;
       if (round) { x.beginPath(); x.arc(p[0], p[1], s * 0.5, 0, Math.PI * 2); x.fill(); } else x.fillRect(p[0], p[1], s, s);
+      if (bx) { bx.fillStyle = col; bx.beginPath(); bx.arc(p[0], p[1], s * 1.2, 0, Math.PI * 2); bx.fill(); }
     };
     return {
       halo(p3, r3, c0, c1) {
@@ -158,6 +173,15 @@
         const p = R.proj(v), r = R.C.focal * r3 / v[2], g = x.createRadialGradient(p[0], p[1], 0, p[0], p[1], r);
         g.addColorStop(0, c0); g.addColorStop(1, c1);
         x.fillStyle = g; x.fillRect(p[0] - r, p[1] - r, r * 2, r * 2);
+        if (bx) { bx.fillStyle = g; bx.fillRect(p[0] - r, p[1] - r, r * 2, r * 2); bx.fillRect(p[0] - r, p[1] - r, r * 2, r * 2); }
+      },
+      // a soft halo that only glows: into the glow where the picture has one (a wide one costs little there), else as halo
+      soft(p3, r3, c0, c1) {
+        const v = R.view(p3);
+        if (v[2] < 0.3) return;
+        const y = bx || x, p = R.proj(v), r = R.C.focal * r3 / v[2], g = y.createRadialGradient(p[0], p[1], 0, p[0], p[1], r);
+        g.addColorStop(0, c0); g.addColorStop(1, c1);
+        y.fillStyle = g; y.fillRect(p[0] - r, p[1] - r, r * 2, r * 2);
       },
       // a spark of fire (life 0…1 fades it)
       spark(p3, life, big) {
