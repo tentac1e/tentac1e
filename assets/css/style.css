@@ -479,7 +479,7 @@ h4 { margin: 0 0 .35em; font-size: 1.04rem; font-weight: 700; line-height: 1.3; 
 
 .eyebrow {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
   margin: 0;
   font-family: var(--font-mono);
@@ -489,7 +489,8 @@ h4 { margin: 0 0 .35em; font-size: 1.04rem; font-weight: 700; line-height: 1.3; 
   text-transform: uppercase;
   color: var(--basil);
 }
-.eyebrow::before { content: ""; width: 30px; height: 1.5px; background: currentColor; flex-shrink: 0; }
+/* the dash stands at the middle of the first line, also when the words wrap to a second one */
+.eyebrow::before { content: ""; width: 30px; height: 1.5px; background: currentColor; flex-shrink: 0; transform: translateY(-.36em); }
 
 .lead {
   margin: 0;
@@ -3144,7 +3145,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] h3, [data-skin="grimoire"] h4 { font-family: var(--font-display); font-weight: 700; letter-spacing: .01em; text-shadow: 2px 2px 0 var(--shade); }
 [data-skin="grimoire"] h3 { font-size: 1.5rem; line-height: 1.08; }
 [data-skin="grimoire"] h4 { font-size: 1.2rem; }
-[data-skin="grimoire"] .eyebrow { font-family: var(--font-hand); font-style: italic; font-size: 1.24rem; font-weight: 600; letter-spacing: .02em; text-transform: none; color: var(--gold); text-shadow: 2px 2px 0 var(--shade); }
+[data-skin="grimoire"] .eyebrow { font-family: var(--font-hand); font-style: italic; font-size: 1.24rem; font-weight: 600; line-height: 1.25; letter-spacing: .02em; text-transform: none; color: var(--gold); text-shadow: 2px 2px 0 var(--shade); }
 [data-skin="grimoire"] .eyebrow::before { background: var(--blood); box-shadow: 2px 2px 0 var(--shade); }
 [data-skin="grimoire"] .lead { color: var(--ink); }
 [data-skin="grimoire"] .hand { font-family: var(--font-hand); font-style: italic; font-weight: 600; color: var(--gold); }
@@ -3408,7 +3409,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] h3, [data-skin="druid"] h4 { font-family: var(--font-display); font-weight: 400; letter-spacing: .01em; }
 [data-skin="druid"] h3 { font-size: 1.45rem; line-height: 1.15; }
 [data-skin="druid"] h4 { font-size: 1.18rem; }
-[data-skin="druid"] .eyebrow { font-family: var(--font-hand); font-size: 1.45rem; font-weight: 600; letter-spacing: .01em; text-transform: none; color: var(--amber); }
+[data-skin="druid"] .eyebrow { font-family: var(--font-hand); font-size: 1.45rem; font-weight: 600; line-height: 1.2; letter-spacing: .01em; text-transform: none; color: var(--amber); }
 [data-skin="druid"] .eyebrow::before { background: var(--moss); }
 [data-skin="druid"] .lead { color: var(--ink); }
 [data-skin="druid"] .hand { font-family: var(--font-hand); font-weight: 600; color: var(--amber); }

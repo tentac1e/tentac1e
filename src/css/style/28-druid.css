@@ -34,7 +34,7 @@
 [data-skin="druid"] h3, [data-skin="druid"] h4 { font-family: var(--font-display); font-weight: 400; letter-spacing: .01em; }
 [data-skin="druid"] h3 { font-size: 1.45rem; line-height: 1.15; }
 [data-skin="druid"] h4 { font-size: 1.18rem; }
-[data-skin="druid"] .eyebrow { font-family: var(--font-hand); font-size: 1.45rem; font-weight: 600; letter-spacing: .01em; text-transform: none; color: var(--amber); }
+[data-skin="druid"] .eyebrow { font-family: var(--font-hand); font-size: 1.45rem; font-weight: 600; line-height: 1.2; letter-spacing: .01em; text-transform: none; color: var(--amber); }
 [data-skin="druid"] .eyebrow::before { background: var(--moss); }
 [data-skin="druid"] .lead { color: var(--ink); }
 [data-skin="druid"] .hand { font-family: var(--font-hand); font-weight: 600; color: var(--amber); }
