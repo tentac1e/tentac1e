@@ -8,7 +8,7 @@
     { id: 'formirovka', num: 6, title: 'Прищипка и сбор', art: 'art-formirovka', desc: 'Как сделать из стебля густой куст и когда собирать урожай. С тренажёром.' },
     { id: 'vkus', num: 7, title: 'Вкус и кухня', art: 'art-vkus', desc: 'Химия аромата, 3D-молекулы, физика кухни, сочетания, хранение и 17 рецептов.' },
     { id: 'problemy', num: 8, title: 'Проблемы', art: 'art-problemy', desc: 'Диагностика по симптомам, болезни, вредители, профилактика.' },
-    { id: 'spravka', num: 9, title: 'Справка', art: 'art-spravka', desc: 'Частые вопросы, словарь терминов, чек-лист сезона и любопытные факты.' }
+    { id: 'spravka', num: 9, title: 'Справка', art: 'art-spravka', desc: 'Частые вопросы, словарь терминов, чек-лист сезона и все научные развороты.' }
   ];
 
   // group: what the reader wants to do — the contents and the home page show the tools by it (TOOL_GROUPS in

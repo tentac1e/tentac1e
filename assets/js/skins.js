@@ -3169,7 +3169,10 @@ window.BasilSkins = (() => {
       'Модель': 'Модель мироздания',
       'Вы остановились здесь': 'Здесь ваша закладка',
       'Вернуться к тексту': 'Вернуться к строке',
-      'Открыть в главе': 'Открыть в гримуаре'
+      'Открыть в главе': 'Открыть в гримуаре',
+      'Связано с этим': 'Связанные страницы трактата',
+      'Все развороты главы': 'Все тайны главы',
+      'Все развороты': 'Все тайны гримуара'
     },
     druid: {
       'гид садовода': 'советы друида',
@@ -3197,7 +3200,10 @@ window.BasilSkins = (() => {
       'Модель': 'Модель рощи',
       'Вы остановились здесь': 'Здесь вы сошли с тропы',
       'Вернуться к тексту': 'Вернуться на тропу',
-      'Открыть в главе': 'Пойти туда'
+      'Открыть в главе': 'Пойти туда',
+      'Связано с этим': 'Тропы отсюда',
+      'Все развороты главы': 'Все предания главы',
+      'Все развороты': 'Все предания рощи'
     }
   };
   const PATTERNS = {
@@ -3218,7 +3224,7 @@ window.BasilSkins = (() => {
   const WORD_AT = ['.brand small', '#sheet-toc-h', '.toc-seg button', '.footer .hand', '.hero h1 em', '.hero .lead', '.hero-actions .btn',
     '#continue > span', '#glavy-h em', '#tools-h', '#nauka .eyebrow', '.ch-hero .eyebrow', '.pager small', '.panel-next small',
     '.deep-zone-label > span', '[data-deep-all]', '.deeper-k', '.faq-here h3', '.faq-more a', '.deep-src-h', '.deep-close',
-    '.lab-kicker', '.resume-pill small', '.peek-go > span'].join(', ');
+    '.lab-kicker', '.resume-pill small', '.peek-go > span', '.related-h', '.deep-map'].join(', ');
   const PLACEHOLDER = {
     grimoire: 'Что ищем в гримуаре? Например, желтеют листья',
     druid: 'О чём спросить рощу? Например, желтеют листья'

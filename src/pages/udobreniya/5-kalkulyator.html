@@ -2,6 +2,7 @@
       <div class="pane dose-tool">
         <form class="dose-form" id="dose-form" novalidate>
           <h3>Калькулятор раствора</h3>
+          <p class="muted">Крепость готового раствора можно проверить EC-метром: чем больше в воде солей, тем лучше она проводит ток (<a href="#deep-ec">почему так?</a>).</p>
           <div class="row-2 wide-first">
             <div class="field"><label for="dose-fert">Удобрение</label><select id="dose-fert"></select></div>
             <div class="field"><label for="dose-water">Вода, л</label><input type="number" id="dose-water" min="0.25" max="100" step="0.25" value="2" inputmode="decimal"></div>
@@ -42,7 +43,8 @@
           </article>
         </div>
       </div>
-      <div class="callout is-opal sub"><svg class="ico"><use href="#i-drop"/></svg><p><b>Растите в воде, без почвы?</b> Гидропоника — теперь отдельная глава: системы в разрезе, банка и ведро своими руками, раствор по EC и pH, проверки и затраты. Калькулятор раствора для неё — на вкладке <a href="#gidro-rastvor">«Раствор»</a>.</p></div>
+      <div class="callout is-opal sub"><svg class="ico"><use href="#i-drop"/></svg><p><b>Растите в воде, без почвы?</b> Гидропоника — отдельная глава: системы в разрезе, банка и ведро своими руками, раствор по EC и pH, проверки и затраты. Раствор для неё разводят иначе — из двух концентратов, A и B, по EC и pH, и считает его свой калькулятор.</p></div>
+      <ul class="related"><li><a href="#gidro-rastvor">Раствор для гидропоники</a></li></ul>
       <div class="deep-zone">
         <p class="deep-zone-label"><span>Для любопытных</span></p>
         <details class="deep" id="deep-ec" data-kind="phys" data-short="EC и ppm">

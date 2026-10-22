@@ -106,7 +106,7 @@
 - `src/js/skins/07-crypt.js`: `crypt` 5
 - `src/js/skins/07-forest.js`: `forest` 9
 - `src/js/skins/08-ills.js`: `cellFilter` 16, `fitCell` 43, `pixelate` 53, `pixelateIn` 73, `refit` 81, `onToggle` 82, `onPanel` 83, `onResize` 84
-- `src/js/skins/08-words.js`: `roman` 11, `say` 96, `wordNode` 103, `putWords` 104, `wordsOn` 130, `wordsOff` 136
+- `src/js/skins/08-words.js`: `roman` 11, `say` 102, `wordNode` 109, `putWords` 110, `wordsOn` 136, `wordsOff` 142
 - `src/js/skins/09-start.js`: `start` 9, `stop` 36
 
 Общие помощники skins.js — кто зовёт:
@@ -184,7 +184,7 @@
 - `src/css/style/16-pinching.css`: `.sim-*`, `.doubling`, `.s-node`, `.diagram-*`, `.stat`, `.pinch-*`, `.cut-*`, `.hit`, `.dot`, `.is-bad`, `.card`, `.ill` · анимации: `node-pulse`, `pop`
 - `src/css/style/17-harvest.css`: `.recipe-*`, `.store-*`, `.germ-*`, `.ingredients`, `.third-*`, `.storage`, `.ill`, `.term`, `.t-cut`, `.t-keep`, `.hand`, `.recipes-*`
 - `src/css/style/18-problems.css`: `.diag-*`, `.ref-*`, `.cause-*`, `.prob`, `.eyebrow`, `.hint`, `.causes`, `.p-high`, `.p-mid`, `.p-low`, `.ill`, `.latin`
-- `src/css/style/19-reference.css`: `.check-*`, `.faq-*`, `.gloss-*`, `.bar`, `.glossary`, `.ico`
+- `src/css/style/19-reference.css`: `.check-*`, `.faq-*`, `.related-*`, `.gloss-*`, `.bar`, `.glossary`, `.ico`
 - `src/css/style/20-footer.css`: `.footer-*`, `.to-top`, `.brand`, `.is-shown`
 - `src/css/style/21-sheets.css`: `.sheet-*`, `.peek-*`, `.search-*`, `.sr-item`, `.is-closing`, `.ico`, `.sr-more`, `.sr-recent`, `.is-loading`, `.sr-group`, `.sr-note`, `.sr-ico` · анимации: `sheet-in`, `fade-in`, `sheet-up`, `peek-paper`, `peek-in`, `search-in`, `is-found`
 - `src/css/style/22-selection.css`: `.lab-*`, `.sim-*`, `.btn`, `.chip`, `.seg`, `.nav`, `.subnav`, `.tabbar`, `.toc`, `.pager`, `.hap-*`, `.rb-filter`
@@ -207,7 +207,7 @@
 - `src/css/lab/08-home-science.css`: `.sh-mol`, `.sh-kinds`, `.science-*`, `.sh-text`, `.sh-open`, `.is-open`, `.sh-chev`, `.mol-*`, `.sh-fold`, `.eyebrow`, `.is-total`, `.ico`
 - `src/css/lab/09-hover-light.css`: `.ch-hero-*`, `.aroma-*`, `.germ-*`, `.q-card`, `.tool`, `.rule`, `.art-*`, `.ar-wisp`, `.ar-mol`, `.ar-o`, `.ar-c`, `.ar-oil` · анимации: `fade-out`
 - `src/css/lab/11-deep-footer.css`: `.deeper-*`, `.deep-*`, `.eq`
-- `src/css/lab/12-sci-notes.css`: `.sci-*`, `.deep-*`, `.ico`, `.facts-*`, `.hand`
+- `src/css/lab/12-sci-notes.css`: `.cmap-*`, `.deep-*`, `.sci-*`, `.ico`, `.hand`, `.curious-*`
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
 - `src/css/lab/14-paint.css`: `.plant-*`, `.lab-*`, `.is-off`, `.pl-stems`, `.osm-*`, `.xylem`, `.phloem`, `.barrel-*`, `.nc-flow`, `.germ-*`
 - `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.hap-*`, `.ico`, `.continue`, `.is-shown`, `.is-bar` · анимации: `resume-mark`
@@ -289,7 +289,7 @@
 
 - `max-width: 900px` — 15: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css, 23-garden.css, 26-hydro.css, 27-grimoire.css
 - `max-width: 560px` — 13: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
-- `max-width: 640px` — 11: 05-deep.css, 06-blocks.css ×2, 12-sci-notes.css, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
+- `max-width: 640px` — 12: 05-deep.css, 06-blocks.css ×2, 12-sci-notes.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
 - `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
 - `max-width: 700px` — 7: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css, 27-grimoire.css ×2, 28-druid.css
@@ -316,16 +316,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1295`
-- `{{description}}` в `src/layout.html` — `build.py:1295`
-- `{{pwa}}` в `src/layout.html` — `build.py:1312`
-- `{{fonts}}` в `src/layout.html` — `build.py:1311`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1292`
-- `{{content}}` в `src/layout.html` — `build.py:1290`
-- `{{toc}}` в `src/layout.html` — `build.py:1292`
-- `{{scripts}}` в `src/layout.html` — `build.py:1310`
-- `{{version}}` в `src/sw.js` — `build.py:1427`
-- `{{precache}}` в `src/sw.js` — `build.py:1427`
+- `{{title}}` в `src/layout.html` — `build.py:1399`
+- `{{description}}` в `src/layout.html` — `build.py:1399`
+- `{{pwa}}` в `src/layout.html` — `build.py:1416`
+- `{{fonts}}` в `src/layout.html` — `build.py:1415`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1396`
+- `{{content}}` в `src/layout.html` — `build.py:1394`
+- `{{toc}}` в `src/layout.html` — `build.py:1396`
+- `{{scripts}}` в `src/layout.html` — `build.py:1414`
+- `{{version}}` в `src/sw.js` — `build.py:1531`
+- `{{precache}}` в `src/sw.js` — `build.py:1531`
 
 ## Проверки
 

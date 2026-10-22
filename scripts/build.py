@@ -204,9 +204,10 @@ SITE_DESC = ('Подробный гид по выращиванию базили
 SKIP = ['#chapters', '#quick', '#tools-home', '#journey', '.diag-result', '.el-detail', '#variety-detail', '.quiz',
         '.plan-list', '.timeline', '.dose-out', '.npk-out', '.soil-out', '.dli-out', '.stage-body', '.pager', '.sim',
         '#glossary', '#disease-grid', '#pest-grid', '#diag-groups', '#place-panel', '#check-groups', '.lab-tool',
-        '.recipe-book', '.deep-src', '.faq-here', '.facts-all']
-# inside a block the search reads: the copies of Справка's questions (faq_here) and the button «Раскрыть все» (deep_all)
-OWN_SKIP = ['.faq-here', '.deep-all']
+        '.recipe-book', '.deep-src', '.faq-here', '.curious-map', '.related']
+# inside a block the search reads: the copies of Справка's questions (faq_here), the button «Раскрыть все» (deep_all) and
+# the way to the map of the chapter's dives (deep_map)
+OWN_SKIP = ['.faq-here', '.deep-all', '.deep-map']
 BOX = ['details', '.card', '.step', '.pane', 'article', '.rule', 'li']
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
@@ -271,44 +272,145 @@ def deep_all(src):
         src[view] = ''.join(out) + html[pos:]
 
 
-def facts_here(src, CH):
-    """Справка «Любопытно»: every fact of the chapters, by chapter, as a card signed with its tab that leads where it
-    is told in full — the dive whose heading it stands in (.deep-fact) or its own link (.deep-facts at the top of
-    «Для любопытных»). The facts are written once, in the chapters; the search finds them there (.facts-all is in SKIP)"""
-    bulb = '<svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg>'
-    out = []
-    for view, _ in PAGES:
-        if view in ('glavnaya', 'spravka', 'moy'):
+def plural(n, one, few, many):
+    """1 разворот, 2 разворота, 5 разворотов"""
+    k = n % 100
+    return one if k % 10 == 1 and k != 11 else few if 2 <= k % 10 <= 4 and not 12 <= k <= 14 else many
+
+
+# the pages that are not chapters: the home page, Справка and «Мой базилик» lead everywhere by design
+HUBS = ('glavnaya', 'spravka', 'moy')
+
+
+def tabs_of(html):
+    """each tab of a page: (id, title, start, end) in its text"""
+    found = list(re.finditer(r'<div class="panel" data-panel id="([^"]+)" data-title="([^"]+)"', html))
+    return [(t.group(1), t.group(2), t.start(), found[i + 1].start() if i + 1 < len(found) else len(html)) for i, t in enumerate(found)]
+
+
+def related_here(src, CH):
+    """«Связано с этим»: a chapter speaks for itself — the text of its tabs leads nowhere outside the chapter. What the
+    reader may want from another chapter (a calculator, a how-to) stands once, at the end of the tab's practical part,
+    signed with its chapter: the tab's own list (<ul class="related"> in its file, written there) and the links of the
+    questions copied in from Справка (faq_here; in the copy they stay words) make one block, before the questions"""
+    where, label = {}, {}
+    for view, html in src.items():
+        for m in re.finditer(r'<(\w+)([^>]*)\sid="([^"]+)"([^>]*)>', html):
+            i = m.group(3)
+            where.setdefault(i, view)
+            attrs = m.group(2) + m.group(4)
+            t = re.search(r'data-title="([^"]+)"', attrs)
+            if t:
+                label.setdefault(i, t.group(1))
+                continue
+            if m.group(1) in ('h2', 'h3', 'h4'):
+                h = html[m.end():html.index(f'</{m.group(1)}>', m.end())]
+            else:  # a box: its first heading
+                h = re.search(r'<h[234][^>]*>(.*?)</h[234]>', html[m.end():m.end() + 1500], re.S)
+                h = h.group(1) if h else ''
+            label.setdefault(i, re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', h)).strip())
+    for view in list(src):
+        if view in HUBS:
             continue
-        cards = []
-        html = src[view]
-        tabs = list(re.finditer(r'data-panel id="([^"]+)" data-title="([^"]+)"', html))
-        for i, t in enumerate(tabs):
-            part = html[t.end():tabs[i + 1].start() if i + 1 < len(tabs) else len(html)]
-            title = t.group(2)
-            here = []
+        html, out, pos = src[view], [], 0
+        for tab, title, a, b in tabs_of(html):
+            part = html[a:b]
+            items, seen = [], set()
+            own = re.search(r'\s*<ul class="related">(.*?)</ul>', part, re.S)
+            if own:
+                for m in re.finditer(r'<li><a href="#([^"]+)">(.*?)</a></li>', own.group(1), re.S):
+                    assert where.get(m.group(1)) not in (None, view), f'{tab}: «Связано» leads to {m.group(1)}, not to another chapter'
+                    items.append((m.group(1), m.group(2).strip()))
+                    seen.add(m.group(1))
+            faq = re.search(r'<section class="faq-here">.*?</section>', part, re.S)
+            if faq:
+                def word(m):
+                    i = m.group(1)
+                    if i == 'spravka-voprosy' or where.get(i) in (None, view):
+                        return m.group(0)
+                    if i not in seen:
+                        assert label.get(i), f'{tab}: no name for {i}'
+                        items.append((i, label[i]))
+                        seen.add(i)
+                    return m.group(2)
+                part = part[:faq.start()] + re.sub(r'<a href="#([^"]+)">(.*?)</a>', word, faq.group(0), flags=re.S) + part[faq.end():]
+            if items:
+                block = ('<nav class="related" aria-label="Связано с этим">\n        <p class="related-h">Связано с этим</p>\n        <ul>\n'
+                         + ''.join(f'          <li><a href="#{i}"><span class="related-ch">{escape(CH[where[i]]["title"])}</span>'
+                                   f'<span class="related-t">{t}</span></a></li>\n' for i, t in items)
+                         + '        </ul>\n      </nav>')
+                if own:
+                    part = part[:own.start()] + '\n      ' + block + part[own.end():]
+                else:
+                    at = next(x for x in (part.find('<section class="faq-here">'), part.find('<div class="deep-zone">')) if x >= 0)
+                    part = part[:at] + block + '\n      ' + part[at:]
+            out.append(html[pos:a] + part)
+            pos = b
+        src[view] = ''.join(out) + html[pos:]
+
+
+def curious_map(src, CH):
+    """Справка «Для любопытных»: the map of the science of the guide — every dive of every chapter, by chapter and tab,
+    with its fact, and the facts of each tab that have no dive of their own there (.deep-facts at the top of its
+    «Для любопытных»). A chapter is a fold (<details id="cmap-<chapter>">): a tab's «Для любопытных» opens its
+    chapter's fold in the sheet (deep_map). The dives and facts are written once, in the chapters; the search finds them
+    there (.curious-map is in SKIP)"""
+    bulb = '<svg class="ico" aria-hidden="true"><use href="#i-bulb"/></svg>'
+    out, total = [], [0, 0]
+    for view, _ in PAGES:
+        if view in HUBS:
+            continue
+        html, tabs, n = src[view], [], [0, 0]
+        for tab, title, a, b in tabs_of(html):
+            part, rows = html[a:b], []
             for m in re.finditer(r'<li data-kind="(\w+)"><svg[^>]*><use href="#i-bulb"/></svg><span>(.*?)</span></li>', part, re.S):
                 text, link = m.group(2), re.search(r' <a class="deep-fact-link" href="#([^"]+)">(.*?)</a>$', m.group(2), re.S)
+                go = ''
                 if link:
                     text = text[:link.start()]
-                    go = f'<a class="sci-note-link" href="#{link.group(1)}">{link.group(2)}</a>'
-                else:
-                    go = ''  # a fact with no dive to lead to: its label says which tab it is from
-                here.append((m.start(), m.group(1), title, text, go))
-            for m in re.finditer(r'<details class="deep" id="([^"]+)" data-kind="(\w+)" data-short="([^"]+)">(.*?)</summary>', part, re.S):
-                for f in re.finditer(r'<span class="deep-fact"><svg[^>]*><use href="#i-bulb"/></svg><span>(.*?)</span></span>', m.group(4), re.S):
-                    go = f'<a class="sci-note-link" href="#{m.group(1)}">Для любопытных: {m.group(3)} <span aria-hidden="true">→</span></a>'
-                    here.append((m.start(), m.group(2), title, f.group(1), go))
-            cards += sorted(here, key=lambda c: c[0])  # in the order they stand on the tab
-        if cards:
-            out.append(f'<section class="facts-ch"><h3>{escape(CH[view]["title"])}</h3>\n        <div class="sci-notes">\n'
-                       + ''.join(f'          <aside class="sci-note" data-kind="{k}"><span class="sci-note-k">{bulb}<span class="hand">{escape(ti)}</span></span>'
-                                 f'<p>{tx.strip()}</p>{go}</aside>\n' for _, k, ti, tx, go in cards)
-                       + '        </div></section>')
-    n = sum(x.count('<aside') for x in out)
-    holder = '<div class="facts-all"></div>'
-    assert src['spravka'].count(holder) == 1, 'Справка: no place for «Любопытно»'
-    src['spravka'] = src['spravka'].replace(holder, f'<div class="facts-all" data-count="{n}">\n      ' + '\n      '.join(out) + '\n      </div>')
+                    go = f' <a class="cmap-more" href="#{link.group(1)}">{link.group(2)}</a>'
+                rows.append((m.start(), f'<li class="cmap-only" data-kind="{m.group(1)}"><p class="cmap-fact">{bulb}<span>{text.strip()}{go}</span></p></li>'))
+                n[1] += 1
+            for m in re.finditer(r'<details class="deep" id="([^"]+)" data-kind="(\w+)" data-short="([^"]+)">\s*<summary>(.*?)</summary>', part, re.S):
+                sm = m.group(4)
+                ico = re.search(r'<span class="deep-ico"[^>]*>(.*?)</span>', sm, re.S).group(1)
+                t = re.search(r'<span class="deep-title">(.*?)</span>', sm, re.S).group(1)
+                sub = re.search(r'<span class="deep-sub">(.*?)</span>', sm, re.S)
+                facts = re.findall(r'<span class="deep-fact"><svg[^>]*><use href="#i-bulb"/></svg><span>(.*?)</span></span>', sm, re.S)
+                rows.append((m.start(), f'<li class="cmap-deep" data-kind="{m.group(2)}"><a href="#{m.group(1)}"><span class="deep-ico" aria-hidden="true">{ico}</span>'
+                                        f'<span class="cmap-tx"><span class="cmap-t">{t}</span>' + (f'<span class="cmap-s">{sub.group(1)}</span>' if sub else '') + '</span></a>'
+                                        + ''.join(f'<p class="cmap-fact">{bulb}<span>{f.strip()}</span></p>' for f in facts) + '</li>'))
+                n[0] += 1
+                n[1] += len(facts)
+            if rows:
+                tabs.append(f'<section class="cmap-tab"><p class="cmap-tab-h">{escape(title)}</p>\n            <ul class="cmap-list">\n'
+                            + ''.join(f'              {r}\n' for _, r in sorted(rows)) + '            </ul></section>')
+        if not tabs:
+            continue
+        total[0] += n[0]
+        total[1] += n[1]
+        count = f'{n[0]} {plural(n[0], "разворот", "разворота", "разворотов")}' + (f' · {n[1]} {plural(n[1], "факт", "факта", "фактов")}' if n[1] else '')
+        out.append(f'<details class="cmap-ch" id="cmap-{view}">\n          <summary><span class="cmap-sum"><svg class="ico" aria-hidden="true"><use href="#i-ch-{view}"/></svg>'
+                   f'<span class="cmap-ch-t">{escape(CH[view]["title"])}</span><span class="cmap-n">{count}</span><span class="deep-plus" aria-hidden="true"></span></span></summary>\n'
+                   '          <div class="cmap-body">\n          ' + '\n          '.join(tabs) + '\n          </div>\n        </details>')
+    holder = '<div class="curious-map"></div>'
+    assert src['spravka'].count(holder) == 1, 'Справка: no place for the map of «Для любопытных»'
+    src['spravka'] = src['spravka'].replace(holder, f'<div class="curious-map" data-dives="{total[0]}" data-facts="{total[1]}">\n        ' + '\n        '.join(out) + '\n      </div>')
+
+
+def deep_map(src):
+    """at the end of each tab's «Для любопытных» line: the way to the map of its chapter's science (curious_map), which
+    opens in the sheet over the page"""
+    label = '<p class="deep-zone-label">'
+    for view, html in src.items():
+        if view in HUBS:
+            continue
+        out, pos = [], 0
+        for m in re.finditer(re.escape(label), html):
+            at = html.index('</p>', m.end())
+            out.append(html[pos:at] + f'<a class="deep-map" href="#cmap-{view}">Все развороты главы</a>')
+            pos = at
+        src[view] = ''.join(out) + html[pos:]
 
 
 # ---------------------------------------------------------------- mini DOM
@@ -1063,7 +1165,9 @@ def main():
     faq_here(src)
     deep_all(src)
     CH = chapters()
-    facts_here(src, CH)
+    related_here(src, CH)
+    deep_map(src)
+    curious_map(src, CH)
     # a build for another place (--out, --single) leaves the one in the root as it is: checks read it meanwhile
     stage = Path(tempfile.mkdtemp(prefix='basil-book-')) if single else None
     assets = stage / 'assets' if single else out_dir / 'assets'

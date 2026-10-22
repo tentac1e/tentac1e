@@ -5,19 +5,19 @@
 ## Главы и вкладки
 
 ### Главная — `/` (`index.html`)
-- `src/pages/glavnaya.html` · вся глава · 178 стр.
+- `src/pages/glavnaya.html` · вся глава · 179 стр.
 
 ### Сорта — `/сорта` (`sorta.html`)
 - `src/pages/sorta/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/sorta/1-katalog.html` · #каталог — Каталог сортов · 106 стр.<br>развороты: Химотипы `#deep-himotipy`, Антоцианы `#deep-antociany`
-- `src/pages/sorta/2-podbor.html` · #подбор — Подбор сорта · 51 стр.<br>развороты: Генотип × среда `#deep-fenotip`
-- `src/pages/sorta/3-vybor.html` · #выбор — Как выбрать семена · 84 стр.<br>развороты: Устойчивость `#deep-ustoychivost`
+- `src/pages/sorta/1-katalog.html` · #каталог — Каталог сортов · 107 стр.<br>развороты: Химотипы `#deep-himotipy`, Антоцианы `#deep-antociany`
+- `src/pages/sorta/2-podbor.html` · #подбор — Подбор сорта · 52 стр.<br>развороты: Генотип × среда `#deep-fenotip`
+- `src/pages/sorta/3-vybor.html` · #выбор — Как выбрать семена · 85 стр.<br>развороты: Устойчивость `#deep-ustoychivost`
 - `src/pages/sorta/4-semena.html` · #семена — Свои семена · 95 стр.<br>модели: `seedlife`; развороты: Генетика семян `#deep-genetika`, Старение семян `#deep-starenie-semyan`
 - `src/pages/sorta/_foot.html` · подвал главы · 3 стр.
 
 ### Посадка — `/посадка` (`posadka.html`)
 - `src/pages/posadka/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/posadka/1-mesto.html` · #место — Где растить · 76 стр.<br>модели: `window`; развороты: Солнце в окне `#deep-okno`
+- `src/pages/posadka/1-mesto.html` · #место — Где растить · 75 стр.<br>модели: `window`; развороты: Солнце в окне `#deep-okno`
 - `src/pages/posadka/2-sroki.html` · #сроки — Сроки посадки · 152 стр.<br>модели: `daylen`, `gdd`; развороты: Длина дня `#deep-fotoperiod`, Холод и лёд `#deep-zamorozok`, Градусо-дни `#deep-gradusodni`
 - `src/pages/posadka/3-posev.html` · #посев — Посев и рассада · 89 стр.<br>модели: `germ`; развороты: Прорастание `#deep-prorastanie`
 - `src/pages/posadka/4-magazin.html` · #магазин — Базилик из магазина · 72 стр.<br>модели: `shade`; развороты: Теснота и тень `#deep-ten`
@@ -29,26 +29,26 @@
 - `src/pages/uhod/_head.html` · обложка, вкладки · 14 стр.
 - `src/pages/uhod/1-svet.html` · #свет — Свет · 122 стр.<br>модели: `spectrum`, `lamp`; развороты: Фотосинтез `#deep-fotosintez`, Обратные квадраты `#deep-lampa`
 - `src/pages/uhod/2-poliv.html` · #полив — Полив · 95 стр.<br>модели: `vpd`; развороты: Путь воды и VPD `#deep-vpd`
-- `src/pages/uhod/3-teplo.html` · #тепло — Тепло и воздух · 82 стр.<br>модели: `temp`; развороты: Ферменты и жара `#deep-fermenty`
-- `src/pages/uhod/4-pochva.html` · #почва — Почва и pH · 75 стр.<br>модели: `ph`; развороты: pH и доступность `#deep-ph`
+- `src/pages/uhod/3-teplo.html` · #тепло — Тепло и воздух · 86 стр.<br>модели: `temp`; развороты: Ферменты и жара `#deep-fermenty`
+- `src/pages/uhod/4-pochva.html` · #почва — Почва и pH · 76 стр.<br>модели: `ph`; развороты: pH и доступность `#deep-ph`
 - `src/pages/uhod/5-sezony.html` · #сезоны — Уход по сезонам · 47 стр.<br>модели: `solar`; развороты: Зимний свет `#deep-zima`
 - `src/pages/uhod/_foot.html` · подвал главы · 3 стр.
 
 ### Удобрения — `/удобрения` (`udobreniya.html`)
 - `src/pages/udobreniya/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/udobreniya/1-osnovy.html` · #основы — Правила подкормки · 123 стр.<br>модели: `osmos`; развороты: Осмос `#deep-osmos`, Химия мифов `#deep-mify-himiya`
+- `src/pages/udobreniya/1-osnovy.html` · #основы — Правила подкормки · 124 стр.<br>модели: `osmos`; развороты: Осмос `#deep-osmos`, Химия мифов `#deep-mify-himiya`
 - `src/pages/udobreniya/2-elementy.html` · #элементы — Что за что отвечает · 70 стр.<br>модели: `flows`; развороты: Ксилема и флоэма `#deep-mobilnost`
 - `src/pages/udobreniya/3-stadii.html` · #стадии — Питание по стадиям роста · 122 стр.<br>модели: `barrel`, `ncycle`; развороты: Закон минимума `#deep-libih`, Круговорот азота `#deep-azot`
 - `src/pages/udobreniya/4-sredstva.html` · #средства — Какие удобрения использовать · 85 стр.<br>модели: `oxide`; развороты: Оксиды на упаковке `#deep-oksidy`
-- `src/pages/udobreniya/5-kalkulyator.html` · #калькулятор — Калькулятор раствора · 87 стр.<br>модели: `ec`; развороты: EC и ppm `#deep-ec`
+- `src/pages/udobreniya/5-kalkulyator.html` · #калькулятор — Калькулятор раствора · 89 стр.<br>модели: `ec`; развороты: EC и ppm `#deep-ec`
 - `src/pages/udobreniya/_foot.html` · подвал главы · 3 стр.
 
 ### Гидропоника — `/гидропоника` (`gidro.html`)
 - `src/pages/gidro/_head.html` · обложка, вкладки · 13 стр.
 - `src/pages/gidro/1-osnovy.html` · #основы — Гидропоника: введение · 201 стр.<br>модели: `hsys`, `o2box`, `alloc`; развороты: Дыхание корня `#deep-dyhanie-kornya`, Почему быстрее `#deep-bystree`, История `#deep-istoriya-gidroponiki`
-- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 188 стр.<br>модели: `kratky`, `capil`; развороты: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
+- `src/pages/gidro/2-sborka.html` · #сборка — Система своими руками · 191 стр.<br>модели: `kratky`, `capil`; развороты: Капилляры `#deep-kapillyary`, Пузыри `#deep-puzyri`
 - `src/pages/gidro/3-rastvor.html` · #раствор — Раствор: EC, pH и кислород · 172 стр.<br>модели: `hmix`, `o2`, `drift`; развороты: Кислород и хелаты `#deep-kislorod`, Дрейф pH и EC `#deep-dreyf-ph`, Концентраты `#deep-osadok`
-- `src/pages/gidro/4-proverki.html` · #проверки — Проверки и неполадки · 158 стр.<br>модели: `hcheck`, `pyth`; развороты: Питиум `#deep-pitium`, Водоросли `#deep-vodorosli`, Приборы `#deep-pribory`
+- `src/pages/gidro/4-proverki.html` · #проверки — Проверки и неполадки · 159 стр.<br>модели: `hcheck`, `pyth`; развороты: Питиум `#deep-pitium`, Водоросли `#deep-vodorosli`, Приборы `#deep-pribory`
 - `src/pages/gidro/5-sravnenie.html` · #сравнение — Горшок или гидропоника · 143 стр.<br>развороты: Вкус `#deep-vkus-gidro`, Вода `#deep-voda-gidro`
 - `src/pages/gidro/_foot.html` · подвал главы · 3 стр.
 
@@ -72,10 +72,10 @@
 
 ### Проблемы — `/проблемы` (`problemy.html`)
 - `src/pages/problemy/_head.html` · обложка, вкладки · 14 стр.
-- `src/pages/problemy/1-diagnostika.html` · #диагностика — Диагностика по симптомам · 47 стр.<br>модели: `pigment`; развороты: Язык цвета `#deep-pigmenty`
-- `src/pages/problemy/2-bolezni.html` · #болезни — Болезни · 43 стр.<br>модели: `dm`; развороты: Ложная мучнистая роса `#deep-oomicet`
-- `src/pages/problemy/3-vrediteli.html` · #вредители — Вредители · 41 стр.<br>модели: `aphid`; развороты: Экспонента тли `#deep-tlya`
-- `src/pages/problemy/4-profilaktika.html` · #профилактика — Профилактика и средства · 65 стр.<br>развороты: Химическая оборона `#deep-oborona`
+- `src/pages/problemy/1-diagnostika.html` · #диагностика — Диагностика по симптомам · 48 стр.<br>модели: `pigment`; развороты: Язык цвета `#deep-pigmenty`
+- `src/pages/problemy/2-bolezni.html` · #болезни — Болезни · 44 стр.<br>модели: `dm`; развороты: Ложная мучнистая роса `#deep-oomicet`
+- `src/pages/problemy/3-vrediteli.html` · #вредители — Вредители · 42 стр.<br>модели: `aphid`; развороты: Экспонента тли `#deep-tlya`
+- `src/pages/problemy/4-profilaktika.html` · #профилактика — Профилактика и средства · 66 стр.<br>развороты: Химическая оборона `#deep-oborona`
 - `src/pages/problemy/_foot.html` · подвал главы · 3 стр.
 
 ### Справка — `/справка` (`spravka.html`)
@@ -83,7 +83,7 @@
 - `src/pages/spravka/1-voprosy.html` · #вопросы — Частые вопросы · 76 стр.<br>развороты: Базилик в цифрах `#deep-cifry`
 - `src/pages/spravka/2-slovar.html` · #словарь — Словарь · 5 стр.
 - `src/pages/spravka/3-chek-list.html` · #чек-лист — Чек-лист сезона · 11 стр.
-- `src/pages/spravka/4-lyubopytno.html` · #любопытно — Любопытно · 4 стр.
+- `src/pages/spravka/4-lyubopytno.html` · #любопытно — Для любопытных · 4 стр.
 - `src/pages/spravka/_foot.html` · подвал главы · 3 стр.
 
 ### Мой базилик — `/мой-базилик` (`moy.html`)
@@ -278,7 +278,7 @@
 - `src/js/skins/07-crypt.js` (54 стр.)
 - `src/js/skins/07-forest.js` (168 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
-- `src/js/skins/08-words.js` (141 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
+- `src/js/skins/08-words.js` (147 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
 - `src/js/skins/09-start.js` (57 стр.): BACKS
 
 ## Стили (src/css/)

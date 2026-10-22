@@ -40,6 +40,14 @@ window.BASIL_PAGES = {
   "check-count": "spravka",
   "check-groups": "spravka",
   "check-reset": "spravka",
+  "cmap-formirovka": "spravka",
+  "cmap-gidro": "spravka",
+  "cmap-posadka": "spravka",
+  "cmap-problemy": "spravka",
+  "cmap-sorta": "spravka",
+  "cmap-udobreniya": "spravka",
+  "cmap-uhod": "spravka",
+  "cmap-vkus": "spravka",
   "continue": "glavnaya",
   "continue-title": "glavnaya",
   "deep-2n": "formirovka",
@@ -681,7 +689,7 @@ window.BASIL_PAGES = {
   "deep-cifry": "Для любопытных: Базилик в цифрах",
   "spravka-slovar": "Справка · Словарь",
   "spravka-chek-list": "Справка · Чек-лист сезона",
-  "spravka-lyubopytno": "Справка · Любопытно",
+  "spravka-lyubopytno": "Справка · Для любопытных",
   "moy-kusty": "Мой базилик · Кусты",
   "moy-pogoda": "Мой базилик · Погода",
   "moy-opyty": "Мой базилик · Опыты"
@@ -882,7 +890,7 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "746d28a1",
-  "skins": "34c794b1"
+  "search": "bbeb679a",
+  "skins": "e4225d6e"
  }
 };

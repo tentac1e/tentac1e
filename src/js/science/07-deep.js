@@ -23,7 +23,7 @@
       d._anim.oncancel = done;
     }
   }
-  const ANIMATED = 'details.deep, details.deeper, details.recipe-card';
+  const ANIMATED = 'details.deep, details.deeper, details.recipe-card, details.cmap-ch';
 
   // «Раскрыть все» in a tab's «Для любопытных» line (the build writes it where there are two dives or more): every dive
   // of that zone at once, and «Свернуть все» once they all stand open

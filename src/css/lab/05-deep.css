@@ -19,6 +19,11 @@
 .deep-zone-label { flex-wrap: wrap; row-gap: 0; }
 .deep-all { order: 3; min-height: 36px; margin-left: auto; padding: 0 14px; border: 1px solid color-mix(in srgb, var(--sci-chem) 40%, var(--line)); border-radius: 999px; background: none; color: var(--sci-chem); font: 600 .74rem/1 var(--font-mono); font-style: normal; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
 .deep-all:hover { color: var(--ink); border-color: var(--ink-3); }
+/* under the line: the way to the map of the chapter's dives, in Справка (deep_map) */
+.deep-map { order: 4; flex-basis: 100%; align-self: start; width: max-content; margin-top: 4px; font: 500 .78rem/1.3 var(--font-mono); font-style: normal; letter-spacing: .02em; color: var(--sci-chem); text-decoration: none; border-bottom: 1px dashed color-mix(in srgb, var(--sci-chem) 50%, transparent); }
+.deep-map::after { content: " →"; }
+.deep-map:hover { color: var(--ink); border-bottom-color: var(--ink); }
+@media (pointer: coarse) { .deep-map { position: relative; } .deep-map::before { content: ""; position: absolute; inset: -12px -6px; } }
 
 .deep {
   --k: var(--sci-bio);
