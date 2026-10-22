@@ -290,7 +290,8 @@
   --shadow-lift: 6px 6px 0 var(--shade);
 
   --font-display: "Cormorant Unicase", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
-  --font-body: "Cormorant Garamond", "Cormorant Garamond Fallback", "Times New Roman", Georgia, serif;
+  /* the text a size larger than the titles' Cormorant (scripts/build.py, text_faces): its small letters are low */
+  --font-body: "Cormorant Garamond Text", "Cormorant Garamond Text Fallback", "Cormorant Garamond", "Cormorant Garamond Fallback", "Times New Roman", Georgia, serif;
   --font-mono: "Handjet", "JetBrains Mono", "Arial Narrow", ui-monospace, monospace;
   --font-hand: "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
   /* the theme's own: the title face, the face of labels and buttons, the signs of alchemy for ornament */

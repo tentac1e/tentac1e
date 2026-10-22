@@ -291,7 +291,8 @@
   --shadow-lift: 6px 6px 0 var(--shade);
 
   --font-display: "Cormorant Unicase", "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
-  --font-body: "Cormorant Garamond", "Cormorant Garamond Fallback", "Times New Roman", Georgia, serif;
+  /* the text a size larger than the titles' Cormorant (scripts/build.py, text_faces): its small letters are low */
+  --font-body: "Cormorant Garamond Text", "Cormorant Garamond Text Fallback", "Cormorant Garamond", "Cormorant Garamond Fallback", "Times New Roman", Georgia, serif;
   --font-mono: "Handjet", "JetBrains Mono", "Arial Narrow", ui-monospace, monospace;
   --font-hand: "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
   /* the theme's own: the title face, the face of labels and buttons, the signs of alchemy for ornament */
@@ -3133,7 +3134,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
    assets/js/grimoire.js; until it comes, their frames already stand in their place */
 
 /* ---- the page: the greenhouse and its sky step aside for the crypt ---- */
-[data-skin="grimoire"] body { font-size: 1.18rem; line-height: 1.62; font-weight: 500; }
+[data-skin="grimoire"] body { font-size: 1.02rem; line-height: 1.62; font-weight: 500; }
 [data-skin="grimoire"] #leaf-field, [data-skin="grimoire"] .aura, [data-skin="grimoire"] .sky-layer { display: none !important; }
 #psx-crypt { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; image-rendering: pixelated; }
 [data-skin="grimoire"] ::selection { background: var(--blood); color: var(--ink); }
@@ -3160,6 +3161,11 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .eyebrow::before { background: var(--blood); box-shadow: 2px 2px 0 var(--shade); }
 [data-skin="grimoire"] .lead { color: var(--ink); }
 [data-skin="grimoire"] .hand { font-family: var(--font-hand); font-style: italic; font-weight: 600; color: var(--gold); }
+/* a whole sentence and the Latin names are not set in the Unicase of the titles: a sentence in capitals shouts, and the
+   Unicase has no italic of its own (the browser would only slant it) — the sentence in the text's face, the Latin in the
+   true italic of Cormorant Garamond */
+[data-skin="grimoire"] .season-text { font-family: var(--font-body); font-weight: 600; }
+[data-skin="grimoire"] :is(.passport-name, .v-latin, .ref-card .latin, .hero .eyebrow i) { font-family: var(--font-hand); font-style: italic; }
 [data-skin="grimoire"] .num, [data-skin="grimoire"] .mono { font-family: var(--font-mono); letter-spacing: .01em; }
 [data-skin="grimoire"] .muted { color: var(--ink-3); }
 

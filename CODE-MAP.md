@@ -190,7 +190,7 @@
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 - `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
-- `src/css/style/27-grimoire.css`: `.subnav-*`, `.ch-hero-*`, `.toc-*`, `.skin-*`, `.view-*`, `.chip`, `.seg`, `.hero-*`, `.search-*`, `.btn-*`, `.psx-*`, `.crt-*` · анимации: `psx-flicker`, `psx-point`
+- `src/css/style/27-grimoire.css`: `.subnav-*`, `.ch-hero-*`, `.hero-*`, `.toc-*`, `.skin-*`, `.view-*`, `.chip`, `.seg`, `.search-*`, `.btn-*`, `.psx-*`, `.crt-*` · анимации: `psx-flicker`, `psx-point`
 - `src/css/style/28-druid.css`: `.subnav-*`, `.toc-*`, `.skin-*`, `.btn-*`, `.chip`, `.seg`, `.pager`, `.search-*`, `.tab-*`, `.range`, `.card`, `.pane`
 
 ### lab.css
@@ -314,16 +314,16 @@
 
 `{{…}}` в каркасе и в работнике без сети — где их подставляет `scripts/build.py`.
 
-- `{{title}}` в `src/layout.html` — `build.py:1273`
-- `{{description}}` в `src/layout.html` — `build.py:1273`
-- `{{pwa}}` в `src/layout.html` — `build.py:1290`
-- `{{fonts}}` в `src/layout.html` — `build.py:1289`
-- `{{tocbtn}}` в `src/layout.html` — `build.py:1270`
-- `{{content}}` в `src/layout.html` — `build.py:1268`
-- `{{toc}}` в `src/layout.html` — `build.py:1270`
-- `{{scripts}}` в `src/layout.html` — `build.py:1288`
-- `{{version}}` в `src/sw.js` — `build.py:1405`
-- `{{precache}}` в `src/sw.js` — `build.py:1405`
+- `{{title}}` в `src/layout.html` — `build.py:1295`
+- `{{description}}` в `src/layout.html` — `build.py:1295`
+- `{{pwa}}` в `src/layout.html` — `build.py:1312`
+- `{{fonts}}` в `src/layout.html` — `build.py:1311`
+- `{{tocbtn}}` в `src/layout.html` — `build.py:1292`
+- `{{content}}` в `src/layout.html` — `build.py:1290`
+- `{{toc}}` в `src/layout.html` — `build.py:1292`
+- `{{scripts}}` в `src/layout.html` — `build.py:1310`
+- `{{version}}` в `src/sw.js` — `build.py:1427`
+- `{{precache}}` в `src/sw.js` — `build.py:1427`
 
 ## Проверки
 

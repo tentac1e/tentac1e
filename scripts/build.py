@@ -211,6 +211,27 @@ BOX = ['details', '.card', '.step', '.pane', 'article', '.rule', 'li']
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 
 
+# «Гримуар» sets its text in Cormorant Garamond, whose small letters are low: at the size the plain theme gives its
+# text (and the many small labels, cells and notes give theirs in rem) it reads a third smaller. Its text takes the same
+# files under a name of its own, drawn a size larger by size-adjust — every size at once, the titles (Cormorant
+# Garamond in the plain theme, Unicase and SC in the skin) untouched; the fallback face of it larger by as much
+TEXT_FACES = {'Cormorant Garamond': ('Cormorant Garamond Text', 1.16)}
+
+
+def text_faces(rules):
+    out = []
+    for fam, (alias, k) in TEXT_FACES.items():
+        for m in re.finditer(r"@font-face\{font-family:'(" + re.escape(fam) + r"(?: Fallback)?)';([^}]*)\}", rules):
+            name, body = m.group(1).replace(fam, alias), m.group(2)
+            if 'size-adjust:' in body:
+                body = re.sub(r'size-adjust:([\d.]+)%', lambda s: f'size-adjust:{float(s.group(1)) * k:.2f}%', body)
+                body = re.sub(r'(ascent|descent|line-gap)-override:([\d.]+)%', lambda s: f'{s.group(1)}-override:{float(s.group(2)) / k:.2f}%', body)
+            else:
+                body += f';size-adjust:{k * 100:.0f}%'
+            out.append("@font-face{font-family:'%s';%s}" % (name, body))
+    return rules.rstrip('\n') + '\n' + '\n'.join(out) + '\n'
+
+
 def faq_here(src):
     """«Частые вопросы» where their topic is: each question of Справка marked data-for="<tab>" stands once more at
     the end of that tab's practical part, before its «Для любопытных», and opens in place. The search keeps the one in
@@ -1229,11 +1250,12 @@ def main():
             '/* Гид по базилику — карта страниц. Файл создаёт scripts/build.py, правьте src/ */\n'
             'window.BASIL_PAGES = ' + json.dumps(pages_js, ensure_ascii=False, indent=1) + ';\n', encoding='utf-8')
 
-    # the fonts' rules go into the <head> of every page, with the files' fingerprints like every other asset
+    # the fonts' rules go into the <head> of every page, with the files' fingerprints like every other asset (and the
+    # faces a skin sets its text in a size larger: text_faces)
     font_head = ''
     if not single:
         fv = lambda n: hashlib.sha1((out_dir / 'assets' / 'fonts' / n).read_bytes()).hexdigest()[:8]
-        rules = (SRC / 'fonts' / 'fonts.css').read_text(encoding='utf-8')
+        rules = text_faces((SRC / 'fonts' / 'fonts.css').read_text(encoding='utf-8'))
         rules = re.sub(r'url\(fonts/([a-z0-9-]+\.woff2)\)', lambda m: f'url(assets/fonts/{m.group(1)}?v={fv(m.group(1))})', rules)
         # asked for at once on the hosting copy only: a page opened from disk has no origin, and a font fetched
         # ahead that way is refused — the page would fall back to the system font
