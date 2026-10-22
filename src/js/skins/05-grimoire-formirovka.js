@@ -1,12 +1,11 @@
   // Прищипка и сбор: a pot on an old stump, the top of the stem growing; a sickle circling it like a crescent moon
   // comes down and cuts the top above a pair of leaves; the top falls to the floor, and two new shoots come out of that
-  // pair, so the bush grows wide instead of tall; then time goes back in a violet shimmer and it begins again. A tap
-  // swings the sickle
+  // pair, so the bush grows wide instead of tall; then time goes back in a violet shimmer and it begins again
   scene('grimoire', 'formirovka', S => {
     const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
-    let off = 0, cut = [0, 2.1, 0], sick = [1, 2.5, 0], tip = null, phase = 0;
-    // the moment of the cycle: the sickle cuts at SW; a tap, once the top has grown, moves the cycle to the swing
-    const at = t => (((t + off) % CYCLE) + CYCLE) % CYCLE;
+    let cut = [0, 2.1, 0], sick = [1, 2.5, 0], tip = null, phase = 0;
+    // the moment of the cycle: the sickle cuts at SW
+    const at = t => ((t % CYCLE) + CYCLE) % CYCLE;
     // the main stem: three nodes with their pairs, the cut above the third
     const NODES = [[0.2, 0.42, 0.12], [0.42, 0.36, 0], [0.62, 0.3, -0.12]];
     const pairAt = (b, h, len, pitch, k, t, g = 1) => {
@@ -29,7 +28,6 @@
     };
     return {
       glow: [176, 192, 255], near: 4.4, look: [0, 1.6, 0], still: 7.5,
-      tap(t) { const u = at(t); if (u > 1.5 && u < SW - 0.6) off += SW - 0.6 - u; },
       tick(t) {
         const u = at(t);
         phase = u;

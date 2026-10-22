@@ -1,9 +1,9 @@
   // Уход: the four the chapter is about. A sun crosses the vault and the bush turns after it, then a pale moon; a cloud
   // comes in and rains on the pot, the earth goes dark with the water and pales as it dries; the candles keep it
-  // warm. A tap calls the rain now
+  // warm
   scene('grimoire', 'uhod', S => {
     const { R, T } = S, DAY = 24, RAIN = 5;
-    let rainAt = -99, tapped = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
+    let rainAt = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
     const EARTH_DRY = [112, 82, 56], EARTH_WET = [34, 22, 18];
     const sky = t => {
       const s = (t % DAY) / DAY, a = s < 0.72 ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI, up = Math.sin(a);
@@ -16,7 +16,6 @@
     };
     return {
       glow: [255, 196, 80], near: 4.6, look: [0, 1.7, 0], still: 4,
-      tap(t) { tapped = t; },
       tick(t) {
         const sun = sky(t);
         // the light of the sky goes over from the moon's to the sun's and back without a jump
@@ -25,9 +24,9 @@
         const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
         lean = mix3([lean[0], lean[1], 0], [want[0], want[1], 0], 0.04).slice(0, 2);
         if (reduce.matches) lean = want;
-        // the rain: by itself once a day, or when tapped; the earth dries over the rest of the day
+        // the rain: once a day; the earth dries over the rest of the day
         const auto = Math.floor((t - 5) / DAY) * DAY + 5;
-        rainAt = Math.max(auto, tapped);
+        rainAt = auto;
         const r = t - rainAt;
         // the cloud comes in and goes, swelling out of nothing and melting away at the side
         cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.6 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.6 * smooth((r - RAIN + 1.2) / 1.2) : 0, k: smooth(r / 0.7) * (1 - smooth((r - RAIN + 0.7) / 0.7)), rain: r > 1 && r < RAIN - 1 } : null;

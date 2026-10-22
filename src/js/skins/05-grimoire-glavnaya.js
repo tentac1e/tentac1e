@@ -1,7 +1,7 @@
   // Главная: плантация алхимика — грядки в каменных рамах под железными арками оранжереи, на ближних кустах —
   // стеклянные колпаки; в конце дорожки перегонный куб на печи, змеевик, приёмник с зелёным эликсиром. По медной трубе
   // от приёмника к грядкам бежит капля, и куст, к которому она пришла, вспыхивает. Над грядками висят знаки алхимии.
-  // Круга, свечей и колонн нет: главная не похожа на главы. Касание — капля сейчас
+  // Круга, свечей и колонн нет: главная не похожа на главы
   scene('grimoire', 'glavnaya', S => {
     const { R, T } = S;
     R.fog = [14, 10, 20]; R.fogNear = 3.5; R.fogFar = 12; R.amb = [0.22, 0.18, 0.28];
@@ -11,7 +11,7 @@
     const GLYPH = [0, 1, 2, 3, 4, 5].map(k => glyphTex(k, [236, 196, 96]));
     const SMALLP = [[0.22, 0.4, 0.1], [0.5, 0.32, -0.05], [0.78, 0.22, -0.35], [0.95, 0.13, -0.6]];
     const FLASK = [0.98, 0.14, -1.9], EVERY = 1.5, RUN = 1.7;
-    let taps = [], glow = BEDS.map(() => 0), drop = null, lastT = 0;
+    let glow = BEDS.map(() => 0), drop = null, lastT = 0;
     // the way of a drop: from the receiver along the edge of the path to its bed, then into the earth
     const route = i => {
       const b = BEDS[i], ex = b.x < 0 ? -0.56 : 0.56;
@@ -26,13 +26,12 @@
     return {
       bare: true, fill: 0.8, orbit: [Math.PI / 2, 0.3], rad: 5.6, near: 5.2, look: [0, 0.75, -0.3], still: 2.2,
       sky: ['#05040A', '#120E1C', '#0C0912'],
-      tap(t) { taps.push(t); if (taps.length > 4) taps.shift(); },
       tick(t) {
         const dt = Math.max(0, Math.min(0.2, t - lastT)); lastT = t;
-        const n = Math.floor(t / EVERY), sends = [n * EVERY].concat(taps).filter(s => s <= t);
+        const n = Math.floor(t / EVERY), sends = [n * EVERY];
         drop = null;
         for (const s of sends) {
-          const u = (t - s) / RUN, i = (taps.includes(s) ? taps.indexOf(s) * 5 + 3 + n : Math.round(s / EVERY)) % BEDS.length;
+          const u = (t - s) / RUN, i = Math.round(s / EVERY) % BEDS.length;
           if (u < 1 && !drop) drop = { p: along(route(i), smooth(u)), i };
           if (u >= 1 && u < 1 + dt / RUN + 0.02) glow[i] = 1;
         }

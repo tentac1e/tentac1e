@@ -1,6 +1,6 @@
   // Гидропоника: родник между двух камней наполняет тихую заводь; посреди неё плавает коряга, на ней растёт куст, и его
-  // белые корни висят в прозрачной воде. Со дна поднимаются пузырьки, по воде расходятся круги. Касание — круги
-  // и пузырьки
+  // белые корни висят в прозрачной воде. Со дна поднимаются пузырьки, по воде расходятся круги, а время от времени —
+  // россыпь кругов и пузырьков
   scene('druid', 'gidro', S => {
     const { R, T } = S, POOL = 1.15, SP = -2.5;
     // the spring: where the water falls in, the two stones on either side of it
@@ -10,7 +10,7 @@
     return {
       rad: 4.8, near: 4.5, look: [0, 0.7, 0], still: 3, clear: 1.8,
       noGrass: (x, z) => Math.hypot(x - TOP[0], z - TOP[2]) < 0.6,
-      tap(t) { taps.push(t); if (taps.length > 3) taps.shift(); },
+      every: 7, beat(t) { taps.push(t); if (taps.length > 3) taps.shift(); },
       lights() { return [{ p: [0, 0.3, 0], col: [0.5, 0.9, 1], i: 0.7, fall: 0.8 }]; },
       draw(t) {
         // the bottom of the pool seen through the water, the bank of stones round it, the face of the water
@@ -22,7 +22,7 @@
         // the stream of the spring falling from between the stones into the pool
         const sd = [-Math.sin(SP), 0, Math.cos(SP)], bot = [IN[0], 0.02, IN[1]];
         quad(R, add(TOP, mul(sd, -0.05)), add(TOP, mul(sd, 0.05)), add(bot, mul(sd, 0.08)), add(bot, mul(sd, -0.08)), { col: [150, 210, 224], emis: true, add: 0.4, ds: true, layer: 1.2 });
-        // the rings on the water: two always going out from the driftwood, two more at each tap, small ones where the
+        // the rings on the water: two always going out from the driftwood, two more now and then, small ones where the
         // spring falls in
         const rings = [(t * 0.3) % 1, (t * 0.3 + 0.5) % 1].concat(...taps.map(h => [(t - h) / 2.4, (t - h) / 2.4 - 0.2]));
         rings.forEach(k => { if (k <= 0 || k >= 1) return; const r = 0.5 + k * (POOL - 0.55); ringTop(R, 0, 0, 0.014, r, r + 0.025, 22, { col: [170, 230, 240], emis: true, add: 0.55 * (1 - k), layer: 0.65 }); });
@@ -41,7 +41,7 @@
         });
       },
       fx(t, F) {
-        // the bubbles rising from the bottom round the roots, many more after a tap; the shine of the moon on the water
+        // the bubbles rising from the bottom round the roots, many more now and then; the shine of the moon on the water
         const more = taps.some(h => t >= h && t - h < 2) ? 26 : 10;
         for (let i = 0; i < more; i++) {
           const k = (t * (0.35 + (i % 4) * 0.08) + i * 0.37) % 1, q = i * 2.4, r = 0.15 + (i % 5) * 0.12;

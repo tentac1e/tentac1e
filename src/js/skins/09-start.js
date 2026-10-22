@@ -15,10 +15,10 @@
     // a page shown in the sheet of another (?peek=1) is only its place: no background, no scene, the molecules as here
     if (!root.classList.contains('is-peek')) {
       mounted.push(BACKS[skin]());
+      // the scenes: the background of the head of each chapter and of the home page's hero, by themselves, without a finger
       $$('.ch-hero').forEach(h => { const v = h.closest('[data-view]'); mounted.push(stage(h, v && v.dataset.view, skin)); });
-      // the home page: the scene is the background of its hero, by itself, without a finger
       const hero = $('.view-home .hero');
-      if (hero) mounted.push(stage(hero, 'glavnaya', skin, true));
+      if (hero) mounted.push(stage(hero, 'glavnaya', skin));
     }
     // the drawings of «Гримуар» go to the console's pixels; «Друид» keeps them smooth and only colours them
     if (skin === 'grimoire') {

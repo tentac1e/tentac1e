@@ -1,9 +1,9 @@
 /* Оформления гида — «Гримуар» и «Друид» — на телефоне и компьютере. Включаются в меню в шапке и запоминаются, а пока
    выключены, их файл (assets/js/skins.js) не грузится; одно сменяется другим сразу, без перезагрузки. Каждая страница
    в оформлении открывается уже тёмной (data-skin и data-theme стоят к DOMContentLoaded), без ошибок и ничего не шире
-   экрана: сцена нарисована в шапке каждой главы, у каждой главы — своя, и касание её меняет и ничего не ломает; на
-   главной сцена — фон первого экрана за текстом, без рамки, её не крутят и не касаются, а она идёт сама; за страницей —
-   свой фон оформления (склеп, лес), оранжерея и её небо спрятаны, заголовки — его шрифтом.
+   экрана: сцена нарисована в шапке каждой главы, у каждой главы — своя; на главной и в каждой главе сцена — фон шапки
+   за текстом, без рамки, её не крутят и не касаются, а она идёт сама; за страницей — свой фон оформления (склеп,
+   роща), оранжерея и её небо спрятаны, заголовки — его шрифтом.
    «Гримуар»: рисунки — через пиксельный фильтр, подписи в них остаются вне фильтра, экран ЭЛТ выключается в подвале
    и помнит это. «Друид»: рисунки как есть, над сценой — слой свечения, выключателя ЭЛТ нет. Молекула рисуется
    по-своему и крутится пальцем; в шторке «Заглянуть» — то же оформление, но без сцены и фона; с «меньше движения» —
@@ -26,8 +26,9 @@ function state(backs) {
     skin: root.dataset.skin || null, theme: root.dataset.theme || null, dcl: window.__dcl || null,
     loaded: !!window.BasilSkins, on: !!(window.BasilSkins && window.BasilSkins.on),
     heroes: document.querySelectorAll('.ch-hero').length + (document.querySelector('.view-home .hero') ? 1 : 0),
-    // the home page: its scene behind the hero, no frame of the living bush, nothing to touch
-    backdrop: (() => { const st = document.querySelector('.view-home .hero > .psx-stage'), art = document.querySelector('.view-home .hero-art'); return st ? { on: st.classList.contains('is-backdrop'), events: getComputedStyle(st).pointerEvents, art: art ? getComputedStyle(art).display : null } : null; })(),
+    // the scene behind the head (the home page's hero, a chapter's head): no frame, the art of the page aside, nothing
+    // to touch
+    backdrop: (() => { const st = document.querySelector('.view-home .hero > .psx-stage, .ch-hero > .psx-stage'), art = document.querySelector('.view-home .hero-art, .ch-hero-art'); return st ? { on: st.classList.contains('is-backdrop'), events: getComputedStyle(st).pointerEvents, art: art ? getComputedStyle(art).display : null, frame: getComputedStyle(st.parentNode).borderTopWidth } : null; })(),
     stages: stages.length, drawn: stages.filter(s => s.classList.contains('is-drawn')).length,
     scene: stages.map(s => s.dataset.scene).join(','), of: [...new Set(stages.map(s => s.dataset.skin))].join(','),
     glows: stages.filter(s => s.querySelector('.psx-glow')).length,
@@ -87,7 +88,7 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
       await inSkin(sctx, sk);
 
       // every page opens in it: dark before the first paint, its scenes drawn, nothing wider than the screen; every
-      // chapter has a scene of its own, and a tap on it changes the picture without an error
+      // chapter has a scene of its own, the background of its head, going on by itself
       const scenes = new Set();
       for (const f of FILES) {
         page = await sctx.newPage();
@@ -99,19 +100,15 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
           tag(`${sk} ${f}: in the skin from the start, ${s.stages} scene(s) drawn, its ${L.back} behind ${JSON.stringify({ dcl: s.dcl, stages: s.stages, drawn: s.drawn, heroes: s.heroes, glows: s.glows, wide: s.wide, face: s.face.slice(0, 30) })}`));
         const own = f === 'index.html' ? 'glavnaya' : s.view;
         scenes.add(s.scene);
-        const tap = await page.evaluate(async () => {
-          const st = document.querySelector('.psx-stage'), cv = st.querySelector('canvas'), r = st.getBoundingClientRect();
+        const goes = await page.evaluate(async () => {
+          const st = document.querySelector('.psx-stage'), cv = st.querySelector('canvas');
           const grab = () => { const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let h = 0; for (let i = 0; i < d.length; i += 4 * 7) h = (h * 31 + d[i] + d[i + 1] * 3 + d[i + 2] * 7) >>> 0; return h; };
-          const at = { clientX: r.left + r.width * 0.6, clientY: r.top + Math.min(r.height, 250) * 0.45, bubbles: true, pointerId: 1 };
           const a = grab();
-          st.dispatchEvent(new PointerEvent('pointerdown', at));
-          dispatchEvent(new PointerEvent('pointerup', at));
           await new Promise(res => setTimeout(res, 700));
           return { changed: a !== grab() };
         });
-        ok(s.scene === own && tap.changed, tag(`${sk} ${f}: the scene of its own chapter (${s.scene}), a tap on it goes on drawing ${JSON.stringify(tap)}`));
-        if (f === 'index.html') ok(s.backdrop && s.backdrop.on && s.backdrop.events === 'none' && s.backdrop.art === 'none',
-          tag(`${sk} ${f}: the scene is the background of the first screen, not to be touched, the frame of the bush gone, and it goes on by itself ${JSON.stringify(s.backdrop)}`));
+        ok(s.scene === own && goes.changed && s.backdrop && s.backdrop.on && s.backdrop.events === 'none' && s.backdrop.art === 'none' && parseFloat(s.backdrop.frame) === 0,
+          tag(`${sk} ${f}: the scene of its own page (${s.scene}) is the background of its head — no frame, the page's art aside, not to be touched — and goes on by itself ${JSON.stringify({ ...s.backdrop, ...goes })}`));
         // the pictures: through the pixel filter with their captions outside it («Гримуар»), or as they are
         const pics = await page.evaluate(async () => {
           const list = [...document.querySelectorAll('.panel.is-active [data-ill], [data-view] > .wrap [data-ill]')].slice(0, 8);

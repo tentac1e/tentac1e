@@ -1,5 +1,5 @@
   // Вкус и кухня: котёл на треноге над костром, в нём зелёное варево; в котёл падают листья базилика, из пара поднимается
-  // аромат — молекула эвгенола, ягоды омелы и рябины на веточках — и тает. Касание — горсть листьев
+  // аромат — молекула эвгенола, ягоды омелы и рябины на веточках — и тает. Время от времени в котёл падает горсть листьев
   scene('druid', 'vkus', S => {
     const { R, T } = S, mol = molShape('eug'), RIM = 0.98;
     const PAL = { bond: [168, 124, 76], O: [236, 70, 52], C: [244, 240, 222], lo: true };
@@ -12,7 +12,7 @@
     };
     return {
       near: 4.6, look: [0, 1.2, 0], still: 2.4, clear: 1.6, shafts: false,
-      tap(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
+      every: 6, beat(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
       lights(t) { return [{ p: [0, 0.4, 0.1], col: [1, 0.62, 0.3], i: 1.5 + 0.25 * Math.sin(t * 9) + 0.15 * Math.sin(t * 23), fall: 0.5 }, { p: [0, RIM + 0.3, 0], col: [0.6, 1, 0.5], i: 0.4, fall: 2 }]; },
       draw(t) {
         campfire(R, T, 0, 0, 1.25, t);
@@ -25,7 +25,7 @@
         prism(R, 0, 0, 0.74, RIM, 0.4, 0.34, 10, { col: [42, 44, 48] });
         ringTop(R, 0, 0, RIM, 0.31, 0.37, 10, { col: [62, 64, 68] });
         disc(R, 0, 0, RIM - 0.03, 0.32, 10, { tex: T.paste });
-        // the leaves falling in: a steady few, and a handful at a tap
+        // the leaves falling in: a steady few, and a handful now and then
         FALL.forEach((f, i) => { const k = (f.a + t * 0.2) % 1; falling(f.x, f.z, smooth(k), t * f.s * 2 + i); });
         hands = hands.filter(h => t - h < 1.6 && t >= h);
         hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(Math.cos(i * 1.1) * 0.4, Math.sin(i * 1.1) * 0.35, k, t * 2 + i); } });

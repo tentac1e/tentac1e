@@ -1,6 +1,6 @@
   // Мой базилик: куст читателя в горшке у плетня, на горшке — бирка. Над плетнём дугой лунный календарь, восемь фаз луны;
-  // нынешняя больше и ярче всех, и куст стоит в её свете: в полнолуние светлее, в новолуние темнее. Фазы идут сами;
-  // касание — следующая
+  // нынешняя больше и ярче всех, и куст стоит в её свете: в полнолуние светлее, в новолуние темнее. Фазы идут
+  // сами
   scene('druid', 'moy', S => {
     const { R, T } = S, N = 8, STEP = 4, FR = 1.15, A = 0.9, BACK = A + Math.PI;
     // the wattle: stakes on an arc behind the pot (on the far side from the camera), withies woven in and out of them
@@ -8,13 +8,12 @@
     const at = (q, r, y) => [Math.cos(q) * r, y, Math.sin(q) * r];
     const MOONS = [...Array(N)].map((_, i) => { const q = BACK - 0.95 + i / (N - 1) * 1.9, c = (i - (N - 1) / 2) / ((N - 1) / 2); return at(q, FR + 0.05, 1.42 + 0.22 * (1 - c * c)); });
     const glide = glider(1.4);
-    let taps = 0, pos = 0, frac = 0;
+    let pos = 0, frac = 0;
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       orbit: [A, 0.35], near: 4.1, rad: 4.5, look: [0, 0.95, 0], still: 13, clear: 1.6,
-      tap() { taps++; },
       tick(t) {
-        const target = Math.floor(t / STEP) + taps;
+        const target = Math.floor(t / STEP);
         pos = glide(target, t);
         // the moonlight on the bush: as much as the moon of the moment is lit, going over smoothly to the next one
         frac = (1 - Math.cos(pos / N * Math.PI * 2)) / 2;

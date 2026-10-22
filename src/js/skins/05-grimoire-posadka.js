@@ -1,13 +1,12 @@
   // Посадка: a seed comes down glowing into a well of earth and sinks; a sprout comes up — the hook, the two seed
   // leaves opening, the first true pair, the second — then goes back to the earth as sparks. Around the well six cups
-  // of peat with seedlings, each a step behind the other; a tap sows again
+  // of peat with seedlings, each a step behind the other
   scene('grimoire', 'posadka', S => {
     const { R, T } = S, CYCLE = 10, EARTH = 0.36;
-    let sown = 0, seed = null, burst = -1;
+    let seed = null, burst = -1;
     const CUPS = [...Array(6)].map((_, i) => { const q = i / 6 * Math.PI * 2 + 0.26; return [Math.cos(q) * 1.55, Math.sin(q) * 1.55]; });
     return {
       glow: [255, 150, 50], rad: 4.6, near: 3.7, look: [0, 0.6, 0], still: 6.2,
-      tap(t) { sown = t; },
       // a warm light over the well, and the seed's own while it comes down
       lights() { return [{ p: [0.2, 1.3, 0.5], col: [1, 0.72, 0.42], i: 0.9, fall: 0.7 }].concat(seed ? [{ p: seed, col: [1, 0.8, 0.4], i: 0.8, fall: 2 }] : []); },
       draw(t) {
@@ -16,7 +15,7 @@
         ringTop(R, 0, 0, EARTH, 0.62, 0.7, 10, { tex: T.stone });
         prism(R, 0, 0, EARTH - 0.12, EARTH, 0.62, 0.62, 10, { col: [44, 34, 40], inv: true });
         disc(R, 0, 0, EARTH - 0.04, 0.62, 10, { tex: T.soil });
-        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        const u = t % CYCLE;
         // the seed: down in a spiral, then into the earth
         seed = null;
         if (u < 2.4) {
@@ -40,7 +39,7 @@
           for (let i = 0; i < 6; i++) F.spark([seed[0], seed[1] + 0.05 + i * 0.07, seed[2]], i / 6);
         }
         // a puff of earth as the seed goes in, the sprout going back to it as sparks
-        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        const u = t % CYCLE;
         if (u > 1.8 && u < 2.6) for (let i = 0; i < 10; i++) { const q = i * 0.63, l = (u - 1.8) / 0.8; F.dot([Math.cos(q) * l * 0.3, EARTH + Math.sin(l * Math.PI) * 0.15, Math.sin(q) * l * 0.3], 'rgba(150,104,64,.9)'); }
         if (burst >= 0) for (let i = 0; i < 24; i++) { const q = i * 0.9, l = burst; F.spark([Math.cos(q) * (0.1 + l * 0.5), EARTH + 0.1 + (i % 6) * 0.09 + l * 0.8, Math.sin(q) * (0.1 + l * 0.5)], l, true); }
       }

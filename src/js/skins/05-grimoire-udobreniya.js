@@ -1,11 +1,10 @@
   // Удобрения: three flasks of the elements, N, P and K, on their stones round the altar, bubbling. In turn each sends
-  // a drop of its light in an arc into the pot; the light climbs the stem and the leaves take its colour. A tap sends
-  // the next one now
+  // a drop of its light in an arc into the pot; the light climbs the stem and the leaves take its colour
   scene('grimoire', 'udobreniya', S => {
     const { R, T } = S, EVERY = 3.6, FLY = 1.3, CLIMB = 1.1;
     const COL = [[120, 140, 255], [255, 112, 64], [255, 206, 80]];
     const FL = [0, 1, 2].map(i => { const q = Math.PI / 2 + i / 3 * Math.PI * 2; return [Math.cos(q) * 1.15, Math.sin(q) * 1.15]; });
-    let taps = [], drop = null, climb = null, earthY = 1.47;
+    let drop = null, climb = null, earthY = 1.47;
     // the drop in flight: from the neck of its flask up and over into the earth
     const path = (k, u) => {
       const a = [FL[k][0], 1.12, FL[k][1]], b = [0, earthY + 0.02, 0], m = mul(add(a, b), 0.5);
@@ -13,11 +12,10 @@
     };
     return {
       glow: [140, 255, 96], near: 4.5, look: [0, 1.3, 0], still: 1.9,
-      tap(t) { taps.push({ t, k: (taps.length + 1 + Math.floor(t / EVERY)) % 3 }); if (taps.length > 3) taps.shift(); },
       tick(t) {
-        // the sends: one every few seconds by itself, in turn, and one at each tap
+        // the sends: one every few seconds, in turn
         const n = Math.floor(t / EVERY);
-        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }].concat(taps).filter(s => s.t <= t).sort((a, b) => b.t - a.t);
+        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }];
         drop = climb = null;
         for (const s of sends) {
           const u = t - s.t;

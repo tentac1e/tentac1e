@@ -1,10 +1,10 @@
   // Прищипка и сбор: куст на старом пне, его верхушка растёт; золотой серп друида кружит рядом, как молодой месяц,
   // спускается и срезает верхушку над парой листьев. Верхушка падает в мох, а из пазух той пары выходят два побега —
-  // куст растёт вширь, а не вверх. Потом мох забирает срезанное, и всё снова. Касание — взмах серпа
+  // куст растёт вширь, а не вверх. Потом мох забирает срезанное, и всё снова
   scene('druid', 'formirovka', S => {
     const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
-    let off = 0, cut = [0, 1.6, 0], sick = [1, 2, 0], tip = null, phase = 0, top = 0.5;
-    const at = t => (((t + off) % CYCLE) + CYCLE) % CYCLE;
+    let cut = [0, 1.6, 0], sick = [1, 2, 0], tip = null, phase = 0, top = 0.5;
+    const at = t => ((t % CYCLE) + CYCLE) % CYCLE;
     // the main stem: three nodes with their pairs, the cut above the third
     const NODES = [[0.2, 0.42, 0.12], [0.42, 0.36, 0], [0.62, 0.3, -0.12]];
     const pair = (R2, c, len, pitch, k, t, g = 1) => {
@@ -23,7 +23,6 @@
     };
     return {
       near: 4.4, look: [0, 1.15, 0], still: 7.5, clear: 1.6,
-      tap(t) { const u = at(t); if (u > 1.5 && u < SW - 0.6) off += SW - 0.6 - u; },
       tick(t) {
         const u = at(t);
         phase = u;

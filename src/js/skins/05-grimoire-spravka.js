@@ -1,9 +1,9 @@
   // Справка: the grimoire itself — open on a stone lectern, its pages turning one by one in their own time, runes of
-  // light circling it, a quill in its inkpot beside. A tap turns the page now
+  // light circling it, a quill in its inkpot beside
   scene('grimoire', 'spravka', S => {
     const { R, T } = S, EVERY = 5, TURN = 1.5, TILT = 0.5, O = [0, 1.0, 0];
-    let off = 0, phi = 0;
-    const at = t => (((t + off) % EVERY) + EVERY) % EVERY;
+    let phi = 0;
+    const at = t => ((t % EVERY) + EVERY) % EVERY;
     // a page from the spine: three strips, the outer ones lagging behind the turn, a little bow along it
     function pageStrips(B, ang, tex, flip) {
       let p = [0, 0, 0], q0 = 0;
@@ -18,7 +18,6 @@
     }
     return {
       glow: [240, 190, 90], orbit: [Math.PI / 2, 0.38], rad: 4.2, near: 3.5, look: [0, 1.25, 0], still: 3.9,
-      tap(t) { const u = at(t); if (u < EVERY - TURN - 0.2) off += EVERY - TURN - u; },
       tick(t) { phi = Math.PI * smooth((at(t) - (EVERY - TURN)) / TURN); },
       lights(t) { return [{ p: [0, 1.7, 0.3], col: [1, 0.8, 0.45], i: 0.7 + 0.1 * Math.sin(t * 2), fall: 0.8 }]; },
       draw(t) {

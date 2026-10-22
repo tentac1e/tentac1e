@@ -1,6 +1,6 @@
   // Удобрения: три котла на камнях вокруг куста, над каждым в пару висит его руна — ᚾ, ᛈ и ᚲ, азот, фосфор и калий.
   // По очереди котёл отдаёт свой свет земле: свет уходит под мох и бежит по корню к кусту, корень за ним светится,
-  // потом свет поднимается по стеблю. Касание — следующий котёл сейчас
+  // потом свет поднимается по стеблю
   scene('druid', 'udobreniya', S => {
     const { R, T } = S, EVERY = 3.8, FLOW = 1.5, CLIMB = 1.1, ROOT = [76, 56, 38];
     const COL = [[130, 196, 255], [255, 128, 82], [255, 210, 92]];
@@ -10,15 +10,14 @@
       const [x, z] = CA[i], s = Math.sin(u * Math.PI) * 0.22 / 1.4, f = (1 - u) * 0.86;
       return [x * f - z * s, 0.025, z * f + x * s];
     };
-    let taps = [], flow = null, climb = null, top = 0.3;
+    let flow = null, climb = null, top = 0.3;
     return {
       rad: 5, near: 4.6, look: [0, 0.9, 0], still: 2.2, clear: 2,
       rune: t => 0.5 + 0.15 * Math.sin(t * 1.1) + (climb ? 0.6 * Math.sin(climb.f * Math.PI) : 0),
-      tap(t) { taps.push({ t, k: (taps.length + 1 + Math.floor(t / EVERY)) % 3 }); if (taps.length > 3) taps.shift(); },
       tick(t) {
-        // the sends: one every few seconds by itself, in turn, and one at each tap
+        // the sends: one every few seconds, in turn
         const n = Math.floor(t / EVERY);
-        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }].concat(taps).filter(s => s.t <= t).sort((a, b) => b.t - a.t);
+        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }];
         flow = climb = null;
         for (const s of sends) {
           const u = t - s.t;

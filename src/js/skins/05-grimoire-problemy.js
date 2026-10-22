@@ -1,15 +1,15 @@
   // Проблемы: the bush on the altar under siege — beetles creep in round the circle towards it and are thrown back by
   // the ward with a red flash, a spider comes down on its thread and climbs back, one lower leaf has gone yellow with
-  // brown spots. A tap raises the ward: every beetle is thrown back at once
+  // brown spots. Every few seconds the ward flares up by itself: every beetle is thrown back at once
   scene('grimoire', 'problemy', S => {
     const { R, T } = S, N = 6, OUT = 2.45, IN = 1.25, CRAWL = 9;
     let warded = -99, flash = 0, bugs = [], spider = [0.3, 3, 0.12];
     return {
       glow: [255, 44, 44], near: 4.8, still: 5.3,
       glowAdd(t) { return 0.3 + 0.18 * Math.sin(t * 1.4) + flash * 0.6; },
-      tap(t) { warded = t; },
+      every: 8, beat(t) { warded = t; },
       tick(t) {
-        // each beetle creeps in along a spiral and is flung back at the ward; a tap flings them all
+        // each beetle creeps in along a spiral and is flung back at the ward; the ward's flare flings them all
         const l = (t - warded) / 1.4, push = l < 0 || l > 1 ? 0 : l < 0.15 ? l / 0.15 : 1 - (l - 0.15) / 0.85;
         flash = push;
         bugs = [...Array(N)].map((_, i) => {

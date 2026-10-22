@@ -1,6 +1,6 @@
   // Вкус и кухня: pesto made as a rite — a stone mortar on a kitchen table, the pestle grinding round in it, leaves of basil
   // falling into the green, garlic, pine nuts and a phial of oil beside it; out of the mortar rises the aroma, a
-  // molecule of eugenol going up and fading. A tap throws in a handful of leaves
+  // molecule of eugenol going up and fading. Now and then a handful of leaves falls in
   scene('grimoire', 'vkus', S => {
     const { R, T } = S, mol = molShape('eug');
     let top = 1.08, hands = [];
@@ -13,7 +13,7 @@
     };
     return {
       glow: [200, 236, 96], near: 4.4, look: [0, 1.7, 0], still: 2.4,
-      tap(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
+      every: 6, beat(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
       lights(t) { return [{ p: [0.2, top + 1.1, 0.5], col: [1, 0.8, 0.5], i: 1 + 0.1 * Math.sin(t * 2), fall: 0.6 }, { p: [0, top + 0.5, 0], col: [0.6, 1, 0.4], i: 0.5, fall: 2 }]; },
       draw(t) {
         // a kitchen table of old wood
@@ -36,7 +36,7 @@
         prism(R, -0.66, -0.26, top, top + 0.26, 0.09, 0.08, 6, { col: [196, 150, 40], emis: true, add: 0.6 });
         prism(R, -0.66, -0.26, top + 0.26, top + 0.38, 0.03, 0.028, 5, { col: [196, 150, 40], emis: true, add: 0.5 });
         prism(R, -0.66, -0.26, top + 0.37, top + 0.42, 0.035, 0.035, 5, { col: [110, 70, 40] }, [90, 56, 32]);
-        // the leaves falling in: a steady few, and a handful at a tap
+        // the leaves falling in: a steady few, and a handful now and then
         FALL.forEach((f, i) => { const k = (f.a + t * 0.22) % 1; falling(f.x, f.z, smooth(k), t * f.s * 2 + i); });
         hands = hands.filter(h => t - h < 1.6 && t >= h);
         hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(Math.cos(i * 1.1) * 0.35, Math.sin(i * 1.1) * 0.3, k, t * 2 + i); } });

@@ -1,6 +1,6 @@
   // Беды и защита: к кусту ползут слизни и жуки, но круг из ягод рябины их не пускает: у круга они останавливаются,
-  // ягоды вспыхивают, и вредители поворачивают назад. На сухой ветке сидит ворон и вертит головой. Касание — ворон
-  // взлетает и делает круг над поляной, а вредители разбегаются
+  // ягоды вспыхивают, и вредители поворачивают назад. На сухой ветке сидит ворон и вертит головой. Время от времени
+  // ворон взлетает и делает круг над поляной, а вредители разбегаются
   scene('druid', 'problemy', S => {
     const { R, T } = S, WARD = 0.82, Z = 1.4;
     const PERCH = [1.02, 1.62, -0.66], BUGS = [...Array(6)].map((_, i) => ({ q: i / 6 * Math.PI * 2 + 0.3, slug: i % 2 === 0, ph: i * 1.9 }));
@@ -9,7 +9,7 @@
     const fear = t => { const u = t - scare; return u < 0 ? 0 : u < 0.8 ? smooth(u / 0.8) : Math.max(0, 1 - (u - 0.8) / 3.5); };
     // how far a bug is from the middle: it comes up to the ring, stops, goes back, comes again
     const reach = (b, t) => WARD + 0.14 + smooth(0.5 + 0.5 * Math.cos(t * 0.42 + b.ph)) * 0.75 + fear(t) * 0.8;
-    // where the raven is: on its branch, or on a round over the glade after a tap
+    // where the raven is: on its branch, or on a round over the glade now and then
     const raven = t => {
       const u = t - scare;
       if (u < 0 || u > 6.5) return { p: PERCH, fly: 0, dir: [-1, 0, 0.2] };
@@ -19,7 +19,7 @@
     };
     return {
       rad: 4.6, near: 4.3, look: [0, 0.8, 0], still: 5, clear: 1.7,
-      tap(t) { if (t - scare > 6.5) scare = t; },
+      every: 14, beat(t) { scare = t; },
       // the warm light of the ring lies on whatever comes up to it
       lights() { return [{ p: [0, 0.5, 0], col: [1, 0.62, 0.5], i: 1.5, fall: 0.6 }]; },
       draw(t) {

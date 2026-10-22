@@ -1,11 +1,10 @@
   // Уход: над кругом камней идёт солнце, и куст поворачивается за ним, а его тень на мху — от солнца; потом луна.
-  // Раз в день приходит туча и поливает куст, на листьях блестит роса. Касание — дождь сейчас
+  // Раз в день приходит туча и поливает куст, на листьях блестит роса
   scene('druid', 'uhod', S => {
     const { R, T } = S, DAY = 24, RAIN = 5;
-    let tapped = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
+    let orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
     return {
       rad: 4.9, near: 4.6, look: [0, 1.2, 0], still: 4, shafts: false,
-      tap(t) { tapped = t; },
       tick(t) {
         const s = (t % DAY) / DAY, sun = s < 0.72, a = sun ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI, up = Math.sin(a);
         day = sun ? up : 0;
@@ -16,7 +15,7 @@
         R.key = { dir: norm(sub(orb, [0, 1, 0])), i: 0.3 + (sun ? 0.75 * day : 0.12 * rise), col: mix3([0.55, 0.7, 1], [1, 0.88, 0.66], sun ? smooth(day / 0.3) : 0) };
         const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
         lean = reduce.matches ? want : [lean[0] + (want[0] - lean[0]) * 0.04, 0];
-        const rainAt = Math.max(Math.floor((t - 5) / DAY) * DAY + 5, tapped), r = t - rainAt;
+        const rainAt = Math.floor((t - 5) / DAY) * DAY + 5, r = t - rainAt;
         // the cloud comes in and goes, swelling out of nothing and melting away at the side
         cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.8 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.8 * smooth((r - RAIN + 1.2) / 1.2) : 0, k: smooth(r / 0.7) * (1 - smooth((r - RAIN + 0.7) / 0.7)), rain: r > 1 && r < RAIN - 1 } : null;
         wet = r < 0 ? 0 : r < RAIN ? Math.min(1, Math.max(0, r - 1.2) / 2) : Math.max(0, 1 - (r - RAIN) / 9);

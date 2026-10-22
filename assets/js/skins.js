@@ -541,9 +541,10 @@ window.BasilSkins = (() => {
   };
   /* ------------------------------------------------------------------ */
   /* the stage at the head of every chapter and in the hero of the home  */
-  /* page: the world of the skin around (05-grimoire.js, 06-druid.js) and */
-  /* the chapter's own scene in the middle (05-grimoire-*.js,             */
-  /* 06-druid-*.js)                                                       */
+  /* page — the background of its block, under the title, by itself: no   */
+  /* finger turns it and nothing is tapped. The world of the skin around  */
+  /* (05-grimoire.js, 06-druid.js) and the chapter's own scene in the     */
+  /* middle (05-grimoire-*.js, 06-druid-*.js)                             */
   /* ------------------------------------------------------------------ */
   /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t), overlay(holder, R) }):
      the options of its rasterizer, its textures, its key light, the three colours of its sky, what its scenes have
@@ -554,7 +555,8 @@ window.BasilSkins = (() => {
      stands (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
      tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
      point lights, fill — how strong the soft light from the camera's side is, fx(t, F) — sparks and halos over the
-     picture (F.spark, F.halo, F.dot, F.streak), tap(t) — what a tap does; candles — its own candles; glow — the
+     picture (F.spark, F.halo, F.dot, F.streak), beat(t) and every — what the scene does by itself every few seconds of
+     its clock (a ward flares, a handful of leaves falls in), as a loop; candles — its own candles; glow — the
      colour of the circle; glowAdd(t) — how bright it burns; look, rad, near — the camera (the point it looks at, how
      far it stands beside the text of a wide screen, how far in the middle of a narrow one); orbit [angle, swing] — a
      camera that swings in front of the scene instead of going round it; still — the moment shown when the reader asked
@@ -721,16 +723,17 @@ window.BasilSkins = (() => {
     };
   }
 
-  // backdrop: the scene as a background of its block (the home page) — no finger turns it, no tap; it goes on by itself
-  function stage(host, view, skin, backdrop = false) {
+  // the scene as the background of its block (the head of a chapter, the hero of the home page): no finger turns it,
+  // nothing is tapped; it goes on by itself
+  function stage(host, view, skin) {
     const W = WORLDS[skin], set = SCENES[skin];
     const holder = doc.createElement('div');
-    holder.className = 'psx-stage' + (backdrop ? ' is-backdrop' : '');
+    holder.className = 'psx-stage is-backdrop';
     holder.dataset.scene = set[view] ? view : 'glavnaya';
     holder.dataset.skin = skin;
     holder.setAttribute('aria-hidden', 'true');
-    // the home's scene is the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
-    if (backdrop) holder.dataset.bg = '';
+    // the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
+    holder.dataset.bg = '';
     const cv = doc.createElement('canvas');
     holder.appendChild(cv);
     host.insertBefore(holder, host.firstChild);
@@ -741,48 +744,24 @@ window.BasilSkins = (() => {
     const S = { R, T, view, ang: 0.6 };
     const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, orbit: [0.6, 0.35], ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);
-    // the reader turns the scene with a finger or the mouse; a tap does what the scene does (a puff of sparks by default)
-    const ptr = { turn: 0, lift: 0, drag: null, puffs: [] };
     // the scene's own clock: it goes on by the frames drawn, a long frame or a pause (off the screen, asleep, another
     // tab) counts as a tenth of a second at most — the picture never jumps ahead when it wakes
-    let now0 = null, time = 0;
+    let now0 = null, time = 0, beat = -1;
     const tick = now => { if (now0 != null) time += clamp((now - now0) / 1000, 0, 0.1); now0 = now; return time; };
-    const clock = () => (reduce.matches ? sc.still : time);
-    const onDown = e => { ptr.drag = { x: e.clientX, y: e.clientY, turn: ptr.turn, lift: ptr.lift, moved: false }; };
-    const onMove = e => {
-      if (!ptr.drag) return;
-      const dx = e.clientX - ptr.drag.x, dy = e.clientY - ptr.drag.y;
-      if (Math.abs(dx) + Math.abs(dy) > 6) ptr.drag.moved = true;
-      ptr.turn = ptr.drag.turn + dx * 0.006;
-      ptr.lift = clamp(ptr.drag.lift - dy * 0.004, -0.6, 0.9);
-      L.start();
-    };
-    const onUp = () => {
-      if (ptr.drag && !ptr.drag.moved) {
-        if (sc.tap) sc.tap(clock());
-        else { ptr.puffs.push({ t: clock() }); if (ptr.puffs.length > 4) ptr.puffs.shift(); }
-        L.start();
-      }
-      ptr.drag = null;
-    };
-    if (!backdrop) {
-      holder.addEventListener('pointerdown', onDown);
-      addEventListener('pointermove', onMove, { passive: true });
-      addEventListener('pointerup', onUp);
-      addEventListener('pointercancel', onUp);
-    }
     function frame(now) {
       // the clock of the scene: stands at its chosen moment when the reader asked for less motion
       const t = reduce.matches ? sc.still : tick(now);
       R.size();
       // wide: the chapter's text on the left, the scene to the right of it; else the scene in the middle, closer
       const wide = R.W > R.H * 1.45;
-      const ang = sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1] + ptr.turn;
-      const look = sc.look, eyeY = look[1] + 1.1 + Math.sin(t * 0.3) * 0.15 + ptr.lift;
+      const ang = sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1];
+      const look = sc.look, eyeY = look[1] + 1.1 + Math.sin(t * 0.3) * 0.15;
       const rad = wide ? sc.rad : sc.near;
       S.ang = ang;
       R.cam([look[0] + Math.cos(ang) * rad, eyeY, look[2] + Math.sin(ang) * rad], look, wide ? 1.25 : 1.05, wide ? 0.68 : 0.5, wide ? 0.44 : 0.4);
       R.key = W.key;
+      // what the scene does now and then, by itself: once for each round of `every` seconds of its clock
+      if (sc.beat && sc.every && !reduce.matches) { const n = Math.floor(t / sc.every); if (n !== beat) { if (beat >= 0 || n > 0) sc.beat(n * sc.every); beat = n; } }
       if (sc.tick) sc.tick(t);
       R.lights = env.lights(t)
         .concat(sc.fill ? [{ p: [look[0] + Math.cos(ang) * 2.2, look[1] + 1.5, look[2] + Math.sin(ang) * 2.2], col: W.fillCol || [0.78, 0.62, 0.95], i: sc.fill, fall: 0.16 }] : [], sc.lights ? sc.lights(t) : []);
@@ -800,14 +779,6 @@ window.BasilSkins = (() => {
       const F = fxKit(R);
       env.fx(t, F);
       if (sc.fx) sc.fx(t, F);
-      ptr.puffs = ptr.puffs.filter(p => t - p.t < 2.2 && t >= p.t);
-      ptr.puffs.forEach(p => {
-        const life = (t - p.t) / 2.2;
-        for (let i = 0; i < 18; i++) {
-          const q = i / 18 * Math.PI * 2, r = 0.2 + life * 0.9;
-          F.spark([Math.cos(q) * r * 0.6, 2.1 + life * 1.3 + Math.sin(i * 7) * 0.1, Math.sin(q) * r * 0.6], life, true);
-        }
-      });
       x.globalCompositeOperation = 'source-over';
       W.post(R, t);
       holder.classList.add('is-drawn');
@@ -815,10 +786,10 @@ window.BasilSkins = (() => {
     // runs while on the screen, by the page's frame budget; one still frame with reduced motion
     let seen = false;
     // as many frames on a phone as anywhere: at 20 the scenes judder
-    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30, W.fps || 30);
+    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, W.fps || 30, W.fps || 30);
     // a check that draws the scene frame by frame itself (tests/motion.js) sets window.BASIL_STAGES = [] before the page;
     // seek sets the scene's clock, a minute into the page in a moment
-    if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame, R, stop: () => L.stop(), seek: s => { time = s; now0 = null; } });
+    if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame, R, stop: () => L.stop(), seek: s => { time = s; now0 = null; beat = -1; } });
     const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); if (seen) L.start(); else L.stop(); }) : null;
     if (io) io.observe(holder); else { seen = true; L.start(); }
     const vis = () => { if (!doc.hidden && seen) L.start(); };
@@ -828,22 +799,18 @@ window.BasilSkins = (() => {
         L.stop();
         if (io) io.disconnect();
         doc.removeEventListener('visibilitychange', vis);
-        removeEventListener('pointermove', onMove);
-        removeEventListener('pointerup', onUp);
-        removeEventListener('pointercancel', onUp);
         holder.remove();
       }
     };
   }
   // Прищипка и сбор: a pot on an old stump, the top of the stem growing; a sickle circling it like a crescent moon
   // comes down and cuts the top above a pair of leaves; the top falls to the floor, and two new shoots come out of that
-  // pair, so the bush grows wide instead of tall; then time goes back in a violet shimmer and it begins again. A tap
-  // swings the sickle
+  // pair, so the bush grows wide instead of tall; then time goes back in a violet shimmer and it begins again
   scene('grimoire', 'formirovka', S => {
     const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
-    let off = 0, cut = [0, 2.1, 0], sick = [1, 2.5, 0], tip = null, phase = 0;
-    // the moment of the cycle: the sickle cuts at SW; a tap, once the top has grown, moves the cycle to the swing
-    const at = t => (((t + off) % CYCLE) + CYCLE) % CYCLE;
+    let cut = [0, 2.1, 0], sick = [1, 2.5, 0], tip = null, phase = 0;
+    // the moment of the cycle: the sickle cuts at SW
+    const at = t => ((t % CYCLE) + CYCLE) % CYCLE;
     // the main stem: three nodes with their pairs, the cut above the third
     const NODES = [[0.2, 0.42, 0.12], [0.42, 0.36, 0], [0.62, 0.3, -0.12]];
     const pairAt = (b, h, len, pitch, k, t, g = 1) => {
@@ -866,7 +833,6 @@ window.BasilSkins = (() => {
     };
     return {
       glow: [176, 192, 255], near: 4.4, look: [0, 1.6, 0], still: 7.5,
-      tap(t) { const u = at(t); if (u > 1.5 && u < SW - 0.6) off += SW - 0.6 - u; },
       tick(t) {
         const u = at(t);
         phase = u;
@@ -937,8 +903,8 @@ window.BasilSkins = (() => {
     };
   });
   // Гидропоника: a glass tank of water with a cold light in it, the bush in a net cup on its lid, white roots hanging
-  // down into the water and swaying like weed, bubbles rising from the stone of the air pump. A tap lets out a burst
-  // of bubbles
+  // down into the water and swaying like weed, bubbles rising from the stone of the air pump. Now and then it lets out a
+  // burst of bubbles by itself
   scene('grimoire', 'gidro', S => {
     const { R, T } = S, TOP = 0.92, LID = 1.12;
     const ROOTS = [...Array(9)].map((_, i) => ({ q: i / 9 * Math.PI * 2 + 0.3, r: 0.03 + (i % 3) * 0.035, len: 0.55 + ((i * 7) % 5) / 14, ph: i * 1.3 }));
@@ -947,7 +913,7 @@ window.BasilSkins = (() => {
     const glass = { col: [70, 110, 130], emis: true, nofog: true, add: 0.12, layer: 2 };
     return {
       glow: [70, 200, 255], near: 4.2, look: [0, 1.15, 0], still: 3,
-      tap(t) { bursts.push(t); if (bursts.length > 3) bursts.shift(); },
+      every: 7, beat(t) { bursts.push(t); if (bursts.length > 3) bursts.shift(); },
       lights(t) { return [{ p: [0, 0.5, 0.1], col: [0.3, 0.8, 1], i: 1 + 0.15 * Math.sin(t * 2.1), fall: 0.7 }]; },
       draw(t) {
         // the water: its far walls first, then its near ones and its surface, light added to what is behind
@@ -998,7 +964,7 @@ window.BasilSkins = (() => {
   // Главная: плантация алхимика — грядки в каменных рамах под железными арками оранжереи, на ближних кустах —
   // стеклянные колпаки; в конце дорожки перегонный куб на печи, змеевик, приёмник с зелёным эликсиром. По медной трубе
   // от приёмника к грядкам бежит капля, и куст, к которому она пришла, вспыхивает. Над грядками висят знаки алхимии.
-  // Круга, свечей и колонн нет: главная не похожа на главы. Касание — капля сейчас
+  // Круга, свечей и колонн нет: главная не похожа на главы
   scene('grimoire', 'glavnaya', S => {
     const { R, T } = S;
     R.fog = [14, 10, 20]; R.fogNear = 3.5; R.fogFar = 12; R.amb = [0.22, 0.18, 0.28];
@@ -1008,7 +974,7 @@ window.BasilSkins = (() => {
     const GLYPH = [0, 1, 2, 3, 4, 5].map(k => glyphTex(k, [236, 196, 96]));
     const SMALLP = [[0.22, 0.4, 0.1], [0.5, 0.32, -0.05], [0.78, 0.22, -0.35], [0.95, 0.13, -0.6]];
     const FLASK = [0.98, 0.14, -1.9], EVERY = 1.5, RUN = 1.7;
-    let taps = [], glow = BEDS.map(() => 0), drop = null, lastT = 0;
+    let glow = BEDS.map(() => 0), drop = null, lastT = 0;
     // the way of a drop: from the receiver along the edge of the path to its bed, then into the earth
     const route = i => {
       const b = BEDS[i], ex = b.x < 0 ? -0.56 : 0.56;
@@ -1023,13 +989,12 @@ window.BasilSkins = (() => {
     return {
       bare: true, fill: 0.8, orbit: [Math.PI / 2, 0.3], rad: 5.6, near: 5.2, look: [0, 0.75, -0.3], still: 2.2,
       sky: ['#05040A', '#120E1C', '#0C0912'],
-      tap(t) { taps.push(t); if (taps.length > 4) taps.shift(); },
       tick(t) {
         const dt = Math.max(0, Math.min(0.2, t - lastT)); lastT = t;
-        const n = Math.floor(t / EVERY), sends = [n * EVERY].concat(taps).filter(s => s <= t);
+        const n = Math.floor(t / EVERY), sends = [n * EVERY];
         drop = null;
         for (const s of sends) {
-          const u = (t - s) / RUN, i = (taps.includes(s) ? taps.indexOf(s) * 5 + 3 + n : Math.round(s / EVERY)) % BEDS.length;
+          const u = (t - s) / RUN, i = Math.round(s / EVERY) % BEDS.length;
           if (u < 1 && !drop) drop = { p: along(route(i), smooth(u)), i };
           if (u >= 1 && u < 1 + dt / RUN + 0.02) glow[i] = 1;
         }
@@ -1098,16 +1063,14 @@ window.BasilSkins = (() => {
     };
   });
   // Мой базилик: your own bush on a sill under an arched window; outside it the sun goes over and the night comes with
-  // its stars and moon; beside the pot an hourglass runs down the time to the next task and turns itself over. A tap
-  // turns the hourglass now
+  // its stars and moon; beside the pot an hourglass runs down the time to the next task and turns itself over
   scene('grimoire', 'moy', S => {
     const { R, T } = S, DAY = 18, RUN = 7.8, FLIP = 0.8, EVERY = 9.2, SILL = 0.965, Z = -0.4;
     const HG = [0.5, 0.04];
-    let off = 0, sun = [0, 1.6, Z + 0.02], day = 1, sand = 0, flip = 0;
-    const at = t => (((t + off) % EVERY) + EVERY) % EVERY;
+    let sun = [0, 1.6, Z + 0.02], day = 1, sand = 0, flip = 0;
+    const at = t => ((t % EVERY) + EVERY) % EVERY;
     return {
       glow: [230, 110, 200], orbit: [Math.PI / 2, 0.4], rad: 4.3, near: 3.6, look: [0, 1.5, 0], still: 4,
-      tap(t) { const u = at(t); if (u < RUN) off += RUN - u; },
       tick(t) {
         const s = (t % DAY) / DAY, a = s < 0.6 ? s / 0.6 * Math.PI : (s - 0.6) / 0.4 * Math.PI;
         day = s < 0.6 ? Math.sin(a) : 0;
@@ -1171,14 +1134,13 @@ window.BasilSkins = (() => {
   });
   // Посадка: a seed comes down glowing into a well of earth and sinks; a sprout comes up — the hook, the two seed
   // leaves opening, the first true pair, the second — then goes back to the earth as sparks. Around the well six cups
-  // of peat with seedlings, each a step behind the other; a tap sows again
+  // of peat with seedlings, each a step behind the other
   scene('grimoire', 'posadka', S => {
     const { R, T } = S, CYCLE = 10, EARTH = 0.36;
-    let sown = 0, seed = null, burst = -1;
+    let seed = null, burst = -1;
     const CUPS = [...Array(6)].map((_, i) => { const q = i / 6 * Math.PI * 2 + 0.26; return [Math.cos(q) * 1.55, Math.sin(q) * 1.55]; });
     return {
       glow: [255, 150, 50], rad: 4.6, near: 3.7, look: [0, 0.6, 0], still: 6.2,
-      tap(t) { sown = t; },
       // a warm light over the well, and the seed's own while it comes down
       lights() { return [{ p: [0.2, 1.3, 0.5], col: [1, 0.72, 0.42], i: 0.9, fall: 0.7 }].concat(seed ? [{ p: seed, col: [1, 0.8, 0.4], i: 0.8, fall: 2 }] : []); },
       draw(t) {
@@ -1187,7 +1149,7 @@ window.BasilSkins = (() => {
         ringTop(R, 0, 0, EARTH, 0.62, 0.7, 10, { tex: T.stone });
         prism(R, 0, 0, EARTH - 0.12, EARTH, 0.62, 0.62, 10, { col: [44, 34, 40], inv: true });
         disc(R, 0, 0, EARTH - 0.04, 0.62, 10, { tex: T.soil });
-        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        const u = t % CYCLE;
         // the seed: down in a spiral, then into the earth
         seed = null;
         if (u < 2.4) {
@@ -1211,7 +1173,7 @@ window.BasilSkins = (() => {
           for (let i = 0; i < 6; i++) F.spark([seed[0], seed[1] + 0.05 + i * 0.07, seed[2]], i / 6);
         }
         // a puff of earth as the seed goes in, the sprout going back to it as sparks
-        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        const u = t % CYCLE;
         if (u > 1.8 && u < 2.6) for (let i = 0; i < 10; i++) { const q = i * 0.63, l = (u - 1.8) / 0.8; F.dot([Math.cos(q) * l * 0.3, EARTH + Math.sin(l * Math.PI) * 0.15, Math.sin(q) * l * 0.3], 'rgba(150,104,64,.9)'); }
         if (burst >= 0) for (let i = 0; i < 24; i++) { const q = i * 0.9, l = burst; F.spark([Math.cos(q) * (0.1 + l * 0.5), EARTH + 0.1 + (i % 6) * 0.09 + l * 0.8, Math.sin(q) * (0.1 + l * 0.5)], l, true); }
       }
@@ -1219,16 +1181,16 @@ window.BasilSkins = (() => {
   });
   // Проблемы: the bush on the altar under siege — beetles creep in round the circle towards it and are thrown back by
   // the ward with a red flash, a spider comes down on its thread and climbs back, one lower leaf has gone yellow with
-  // brown spots. A tap raises the ward: every beetle is thrown back at once
+  // brown spots. Every few seconds the ward flares up by itself: every beetle is thrown back at once
   scene('grimoire', 'problemy', S => {
     const { R, T } = S, N = 6, OUT = 2.45, IN = 1.25, CRAWL = 9;
     let warded = -99, flash = 0, bugs = [], spider = [0.3, 3, 0.12];
     return {
       glow: [255, 44, 44], near: 4.8, still: 5.3,
       glowAdd(t) { return 0.3 + 0.18 * Math.sin(t * 1.4) + flash * 0.6; },
-      tap(t) { warded = t; },
+      every: 8, beat(t) { warded = t; },
       tick(t) {
-        // each beetle creeps in along a spiral and is flung back at the ward; a tap flings them all
+        // each beetle creeps in along a spiral and is flung back at the ward; the ward's flare flings them all
         const l = (t - warded) / 1.4, push = l < 0 || l > 1 ? 0 : l < 0.15 ? l / 0.15 : 1 - (l - 0.15) / 0.85;
         flash = push;
         bugs = [...Array(N)].map((_, i) => {
@@ -1282,7 +1244,7 @@ window.BasilSkins = (() => {
     };
   });
   // Сорта: five sorts on a turning table, as the screen where a game's hero is chosen — the chosen one comes to the
-  // front, rises into a beam of light and turns itself; the table turns on to the next by itself, or at a tap
+  // front, rises into a beam of light and turns itself; the table turns on to the next by itself
   scene('grimoire', 'sorta', S => {
     const { R, T } = S, N = 5, STEP = 6, RAD = 1.2;
     const KINDS = [
@@ -1297,13 +1259,12 @@ window.BasilSkins = (() => {
     // a small bush has four pairs
     const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
     const glide = glider(1.6);
-    let taps = 0, pos = 0, chosen = [0, 0, 0];
+    let pos = 0, chosen = [0, 0, 0];
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       glow: [176, 110, 255], orbit: [0.75, 0.42], rad: 5, near: 4.2, look: [0, 1.15, 0], still: 1,
-      tap() { taps++; },
       tick(t) {
-        const target = Math.floor(t / STEP) + taps;
+        const target = Math.floor(t / STEP);
         pos = glide(target, t);
       },
       lights() { return [{ p: [chosen[0], 2.3, chosen[2]], col: [0.75, 0.62, 1], i: 1.4, fall: 0.35 }]; },
@@ -1341,11 +1302,11 @@ window.BasilSkins = (() => {
     };
   });
   // Справка: the grimoire itself — open on a stone lectern, its pages turning one by one in their own time, runes of
-  // light circling it, a quill in its inkpot beside. A tap turns the page now
+  // light circling it, a quill in its inkpot beside
   scene('grimoire', 'spravka', S => {
     const { R, T } = S, EVERY = 5, TURN = 1.5, TILT = 0.5, O = [0, 1.0, 0];
-    let off = 0, phi = 0;
-    const at = t => (((t + off) % EVERY) + EVERY) % EVERY;
+    let phi = 0;
+    const at = t => ((t % EVERY) + EVERY) % EVERY;
     // a page from the spine: three strips, the outer ones lagging behind the turn, a little bow along it
     function pageStrips(B, ang, tex, flip) {
       let p = [0, 0, 0], q0 = 0;
@@ -1360,7 +1321,6 @@ window.BasilSkins = (() => {
     }
     return {
       glow: [240, 190, 90], orbit: [Math.PI / 2, 0.38], rad: 4.2, near: 3.5, look: [0, 1.25, 0], still: 3.9,
-      tap(t) { const u = at(t); if (u < EVERY - TURN - 0.2) off += EVERY - TURN - u; },
       tick(t) { phi = Math.PI * smooth((at(t) - (EVERY - TURN)) / TURN); },
       lights(t) { return [{ p: [0, 1.7, 0.3], col: [1, 0.8, 0.45], i: 0.7 + 0.1 * Math.sin(t * 2), fall: 0.8 }]; },
       draw(t) {
@@ -1400,13 +1360,12 @@ window.BasilSkins = (() => {
     };
   });
   // Удобрения: three flasks of the elements, N, P and K, on their stones round the altar, bubbling. In turn each sends
-  // a drop of its light in an arc into the pot; the light climbs the stem and the leaves take its colour. A tap sends
-  // the next one now
+  // a drop of its light in an arc into the pot; the light climbs the stem and the leaves take its colour
   scene('grimoire', 'udobreniya', S => {
     const { R, T } = S, EVERY = 3.6, FLY = 1.3, CLIMB = 1.1;
     const COL = [[120, 140, 255], [255, 112, 64], [255, 206, 80]];
     const FL = [0, 1, 2].map(i => { const q = Math.PI / 2 + i / 3 * Math.PI * 2; return [Math.cos(q) * 1.15, Math.sin(q) * 1.15]; });
-    let taps = [], drop = null, climb = null, earthY = 1.47;
+    let drop = null, climb = null, earthY = 1.47;
     // the drop in flight: from the neck of its flask up and over into the earth
     const path = (k, u) => {
       const a = [FL[k][0], 1.12, FL[k][1]], b = [0, earthY + 0.02, 0], m = mul(add(a, b), 0.5);
@@ -1414,11 +1373,10 @@ window.BasilSkins = (() => {
     };
     return {
       glow: [140, 255, 96], near: 4.5, look: [0, 1.3, 0], still: 1.9,
-      tap(t) { taps.push({ t, k: (taps.length + 1 + Math.floor(t / EVERY)) % 3 }); if (taps.length > 3) taps.shift(); },
       tick(t) {
-        // the sends: one every few seconds by itself, in turn, and one at each tap
+        // the sends: one every few seconds, in turn
         const n = Math.floor(t / EVERY);
-        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }].concat(taps).filter(s => s.t <= t).sort((a, b) => b.t - a.t);
+        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }];
         drop = climb = null;
         for (const s of sends) {
           const u = t - s.t;
@@ -1462,10 +1420,10 @@ window.BasilSkins = (() => {
   });
   // Уход: the four the chapter is about. A sun crosses the vault and the bush turns after it, then a pale moon; a cloud
   // comes in and rains on the pot, the earth goes dark with the water and pales as it dries; the candles keep it
-  // warm. A tap calls the rain now
+  // warm
   scene('grimoire', 'uhod', S => {
     const { R, T } = S, DAY = 24, RAIN = 5;
-    let rainAt = -99, tapped = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
+    let rainAt = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
     const EARTH_DRY = [112, 82, 56], EARTH_WET = [34, 22, 18];
     const sky = t => {
       const s = (t % DAY) / DAY, a = s < 0.72 ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI, up = Math.sin(a);
@@ -1478,7 +1436,6 @@ window.BasilSkins = (() => {
     };
     return {
       glow: [255, 196, 80], near: 4.6, look: [0, 1.7, 0], still: 4,
-      tap(t) { tapped = t; },
       tick(t) {
         const sun = sky(t);
         // the light of the sky goes over from the moon's to the sun's and back without a jump
@@ -1487,9 +1444,9 @@ window.BasilSkins = (() => {
         const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
         lean = mix3([lean[0], lean[1], 0], [want[0], want[1], 0], 0.04).slice(0, 2);
         if (reduce.matches) lean = want;
-        // the rain: by itself once a day, or when tapped; the earth dries over the rest of the day
+        // the rain: once a day; the earth dries over the rest of the day
         const auto = Math.floor((t - 5) / DAY) * DAY + 5;
-        rainAt = Math.max(auto, tapped);
+        rainAt = auto;
         const r = t - rainAt;
         // the cloud comes in and goes, swelling out of nothing and melting away at the side
         cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.6 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.6 * smooth((r - RAIN + 1.2) / 1.2) : 0, k: smooth(r / 0.7) * (1 - smooth((r - RAIN + 0.7) / 0.7)), rain: r > 1 && r < RAIN - 1 } : null;
@@ -1520,7 +1477,7 @@ window.BasilSkins = (() => {
   });
   // Вкус и кухня: pesto made as a rite — a stone mortar on a kitchen table, the pestle grinding round in it, leaves of basil
   // falling into the green, garlic, pine nuts and a phial of oil beside it; out of the mortar rises the aroma, a
-  // molecule of eugenol going up and fading. A tap throws in a handful of leaves
+  // molecule of eugenol going up and fading. Now and then a handful of leaves falls in
   scene('grimoire', 'vkus', S => {
     const { R, T } = S, mol = molShape('eug');
     let top = 1.08, hands = [];
@@ -1533,7 +1490,7 @@ window.BasilSkins = (() => {
     };
     return {
       glow: [200, 236, 96], near: 4.4, look: [0, 1.7, 0], still: 2.4,
-      tap(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
+      every: 6, beat(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
       lights(t) { return [{ p: [0.2, top + 1.1, 0.5], col: [1, 0.8, 0.5], i: 1 + 0.1 * Math.sin(t * 2), fall: 0.6 }, { p: [0, top + 0.5, 0], col: [0.6, 1, 0.4], i: 0.5, fall: 2 }]; },
       draw(t) {
         // a kitchen table of old wood
@@ -1556,7 +1513,7 @@ window.BasilSkins = (() => {
         prism(R, -0.66, -0.26, top, top + 0.26, 0.09, 0.08, 6, { col: [196, 150, 40], emis: true, add: 0.6 });
         prism(R, -0.66, -0.26, top + 0.26, top + 0.38, 0.03, 0.028, 5, { col: [196, 150, 40], emis: true, add: 0.5 });
         prism(R, -0.66, -0.26, top + 0.37, top + 0.42, 0.035, 0.035, 5, { col: [110, 70, 40] }, [90, 56, 32]);
-        // the leaves falling in: a steady few, and a handful at a tap
+        // the leaves falling in: a steady few, and a handful now and then
         FALL.forEach((f, i) => { const k = (f.a + t * 0.22) % 1; falling(f.x, f.z, smooth(k), t * f.s * 2 + i); });
         hands = hands.filter(h => t - h < 1.6 && t >= h);
         hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(Math.cos(i * 1.1) * 0.35, Math.sin(i * 1.1) * 0.3, k, t * 2 + i); } });
@@ -1658,11 +1615,11 @@ window.BasilSkins = (() => {
   }
   // Прищипка и сбор: куст на старом пне, его верхушка растёт; золотой серп друида кружит рядом, как молодой месяц,
   // спускается и срезает верхушку над парой листьев. Верхушка падает в мох, а из пазух той пары выходят два побега —
-  // куст растёт вширь, а не вверх. Потом мох забирает срезанное, и всё снова. Касание — взмах серпа
+  // куст растёт вширь, а не вверх. Потом мох забирает срезанное, и всё снова
   scene('druid', 'formirovka', S => {
     const { R, T } = S, CYCLE = 12, SW = 4.6, s = 1.15;
-    let off = 0, cut = [0, 1.6, 0], sick = [1, 2, 0], tip = null, phase = 0, top = 0.5;
-    const at = t => (((t + off) % CYCLE) + CYCLE) % CYCLE;
+    let cut = [0, 1.6, 0], sick = [1, 2, 0], tip = null, phase = 0, top = 0.5;
+    const at = t => ((t % CYCLE) + CYCLE) % CYCLE;
     // the main stem: three nodes with their pairs, the cut above the third
     const NODES = [[0.2, 0.42, 0.12], [0.42, 0.36, 0], [0.62, 0.3, -0.12]];
     const pair = (R2, c, len, pitch, k, t, g = 1) => {
@@ -1681,7 +1638,6 @@ window.BasilSkins = (() => {
     };
     return {
       near: 4.4, look: [0, 1.15, 0], still: 7.5, clear: 1.6,
-      tap(t) { const u = at(t); if (u > 1.5 && u < SW - 0.6) off += SW - 0.6 - u; },
       tick(t) {
         const u = at(t);
         phase = u;
@@ -1743,8 +1699,8 @@ window.BasilSkins = (() => {
     };
   });
   // Гидропоника: родник между двух камней наполняет тихую заводь; посреди неё плавает коряга, на ней растёт куст, и его
-  // белые корни висят в прозрачной воде. Со дна поднимаются пузырьки, по воде расходятся круги. Касание — круги
-  // и пузырьки
+  // белые корни висят в прозрачной воде. Со дна поднимаются пузырьки, по воде расходятся круги, а время от времени —
+  // россыпь кругов и пузырьков
   scene('druid', 'gidro', S => {
     const { R, T } = S, POOL = 1.15, SP = -2.5;
     // the spring: where the water falls in, the two stones on either side of it
@@ -1754,7 +1710,7 @@ window.BasilSkins = (() => {
     return {
       rad: 4.8, near: 4.5, look: [0, 0.7, 0], still: 3, clear: 1.8,
       noGrass: (x, z) => Math.hypot(x - TOP[0], z - TOP[2]) < 0.6,
-      tap(t) { taps.push(t); if (taps.length > 3) taps.shift(); },
+      every: 7, beat(t) { taps.push(t); if (taps.length > 3) taps.shift(); },
       lights() { return [{ p: [0, 0.3, 0], col: [0.5, 0.9, 1], i: 0.7, fall: 0.8 }]; },
       draw(t) {
         // the bottom of the pool seen through the water, the bank of stones round it, the face of the water
@@ -1766,7 +1722,7 @@ window.BasilSkins = (() => {
         // the stream of the spring falling from between the stones into the pool
         const sd = [-Math.sin(SP), 0, Math.cos(SP)], bot = [IN[0], 0.02, IN[1]];
         quad(R, add(TOP, mul(sd, -0.05)), add(TOP, mul(sd, 0.05)), add(bot, mul(sd, 0.08)), add(bot, mul(sd, -0.08)), { col: [150, 210, 224], emis: true, add: 0.4, ds: true, layer: 1.2 });
-        // the rings on the water: two always going out from the driftwood, two more at each tap, small ones where the
+        // the rings on the water: two always going out from the driftwood, two more now and then, small ones where the
         // spring falls in
         const rings = [(t * 0.3) % 1, (t * 0.3 + 0.5) % 1].concat(...taps.map(h => [(t - h) / 2.4, (t - h) / 2.4 - 0.2]));
         rings.forEach(k => { if (k <= 0 || k >= 1) return; const r = 0.5 + k * (POOL - 0.55); ringTop(R, 0, 0, 0.014, r, r + 0.025, 22, { col: [170, 230, 240], emis: true, add: 0.55 * (1 - k), layer: 0.65 }); });
@@ -1785,7 +1741,7 @@ window.BasilSkins = (() => {
         });
       },
       fx(t, F) {
-        // the bubbles rising from the bottom round the roots, many more after a tap; the shine of the moon on the water
+        // the bubbles rising from the bottom round the roots, many more now and then; the shine of the moon on the water
         const more = taps.some(h => t >= h && t - h < 2) ? 26 : 10;
         for (let i = 0; i < more; i++) {
           const k = (t * (0.35 + (i % 4) * 0.08) + i * 0.37) % 1, q = i * 2.4, r = 0.15 + (i % 5) * 0.12;
@@ -1823,8 +1779,8 @@ window.BasilSkins = (() => {
     };
   });
   // Мой базилик: куст читателя в горшке у плетня, на горшке — бирка. Над плетнём дугой лунный календарь, восемь фаз луны;
-  // нынешняя больше и ярче всех, и куст стоит в её свете: в полнолуние светлее, в новолуние темнее. Фазы идут сами;
-  // касание — следующая
+  // нынешняя больше и ярче всех, и куст стоит в её свете: в полнолуние светлее, в новолуние темнее. Фазы идут
+  // сами
   scene('druid', 'moy', S => {
     const { R, T } = S, N = 8, STEP = 4, FR = 1.15, A = 0.9, BACK = A + Math.PI;
     // the wattle: stakes on an arc behind the pot (on the far side from the camera), withies woven in and out of them
@@ -1832,13 +1788,12 @@ window.BasilSkins = (() => {
     const at = (q, r, y) => [Math.cos(q) * r, y, Math.sin(q) * r];
     const MOONS = [...Array(N)].map((_, i) => { const q = BACK - 0.95 + i / (N - 1) * 1.9, c = (i - (N - 1) / 2) / ((N - 1) / 2); return at(q, FR + 0.05, 1.42 + 0.22 * (1 - c * c)); });
     const glide = glider(1.4);
-    let taps = 0, pos = 0, frac = 0;
+    let pos = 0, frac = 0;
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       orbit: [A, 0.35], near: 4.1, rad: 4.5, look: [0, 0.95, 0], still: 13, clear: 1.6,
-      tap() { taps++; },
       tick(t) {
-        const target = Math.floor(t / STEP) + taps;
+        const target = Math.floor(t / STEP);
         pos = glide(target, t);
         // the moonlight on the bush: as much as the moon of the moment is lit, going over smoothly to the next one
         frac = (1 - Math.cos(pos / N * Math.PI * 2)) / 2;
@@ -1876,17 +1831,16 @@ window.BasilSkins = (() => {
   });
   // Посадка: семя падает в лунку у корней старого пня и уходит в землю; из лунки поднимается росток —
   // крючок, две семядоли, первая пара настоящих листьев, вторая — и снова уходит в землю светом. Вокруг во мху всходы,
-  // каждый на шаг позади другого. Касание — посеять снова
+  // каждый на шаг позади другого
   scene('druid', 'posadka', S => {
     const { R, T } = S, CYCLE = 10;
-    let sown = 0, seed = null, burst = -1;
+    let seed = null, burst = -1;
     // the camera stands on one side; the old stump behind the hole, its roots going round it into the moss
     const A = 0.5, D = [Math.cos(A), 0, Math.sin(A)], ST = mul(D, -0.85);
     const KIDS = [...Array(5)].map((_, i) => { const q = A - 1.5 + i / 4 * 3; return [Math.cos(q) * 1.2, Math.sin(q) * 1.2]; });
     const ROOTS = [-1.1, -0.45, 0.5, 1.15].map(d => { const q = A + Math.PI + d; return [0, 1, 2, 3].map(k => { const r = 0.42 + k * 0.32, b = d * k * 0.12; return [ST[0] + Math.cos(q - b) * r, 0.07 - k * 0.03, ST[2] + Math.sin(q - b) * r]; }); });
     return {
       orbit: [A, 0.4], rad: 4.4, near: 3.9, look: [0, 0.5, 0], still: 6.2, clear: 1.9,
-      tap(t) { sown = t; },
       lights() { return [{ p: [0.3, 1.2, 0.6], col: [1, 0.86, 0.6], i: 0.7, fall: 0.6 }].concat(seed ? [{ p: seed, col: [1, 0.86, 0.5], i: 1, fall: 2 }] : []); },
       draw(t) {
         // the hole: a ring of dark earth in the moss
@@ -1894,7 +1848,7 @@ window.BasilSkins = (() => {
         ringTop(R, 0, 0, 0.03, 0.36, 0.48, 10, { col: [52, 38, 26] });
         stump(R, T, ST[0], ST[2], 0.42, 0.62);
         ROOTS.forEach(P => P.slice(1).forEach((p, k) => rod(R, P[k], p, 0.06 - k * 0.015, { col: [76 - k * 3, 56 - k * 2, 38] }, 5)));
-        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        const u = t % CYCLE;
         seed = null;
         if (u < 2.4) {
           const k = smooth(u / 1.8), q = u * 3, r = 0.5 * (1 - k);
@@ -1916,15 +1870,15 @@ window.BasilSkins = (() => {
           F.halo(seed, 0.36, 'rgba(255,214,120,.42)', 'rgba(255,190,90,0)');
           for (let i = 0; i < 6; i++) F.dot([seed[0], seed[1] + 0.06 + i * 0.07, seed[2]], `rgba(255,220,140,${0.8 - i * 0.12})`, 1);
         }
-        const u = ((t - sown) % CYCLE + CYCLE) % CYCLE;
+        const u = t % CYCLE;
         if (u > 1.8 && u < 2.6) for (let i = 0; i < 10; i++) { const q = i * 0.63, l = (u - 1.8) / 0.8; F.dot([Math.cos(q) * l * 0.3, 0.04 + Math.sin(l * Math.PI) * 0.15, Math.sin(q) * l * 0.3], 'rgba(150,110,70,.9)'); }
         if (burst >= 0) for (let i = 0; i < 24; i++) { const q = i * 0.9, l = burst; F.dot([Math.cos(q) * (0.1 + l * 0.5), 0.1 + (i % 6) * 0.09 + l * 0.8, Math.sin(q) * (0.1 + l * 0.5)], `rgba(170,255,200,${1 - l})`, 1.5); }
       }
     };
   });
   // Беды и защита: к кусту ползут слизни и жуки, но круг из ягод рябины их не пускает: у круга они останавливаются,
-  // ягоды вспыхивают, и вредители поворачивают назад. На сухой ветке сидит ворон и вертит головой. Касание — ворон
-  // взлетает и делает круг над поляной, а вредители разбегаются
+  // ягоды вспыхивают, и вредители поворачивают назад. На сухой ветке сидит ворон и вертит головой. Время от времени
+  // ворон взлетает и делает круг над поляной, а вредители разбегаются
   scene('druid', 'problemy', S => {
     const { R, T } = S, WARD = 0.82, Z = 1.4;
     const PERCH = [1.02, 1.62, -0.66], BUGS = [...Array(6)].map((_, i) => ({ q: i / 6 * Math.PI * 2 + 0.3, slug: i % 2 === 0, ph: i * 1.9 }));
@@ -1933,7 +1887,7 @@ window.BasilSkins = (() => {
     const fear = t => { const u = t - scare; return u < 0 ? 0 : u < 0.8 ? smooth(u / 0.8) : Math.max(0, 1 - (u - 0.8) / 3.5); };
     // how far a bug is from the middle: it comes up to the ring, stops, goes back, comes again
     const reach = (b, t) => WARD + 0.14 + smooth(0.5 + 0.5 * Math.cos(t * 0.42 + b.ph)) * 0.75 + fear(t) * 0.8;
-    // where the raven is: on its branch, or on a round over the glade after a tap
+    // where the raven is: on its branch, or on a round over the glade now and then
     const raven = t => {
       const u = t - scare;
       if (u < 0 || u > 6.5) return { p: PERCH, fly: 0, dir: [-1, 0, 0.2] };
@@ -1943,7 +1897,7 @@ window.BasilSkins = (() => {
     };
     return {
       rad: 4.6, near: 4.3, look: [0, 0.8, 0], still: 5, clear: 1.7,
-      tap(t) { if (t - scare > 6.5) scare = t; },
+      every: 14, beat(t) { scare = t; },
       // the warm light of the ring lies on whatever comes up to it
       lights() { return [{ p: [0, 0.5, 0], col: [1, 0.62, 0.5], i: 1.5, fall: 0.6 }]; },
       draw(t) {
@@ -2008,7 +1962,7 @@ window.BasilSkins = (() => {
     };
   });
   // Сорта: пять сортов на пнях вокруг старого дуба. Выбранный стоит в столбе лунного света и светится; по кругу
-  // выходит вперёд следующий — сам или по касанию
+  // выходит вперёд следующий
   scene('druid', 'sorta', S => {
     const { R, T } = S, N = 5, STEP = 6, RAD = 1.5, A = 0.75, O = [-Math.cos(A) * 0.5, 0, -Math.sin(A) * 0.5];
     const KINDS = [
@@ -2021,14 +1975,13 @@ window.BasilSkins = (() => {
     const BALL = [...Array(20)].map((_, i) => { const y = 1 - (i + 0.5) / 20 * 1.6, r = Math.sqrt(Math.max(0, 1 - y * y)), q = i * 2.4; return norm([Math.cos(q) * r, y, Math.sin(q) * r]); });
     const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
     const glide = glider(1.6);
-    let taps = 0, pos = 0, chosen = [0, 0, 0];
+    let pos = 0, chosen = [0, 0, 0];
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       // the camera looks at the place in front where the chosen sort stands, the oak behind it
       orbit: [A, 0.4], rad: 4.6, near: 4.3, look: [Math.cos(A) * 0.6, 0.95, Math.sin(A) * 0.6], still: 1, clear: 2.1,
-      tap() { taps++; },
       tick(t) {
-        const target = Math.floor(t / STEP) + taps;
+        const target = Math.floor(t / STEP);
         pos = glide(target, t);
       },
       lights() { return [{ p: [chosen[0], 1.9, chosen[2]], col: [0.75, 0.9, 1], i: 1.3, fall: 0.5 }]; },
@@ -2068,7 +2021,7 @@ window.BasilSkins = (() => {
   });
   // Справка: высокий камень с огамической надписью вдоль ребра. Зарубки загораются одна за другой снизу вверх, как
   // строка, которую читают, и руны на камнях круга разгораются вместе с ней; строка прочитана — гаснет, и начинается
-  // следующая. У подножия растёт куст. Касание — следующая строка
+  // следующая. У подножия растёт куст
   scene('druid', 'spravka', S => {
     const { R, T } = S, H = 2.3, ANG = 0.7, STEP = 0.5, N = 9, DUR = N * STEP + 1.8;
     const r0 = 0.42, r1 = 0.26, rAt = y => r0 + (r1 - r0) * y / H;
@@ -2084,7 +2037,6 @@ window.BasilSkins = (() => {
     return {
       orbit: [ANG, 0.45], near: 4.6, rad: 5, look: [0, 1.2, 0], still: 4, clear: 1.4,
       rune: () => 0.35 + read * 0.6,
-      tap(t) { line++; start = t; },
       tick(t) {
         while (t - start > DUR) { start += DUR; line++; }
         u = t - start;
@@ -2122,7 +2074,7 @@ window.BasilSkins = (() => {
   });
   // Удобрения: три котла на камнях вокруг куста, над каждым в пару висит его руна — ᚾ, ᛈ и ᚲ, азот, фосфор и калий.
   // По очереди котёл отдаёт свой свет земле: свет уходит под мох и бежит по корню к кусту, корень за ним светится,
-  // потом свет поднимается по стеблю. Касание — следующий котёл сейчас
+  // потом свет поднимается по стеблю
   scene('druid', 'udobreniya', S => {
     const { R, T } = S, EVERY = 3.8, FLOW = 1.5, CLIMB = 1.1, ROOT = [76, 56, 38];
     const COL = [[130, 196, 255], [255, 128, 82], [255, 210, 92]];
@@ -2132,15 +2084,14 @@ window.BasilSkins = (() => {
       const [x, z] = CA[i], s = Math.sin(u * Math.PI) * 0.22 / 1.4, f = (1 - u) * 0.86;
       return [x * f - z * s, 0.025, z * f + x * s];
     };
-    let taps = [], flow = null, climb = null, top = 0.3;
+    let flow = null, climb = null, top = 0.3;
     return {
       rad: 5, near: 4.6, look: [0, 0.9, 0], still: 2.2, clear: 2,
       rune: t => 0.5 + 0.15 * Math.sin(t * 1.1) + (climb ? 0.6 * Math.sin(climb.f * Math.PI) : 0),
-      tap(t) { taps.push({ t, k: (taps.length + 1 + Math.floor(t / EVERY)) % 3 }); if (taps.length > 3) taps.shift(); },
       tick(t) {
-        // the sends: one every few seconds by itself, in turn, and one at each tap
+        // the sends: one every few seconds, in turn
         const n = Math.floor(t / EVERY);
-        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }].concat(taps).filter(s => s.t <= t).sort((a, b) => b.t - a.t);
+        const sends = [{ t: n * EVERY, k: n % 3 }, { t: (n - 1) * EVERY, k: (n + 2) % 3 }];
         flow = climb = null;
         for (const s of sends) {
           const u = t - s.t;
@@ -2189,13 +2140,12 @@ window.BasilSkins = (() => {
     };
   });
   // Уход: над кругом камней идёт солнце, и куст поворачивается за ним, а его тень на мху — от солнца; потом луна.
-  // Раз в день приходит туча и поливает куст, на листьях блестит роса. Касание — дождь сейчас
+  // Раз в день приходит туча и поливает куст, на листьях блестит роса
   scene('druid', 'uhod', S => {
     const { R, T } = S, DAY = 24, RAIN = 5;
-    let tapped = -99, orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
+    let orb = [0, 3, 0], day = 1, rise = 1, cloud = null, wet = 0, lean = [0, 0];
     return {
       rad: 4.9, near: 4.6, look: [0, 1.2, 0], still: 4, shafts: false,
-      tap(t) { tapped = t; },
       tick(t) {
         const s = (t % DAY) / DAY, sun = s < 0.72, a = sun ? s / 0.72 * Math.PI : (s - 0.72) / 0.28 * Math.PI, up = Math.sin(a);
         day = sun ? up : 0;
@@ -2206,7 +2156,7 @@ window.BasilSkins = (() => {
         R.key = { dir: norm(sub(orb, [0, 1, 0])), i: 0.3 + (sun ? 0.75 * day : 0.12 * rise), col: mix3([0.55, 0.7, 1], [1, 0.88, 0.66], sun ? smooth(day / 0.3) : 0) };
         const want = sun ? [orb[0] * 0.09 * day, 0] : [0, 0];
         lean = reduce.matches ? want : [lean[0] + (want[0] - lean[0]) * 0.04, 0];
-        const rainAt = Math.max(Math.floor((t - 5) / DAY) * DAY + 5, tapped), r = t - rainAt;
+        const rainAt = Math.floor((t - 5) / DAY) * DAY + 5, r = t - rainAt;
         // the cloud comes in and goes, swelling out of nothing and melting away at the side
         cloud = r >= 0 && r < RAIN ? { x: r < 1.2 ? -2.8 * (1 - smooth(r / 1.2)) : r > RAIN - 1.2 ? 2.8 * smooth((r - RAIN + 1.2) / 1.2) : 0, k: smooth(r / 0.7) * (1 - smooth((r - RAIN + 0.7) / 0.7)), rain: r > 1 && r < RAIN - 1 } : null;
         wet = r < 0 ? 0 : r < RAIN ? Math.min(1, Math.max(0, r - 1.2) / 2) : Math.max(0, 1 - (r - RAIN) / 9);
@@ -2234,7 +2184,7 @@ window.BasilSkins = (() => {
     };
   });
   // Вкус и кухня: котёл на треноге над костром, в нём зелёное варево; в котёл падают листья базилика, из пара поднимается
-  // аромат — молекула эвгенола, ягоды омелы и рябины на веточках — и тает. Касание — горсть листьев
+  // аромат — молекула эвгенола, ягоды омелы и рябины на веточках — и тает. Время от времени в котёл падает горсть листьев
   scene('druid', 'vkus', S => {
     const { R, T } = S, mol = molShape('eug'), RIM = 0.98;
     const PAL = { bond: [168, 124, 76], O: [236, 70, 52], C: [244, 240, 222], lo: true };
@@ -2247,7 +2197,7 @@ window.BasilSkins = (() => {
     };
     return {
       near: 4.6, look: [0, 1.2, 0], still: 2.4, clear: 1.6, shafts: false,
-      tap(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
+      every: 6, beat(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
       lights(t) { return [{ p: [0, 0.4, 0.1], col: [1, 0.62, 0.3], i: 1.5 + 0.25 * Math.sin(t * 9) + 0.15 * Math.sin(t * 23), fall: 0.5 }, { p: [0, RIM + 0.3, 0], col: [0.6, 1, 0.5], i: 0.4, fall: 2 }]; },
       draw(t) {
         campfire(R, T, 0, 0, 1.25, t);
@@ -2260,7 +2210,7 @@ window.BasilSkins = (() => {
         prism(R, 0, 0, 0.74, RIM, 0.4, 0.34, 10, { col: [42, 44, 48] });
         ringTop(R, 0, 0, RIM, 0.31, 0.37, 10, { col: [62, 64, 68] });
         disc(R, 0, 0, RIM - 0.03, 0.32, 10, { tex: T.paste });
-        // the leaves falling in: a steady few, and a handful at a tap
+        // the leaves falling in: a steady few, and a handful now and then
         FALL.forEach((f, i) => { const k = (f.a + t * 0.2) % 1; falling(f.x, f.z, smooth(k), t * f.s * 2 + i); });
         hands = hands.filter(h => t - h < 1.6 && t >= h);
         hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(Math.cos(i * 1.1) * 0.4, Math.sin(i * 1.1) * 0.35, k, t * 2 + i); } });
@@ -3013,10 +2963,10 @@ window.BasilSkins = (() => {
     // a page shown in the sheet of another (?peek=1) is only its place: no background, no scene, the molecules as here
     if (!root.classList.contains('is-peek')) {
       mounted.push(BACKS[skin]());
+      // the scenes: the background of the head of each chapter and of the home page's hero, by themselves, without a finger
       $$('.ch-hero').forEach(h => { const v = h.closest('[data-view]'); mounted.push(stage(h, v && v.dataset.view, skin)); });
-      // the home page: the scene is the background of its hero, by itself, without a finger
       const hero = $('.view-home .hero');
-      if (hero) mounted.push(stage(hero, 'glavnaya', skin, true));
+      if (hero) mounted.push(stage(hero, 'glavnaya', skin));
     }
     // the drawings of «Гримуар» go to the console's pixels; «Друид» keeps them smooth and only colours them
     if (skin === 'grimoire') {

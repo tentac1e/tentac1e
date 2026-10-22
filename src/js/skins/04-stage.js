@@ -1,8 +1,9 @@
   /* ------------------------------------------------------------------ */
   /* the stage at the head of every chapter and in the hero of the home  */
-  /* page: the world of the skin around (05-grimoire.js, 06-druid.js) and */
-  /* the chapter's own scene in the middle (05-grimoire-*.js,             */
-  /* 06-druid-*.js)                                                       */
+  /* page — the background of its block, under the title, by itself: no   */
+  /* finger turns it and nothing is tapped. The world of the skin around  */
+  /* (05-grimoire.js, 06-druid.js) and the chapter's own scene in the     */
+  /* middle (05-grimoire-*.js, 06-druid-*.js)                             */
   /* ------------------------------------------------------------------ */
   /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t), overlay(holder, R) }):
      the options of its rasterizer, its textures, its key light, the three colours of its sky, what its scenes have
@@ -13,7 +14,8 @@
      stands (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
      tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
      point lights, fill — how strong the soft light from the camera's side is, fx(t, F) — sparks and halos over the
-     picture (F.spark, F.halo, F.dot, F.streak), tap(t) — what a tap does; candles — its own candles; glow — the
+     picture (F.spark, F.halo, F.dot, F.streak), beat(t) and every — what the scene does by itself every few seconds of
+     its clock (a ward flares, a handful of leaves falls in), as a loop; candles — its own candles; glow — the
      colour of the circle; glowAdd(t) — how bright it burns; look, rad, near — the camera (the point it looks at, how
      far it stands beside the text of a wide screen, how far in the middle of a narrow one); orbit [angle, swing] — a
      camera that swings in front of the scene instead of going round it; still — the moment shown when the reader asked
@@ -180,16 +182,17 @@
     };
   }
 
-  // backdrop: the scene as a background of its block (the home page) — no finger turns it, no tap; it goes on by itself
-  function stage(host, view, skin, backdrop = false) {
+  // the scene as the background of its block (the head of a chapter, the hero of the home page): no finger turns it,
+  // nothing is tapped; it goes on by itself
+  function stage(host, view, skin) {
     const W = WORLDS[skin], set = SCENES[skin];
     const holder = doc.createElement('div');
-    holder.className = 'psx-stage' + (backdrop ? ' is-backdrop' : '');
+    holder.className = 'psx-stage is-backdrop';
     holder.dataset.scene = set[view] ? view : 'glavnaya';
     holder.dataset.skin = skin;
     holder.setAttribute('aria-hidden', 'true');
-    // the home's scene is the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
-    if (backdrop) holder.dataset.bg = '';
+    // the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
+    holder.dataset.bg = '';
     const cv = doc.createElement('canvas');
     holder.appendChild(cv);
     host.insertBefore(holder, host.firstChild);
@@ -200,48 +203,24 @@
     const S = { R, T, view, ang: 0.6 };
     const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, orbit: [0.6, 0.35], ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);
-    // the reader turns the scene with a finger or the mouse; a tap does what the scene does (a puff of sparks by default)
-    const ptr = { turn: 0, lift: 0, drag: null, puffs: [] };
     // the scene's own clock: it goes on by the frames drawn, a long frame or a pause (off the screen, asleep, another
     // tab) counts as a tenth of a second at most — the picture never jumps ahead when it wakes
-    let now0 = null, time = 0;
+    let now0 = null, time = 0, beat = -1;
     const tick = now => { if (now0 != null) time += clamp((now - now0) / 1000, 0, 0.1); now0 = now; return time; };
-    const clock = () => (reduce.matches ? sc.still : time);
-    const onDown = e => { ptr.drag = { x: e.clientX, y: e.clientY, turn: ptr.turn, lift: ptr.lift, moved: false }; };
-    const onMove = e => {
-      if (!ptr.drag) return;
-      const dx = e.clientX - ptr.drag.x, dy = e.clientY - ptr.drag.y;
-      if (Math.abs(dx) + Math.abs(dy) > 6) ptr.drag.moved = true;
-      ptr.turn = ptr.drag.turn + dx * 0.006;
-      ptr.lift = clamp(ptr.drag.lift - dy * 0.004, -0.6, 0.9);
-      L.start();
-    };
-    const onUp = () => {
-      if (ptr.drag && !ptr.drag.moved) {
-        if (sc.tap) sc.tap(clock());
-        else { ptr.puffs.push({ t: clock() }); if (ptr.puffs.length > 4) ptr.puffs.shift(); }
-        L.start();
-      }
-      ptr.drag = null;
-    };
-    if (!backdrop) {
-      holder.addEventListener('pointerdown', onDown);
-      addEventListener('pointermove', onMove, { passive: true });
-      addEventListener('pointerup', onUp);
-      addEventListener('pointercancel', onUp);
-    }
     function frame(now) {
       // the clock of the scene: stands at its chosen moment when the reader asked for less motion
       const t = reduce.matches ? sc.still : tick(now);
       R.size();
       // wide: the chapter's text on the left, the scene to the right of it; else the scene in the middle, closer
       const wide = R.W > R.H * 1.45;
-      const ang = sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1] + ptr.turn;
-      const look = sc.look, eyeY = look[1] + 1.1 + Math.sin(t * 0.3) * 0.15 + ptr.lift;
+      const ang = sc.orbit[0] + Math.sin(t * 0.13) * sc.orbit[1];
+      const look = sc.look, eyeY = look[1] + 1.1 + Math.sin(t * 0.3) * 0.15;
       const rad = wide ? sc.rad : sc.near;
       S.ang = ang;
       R.cam([look[0] + Math.cos(ang) * rad, eyeY, look[2] + Math.sin(ang) * rad], look, wide ? 1.25 : 1.05, wide ? 0.68 : 0.5, wide ? 0.44 : 0.4);
       R.key = W.key;
+      // what the scene does now and then, by itself: once for each round of `every` seconds of its clock
+      if (sc.beat && sc.every && !reduce.matches) { const n = Math.floor(t / sc.every); if (n !== beat) { if (beat >= 0 || n > 0) sc.beat(n * sc.every); beat = n; } }
       if (sc.tick) sc.tick(t);
       R.lights = env.lights(t)
         .concat(sc.fill ? [{ p: [look[0] + Math.cos(ang) * 2.2, look[1] + 1.5, look[2] + Math.sin(ang) * 2.2], col: W.fillCol || [0.78, 0.62, 0.95], i: sc.fill, fall: 0.16 }] : [], sc.lights ? sc.lights(t) : []);
@@ -259,14 +238,6 @@
       const F = fxKit(R);
       env.fx(t, F);
       if (sc.fx) sc.fx(t, F);
-      ptr.puffs = ptr.puffs.filter(p => t - p.t < 2.2 && t >= p.t);
-      ptr.puffs.forEach(p => {
-        const life = (t - p.t) / 2.2;
-        for (let i = 0; i < 18; i++) {
-          const q = i / 18 * Math.PI * 2, r = 0.2 + life * 0.9;
-          F.spark([Math.cos(q) * r * 0.6, 2.1 + life * 1.3 + Math.sin(i * 7) * 0.1, Math.sin(q) * r * 0.6], life, true);
-        }
-      });
       x.globalCompositeOperation = 'source-over';
       W.post(R, t);
       holder.classList.add('is-drawn');
@@ -274,10 +245,10 @@
     // runs while on the screen, by the page's frame budget; one still frame with reduced motion
     let seen = false;
     // as many frames on a phone as anywhere: at 20 the scenes judder
-    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches && !ptr.drag) L.stop(); }, W.fps || 30, W.fps || 30);
+    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, W.fps || 30, W.fps || 30);
     // a check that draws the scene frame by frame itself (tests/motion.js) sets window.BASIL_STAGES = [] before the page;
     // seek sets the scene's clock, a minute into the page in a moment
-    if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame, R, stop: () => L.stop(), seek: s => { time = s; now0 = null; } });
+    if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame, R, stop: () => L.stop(), seek: s => { time = s; now0 = null; beat = -1; } });
     const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); if (seen) L.start(); else L.stop(); }) : null;
     if (io) io.observe(holder); else { seen = true; L.start(); }
     const vis = () => { if (!doc.hidden && seen) L.start(); };
@@ -287,9 +258,6 @@
         L.stop();
         if (io) io.disconnect();
         doc.removeEventListener('visibilitychange', vis);
-        removeEventListener('pointermove', onMove);
-        removeEventListener('pointerup', onUp);
-        removeEventListener('pointercancel', onUp);
         holder.remove();
       }
     };

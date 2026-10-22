@@ -1,5 +1,5 @@
   // Сорта: пять сортов на пнях вокруг старого дуба. Выбранный стоит в столбе лунного света и светится; по кругу
-  // выходит вперёд следующий — сам или по касанию
+  // выходит вперёд следующий
   scene('druid', 'sorta', S => {
     const { R, T } = S, N = 5, STEP = 6, RAD = 1.5, A = 0.75, O = [-Math.cos(A) * 0.5, 0, -Math.sin(A) * 0.5];
     const KINDS = [
@@ -12,14 +12,13 @@
     const BALL = [...Array(20)].map((_, i) => { const y = 1 - (i + 0.5) / 20 * 1.6, r = Math.sqrt(Math.max(0, 1 - y * y)), q = i * 2.4; return norm([Math.cos(q) * r, y, Math.sin(q) * r]); });
     const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
     const glide = glider(1.6);
-    let taps = 0, pos = 0, chosen = [0, 0, 0];
+    let pos = 0, chosen = [0, 0, 0];
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       // the camera looks at the place in front where the chosen sort stands, the oak behind it
       orbit: [A, 0.4], rad: 4.6, near: 4.3, look: [Math.cos(A) * 0.6, 0.95, Math.sin(A) * 0.6], still: 1, clear: 2.1,
-      tap() { taps++; },
       tick(t) {
-        const target = Math.floor(t / STEP) + taps;
+        const target = Math.floor(t / STEP);
         pos = glide(target, t);
       },
       lights() { return [{ p: [chosen[0], 1.9, chosen[2]], col: [0.75, 0.9, 1], i: 1.3, fall: 0.5 }]; },

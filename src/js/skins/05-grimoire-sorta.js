@@ -1,5 +1,5 @@
   // Сорта: five sorts on a turning table, as the screen where a game's hero is chosen — the chosen one comes to the
-  // front, rises into a beam of light and turns itself; the table turns on to the next by itself, or at a tap
+  // front, rises into a beam of light and turns itself; the table turns on to the next by itself
   scene('grimoire', 'sorta', S => {
     const { R, T } = S, N = 5, STEP = 6, RAD = 1.2;
     const KINDS = [
@@ -14,13 +14,12 @@
     // a small bush has four pairs
     const SMALL = PAIRS.slice(0, 3).concat([[0.9, 0.2, -0.45]]);
     const glide = glider(1.6);
-    let taps = 0, pos = 0, chosen = [0, 0, 0];
+    let pos = 0, chosen = [0, 0, 0];
     const wrap = v => ((v % N) + N + N / 2) % N - N / 2;
     return {
       glow: [176, 110, 255], orbit: [0.75, 0.42], rad: 5, near: 4.2, look: [0, 1.15, 0], still: 1,
-      tap() { taps++; },
       tick(t) {
-        const target = Math.floor(t / STEP) + taps;
+        const target = Math.floor(t / STEP);
         pos = glide(target, t);
       },
       lights() { return [{ p: [chosen[0], 2.3, chosen[2]], col: [0.75, 0.62, 1], i: 1.4, fall: 0.35 }]; },
