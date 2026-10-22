@@ -108,14 +108,15 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
 
   // no row of dives under the chapter's title: they stand at the ends of their tabs, «Для любопытных»
   const row = await page.evaluate(() => ({ nav: document.querySelectorAll('.deep-index, .ch-hero a[href^="#deep-"]').length, label: (document.querySelector('.deep-zone-label') || {}).textContent }));
-  // a link from the text to a dive of another tab of this chapter: the dive in the sheet, the tab the reader is on stays
+  // a link from a dive to a dive of another tab of this chapter (from the text the science opens only in its own tab):
+  // the dive in the sheet, the tab the reader is on stays
   await page.goto(fileUrl('gidro.html') + '#' + encodeURIComponent('сборка'), { waitUntil: 'load' });
   await page.waitForTimeout(1200);
   const row2 = await page.evaluate(() => ({ nav: document.querySelectorAll('.deep-index, .ch-hero a[href^="#deep-"]').length, kinds: document.querySelectorAll('.deep-kind, .deep-tag, .deep-time').length, deeper: [...new Set([...document.querySelectorAll('.deeper-k')].map(x => x.textContent))] }));
   ok(!row.nav && !row2.nav && !row2.kinds && /^Для любопытных/.test(row.label || '') && row2.deeper.join() === 'Подробнее', `the chapter's head has no row of dives, their headings only what they are about ${JSON.stringify({ row, row2 })}`);
   const tab0 = await page.evaluate(() => document.querySelector('.panel.is-active').id);
   const toDive = 'main .panel.is-active a[href="#deep-dyhanie-kornya"]';
-  await page.evaluate(sel => document.querySelector(sel).scrollIntoView({ block: 'center', behavior: 'instant' }), toDive);
+  await page.evaluate(sel => { const a = document.querySelector(sel); a.closest('details.deep').open = true; a.scrollIntoView({ block: 'center', behavior: 'instant' }); }, toDive);
   await page.waitForTimeout(300);
   await page.click(toDive);
   ok(await ready(page), 'a link to a dive of another tab opens the sheet');
