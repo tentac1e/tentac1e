@@ -124,6 +124,23 @@ const { playwright, server, ok, done, landedAt } = require('./lib');
   await page.waitForTimeout(1800);
   const l5 = await landed();
   ok(placed(l5, await posNow()) && l5.y <= legacy.y + 4 && legacy.y - l5.y < l5.vh, `an old bookmark lands at the start of what stands there:${JSON.stringify(l5)} vs ${legacy.y}`);
+  // a question folded away under the line: the browser keeps a box for its answer, but the bookmark never lands on it
+  await page.mouse.wheel(0, 100);
+  const unseen = [];
+  for (let k = 30; k <= 230; k += 8) {
+    const got = await page.evaluate(async k => {
+      const d = document.querySelector('.panel.is-active .faq-here details:not([open])'), ans = d && d.querySelector(':scope > :not(summary)');
+      if (!ans) return null;
+      scrollTo({ top: d.querySelector('summary').getBoundingClientRect().bottom + scrollY - k, behavior: 'instant' });
+      await new Promise(r => setTimeout(r, 80));
+      dispatchEvent(new Event('pagehide'));
+      const sig = (JSON.parse(localStorage.getItem('basil-pos')).uhod || {}).sig || '';
+      return { sig, hidden: ans.textContent.replace(/\s+/g, ' ').trim().slice(0, 40) };
+    }, k);
+    if (!got) { unseen.push('no folded question'); break; }
+    if (got.sig === got.hidden) unseen.push(`${k}: ${got.sig}`);
+  }
+  ok(!unseen.length, `the bookmark never lands in a folded answer ${JSON.stringify(unseen)}`);
   // next tab at the end of a tab
   await page.goto(U('/удобрения'), { waitUntil: 'load' });
   await page.waitForTimeout(900);

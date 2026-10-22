@@ -4383,13 +4383,16 @@
   // the spot lands this far below the covered edge: the lines before it stay in sight, as in a book
   const READ_LEAD = 48;
   // the block being read at the top of the screen, and the start of the sentence the top line is in
+  // a block folded away: inside a closed <details> (a question's answer, a spread not opened) and not its summary —
+  // the browser keeps a box for it where it would stand, but the reader does not see it
+  const folded = el => !!el.closest('details:not([open]) > :not(summary)');
   function spotAt(scope) {
     const line = coverTop(false) + READ_LEAD;
     const blocks = readBlocks(scope);
     let b = null;
     for (const el of blocks) {
       const r = el.getBoundingClientRect();
-      if (r.height && r.bottom > line + 6) { b = el; break; }
+      if (r.height && r.bottom > line + 6 && !folded(el)) { b = el; break; }
     }
     if (!b) return null;
     let ch = 0, dy = 0;

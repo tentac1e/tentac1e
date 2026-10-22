@@ -38,7 +38,7 @@
 - `src/js/app/22-garden-weather.js`: `round2` 9, `wxSvp` 12, `wxPlace` 13, `wxCached` 16, `pad2` 23, `wxParse` 25, `wxRefresh` 42, `wxSearch` 64, `wxSetPlace` 72, `wxHere` 82, `fmtT` 90, `fillText` 91, `wxWhen` 93, `wxDays` 94, `wxTasks` 97, `wxAdvice` 118, `wxAge` 135, `wxStrip` 143
 - `src/js/app/22-garden.js`: `gardenLoad` 7, `gardenSave` 11, `gardenVariety` 15, `weekOf` 17, `later` 18, `daysWord` 19, `plantTasks` 25, `plantWeek` 115, `plantStage` 124, `plantNote` 130, `plantDone` 134, `lastNote` 138
 - `src/js/app/22-install.js`: `initInstall` 6
-- `src/js/app/22-reading-pos.js`: `readPos` 31, `absTop` 36, `labelOf` 37, `currentAnchor` 45, `headingBefore` 57, `ownWords` 69, `readBlocks` 70, `normText` 77, `plainText` 80, `sentenceStart` 91, `sentenceEnd` 97, `pointIn` 103, `caretAt` 113, `coverTop` 119, `spotAt` 128, `spotOf` 159, `findSpot` 184, `firstLetter` 198, `spotTop` 205, `markSpot` 221, `holdTop` 271, `bookmarkHere` 291, `savePos` 306, `resumeTo` 313, `saveDetour` 367, `readDetour` 370, `dropDetour` 376, `wayBack` 379, `offerBack` 399, `offerReturn` 404, `offerResume` 409, `initReadingPos` 434, `initLinks` 477, `initPageAction` 486
+- `src/js/app/22-reading-pos.js`: `readPos` 31, `absTop` 36, `labelOf` 37, `currentAnchor` 45, `headingBefore` 57, `ownWords` 69, `readBlocks` 70, `normText` 77, `plainText` 80, `sentenceStart` 91, `sentenceEnd` 97, `pointIn` 103, `caretAt` 113, `coverTop` 119, `folded` 130, `spotAt` 131, `spotOf` 162, `findSpot` 187, `firstLetter` 201, `spotTop` 208, `markSpot` 224, `holdTop` 274, `bookmarkHere` 294, `savePos` 309, `resumeTo` 316, `saveDetour` 370, `readDetour` 373, `dropDetour` 379, `wayBack` 382, `offerBack` 402, `offerReturn` 407, `offerResume` 412, `initReadingPos` 437, `initLinks` 480, `initPageAction` 489
 - `src/js/app/23-boot.js`: `boot` 4
 
 Общие помощники app.js — кто зовёт:
@@ -258,7 +258,7 @@
 
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
-- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:286`, `src/js/science/06-labs-loader.js:186`, `src/js/skins/09-start.js:30`
+- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:289`, `src/js/science/06-labs-loader.js:186`, `src/js/skins/09-start.js:30`
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:238`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:130`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
 - `basil:theme` — шлёт: `src/js/app/01-theme.js:33`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:491`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/js/skins/09-start.js:55`, `src/labs/vkus/pesto.js:67`
@@ -270,7 +270,7 @@
 Ключи `localStorage` (и база IndexedDB `basil-photos`) — в каких файлах встречаются, с первой строкой.
 
 - `basil-crt` — `src/js/skins/09-start.js:53`
-- `basil-detour` — `src/js/app/22-reading-pos.js:366`
+- `basil-detour` — `src/js/app/22-reading-pos.js:369`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
 - `basil-haptics` — `src/js/haptics.js:7`

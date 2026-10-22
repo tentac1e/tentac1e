@@ -7,7 +7,8 @@
    «Гримуар»: рисунки — через пиксельный фильтр, подписи в них остаются вне фильтра, экран ЭЛТ выключается в подвале
    и помнит это. «Друид»: рисунки как есть, над сценой — слой свечения, выключателя ЭЛТ нет. Молекула рисуется
    по-своему и крутится пальцем; в шторке «Заглянуть» — то же оформление, но без сцены и фона; с «меньше движения» —
-   один неподвижный кадр. Выключили — всё как было, и тема, выбранная луной, вернулась. Проверяет сборку в корне. */
+   один неподвижный кадр. Надписи гида — словами оформления, у каждого своими, а место чтения запоминается по обычным.
+   Выключили — всё как было: слова, и тема, выбранная луной. Проверяет сборку в корне. */
 const { playwright, ok, done, watch, fileUrl, FILES, SKINS, inSkin } = require('./lib');
 
 // what each skin shows: the colour of the browser's bar, the canvas behind the page, the face of the titles, pictures
@@ -41,6 +42,25 @@ function state(backs) {
   };
 }
 const DCL = () => { document.addEventListener('DOMContentLoaded', () => { const r = document.documentElement; window.__dcl = { skin: r.dataset.skin || null, theme: r.dataset.theme || null, crt: r.classList.contains('no-crt') }; }); };
+// some labels of the guide's frame as they read now, how many stand in a skin's words, what the skin calls the contents
+const words = () => ({
+  labels: ['.brand small', '.footer .hand', '.ch-hero .eyebrow', '.panel.is-active .deep-zone-label > span', '.panel.is-active .faq-here h3'].map(q => { const e = document.querySelector(q); return e ? e.textContent.trim() : null; }),
+  marked: document.querySelectorAll('[data-plain]').length,
+  say: window.BasilSkins && window.BasilSkins.on ? window.BasilSkins.say('Оглавление') : 'Оглавление'
+});
+// the first words the reading place keeps for the block of the line «Для любопытных» brought to the top of the screen
+// (after a key pressed: it keeps only a place the reader went to)
+const sigHere = async page => {
+  await page.keyboard.press('Shift');
+  // the line goes up the screen until the place is its block (where it lands depends on the heights over it)
+  for (let off = 200; off > -40; off -= 4) {
+    await page.evaluate(off => { const el = document.querySelector('.panel.is-active .deep-zone-label'); scrollTo({ top: el.getBoundingClientRect().top + scrollY - off, behavior: 'instant' }); }, off);
+    await page.waitForTimeout(120);
+    const sig = await page.evaluate(() => { dispatchEvent(new Event('pagehide')); return ((JSON.parse(localStorage.getItem('basil-pos') || '{}').uhod) || {}).sig || null; });
+    if (/любопытных/.test(sig || '')) return sig;
+  }
+  return null;
+};
 const pick = async (page, skin) => { await page.click('#skin-btn'); await page.click(`#skin-menu [data-skin="${skin}"]`); };
 
 (async () => {
@@ -65,6 +85,8 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
     await page.waitForTimeout(800);
     let s = await page.evaluate(state, BACKS);
     ok(!s.skin && s.theme === 'light' && !asked.length && !s.loaded && s.field && s.art && s.moon && !s.crtRow, tag(`off: the skins' file is not fetched, the greenhouse and the chapter's art stand ${JSON.stringify(s)}`));
+    const plain = await page.evaluate(words), plainSig = await sigHere(page);
+    const said = {};
     for (const sk of SKINS) {
       await pick(page, sk);
       await page.waitForTimeout(1500);
@@ -72,12 +94,20 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
       const saved = await page.evaluate(() => localStorage.getItem('basil-skin')), L = LOOK[sk];
       ok(s.skin === sk && s.theme === 'dark' && asked.length === 1 && s.on && s.stages === s.heroes && s.of === sk && s.backs.join() === L.back && !s.field && !s.art && !s.moon && saved === JSON.stringify(sk) && s.meta === L.meta,
         tag(`the menu switches on ${sk}: dark, its scenes and its ${L.back} in place, the moon aside, remembered ${JSON.stringify({ ...s, asked: asked.length, saved })}`));
+      // its own words for the frame of the guide, each different from the plain one and from the other skin's; the
+      // place of reading keeps going by the plain words
+      const w = await page.evaluate(words), sig = await sigHere(page);
+      said[sk] = w;
+      ok(w.labels.every((t, i) => t && t !== plain.labels[i] && SKINS.every(o => o === sk || !said[o] || said[o].labels[i] !== t)) && w.marked >= w.labels.length && w.say !== plain.say && sig && sig === plainSig,
+        tag(`${sk}: the guide's labels in its own words, the place of reading by the plain ones ${JSON.stringify({ plain: plain.labels, w: w.labels, say: w.say, sig, plainSig })}`));
     }
     await pick(page, '');
     await page.waitForTimeout(900);
     s = await page.evaluate(state, BACKS);
     ok(!s.skin && s.theme === 'light' && !s.on && !s.stages && !s.backs.length && s.field && s.art && s.moon && await page.evaluate(() => !document.querySelector('.psx-g') || getComputedStyle(document.querySelector('.psx-g')).filter === 'none'),
       tag(`off again: the greenhouse and the art back, the light theme the moon chose ${JSON.stringify(s)}`));
+    const back = await page.evaluate(words);
+    ok(JSON.stringify(back.labels) === JSON.stringify(plain.labels) && !back.marked, tag(`off again: the plain words back ${JSON.stringify(back)}`));
     await page.close();
     await ctx.close();
 

@@ -209,7 +209,7 @@
 - `src/js/app/22-garden-weather.js` (153 стр.): WX_KEY, WX_API, WX_DAY
 - `src/js/app/22-garden.js` (138 стр.): GARDEN_KEY
 - `src/js/app/22-install.js` (96 стр.): initInstall
-- `src/js/app/22-reading-pos.js` (498 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
+- `src/js/app/22-reading-pos.js` (501 стр.): POS_KEY, READ_HEADS, READ_WHOLE, READ_BLOCK, SENT_END, READ_LEAD, USER_INPUT, HOLD_ENDS, DETOUR_KEY, initReadingPos, initLinks, initPageAction
 - `src/js/app/23-boot.js` (24 стр.)
 
 **science.js**
