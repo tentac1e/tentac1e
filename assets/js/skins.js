@@ -180,20 +180,12 @@ window.BasilSkins = (() => {
             const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10) : o.tex;
             if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
             x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath();
-            if (this.smooth) {
-              // smooth: the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many
-              // times cheaper where the canvas is drawn without the graphics card
-              const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
-              pat.setTransform(new DOMMatrix(M));
-              x.fillStyle = pat;
-              x.fill();
-            } else {
-              x.save();
-              x.clip();
-              x.setTransform(...M);
-              x.drawImage(src, 0, 0);
-              x.restore();
-            }
+            // the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many times cheaper
+            // where the canvas is drawn without the graphics card
+            const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
+            pat.setTransform(new DOMMatrix(M));
+            x.fillStyle = pat;
+            x.fill();
             x.globalAlpha = 1;
             if (bx && solid(o)) dark(A, B, C);
             if (bx && o.emis) {
@@ -487,6 +479,12 @@ window.BasilSkins = (() => {
       }
       ritual(t, glow ? col : col.map(v => v * 0.55), glow ? gold : gold.map(v => v * 0.55));
     });
+    // the glow: which of its blocks of 8 × 8 hold a line (psxInk) — a cell of the floor over none of them adds nothing
+    if (glow) {
+      const d = c.getContext('2d').getImageData(0, 0, 128, 128).data, ink = new Uint8Array(256);
+      for (let i = 3; i < d.length; i += 4) if (d[i]) { const q = (i - 3) / 4; ink[((q / 128 | 0) >> 3) * 16 + ((q % 128) >> 3)] = 1; }
+      c.psxInk = ink;
+    }
     FLOORS.set(key, c);
     return c;
   }
@@ -1652,10 +1650,36 @@ window.BasilSkins = (() => {
           if (!sc.bare) {
             // the floor and its circle: a layer of their own, under everything
             const FL = 4.4, N = 2, glowA = sc.glowAdd ? sc.glowAdd(t) : 0.32 + 0.22 * Math.sin(t * 1.4);
+            // a texture goes onto a triangle by an affine map, as on the console: where the floor runs from under the
+            // camera into the distance, one big cell bent the lines of the circle into long streaks falling towards
+            // the lens. A cell is cut in four, again and again, while the map would stray by more than a few pixels:
+            // its size on the screen times its spread in depth (a cell off the screen is left whole, to be culled; one
+            // that runs under the camera is cut only into a few, to find the part of it in front)
+            const cell = (x0, x1, z0, z1, u0, u1, v0, v1, k) => {
+              const vs = [[x0, z0], [x1, z0], [x0, z1], [x1, z1]].map(([x, z]) => R.view([x, 0, z]));
+              let split = k < 3;
+              if (vs.every(v => v[2] > R.near)) {
+                const zs = vs.map(v => v[2]), lo = Math.min(...zs), hi = Math.max(...zs);
+                const ps = vs.map(v => R.proj(v)), X = ps.map(q => q[0]), Y = ps.map(q => q[1]);
+                const seen = Math.max(...X) > 0 && Math.min(...X) < R.W && Math.max(...Y) > 0 && Math.min(...Y) < R.H;
+                split = k < 5 && seen && Math.hypot(Math.max(...X) - Math.min(...X), Math.max(...Y) - Math.min(...Y)) * (hi - lo) / (hi + lo) > 8;
+              }
+              if (split) {
+                const xm = (x0 + x1) / 2, zm = (z0 + z1) / 2, um = (u0 + u1) / 2, vm = (v0 + v1) / 2;
+                cell(x0, xm, z0, zm, u0, um, v0, vm, k + 1); cell(xm, x1, z0, zm, um, u1, v0, vm, k + 1);
+                cell(x0, xm, zm, z1, u0, um, vm, v1, k + 1); cell(xm, x1, zm, z1, um, u1, vm, v1, k + 1);
+                return;
+              }
+              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: FLOOR, layer: 0, ds: true }, u0, u1, v0, v1);
+              if (inked(u0, u1, v0, v1)) quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: GLOW, layer: 0, add: glowA, ds: true }, u0, u1, v0, v1);
+            };
+            const inked = (u0, u1, v0, v1) => {
+              for (let y = Math.floor(v0 * 16); y < Math.ceil(v1 * 16); y++) for (let x = Math.floor(u0 * 16); x < Math.ceil(u1 * 16); x++) if (GLOW.psxInk[y * 16 + x]) return true;
+              return false;
+            };
             for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
-              const x0 = -FL + i * FL * 2 / N, x1 = x0 + FL * 2 / N, z0 = -FL + j * FL * 2 / N, z1 = z0 + FL * 2 / N;
-              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: FLOOR, layer: 0, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
-              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: GLOW, layer: 0, add: glowA, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
+              const x0 = -FL + i * FL * 2 / N, z0 = -FL + j * FL * 2 / N;
+              cell(x0, x0 + FL * 2 / N, z0, z0 + FL * 2 / N, i / N, (i + 1) / N, j / N, (j + 1) / N, 0);
             }
             for (let k = 0; k < 4; k++) {
               const q = k * Math.PI / 2, far = 16, s = [Math.cos(q), Math.sin(q)], tn = [-s[1], s[0]];
@@ -2843,7 +2867,8 @@ window.BasilSkins = (() => {
   };
   /* ------------------------------------------------------------------ */
   /* the crypt behind the page: fog of old blood and violet, ash and      */
-  /* sparks drifting up, at a fifth of the resolution                     */
+  /* sparks drifting up. A small canvas drawn up smooth: dithered and     */
+  /* drawn up square, its fog lay over the page as a coarse grid of dots  */
   /* ------------------------------------------------------------------ */
   function crypt() {
     const cv = doc.createElement('canvas');
@@ -2851,16 +2876,19 @@ window.BasilSkins = (() => {
     cv.setAttribute('aria-hidden', 'true');
     const page = $('.page');
     (page ? page.parentNode : doc.body).insertBefore(cv, page);
-    const x = cv.getContext('2d', { willReadFrequently: true });
-    const R = new Raster(cv, { px: 5, maxW: 320, levels: 20 });
+    const R = new Raster(cv, { smooth: true }), x = R.x;
     const motes = [...Array(70)].map((_, i) => ({ x: (i * 0.618) % 1, y: (i * 0.37) % 1, s: 0.2 + (i % 7) / 10, ember: i % 9 === 0 }));
     const blobs = [[0.2, 0.3, '40,20,58'], [0.8, 0.2, '62,14,26'], [0.6, 0.8, '34,18,48'], [0.1, 0.9, '58,16,28']];
     const t0 = performance.now();
-    let scroll = scrollY;
+    // the size of the crypt's pixels: a third of the screen's, at most 520 across (sizeTo, not size: smooth, size
+    // would draw it at the screen's resolution)
+    const fit = () => { const cw = cv.clientWidth || 300, ch = cv.clientHeight || 200, s = Math.max(3, cw / 520); R.sizeTo(Math.round(cw / s), Math.round(ch / s)); };
+    // the motes rise in their own time and stand still while the page scrolls: a background that rides the scroll
+    // pulls at the eye (so the owner found the old forest of the druid)
     function frame(now) {
       const still = reduce.matches, t = (now - t0) / 1000;
-      R.size();
-      const W = R.W, H = R.H, drift = still ? 0 : (scrollY - scroll) / innerHeight * 0.15;
+      fit();
+      const W = R.W, H = R.H;
       x.fillStyle = '#0B0910';
       x.fillRect(0, 0, W, H);
       blobs.forEach(([bx, by, c], i) => {
@@ -2870,17 +2898,14 @@ window.BasilSkins = (() => {
         x.fillStyle = g; x.fillRect(0, 0, W, H);
       });
       motes.forEach(m => {
-        const y = (((m.y - (still ? 0 : t * 0.006 * m.s) - drift * m.s) % 1) + 1) % 1, xx = (m.x + (still ? 0 : Math.sin(t * 0.2 + m.y * 9) * 0.01)) * W;
+        const y = (((m.y - (still ? 0 : t * 0.006 * m.s)) % 1) + 1) % 1, xx = (m.x + (still ? 0 : Math.sin(t * 0.2 + m.y * 9) * 0.01)) * W;
         x.fillStyle = m.ember ? 'rgba(238,138,50,.8)' : 'rgba(181,168,141,.35)';
-        x.fillRect(xx | 0, (y * H) | 0, 1, 1);
+        x.fillRect(xx, y * H, 1, 1);
       });
-      R.post(20);
     }
     const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 15);
     L.start();
-    const onScroll = () => { if (!L.on && !reduce.matches) L.start(); };
-    const vis = () => { if (!doc.hidden) { scroll = scrollY; L.start(); } };
-    addEventListener('scroll', onScroll, { passive: true });
+    const vis = () => { if (!doc.hidden) L.start(); };
     doc.addEventListener('visibilitychange', vis);
     let rz = 0;
     const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { if (reduce.matches) frame(performance.now()); }, 120); };
@@ -2888,7 +2913,6 @@ window.BasilSkins = (() => {
     return {
       destroy() {
         L.stop();
-        removeEventListener('scroll', onScroll);
         removeEventListener('resize', onResize);
         doc.removeEventListener('visibilitychange', vis);
         cv.remove();

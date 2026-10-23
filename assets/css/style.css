@@ -3155,7 +3155,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 /* ---- the page: the greenhouse and its sky step aside for the crypt ---- */
 [data-skin="grimoire"] body { font-size: 1.02rem; line-height: 1.62; font-weight: 500; }
 [data-skin="grimoire"] #leaf-field, [data-skin="grimoire"] .aura, [data-skin="grimoire"] .sky-layer { display: none !important; }
-#psx-crypt { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; image-rendering: pixelated; }
+#psx-crypt { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
 [data-skin="grimoire"] ::selection { background: var(--blood); color: var(--ink); }
 [data-skin="grimoire"] :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 2px; }
 [data-skin="grimoire"] a { color: var(--basil); text-decoration-thickness: 2px; text-decoration-color: color-mix(in srgb, var(--basil) 45%, transparent); }
@@ -3204,8 +3204,19 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
   text-shadow: none;
 }
 
-/* ---- the header: a crypt band with a bone rule and a blood line under it ---- */
-[data-skin="grimoire"] .topbar { background: linear-gradient(var(--surface), var(--bg)); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 2px solid var(--rim-d); box-shadow: 0 2px 0 var(--blood-d); }
+/* ---- the header: a bed of the crypt under its row, fading out towards the edges of the screen and below, and the
+   bone rule with its blood line under it only as long as the row — no band and no line across a wide screen ---- */
+[data-skin="grimoire"] .topbar { --band-fade: max(16px, calc(50vw - 760px)); background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 0; box-shadow: none; }
+[data-skin="grimoire"] .topbar::before {
+  content: ""; position: absolute; inset: 0 0 -20px; z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, var(--surface), var(--bg) calc(100% - 20px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
+}
+[data-skin="grimoire"] .topbar::after {
+  content: ""; position: absolute; bottom: -2px; left: 50%; width: min(1376px, calc(100% - 32px)); height: 4px; transform: translateX(-50%); pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--rim-d) 12%, var(--rim-d) 88%, transparent) top / 100% 2px no-repeat, linear-gradient(90deg, transparent, var(--blood-d) 12%, var(--blood-d) 88%, transparent) bottom / 100% 2px no-repeat;
+}
 [data-skin="grimoire"] .brand span { font-family: var(--font-title); font-weight: 700; font-size: 1.55rem; letter-spacing: .01em; color: var(--ink); }
 [data-skin="grimoire"] .brand small { font-family: var(--font-label); font-weight: 700; font-size: .78rem; letter-spacing: .12em; color: var(--gold); }
 [data-skin="grimoire"] .icon-btn, [data-skin="grimoire"] .search-btn { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface-2); color: var(--ink-2); box-shadow: 3px 3px 0 var(--shade); transition: none; }
@@ -3337,22 +3348,26 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 :root[data-skin] .view-home .hero { position: relative; isolation: isolate; grid-template-columns: minmax(0, 1fr); min-height: clamp(440px, 44vw, 600px); }
 :root[data-skin] .view-home .hero-art { display: none; }
 :root[data-skin] .view-home .hero-text { position: relative; max-width: 36rem; text-shadow: 0 1px 10px var(--bg); }
-:root[data-skin] .view-home .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 52% 62% at 24% 52%, var(--scrim) 0%, var(--scrim) 45%, transparent 100%); }
+:root[data-skin] .view-home .hero::after { content: ""; position: absolute; inset: -40px 0 -40px -120px; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 50% 56% at 31% 52%, var(--scrim) 0%, var(--scrim) 45%, transparent 100%); }
 /* the head of a chapter: the scene to the right of the title (the camera puts it there on a wide screen), the title
    at the foot on a soft dark of its own */
 :root[data-skin] .ch-hero { position: relative; display: block; isolation: isolate; margin-top: 6px; min-height: clamp(340px, 38vw, 480px); padding: clamp(150px, 21vw, 260px) 0 clamp(16px, 2.4vw, 26px); }
 :root[data-skin] .ch-hero-art { display: none; }
 :root[data-skin] .ch-hero-text { position: relative; display: block; max-width: 44rem; text-shadow: 0 1px 10px var(--bg); }
-:root[data-skin] .ch-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 58% 62% at 20% 80%, var(--scrim) 0%, var(--scrim) 42%, transparent 100%); }
+:root[data-skin] .ch-hero::after { content: ""; position: absolute; inset: -8px 0 -60px -120px; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 54% 60% at 30% 72%, var(--scrim) 0%, var(--scrim) 42%, transparent 100%); }
+/* the dark under the title is a pool with no edge anywhere: it reaches out past the column to the left and below and
+   fades out there — a radial gradient alone is cut off by its box, and on a wide screen that drew a hard dark
+   rectangle beside the column (the owner saw it) */
+:root[data-skin] .view-home .hero::after, :root[data-skin] .ch-hero::after { --sx: 120px; --sy: 60px; --fade-l: linear-gradient(to right, transparent, #000 var(--sx)); --fade-v: linear-gradient(to bottom, transparent, #000 var(--sy), #000 calc(100% - var(--sy)), transparent); -webkit-mask-image: var(--fade-l), var(--fade-v); -webkit-mask-composite: source-in; mask-image: var(--fade-l), var(--fade-v); mask-composite: intersect; }
 /* narrower: the scene above the text, fading out under it */
 @media (max-width: 900px) {
   :root[data-skin] .view-home .hero { padding-top: 230px; min-height: 0; }
-  :root[data-skin] .view-home .hero::after { top: 150px; background: linear-gradient(transparent, var(--scrim) 110px, var(--scrim) calc(100% - 60px), transparent); }
+  :root[data-skin] .view-home .hero::after { inset: 150px -24px 0; -webkit-mask-image: none; mask-image: none; background: linear-gradient(transparent, var(--scrim) 110px, var(--scrim) calc(100% - 60px), transparent); }
   :root[data-skin] .view-home .psx-stage.is-backdrop { bottom: auto; height: 340px; --fade-x: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); --fade-y: linear-gradient(to bottom, #000 70%, transparent); }
 }
 @media (max-width: 700px) {
   :root[data-skin] .ch-hero { padding-top: 210px; min-height: 0; }
-  :root[data-skin] .ch-hero::after { top: 140px; background: linear-gradient(transparent, var(--scrim) 90px, var(--scrim) calc(100% - 40px), transparent); }
+  :root[data-skin] .ch-hero::after { inset: 140px -24px 0; -webkit-mask-image: none; mask-image: none; background: linear-gradient(transparent, var(--scrim) 90px, var(--scrim) calc(100% - 40px), transparent); }
   :root[data-skin] .ch-hero .psx-stage.is-backdrop { bottom: auto; height: 290px; --fade-x: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); --fade-y: linear-gradient(to bottom, #000 66%, transparent); }
 }
 
@@ -3400,8 +3415,10 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .toc-t, [data-skin="grimoire"] .sr-item b { font-family: var(--font-display); font-size: 1.12rem; }
 [data-skin="grimoire"] .tools-gh, [data-skin="grimoire"] .sr-gh { font-family: var(--font-label); font-weight: 700; color: var(--gold); }
 
-/* ---- the footer ---- */
-[data-skin="grimoire"] .footer { background: var(--surface); border-top: 2px solid var(--rim-d); box-shadow: 0 -2px 0 var(--blood-d); }
+/* ---- the footer: the crypt goes on under it — a soft bed under its text, and the bone rule and the blood line only
+   as long as the column ---- */
+[data-skin="grimoire"] .footer { position: relative; background: radial-gradient(ellipse min(760px, 70%) 100% at 50% 100%, var(--surface), transparent 100%); border-top: 0; box-shadow: none; }
+[data-skin="grimoire"] .footer::before { content: ""; position: absolute; top: 0; left: 50%; width: min(1100px, calc(100% - 32px)); height: 4px; transform: translateX(-50%); background: linear-gradient(90deg, transparent, var(--blood-d) 14%, var(--blood-d) 86%, transparent) top / 100% 2px no-repeat, linear-gradient(90deg, transparent, var(--rim-d) 14%, var(--rim-d) 86%, transparent) bottom / 100% 2px no-repeat; }
 [data-skin="grimoire"] .footer .brand { font-family: var(--font-title); font-weight: 700; font-size: 1.5rem; }
 [data-skin="grimoire"] .hap-switch { border-radius: 2px; background: var(--rim-d); }
 [data-skin="grimoire"] .hap-switch::after { border-radius: 0; background: var(--ink-2); }

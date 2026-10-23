@@ -26,10 +26,36 @@
           if (!sc.bare) {
             // the floor and its circle: a layer of their own, under everything
             const FL = 4.4, N = 2, glowA = sc.glowAdd ? sc.glowAdd(t) : 0.32 + 0.22 * Math.sin(t * 1.4);
+            // a texture goes onto a triangle by an affine map, as on the console: where the floor runs from under the
+            // camera into the distance, one big cell bent the lines of the circle into long streaks falling towards
+            // the lens. A cell is cut in four, again and again, while the map would stray by more than a few pixels:
+            // its size on the screen times its spread in depth (a cell off the screen is left whole, to be culled; one
+            // that runs under the camera is cut only into a few, to find the part of it in front)
+            const cell = (x0, x1, z0, z1, u0, u1, v0, v1, k) => {
+              const vs = [[x0, z0], [x1, z0], [x0, z1], [x1, z1]].map(([x, z]) => R.view([x, 0, z]));
+              let split = k < 3;
+              if (vs.every(v => v[2] > R.near)) {
+                const zs = vs.map(v => v[2]), lo = Math.min(...zs), hi = Math.max(...zs);
+                const ps = vs.map(v => R.proj(v)), X = ps.map(q => q[0]), Y = ps.map(q => q[1]);
+                const seen = Math.max(...X) > 0 && Math.min(...X) < R.W && Math.max(...Y) > 0 && Math.min(...Y) < R.H;
+                split = k < 5 && seen && Math.hypot(Math.max(...X) - Math.min(...X), Math.max(...Y) - Math.min(...Y)) * (hi - lo) / (hi + lo) > 8;
+              }
+              if (split) {
+                const xm = (x0 + x1) / 2, zm = (z0 + z1) / 2, um = (u0 + u1) / 2, vm = (v0 + v1) / 2;
+                cell(x0, xm, z0, zm, u0, um, v0, vm, k + 1); cell(xm, x1, z0, zm, um, u1, v0, vm, k + 1);
+                cell(x0, xm, zm, z1, u0, um, vm, v1, k + 1); cell(xm, x1, zm, z1, um, u1, vm, v1, k + 1);
+                return;
+              }
+              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: FLOOR, layer: 0, ds: true }, u0, u1, v0, v1);
+              if (inked(u0, u1, v0, v1)) quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: GLOW, layer: 0, add: glowA, ds: true }, u0, u1, v0, v1);
+            };
+            const inked = (u0, u1, v0, v1) => {
+              for (let y = Math.floor(v0 * 16); y < Math.ceil(v1 * 16); y++) for (let x = Math.floor(u0 * 16); x < Math.ceil(u1 * 16); x++) if (GLOW.psxInk[y * 16 + x]) return true;
+              return false;
+            };
             for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
-              const x0 = -FL + i * FL * 2 / N, x1 = x0 + FL * 2 / N, z0 = -FL + j * FL * 2 / N, z1 = z0 + FL * 2 / N;
-              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: FLOOR, layer: 0, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
-              quad(R, [x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 0, z0], { tex: GLOW, layer: 0, add: glowA, ds: true }, i / N, (i + 1) / N, j / N, (j + 1) / N);
+              const x0 = -FL + i * FL * 2 / N, z0 = -FL + j * FL * 2 / N;
+              cell(x0, x0 + FL * 2 / N, z0, z0 + FL * 2 / N, i / N, (i + 1) / N, j / N, (j + 1) / N, 0);
             }
             for (let k = 0; k < 4; k++) {
               const q = k * Math.PI / 2, far = 16, s = [Math.cos(q), Math.sin(q)], tn = [-s[1], s[0]];

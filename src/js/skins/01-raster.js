@@ -141,20 +141,12 @@
             const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10) : o.tex;
             if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
             x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath();
-            if (this.smooth) {
-              // smooth: the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many
-              // times cheaper where the canvas is drawn without the graphics card
-              const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
-              pat.setTransform(new DOMMatrix(M));
-              x.fillStyle = pat;
-              x.fill();
-            } else {
-              x.save();
-              x.clip();
-              x.setTransform(...M);
-              x.drawImage(src, 0, 0);
-              x.restore();
-            }
+            // the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many times cheaper
+            // where the canvas is drawn without the graphics card
+            const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
+            pat.setTransform(new DOMMatrix(M));
+            x.fillStyle = pat;
+            x.fill();
             x.globalAlpha = 1;
             if (bx && solid(o)) dark(A, B, C);
             if (bx && o.emis) {

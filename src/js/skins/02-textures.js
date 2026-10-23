@@ -149,6 +149,12 @@
       }
       ritual(t, glow ? col : col.map(v => v * 0.55), glow ? gold : gold.map(v => v * 0.55));
     });
+    // the glow: which of its blocks of 8 × 8 hold a line (psxInk) — a cell of the floor over none of them adds nothing
+    if (glow) {
+      const d = c.getContext('2d').getImageData(0, 0, 128, 128).data, ink = new Uint8Array(256);
+      for (let i = 3; i < d.length; i += 4) if (d[i]) { const q = (i - 3) / 4; ink[((q / 128 | 0) >> 3) * 16 + ((q % 128) >> 3)] = 1; }
+      c.psxInk = ink;
+    }
     FLOORS.set(key, c);
     return c;
   }
