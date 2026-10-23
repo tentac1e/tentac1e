@@ -270,12 +270,15 @@ window.BasilSkins = (() => {
     R.tri(a, b, c, { ...o, uv: [[u0, v1], [u1, v1], [u1, v0]] });
     R.tri(a, c, d, { ...o, uv: [[u0, v1], [u1, v0], [u0, v0]] });
   }
+  // a face another part always covers (the top of an altar under its slab) is left out by name (o.skip: 'top'): the
+  // painter does not know it is hidden, and drawn after what lies on it, it would cut a triangle out of that
+  const FACES = ['back', 'front', 'left', 'right', 'top', 'bottom'];
   function box(R, c, s, o) {
     const [x, y, z] = c, [a, b, d] = s;
     const v = [[x - a, y - b, z - d], [x + a, y - b, z - d], [x + a, y + b, z - d], [x - a, y + b, z - d], [x - a, y - b, z + d], [x + a, y - b, z + d], [x + a, y + b, z + d], [x - a, y + b, z + d]];
     [[0, 1, 2, 3, 1], [5, 4, 7, 6, 1], [4, 0, 3, 7, 0], [1, 5, 6, 2, 0], [3, 2, 6, 7, 0], [4, 5, 1, 0, 0]]
       // the front and the back (f[4]) carry texFront, read the right way round from their own side
-      .forEach(f => quad(R, v[f[0]], v[f[1]], v[f[2]], v[f[3]], { ...o, tex: f[4] && o.texFront ? o.texFront : o.tex, ctr: c }, f[4] ? 1 : 0, f[4] ? 0 : 1));
+      .forEach((f, i) => { if (!(o.skip && o.skip.includes(FACES[i]))) quad(R, v[f[0]], v[f[1]], v[f[2]], v[f[3]], { ...o, tex: f[4] && o.texFront ? o.texFront : o.tex, ctr: c }, f[4] ? 1 : 0, f[4] ? 0 : 1); });
   }
   function prism(R, cx, cz, y0, y1, r0, r1, n, o, cap, rot = 0) {
     const ctr = [cx, (y0 + y1) / 2, cz];
@@ -1684,7 +1687,7 @@ window.BasilSkins = (() => {
 
   // the stone altar with its sigil: gives the height of its top
   function altarStone(R, T) {
-    box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar });
+    box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar, skip: 'top' });
     box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
     return 1.08;
   }

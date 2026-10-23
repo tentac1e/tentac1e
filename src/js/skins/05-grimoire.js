@@ -61,7 +61,7 @@
 
   // the stone altar with its sigil: gives the height of its top
   function altarStone(R, T) {
-    box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar });
+    box(R, [0, 0.48, 0], [0.8, 0.48, 0.5], { tex: T.stone, texFront: T.altar, skip: 'top' });
     box(R, [0, 1.02, 0], [0.92, 0.06, 0.6], { tex: T.stone });
     return 1.08;
   }
