@@ -53,7 +53,14 @@
         for (let k = 0; k < 6; k++) { const z0 = -2.2 + k * 0.82; quad(R, [-0.38, 0.004, z0 + 0.76], [0.38, 0.004, z0 + 0.76], [0.38, 0.004, z0], [-0.38, 0.004, z0], { tex: T.stone, layer: 0.5, ds: true }); }
         // the beds: a frame of stone, earth, two bushes each; the near ones under bell jars
         BEDS.forEach((b, i) => {
-          box(R, [b.x, 0.14, b.z], [0.46, 0.14, 0.58], { tex: T.stone });
+          // the frame round the earth, not a lid under it: a lid 0.005 under the earth, put in the painter's order by
+          // its own depth, now and then covered the earth whole
+          box(R, [b.x, 0.14, b.z], [0.46, 0.14, 0.58], { tex: T.stone, skip: 'top' });
+          const rim = (x0, x1, z0, z1) => quad(R, [x0, 0.28, z1], [x1, 0.28, z1], [x1, 0.28, z0], [x0, 0.28, z0], { tex: T.stone, ctr: [b.x, 0.14, b.z] }, (x0 - b.x + 0.46) / 0.92, (x1 - b.x + 0.46) / 0.92, (z0 - b.z + 0.58) / 1.16, (z1 - b.z + 0.58) / 1.16);
+          rim(b.x - 0.46, b.x + 0.46, b.z + 0.52, b.z + 0.58);
+          rim(b.x - 0.46, b.x + 0.46, b.z - 0.58, b.z - 0.52);
+          rim(b.x - 0.46, b.x - 0.4, b.z - 0.52, b.z + 0.52);
+          rim(b.x + 0.4, b.x + 0.46, b.z - 0.52, b.z + 0.52);
           quad(R, [b.x - 0.4, 0.285, b.z + 0.52], [b.x + 0.4, 0.285, b.z + 0.52], [b.x + 0.4, 0.285, b.z - 0.52], [b.x - 0.4, 0.285, b.z - 0.52], { tex: T.soil, ds: true });
           const far = b.z < -0.5;
           [-0.24, 0.24].forEach((dz, j) => {
@@ -82,8 +89,9 @@
         rod(R, [0.98, 0.3, -2.05], add(FLASK, [0, 0.14, 0]), 0.016, { col: [206, 128, 70] }, 3);
         ball(R, FLASK, 0.09, { col: [120, 255, 110], emis: true, nofog: true });
         ball(R, FLASK, 0.13, { col: [120, 150, 170], emis: true, nofog: true, add: 0.2 });
-        // the pipe along the path, both sides
-        [-0.56, 0.56].forEach(x => rod(R, [x, 0.08, -1.9], [x, 0.08, 1.9], 0.02, { col: [176, 104, 56] }, 3));
+        // the pipe along the path, both sides, in six lengths: one long face, put in the painter's order by its middle,
+        // went under the side of a bed near the camera
+        [-0.56, 0.56].forEach(x => { for (let k = 0; k < 6; k++) rod(R, [x, 0.08, -1.9 + k * 3.8 / 6], [x, 0.08, -1.9 + (k + 1) * 3.8 / 6], 0.02, { col: [176, 104, 56] }, 3); });
         if (drop) ball(R, drop.p, 0.04, { col: [150, 255, 120], emis: true, nofog: true });
       },
       fx(t, F) {

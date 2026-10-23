@@ -33,14 +33,14 @@ if [ "$1" = "--one" ]; then
   exit 0
 fi
 
-ALL="pages clean nav peek labs overlap controls gestures ills garden agronom skins motion pwa perf single"
+ALL="pages clean nav peek labs overlap controls gestures ills garden agronom skins motion depth pwa perf single"
 # the suites a changed file concerns (the first pattern that fits); a file the table does not know — all of them
 suites_for() {
   case "$1" in
     tests/run.sh|tests/lib.js|scripts/build.py|scripts/serve.py|scripts/bundle.py) echo "$ALL" ;;
     tests/gallery.js) echo "" ;;
     tests/*.js) basename "$1" .js ;;
-    src/js/skins/*) echo "skins motion" ;;
+    src/js/skins/*) echo "skins motion depth" ;;
     src/css/style/27-grimoire.css|src/css/lab/16-grimoire.css|src/css/style/28-druid.css|src/css/lab/17-druid.css|src/fonts/*|scripts/fonts.py) echo "skins" ;;
     src/js/app/01-theme.js) echo "skins pages nav" ;;
     src/labs/*) echo "labs overlap controls ills single skins" ;;
@@ -94,7 +94,7 @@ wait $b2 || { cat tests/out/run-build-clean.log; exit 1; }
 
 # the pool: the longest first, so that the short ones fill the gaps at the end
 pool="" tail=""
-for t in ills labs nav peek controls agronom overlap garden skins motion gestures pages clean single pwa; do
+for t in ills labs nav peek controls agronom overlap garden skins motion depth gestures pages clean single pwa; do
   case " $list " in *" $t "*) pool="$pool $t" ;; esac
 done
 case " $list " in *" skins "*) pool="$pool grimoire-labs druid-labs grimoire-overlap druid-overlap" ;; esac

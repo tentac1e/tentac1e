@@ -25,7 +25,8 @@
         // pages, the leaves, the leaf turning — the faces of the book lie almost on the board, and by depth alone they
         // would cut through one another
         const part = together(R, O);
-        box(part(0), [0, 0.42, 0], [0.18, 0.42, 0.18], { tex: T.stone });
+        // the column stands on its base (from its top up, not through it: its foot inside the base showed over it)
+        box(part(0), [0, 0.48, 0], [0.18, 0.36, 0.18], { tex: T.stone });
         box(part(0), [0, 0.06, 0], [0.34, 0.06, 0.34], { tex: T.stone });
         // the board, the book and its pages, turned to the slope of the lectern; the book's spine along its slope
         const Bk = k => turned(part(k), [0, 0, 0], [1, 0, 0], TILT, O);

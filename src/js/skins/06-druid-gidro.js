@@ -27,18 +27,20 @@
         const rings = [(t * 0.3) % 1, (t * 0.3 + 0.5) % 1].concat(...taps.map(h => [(t - h) / 2.4, (t - h) / 2.4 - 0.2]));
         rings.forEach(k => { if (k <= 0 || k >= 1) return; const r = 0.5 + k * (POOL - 0.55); ringTop(R, 0, 0, 0.014, r, r + 0.025, 22, { col: [170, 230, 240], emis: true, add: 0.55 * (1 - k), layer: 0.65 }); });
         [(t * 0.9) % 1, (t * 0.9 + 0.5) % 1].forEach(k => { const r = 0.05 + k * 0.3; ringTop(R, IN[0], IN[1], 0.014, r, r + 0.02, 12, { col: [190, 236, 246], emis: true, add: 0.5 * (1 - k), layer: 0.65 }); });
-        // the driftwood rocking on the water, a pad of moss on it, the bush, its roots hanging down into the clear water
+        // the driftwood rocking on the water, a pad of moss on it, the bush, its roots hanging down into the clear water —
+        // drawn together, part over part: the roots under the wood, the wood, the branch out of it (from its face, not
+        // through it) and the moss on it, the bush; by depth alone the wood cut into the branch and the foot of the bush
         y = 0.06 + Math.sin(t * 1.1) * 0.022;
-        const roll = Math.sin(t * 0.8) * 0.03, a = [-0.62, y - roll, -0.14], b = [0.62, y + roll, 0.14];
-        rod(R, a, b, 0.1, { col: [104, 80, 58] }, 6);
-        rod(R, [0.3, y + 0.02, 0.07], [0.52, y + 0.2, -0.12], 0.035, { col: [96, 74, 52] }, 4);
-        egg(R, [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46] });
-        bush(R, T, [0, y + 0.1, 0], t, { s: 1 });
+        const roll = Math.sin(t * 0.8) * 0.03, a = [-0.62, y - roll, -0.14], b = [0.62, y + roll, 0.14], part = together(R, [0, y, 0]);
         ROOTS.forEach((r, i) => {
           const w = Math.sin(t * 0.9 + i) * 0.03, m = [Math.cos(r.q) * r.r * 0.5 + w, -r.d * 0.45, Math.sin(r.q) * r.r * 0.5];
-          rod(R, [Math.cos(r.q) * 0.06, y - 0.06, Math.sin(r.q) * 0.06], m, 0.012, { col: [196, 214, 204] }, 3);
-          rod(R, m, [Math.cos(r.q) * r.r + w * 2, -r.d, Math.sin(r.q) * r.r], 0.008, { col: [176, 204, 200] }, 3);
+          rod(part(0), [Math.cos(r.q) * 0.06, y - 0.06, Math.sin(r.q) * 0.06], m, 0.012, { col: [196, 214, 204] }, 3);
+          rod(part(0), m, [Math.cos(r.q) * r.r + w * 2, -r.d, Math.sin(r.q) * r.r], 0.008, { col: [176, 204, 200] }, 3);
         });
+        rod(part(1), a, b, 0.1, { col: [104, 80, 58] }, 6);
+        rod(part(2), [0.32, y + 0.08, 0.06], [0.52, y + 0.2, -0.12], 0.035, { col: [96, 74, 52] }, 4);
+        egg(part(2), [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46] });
+        bush(part(3), T, [0, y + 0.1, 0], t, { s: 1 });
       },
       fx(t, F) {
         // the bubbles rising from the bottom round the roots, many more now and then; the shine of the moon on the water

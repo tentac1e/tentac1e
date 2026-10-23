@@ -1005,21 +1005,28 @@ window.BasilSkins = (() => {
         box(R, [0, TOP / 2 + 0.01, 0], [0.6, TOP / 2, 0.4], { col: [24, 90, 130], emis: true, nofog: true, add: 0.3, inv: true, layer: 2 });
         box(R, [0, TOP / 2 + 0.01, 0], [0.6, TOP / 2, 0.4], { col: [30, 110, 150], emis: true, nofog: true, add: 0.26, layer: 2 });
         box(R, [0, 0.55, 0], [0.63, 0.55, 0.43], glass);
+        // the lid and what goes through it are drawn together: under it the top edges of the frame, the roots and the
+        // cup below the lid, then the lid, then the cup above it and the bush — by depth alone the cup under the lid
+        // showed through it as a ring
+        const part = together(R, [0, LID, 0]), Under = part(0), Over = part(2);
         // the frame of the tank: its twelve edges
         const X = 0.63, Y = 1.1, Z = 0.43, E = { col: [150, 170, 180] };
         [[-X, -Z], [X, -Z], [X, Z], [-X, Z]].forEach(([x, z]) => rod(R, [x, 0, z], [x, Y, z], 0.014, E, 3));
-        [0, Y].forEach(y => { rod(R, [-X, y, -Z], [X, y, -Z], 0.014, E, 3); rod(R, [-X, y, Z], [X, y, Z], 0.014, E, 3); rod(R, [-X, y, -Z], [-X, y, Z], 0.014, E, 3); rod(R, [X, y, -Z], [X, y, Z], 0.014, E, 3); });
-        // the lid, the net cup with its clay pebbles, the bush
-        box(R, [0, LID, 0], [0.66, 0.025, 0.46], { col: [44, 40, 52] });
-        prism(R, 0, 0, LID - 0.2, LID + 0.06, 0.13, 0.17, 8, { col: [64, 62, 72] }, [150, 92, 60]);
-        bush(R, T, [0, LID + 0.06, 0], t, { s: 1.1 });
+        [[0, R], [Y, Under]].forEach(([y, P]) => { rod(P, [-X, y, -Z], [X, y, -Z], 0.014, E, 3); rod(P, [-X, y, Z], [X, y, Z], 0.014, E, 3); rod(P, [-X, y, -Z], [-X, y, Z], 0.014, E, 3); rod(P, [X, y, -Z], [X, y, Z], 0.014, E, 3); });
+        // the lid, the net cup with its clay pebbles (its wall widening from 0.13 to 0.17, cut where it meets the top of
+        // the lid), the bush
+        const LT = LID + 0.025, rLT = 0.13 + 0.04 * (LT - (LID - 0.2)) / 0.26;
+        box(part(1), [0, LID, 0], [0.66, 0.025, 0.46], { col: [44, 40, 52] });
+        prism(Under, 0, 0, LID - 0.2, LT, 0.13, rLT, 8, { col: [64, 62, 72] });
+        prism(Over, 0, 0, LT, LID + 0.06, rLT, 0.17, 8, { col: [64, 62, 72] }, [150, 92, 60]);
+        bush(Over, T, [0, LID + 0.06, 0], t, { s: 1.1 });
         // the roots: white threads from the cup into the water, swaying
         ROOTS.forEach(r => {
           let p = [Math.cos(r.q) * r.r, LID - 0.2, Math.sin(r.q) * r.r];
           for (let j = 1; j <= 6; j++) {
             const f = j / 6, sw = Math.sin(t * 0.9 + r.ph + j * 0.7) * 0.045 * f;
             const q = [Math.cos(r.q) * (r.r + f * 0.16) + sw, LID - 0.2 - f * r.len, Math.sin(r.q) * (r.r + f * 0.12) + Math.cos(t * 0.7 + r.ph + j) * 0.03 * f];
-            rod(R, p, q, 0.014 * (1.2 - f * 0.6), { col: [226, 216, 190] }, 3);
+            rod(Under, p, q, 0.014 * (1.2 - f * 0.6), { col: [226, 216, 190] }, 3);
             p = q;
           }
         });
@@ -1101,7 +1108,14 @@ window.BasilSkins = (() => {
         for (let k = 0; k < 6; k++) { const z0 = -2.2 + k * 0.82; quad(R, [-0.38, 0.004, z0 + 0.76], [0.38, 0.004, z0 + 0.76], [0.38, 0.004, z0], [-0.38, 0.004, z0], { tex: T.stone, layer: 0.5, ds: true }); }
         // the beds: a frame of stone, earth, two bushes each; the near ones under bell jars
         BEDS.forEach((b, i) => {
-          box(R, [b.x, 0.14, b.z], [0.46, 0.14, 0.58], { tex: T.stone });
+          // the frame round the earth, not a lid under it: a lid 0.005 under the earth, put in the painter's order by
+          // its own depth, now and then covered the earth whole
+          box(R, [b.x, 0.14, b.z], [0.46, 0.14, 0.58], { tex: T.stone, skip: 'top' });
+          const rim = (x0, x1, z0, z1) => quad(R, [x0, 0.28, z1], [x1, 0.28, z1], [x1, 0.28, z0], [x0, 0.28, z0], { tex: T.stone, ctr: [b.x, 0.14, b.z] }, (x0 - b.x + 0.46) / 0.92, (x1 - b.x + 0.46) / 0.92, (z0 - b.z + 0.58) / 1.16, (z1 - b.z + 0.58) / 1.16);
+          rim(b.x - 0.46, b.x + 0.46, b.z + 0.52, b.z + 0.58);
+          rim(b.x - 0.46, b.x + 0.46, b.z - 0.58, b.z - 0.52);
+          rim(b.x - 0.46, b.x - 0.4, b.z - 0.52, b.z + 0.52);
+          rim(b.x + 0.4, b.x + 0.46, b.z - 0.52, b.z + 0.52);
           quad(R, [b.x - 0.4, 0.285, b.z + 0.52], [b.x + 0.4, 0.285, b.z + 0.52], [b.x + 0.4, 0.285, b.z - 0.52], [b.x - 0.4, 0.285, b.z - 0.52], { tex: T.soil, ds: true });
           const far = b.z < -0.5;
           [-0.24, 0.24].forEach((dz, j) => {
@@ -1130,8 +1144,9 @@ window.BasilSkins = (() => {
         rod(R, [0.98, 0.3, -2.05], add(FLASK, [0, 0.14, 0]), 0.016, { col: [206, 128, 70] }, 3);
         ball(R, FLASK, 0.09, { col: [120, 255, 110], emis: true, nofog: true });
         ball(R, FLASK, 0.13, { col: [120, 150, 170], emis: true, nofog: true, add: 0.2 });
-        // the pipe along the path, both sides
-        [-0.56, 0.56].forEach(x => rod(R, [x, 0.08, -1.9], [x, 0.08, 1.9], 0.02, { col: [176, 104, 56] }, 3));
+        // the pipe along the path, both sides, in six lengths: one long face, put in the painter's order by its middle,
+        // went under the side of a bed near the camera
+        [-0.56, 0.56].forEach(x => { for (let k = 0; k < 6; k++) rod(R, [x, 0.08, -1.9 + k * 3.8 / 6], [x, 0.08, -1.9 + (k + 1) * 3.8 / 6], 0.02, { col: [176, 104, 56] }, 3); });
         if (drop) ball(R, drop.p, 0.04, { col: [150, 255, 120], emis: true, nofog: true });
       },
       fx(t, F) {
@@ -1166,8 +1181,8 @@ window.BasilSkins = (() => {
       },
       lights() { return [{ p: [sun[0], sun[1], 0.1], col: day > 0 ? [1, 0.8, 0.5] : [0.55, 0.65, 1], i: day > 0 ? 0.5 + 0.8 * day : 0.55, fall: 0.5 }]; },
       draw(t) {
-        // the wall under the window, the sill, the posts and the arch
-        box(R, [0, 0.45, Z + 0.05], [0.95, 0.45, 0.12], { tex: T.stone });
+        // the wall under the window (its top, under the sill, left out), the sill, the posts and the arch
+        box(R, [0, 0.45, Z + 0.05], [0.95, 0.45, 0.12], { tex: T.stone, skip: 'top' });
         box(R, [0, SILL - 0.035, -0.1], [1.0, 0.035, 0.34], { tex: T.stone });
         box(R, [-0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
         box(R, [0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
@@ -1413,7 +1428,8 @@ window.BasilSkins = (() => {
         // pages, the leaves, the leaf turning — the faces of the book lie almost on the board, and by depth alone they
         // would cut through one another
         const part = together(R, O);
-        box(part(0), [0, 0.42, 0], [0.18, 0.42, 0.18], { tex: T.stone });
+        // the column stands on its base (from its top up, not through it: its foot inside the base showed over it)
+        box(part(0), [0, 0.48, 0], [0.18, 0.36, 0.18], { tex: T.stone });
         box(part(0), [0, 0.06, 0], [0.34, 0.06, 0.34], { tex: T.stone });
         // the board, the book and its pages, turned to the slope of the lectern; the book's spine along its slope
         const Bk = k => turned(part(k), [0, 0, 0], [1, 0, 0], TILT, O);
@@ -1572,7 +1588,7 @@ window.BasilSkins = (() => {
     let top = 1.08, hands = [];
     const FALL = [...Array(7)].map((_, i) => ({ a: i / 7, x: ((i * 0.61) % 1 - 0.5) * 0.5, z: ((i * 0.37) % 1 - 0.5) * 0.4, s: 0.7 + (i % 3) * 0.12 }));
     // a leaf tumbling down from above into the mortar, k — how far it has fallen
-    const falling = (x, z, k, spin) => {
+    const falling = (R, x, z, k, spin) => {
       const y = 3.1 - k * (3.1 - top - 0.28);
       const F = norm([Math.cos(spin), Math.sin(spin * 0.7) * 0.8, Math.sin(spin)]);
       leaf(R, [x * (1 - k * 0.6), y, z * (1 - k * 0.6)], F, 0.26, T.leaf, { side: [Math.sin(spin * 1.3), 0.5, Math.cos(spin * 1.3)] });
@@ -1582,30 +1598,33 @@ window.BasilSkins = (() => {
       every: 6, beat(t) { hands.push(t); if (hands.length > 3) hands.shift(); },
       lights(t) { return [{ p: [0.2, top + 1.1, 0.5], col: [1, 0.8, 0.5], i: 1 + 0.1 * Math.sin(t * 2), fall: 0.6 }, { p: [0, top + 0.5, 0], col: [0.6, 1, 0.4], i: 0.5, fall: 2 }]; },
       draw(t) {
-        // a kitchen table of old wood
+        // a kitchen table of old wood, and all on it drawn together: the legs, the top, then what stands on it, each
+        // by its own depth — the big face of the top, by its own depth, went over the inside of the mortar, and the
+        // legs over its corners (the tops of the legs, under it, are left out)
         top = 1.06;
-        box(R, [0, top - 0.04, 0], [0.88, 0.04, 0.58], { col: [124, 80, 46] });
-        [[-0.74, -0.46], [0.74, -0.46], [0.74, 0.46], [-0.74, 0.46]].forEach(([x, z]) => box(R, [x, (top - 0.08) / 2, z], [0.06, (top - 0.08) / 2, 0.06], { col: [96, 60, 34] }));
+        const part = together(R, [0, top, 0]), On = part(2);
+        box(part(1), [0, top - 0.04, 0], [0.88, 0.04, 0.58], { col: [124, 80, 46] });
+        [[-0.74, -0.46], [0.74, -0.46], [0.74, 0.46], [-0.74, 0.46]].forEach(([x, z]) => box(part(0), [x, (top - 0.08) / 2, z], [0.06, (top - 0.08) / 2, 0.06], { col: [96, 60, 34], skip: 'top' }));
         const y0 = top, y1 = top + 0.42;
         // the mortar: its outer wall, the rim, the far inner wall, the green inside
-        prism(R, 0, 0, y0, y1, 0.36, 0.48, 10, { tex: T.stone });
-        ringTop(R, 0, 0, y1, 0.38, 0.48, 10, { tex: T.stone });
-        prism(R, 0, 0, y0 + 0.16, y1, 0.28, 0.38, 10, { col: [92, 82, 98], inv: true });
-        disc(R, 0, 0, y0 + 0.2, 0.31, 10, { tex: T.paste });
+        prism(On, 0, 0, y0, y1, 0.36, 0.48, 10, { tex: T.stone });
+        ringTop(On, 0, 0, y1, 0.38, 0.48, 10, { tex: T.stone });
+        prism(On, 0, 0, y0 + 0.16, y1, 0.28, 0.38, 10, { col: [92, 82, 98], inv: true });
+        disc(On, 0, 0, y0 + 0.2, 0.31, 10, { tex: T.paste });
         // the pestle grinding round
         const a = t * 1.7, b = [Math.cos(a) * 0.13, y0 + 0.25, Math.sin(a) * 0.13], q = [Math.cos(a) * 0.36, y0 + 0.92, Math.sin(a) * 0.36];
-        rod(R, b, q, 0.05, { col: [184, 172, 160] }, 6);
-        ball(R, b, 0.07, { col: [184, 172, 160] });
+        rod(On, b, q, 0.05, { col: [184, 172, 160] }, 6);
+        ball(On, b, 0.07, { col: [184, 172, 160] });
         // the garlic, the pine nuts, the oil
-        [[0, 0, 0.07], [0.06, -0.01, 0.05], [-0.05, -0.01, 0.05], [0.01, 0.02, 0.05]].forEach(([dx, dz, r]) => egg(R, [0.66 + dx, top + r * 0.9, 0.3 + dz], [r, r * 1.1, r], 0, { col: [232, 222, 202] }));
-        for (let i = 0; i < 6; i++) egg(R, [0.6 + (i % 3) * 0.06, top + 0.02, -0.34 + (i >> 1 & 1) * 0.06 + (i > 3 ? 0.06 : 0)], [0.028, 0.018, 0.016], i, { col: [228, 204, 150] });
-        prism(R, -0.66, -0.26, top, top + 0.26, 0.09, 0.08, 6, { col: [196, 150, 40], emis: true, add: 0.6 });
-        prism(R, -0.66, -0.26, top + 0.26, top + 0.38, 0.03, 0.028, 5, { col: [196, 150, 40], emis: true, add: 0.5 });
-        prism(R, -0.66, -0.26, top + 0.37, top + 0.42, 0.035, 0.035, 5, { col: [110, 70, 40] }, [90, 56, 32]);
+        [[0, 0, 0.07], [0.06, -0.01, 0.05], [-0.05, -0.01, 0.05], [0.01, 0.02, 0.05]].forEach(([dx, dz, r]) => egg(On, [0.66 + dx, top + r * 0.9, 0.3 + dz], [r, r * 1.1, r], 0, { col: [232, 222, 202] }));
+        for (let i = 0; i < 6; i++) egg(On, [0.6 + (i % 3) * 0.06, top + 0.02, -0.34 + (i >> 1 & 1) * 0.06 + (i > 3 ? 0.06 : 0)], [0.028, 0.018, 0.016], i, { col: [228, 204, 150] });
+        prism(On, -0.66, -0.26, top, top + 0.26, 0.09, 0.08, 6, { col: [196, 150, 40], emis: true, add: 0.6 });
+        prism(On, -0.66, -0.26, top + 0.26, top + 0.38, 0.03, 0.028, 5, { col: [196, 150, 40], emis: true, add: 0.5 });
+        prism(On, -0.66, -0.26, top + 0.37, top + 0.42, 0.035, 0.035, 5, { col: [110, 70, 40] }, [90, 56, 32]);
         // the leaves falling in: a steady few, and a handful now and then
-        FALL.forEach((f, i) => { const k = (f.a + t * 0.22) % 1; falling(f.x, f.z, smooth(k), t * f.s * 2 + i); });
+        FALL.forEach((f, i) => { const k = (f.a + t * 0.22) % 1; falling(On, f.x, f.z, smooth(k), t * f.s * 2 + i); });
         hands = hands.filter(h => t - h < 1.6 && t >= h);
-        hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(Math.cos(i * 1.1) * 0.35, Math.sin(i * 1.1) * 0.3, k, t * 2 + i); } });
+        hands.forEach(h => { for (let i = 0; i < 6; i++) { const k = smooth(Math.min(1, (t - h) / 1.2 - i * 0.04)); if (k > 0) falling(On, Math.cos(i * 1.1) * 0.35, Math.sin(i * 1.1) * 0.3, k, t * 2 + i); } });
         // the aroma: the molecule going up out of the mortar and fading as it goes
         if (mol) {
           const k = (t * 0.11) % 1;
@@ -1842,18 +1861,20 @@ window.BasilSkins = (() => {
         const rings = [(t * 0.3) % 1, (t * 0.3 + 0.5) % 1].concat(...taps.map(h => [(t - h) / 2.4, (t - h) / 2.4 - 0.2]));
         rings.forEach(k => { if (k <= 0 || k >= 1) return; const r = 0.5 + k * (POOL - 0.55); ringTop(R, 0, 0, 0.014, r, r + 0.025, 22, { col: [170, 230, 240], emis: true, add: 0.55 * (1 - k), layer: 0.65 }); });
         [(t * 0.9) % 1, (t * 0.9 + 0.5) % 1].forEach(k => { const r = 0.05 + k * 0.3; ringTop(R, IN[0], IN[1], 0.014, r, r + 0.02, 12, { col: [190, 236, 246], emis: true, add: 0.5 * (1 - k), layer: 0.65 }); });
-        // the driftwood rocking on the water, a pad of moss on it, the bush, its roots hanging down into the clear water
+        // the driftwood rocking on the water, a pad of moss on it, the bush, its roots hanging down into the clear water —
+        // drawn together, part over part: the roots under the wood, the wood, the branch out of it (from its face, not
+        // through it) and the moss on it, the bush; by depth alone the wood cut into the branch and the foot of the bush
         y = 0.06 + Math.sin(t * 1.1) * 0.022;
-        const roll = Math.sin(t * 0.8) * 0.03, a = [-0.62, y - roll, -0.14], b = [0.62, y + roll, 0.14];
-        rod(R, a, b, 0.1, { col: [104, 80, 58] }, 6);
-        rod(R, [0.3, y + 0.02, 0.07], [0.52, y + 0.2, -0.12], 0.035, { col: [96, 74, 52] }, 4);
-        egg(R, [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46] });
-        bush(R, T, [0, y + 0.1, 0], t, { s: 1 });
+        const roll = Math.sin(t * 0.8) * 0.03, a = [-0.62, y - roll, -0.14], b = [0.62, y + roll, 0.14], part = together(R, [0, y, 0]);
         ROOTS.forEach((r, i) => {
           const w = Math.sin(t * 0.9 + i) * 0.03, m = [Math.cos(r.q) * r.r * 0.5 + w, -r.d * 0.45, Math.sin(r.q) * r.r * 0.5];
-          rod(R, [Math.cos(r.q) * 0.06, y - 0.06, Math.sin(r.q) * 0.06], m, 0.012, { col: [196, 214, 204] }, 3);
-          rod(R, m, [Math.cos(r.q) * r.r + w * 2, -r.d, Math.sin(r.q) * r.r], 0.008, { col: [176, 204, 200] }, 3);
+          rod(part(0), [Math.cos(r.q) * 0.06, y - 0.06, Math.sin(r.q) * 0.06], m, 0.012, { col: [196, 214, 204] }, 3);
+          rod(part(0), m, [Math.cos(r.q) * r.r + w * 2, -r.d, Math.sin(r.q) * r.r], 0.008, { col: [176, 204, 200] }, 3);
         });
+        rod(part(1), a, b, 0.1, { col: [104, 80, 58] }, 6);
+        rod(part(2), [0.32, y + 0.08, 0.06], [0.52, y + 0.2, -0.12], 0.035, { col: [96, 74, 52] }, 4);
+        egg(part(2), [0, y + 0.08, 0], [0.18, 0.05, 0.12], 0.2, { col: [64, 104, 46] });
+        bush(part(3), T, [0, y + 0.1, 0], t, { s: 1 });
       },
       fx(t, F) {
         // the bubbles rising from the bottom round the roots, many more now and then; the shine of the moon on the water

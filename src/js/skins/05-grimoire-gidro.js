@@ -16,21 +16,28 @@
         box(R, [0, TOP / 2 + 0.01, 0], [0.6, TOP / 2, 0.4], { col: [24, 90, 130], emis: true, nofog: true, add: 0.3, inv: true, layer: 2 });
         box(R, [0, TOP / 2 + 0.01, 0], [0.6, TOP / 2, 0.4], { col: [30, 110, 150], emis: true, nofog: true, add: 0.26, layer: 2 });
         box(R, [0, 0.55, 0], [0.63, 0.55, 0.43], glass);
+        // the lid and what goes through it are drawn together: under it the top edges of the frame, the roots and the
+        // cup below the lid, then the lid, then the cup above it and the bush — by depth alone the cup under the lid
+        // showed through it as a ring
+        const part = together(R, [0, LID, 0]), Under = part(0), Over = part(2);
         // the frame of the tank: its twelve edges
         const X = 0.63, Y = 1.1, Z = 0.43, E = { col: [150, 170, 180] };
         [[-X, -Z], [X, -Z], [X, Z], [-X, Z]].forEach(([x, z]) => rod(R, [x, 0, z], [x, Y, z], 0.014, E, 3));
-        [0, Y].forEach(y => { rod(R, [-X, y, -Z], [X, y, -Z], 0.014, E, 3); rod(R, [-X, y, Z], [X, y, Z], 0.014, E, 3); rod(R, [-X, y, -Z], [-X, y, Z], 0.014, E, 3); rod(R, [X, y, -Z], [X, y, Z], 0.014, E, 3); });
-        // the lid, the net cup with its clay pebbles, the bush
-        box(R, [0, LID, 0], [0.66, 0.025, 0.46], { col: [44, 40, 52] });
-        prism(R, 0, 0, LID - 0.2, LID + 0.06, 0.13, 0.17, 8, { col: [64, 62, 72] }, [150, 92, 60]);
-        bush(R, T, [0, LID + 0.06, 0], t, { s: 1.1 });
+        [[0, R], [Y, Under]].forEach(([y, P]) => { rod(P, [-X, y, -Z], [X, y, -Z], 0.014, E, 3); rod(P, [-X, y, Z], [X, y, Z], 0.014, E, 3); rod(P, [-X, y, -Z], [-X, y, Z], 0.014, E, 3); rod(P, [X, y, -Z], [X, y, Z], 0.014, E, 3); });
+        // the lid, the net cup with its clay pebbles (its wall widening from 0.13 to 0.17, cut where it meets the top of
+        // the lid), the bush
+        const LT = LID + 0.025, rLT = 0.13 + 0.04 * (LT - (LID - 0.2)) / 0.26;
+        box(part(1), [0, LID, 0], [0.66, 0.025, 0.46], { col: [44, 40, 52] });
+        prism(Under, 0, 0, LID - 0.2, LT, 0.13, rLT, 8, { col: [64, 62, 72] });
+        prism(Over, 0, 0, LT, LID + 0.06, rLT, 0.17, 8, { col: [64, 62, 72] }, [150, 92, 60]);
+        bush(Over, T, [0, LID + 0.06, 0], t, { s: 1.1 });
         // the roots: white threads from the cup into the water, swaying
         ROOTS.forEach(r => {
           let p = [Math.cos(r.q) * r.r, LID - 0.2, Math.sin(r.q) * r.r];
           for (let j = 1; j <= 6; j++) {
             const f = j / 6, sw = Math.sin(t * 0.9 + r.ph + j * 0.7) * 0.045 * f;
             const q = [Math.cos(r.q) * (r.r + f * 0.16) + sw, LID - 0.2 - f * r.len, Math.sin(r.q) * (r.r + f * 0.12) + Math.cos(t * 0.7 + r.ph + j) * 0.03 * f];
-            rod(R, p, q, 0.014 * (1.2 - f * 0.6), { col: [226, 216, 190] }, 3);
+            rod(Under, p, q, 0.014 * (1.2 - f * 0.6), { col: [226, 216, 190] }, 3);
             p = q;
           }
         });

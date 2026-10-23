@@ -17,8 +17,8 @@
       },
       lights() { return [{ p: [sun[0], sun[1], 0.1], col: day > 0 ? [1, 0.8, 0.5] : [0.55, 0.65, 1], i: day > 0 ? 0.5 + 0.8 * day : 0.55, fall: 0.5 }]; },
       draw(t) {
-        // the wall under the window, the sill, the posts and the arch
-        box(R, [0, 0.45, Z + 0.05], [0.95, 0.45, 0.12], { tex: T.stone });
+        // the wall under the window (its top, under the sill, left out), the sill, the posts and the arch
+        box(R, [0, 0.45, Z + 0.05], [0.95, 0.45, 0.12], { tex: T.stone, skip: 'top' });
         box(R, [0, SILL - 0.035, -0.1], [1.0, 0.035, 0.34], { tex: T.stone });
         box(R, [-0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
         box(R, [0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
