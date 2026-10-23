@@ -137,7 +137,8 @@ window.BasilSkins = (() => {
       const p = [this.proj(va), this.proj(vb), this.proj(vc)];
       const xs = [p[0][0], p[1][0], p[2][0]], ys = [p[0][1], p[1][1], p[2][1]];
       if (Math.max(...xs) < 0 || Math.min(...xs) > this.W || Math.max(...ys) < 0 || Math.min(...ys) > this.H) return;
-      this.list.push({ p, z: (va[2] + vb[2] + vc[2]) / 3, o, l: o.emis ? null : this.shade(n, m, o.ds) });
+      // a part of a thing drawn together (together()): it takes the depth of the thing's own point in the painter's order
+      this.list.push({ p, z: (va[2] + vb[2] + vc[2]) / 3, gz: o.group ? this.view(o.gat)[2] : null, o, l: o.emis ? null : this.shade(n, m, o.ds) });
     }
     draw() {
       const x = this.x, F = this.fog;
@@ -154,8 +155,8 @@ window.BasilSkins = (() => {
         if (run.o === 'dark') { bx.globalCompositeOperation = 'source-over'; bx.fill(); bx.globalCompositeOperation = 'lighter'; } else bx.fill();
         bx.globalAlpha = 1; run = null;
       };
-      const lay = o => (o.layer == null ? 1 : o.layer);
-      this.list.sort((A, B) => lay(A.o) - lay(B.o) || B.z - A.z);
+      const lay = o => (o.layer == null ? 1 : o.layer), zOf = t => (t.gz == null ? t.z : t.gz);
+      this.list.sort((A, B) => lay(A.o) - lay(B.o) || zOf(B) - zOf(A) || (A.o.group && A.o.group === B.o.group ? (A.o.ord || 0) - (B.o.ord || 0) || B.z - A.z : 0));
       for (const t of this.list) {
         const o = t.o, [a, b, c] = t.p;
         const f = o.nofog ? 0 : clamp((t.z - this.fogNear) / (this.fogFar - this.fogNear), 0, 1) ** 1.15;
@@ -314,6 +315,15 @@ window.BasilSkins = (() => {
   function billboard(R, c, w, h, o) {
     const r = mul(R.C.r, w), u = mul(R.C.u, h);
     quad(R, sub(sub(c, r), u), sub(add(c, r), u), add(add(c, r), u), add(sub(c, r), u), o);
+  }
+  // a thing made of parts lying almost in one plane (a book open on its lectern: the board, the cover, the block of
+  // pages, the leaves): the painter's order by the depth of each triangle flips between such faces from frame to frame
+  // and lets the board's big face through the pages. Drawn together, the thing takes its place in the order of the
+  // frame as one, by the depth of its point at, and its parts go in the order asked — part(0) first, then part(1)…;
+  // the triangles of one part by their own depth
+  function together(R, at) {
+    const g = {};
+    return ord => ({ C: R.C, tri: (a, b, d, q) => R.tri(a, b, d, { ...q, group: g, gat: at, ord }) });
   }
   // a stand-in for the rasterizer that turns every vertex about the axis ax through o first, then moves it by shift:
   // an hourglass turned over, a cut top falling, a page turned
@@ -1398,22 +1408,26 @@ window.BasilSkins = (() => {
       tick(t) { phi = Math.PI * smooth((at(t) - (EVERY - TURN)) / TURN); },
       lights(t) { return [{ p: [0, 1.7, 0.3], col: [1, 0.8, 0.45], i: 0.7 + 0.1 * Math.sin(t * 2), fall: 0.8 }]; },
       draw(t) {
-        box(R, [0, 0.42, 0], [0.18, 0.42, 0.18], { tex: T.stone });
-        box(R, [0, 0.06, 0], [0.34, 0.06, 0.34], { tex: T.stone });
+        // the lectern and its book are drawn together, part over part: the stone, the board, the cover, the blocks of
+        // pages, the leaves, the leaf turning — the faces of the book lie almost on the board, and by depth alone they
+        // would cut through one another
+        const part = together(R, O);
+        box(part(0), [0, 0.42, 0], [0.18, 0.42, 0.18], { tex: T.stone });
+        box(part(0), [0, 0.06, 0], [0.34, 0.06, 0.34], { tex: T.stone });
         // the board, the book and its pages, turned to the slope of the lectern; the book's spine along its slope
-        const Bk = turned(R, [0, 0, 0], [1, 0, 0], TILT, O);
-        box(Bk, [0, -0.04, 0], [0.8, 0.03, 0.44], { tex: T.stone });
-        box(Bk, [0, 0.005, 0], [0.54, 0.012, 0.37], { tex: T.leather });
-        box(Bk, [-0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
-        box(Bk, [0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
-        pageStrips(Bk, Math.PI, T.pageL, true);
-        pageStrips(Bk, 0, T.pageR, false);
-        if (phi > 0 && phi < Math.PI) pageStrips(Bk, phi, phi < Math.PI / 2 ? T.pageR : T.pageL, phi >= Math.PI / 2);
+        const Bk = k => turned(part(k), [0, 0, 0], [1, 0, 0], TILT, O);
+        box(Bk(1), [0, -0.04, 0], [0.8, 0.03, 0.44], { tex: T.stone });
+        box(Bk(2), [0, 0.005, 0], [0.54, 0.012, 0.37], { tex: T.leather });
+        box(Bk(3), [-0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
+        box(Bk(3), [0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
+        pageStrips(Bk(4), Math.PI, T.pageL, true);
+        pageStrips(Bk(4), 0, T.pageR, false);
+        if (phi > 0 && phi < Math.PI) pageStrips(Bk(5), phi, phi < Math.PI / 2 ? T.pageR : T.pageL, phi >= Math.PI / 2);
         // the inkpot and its quill on the corner of the board
-        prism(Bk, 0.66, 0.24, -0.01, 0.1, 0.07, 0.06, 6, { col: [34, 28, 44] }, [12, 8, 18]);
+        prism(Bk(2), 0.66, 0.24, -0.01, 0.1, 0.07, 0.06, 6, { col: [34, 28, 44] }, [12, 8, 18]);
         const qb = [0.66, 0.08, 0.24], qt = [0.8, 0.5, 0.12];
-        rod(Bk, qb, qt, 0.008, { col: [226, 214, 196] }, 3);
-        leaf(Bk, add(qb, mul(sub(qt, qb), 0.35)), norm(sub(qt, qb)), 0.36, T.feather, { w: 0.22, curl: 0.1, side: [0, 0, 1] });
+        rod(Bk(2), qb, qt, 0.008, { col: [226, 214, 196] }, 3);
+        leaf(Bk(2), add(qb, mul(sub(qt, qb), 0.35)), norm(sub(qt, qb)), 0.36, T.feather, { w: 0.22, curl: 0.1, side: [0, 0, 1] });
         // the runes round the book
         for (let k = 0; k < 8; k++) {
           const q = t * 0.35 + k / 8 * Math.PI * 2;

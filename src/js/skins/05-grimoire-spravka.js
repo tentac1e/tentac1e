@@ -21,22 +21,26 @@
       tick(t) { phi = Math.PI * smooth((at(t) - (EVERY - TURN)) / TURN); },
       lights(t) { return [{ p: [0, 1.7, 0.3], col: [1, 0.8, 0.45], i: 0.7 + 0.1 * Math.sin(t * 2), fall: 0.8 }]; },
       draw(t) {
-        box(R, [0, 0.42, 0], [0.18, 0.42, 0.18], { tex: T.stone });
-        box(R, [0, 0.06, 0], [0.34, 0.06, 0.34], { tex: T.stone });
+        // the lectern and its book are drawn together, part over part: the stone, the board, the cover, the blocks of
+        // pages, the leaves, the leaf turning — the faces of the book lie almost on the board, and by depth alone they
+        // would cut through one another
+        const part = together(R, O);
+        box(part(0), [0, 0.42, 0], [0.18, 0.42, 0.18], { tex: T.stone });
+        box(part(0), [0, 0.06, 0], [0.34, 0.06, 0.34], { tex: T.stone });
         // the board, the book and its pages, turned to the slope of the lectern; the book's spine along its slope
-        const Bk = turned(R, [0, 0, 0], [1, 0, 0], TILT, O);
-        box(Bk, [0, -0.04, 0], [0.8, 0.03, 0.44], { tex: T.stone });
-        box(Bk, [0, 0.005, 0], [0.54, 0.012, 0.37], { tex: T.leather });
-        box(Bk, [-0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
-        box(Bk, [0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
-        pageStrips(Bk, Math.PI, T.pageL, true);
-        pageStrips(Bk, 0, T.pageR, false);
-        if (phi > 0 && phi < Math.PI) pageStrips(Bk, phi, phi < Math.PI / 2 ? T.pageR : T.pageL, phi >= Math.PI / 2);
+        const Bk = k => turned(part(k), [0, 0, 0], [1, 0, 0], TILT, O);
+        box(Bk(1), [0, -0.04, 0], [0.8, 0.03, 0.44], { tex: T.stone });
+        box(Bk(2), [0, 0.005, 0], [0.54, 0.012, 0.37], { tex: T.leather });
+        box(Bk(3), [-0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
+        box(Bk(3), [0.25, 0.035, 0], [0.24, 0.022, 0.335], { col: [214, 196, 152] });
+        pageStrips(Bk(4), Math.PI, T.pageL, true);
+        pageStrips(Bk(4), 0, T.pageR, false);
+        if (phi > 0 && phi < Math.PI) pageStrips(Bk(5), phi, phi < Math.PI / 2 ? T.pageR : T.pageL, phi >= Math.PI / 2);
         // the inkpot and its quill on the corner of the board
-        prism(Bk, 0.66, 0.24, -0.01, 0.1, 0.07, 0.06, 6, { col: [34, 28, 44] }, [12, 8, 18]);
+        prism(Bk(2), 0.66, 0.24, -0.01, 0.1, 0.07, 0.06, 6, { col: [34, 28, 44] }, [12, 8, 18]);
         const qb = [0.66, 0.08, 0.24], qt = [0.8, 0.5, 0.12];
-        rod(Bk, qb, qt, 0.008, { col: [226, 214, 196] }, 3);
-        leaf(Bk, add(qb, mul(sub(qt, qb), 0.35)), norm(sub(qt, qb)), 0.36, T.feather, { w: 0.22, curl: 0.1, side: [0, 0, 1] });
+        rod(Bk(2), qb, qt, 0.008, { col: [226, 214, 196] }, 3);
+        leaf(Bk(2), add(qb, mul(sub(qt, qb), 0.35)), norm(sub(qt, qb)), 0.36, T.feather, { w: 0.22, curl: 0.1, side: [0, 0, 1] });
         // the runes round the book
         for (let k = 0; k < 8; k++) {
           const q = t * 0.35 + k / 8 * Math.PI * 2;

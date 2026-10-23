@@ -98,7 +98,8 @@
       const p = [this.proj(va), this.proj(vb), this.proj(vc)];
       const xs = [p[0][0], p[1][0], p[2][0]], ys = [p[0][1], p[1][1], p[2][1]];
       if (Math.max(...xs) < 0 || Math.min(...xs) > this.W || Math.max(...ys) < 0 || Math.min(...ys) > this.H) return;
-      this.list.push({ p, z: (va[2] + vb[2] + vc[2]) / 3, o, l: o.emis ? null : this.shade(n, m, o.ds) });
+      // a part of a thing drawn together (together()): it takes the depth of the thing's own point in the painter's order
+      this.list.push({ p, z: (va[2] + vb[2] + vc[2]) / 3, gz: o.group ? this.view(o.gat)[2] : null, o, l: o.emis ? null : this.shade(n, m, o.ds) });
     }
     draw() {
       const x = this.x, F = this.fog;
@@ -115,8 +116,8 @@
         if (run.o === 'dark') { bx.globalCompositeOperation = 'source-over'; bx.fill(); bx.globalCompositeOperation = 'lighter'; } else bx.fill();
         bx.globalAlpha = 1; run = null;
       };
-      const lay = o => (o.layer == null ? 1 : o.layer);
-      this.list.sort((A, B) => lay(A.o) - lay(B.o) || B.z - A.z);
+      const lay = o => (o.layer == null ? 1 : o.layer), zOf = t => (t.gz == null ? t.z : t.gz);
+      this.list.sort((A, B) => lay(A.o) - lay(B.o) || zOf(B) - zOf(A) || (A.o.group && A.o.group === B.o.group ? (A.o.ord || 0) - (B.o.ord || 0) || B.z - A.z : 0));
       for (const t of this.list) {
         const o = t.o, [a, b, c] = t.p;
         const f = o.nofog ? 0 : clamp((t.z - this.fogNear) / (this.fogFar - this.fogNear), 0, 1) ** 1.15;
@@ -275,6 +276,15 @@
   function billboard(R, c, w, h, o) {
     const r = mul(R.C.r, w), u = mul(R.C.u, h);
     quad(R, sub(sub(c, r), u), sub(add(c, r), u), add(add(c, r), u), add(sub(c, r), u), o);
+  }
+  // a thing made of parts lying almost in one plane (a book open on its lectern: the board, the cover, the block of
+  // pages, the leaves): the painter's order by the depth of each triangle flips between such faces from frame to frame
+  // and lets the board's big face through the pages. Drawn together, the thing takes its place in the order of the
+  // frame as one, by the depth of its point at, and its parts go in the order asked — part(0) first, then part(1)…;
+  // the triangles of one part by their own depth
+  function together(R, at) {
+    const g = {};
+    return ord => ({ C: R.C, tri: (a, b, d, q) => R.tri(a, b, d, { ...q, group: g, gat: at, ord }) });
   }
   // a stand-in for the rasterizer that turns every vertex about the axis ax through o first, then moves it by shift:
   // an hourglass turned over, a cut top falling, a page turned

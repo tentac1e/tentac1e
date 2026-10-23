@@ -247,7 +247,7 @@
 
 **skins.js**
 - `src/js/skins/00-core.js` (36 стр.): SKINS, BAYER
-- `src/js/skins/01-raster.js` (286 стр.): SHADED, ICO, OCT
+- `src/js/skins/01-raster.js` (296 стр.): SHADED, ICO, OCT
 - `src/js/skins/02-textures.js` (185 стр.): FLOORS, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
 - `src/js/skins/04-stage.js` (288 стр.): WORLDS, PAIRS, ESSENCE
@@ -258,7 +258,7 @@
 - `src/js/skins/05-grimoire-posadka.js` (47 стр.)
 - `src/js/skins/05-grimoire-problemy.js` (64 стр.)
 - `src/js/skins/05-grimoire-sorta.js` (58 стр.)
-- `src/js/skins/05-grimoire-spravka.js` (58 стр.)
+- `src/js/skins/05-grimoire-spravka.js` (62 стр.)
 - `src/js/skins/05-grimoire-udobreniya.js` (59 стр.)
 - `src/js/skins/05-grimoire-uhod.js` (57 стр.)
 - `src/js/skins/05-grimoire-vkus.js` (58 стр.)
