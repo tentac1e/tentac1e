@@ -1940,7 +1940,7 @@ window.BasilSkins = (() => {
       leather: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) t.put(x, y, x === 1 || y === 1 || x === 14 || y === 14 ? [176, 132, 58] : [noise(86, 8), noise(24, 4), noise(30, 4)]); }),
       // the night outside the window: violet going dark upwards, a few stars
       sky: tex(32, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) { const k = y / 31; t.put(x, y, R0() < 0.025 && k < 0.7 ? [236, 226, 255] : [noise(14 + 44 * k, 3), noise(10 + 18 * k, 3), noise(34 + 40 * k, 4)]); } }),
-      runes: [...Array(6)].map((_, i) => tex(8, 8, t => runeGlyph(t, i))),
+      runes: [...Array(6)].map((_, i) => tex(8, 12, t => runeGlyph(t, i))),
       letters: ['N', 'P', 'K'].map(ch => tex(16, 16, t => letter(t, ch, noise))),
       flame: tex(16, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) {
@@ -2014,12 +2014,20 @@ window.BasilSkins = (() => {
       for (let i = 0; i < 5; i++) { const q = -Math.PI / 2 + i / 5 * Math.PI * 2, q2 = q + 4 * Math.PI / 5; line(12 + Math.cos(q) * 4, 21 + Math.sin(q) * 4, 12 + Math.cos(q2) * 4, 21 + Math.sin(q2) * 4, [150, 30, 36]); }
     }
   }
-  // a rune of light (the glyphs that circle the book): a few strokes on a grid of three by four, nothing around them
+  // a rune of light (the glyphs that circle the book): a rune of the elder row — Fehu, Uruz, Thurisaz, Ansuz, Raidho,
+  // Kaunan — its strokes a pixel wide on a stave of eleven, a glow of dark gold beside them so that it reads small
+  const RUNE_STROKES = [
+    [[1, 0, 1, 10], [1, 4, 5, 1], [1, 7, 5, 4]],
+    [[1, 0, 1, 10], [1, 0, 5, 4], [5, 4, 5, 10]],
+    [[1, 0, 1, 10], [1, 3, 4, 5], [4, 5, 1, 7]],
+    [[1, 0, 1, 10], [1, 1, 5, 4], [1, 4, 5, 7]],
+    [[1, 0, 1, 10], [1, 0, 5, 2], [5, 2, 1, 5], [1, 5, 5, 10]],
+    [[5, 1, 1, 5], [1, 5, 5, 9]]
+  ];
   function runeGlyph(t, i) {
-    const R4 = rng(61 + i * 7), g = [255, 204, 112], P = [[1, 1], [6, 1], [1, 6], [6, 6], [3, 1], [3, 6], [1, 3], [6, 3], [3, 3]];
-    const n = 2 + (R4() * 2 | 0);
-    for (let k = 0; k < n; k++) { const a = P[R4() * P.length | 0], b = P[R4() * P.length | 0]; t.line(a[0], a[1], b[0], b[1], g); }
-    t.line(3, 1, 3, 6, g);
+    const g = [255, 210, 120], d = [120, 74, 24];
+    RUNE_STROKES[i].forEach(([x0, y0, x1, y1]) => t.line(x0 + 2, y0 + 1, x1 + 2, y1 + 1, d));
+    RUNE_STROKES[i].forEach(([x0, y0, x1, y1]) => t.line(x0 + 1, y0 + 1, x1 + 1, y1 + 1, g));
   }
   // a letter of gold carved into a stone: the element a flask holds
   const GLYPH = { N: ['1001', '1101', '1011', '1001', '1001'], P: ['1110', '1001', '1110', '1000', '1000'], K: ['1001', '1010', '1100', '1010', '1001'] };
@@ -2640,11 +2648,19 @@ window.BasilSkins = (() => {
         [2, 4, 6].forEach(k => rod(R, arcP(ARCH[0], k / 8 * Math.PI), arcP(ARCH[3], k / 8 * Math.PI), 0.022, { col: [58, 52, 70] }, 3));
         for (let g = 0; g < 3; g++) for (let k = 1; k < 7; k++) quad(R, arcP(ARCH[g], k / 8 * Math.PI), arcP(ARCH[g + 1], k / 8 * Math.PI), arcP(ARCH[g + 1], (k + 1) / 8 * Math.PI), arcP(ARCH[g], (k + 1) / 8 * Math.PI), { col: [70, 90, 120], emis: true, nofog: true, add: 0.035, ds: true });
         // the still: a furnace with its fire, a copper pot, the swan's neck, the coil, the receiver
-        box(R, [0, 0.32, -2.3], [0.42, 0.32, 0.4], { tex: T.stone });
-        const fl = 0.8 + 0.2 * Math.sin(t * 13);
-        quad(R, [-0.16, 0.06, -1.895], [0.16, 0.06, -1.895], [0.16, 0.34, -1.895], [-0.16, 0.34, -1.895], { col: [255, 130 * fl + 40, 40], emis: true, nofog: true });
-        ball(R, [0, 0.95, -2.3], 0.36, { col: [196, 118, 64] });
-        prism(R, 0, -2.3, 1.22, 1.62, 0.11, 0.05, 6, { col: [196, 118, 64] });
+        // the furnace and its mouth drawn together, the fire over the stone: by depth alone half the fire, a hair in front
+        // of the stone, went behind it and showed a triangle. In the mouth: the glow of the coals, three tongues of flame
+        const oven = together(R, [0, 0.32, -1.9]), fl = 0.8 + 0.2 * Math.sin(t * 13);
+        box(oven(0), [0, 0.32, -2.3], [0.42, 0.32, 0.4], { tex: T.stone });
+        quad(oven(1), [-0.17, 0.05, -1.895], [0.17, 0.05, -1.895], [0.17, 0.36, -1.895], [-0.17, 0.36, -1.895], { col: [40, 10, 6] });
+        quad(oven(2), [-0.15, 0.06, -1.892], [0.15, 0.06, -1.892], [0.15, 0.16, -1.892], [-0.15, 0.16, -1.892], { col: [255, 110 * fl + 40, 30], emis: true, nofog: true });
+        [-0.08, 0, 0.08].forEach((x, k) => {
+          const h = (0.15 + 0.05 * Math.sin(t * (9 + k * 3) + k * 2)) * fl;
+          quad(oven(3), [x - 0.055, 0.1, -1.889], [x + 0.055, 0.1, -1.889], [x + 0.055, 0.1 + h, -1.889], [x - 0.055, 0.1 + h, -1.889], { tex: T.flame, emis: true, nofog: true, cut: true }, 0, 1, 0, 1);
+        });
+        // the copper pot sits on the furnace, drawn after it
+        ball(oven(4), [0, 0.98, -2.3], 0.36, { col: [196, 118, 64] });
+        prism(oven(4), 0, -2.3, 1.25, 1.62, 0.11, 0.05, 6, { col: [196, 118, 64] });
         rod(R, [0, 1.62, -2.3], [0.35, 1.72, -2.3], 0.035, { col: [196, 118, 64] }, 4);
         rod(R, [0.35, 1.72, -2.3], [0.92, 1.05, -2.3], 0.03, { col: [196, 118, 64] }, 4);
         prism(R, 0.98, -2.3, 0, 0.78, 0.22, 0.24, 8, { col: [112, 72, 44] }, [70, 46, 30]);
@@ -2691,7 +2707,15 @@ window.BasilSkins = (() => {
       draw(t) {
         // the wall under the window (its top, under the sill, left out), the sill, the posts and the arch
         box(R, [0, 0.45, Z + 0.05], [0.95, 0.45, 0.12], { tex: T.stone, skip: 'top' });
-        box(R, [0, SILL - 0.035, -0.1], [1.0, 0.035, 0.34], { tex: T.stone });
+        // the sill: its top in two, the strip the posts stand on and the rest before them — one face under both, put
+        // in the painter's order by its middle, went over the feet of the posts; it ends where the window begins
+        box(R, [0, SILL - 0.035, -0.08], [1.0, 0.035, 0.32], { tex: T.stone, skip: 'top' });
+        quad(R, [-1, SILL, -0.23], [1, SILL, -0.23], [1, SILL, -0.4], [-1, SILL, -0.4], { tex: T.stone }, 0, 1, 0, 0.27);
+        // the rest of it in small stones, so that what stands on it (the pot, the hourglass) is put in order by its own
+        for (let i = 0; i < 8; i++) for (let j = 0; j < 2; j++) {
+          const x0 = -1 + i / 4, z0 = -0.23 + j * 0.235;
+          quad(R, [x0, SILL, z0 + 0.235], [x0 + 0.25, SILL, z0 + 0.235], [x0 + 0.25, SILL, z0], [x0, SILL, z0], { tex: T.stone }, i / 8, (i + 1) / 8, 0.27 + j * 0.365, 0.27 + (j + 1) * 0.365);
+        }
         box(R, [-0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
         box(R, [0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
         const C = [0, 2.28, Z + 0.17], n = 7;
@@ -2710,8 +2734,9 @@ window.BasilSkins = (() => {
             R.tri([0, 2.28, Z + lift], [Math.cos(a0) * 0.56, 2.28 + Math.sin(a0) * 0.56, Z + lift], [Math.cos(a1) * 0.56, 2.28 + Math.sin(a1) * 0.56, Z + lift], { ...o, uv: [[0.5, 0.35], [0.5 + Math.cos(a0) / 2, 0.35 - Math.sin(a0) * 0.35], [0.5 + Math.cos(a1) / 2, 0.35 - Math.sin(a1) * 0.35]] });
           }
         };
-        sky({ tex: T.sky, emis: true, nofog: true, ds: true });
-        if (day > 0) sky({ col: [96, 120, 200], emis: true, nofog: true, ds: true, add: 0.75 * day }, 0.005);
+        // the sky lies behind all that is in the window — the sun, the moon, the bush — on a layer of its own
+        sky({ tex: T.sky, emis: true, nofog: true, ds: true, layer: 0.5 });
+        if (day > 0) sky({ col: [96, 120, 200], emis: true, nofog: true, ds: true, add: 0.75 * day, layer: 0.5 }, 0.005);
         ball(R, sun, day > 0 ? 0.1 : 0.075, { col: day > 0 ? [255, 214, 120] : [214, 222, 255], emis: true, nofog: true });
         // the pot and its bush
         const earth = pot(R, T, -0.3, 0.02, SILL, 0.85);
@@ -2956,7 +2981,7 @@ window.BasilSkins = (() => {
         // the runes round the book
         for (let k = 0; k < 8; k++) {
           const q = t * 0.35 + k / 8 * Math.PI * 2;
-          billboard(R, [Math.cos(q) * 1, 1.5 + Math.sin(t * 1.1 + k) * 0.12, Math.sin(q) * 0.75], 0.065, 0.065, { tex: T.runes[k % 6], emis: true, nofog: true, cut: true });
+          billboard(R, [Math.cos(q) * 1, 1.5 + Math.sin(t * 1.1 + k) * 0.12, Math.sin(q) * 0.75], 0.062, 0.093, { tex: T.runes[k % 6], emis: true, nofog: true, cut: true });
         }
       },
       fx(t, F) {

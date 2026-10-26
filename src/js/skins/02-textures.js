@@ -102,7 +102,7 @@
       leather: tex(16, 16, t => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) t.put(x, y, x === 1 || y === 1 || x === 14 || y === 14 ? [176, 132, 58] : [noise(86, 8), noise(24, 4), noise(30, 4)]); }),
       // the night outside the window: violet going dark upwards, a few stars
       sky: tex(32, 32, t => { for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) { const k = y / 31; t.put(x, y, R0() < 0.025 && k < 0.7 ? [236, 226, 255] : [noise(14 + 44 * k, 3), noise(10 + 18 * k, 3), noise(34 + 40 * k, 4)]); } }),
-      runes: [...Array(6)].map((_, i) => tex(8, 8, t => runeGlyph(t, i))),
+      runes: [...Array(6)].map((_, i) => tex(8, 12, t => runeGlyph(t, i))),
       letters: ['N', 'P', 'K'].map(ch => tex(16, 16, t => letter(t, ch, noise))),
       flame: tex(16, 32, t => {
         for (let y = 0; y < 32; y++) for (let x = 0; x < 16; x++) {
@@ -176,12 +176,20 @@
       for (let i = 0; i < 5; i++) { const q = -Math.PI / 2 + i / 5 * Math.PI * 2, q2 = q + 4 * Math.PI / 5; line(12 + Math.cos(q) * 4, 21 + Math.sin(q) * 4, 12 + Math.cos(q2) * 4, 21 + Math.sin(q2) * 4, [150, 30, 36]); }
     }
   }
-  // a rune of light (the glyphs that circle the book): a few strokes on a grid of three by four, nothing around them
+  // a rune of light (the glyphs that circle the book): a rune of the elder row — Fehu, Uruz, Thurisaz, Ansuz, Raidho,
+  // Kaunan — its strokes a pixel wide on a stave of eleven, a glow of dark gold beside them so that it reads small
+  const RUNE_STROKES = [
+    [[1, 0, 1, 10], [1, 4, 5, 1], [1, 7, 5, 4]],
+    [[1, 0, 1, 10], [1, 0, 5, 4], [5, 4, 5, 10]],
+    [[1, 0, 1, 10], [1, 3, 4, 5], [4, 5, 1, 7]],
+    [[1, 0, 1, 10], [1, 1, 5, 4], [1, 4, 5, 7]],
+    [[1, 0, 1, 10], [1, 0, 5, 2], [5, 2, 1, 5], [1, 5, 5, 10]],
+    [[5, 1, 1, 5], [1, 5, 5, 9]]
+  ];
   function runeGlyph(t, i) {
-    const R4 = rng(61 + i * 7), g = [255, 204, 112], P = [[1, 1], [6, 1], [1, 6], [6, 6], [3, 1], [3, 6], [1, 3], [6, 3], [3, 3]];
-    const n = 2 + (R4() * 2 | 0);
-    for (let k = 0; k < n; k++) { const a = P[R4() * P.length | 0], b = P[R4() * P.length | 0]; t.line(a[0], a[1], b[0], b[1], g); }
-    t.line(3, 1, 3, 6, g);
+    const g = [255, 210, 120], d = [120, 74, 24];
+    RUNE_STROKES[i].forEach(([x0, y0, x1, y1]) => t.line(x0 + 2, y0 + 1, x1 + 2, y1 + 1, d));
+    RUNE_STROKES[i].forEach(([x0, y0, x1, y1]) => t.line(x0 + 1, y0 + 1, x1 + 1, y1 + 1, g));
   }
   // a letter of gold carved into a stone: the element a flask holds
   const GLYPH = { N: ['1001', '1101', '1011', '1001', '1001'], P: ['1110', '1001', '1110', '1000', '1000'], K: ['1001', '1010', '1100', '1010', '1001'] };

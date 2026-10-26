@@ -77,11 +77,19 @@
         [2, 4, 6].forEach(k => rod(R, arcP(ARCH[0], k / 8 * Math.PI), arcP(ARCH[3], k / 8 * Math.PI), 0.022, { col: [58, 52, 70] }, 3));
         for (let g = 0; g < 3; g++) for (let k = 1; k < 7; k++) quad(R, arcP(ARCH[g], k / 8 * Math.PI), arcP(ARCH[g + 1], k / 8 * Math.PI), arcP(ARCH[g + 1], (k + 1) / 8 * Math.PI), arcP(ARCH[g], (k + 1) / 8 * Math.PI), { col: [70, 90, 120], emis: true, nofog: true, add: 0.035, ds: true });
         // the still: a furnace with its fire, a copper pot, the swan's neck, the coil, the receiver
-        box(R, [0, 0.32, -2.3], [0.42, 0.32, 0.4], { tex: T.stone });
-        const fl = 0.8 + 0.2 * Math.sin(t * 13);
-        quad(R, [-0.16, 0.06, -1.895], [0.16, 0.06, -1.895], [0.16, 0.34, -1.895], [-0.16, 0.34, -1.895], { col: [255, 130 * fl + 40, 40], emis: true, nofog: true });
-        ball(R, [0, 0.95, -2.3], 0.36, { col: [196, 118, 64] });
-        prism(R, 0, -2.3, 1.22, 1.62, 0.11, 0.05, 6, { col: [196, 118, 64] });
+        // the furnace and its mouth drawn together, the fire over the stone: by depth alone half the fire, a hair in front
+        // of the stone, went behind it and showed a triangle. In the mouth: the glow of the coals, three tongues of flame
+        const oven = together(R, [0, 0.32, -1.9]), fl = 0.8 + 0.2 * Math.sin(t * 13);
+        box(oven(0), [0, 0.32, -2.3], [0.42, 0.32, 0.4], { tex: T.stone });
+        quad(oven(1), [-0.17, 0.05, -1.895], [0.17, 0.05, -1.895], [0.17, 0.36, -1.895], [-0.17, 0.36, -1.895], { col: [40, 10, 6] });
+        quad(oven(2), [-0.15, 0.06, -1.892], [0.15, 0.06, -1.892], [0.15, 0.16, -1.892], [-0.15, 0.16, -1.892], { col: [255, 110 * fl + 40, 30], emis: true, nofog: true });
+        [-0.08, 0, 0.08].forEach((x, k) => {
+          const h = (0.15 + 0.05 * Math.sin(t * (9 + k * 3) + k * 2)) * fl;
+          quad(oven(3), [x - 0.055, 0.1, -1.889], [x + 0.055, 0.1, -1.889], [x + 0.055, 0.1 + h, -1.889], [x - 0.055, 0.1 + h, -1.889], { tex: T.flame, emis: true, nofog: true, cut: true }, 0, 1, 0, 1);
+        });
+        // the copper pot sits on the furnace, drawn after it
+        ball(oven(4), [0, 0.98, -2.3], 0.36, { col: [196, 118, 64] });
+        prism(oven(4), 0, -2.3, 1.25, 1.62, 0.11, 0.05, 6, { col: [196, 118, 64] });
         rod(R, [0, 1.62, -2.3], [0.35, 1.72, -2.3], 0.035, { col: [196, 118, 64] }, 4);
         rod(R, [0.35, 1.72, -2.3], [0.92, 1.05, -2.3], 0.03, { col: [196, 118, 64] }, 4);
         prism(R, 0.98, -2.3, 0, 0.78, 0.22, 0.24, 8, { col: [112, 72, 44] }, [70, 46, 30]);

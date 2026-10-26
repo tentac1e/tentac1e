@@ -41,6 +41,9 @@ suites_for() {
     tests/gallery.js) echo "" ;;
     tests/*.js) basename "$1" .js ;;
     src/js/skins/*) echo "skins motion depth" ;;
+    # the pictures of the skins: their icons and their frames
+    scripts/skin-icons.js) echo "skins" ;;
+    scripts/skin-art.js) echo "skins overlap controls" ;;
     src/css/style/27-grimoire.css|src/css/lab/16-grimoire.css|src/css/style/28-druid.css|src/css/lab/17-druid.css|src/fonts/*|scripts/fonts.py) echo "skins" ;;
     src/js/app/01-theme.js) echo "skins pages nav" ;;
     src/labs/*) echo "labs overlap controls ills single skins" ;;

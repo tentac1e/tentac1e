@@ -19,7 +19,15 @@
       draw(t) {
         // the wall under the window (its top, under the sill, left out), the sill, the posts and the arch
         box(R, [0, 0.45, Z + 0.05], [0.95, 0.45, 0.12], { tex: T.stone, skip: 'top' });
-        box(R, [0, SILL - 0.035, -0.1], [1.0, 0.035, 0.34], { tex: T.stone });
+        // the sill: its top in two, the strip the posts stand on and the rest before them — one face under both, put
+        // in the painter's order by its middle, went over the feet of the posts; it ends where the window begins
+        box(R, [0, SILL - 0.035, -0.08], [1.0, 0.035, 0.32], { tex: T.stone, skip: 'top' });
+        quad(R, [-1, SILL, -0.23], [1, SILL, -0.23], [1, SILL, -0.4], [-1, SILL, -0.4], { tex: T.stone }, 0, 1, 0, 0.27);
+        // the rest of it in small stones, so that what stands on it (the pot, the hourglass) is put in order by its own
+        for (let i = 0; i < 8; i++) for (let j = 0; j < 2; j++) {
+          const x0 = -1 + i / 4, z0 = -0.23 + j * 0.235;
+          quad(R, [x0, SILL, z0 + 0.235], [x0 + 0.25, SILL, z0 + 0.235], [x0 + 0.25, SILL, z0], [x0, SILL, z0], { tex: T.stone }, i / 8, (i + 1) / 8, 0.27 + j * 0.365, 0.27 + (j + 1) * 0.365);
+        }
         box(R, [-0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
         box(R, [0.66, 1.62, Z + 0.05], [0.1, 0.66, 0.12], { tex: T.stone });
         const C = [0, 2.28, Z + 0.17], n = 7;
@@ -38,8 +46,9 @@
             R.tri([0, 2.28, Z + lift], [Math.cos(a0) * 0.56, 2.28 + Math.sin(a0) * 0.56, Z + lift], [Math.cos(a1) * 0.56, 2.28 + Math.sin(a1) * 0.56, Z + lift], { ...o, uv: [[0.5, 0.35], [0.5 + Math.cos(a0) / 2, 0.35 - Math.sin(a0) * 0.35], [0.5 + Math.cos(a1) / 2, 0.35 - Math.sin(a1) * 0.35]] });
           }
         };
-        sky({ tex: T.sky, emis: true, nofog: true, ds: true });
-        if (day > 0) sky({ col: [96, 120, 200], emis: true, nofog: true, ds: true, add: 0.75 * day }, 0.005);
+        // the sky lies behind all that is in the window — the sun, the moon, the bush — on a layer of its own
+        sky({ tex: T.sky, emis: true, nofog: true, ds: true, layer: 0.5 });
+        if (day > 0) sky({ col: [96, 120, 200], emis: true, nofog: true, ds: true, add: 0.75 * day, layer: 0.5 }, 0.005);
         ball(R, sun, day > 0 ? 0.1 : 0.075, { col: day > 0 ? [255, 214, 120] : [214, 222, 255], emis: true, nofog: true });
         // the pot and its bush
         const earth = pot(R, T, -0.3, 0.02, SILL, 0.85);

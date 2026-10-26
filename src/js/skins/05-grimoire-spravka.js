@@ -45,7 +45,7 @@
         // the runes round the book
         for (let k = 0; k < 8; k++) {
           const q = t * 0.35 + k / 8 * Math.PI * 2;
-          billboard(R, [Math.cos(q) * 1, 1.5 + Math.sin(t * 1.1 + k) * 0.12, Math.sin(q) * 0.75], 0.065, 0.065, { tex: T.runes[k % 6], emis: true, nofog: true, cut: true });
+          billboard(R, [Math.cos(q) * 1, 1.5 + Math.sin(t * 1.1 + k) * 0.12, Math.sin(q) * 0.75], 0.062, 0.093, { tex: T.runes[k % 6], emis: true, nofog: true, cut: true });
         }
       },
       fx(t, F) {

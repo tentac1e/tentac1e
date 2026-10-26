@@ -252,13 +252,13 @@
 - `src/js/skins/02-icons-grimoire-hand.js` (242 стр.): GRIMOIRE_HAND
 - `src/js/skins/02-icons-grimoire.js` (1142 стр.): GRIMOIRE_ICONS
 - `src/js/skins/02-icons.js` (54 стр.): PIX, ICON_SETS
-- `src/js/skins/02-textures.js` (191 стр.): FLOORS, GLYPH
+- `src/js/skins/02-textures.js` (199 стр.): FLOORS, RUNE_STROKES, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
 - `src/js/skins/04-stage.js` (288 стр.): WORLDS, PAIRS, ESSENCE
 - `src/js/skins/05-grimoire-formirovka.js` (99 стр.)
 - `src/js/skins/05-grimoire-gidro.js` (66 стр.)
-- `src/js/skins/05-grimoire-glavnaya.js` (109 стр.)
-- `src/js/skins/05-grimoire-moy.js` (70 стр.)
+- `src/js/skins/05-grimoire-glavnaya.js` (117 стр.)
+- `src/js/skins/05-grimoire-moy.js` (79 стр.)
 - `src/js/skins/05-grimoire-posadka.js` (47 стр.)
 - `src/js/skins/05-grimoire-problemy.js` (64 стр.)
 - `src/js/skins/05-grimoire-sorta.js` (58 стр.)

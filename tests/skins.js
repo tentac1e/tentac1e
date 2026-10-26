@@ -61,6 +61,18 @@ const sigHere = async page => {
   }
   return null;
 };
+// in the page: the icons of the sprite as the page has them now — how many symbols, how many of them a skin's own, what
+// one of them is drawn with (pixels of «Гримуар»: paths with no stroke; the cuts of «Друид»: a groove under them); the
+// frame of a window
+const icons = () => {
+  const syms = [...document.querySelectorAll('symbol[id^="i-"]')], book = document.getElementById('i-book');
+  const card = document.querySelector('.card, .pane, .deep');
+  return {
+    n: syms.length, own: syms.filter(x => x.dataset.skinIco).length, box: book.getAttribute('viewBox'),
+    pixels: book.querySelectorAll('path[style*="stroke:none"]').length, groove: !!book.querySelector('.ico-groove'), body: book.innerHTML.length,
+    frame: card ? getComputedStyle(card).borderImageSource.slice(0, 40) : ''
+  };
+};
 const pick = async (page, skin) => { await page.click('#skin-btn'); await page.click(`#skin-menu [data-skin="${skin}"]`); };
 
 (async () => {
@@ -85,7 +97,7 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
     await page.waitForTimeout(800);
     let s = await page.evaluate(state, BACKS);
     ok(!s.skin && s.theme === 'light' && !asked.length && !s.loaded && s.field && s.art && s.moon && !s.crtRow, tag(`off: the skins' file is not fetched, the greenhouse and the chapter's art stand ${JSON.stringify(s)}`));
-    const plain = await page.evaluate(words), plainSig = await sigHere(page);
+    const plain = await page.evaluate(words), plainSig = await sigHere(page), plainIco = await page.evaluate(icons);
     const said = {};
     for (const sk of SKINS) {
       await pick(page, sk);
@@ -100,12 +112,18 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
       said[sk] = w;
       ok(w.labels.every((t, i) => t && t !== plain.labels[i] && SKINS.every(o => o === sk || !said[o] || said[o].labels[i] !== t)) && w.marked >= w.labels.length && w.say !== plain.say && sig && sig === plainSig,
         tag(`${sk}: the guide's labels in its own words, the place of reading by the plain ones ${JSON.stringify({ plain: plain.labels, w: w.labels, say: w.say, sig, plainSig })}`));
+      // its own icons in every symbol of the sprite (02-icons.js) and its own frame on the windows (26-skin-art.css)
+      const ic = await page.evaluate(icons);
+      ok(ic.own === ic.n && ic.n > 50 && (sk === 'grimoire' ? ic.box === '0 0 16 16' && ic.pixels > 2 && !ic.groove : ic.box === '0 0 24 24' && ic.groove && !ic.pixels) && /svg/.test(ic.frame),
+        tag(`${sk}: its own icons in all ${ic.n} symbols and its own frame on the windows ${JSON.stringify(ic)}`));
     }
     await pick(page, '');
     await page.waitForTimeout(900);
     s = await page.evaluate(state, BACKS);
     ok(!s.skin && s.theme === 'light' && !s.on && !s.stages && !s.backs.length && s.field && s.art && s.moon && await page.evaluate(() => !document.querySelector('.psx-g') || getComputedStyle(document.querySelector('.psx-g')).filter === 'none'),
       tag(`off again: the greenhouse and the art back, the light theme the moon chose ${JSON.stringify(s)}`));
+    const backIco = await page.evaluate(icons);
+    ok(!backIco.own && backIco.box === plainIco.box && backIco.body === plainIco.body && backIco.frame === plainIco.frame, tag(`off again: the plain icons back ${JSON.stringify(backIco)}`));
     const back = await page.evaluate(words);
     ok(JSON.stringify(back.labels) === JSON.stringify(plain.labels) && !back.marked, tag(`off again: the plain words back ${JSON.stringify(back)}`));
     await page.close();
