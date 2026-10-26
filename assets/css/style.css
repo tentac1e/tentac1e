@@ -357,6 +357,16 @@
   --berry: #C9382D;
   --rune: #8FE8C6;
   --rune-glow: rgba(143, 232, 198, .45);
+  /* the wood of the windows, its dark and its worn light, the iron of their fittings, the stone of the tablets */
+  --wood: #2A1F14;
+  --wood-d: #18110A;
+  --wood-hi: #47362A;
+  --iron: #4A5056;
+  --iron-hi: #9AA3A8;
+  --stone: #3E443D;
+  --stone-d: #252A25;
+  --stone-hi: #5F665D;
+  --ember-glow: rgba(226, 164, 59, .5);
   --fog: #1C2B22;
   --scrim: rgba(11, 18, 13, .74);
   --shade: rgba(0, 0, 0, .55);
@@ -3145,6 +3155,31 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 .hy-cost-list li { break-inside: avoid; }
 /* a part of a tab with its own heading (the jar, the bucket): a link can open it whole in the sheet */
 .hy-part + .hy-part { margin-top: clamp(32px, 4.5vw, 52px); }
+/* ================= the pictures of the skins' frames — written by scripts/skin-art.js, not by hand =================
+   «Гримуар»: pixels (a frame in nine parts is drawn at twice its size: a pixel of it is two of the page); «Друид»: vector */
+:root[data-skin="grimoire"] {
+  --px-win: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M2 0h13v1h-13zM1 1h1v1h-1zM5 1h1v1h-1zM11 1h1v1h-1zM15 1h1v1h-1zM0 2h1v1h-1zM5 2h1v1h-1zM11 2h1v1h-1zM16 2h1v1h-1zM0 3h1v1h-1zM5 3h1v1h-1zM11 3h1v1h-1zM16 3h1v1h-1zM0 4h2v1h-2zM4 4h1v1h-1zM12 4h1v1h-1zM15 4h2v1h-2zM0 5h1v1h-1zM2 5h2v1h-2zM5 5h7v1h-7zM13 5h2v1h-2zM16 5h1v1h-1zM0 6h1v1h-1zM5 6h1v1h-1zM11 6h1v1h-1zM16 6h1v1h-1zM0 7h1v1h-1zM5 7h1v1h-1zM11 7h1v1h-1zM16 7h1v1h-1zM0 8h1v1h-1zM5 8h1v1h-1zM11 8h1v1h-1zM16 8h1v1h-1zM0 9h1v1h-1zM5 9h1v1h-1zM11 9h1v1h-1zM16 9h1v1h-1zM0 10h1v1h-1zM5 10h1v1h-1zM11 10h1v1h-1zM16 10h1v1h-1zM0 11h1v1h-1zM2 11h2v1h-2zM5 11h7v1h-7zM13 11h2v1h-2zM16 11h1v1h-1zM0 12h2v1h-2zM4 12h1v1h-1zM12 12h1v1h-1zM15 12h2v1h-2zM0 13h1v1h-1zM5 13h1v1h-1zM11 13h1v1h-1zM16 13h1v1h-1zM0 14h1v1h-1zM5 14h1v1h-1zM11 14h1v1h-1zM16 14h1v1h-1zM1 15h1v1h-1zM5 15h1v1h-1zM11 15h1v1h-1zM15 15h1v1h-1zM2 16h13v1h-13z'/%3E%3Cpath fill='%238A6826' d='M2 1h1v1h-1zM4 1h1v1h-1zM12 1h1v1h-1zM14 1h1v1h-1zM1 2h1v1h-1zM15 2h1v1h-1zM3 3h2v1h-2zM12 3h2v1h-2zM2 4h2v1h-2zM13 4h2v1h-2zM2 12h2v1h-2zM13 12h2v1h-2zM3 13h2v1h-2zM12 13h2v1h-2zM1 14h1v1h-1zM15 14h1v1h-1zM2 15h1v1h-1zM4 15h1v1h-1zM12 15h1v1h-1zM14 15h1v1h-1z'/%3E%3Cpath fill='%23E2BE63' d='M3 1h1v1h-1zM13 1h1v1h-1zM3 2h2v1h-2zM12 2h2v1h-2zM1 3h2v1h-2zM14 3h2v1h-2zM1 13h2v1h-2zM14 13h2v1h-2zM3 14h2v1h-2zM12 14h2v1h-2zM3 15h1v1h-1zM13 15h1v1h-1z'/%3E%3Cpath fill='%23CDBF9E' d='M6 1h5v1h-5zM6 3h5v1h-5zM1 5h1v1h-1zM1 6h1v1h-1zM3 6h1v1h-1zM13 6h1v1h-1zM1 7h1v1h-1zM3 7h1v1h-1zM13 7h1v1h-1zM1 8h1v1h-1zM3 8h1v1h-1zM13 8h1v1h-1zM1 9h1v1h-1zM3 9h1v1h-1zM13 9h1v1h-1zM1 10h1v1h-1zM3 10h1v1h-1zM13 10h1v1h-1zM1 11h1v1h-1zM6 13h5v1h-5z'/%3E%3Cpath fill='%23F6DF96' d='M2 2h1v1h-1zM14 2h1v1h-1zM2 14h1v1h-1zM14 14h1v1h-1z'/%3E%3Cpath fill='%23EBE1C8' d='M6 2h5v1h-5zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1z'/%3E%3Cpath fill='%234A3C42' d='M5 4h7v1h-7zM4 5h1v1h-1zM12 5h1v1h-1zM15 5h1v1h-1zM4 6h1v1h-1zM12 6h1v1h-1zM15 6h1v1h-1zM4 7h1v1h-1zM12 7h1v1h-1zM15 7h1v1h-1zM4 8h1v1h-1zM12 8h1v1h-1zM15 8h1v1h-1zM4 9h1v1h-1zM12 9h1v1h-1zM15 9h1v1h-1zM4 10h1v1h-1zM12 10h1v1h-1zM15 10h1v1h-1zM4 11h1v1h-1zM12 11h1v1h-1zM15 11h1v1h-1zM5 12h7v1h-7zM6 15h5v1h-5z'/%3E%3Cpath fill='%235E1219' d='M6 6h5v1h-5zM6 7h1v1h-1zM10 7h1v1h-1zM6 8h1v1h-1zM10 8h1v1h-1zM6 9h1v1h-1zM10 9h1v1h-1zM6 10h5v1h-5z'/%3E%3Cpath fill='%239C8F72' d='M14 6h1v1h-1zM14 7h1v1h-1zM14 8h1v1h-1zM14 9h1v1h-1zM14 10h1v1h-1zM6 14h5v1h-5z'/%3E%3C/svg%3E");
+  --px-win-lit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M2 0h13v1h-13zM1 1h1v1h-1zM5 1h1v1h-1zM11 1h1v1h-1zM15 1h1v1h-1zM0 2h1v1h-1zM5 2h1v1h-1zM11 2h1v1h-1zM16 2h1v1h-1zM0 3h1v1h-1zM5 3h1v1h-1zM11 3h1v1h-1zM16 3h1v1h-1zM0 4h2v1h-2zM4 4h1v1h-1zM12 4h1v1h-1zM15 4h2v1h-2zM0 5h1v1h-1zM2 5h2v1h-2zM5 5h7v1h-7zM13 5h2v1h-2zM16 5h1v1h-1zM0 6h1v1h-1zM5 6h1v1h-1zM11 6h1v1h-1zM16 6h1v1h-1zM0 7h1v1h-1zM5 7h1v1h-1zM11 7h1v1h-1zM16 7h1v1h-1zM0 8h1v1h-1zM5 8h1v1h-1zM11 8h1v1h-1zM16 8h1v1h-1zM0 9h1v1h-1zM5 9h1v1h-1zM11 9h1v1h-1zM16 9h1v1h-1zM0 10h1v1h-1zM5 10h1v1h-1zM11 10h1v1h-1zM16 10h1v1h-1zM0 11h1v1h-1zM2 11h2v1h-2zM5 11h7v1h-7zM13 11h2v1h-2zM16 11h1v1h-1zM0 12h2v1h-2zM4 12h1v1h-1zM12 12h1v1h-1zM15 12h2v1h-2zM0 13h1v1h-1zM5 13h1v1h-1zM11 13h1v1h-1zM16 13h1v1h-1zM0 14h1v1h-1zM5 14h1v1h-1zM11 14h1v1h-1zM16 14h1v1h-1zM1 15h1v1h-1zM5 15h1v1h-1zM11 15h1v1h-1zM15 15h1v1h-1zM2 16h13v1h-13z'/%3E%3Cpath fill='%23EBE1C8' d='M2 1h1v1h-1zM14 1h1v1h-1zM1 2h1v1h-1zM15 2h1v1h-1zM1 14h1v1h-1zM15 14h1v1h-1zM2 15h1v1h-1zM14 15h1v1h-1z'/%3E%3Cpath fill='%23F6DF96' d='M3 1h2v1h-2zM12 1h2v1h-2zM2 2h1v1h-1zM6 2h5v1h-5zM14 2h1v1h-1zM1 3h1v1h-1zM15 3h1v1h-1zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1zM1 13h1v1h-1zM15 13h1v1h-1zM2 14h1v1h-1zM14 14h1v1h-1zM3 15h2v1h-2zM12 15h2v1h-2z'/%3E%3Cpath fill='%23E2BE63' d='M6 1h5v1h-5zM3 2h2v1h-2zM12 2h2v1h-2zM2 3h1v1h-1zM6 3h5v1h-5zM14 3h1v1h-1zM1 5h1v1h-1zM1 6h1v1h-1zM3 6h1v1h-1zM13 6h2v1h-2zM1 7h1v1h-1zM3 7h1v1h-1zM13 7h2v1h-2zM1 8h1v1h-1zM3 8h1v1h-1zM13 8h2v1h-2zM1 9h1v1h-1zM3 9h1v1h-1zM13 9h2v1h-2zM1 10h1v1h-1zM3 10h1v1h-1zM13 10h2v1h-2zM1 11h1v1h-1zM2 13h1v1h-1zM6 13h5v1h-5zM14 13h1v1h-1zM3 14h2v1h-2zM6 14h5v1h-5zM12 14h2v1h-2z'/%3E%3Cpath fill='%238A6826' d='M3 3h2v1h-2zM12 3h2v1h-2zM2 4h2v1h-2zM5 4h7v1h-7zM13 4h2v1h-2zM4 5h1v1h-1zM12 5h1v1h-1zM15 5h1v1h-1zM4 6h1v1h-1zM12 6h1v1h-1zM15 6h1v1h-1zM4 7h1v1h-1zM12 7h1v1h-1zM15 7h1v1h-1zM4 8h1v1h-1zM12 8h1v1h-1zM15 8h1v1h-1zM4 9h1v1h-1zM12 9h1v1h-1zM15 9h1v1h-1zM4 10h1v1h-1zM12 10h1v1h-1zM15 10h1v1h-1zM4 11h1v1h-1zM12 11h1v1h-1zM15 11h1v1h-1zM2 12h2v1h-2zM5 12h7v1h-7zM13 12h2v1h-2zM3 13h2v1h-2zM12 13h2v1h-2zM6 15h5v1h-5z'/%3E%3Cpath fill='%235E1219' d='M6 6h5v1h-5zM6 7h1v1h-1zM10 7h1v1h-1zM6 8h1v1h-1zM10 8h1v1h-1zM6 9h1v1h-1zM10 9h1v1h-1zM6 10h5v1h-5z'/%3E%3C/svg%3E");
+  --px-dlg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M1 0h15v1h-15zM0 1h1v1h-1zM4 1h1v1h-1zM12 1h1v1h-1zM16 1h1v1h-1zM0 2h1v1h-1zM4 2h1v1h-1zM12 2h1v1h-1zM16 2h1v1h-1zM0 3h1v1h-1zM4 3h1v1h-1zM12 3h1v1h-1zM16 3h1v1h-1zM0 4h17v1h-17zM0 5h1v1h-1zM4 5h1v1h-1zM12 5h1v1h-1zM16 5h1v1h-1zM0 6h1v1h-1zM4 6h1v1h-1zM12 6h1v1h-1zM16 6h1v1h-1zM0 7h1v1h-1zM4 7h1v1h-1zM12 7h1v1h-1zM16 7h1v1h-1zM0 8h1v1h-1zM4 8h1v1h-1zM12 8h1v1h-1zM16 8h1v1h-1zM0 9h1v1h-1zM4 9h1v1h-1zM12 9h1v1h-1zM16 9h1v1h-1zM0 10h1v1h-1zM4 10h1v1h-1zM12 10h1v1h-1zM16 10h1v1h-1zM0 11h1v1h-1zM4 11h1v1h-1zM12 11h1v1h-1zM16 11h1v1h-1zM0 12h17v1h-17zM0 13h1v1h-1zM4 13h1v1h-1zM12 13h1v1h-1zM16 13h1v1h-1zM0 14h1v1h-1zM4 14h1v1h-1zM12 14h1v1h-1zM16 14h1v1h-1zM0 15h1v1h-1zM4 15h1v1h-1zM12 15h1v1h-1zM16 15h1v1h-1zM1 16h15v1h-15z'/%3E%3Cpath fill='%23E2BE63' d='M1 1h1v1h-1zM3 1h1v1h-1zM13 1h1v1h-1zM15 1h1v1h-1zM2 2h1v1h-1zM14 2h1v1h-1zM1 3h1v1h-1zM15 3h1v1h-1zM1 13h1v1h-1zM15 13h1v1h-1zM2 14h1v1h-1zM14 14h1v1h-1zM1 15h1v1h-1zM3 15h1v1h-1zM13 15h1v1h-1zM15 15h1v1h-1z'/%3E%3Cpath fill='%23F6DF96' d='M2 1h1v1h-1zM14 1h1v1h-1zM1 2h1v1h-1zM15 2h1v1h-1zM1 14h1v1h-1zM15 14h1v1h-1zM2 15h1v1h-1zM14 15h1v1h-1z'/%3E%3Cpath fill='%235E1219' d='M5 1h7v1h-7zM5 3h7v1h-7zM1 5h1v1h-1zM3 5h1v1h-1zM13 5h3v1h-3zM1 6h1v1h-1zM3 6h1v1h-1zM13 6h3v1h-3zM1 7h1v1h-1zM3 7h1v1h-1zM13 7h3v1h-3zM1 8h1v1h-1zM3 8h1v1h-1zM13 8h3v1h-3zM1 9h1v1h-1zM3 9h1v1h-1zM13 9h3v1h-3zM1 10h1v1h-1zM3 10h1v1h-1zM13 10h3v1h-3zM1 11h1v1h-1zM3 11h1v1h-1zM13 11h3v1h-3zM5 13h7v1h-7zM5 14h7v1h-7zM5 15h7v1h-7z'/%3E%3Cpath fill='%238A6826' d='M3 2h1v1h-1zM13 2h1v1h-1zM2 3h2v1h-2zM13 3h2v1h-2zM5 5h7v1h-7zM5 6h1v1h-1zM11 6h1v1h-1zM5 7h1v1h-1zM11 7h1v1h-1zM5 8h1v1h-1zM11 8h1v1h-1zM5 9h1v1h-1zM11 9h1v1h-1zM5 10h1v1h-1zM11 10h1v1h-1zM5 11h7v1h-7zM2 13h2v1h-2zM13 13h2v1h-2zM3 14h1v1h-1zM13 14h1v1h-1z'/%3E%3Cpath fill='%23C62B35' d='M5 2h7v1h-7zM2 5h1v1h-1zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1zM2 11h1v1h-1z'/%3E%3C/svg%3E");
+  --px-slot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' shape-rendering='crispEdges'%3E%3Cpath fill='%234A3C42' d='M1 0h9v1h-9zM0 1h1v1h-1zM10 1h1v1h-1zM0 2h1v1h-1zM10 2h1v1h-1zM0 3h1v1h-1zM10 3h1v1h-1zM0 4h1v1h-1zM10 4h1v1h-1zM0 5h1v1h-1zM10 5h1v1h-1zM0 6h1v1h-1zM10 6h1v1h-1zM0 7h1v1h-1zM10 7h1v1h-1zM0 8h1v1h-1zM10 8h1v1h-1zM0 9h1v1h-1zM10 9h1v1h-1zM1 10h9v1h-9z'/%3E%3Cpath fill='rgba(0,0,0,.62)' d='M1 1h9v1h-9zM1 2h1v1h-1zM1 3h1v1h-1zM1 4h1v1h-1zM1 5h1v1h-1zM1 6h1v1h-1zM1 7h1v1h-1zM1 8h1v1h-1z'/%3E%3Cpath fill='rgba(0,0,0,.42)' d='M2 2h7v1h-7zM2 3h1v1h-1zM2 4h1v1h-1zM2 5h1v1h-1zM2 6h1v1h-1zM2 7h1v1h-1z'/%3E%3Cpath fill='rgba(255,255,255,.16)' d='M9 2h1v1h-1zM9 3h1v1h-1zM9 4h1v1h-1zM9 5h1v1h-1zM9 6h1v1h-1zM9 7h1v1h-1zM9 8h1v1h-1zM1 9h9v1h-9z'/%3E%3Cpath fill='rgba(255,255,255,.34)' d='M8 3h1v1h-1zM8 4h1v1h-1zM8 5h1v1h-1zM8 6h1v1h-1zM8 7h1v1h-1zM2 8h7v1h-7z'/%3E%3C/svg%3E");
+  --px-btn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M1 0h7v1h-7zM0 1h1v1h-1zM8 1h1v1h-1zM0 2h1v1h-1zM8 2h1v1h-1zM0 3h1v1h-1zM8 3h1v1h-1zM0 4h1v1h-1zM8 4h1v1h-1zM0 5h1v1h-1zM8 5h1v1h-1zM0 6h1v1h-1zM8 6h1v1h-1zM0 7h1v1h-1zM8 7h1v1h-1zM1 8h7v1h-7z'/%3E%3Cpath fill='rgba(255,255,255,.34)' d='M1 1h7v1h-7zM1 2h1v1h-1zM1 3h1v1h-1zM1 4h1v1h-1zM1 5h1v1h-1zM1 6h1v1h-1z'/%3E%3Cpath fill='rgba(0,0,0,.62)' d='M7 2h1v1h-1zM7 3h1v1h-1zM7 4h1v1h-1zM7 5h1v1h-1zM7 6h1v1h-1zM1 7h7v1h-7z'/%3E%3C/svg%3E");
+  --px-btn-in: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M1 0h7v1h-7zM0 1h1v1h-1zM8 1h1v1h-1zM0 2h1v1h-1zM8 2h1v1h-1zM0 3h1v1h-1zM8 3h1v1h-1zM0 4h1v1h-1zM8 4h1v1h-1zM0 5h1v1h-1zM8 5h1v1h-1zM0 6h1v1h-1zM8 6h1v1h-1zM0 7h1v1h-1zM8 7h1v1h-1zM1 8h7v1h-7z'/%3E%3Cpath fill='rgba(0,0,0,.62)' d='M1 1h7v1h-7zM1 2h1v1h-1zM1 3h1v1h-1zM1 4h1v1h-1zM1 5h1v1h-1zM1 6h1v1h-1z'/%3E%3Cpath fill='rgba(255,255,255,.16)' d='M7 2h1v1h-1zM7 3h1v1h-1zM7 4h1v1h-1zM7 5h1v1h-1zM7 6h1v1h-1zM1 7h7v1h-7z'/%3E%3C/svg%3E");
+  --px-sigil: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M1 0h3v1h-3zM5 0h3v1h-3zM0 1h1v1h-1zM4 1h1v1h-1zM8 1h1v1h-1zM0 2h1v1h-1zM8 2h1v1h-1zM1 3h1v1h-1zM7 3h1v1h-1zM0 4h2v1h-2zM7 4h2v1h-2zM1 5h1v1h-1zM7 5h1v1h-1zM0 6h1v1h-1zM8 6h1v1h-1zM0 7h1v1h-1zM4 7h1v1h-1zM8 7h1v1h-1zM1 8h3v1h-3zM5 8h3v1h-3z'/%3E%3Cpath fill='%23C62B35' d='M1 1h3v1h-3zM5 1h3v1h-3zM1 2h1v1h-1zM3 2h5v1h-5zM2 3h5v1h-5zM2 4h5v1h-5zM2 5h5v1h-5zM1 6h7v1h-7zM1 7h3v1h-3zM5 7h3v1h-3z'/%3E%3Cpath fill='%23EBE1C8' d='M2 2h1v1h-1z'/%3E%3C/svg%3E");
+  --px-gem: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M4 0h4v1h-4zM3 1h1v1h-1zM8 1h1v1h-1zM2 2h1v1h-1zM9 2h1v1h-1zM1 3h1v1h-1zM10 3h1v1h-1zM0 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM0 6h1v1h-1zM11 6h1v1h-1zM1 7h1v1h-1zM10 7h1v1h-1zM2 8h1v1h-1zM9 8h1v1h-1zM3 9h1v1h-1zM8 9h1v1h-1zM4 10h4v1h-4z'/%3E%3Cpath fill='%23EBE1C8' d='M4 1h1v1h-1zM3 2h1v1h-1zM2 3h1v1h-1zM1 4h1v1h-1z'/%3E%3Cpath fill='%23C62B35' d='M5 1h3v1h-3zM4 2h4v1h-4zM3 3h6v1h-6zM2 4h8v1h-8zM1 5h8v1h-8zM1 6h7v1h-7zM2 7h5v1h-5zM4 8h1v1h-1z'/%3E%3Cpath fill='%235E1219' d='M8 2h1v1h-1zM9 3h1v1h-1zM10 4h1v1h-1zM9 5h2v1h-2zM8 6h3v1h-3zM7 7h3v1h-3zM3 8h1v1h-1zM5 8h4v1h-4zM4 9h4v1h-4z'/%3E%3C/svg%3E");
+  --px-more: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M0 0h9v1h-9zM0 1h1v1h-1zM8 1h1v1h-1zM1 2h1v1h-1zM7 2h1v1h-1zM2 3h1v1h-1zM6 3h1v1h-1zM3 4h1v1h-1zM5 4h1v1h-1zM4 5h1v1h-1z'/%3E%3Cpath fill='%23E2BE63' d='M1 1h1v1h-1zM7 1h1v1h-1zM2 2h1v1h-1zM6 2h1v1h-1zM3 3h1v1h-1zM5 3h1v1h-1zM4 4h1v1h-1z'/%3E%3Cpath fill='%23F6DF96' d='M2 1h5v1h-5zM3 2h3v1h-3zM4 3h1v1h-1z'/%3E%3C/svg%3E");
+  --px-cur: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='17' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M0 0h1v1h-1zM0 1h2v1h-2zM0 2h1v1h-1zM2 2h1v1h-1zM0 3h1v1h-1zM3 3h1v1h-1zM0 4h1v1h-1zM4 4h1v1h-1zM0 5h1v1h-1zM5 5h1v1h-1zM0 6h1v1h-1zM6 6h1v1h-1zM0 7h1v1h-1zM7 7h1v1h-1zM0 8h1v1h-1zM8 8h1v1h-1zM0 9h1v1h-1zM9 9h1v1h-1zM0 10h1v1h-1zM6 10h5v1h-5zM0 11h1v1h-1zM3 11h1v1h-1zM6 11h1v1h-1zM0 12h1v1h-1zM2 12h1v1h-1zM4 12h1v1h-1zM7 12h1v1h-1zM0 13h2v1h-2zM4 13h1v1h-1zM7 13h1v1h-1zM0 14h1v1h-1zM5 14h1v1h-1zM8 14h1v1h-1zM5 15h1v1h-1zM8 15h1v1h-1zM6 16h2v1h-2z'/%3E%3Cpath fill='%23EBE1C8' d='M1 2h1v1h-1zM1 3h2v1h-2zM1 4h3v1h-3zM1 5h4v1h-4zM1 6h5v1h-5zM1 7h6v1h-6zM1 8h7v1h-7zM1 9h8v1h-8zM1 10h5v1h-5zM1 11h2v1h-2zM4 11h2v1h-2zM1 12h1v1h-1zM5 12h2v1h-2zM5 13h2v1h-2zM6 14h2v1h-2zM6 15h2v1h-2z'/%3E%3C/svg%3E");
+  --px-hand: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Cpath fill='%23000' d='M4 0h2v1h-2zM3 1h1v1h-1zM6 1h1v1h-1zM3 2h1v1h-1zM6 2h1v1h-1zM3 3h1v1h-1zM6 3h1v1h-1zM3 4h1v1h-1zM6 4h3v1h-3zM3 5h1v1h-1zM6 5h1v1h-1zM9 5h3v1h-3zM3 6h1v1h-1zM6 6h1v1h-1zM9 6h1v1h-1zM12 6h2v1h-2zM0 7h2v1h-2zM3 7h1v1h-1zM6 7h1v1h-1zM9 7h1v1h-1zM12 7h1v1h-1zM14 7h1v1h-1zM0 8h1v1h-1zM2 8h2v1h-2zM12 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM3 9h1v1h-1zM15 9h1v1h-1zM1 10h1v1h-1zM15 10h1v1h-1zM2 11h1v1h-1zM14 11h1v1h-1zM2 12h1v1h-1zM14 12h1v1h-1zM3 13h1v1h-1zM13 13h1v1h-1zM3 14h1v1h-1zM13 14h1v1h-1zM4 15h9v1h-9z'/%3E%3Cpath fill='%23EBE1C8' d='M4 1h2v1h-2zM4 2h2v1h-2zM4 3h2v1h-2zM4 4h2v1h-2zM4 5h2v1h-2zM7 5h2v1h-2zM4 6h2v1h-2zM7 6h2v1h-2zM10 6h2v1h-2zM4 7h2v1h-2zM7 7h2v1h-2zM10 7h2v1h-2zM13 7h1v1h-1zM1 8h1v1h-1zM4 8h8v1h-8zM13 8h2v1h-2zM1 9h2v1h-2zM4 9h11v1h-11zM2 10h13v1h-13zM3 11h11v1h-11zM3 12h11v1h-11zM4 13h9v1h-9zM4 14h9v1h-9z'/%3E%3C/svg%3E");
+}
+:root[data-skin="druid"] {
+  --dr-win: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M8 0 H40 L48 8 V40 L40 48 H8 L0 40 V8 Z' fill='%231E150D'/%3E%3Cpath d='M9 2 H39 L46 9 V39 L39 46 H9 L2 39 V9 Z' fill='%233A2A1A'/%3E%3Cpath d='M10 4 H38 L44 10 V38 L38 44 H10 L4 38 V10 Z' fill='%232A1E13'/%3E%3Cpath d='M9 2 H39 L46 9' fill='none' stroke='%236E5236' stroke-width='1'/%3E%3Cpath d='M2 39 V9 L9 2' fill='none' stroke='%235C442D' stroke-width='1'/%3E%3Cpath d='M10.5 6.5 H37.5 L41.5 10.5 V37.5 L37.5 41.5 H10.5 L6.5 37.5 V10.5 Z' fill='none' stroke='%23120C07' stroke-width='1.2'/%3E%3Cpath d='M0 3.2 H48 M0 44.8 H48 M3.2 0 V48 M44.8 0 V48' stroke='%234A3622' stroke-width='.7'/%3E%3Cg transform=''%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%23454B50'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%238E979C' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3Cg transform='translate(48 0) scale(-1 1)'%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%23454B50'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%238E979C' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3Cg transform='translate(0 48) scale(1 -1)'%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%23454B50'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%238E979C' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3Cg transform='translate(48 48) scale(-1 -1)'%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%23454B50'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%238E979C' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23C9CFC9'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3C/svg%3E");
+  --dr-win-lit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M8 0 H40 L48 8 V40 L40 48 H8 L0 40 V8 Z' fill='%231E150D'/%3E%3Cpath d='M9 2 H39 L46 9 V39 L39 46 H9 L2 39 V9 Z' fill='%233A2A1A'/%3E%3Cpath d='M10 4 H38 L44 10 V38 L38 44 H10 L4 38 V10 Z' fill='%232A1E13'/%3E%3Cpath d='M9 2 H39 L46 9' fill='none' stroke='%236E5236' stroke-width='1'/%3E%3Cpath d='M2 39 V9 L9 2' fill='none' stroke='%235C442D' stroke-width='1'/%3E%3Cpath d='M10.5 6.5 H37.5 L41.5 10.5 V37.5 L37.5 41.5 H10.5 L6.5 37.5 V10.5 Z' fill='none' stroke='%23120C07' stroke-width='1.2'/%3E%3Cpath d='M0 3.2 H48 M0 44.8 H48 M3.2 0 V48 M44.8 0 V48' stroke='%234A3622' stroke-width='.7'/%3E%3Cg transform=''%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%236A5838'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%23E2A43B' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3Cg transform='translate(48 0) scale(-1 1)'%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%236A5838'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%23E2A43B' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3Cg transform='translate(0 48) scale(1 -1)'%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%236A5838'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%23E2A43B' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3Cg transform='translate(48 48) scale(-1 -1)'%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 4.2 L4.2 15 L0 15 Z' fill='%236A5838'/%3E%3Cpath d='M0 7.5 L7.5 0 L15 0 L15 1.4 L8.1 1.4 L1.4 8.1 L1.4 15 L0 15 Z' fill='%23E2A43B' opacity='.6'/%3E%3Cpath d='M4.2 15 L15 4.2 L15 5.6 L5.6 15 Z' fill='%231E2226'/%3E%3Ccircle cx='10.2' cy='2.9' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='2.9' cy='10.2' r='1.25' fill='%23F6D58A'/%3E%3Ccircle cx='10.5' cy='3.2' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='3.2' cy='10.5' r='.6' fill='%232A2F33'/%3E%3C/g%3E%3C/svg%3E");
+  --dr-btn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 0 H20 L24 4 V20 L20 24 H4 L0 20 V4 Z' fill='%231E150D'/%3E%3Cpath d='M4.5 1 H19.5 L23 4.5 V19.5 L19.5 23 H4.5 L1 19.5 V4.5 Z' fill='none' stroke='%238A6440' stroke-width='1' opacity='.55'/%3E%3Cpath d='M4.5 23 H19.5 L23 19.5' fill='none' stroke='%23000' stroke-width='1.2' opacity='.5'/%3E%3Ccircle cx='5' cy='12' r='1.3' fill='%23B9BFB9'/%3E%3Ccircle cx='19' cy='12' r='1.3' fill='%23B9BFB9'/%3E%3Ccircle cx='5.3' cy='12.3' r='.6' fill='%232A2F33'/%3E%3Ccircle cx='19.3' cy='12.3' r='.6' fill='%232A2F33'/%3E%3C/svg%3E");
+  --dr-stone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 2 Q14 0 24 1.5 Q35 0 42 2.5 Q47 6 46 14 Q47.5 24 46 34 Q47 43 41 46 Q31 48 22 46.5 Q12 48 6 45.5 Q1 41 2 32 Q0.5 22 2 13 Q1.5 5 6 2 Z' fill='%233E443D'/%3E%3Cpath d='M7 4.5 Q15 3 24 4.2 Q34 3 40.5 5 Q44 8 43.5 15 Q44.8 24 43.5 33 Q44 41 39 43.5 Q30 45 22 44 Q13 45 7.5 43 Q4 39.5 4.6 32 Q3.4 22 4.6 14 Q4.2 7 7 4.5 Z' fill='%23262B26'/%3E%3Cpath d='M6 2 Q14 0 24 1.5 Q35 0 42 2.5 Q45 4.5 45.8 9 Q40 6.5 33 6 Q24 7.5 15 6 Q8 6.5 2.6 9.5 Q3 4 6 2 Z' fill='%234E7A3A'/%3E%3Cpath d='M9 5 Q16 3.5 24 5 Q33 3.6 39 5.6' fill='none' stroke='%2378A848' stroke-width='1.2' opacity='.7'/%3E%3Cpath d='M3 30 Q2.5 36 4 40 M45 18 Q46 24 45.4 28' fill='none' stroke='%235F665D' stroke-width='1'/%3E%3C/svg%3E");
+  --dr-knot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='12' viewBox='0 0 32 12'%3E%3Cpath d='M0 6 C4 0 12 0 16 6 S28 12 32 6' fill='none' stroke='%23120C07' stroke-width='3.6'/%3E%3Cpath d='M0 6 C4 12 12 12 16 6 S28 0 32 6' fill='none' stroke='%23120C07' stroke-width='3.6'/%3E%3Cpath d='M0 6 C4 0 12 0 16 6 S28 12 32 6' fill='none' stroke='%23B8823A' stroke-width='1.8'/%3E%3Cpath d='M0 6 C4 12 12 12 16 6' fill='none' stroke='%23120C07' stroke-width='3.6'/%3E%3Cpath d='M0 6 C4 12 12 12 16 6' fill='none' stroke='%237E9C4A' stroke-width='1.8'/%3E%3Cpath d='M16 6 C20 0 28 0 32 6' fill='none' stroke='%237E9C4A' stroke-width='1.8'/%3E%3C/svg%3E");
+  --dr-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='96' viewBox='0 0 240 96'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M0 47.5 H240' opacity='.55'/%3E%3Cpath d='M0 48.5 H240' stroke='%238A6440' opacity='.12'/%3E%3Cpath d='M0 9 Q60 6 120 10 T240 8' opacity='.14'/%3E%3Cpath d='M0 18 Q70 21 140 17 T240 19' opacity='.1'/%3E%3Cpath d='M0 29 Q50 26 110 30 Q170 33 240 28' opacity='.12'/%3E%3Cpath d='M0 38 Q80 40 160 36 T240 39' opacity='.09'/%3E%3Cpath d='M0 58 Q60 55 100 60 Q130 64 160 58 T240 59' opacity='.13'/%3E%3Cpath d='M0 68 Q40 71 90 67 Q120 63 150 68 T240 66' opacity='.1'/%3E%3Cpath d='M0 79 Q70 76 140 80 T240 78' opacity='.12'/%3E%3Cpath d='M0 88 Q90 91 180 87 T240 89' opacity='.09'/%3E%3Cellipse cx='128' cy='63' rx='7' ry='3' opacity='.16'/%3E%3Cellipse cx='128' cy='63' rx='3.5' ry='1.4' opacity='.2'/%3E%3C/g%3E%3C/svg%3E");
+  --dr-cur: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='22' viewBox='0 0 20 22'%3E%3Cpath d='M1.5 1.5 L17 9.5 L10 11.5 L7 19.5 Z' fill='%232A2F33' stroke='%230A0C0D' stroke-width='1.4' stroke-linejoin='round'/%3E%3Cpath d='M3.2 3.4 L14.2 9.2 L9.2 10.6' fill='none' stroke='%23E2A43B' stroke-width='1'/%3E%3C/svg%3E");
+  --dr-hand: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='22' viewBox='0 0 20 22'%3E%3Cpath d='M1.5 1.5 L17 9.5 L10 11.5 L7 19.5 Z' fill='%235A4630' stroke='%230A0C0D' stroke-width='1.4' stroke-linejoin='round'/%3E%3Cpath d='M3.2 3.4 L14.2 9.2 L9.2 10.6' fill='none' stroke='%23F6D58A' stroke-width='1'/%3E%3C/svg%3E");
+}
 /* ================= the theme «Гримуар»: the guide as a PS1 game of the occult =================
    data-skin="grimoire" on <html> (01-theme.js, the inline script in layout.html), always over the dark theme.
    Its colours are the tokens of 00-tokens.css; here the components put on its clothes: menu windows with a bone
@@ -3168,6 +3203,26 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"].no-crt .crt { display: none; }
 /* (the row of the switch is a .hap-row of lab.css, which comes later: hidden with more weight than its display) */
 :root:not([data-skin="grimoire"]) .crt-row { display: none; }
+
+/* ---- the icons: sprites of the console (02-icons.js), pixel for pixel — the colour of the icon is its place's, its light
+   and shade go with it, blood, gold, venom and water are the skin's own, the outline is the dark of the crypt ---- */
+[data-skin="grimoire"] .ico {
+  --ico-h: color-mix(in srgb, currentColor 52%, var(--ink));
+  --ico-s: color-mix(in srgb, currentColor 40%, var(--bg));
+  --ico-o: var(--bg-deep);
+  --ico-r: var(--blood);
+  --ico-g: var(--gold);
+  --ico-v: var(--venom);
+  --ico-b: var(--ghost);
+  --ico-w: var(--ink);
+  shape-rendering: crispEdges;
+}
+/* a sprite of 16 shown at 16, 24 or 32 points — a pixel of it one point, one and a half or two — never between: its
+   stairs would go uneven */
+[data-skin="grimoire"] .ico { width: 16px; height: 16px; }
+[data-skin="grimoire"] :is(.tab-item, .skin-menu, .icon-btn, .toc-btn) .ico, [data-skin="grimoire"] :is(.toc-art, .toc-ico, .t-ico) .ico { width: 24px; height: 24px; }
+[data-skin="grimoire"] :is(.q-ico, .rule-ico, .pick, .home-chapters .toc-art) .ico { width: 32px; height: 32px; }
+@media (max-width: 760px) { [data-skin="grimoire"] .q-ico .ico { width: 16px; height: 16px; } }
 
 /* ---- type: the faces of an esoteric book — unicase titles, small capitals for labels, italics for the eyebrows ---- */
 [data-skin="grimoire"] h1, [data-skin="grimoire"] h2 { font-family: var(--font-title); font-weight: 700; letter-spacing: .005em; text-shadow: 2px 2px 0 var(--blood-d), 4px 4px 0 var(--shade); }
@@ -3219,14 +3274,14 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 }
 [data-skin="grimoire"] .brand span { font-family: var(--font-title); font-weight: 700; font-size: 1.55rem; letter-spacing: .01em; color: var(--ink); }
 [data-skin="grimoire"] .brand small { font-family: var(--font-label); font-weight: 700; font-size: .78rem; letter-spacing: .12em; color: var(--gold); }
-[data-skin="grimoire"] .icon-btn, [data-skin="grimoire"] .search-btn { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface-2); color: var(--ink-2); box-shadow: 3px 3px 0 var(--shade); transition: none; }
-@media (hover: hover) { [data-skin="grimoire"] .icon-btn:hover, [data-skin="grimoire"] .search-btn:hover { border-color: var(--rim); color: var(--ink); transform: none; } }
-[data-skin="grimoire"] .icon-btn:active, [data-skin="grimoire"] .search-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shade); }
+[data-skin="grimoire"] .icon-btn, [data-skin="grimoire"] .search-btn { border: 2px solid transparent; border-image: var(--px-btn) 4 / 8px / 2px stretch; border-radius: 0; background: var(--surface-2); color: var(--ink-2); box-shadow: 4px 4px 0 var(--shade); transition: none; }
+@media (hover: hover) { [data-skin="grimoire"] .icon-btn:hover, [data-skin="grimoire"] .search-btn:hover { background: var(--win-a); color: var(--ink); transform: none; } }
+[data-skin="grimoire"] .icon-btn:active, [data-skin="grimoire"] .search-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shade); border-image-source: var(--px-btn-in); }
 [data-skin="grimoire"] .search-btn span { font-family: var(--font-label); font-size: 1.08rem; font-weight: 700; }
 [data-skin="grimoire"] .search-btn kbd { border-radius: 2px; border-color: var(--rim-d); background: var(--bg); font-family: var(--font-mono); }
 /* the button of the skins shows a lit candle; its menu is a window of the console */
-[data-skin="grimoire"] .skin-btn { color: var(--ember); border-color: var(--rim); }
-[data-skin="grimoire"] .skin-menu { border: 2px solid var(--rim); border-radius: 5px; background: var(--win-b); box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 5px 5px 0 var(--shade); }
+[data-skin="grimoire"] .skin-btn { color: var(--ember); }
+[data-skin="grimoire"] .skin-menu { border: 2px solid transparent; border-image: var(--px-win) 8 / 16px / 2px stretch; border-radius: 0; background: var(--win-b); box-shadow: 8px 8px 0 var(--shade); }
 [data-skin="grimoire"] .skin-menu button { border-radius: 2px; }
 [data-skin="grimoire"] .skin-menu button:focus-visible { background: var(--win-a); }
 @media (hover: hover) { [data-skin="grimoire"] .skin-menu button:hover { background: var(--win-a); } }
@@ -3236,8 +3291,8 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 @keyframes psx-flicker { 50% { opacity: .72; } }
 [data-skin="grimoire"] .progress span { background: var(--blood); }
 [data-skin="grimoire"] .garden-badge { border-radius: 2px; background: var(--blood); color: var(--ink); font-family: var(--font-mono); }
-[data-skin="grimoire"] .toc-btn { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface-2); box-shadow: 3px 3px 0 var(--shade); font-family: var(--font-label); font-size: 1.1rem; font-weight: 700; }
-@media (hover: hover) { [data-skin="grimoire"] .toc-btn:hover { border-color: var(--rim); transform: none; } }
+[data-skin="grimoire"] .toc-btn { border: 2px solid transparent; border-image: var(--px-btn) 4 / 8px / 2px stretch; border-radius: 0; background: var(--surface-2); box-shadow: 4px 4px 0 var(--shade); font-family: var(--font-label); font-size: 1.1rem; font-weight: 700; }
+@media (hover: hover) { [data-skin="grimoire"] .toc-btn:hover { background: var(--win-a); transform: none; } }
 @media (max-width: 899px) {
   [data-skin="grimoire"] .tabbar { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; border-top: 2px solid var(--rim-d); box-shadow: 0 -2px 0 var(--blood-d); }
   [data-skin="grimoire"] .tab-item { border-radius: 3px; font: 700 .9rem/1.1 var(--font-label); color: var(--ink-3); }
@@ -3249,35 +3304,48 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .passport, [data-skin="grimoire"] .season-tip, [data-skin="grimoire"] .journey, [data-skin="grimoire"] .facts,
 [data-skin="grimoire"] .diag-card, [data-skin="grimoire"] .exp-card, [data-skin="grimoire"] .vt-panel, [data-skin="grimoire"] .place-card,
 [data-skin="grimoire"] .vtype, [data-skin="grimoire"] .ref-card, [data-skin="grimoire"] .stage-card, [data-skin="grimoire"] .garden-box {
-  border: 2px solid var(--rim);
-  border-radius: 5px;
+  /* the frame of the console's windows (26-skin-art.css): a pipe of bone, a black line, a seam of blood, gold at the
+     corners — a pixel of it two points of the page, from a little outside the box into its padding */
+  border: 2px solid transparent;
+  border-image: var(--px-win) 8 / 16px / 2px stretch;
+  border-radius: 0;
   background-color: var(--win-b);
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAOklEQVR42mNgQAAFKOaAYg0oJqzAAIoFoNgCiiWgmLACHijWgWIWKFaBYsIKbKBYBopNoFgEivErAABw9QeBoOZpAwAAAABJRU5ErkJggg=="), linear-gradient(165deg, var(--win-a), var(--win-b) 74%);
   background-size: 8px 8px, auto;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
-  box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 5px 5px 0 var(--shade);
+  box-shadow: 8px 8px 0 var(--shade);
 }
-[data-skin="grimoire"] .card .card, [data-skin="grimoire"] .pane .card { background-image: none; background-color: var(--surface); box-shadow: inset 0 0 0 2px var(--bg), 3px 3px 0 var(--shade); border-color: var(--rim-d); }
+/* a window in a window: the same frame a pixel to a point */
+[data-skin="grimoire"] .card .card, [data-skin="grimoire"] .pane .card { background-image: none; background-color: var(--surface); border-image: var(--px-win) 8 / 8px / 2px stretch; box-shadow: 4px 4px 0 var(--shade); }
 [data-skin="grimoire"] .float-card, [data-skin="grimoire"] .tool, [data-skin="grimoire"] .q-card { transition: transform .2s steps(2), box-shadow .2s steps(2), border-color .2s; }
-@media (hover: hover) { [data-skin="grimoire"] .float-card:hover, [data-skin="grimoire"] .tool:hover, [data-skin="grimoire"] .q-card:hover { transform: translate(-2px, -2px); box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 7px 7px 0 var(--shade); border-color: var(--gold); } }
+/* under the hand the frame turns to gold */
+@media (hover: hover) { [data-skin="grimoire"] .float-card:hover, [data-skin="grimoire"] .tool:hover, [data-skin="grimoire"] .q-card:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--shade); border-image-source: var(--px-win-lit); } }
 [data-skin="grimoire"] .card h3, [data-skin="grimoire"] .pane h3 { color: var(--ink); }
-[data-skin="grimoire"] .callout { border: 2px dashed var(--rim-d); border-radius: 4px; background: var(--surface); box-shadow: none; }
-[data-skin="grimoire"] .q-ico, [data-skin="grimoire"] .rule-ico, [data-skin="grimoire"] .t-ico, [data-skin="grimoire"] .toc-art, [data-skin="grimoire"] .toc-ico { border-radius: 3px; background: var(--bg); box-shadow: inset 0 0 0 2px var(--rim-d); color: var(--gold); }
+/* a word of advice: a dialogue box of the console — a frame of blood with a thread of gold, its icon a portrait in a
+   slot, the triangle of «more» at its foot */
+[data-skin="grimoire"] .callout { position: relative; border: 2px solid transparent; border-image: var(--px-dlg) 8 / 16px / 2px stretch; border-radius: 0; background: linear-gradient(170deg, color-mix(in srgb, var(--blood-d) 55%, var(--win-b)), var(--win-b) 70%); box-shadow: 8px 8px 0 var(--shade); padding-right: 40px; }
+[data-skin="grimoire"] .callout::after { content: ""; position: absolute; right: 14px; bottom: 12px; width: 18px; height: 12px; background: var(--px-more) center / 18px 12px no-repeat; pointer-events: none; }
+[data-skin="grimoire"] .callout > .ico { width: 32px; height: 32px; padding: 8px; box-sizing: content-box; margin-top: 0; background: var(--bg-deep); border-image: var(--px-slot) 5 / 10px stretch; color: var(--gold); }
+/* the slots of the inventory: an icon sunk into the window */
+[data-skin="grimoire"] .q-ico, [data-skin="grimoire"] .rule-ico, [data-skin="grimoire"] .t-ico, [data-skin="grimoire"] .toc-art, [data-skin="grimoire"] .toc-ico { border: 0 solid transparent; border-image: var(--px-slot) 5 / 10px stretch; border-radius: 0; background: var(--bg-deep); box-shadow: none; color: var(--gold); }
+@media (max-width: 760px) { [data-skin="grimoire"] .q-ico { border-image-width: 5px; } }
 
 /* ---- buttons, chips and segments: menu items; the chosen one has the hand ---- */
-[data-skin="grimoire"] .btn { border-radius: 4px; border: 2px solid var(--rim-d); font: 700 1.12rem/1.1 var(--font-label); letter-spacing: .05em; box-shadow: 3px 3px 0 var(--shade); transition: transform .16s steps(2), box-shadow .16s steps(2); }
-[data-skin="grimoire"] .btn-primary { background: var(--blood); border-color: var(--rim); color: var(--ink); }
+/* a button of the console: raised — light above and to the left, dark below and to the right, a black outline; pressed,
+   the other way round (the frame is light and dark laid over the button's own colour) */
+[data-skin="grimoire"] .btn { border-radius: 0; border: 2px solid transparent; border-image: var(--px-btn) 4 / 8px / 2px stretch; font: 700 1.12rem/1.1 var(--font-label); letter-spacing: .05em; box-shadow: 4px 4px 0 var(--shade); transition: transform .16s steps(2), box-shadow .16s steps(2); }
+[data-skin="grimoire"] .btn-primary { background: var(--blood); color: var(--ink); }
 @media (hover: hover) { [data-skin="grimoire"] .btn-primary:hover { color: var(--ink); background: color-mix(in srgb, var(--blood) 84%, var(--ink)); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--shade); } }
-[data-skin="grimoire"] .btn-ghost { background: var(--surface-2); color: var(--ink); border-color: var(--rim-d); }
-@media (hover: hover) { [data-skin="grimoire"] .btn-ghost:hover { color: var(--ink); border-color: var(--rim); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--shade); } }
-[data-skin="grimoire"] .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shade); }
-[data-skin="grimoire"] .chip { position: relative; border-radius: 3px; border: 2px solid var(--rim-d); background: var(--surface); color: var(--ink-2); font: 700 1.06rem/1.2 var(--font-label); letter-spacing: .04em; padding: .4em .95em .4em 26px; transition: none; }
-@media (hover: hover) { [data-skin="grimoire"] .chip:hover { transform: none; border-color: var(--rim); color: var(--ink); } }
-[data-skin="grimoire"] .chip[aria-pressed="true"] { background: var(--win-a); border-color: var(--rim); color: var(--ink); box-shadow: 3px 3px 0 var(--shade); }
-[data-skin="grimoire"] .seg { border-radius: 4px; border: 2px solid var(--rim-d); background: var(--bg); padding: 3px; }
+[data-skin="grimoire"] .btn-ghost { background: var(--surface-2); color: var(--ink); }
+@media (hover: hover) { [data-skin="grimoire"] .btn-ghost:hover { color: var(--ink); background: var(--win-a); transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--shade); } }
+[data-skin="grimoire"] .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shade); border-image-source: var(--px-btn-in); }
+[data-skin="grimoire"] .chip { position: relative; border-radius: 0; border: 2px solid transparent; border-image: var(--px-btn) 4 / 8px / 2px stretch; background: var(--surface-2); color: var(--ink-2); font: 700 1.06rem/1.2 var(--font-label); letter-spacing: .04em; padding: .4em .95em .4em 26px; transition: none; }
+@media (hover: hover) { [data-skin="grimoire"] .chip:hover { transform: none; color: var(--ink); background: var(--win-a); } }
+[data-skin="grimoire"] .chip[aria-pressed="true"] { background: var(--win-a); border-image-source: var(--px-btn-in); color: var(--ink); box-shadow: none; }
+[data-skin="grimoire"] .seg { border-radius: 0; border: 2px solid transparent; border-image: var(--px-slot) 5 / 5px / 0 stretch; background: var(--bg-deep); padding: 3px; }
 [data-skin="grimoire"] .seg button { position: relative; border-radius: 2px; font: 700 1.06rem/1.2 var(--font-label); letter-spacing: .04em; color: var(--ink-2); padding: 8px 12px 8px 26px; transition: none; }
-[data-skin="grimoire"] .seg button[aria-pressed="true"] { background: var(--win-a); color: var(--ink); box-shadow: inset 0 0 0 2px var(--rim-d); }
+[data-skin="grimoire"] .seg button[aria-pressed="true"] { background: var(--win-a); color: var(--ink); border-image: var(--px-btn-in) 4 / 4px stretch; box-shadow: none; }
 /* the pointing hand of the console's menus: by the chosen item, and by the one under the mouse */
 [data-skin="grimoire"] .chip::before, [data-skin="grimoire"] .seg button::before, [data-skin="grimoire"] .subnav a::before {
   content: "";
@@ -3296,10 +3364,10 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 @media (hover: hover) { [data-skin="grimoire"] .chip:hover::before, [data-skin="grimoire"] .seg button:hover::before, [data-skin="grimoire"] .subnav a:hover::before { opacity: 1; } }
 @keyframes psx-point { 50% { translate: -3px 0; } }
 
-[data-skin="grimoire"] .vtype.is-open { border-color: var(--gold); }
-[data-skin="grimoire"] .tabs .tab { border: 2px solid var(--rim-d); background: var(--surface); color: var(--ink-2); box-shadow: none; font-family: var(--font-label); font-size: 1.12rem; font-weight: 700; letter-spacing: .04em; transition: none; }
-@media (hover: hover) { [data-skin="grimoire"] .tabs .tab:hover { transform: none; border-color: var(--rim); color: var(--ink); } }
-[data-skin="grimoire"] .tabs .tab[aria-selected="true"] { background: var(--win-a); border-color: var(--rim); color: var(--ink); box-shadow: 3px 3px 0 var(--shade); }
+[data-skin="grimoire"] .vtype.is-open { border-image-source: var(--px-win-lit); }
+[data-skin="grimoire"] .tabs .tab { border: 2px solid transparent; border-image: var(--px-btn) 4 / 8px / 2px stretch; border-radius: 0; background: var(--surface-2); color: var(--ink-2); box-shadow: 4px 4px 0 var(--shade); font-family: var(--font-label); font-size: 1.12rem; font-weight: 700; letter-spacing: .04em; transition: none; }
+@media (hover: hover) { [data-skin="grimoire"] .tabs .tab:hover { transform: none; background: var(--win-a); color: var(--ink); } }
+[data-skin="grimoire"] .tabs .tab[aria-selected="true"] { background: var(--win-a); border-image-source: var(--px-btn-in); color: var(--ink); box-shadow: none; }
 
 /* the questions: a plus in a slot, turned to a cross when open — as the dives */
 [data-skin="grimoire"] .faq details, [data-skin="grimoire"] .faq details:first-child { border-color: var(--rim-d); border-width: 2px; border-style: dotted; border-left: 0; border-right: 0; }
@@ -3311,23 +3379,25 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .field > label, [data-skin="grimoire"] .field > .label, [data-skin="grimoire"] .field legend.label { font: 700 .98rem/1.2 var(--font-label); letter-spacing: .06em; color: var(--gold); }
 [data-skin="grimoire"] .field label b { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: var(--ink); }
 [data-skin="grimoire"] select, [data-skin="grimoire"] input[type="date"], [data-skin="grimoire"] input[type="number"], [data-skin="grimoire"] input[type="search"], [data-skin="grimoire"] input[type="text"], [data-skin="grimoire"] textarea {
-  border: 2px solid var(--rim-d);
-  border-radius: 3px;
+  border: 2px solid transparent;
+  border-image: var(--px-slot) 5 / 5px / 1px stretch;
+  border-radius: 0;
   background: var(--bg-deep);
   color: var(--ink);
   font-family: var(--font-mono);
   font-size: 1.1rem;
   font-weight: 500;
 }
-@media (hover: hover) { [data-skin="grimoire"] select:hover, [data-skin="grimoire"] input:hover { border-color: var(--rim); } }
+@media (hover: hover) { [data-skin="grimoire"] select:hover, [data-skin="grimoire"] input:hover { background-color: color-mix(in srgb, var(--win-a) 35%, var(--bg-deep)); } }
 [data-skin="grimoire"] input[type="range"].range { accent-color: var(--gold); }
-[data-skin="grimoire"] input[type="range"].range::-webkit-slider-runnable-track { height: 10px; border-radius: 0; border: 2px solid var(--rim-d); background: var(--bg-deep); }
-[data-skin="grimoire"] input[type="range"].range::-moz-range-track { height: 6px; border-radius: 0; border: 2px solid var(--rim-d); background: var(--bg-deep); }
-[data-skin="grimoire"] input[type="range"].range::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -7px; border-radius: 0; background: var(--gold); border: 2px solid var(--shade); box-shadow: none; rotate: 45deg; }
-[data-skin="grimoire"] input[type="range"].range::-moz-range-thumb { width: 14px; height: 14px; border-radius: 0; background: var(--gold); border: 2px solid var(--shade); rotate: 45deg; }
+/* a slider is a bar of life of the console: segments of old blood in a black rim, its stone a gem of blood */
+[data-skin="grimoire"] input[type="range"].range::-webkit-slider-runnable-track { height: 12px; border-radius: 0; border: 2px solid var(--shade); background: repeating-linear-gradient(90deg, var(--blood-d) 0 6px, var(--bg-deep) 6px 8px); box-shadow: 0 0 0 2px var(--rim-d); }
+[data-skin="grimoire"] input[type="range"].range::-moz-range-track { height: 8px; border-radius: 0; border: 2px solid var(--shade); background: repeating-linear-gradient(90deg, var(--blood-d) 0 6px, var(--bg-deep) 6px 8px); }
+[data-skin="grimoire"] input[type="range"].range::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -8px; border: 0; border-radius: 0; background: var(--px-gem) center / 24px 24px no-repeat; box-shadow: none; rotate: none; }
+[data-skin="grimoire"] input[type="range"].range::-moz-range-thumb { width: 24px; height: 24px; border: 0; border-radius: 0; background: var(--px-gem) center / 24px 24px no-repeat; rotate: none; }
 
 /* ---- tables and rows of figures: dotted rules, the figures in gold ---- */
-[data-skin="grimoire"] .table-wrap { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface); box-shadow: 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] .table-wrap { border: 2px solid transparent; border-image: var(--px-win) 8 / 16px / 2px stretch; border-radius: 0; background: var(--surface); box-shadow: 8px 8px 0 var(--shade); }
 [data-skin="grimoire"] th { font-family: var(--font-label); font-weight: 700; font-size: .98rem; letter-spacing: .06em; text-transform: none; color: var(--gold); }
 [data-skin="grimoire"] td { border-color: var(--rim-d); }
 [data-skin="grimoire"] .data-rows div { border-bottom: 2px dotted var(--rim-d); }
@@ -3389,7 +3459,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 
 /* ---- the home page ---- */
 [data-skin="grimoire"] .view-home .hero h1 { font-size: clamp(2.2rem, 5.4vw, 4rem); line-height: 1.04; }
-[data-skin="grimoire"] .continue { border: 2px solid var(--rim); border-radius: 4px; background: var(--win-a); box-shadow: 4px 4px 0 var(--shade); }
+[data-skin="grimoire"] .continue { border: 2px solid transparent; border-image: var(--px-win-lit) 8 / 16px / 2px stretch; border-radius: 0; background: var(--win-a); box-shadow: 8px 8px 0 var(--shade); }
 
 /* ---- the chapter's tabs: the hand by the open one, a blood bar under it ---- */
 [data-skin="grimoire"] .subnav { box-shadow: none; }
@@ -3400,16 +3470,16 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="grimoire"] .subnav a::after { left: 28px; right: 12px; height: 4px; border-radius: 0; background: var(--blood); transition: none; }
 
 /* ---- the pager and «Дальше в главе» ---- */
-[data-skin="grimoire"] .pager a { border: 2px solid var(--rim-d); border-radius: 4px; background: var(--surface); box-shadow: 4px 4px 0 var(--shade); transition: transform .16s steps(2); }
-@media (hover: hover) { [data-skin="grimoire"] .pager a:hover { border-color: var(--rim); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shade); } }
+[data-skin="grimoire"] .pager a { border: 2px solid transparent; border-image: var(--px-win) 8 / 16px / 2px stretch; border-radius: 0; background: var(--surface); box-shadow: 8px 8px 0 var(--shade); transition: transform .16s steps(2); }
+@media (hover: hover) { [data-skin="grimoire"] .pager a:hover { border-image-source: var(--px-win-lit); transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--shade); } }
 [data-skin="grimoire"] .pager small { font-family: var(--font-label); font-weight: 700; color: var(--gold); }
 [data-skin="grimoire"] .pager b { font-family: var(--font-display); font-weight: 700; }
 
 /* ---- sheets: the search, the contents, «Заглянуть» are menu windows too ---- */
-[data-skin="grimoire"] .sheet { border: 2px solid var(--rim); border-radius: 5px; background: var(--win-b); box-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px var(--rim-d), 6px 6px 0 var(--shade); }
+[data-skin="grimoire"] .sheet { border: 2px solid transparent; border-image: var(--px-win) 8 / 16px / 0 stretch; border-radius: 0; background: var(--win-b); box-shadow: 8px 8px 0 var(--shade); }
 [data-skin="grimoire"] .sheet::backdrop { background: rgba(0, 0, 0, .6); -webkit-backdrop-filter: none; backdrop-filter: none; }
 [data-skin="grimoire"] .sheet-head h2, [data-skin="grimoire"] .sheet-head h3 { font-size: 1.15rem; }
-[data-skin="grimoire"] .search-box { border: 2px solid var(--rim-d); border-radius: 3px; background: var(--bg-deep); }
+[data-skin="grimoire"] .search-box { border: 2px solid transparent; border-image: var(--px-slot) 5 / 5px / 1px stretch; border-radius: 0; background: var(--bg-deep); }
 [data-skin="grimoire"] .sr-item:focus-visible { background: var(--win-a); border-radius: 2px; }
 @media (hover: hover) { [data-skin="grimoire"] .sr-item:hover, [data-skin="grimoire"] .toc-link:hover, [data-skin="grimoire"] .toc-tool:hover { background: var(--win-a); border-radius: 2px; } }
 [data-skin="grimoire"] .toc-t, [data-skin="grimoire"] .sr-item b { font-family: var(--font-display); font-size: 1.12rem; }
@@ -3428,6 +3498,25 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
    into .psx-g and fits it a filter of about 4 px a cell), dithered, eight levels a channel; the captions stay sharp ---- */
 [data-skin="grimoire"] .psx-g { filter: var(--psx-f, none); }
 [data-skin="grimoire"] .ill-lbl { fill: var(--ink); }
+
+/* ---- the headings of a window: a sigil of blood before them; the first word of a tab and of a dive: an initial of the
+   treatise, red in a frame of gold ---- */
+[data-skin="grimoire"] :is(.card, .pane, .facts, .vt-panel, .exp-card, .garden-box, .tab-part) > h3:not(:has(.ico))::before, [data-skin="grimoire"] .hy-h:not(:has(.ico))::before {
+  content: ""; display: inline-block; width: 18px; height: 18px; margin: 0 10px 0 0; vertical-align: -1px; background: var(--px-sigil) center / 18px 18px no-repeat;
+}
+[data-skin="grimoire"] :is(.panel-lead, .deep-text > p:first-child)::first-letter {
+  float: left; margin: .1em .2em 0 0; padding: .12em .16em .02em; border: 3px double var(--gold); background: var(--bg-deep);
+  font: 700 3.1em/.84 var(--font-title); color: var(--blood); text-shadow: 2px 2px 0 var(--shade), 0 0 10px color-mix(in srgb, var(--blood) 45%, transparent);
+}
+
+/* ---- the pointer of the console where there is a mouse: the arrow, and the hand over what can be pressed; the scroll
+   bar in bone over the dark ---- */
+@media (pointer: fine) {
+  [data-skin="grimoire"] body { cursor: var(--px-cur) 0 0, auto; }
+  [data-skin="grimoire"] :is(a, button, summary, label[for], select, [role="button"], [role="menuitemradio"], [role="tab"], .chip, input[type="range"], input[type="checkbox"]) { cursor: var(--px-hand) 4 0, pointer; }
+  [data-skin="grimoire"] :is(input[type="text"], input[type="search"], input[type="number"], input[type="date"], textarea) { cursor: text; }
+}
+:root[data-skin="grimoire"] { scrollbar-color: var(--rim-d) var(--bg-deep); }
 
 @media (prefers-reduced-motion: reduce) {
   [data-skin="grimoire"] .skin-btn .ico, [data-skin="grimoire"] .chip::before, [data-skin="grimoire"] .seg button::before, [data-skin="grimoire"] .subnav a::before { animation: none !important; }
@@ -3500,6 +3589,10 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] a { color: var(--rune); text-decoration-thickness: 1px; text-underline-offset: .18em; text-decoration-color: color-mix(in srgb, var(--rune) 45%, transparent); }
 @media (hover: hover) { [data-skin="druid"] a:hover { color: var(--birch); text-decoration-color: currentColor; } }
 
+/* ---- the icons: cut in wood (02-icons.js) — straight cuts with flat ends, sharp where they turn, a groove of the dark
+   under each ---- */
+[data-skin="druid"] .ico { --ico-k: color-mix(in srgb, var(--bg-deep) 82%, transparent); stroke-width: 2; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 4; }
+
 /* ---- type: a rough hand for titles, labels and numbers, a calm face for the text, a quick hand for notes ---- */
 [data-skin="druid"] h1, [data-skin="druid"] h2 { font-family: var(--font-title); font-weight: 400; letter-spacing: .01em; text-shadow: 0 2px 0 var(--bark-d), 0 6px 18px var(--shade); }
 [data-skin="druid"] h1 em, [data-skin="druid"] h2 em { font-style: normal; color: var(--moss); }
@@ -3542,7 +3635,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] .search-btn kbd { border-radius: 3px; border-color: var(--bark-d); background: var(--bg); }
 [data-skin="druid"] .skin-btn { color: var(--rune); }
 [data-skin="druid"] .skin-btn .ico { filter: drop-shadow(0 0 4px var(--rune-glow)); }
-[data-skin="druid"] .skin-menu { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--twig-tl) left top / 22px no-repeat, var(--twig-tr) right top / 22px no-repeat, var(--twig-bl) left bottom / 22px no-repeat, var(--twig-br) right bottom / 22px no-repeat, var(--bark-face); box-shadow: var(--shadow-float); }
+[data-skin="druid"] .skin-menu { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 8px; background: var(--dr-grain) 0 0 / 240px 96px, var(--wood); box-shadow: var(--shadow-float); }
 [data-skin="druid"] .skin-menu button:focus-visible { background: color-mix(in srgb, var(--moss-d) 55%, transparent); }
 @media (hover: hover) { [data-skin="druid"] .skin-menu button:hover { background: color-mix(in srgb, var(--moss-d) 55%, transparent); } }
 [data-skin="druid"] .skin-menu button[aria-checked="true"] { box-shadow: inset 3px 0 0 var(--rune); }
@@ -3550,7 +3643,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] .skin-menu b { font-family: var(--font-label); font-weight: 400; font-size: 1.1rem; }
 [data-skin="druid"] .progress span { background: linear-gradient(90deg, var(--moss-d), var(--moss), var(--rune)); }
 [data-skin="druid"] .garden-badge { background: var(--amber); color: var(--bg); font-family: var(--font-mono); }
-[data-skin="druid"] .toc-btn { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--plank); color: var(--birch); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3), var(--shadow-sm); font-family: var(--font-label); font-size: 1.08rem; }
+[data-skin="druid"] .toc-btn { border: 1px solid var(--wood-d); border-radius: 4px; background: var(--bands), var(--plank); color: var(--birch); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3), 0 2px 0 rgba(0, 0, 0, .5); font-family: var(--font-label); font-size: 1.08rem; padding-left: 20px; padding-right: 20px; }
 @media (hover: hover) { [data-skin="druid"] .toc-btn:hover { border-color: var(--rune); transform: none; } }
 @media (max-width: 899px) {
   [data-skin="druid"] .tabbar { background: linear-gradient(var(--bg), color-mix(in srgb, var(--bark-d) 40%, var(--bg))); -webkit-backdrop-filter: none; backdrop-filter: none; border-top: 1px solid var(--bark-d); box-shadow: 0 -1px 0 var(--moss-d); }
@@ -3563,25 +3656,42 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] .passport, [data-skin="druid"] .season-tip, [data-skin="druid"] .journey, [data-skin="druid"] .facts,
 [data-skin="druid"] .diag-card, [data-skin="druid"] .exp-card, [data-skin="druid"] .vt-panel, [data-skin="druid"] .place-card,
 [data-skin="druid"] .vtype, [data-skin="druid"] .ref-card, [data-skin="druid"] .stage-card, [data-skin="druid"] .garden-box {
-  border: 1px solid var(--bark-d);
+  /* a board of dark hewn wood in its frame (26-skin-art.css): the corners cut, an iron plate on two nails on each cut,
+     the grain of two planks across it; its own corners rounded under the cuts, so nothing shows past them */
+  border: 2px solid transparent;
+  border-image: var(--dr-win) 16 / 16px / 2px round;
   border-radius: 8px;
-  background: var(--twig-tl) left top / 22px no-repeat, var(--twig-tr) right top / 22px no-repeat, var(--twig-bl) left bottom / 22px no-repeat, var(--twig-br) right bottom / 22px no-repeat, var(--bark-face);
+  background: var(--dr-grain) 0 0 / 240px 96px, linear-gradient(172deg, var(--wood-hi) -30%, var(--wood) 38%, var(--wood-d));
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--birch) 6%, transparent), var(--shadow-float);
+  box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7);
 }
-[data-skin="druid"] .card .card, [data-skin="druid"] .pane .card { background: color-mix(in srgb, var(--bg) 40%, var(--surface)); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--birch) 5%, transparent); border-color: var(--line); }
+/* a board on a board: no frame of its own, a hollow cut in the wood */
+[data-skin="druid"] .card .card, [data-skin="druid"] .pane .card { border: 1px solid var(--wood-d); border-image: none; border-radius: 6px; background: color-mix(in srgb, var(--wood-d) 70%, transparent); box-shadow: inset 0 2px 8px rgba(0, 0, 0, .5), 0 1px 0 color-mix(in srgb, var(--wood-hi) 60%, transparent); }
 [data-skin="druid"] .float-card, [data-skin="druid"] .tool, [data-skin="druid"] .q-card { transition: transform .3s var(--ease-float), box-shadow .3s, border-color .2s; }
-@media (hover: hover) { [data-skin="druid"] .float-card:hover, [data-skin="druid"] .tool:hover, [data-skin="druid"] .q-card:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--rune) 40%, transparent), var(--shadow-lift); border-color: color-mix(in srgb, var(--rune) 50%, var(--bark-d)); } }
+/* under the hand its iron warms in the light of a fire */
+@media (hover: hover) { [data-skin="druid"] .float-card:hover, [data-skin="druid"] .tool:hover, [data-skin="druid"] .q-card:hover { transform: translateY(-3px); box-shadow: 0 16px 30px -8px rgba(0, 0, 0, .75), 0 0 22px -6px var(--ember-glow); border-image-source: var(--dr-win-lit); } }
 [data-skin="druid"] .card h3, [data-skin="druid"] .pane h3 { color: var(--birch); }
-[data-skin="druid"] .callout { border: 1px dashed var(--moss-d); border-radius: 8px; background: color-mix(in srgb, var(--moss-d) 18%, var(--surface)); box-shadow: none; }
-[data-skin="druid"] .q-ico, [data-skin="druid"] .rule-ico, [data-skin="druid"] .t-ico, [data-skin="druid"] .toc-art, [data-skin="druid"] .toc-ico { border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 1px var(--bark), 0 0 0 3px color-mix(in srgb, var(--moss-d) 50%, transparent); color: var(--rune); }
+/* a word of advice: a tablet of grey stone with moss on its top */
+[data-skin="druid"] .callout { border: 2px solid transparent; border-image: var(--dr-stone) 16 fill / 16px / 2px stretch; border-radius: 12px; background: none; box-shadow: 0 10px 22px -8px rgba(0, 0, 0, .7); }
+[data-skin="druid"] .callout > .ico { color: var(--amber); filter: drop-shadow(0 0 5px var(--ember-glow)); }
+/* an icon cut in a runestone: uneven grey stone, the cut lit like embers */
+[data-skin="druid"] .q-ico, [data-skin="druid"] .rule-ico, [data-skin="druid"] .t-ico, [data-skin="druid"] .toc-art, [data-skin="druid"] .toc-ico {
+  border-radius: 46% 40% 48% 42% / 44% 48% 40% 46%;
+  background: radial-gradient(circle at 34% 28%, var(--stone-hi), var(--stone) 46%, var(--stone-d));
+  box-shadow: inset 0 -3px 6px rgba(0, 0, 0, .55), inset 0 2px 1px rgba(255, 255, 255, .08), 0 3px 0 rgba(0, 0, 0, .55), 0 0 0 1px rgba(0, 0, 0, .6);
+  color: var(--amber);
+}
+[data-skin="druid"] :is(.q-ico, .rule-ico, .t-ico, .toc-art, .toc-ico) .ico { filter: drop-shadow(0 0 4px var(--ember-glow)); }
 
 /* ---- buttons, chips and segments: planks; the chosen chip has a rune ---- */
-[data-skin="druid"] .btn { border-radius: 6px; border: 1px solid var(--bark-d); font: 400 1.12rem/1.1 var(--font-label); letter-spacing: .04em; color: var(--birch); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .32), var(--shadow-sm); transition: transform .2s var(--ease-float), box-shadow .2s, filter .2s; }
-[data-skin="druid"] .btn-primary { background: var(--plank-moss); border-color: var(--moss-d); color: var(--birch); }
+/* a button: a plank bound with a band of iron at each end, a nail in each band */
+[data-skin="druid"] .btn { border-radius: 4px; border: 1px solid var(--wood-d); font: 400 1.12rem/1.1 var(--font-label); letter-spacing: .04em; color: var(--birch); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .32), 0 2px 0 rgba(0, 0, 0, .5), var(--shadow-sm); transition: transform .2s var(--ease-float), box-shadow .2s, filter .2s; }
+[data-skin="druid"] :is(.btn, .toc-btn, .tabs .tab, .panel-next, .deep-all) { --bands: radial-gradient(circle at 6px 50%, var(--iron-hi) 0 1.6px, transparent 2.2px), radial-gradient(circle at calc(100% - 6px) 50%, var(--iron-hi) 0 1.6px, transparent 2.2px), linear-gradient(90deg, var(--iron) 0 12px, transparent 12px calc(100% - 12px), var(--iron) calc(100% - 12px)); }
+[data-skin="druid"] .btn { padding-left: max(22px, 1.3em); padding-right: max(22px, 1.3em); }
+[data-skin="druid"] .btn-primary { background: var(--bands), var(--plank-moss); border-color: var(--moss-d); color: var(--birch); }
 @media (hover: hover) { [data-skin="druid"] .btn-primary:hover { color: var(--birch); filter: brightness(1.12); transform: translateY(-1px); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .32), 0 0 0 3px color-mix(in srgb, var(--rune) 20%, transparent), var(--shadow-float); } }
-[data-skin="druid"] .btn-ghost { background: var(--plank); color: var(--birch); border-color: var(--bark-d); }
+[data-skin="druid"] .btn-ghost { background: var(--bands), var(--plank); color: var(--birch); border-color: var(--wood-d); }
 @media (hover: hover) { [data-skin="druid"] .btn-ghost:hover { color: var(--birch); filter: brightness(1.12); transform: translateY(-1px); } }
 [data-skin="druid"] .btn:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .32); }
 [data-skin="druid"] .chip { position: relative; border-radius: 14px 4px 14px 4px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-2); font: 400 1.04rem/1.2 var(--font-label); letter-spacing: .03em; padding: .42em .95em .42em 1.9em; transition: border-color .2s, color .2s; }
@@ -3611,7 +3721,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] .vtype.is-open { border-color: var(--moss); }
 [data-skin="druid"] .tabs .tab { border: 1px solid var(--bark-d); background: var(--surface); color: var(--ink-2); box-shadow: none; font-family: var(--font-label); font-size: 1.1rem; transition: color .2s, border-color .2s; }
 @media (hover: hover) { [data-skin="druid"] .tabs .tab:hover { transform: none; border-color: var(--moss); color: var(--birch); } }
-[data-skin="druid"] .tabs .tab[aria-selected="true"] { background: var(--plank); border-color: var(--bark-d); color: var(--birch); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3), var(--shadow-sm); }
+[data-skin="druid"] .tabs .tab[aria-selected="true"] { background: var(--bands), var(--plank); border-color: var(--wood-d); color: var(--birch); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3), 0 0 14px -4px var(--ember-glow); }
 
 /* the questions: a ring with a cross of twigs, turned when open */
 [data-skin="druid"] .faq details, [data-skin="druid"] .faq details:first-child { border-color: var(--line); }
@@ -3633,13 +3743,14 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 }
 @media (hover: hover) { [data-skin="druid"] select:hover, [data-skin="druid"] input:hover { border-color: var(--moss); } }
 [data-skin="druid"] input[type="range"].range { accent-color: var(--amber); }
-[data-skin="druid"] input[type="range"].range::-webkit-slider-runnable-track { height: 8px; border-radius: 4px; border: 1px solid var(--bark-d); background: linear-gradient(90deg, var(--moss-d), var(--bg-deep)); }
-[data-skin="druid"] input[type="range"].range::-moz-range-track { height: 6px; border-radius: 4px; border: 1px solid var(--bark-d); background: linear-gradient(90deg, var(--moss-d), var(--bg-deep)); }
-[data-skin="druid"] input[type="range"].range::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -7px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--oil-bright), var(--amber) 60%, var(--bark)); border: 1px solid var(--bark-d); box-shadow: 0 0 8px color-mix(in srgb, var(--amber) 50%, transparent); }
-[data-skin="druid"] input[type="range"].range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--amber); border: 1px solid var(--bark-d); }
+/* a slider: a cord of two strands, woven; on it a ring of iron with an ember in it */
+[data-skin="druid"] input[type="range"].range::-webkit-slider-runnable-track { height: 12px; border: 0; border-radius: 6px; background: var(--dr-knot) left center / 32px 12px repeat-x; }
+[data-skin="druid"] input[type="range"].range::-moz-range-track { height: 12px; border: 0; border-radius: 6px; background: var(--dr-knot) left center / 32px 12px repeat-x; }
+[data-skin="druid"] input[type="range"].range::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -6px; border-radius: 50%; border: 0; background: radial-gradient(circle, var(--oil-bright) 0 3px, var(--amber) 4px, transparent 5px 6px, var(--iron-hi) 6.5px 7.5px, var(--iron) 8px 10px, #0A0C0D 10.5px 12px); box-shadow: 0 0 10px var(--ember-glow); }
+[data-skin="druid"] input[type="range"].range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; border: 0; background: radial-gradient(circle, var(--oil-bright) 0 3px, var(--amber) 4px, transparent 5px 6px, var(--iron-hi) 6.5px 7.5px, var(--iron) 8px 10px, #0A0C0D 10.5px 12px); }
 
 /* ---- tables and rows of figures: a header of bark, the figures in amber ---- */
-[data-skin="druid"] .table-wrap { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--surface); box-shadow: var(--shadow-sm); }
+[data-skin="druid"] .table-wrap { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 8px; background: var(--dr-grain) 0 0 / 240px 96px, var(--wood); box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7); }
 [data-skin="druid"] th { font-family: var(--font-label); font-weight: 400; font-size: 1rem; letter-spacing: .04em; text-transform: none; color: var(--amber); }
 [data-skin="druid"] thead th { background: color-mix(in srgb, var(--bark-d) 45%, transparent); }
 [data-skin="druid"] td { border-color: var(--line); }
@@ -3658,7 +3769,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 
 /* ---- the home page: the grove in place of the living bush ---- */
 [data-skin="druid"] .view-home .hero h1 { font-size: clamp(2.3rem, 5.4vw, 4.1rem); line-height: 1.06; }
-[data-skin="druid"] .continue { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
+[data-skin="druid"] .continue { border: 2px solid transparent; border-image: var(--dr-win-lit) 16 / 16px / 2px round; border-radius: 8px; background: var(--dr-grain) 0 0 / 240px 96px, var(--wood); box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7); }
 
 /* ---- the chapter's tabs: a rune by the open one, a line of moss under it ---- */
 [data-skin="druid"] .subnav { box-shadow: none; }
@@ -3669,13 +3780,13 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] .subnav a::after { left: 28px; right: 12px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--moss), var(--rune)); box-shadow: 0 0 8px var(--rune-glow); }
 
 /* ---- the pager and «Дальше в главе» ---- */
-[data-skin="druid"] .pager a { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--bark-face); box-shadow: var(--shadow-sm); transition: transform .25s var(--ease-float), border-color .2s; }
-@media (hover: hover) { [data-skin="druid"] .pager a:hover { border-color: var(--moss); transform: translateY(-2px); } }
+[data-skin="druid"] .pager a { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 8px; background: var(--dr-grain) 0 0 / 240px 96px, var(--wood); box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7); transition: transform .25s var(--ease-float); }
+@media (hover: hover) { [data-skin="druid"] .pager a:hover { border-image-source: var(--dr-win-lit); transform: translateY(-2px); } }
 [data-skin="druid"] .pager small { color: var(--amber); }
 [data-skin="druid"] .pager b { font-family: var(--font-display); font-weight: 400; }
 
 /* ---- sheets: the search, the contents, «Заглянуть» — windows of bark too ---- */
-[data-skin="druid"] .sheet { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--twig-tl) left top / 22px no-repeat, var(--twig-tr) right top / 22px no-repeat, var(--twig-bl) left bottom / 22px no-repeat, var(--twig-br) right bottom / 22px no-repeat, var(--bark-face), var(--surface); box-shadow: var(--shadow-lift); }
+[data-skin="druid"] .sheet { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 0 round; border-radius: 10px; background: var(--dr-grain) 0 0 / 240px 96px, linear-gradient(172deg, var(--wood-hi) -30%, var(--wood) 38%, var(--wood-d)); box-shadow: var(--shadow-lift); }
 [data-skin="druid"] .sheet::backdrop { background: rgba(3, 8, 5, .6); }
 [data-skin="druid"] .sheet-head h2, [data-skin="druid"] .sheet-head h3 { font-size: 1.2rem; }
 [data-skin="druid"] .search-box { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--bg-deep); box-shadow: inset 0 2px 6px rgba(0, 0, 0, .45); }
@@ -3692,6 +3803,30 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 [data-skin="druid"] .hap-switch { background: var(--bark-d); }
 [data-skin="druid"] .hap-switch::after { background: var(--ink-2); }
 [data-skin="druid"] .hap-row[aria-checked="true"] .hap-switch { background: var(--moss-d); }
+
+/* ---- the headings of a board: a rune lit like an ember before them, a cord of two strands under them; the first word
+   of a tab and of a dive: an initial cut in a runestone ---- */
+[data-skin="druid"] :is(.card, .pane, .facts, .vt-panel, .exp-card, .garden-box, .tab-part) > h3:not(:has(.ico))::before, [data-skin="druid"] .hy-h:not(:has(.ico))::before {
+  content: "\16DF"; margin-right: .42em; font: 400 .82em/1 var(--font-rune); color: var(--amber); text-shadow: 0 0 8px var(--ember-glow); vertical-align: .06em;
+}
+[data-skin="druid"] :is(.card, .pane, .facts, .vt-panel, .exp-card, .garden-box, .tab-part) > h3:not(:has(.ico))::after {
+  content: ""; display: block; width: 96px; height: 8px; margin-top: 8px; background: var(--dr-knot) left center / 21px 8px repeat-x; opacity: .9;
+}
+[data-skin="druid"] :is(.panel-lead, .deep-text > p:first-child)::first-letter {
+  float: left; margin: .06em .22em 0 0; padding: .16em .26em .08em;
+  border-radius: 46% 40% 48% 42% / 44% 48% 40% 46%; border: 1px solid rgba(0, 0, 0, .6);
+  background: radial-gradient(circle at 34% 28%, var(--stone-hi), var(--stone) 46%, var(--stone-d));
+  font: 400 2.9em/.9 var(--font-title); color: var(--amber); text-shadow: 0 0 12px var(--ember-glow), 0 2px 0 #000;
+}
+
+/* ---- the pointer of the grove where there is a mouse: an arrowhead of dark iron, warm over what can be pressed; the
+   scroll bar of bark ---- */
+@media (pointer: fine) {
+  [data-skin="druid"] body { cursor: var(--dr-cur) 1 1, auto; }
+  [data-skin="druid"] :is(a, button, summary, label[for], select, [role="button"], [role="menuitemradio"], [role="tab"], .chip, input[type="range"], input[type="checkbox"]) { cursor: var(--dr-hand) 1 1, pointer; }
+  [data-skin="druid"] :is(input[type="text"], input[type="search"], input[type="number"], input[type="date"], textarea) { cursor: text; }
+}
+:root[data-skin="druid"] { scrollbar-color: var(--bark) var(--bg-deep); }
 
 @media (prefers-reduced-motion: reduce) {
   [data-skin="druid"] .float-card, [data-skin="druid"] .tool, [data-skin="druid"] .q-card, [data-skin="druid"] .btn { transition: none; }

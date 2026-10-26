@@ -248,6 +248,10 @@
 **skins.js**
 - `src/js/skins/00-core.js` (36 стр.): SKINS, BAYER
 - `src/js/skins/01-raster.js` (291 стр.): SHADED, FACES, ICO, OCT
+- `src/js/skins/02-icons-druid.js` (70 стр.): DRUID_ICONS
+- `src/js/skins/02-icons-grimoire-hand.js` (242 стр.): GRIMOIRE_HAND
+- `src/js/skins/02-icons-grimoire.js` (1142 стр.): GRIMOIRE_ICONS
+- `src/js/skins/02-icons.js` (54 стр.): PIX, ICON_SETS
 - `src/js/skins/02-textures.js` (191 стр.): FLOORS, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
 - `src/js/skins/04-stage.js` (288 стр.): WORLDS, PAIRS, ESSENCE
@@ -279,10 +283,10 @@
 - `src/js/skins/07-forest.js` (422 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
 - `src/js/skins/08-words.js` (147 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
-- `src/js/skins/09-start.js` (57 стр.): BACKS
+- `src/js/skins/09-start.js` (59 стр.): BACKS
 
 ## Стили (src/css/)
 
-**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`, `27-grimoire.css`, `28-druid.css`
+**style.css**: `00-tokens.css`, `01-base.css`, `02-ambient.css`, `03-header.css`, `04-controls.css`, `05-views.css`, `06-blocks.css`, `07-chapter-art.css`, `08-home.css`, `09-chapter-chrome.css`, `10-varieties.css`, `11-places.css`, `12-steps.css`, `13-calendar.css`, `14-care.css`, `15-fertilizers.css`, `16-pinching.css`, `17-harvest.css`, `18-problems.css`, `19-reference.css`, `20-footer.css`, `21-sheets.css`, `22-selection.css`, `23-garden.css`, `24-toc.css`, `25-peek.css`, `26-hydro.css`, `26-skin-art.css`, `27-grimoire.css`, `28-druid.css`
 **lab.css**: `00-aroma.css`, `00-ill.css`, `00-micro.css`, `00-tokens.css`, `01-hero.css`, `04-deep-kinds.css`, `05-deep.css`, `06-lab-tools.css`, `07-vkus.css`, `08-home-science.css`, `09-hover-light.css`, `11-deep-footer.css`, `12-sci-notes.css`, `13-recipes.css`, `14-paint.css`, `15-nav-helpers.css`, `16-grimoire.css`, `17-druid.css`
 

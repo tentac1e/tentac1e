@@ -98,6 +98,7 @@
 ### skins.js
 - `src/js/skins/00-core.js`: `$` 5, `clamp` 6, `skinNow` 10, `rng` 13, `sub` 19, `add` 20, `mul` 21, `dot` 22, `cross` 23, `norm` 24, `psxLoop` 27
 - `src/js/skins/01-raster.js`: `shaded` 200, `quad` 222, `box` 229, `prism` 236, `ICO` 246, `ball` 254, `egg` 256, `rod` 261, `billboard` 271, `together` 280, `turned` 286
+- `src/js/skins/02-icons.js`: `pixelSprite` 13, `carvedIcon` 28, `iconsOn` 40, `iconsOff` 51
 - `src/js/skins/02-textures.js`: `tex` 6, `ritual` 35, `textures` 54, `leafTex` 122, `floorTex` 140, `page` 162, `runeGlyph` 180, `letter` 188
 - `src/js/skins/03-mol.js`: `molShape` 6, `drawMol` 45
 - `src/js/skins/04-stage.js`: `world` 27, `scene` 28, `smooth` 29, `mix3` 30, `leaf` 35, `bush` 66, `pot` 84, `ringTop` 90, `disc` 98, `sprout` 107, `essence` 137, `glider` 147, `fxKit` 161, `stage` 211
@@ -107,7 +108,7 @@
 - `src/js/skins/07-forest.js`: `forest` 12
 - `src/js/skins/08-ills.js`: `cellFilter` 16, `fitCell` 43, `pixelate` 53, `pixelateIn` 73, `refit` 81, `onToggle` 82, `onPanel` 83, `onResize` 84
 - `src/js/skins/08-words.js`: `roman` 11, `say` 102, `wordNode` 109, `putWords` 110, `wordsOn` 136, `wordsOff` 142
-- `src/js/skins/09-start.js`: `start` 9, `stop` 36
+- `src/js/skins/09-start.js`: `start` 9, `stop` 37
 
 Общие помощники skins.js — кто зовёт:
 - `clamp` (00-core.js:6) — 7: 01-raster, 02-textures, 04-stage …
@@ -116,12 +117,12 @@
 - `sub` (00-core.js:19) — 11: 01-raster, 03-mol, 04-stage …
 - `add` (00-core.js:20) — 22: 01-raster, 03-mol, 04-stage …
 - `mul` (00-core.js:21) — 16: 01-raster, 03-mol, 04-stage …
-- `dot` (00-core.js:22) — 4: 01-raster, 04-stage, 06-druid …
+- `dot` (00-core.js:22) — 5: 01-raster, 02-icons, 04-stage …
 - `cross` (00-core.js:23) — 6: 01-raster, 03-mol, 04-stage …
 - `norm` (00-core.js:24) — 17: 03-mol, 04-stage, 05-grimoire-formirovka …
 - `psxLoop` (00-core.js:27) — 3: 04-stage, 07-crypt, 07-forest
 - `quad` (01-raster.js:222) — 9: 04-stage, 05-grimoire-formirovka, 05-grimoire-glavnaya …
-- `box` (01-raster.js:229) — 11: 05-grimoire-gidro, 05-grimoire-glavnaya, 05-grimoire-moy …
+- `box` (01-raster.js:229) — 12: 02-icons, 05-grimoire-gidro, 05-grimoire-glavnaya …
 - `prism` (01-raster.js:236) — 16: 04-stage, 05-grimoire-formirovka, 05-grimoire-gidro …
 - `ball` (01-raster.js:254) — 15: 03-mol, 04-stage, 05-grimoire-glavnaya …
 - `egg` (01-raster.js:256) — 11: 05-grimoire-glavnaya, 05-grimoire-posadka, 05-grimoire-problemy …
@@ -131,17 +132,17 @@
 - `turned` (01-raster.js:286) — 8: 03-mol, 04-stage, 05-grimoire-formirovka …
 - `tex` (02-textures.js:6) — 15: 01-raster, 05-grimoire-glavnaya, 05-grimoire-moy …
 - `textures` (02-textures.js:54) — 4: 01-raster, 04-stage, 05-grimoire …
-- `page` (02-textures.js:162) — 9: 00-core, 01-raster, 04-stage …
+- `page` (02-textures.js:162) — 10: 00-core, 01-raster, 02-icons …
 - `world` (04-stage.js:27) — 4: 01-raster, 05-grimoire, 06-druid-uhod …
 - `scene` (04-stage.js:28) — 27: 00-core, 01-raster, 05-grimoire-formirovka …
 - `smooth` (04-stage.js:29) — 21: 05-grimoire-formirovka, 05-grimoire-glavnaya, 05-grimoire-moy …
 - `mix3` (04-stage.js:30) — 8: 05-grimoire-formirovka, 05-grimoire-uhod, 06-druid-formirovka …
-- `leaf` (04-stage.js:35) — 13: 01-raster, 02-textures, 05-grimoire-formirovka …
+- `leaf` (04-stage.js:35) — 15: 01-raster, 02-icons-druid, 02-icons-grimoire …
 - `bush` (04-stage.js:66) — 17: 05-grimoire-formirovka, 05-grimoire-gidro, 05-grimoire-glavnaya …
-- `pot` (04-stage.js:84) — 9: 02-textures, 05-grimoire-formirovka, 05-grimoire-glavnaya …
+- `pot` (04-stage.js:84) — 11: 02-icons-druid, 02-icons-grimoire, 02-textures …
 - `ringTop` (04-stage.js:90) — 7: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus …
 - `disc` (04-stage.js:98) — 10: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus …
-- `sprout` (04-stage.js:107) — 3: 05-grimoire-posadka, 06-druid-posadka, 07-forest
+- `sprout` (04-stage.js:107) — 5: 02-icons-druid, 02-icons-grimoire, 05-grimoire-posadka …
 - `glider` (04-stage.js:147) — 3: 05-grimoire-sorta, 06-druid-moy, 06-druid-sorta
 - `stump` (06-druid.js:254) — 10: 01-raster, 05-grimoire-formirovka, 06-druid-formirovka …
 - `forest` (07-forest.js:12) — 3: 06-druid, 07-crypt, 09-start
@@ -195,8 +196,8 @@
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 - `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
-- `src/css/style/27-grimoire.css`: `.subnav-*`, `.ch-hero-*`, `.hero-*`, `.view-*`, `.toc-*`, `.skin-*`, `.chip`, `.seg`, `.search-*`, `.btn-*`, `.psx-*`, `.crt-*` · анимации: `psx-flicker`, `psx-point`
-- `src/css/style/28-druid.css`: `.subnav`, `.toc-*`, `.skin-*`, `.btn-*`, `.chip`, `.seg`, `.pager`, `.search-*`, `.tab-*`, `.range`, `.card`, `.pane`
+- `src/css/style/27-grimoire.css`: `.subnav-*`, `.toc-*`, `.ico`, `.ch-hero-*`, `.skin-*`, `.hero-*`, `.view-*`, `.chip`, `.tab-*`, `.seg`, `.search-*`, `.btn-*` · анимации: `psx-flicker`, `psx-point`
+- `src/css/style/28-druid.css`: `.toc-*`, `.subnav`, `.btn-*`, `.tab-*`, `.ico`, `.skin-*`, `.chip`, `.card`, `.pane`, `.seg`, `.pager`, `.exp-*`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
@@ -214,8 +215,8 @@
 - `src/css/lab/13-recipes.css`: `.recipe-*`, `.is-feat`, `.rc-sci-*`, `.ico`, `.rc-ico`, `.rb-intro`, `.rb-filter`, `.rc-sum`, `.deep-*`, `.rc-facts`, `.chip`, `.rc-title`
 - `src/css/lab/14-paint.css`: `.plant-*`, `.lab-*`, `.is-off`, `.pl-stems`, `.osm-*`, `.xylem`, `.phloem`, `.barrel-*`, `.nc-flow`, `.germ-*`
 - `src/css/lab/15-nav-helpers.css`: `.resume-*`, `.panel-*`, `.hap-*`, `.ico`, `.continue`, `.is-shown`, `.is-bar` · анимации: `resume-mark`
-- `src/css/lab/16-grimoire.css`: `.deep-*`, `.lab-*`, `.deeper-*`, `.range`, `.sci-*`, `.resume-*`, `.panel-*`, `.eq`, `.num-*`, `.chip`, `.mol-*`, `.recipe-*`
-- `src/css/lab/17-druid.css`: `.deep-*`, `.lab-*`, `.deeper-*`, `.sci-*`, `.resume-*`, `.panel-*`, `.eq`, `.num-*`, `.range`, `.mol-*`, `.recipe-*`, `.eq-label`
+- `src/css/lab/16-grimoire.css`: `.deep-*`, `.lab-*`, `.deeper-*`, `.range`, `.sci-*`, `.resume-*`, `.ico`, `.panel-*`, `.eq`, `.num-*`, `.chip`, `.mol-*`
+- `src/css/lab/17-druid.css`: `.deep-*`, `.lab-*`, `.deeper-*`, `.sci-*`, `.resume-*`, `.panel-*`, `.ico`, `.eq`, `.num-*`, `.range`, `.mol-*`, `.recipe-*`
 
 ### стили моделей и глав
 - `src/labs/formirovka/auxin.css`: `.aux-*`, `.is-on`, `.auxin-*`, `.lab-*`
@@ -261,10 +262,10 @@
 
 - `basil:calm` — шлёт: `src/js/scene/01-budget.js:32`; слушают: —
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
-- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:289`, `src/js/science/06-labs-loader.js:186`, `src/js/skins/09-start.js:30`
+- `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:289`, `src/js/science/06-labs-loader.js:186`, `src/js/skins/09-start.js:31`
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:238`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:130`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
-- `basil:theme` — шлёт: `src/js/app/01-theme.js:33`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:491`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/js/skins/09-start.js:55`, `src/labs/vkus/pesto.js:67`
+- `basil:theme` — шлёт: `src/js/app/01-theme.js:33`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:491`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/js/skins/09-start.js:57`, `src/labs/vkus/pesto.js:67`
 - `basil:view` — шлёт: `src/js/app/02-router.js:184`; слушают: `src/js/app/02-router.js:263`, `src/js/app/02-router.js:293`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:132`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 
@@ -272,7 +273,7 @@
 
 Ключи `localStorage` (и база IndexedDB `basil-photos`) — в каких файлах встречаются, с первой строкой.
 
-- `basil-crt` — `src/js/skins/09-start.js:53`
+- `basil-crt` — `src/js/skins/09-start.js:55`
 - `basil-detour` — `src/js/app/22-reading-pos.js:369`
 - `basil-found` — `src/js/app/04-search.js:285`
 - `basil-garden` — `src/js/app/22-garden.js:6`
@@ -293,10 +294,10 @@
 - `max-width: 900px` — 15: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css, 23-garden.css, 26-hydro.css, 27-grimoire.css
 - `max-width: 560px` — 13: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
 - `max-width: 640px` — 12: 05-deep.css, 06-blocks.css ×2, 12-sci-notes.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
+- `max-width: 760px` — 10: 06-lab-tools.css, 12-steps.css, 16-grimoire.css, 26-hydro.css, 27-grimoire.css ×2, _shared.css, drift.css, flows.css, kratky.css
 - `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
 - `max-width: 700px` — 7: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css, 27-grimoire.css ×2, 28-druid.css
-- `max-width: 760px` — 7: 06-lab-tools.css, 12-steps.css, 26-hydro.css, _shared.css, drift.css, flows.css, kratky.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
 - `max-width: 899px` — 5: 03-header.css, 24-toc.css ×2, 27-grimoire.css, 28-druid.css

@@ -10,20 +10,22 @@
 [data-skin="druid"] .deep-all:hover { color: var(--birch); border-color: var(--rune); }
 
 /* a dive: a window of bark, tinted by its discipline */
-[data-skin="druid"] .deep { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--twig-tl) left top / 22px no-repeat, var(--twig-tr) right top / 22px no-repeat, var(--twig-bl) left bottom / 22px no-repeat, var(--twig-br) right bottom / 22px no-repeat, var(--bark-face); box-shadow: var(--shadow-float); }
-[data-skin="druid"] .deep:hover { border-color: color-mix(in srgb, var(--k) 50%, var(--bark-d)); }
-[data-skin="druid"] .deep[open] { box-shadow: 0 0 0 1px color-mix(in srgb, var(--k) 30%, transparent), var(--shadow-lift); }
+[data-skin="druid"] .deep { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 10px; background: var(--dr-grain) 0 0 / 240px 96px, linear-gradient(172deg, var(--wood-hi) -30%, var(--wood) 38%, var(--wood-d)); box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7); }
+[data-skin="druid"] .deep:hover { border-image-source: var(--dr-win-lit); }
+[data-skin="druid"] .deep[open] { box-shadow: 0 0 0 1px color-mix(in srgb, var(--k) 25%, transparent), 0 16px 32px -8px rgba(0, 0, 0, .75); }
 [data-skin="druid"] .deep > summary { background-color: transparent; background-image: linear-gradient(165deg, color-mix(in srgb, var(--k) 12%, transparent), transparent 72%); }
-[data-skin="druid"] .deep-ico { border-radius: 50%; background: radial-gradient(circle at 40% 35%, color-mix(in srgb, var(--ink-3) 30%, var(--surface-2)), var(--bg) 75%); box-shadow: inset 0 0 0 1px var(--k), 0 0 12px color-mix(in srgb, var(--k) 30%, transparent); }
+/* the icon of a dive cut in a runestone, a ring of its discipline's colour round it */
+[data-skin="druid"] .deep-ico { border-radius: 46% 40% 48% 42% / 44% 48% 40% 46%; background: radial-gradient(circle at 34% 28%, var(--stone-hi), var(--stone) 46%, var(--stone-d)); box-shadow: inset 0 -3px 6px rgba(0, 0, 0, .55), 0 3px 0 rgba(0, 0, 0, .55), 0 0 0 2px color-mix(in srgb, var(--k) 45%, transparent); color: var(--amber); }
+[data-skin="druid"] .deep-ico .ico { filter: drop-shadow(0 0 4px var(--ember-glow)); }
 [data-skin="druid"] .deep-title { font-family: var(--font-title); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 1.75rem); line-height: 1.12; }
 [data-skin="druid"] .deep-sub { font-size: .98rem; color: var(--ink-2); }
 [data-skin="druid"] .deep-plus { border: 1px solid var(--k); background: var(--bg); }
 [data-skin="druid"] .deep-fact { border-left: 3px solid var(--k); background: color-mix(in srgb, var(--bg) 60%, transparent); font-family: var(--font-hand); font-size: 1.2rem; font-weight: 600; color: var(--ink); }
-[data-skin="druid"] .deep-body { border-top: 1px solid var(--bark-d); background: color-mix(in srgb, var(--bg) 35%, transparent); }
+[data-skin="druid"] .deep-body { border-top: 1px solid var(--wood-d); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--wood-hi) 50%, transparent); background: color-mix(in srgb, var(--wood-d) 45%, transparent); }
 [data-skin="druid"] .deep-text p { color: var(--ink-2); }
 
 /* a stone of an equation, the figures in the margin */
-[data-skin="druid"] .eq { border-radius: 10px; border: 1px solid var(--line-strong); background: radial-gradient(ellipse at 30% 20%, color-mix(in srgb, var(--ink-3) 14%, var(--surface-2)), var(--surface) 70%); box-shadow: inset 0 2px 8px rgba(0, 0, 0, .4); }
+[data-skin="druid"] .eq { border: 2px solid transparent; border-image: var(--dr-stone) 16 fill / 16px / 0 stretch; border-radius: 12px; background: none; box-shadow: none; }
 [data-skin="druid"] .eq-label { font-family: var(--font-label); font-weight: 400; color: var(--amber); }
 [data-skin="druid"] .eq p { font-family: var(--font-mono); font-size: 1.1rem; }
 [data-skin="druid"] .num-note { border-left-width: 3px; }
@@ -38,7 +40,8 @@
 [data-skin="druid"] .deep-src-h { font-family: var(--font-label); font-weight: 400; }
 
 /* a model: a board in the colour of its discipline */
-[data-skin="druid"] .lab-tool { border: 1px solid color-mix(in srgb, var(--k) 45%, var(--bark-d)); border-radius: 10px; background: var(--bark-face); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--birch) 5%, transparent), var(--shadow-float); }
+/* a model: a board of the grove, a line of its discipline's colour inside the frame */
+[data-skin="druid"] .lab-tool { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 10px; background: var(--dr-grain) 0 0 / 240px 96px, linear-gradient(172deg, var(--wood-hi) -30%, var(--wood) 38%, var(--wood-d)); box-shadow: inset 0 0 0 12px transparent, inset 0 0 0 13px color-mix(in srgb, var(--k) 40%, transparent), 0 12px 26px -8px rgba(0, 0, 0, .7); }
 [data-skin="druid"] .lab-tool:empty { background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--k) 10%, transparent) 50%, transparent 70%), var(--surface); background-size: 200% 100%, auto; }
 [data-skin="druid"] .lab-kicker { font-family: var(--font-label); font-weight: 400; font-size: .92rem; letter-spacing: .06em; }
 [data-skin="druid"] .lab-title { font-family: var(--font-title); font-weight: 400; font-size: 1.55rem; }
@@ -49,20 +52,20 @@
 [data-skin="druid"] .mol-stage, [data-skin="druid"] .mol-canvas { border-radius: 10px; background: radial-gradient(circle at 50% 45%, var(--surface-2), var(--bg-deep) 75%); box-shadow: inset 0 0 0 1px var(--bark-d), inset 0 4px 18px rgba(0, 0, 0, .5); }
 
 /* «Любопытно»: notes pinned to the bark */
-[data-skin="druid"] .sci-note { border: 1px solid var(--bark-d); border-radius: 8px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
+[data-skin="druid"] .sci-note { border: 2px solid transparent; border-image: var(--dr-stone) 16 fill / 16px / 2px stretch; border-radius: 12px; background: none; box-shadow: 0 10px 22px -8px rgba(0, 0, 0, .7); }
 [data-skin="druid"] .sci-note::after { background: color-mix(in srgb, var(--k) 40%, var(--bg)); }
 [data-skin="druid"] .sci-note-k .hand { font-family: var(--font-hand); }
 [data-skin="druid"] .sci-note-link { font-family: var(--font-label); font-size: .98rem; }
 
 /* recipes, the home page's science, the plates of the way back */
-[data-skin="druid"] .recipe-card { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
-[data-skin="druid"] .recipe-card[open] { border-color: var(--moss); }
-[data-skin="druid"] .science-home { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--twig-tl) left top / 22px no-repeat, var(--twig-tr) right top / 22px no-repeat, var(--twig-bl) left bottom / 22px no-repeat, var(--twig-br) right bottom / 22px no-repeat, linear-gradient(165deg, color-mix(in srgb, var(--rune) 7%, var(--surface)), var(--surface) 74%); box-shadow: var(--shadow-float); }
+[data-skin="druid"] .recipe-card { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 10px; background: var(--dr-grain) 0 0 / 240px 96px, var(--wood); box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7); }
+[data-skin="druid"] .recipe-card[open] { border-image-source: var(--dr-win-lit); }
+[data-skin="druid"] .science-home { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 10px; background: var(--dr-grain) 0 0 / 240px 96px, linear-gradient(172deg, var(--wood-hi) -30%, var(--wood) 38%, var(--wood-d)); box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7); }
 [data-skin="druid"] .sh-kinds li { border-radius: 14px 4px 14px 4px; }
 [data-skin="druid"] .sh-mol figcaption b { font-family: var(--font-title); font-weight: 400; }
 [data-skin="druid"] .resume-pill, [data-skin="druid"] .back-pill { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--bark-face), var(--surface); box-shadow: var(--shadow-float); }
 [data-skin="druid"] .resume-go .ico, [data-skin="druid"] .panel-next .ico { border-radius: 50%; background: var(--moss-d); color: var(--birch); }
-[data-skin="druid"] .panel-next { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--bark-face); box-shadow: var(--shadow-sm); }
+[data-skin="druid"] .panel-next { border: 1px solid var(--wood-d); border-radius: 4px; background: var(--bands), var(--plank); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .32), 0 2px 0 rgba(0, 0, 0, .5); padding-left: 22px; }
 [data-skin="druid"] .panel-next small { font-family: var(--font-label); color: var(--amber); }
 [data-skin="druid"] .resume-mark i { background: color-mix(in srgb, var(--rune) 30%, transparent); }
 [data-skin="druid"] .resume-mark i.is-bar { background: var(--rune); }

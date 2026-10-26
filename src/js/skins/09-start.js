@@ -12,8 +12,9 @@
     if (started === skin) return;
     if (started) stop();
     started = skin;
-    // its words on the labels of the guide (08-words.js), the sheet's page too
+    // its words on the labels of the guide (08-words.js) and its own icons (02-icons.js), the sheet's page too
     wordsOn(skin);
+    iconsOn(skin);
     // a page shown in the sheet of another (?peek=1) is only its place: no background, no scene, the molecules as here
     if (!root.classList.contains('is-peek')) {
       mounted.push(BACKS[skin]());
@@ -38,6 +39,7 @@
     started = null;
     mounted.splice(0).forEach(m => m.destroy());
     wordsOff();
+    iconsOff();
     illWatch.disconnect();
     doc.removeEventListener('toggle', onToggle, true);
     doc.removeEventListener('basil:panel', onPanel);

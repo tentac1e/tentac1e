@@ -356,6 +356,16 @@
   --berry: #C9382D;
   --rune: #8FE8C6;
   --rune-glow: rgba(143, 232, 198, .45);
+  /* the wood of the windows, its dark and its worn light, the iron of their fittings, the stone of the tablets */
+  --wood: #2A1F14;
+  --wood-d: #18110A;
+  --wood-hi: #47362A;
+  --iron: #4A5056;
+  --iron-hi: #9AA3A8;
+  --stone: #3E443D;
+  --stone-d: #252A25;
+  --stone-hi: #5F665D;
+  --ember-glow: rgba(226, 164, 59, .5);
   --fog: #1C2B22;
   --scrim: rgba(11, 18, 13, .74);
   --shade: rgba(0, 0, 0, .55);
