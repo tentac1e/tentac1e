@@ -1819,6 +1819,28 @@ window.BasilSkins = (() => {
     grimoire: () => Object.fromEntries(Object.entries({ ...GRIMOIRE_ICONS, ...GRIMOIRE_HAND }).map(([k, rows]) => [k, { box: '0 0 16 16', body: pixelSprite(rows) }])),
     druid: () => Object.fromEntries(Object.entries(DRUID_ICONS).map(([k, shapes]) => [k, { box: '0 0 24 24', body: carvedIcon(shapes) }]))
   };
+  // the mark of the guide in the header and the footer: a leaf of basil — a sprite of the console, a leaf cut in wood
+  const BRAND = {
+    grimoire: () => ({ box: '0 0 16 16', body: pixelSprite([
+      '.......oo.......',
+      '......ovvo......',
+      '.....ov+vvo.....',
+      '....ov++vvvo....',
+      '...ov++vvvvvo...',
+      '...ov+vvgvvvo...',
+      '..ov+vvvgvvvvo..',
+      '..ovvvvvgvvvvo..',
+      '..ovvvvvgvvv=o..',
+      '..ovvvvgvvv==o..',
+      '...ovvvgvv==o...',
+      '....ovvgv==o....',
+      '.....oogo=o.....',
+      '.......go.......',
+      '.......go.......',
+      '........o.......'
+    ]) }),
+    druid: () => ({ box: '0 0 32 32', body: carvedIcon(['M16 30.5L16.2 9.5', 'M16 26L23.6 21.4L26.2 13.2L16.1 2.4L5.9 12.8L8.6 21.2Z', 'M16.1 19.6L21.4 15.2M16 14.4L11 10.4M16.1 10.6L19.4 7.8']) })
+  };
   const iconCache = {};
   const plainIcons = new Map();
   function iconsOn(skin) {
@@ -1830,6 +1852,13 @@ window.BasilSkins = (() => {
       sym.setAttribute('viewBox', own.box);
       sym.innerHTML = own.body;
       sym.dataset.skinIco = skin;
+    });
+    const mark = (iconCache[skin + ':brand'] = iconCache[skin + ':brand'] || (BRAND[skin] ? BRAND[skin]() : null));
+    if (mark) $$('.brand svg').forEach(svg => {
+      if (!plainIcons.has(svg)) plainIcons.set(svg, { box: svg.getAttribute('viewBox'), body: svg.innerHTML });
+      svg.setAttribute('viewBox', mark.box);
+      svg.innerHTML = mark.body;
+      svg.dataset.skinIco = skin;
     });
   }
   function iconsOff() {

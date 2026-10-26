@@ -1,6 +1,7 @@
 /* ================= the skin «Друид»: the science layer as a lore of the grove =================
-   (the components of the interface: style/28-druid.css). A dive is a window of bark tinted by its discipline, its
-   icon on a round stone; «Подробнее» a hollow in the wood; the facts notes in a quick hand; «Для любопытных» written
+   (the components of the interface: style/28-druid.css). A dive is a board of hewn wood with iron on its corners, its
+   icon cut in a runestone ringed in its discipline's colour; a model a board with a line of that colour inside;
+   equations and facts on tablets of stone; «Подробнее» a hollow in the wood; the facts notes in a quick hand; «Для любопытных» written
    by hand between two lines of ogham. Charts keep their shapes and their smoothing; the molecules are drawn by
    skins.js — berries and twigs */
 [data-skin="druid"] .deep-zone-label { font-family: var(--font-hand); font-style: normal; font-weight: 600; font-size: 2.1rem; color: var(--rune); text-shadow: 0 0 14px var(--rune-glow); }
@@ -63,7 +64,7 @@
 [data-skin="druid"] .science-home { border: 2px solid transparent; border-image: var(--dr-win) 16 / 16px / 2px round; border-radius: 10px; background: var(--dr-grain) 0 0 / 240px 96px, linear-gradient(172deg, var(--wood-hi) -30%, var(--wood) 38%, var(--wood-d)); box-shadow: 0 12px 26px -8px rgba(0, 0, 0, .7); }
 [data-skin="druid"] .sh-kinds li { border-radius: 14px 4px 14px 4px; }
 [data-skin="druid"] .sh-mol figcaption b { font-family: var(--font-title); font-weight: 400; }
-[data-skin="druid"] .resume-pill, [data-skin="druid"] .back-pill { border: 1px solid var(--bark-d); border-radius: 10px; background: var(--bark-face), var(--surface); box-shadow: var(--shadow-float); }
+[data-skin="druid"] .resume-pill, [data-skin="druid"] .back-pill { border: 1px solid var(--wood-d); border-radius: 6px; background: var(--dr-grain) 0 0 / 240px 96px, var(--wood); box-shadow: inset 0 0 0 2px var(--iron), inset 0 0 0 3px #0A0C0D, var(--shadow-float); }
 [data-skin="druid"] .resume-go .ico, [data-skin="druid"] .panel-next .ico { border-radius: 50%; background: var(--moss-d); color: var(--birch); }
 [data-skin="druid"] .panel-next { border: 1px solid var(--wood-d); border-radius: 4px; background: var(--bands), var(--plank); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .32), 0 2px 0 rgba(0, 0, 0, .5); padding-left: 22px; }
 [data-skin="druid"] .panel-next small { font-family: var(--font-label); color: var(--amber); }

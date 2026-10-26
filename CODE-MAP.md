@@ -98,7 +98,7 @@
 ### skins.js
 - `src/js/skins/00-core.js`: `$` 5, `clamp` 6, `skinNow` 10, `rng` 13, `sub` 19, `add` 20, `mul` 21, `dot` 22, `cross` 23, `norm` 24, `psxLoop` 27
 - `src/js/skins/01-raster.js`: `shaded` 200, `quad` 222, `box` 229, `prism` 236, `ICO` 246, `ball` 254, `egg` 256, `rod` 261, `billboard` 271, `together` 280, `turned` 286
-- `src/js/skins/02-icons.js`: `pixelSprite` 13, `carvedIcon` 28, `iconsOn` 40, `iconsOff` 51
+- `src/js/skins/02-icons.js`: `pixelSprite` 13, `carvedIcon` 28, `iconsOn` 62, `iconsOff` 80
 - `src/js/skins/02-textures.js`: `tex` 6, `ritual` 35, `textures` 54, `leafTex` 122, `floorTex` 140, `page` 162, `runeGlyph` 189, `letter` 196
 - `src/js/skins/03-mol.js`: `molShape` 6, `drawMol` 45
 - `src/js/skins/04-stage.js`: `world` 27, `scene` 28, `smooth` 29, `mix3` 30, `leaf` 35, `bush` 66, `pot` 84, `ringTop` 90, `disc` 98, `sprout` 107, `essence` 137, `glider` 147, `fxKit` 161, `stage` 211
@@ -137,7 +137,7 @@
 - `scene` (04-stage.js:28) — 27: 00-core, 01-raster, 05-grimoire-formirovka …
 - `smooth` (04-stage.js:29) — 21: 05-grimoire-formirovka, 05-grimoire-glavnaya, 05-grimoire-moy …
 - `mix3` (04-stage.js:30) — 8: 05-grimoire-formirovka, 05-grimoire-uhod, 06-druid-formirovka …
-- `leaf` (04-stage.js:35) — 15: 01-raster, 02-icons-druid, 02-icons-grimoire …
+- `leaf` (04-stage.js:35) — 16: 01-raster, 02-icons-druid, 02-icons-grimoire …
 - `bush` (04-stage.js:66) — 17: 05-grimoire-formirovka, 05-grimoire-gidro, 05-grimoire-glavnaya …
 - `pot` (04-stage.js:84) — 11: 02-icons-druid, 02-icons-grimoire, 02-textures …
 - `ringTop` (04-stage.js:90) — 7: 05-grimoire-formirovka, 05-grimoire-posadka, 05-grimoire-vkus …
@@ -196,8 +196,8 @@
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 - `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
-- `src/css/style/27-grimoire.css`: `.subnav-*`, `.toc-*`, `.ico`, `.ch-hero-*`, `.skin-*`, `.hero-*`, `.view-*`, `.chip`, `.tab-*`, `.seg`, `.search-*`, `.btn-*` · анимации: `psx-flicker`, `psx-point`
-- `src/css/style/28-druid.css`: `.toc-*`, `.subnav`, `.btn-*`, `.tab-*`, `.ico`, `.skin-*`, `.chip`, `.card`, `.pane`, `.seg`, `.pager`, `.exp-*`
+- `src/css/style/27-grimoire.css`: `.subnav-*`, `.toc-*`, `.ico`, `.ch-hero-*`, `.skin-*`, `.hero-*`, `.view-*`, `.chip`, `.tab-*`, `.seg`, `.brand`, `.search-*` · анимации: `psx-flicker`, `psx-point`
+- `src/css/style/28-druid.css`: `.toc-*`, `.subnav`, `.btn-*`, `.tab-*`, `.ico`, `.skin-*`, `.chip`, `.card`, `.pane`, `.seg`, `.brand`, `.pager`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
@@ -300,8 +300,8 @@
 - `max-width: 700px` — 7: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css, 27-grimoire.css ×2, 28-druid.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
+- `min-width: 900px` — 6: 11-deep-footer.css, 24-toc.css, 27-grimoire.css, 28-druid.css ×2, pairing.css
 - `max-width: 899px` — 5: 03-header.css, 24-toc.css ×2, 27-grimoire.css, 28-druid.css
-- `min-width: 900px` — 4: 11-deep-footer.css, 24-toc.css, 28-druid.css, pairing.css
 - `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
 - `max-width: 820px` — 3: 14-care.css, 15-fertilizers.css ×2

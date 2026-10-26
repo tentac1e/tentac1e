@@ -251,7 +251,7 @@
 - `src/js/skins/02-icons-druid.js` (70 стр.): DRUID_ICONS
 - `src/js/skins/02-icons-grimoire-hand.js` (242 стр.): GRIMOIRE_HAND
 - `src/js/skins/02-icons-grimoire.js` (1142 стр.): GRIMOIRE_ICONS
-- `src/js/skins/02-icons.js` (54 стр.): PIX, ICON_SETS
+- `src/js/skins/02-icons.js` (83 стр.): PIX, ICON_SETS, BRAND
 - `src/js/skins/02-textures.js` (199 стр.): FLOORS, RUNE_STROKES, GLYPH
 - `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
 - `src/js/skins/04-stage.js` (288 стр.): WORLDS, PAIRS, ESSENCE

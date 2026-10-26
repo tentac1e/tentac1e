@@ -24,7 +24,7 @@
 
 /* ---- the icons: sprites of the console (02-icons.js), pixel for pixel — the colour of the icon is its place's, its light
    and shade go with it, blood, gold, venom and water are the skin's own, the outline is the dark of the crypt ---- */
-[data-skin="grimoire"] .ico {
+[data-skin="grimoire"] :is(.ico, .brand svg) {
   --ico-h: color-mix(in srgb, currentColor 52%, var(--ink));
   --ico-s: color-mix(in srgb, currentColor 40%, var(--bg));
   --ico-o: var(--bg-deep);
@@ -35,6 +35,7 @@
   --ico-w: var(--ink);
   shape-rendering: crispEdges;
 }
+[data-skin="grimoire"] .brand svg { width: 32px; height: 32px; color: var(--venom); }
 /* a sprite of 16 shown at 16, 24 or 32 points — a pixel of it one point, one and a half or two — never between: its
    stairs would go uneven */
 [data-skin="grimoire"] .ico { width: 16px; height: 16px; }
@@ -294,6 +295,8 @@
 
 /* ---- sheets: the search, the contents, «Заглянуть» are menu windows too ---- */
 [data-skin="grimoire"] .sheet { border: 2px solid transparent; border-image: var(--px-win) 8 / 16px / 0 stretch; border-radius: 0; background: var(--win-b); box-shadow: 8px 8px 0 var(--shade); }
+/* the contents dropping from the header: its own rule (an id) resets the border, the frame with it */
+@media (min-width: 900px) { [data-skin="grimoire"] #sheet-toc { border: 2px solid transparent; border-image: var(--px-win) 8 / 16px / 0 stretch; border-radius: 0; box-shadow: 8px 8px 0 var(--shade); } }
 [data-skin="grimoire"] .sheet::backdrop { background: rgba(0, 0, 0, .6); -webkit-backdrop-filter: none; backdrop-filter: none; }
 [data-skin="grimoire"] .sheet-head h2, [data-skin="grimoire"] .sheet-head h3 { font-size: 1.15rem; }
 [data-skin="grimoire"] .search-box { border: 2px solid transparent; border-image: var(--px-slot) 5 / 5px / 1px stretch; border-radius: 0; background: var(--bg-deep); }
