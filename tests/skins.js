@@ -236,6 +236,30 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
         ok(mol.colours > 4 && turned !== mol.turn, tag(`${sk}: the molecule is drawn by the skin (${mol.colours} colours) and turns under the mouse`));
       } else ok(false, tag(`${sk} vkus.html: no molecule viewer`));
 
+      // «Друид»: the chosen chip and segment wear a vine; no rune before the word, and no room kept for one — the
+      // word of every chip stands in its middle (a rune there once lay over the first letter in the models)
+      if (sk === 'druid') {
+        await page.goto(fileUrl('vkus.html') + '#' + encodeURIComponent('кухня'), { waitUntil: 'load' });
+        await page.waitForTimeout(800);
+        const vine = await page.evaluate(async () => {
+          for (const id of ['lab-ht-t', 'lab-an-q']) {
+            document.querySelector(`.lab-tool:has(#${id}), .lab-tool[data-lab="${id === 'lab-ht-t' ? 'heat' : 'anthocyanin'}"]`).scrollIntoView({ block: 'center', behavior: 'instant' });
+            await new Promise(r => setTimeout(r, 500));
+          }
+          const all = [...document.querySelectorAll('#lab-ht-t button, #lab-an-q .chip')];
+          const chosen = all.filter(b => b.getAttribute('aria-pressed') === 'true');
+          const off = all.map(b => {
+            const cs = getComputedStyle(b), mark = getComputedStyle(b, '::before').content;
+            const rg = document.createRange();
+            rg.selectNodeContents(b);
+            const t = rg.getBoundingClientRect(), r = b.getBoundingClientRect();
+            return Math.max(Math.abs(parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)), Math.abs((t.left + t.right) / 2 - (r.left + r.right) / 2)) + (mark !== 'none' && mark !== 'normal' ? 99 : 0);
+          });
+          return { n: all.length, chosen: chosen.length, vined: chosen.filter(b => /svg/.test(getComputedStyle(b).borderImageSource)).length, off: Math.max(...off).toFixed(1) };
+        });
+        ok(vine.n >= 8 && vine.chosen === 2 && vine.vined === 2 && +vine.off <= 1.5, tag(`druid: a vine round the chosen chip and segment, the word in the middle and no rune before it ${JSON.stringify(vine)}`));
+      }
+
       // the CRT: off in the footer and remembered for the next page («Гримуар»); no CRT and no switch for it in the rest
       if (L.crt) {
         await page.evaluate(() => document.querySelector('[data-crt]').scrollIntoView({ block: 'center', behavior: 'instant' }));

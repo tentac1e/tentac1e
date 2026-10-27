@@ -2,7 +2,7 @@
    data-skin="druid" on <html> (01-theme.js, the inline script in layout.html), always over the dark theme. Its
    colours are the tokens of 00-tokens.css; here the components put on their clothes: boards of dark hewn wood with
    iron on their cut corners, runestones for icons, planks bound with iron for buttons, tablets of stone for advice,
-   cords for sliders, a rune lit by the open tab, soft deep shadows; a rough hand for titles and labels. The grove behind the page (twigs and fireflies) and the scenes at the head of a chapter come from
+   cords for sliders, a vine of basil round the chosen chip, a rune lit by the open tab, soft deep shadows; a rough hand for titles and labels. The grove behind the page (twigs and fireflies) and the scenes at the head of a chapter come from
    assets/js/skins.js — smooth, without pixels; until they come, their frames already stand in their place */
 
 /* the pictures of the skin: the frames of its boards, the iron, the stone, the cord — tokens of 26-skin-art.css; here
@@ -155,7 +155,7 @@
 }
 [data-skin="druid"] :is(.q-ico, .rule-ico, .t-ico, .toc-art, .toc-ico) .ico { filter: drop-shadow(0 0 4px var(--ember-glow)); }
 
-/* ---- buttons, chips and segments: planks; the chosen chip has a rune ---- */
+/* ---- buttons, chips and segments: planks; a vine round the chosen chip and segment ---- */
 /* a button: a plank bound with a band of iron at each end, a nail in each band */
 [data-skin="druid"] .btn { border-radius: 4px; border: 1px solid var(--wood-d); font: 400 1.12rem/1.1 var(--font-label); letter-spacing: .04em; color: var(--birch); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .32), 0 2px 0 rgba(0, 0, 0, .5), var(--shadow-sm); transition: transform .2s var(--ease-float), box-shadow .2s, filter .2s; }
 [data-skin="druid"] :is(.btn, .toc-btn, .tabs .tab, .panel-next, .deep-all) { --bands: radial-gradient(circle at 6px 50%, var(--iron-hi) 0 1.6px, transparent 2.2px), radial-gradient(circle at calc(100% - 6px) 50%, var(--iron-hi) 0 1.6px, transparent 2.2px), linear-gradient(90deg, var(--iron) 0 12px, transparent 12px calc(100% - 12px), var(--iron) calc(100% - 12px)); }
@@ -165,17 +165,25 @@
 [data-skin="druid"] .btn-ghost { background: var(--bands), var(--plank); color: var(--birch); border-color: var(--wood-d); }
 [data-skin="druid"] .btn-ghost:hover { color: var(--birch); filter: brightness(1.12); transform: translateY(-1px); }
 [data-skin="druid"] .btn:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .32); }
-[data-skin="druid"] .chip { position: relative; border-radius: 14px 4px 14px 4px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-2); font: 400 1.04rem/1.2 var(--font-label); letter-spacing: .03em; padding: .42em .95em .42em 1.9em; transition: border-color .2s, color .2s; }
+[data-skin="druid"] .chip { position: relative; border-radius: 14px 4px 14px 4px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink-2); font: 400 1.04rem/1.2 var(--font-label); letter-spacing: .03em; padding: .42em .95em; transition: border-color .2s, color .2s; }
 [data-skin="druid"] .chip:hover { transform: none; border-color: var(--moss); color: var(--birch); }
-[data-skin="druid"] .chip[aria-pressed="true"] { background: color-mix(in srgb, var(--moss-d) 55%, var(--surface)); border-color: var(--moss); color: var(--birch); box-shadow: 0 0 0 3px color-mix(in srgb, var(--moss) 14%, transparent); }
+[data-skin="druid"] .chip[aria-pressed="true"] { background: color-mix(in srgb, var(--moss-d) 38%, var(--surface)); border-color: var(--moss); color: var(--birch); box-shadow: none; }
 [data-skin="druid"] .seg { border-radius: 8px; border: 1px solid var(--bark-d); background: var(--bg-deep); padding: 3px; }
-[data-skin="druid"] .seg button { position: relative; border-radius: 6px; font: 400 1.04rem/1.2 var(--font-label); letter-spacing: .03em; color: var(--ink-2); padding: 8px 12px 8px 1.7em; transition: color .2s; }
-[data-skin="druid"] .seg button[aria-pressed="true"] { background: var(--plank); color: var(--birch); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .3); }
-/* the rune of the chosen: Fehu by a chip and a segment, Jera by the open tab — lit in the cold light of the stones */
-[data-skin="druid"] .chip::before, [data-skin="druid"] .seg button::before, [data-skin="druid"] .subnav a::before {
-  content: "\16A0";
+[data-skin="druid"] .seg button { position: relative; border: 1px solid transparent; border-radius: 6px; font: 400 1.04rem/1.2 var(--font-label); letter-spacing: .03em; color: var(--ink-2); padding: 8px 12px; transition: color .2s; }
+@media (max-width: 560px) { [data-skin="druid"] .seg button { padding-inline: 8px; } }
+[data-skin="druid"] .seg button[aria-pressed="true"] { background: color-mix(in srgb, var(--moss-d) 38%, var(--surface)); color: var(--birch); box-shadow: none; border-radius: 8px; }
+/* the chosen chip and segment: a vine of basil round it — its stem on the edge, a spray of leaves at two corners,
+   rowan berries at the others, leaves along it (--dr-vine). The word stays in the middle: no room is kept for a mark,
+   and the chip keeps its size. A chip's vine lies 5 px outside it, a segment's 1 px, inside the frame of its row */
+[data-skin="druid"] .chip[aria-pressed="true"] { border-image: var(--dr-vine) 20 / 15px / 5px round; border-radius: 9px 3px 9px 3px; }
+[data-skin="druid"] .seg button[aria-pressed="true"] { border-image: var(--dr-vine) 20 / 12px / 1px round; }
+/* a row of chips that scrolls sideways cuts what lies outside it: room for the leaves */
+@media (max-width: 700px) { [data-skin="druid"] .filters { padding-block: 6px; } }
+/* the rune of the open tab: Jera, lit in the cold light of the stones */
+[data-skin="druid"] .subnav a::before {
+  content: "\16C3";
   position: absolute;
-  left: .65em;
+  left: 10px;
   top: 50%;
   translate: 0 -52%;
   font: 400 .92em/1 var(--font-rune);
@@ -185,9 +193,8 @@
   transition: opacity .2s;
   pointer-events: none;
 }
-[data-skin="druid"] .subnav a::before { content: "\16C3"; left: 10px; }
-[data-skin="druid"] .chip[aria-pressed="true"]::before, [data-skin="druid"] .seg button[aria-pressed="true"]::before, [data-skin="druid"] .subnav a[aria-current="true"]::before { opacity: 1; }
-[data-skin="druid"] .chip:hover::before, [data-skin="druid"] .seg button:hover::before, [data-skin="druid"] .subnav a:hover::before { opacity: .6; }
+[data-skin="druid"] .subnav a[aria-current="true"]::before { opacity: 1; }
+[data-skin="druid"] .subnav a:hover::before { opacity: .6; }
 
 [data-skin="druid"] .vtype.is-open { border-color: var(--moss); }
 [data-skin="druid"] .tabs .tab { border: 1px solid var(--bark-d); background: var(--surface); color: var(--ink-2); box-shadow: none; font-family: var(--font-label); font-size: 1.1rem; transition: color .2s, border-color .2s; }

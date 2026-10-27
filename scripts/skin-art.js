@@ -9,7 +9,7 @@
    «дальше», стрелка и рука курсора. Рамка рисуется по профилю каждой кромки снаружи внутрь, угол берёт профиль ближней
    кромки, крайний пиксель угла срезан, поверх углов — штамп. «Друид» — вектор: рама из тёмного тёсаного дерева со
    срезанными углами и железными уголками на двух гвоздях, каменная табличка с мхом, плетёный шнур, волокно досок,
-   наконечник курсора. Цвета в картинках — те же, что у токенов оформлений: в data URI токены CSS не работают. */
+   лоза вокруг выбранной кнопки, наконечник курсора. Цвета в картинках — те же, что у токенов оформлений: в data URI токены CSS не работают. */
 const fs = require('fs');
 const path = require('path');
 const OUT = path.join(__dirname, '..', 'src', 'css', 'style', '26-skin-art.css');
@@ -204,6 +204,24 @@ D['dr-knot'] = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="12" v
 <path d="M0 6 C4 12 12 12 16 6" fill="none" stroke="#120C07" stroke-width="3.6"/>
 <path d="M0 6 C4 12 12 12 16 6" fill="none" stroke="#7E9C4A" stroke-width="1.8"/>
 <path d="M16 6 C20 0 28 0 32 6" fill="none" stroke="#7E9C4A" stroke-width="1.8"/>
+</svg>`;
+// the vine round the chosen chip or segment: a frame in nine parts, 96 × 56, slices of 20. Its stem runs 7 from the
+// edge — on the chip's own edge, the picture lies 5 outside it — with a thinner strand twined along; at two corners a
+// spray of basil leaves, at the other two a tendril and a pair of rowan berries; the top and the bottom edge (56
+// wide) carry a pair of leaves each, the sides (16 tall) the stem alone, so a tile squeezed to a short side bends
+// no leaf. The colours: --bg under the cut, --stem, --leaf, --basil, --basil-deep, --moss-d, --berry
+const vineLeaf = (x, y, a, k = 1) => `<g transform="translate(${x} ${y}) rotate(${a}) scale(${k})"><path d="M0 0 C2.6 -3.6 6.6 -3.6 9.4 0 C6.6 3.6 2.6 3.6 0 0 Z" fill="#0B120D" transform="translate(.5 .7)"/><path d="M0 0 C2.6 -3.6 6.6 -3.6 9.4 0 C6.6 3.6 2.6 3.6 0 0 Z" fill="#78A848"/><path d="M0 0 C2.6 -3.6 6.6 -3.6 9.4 0 C6.4 -1 3 -1 0 0 Z" fill="#8FC85A"/><path d="M.6 0 H8.2" stroke="#2F4A26" stroke-width=".6"/></g>`;
+const vineStem = d => `<path d="${d}" fill="none" stroke="#0B120D" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" transform="translate(.5 .7)"/><path d="${d}" fill="none" stroke="#4E8634" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#8FC85A" stroke-width=".9" stroke-linecap="round" opacity=".75" transform="translate(-.45 -.5)"/>`;
+const tendril = 'M86 7.4 q3.4 -3.6 6.2 -1.6 q2 2 -.6 3.4 q-1.6 .4 -1.4 -1';
+D['dr-vine'] = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="56" viewBox="0 0 96 56">
+${vineStem('M7 20 A13 13 0 0 1 20 7 Q34 4.8 48 7 T76 7 H85 A4 4 0 0 1 89 11 V20 Q90.5 24 89 28 T89 36 A13 13 0 0 1 76 49 Q62 51.2 48 49 T20 49 H11 A4 4 0 0 1 7 45 V36 Q5.5 32 7 28 T7 20')}
+<path d="M20 7 Q34 9.2 48 7 T76 7 M89 20 Q87.4 24 89 28 T89 36 M76 49 Q62 46.8 48 49 T20 49 M7 36 Q8.6 32 7 28 T7 20" fill="none" stroke="#B5E07E" stroke-width="1" stroke-linecap="round" opacity=".8"/>
+${vineLeaf(10.4, 10.4, -168, 1.25)}${vineLeaf(10.4, 10.4, -102, 1.25)}${vineLeaf(14.2, 7.6, -40, .8)}
+${vineLeaf(85.6, 45.6, 12, 1.25)}${vineLeaf(85.6, 45.6, 78, 1.25)}${vineLeaf(81.8, 48.4, 140, .8)}
+${vineLeaf(33, 6.2, -150, .9)}${vineLeaf(34, 6, -30, .9)}${vineLeaf(62, 49.8, 150, .9)}${vineLeaf(63, 50, 30, .9)}
+<path d="${tendril}" fill="none" stroke="#78A848" stroke-width="1" stroke-linecap="round"/>
+<path d="${tendril}" fill="none" stroke="#78A848" stroke-width="1" stroke-linecap="round" transform="rotate(180 48 28)"/>
+<g stroke="#0B120D" stroke-width=".5"><circle cx="89" cy="12.6" r="1.3" fill="#C9382D"/><circle cx="89.8" cy="11" r="1.6" fill="#C9382D"/><circle cx="7" cy="43.4" r="1.3" fill="#C9382D"/><circle cx="6.2" cy="45" r="1.6" fill="#C9382D"/></g>
 </svg>`;
 // the grain of the planks: two boards across a window, their fibres, a knot in one
 D['dr-grain'] = `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="96" viewBox="0 0 240 96">

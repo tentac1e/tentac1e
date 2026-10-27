@@ -197,7 +197,7 @@
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.aura`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 - `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
 - `src/css/style/27-grimoire.css`: `.subnav-*`, `.toc-*`, `.ico`, `.ch-hero-*`, `.skin-*`, `.hero-*`, `.view-*`, `.chip`, `.tab-*`, `.seg`, `.brand`, `.search-*` · анимации: `psx-flicker`, `psx-point`
-- `src/css/style/28-druid.css`: `.toc-*`, `.subnav`, `.btn-*`, `.tab-*`, `.ico`, `.skin-*`, `.chip`, `.card`, `.pane`, `.seg`, `.brand`, `.pager`
+- `src/css/style/28-druid.css`: `.toc-*`, `.btn-*`, `.subnav`, `.tab-*`, `.ico`, `.skin-*`, `.card`, `.pane`, `.brand`, `.pager`, `.exp-*`, `.search-*`
 
 ### lab.css
 - `src/css/lab/00-ill.css`: `.ill-*` · анимации: `ill-in`
@@ -292,12 +292,12 @@
 Сколько правил `@media` на каждую ширину и в каких файлах. Новую ширину не придумывайте — берите ближайшую.
 
 - `max-width: 900px` — 15: 01-hero.css, 06-blocks.css, 07-vkus.css ×2, 08-home.css ×5, 13-calendar.css, 15-nav-helpers.css, 16-pinching.css, 23-garden.css, 26-hydro.css, 27-grimoire.css
-- `max-width: 560px` — 13: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, aphid.css, trichome.css
+- `max-width: 560px` — 14: 01-hero.css, 04-controls.css, 07-vkus.css, 08-home.css ×4, 10-varieties.css, 14-care.css, 15-fertilizers.css, 24-toc.css, 28-druid.css, aphid.css, trichome.css
 - `max-width: 640px` — 12: 05-deep.css, 06-blocks.css ×2, 12-sci-notes.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
 - `max-width: 760px` — 10: 06-lab-tools.css, 12-steps.css, 16-grimoire.css, 26-hydro.css, 27-grimoire.css ×2, _shared.css, drift.css, flows.css, kratky.css
+- `max-width: 700px` — 8: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css, 27-grimoire.css ×2, 28-druid.css ×2
 - `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
-- `max-width: 700px` — 7: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css, 27-grimoire.css ×2, 28-druid.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
 - `min-width: 900px` — 6: 11-deep-footer.css, 24-toc.css, 27-grimoire.css, 28-druid.css ×2, pairing.css
