@@ -9,8 +9,10 @@
 const { playwright, ok, done, fileUrl, FILES } = require('./lib');
 
 const only = (process.argv[2] || '').split(',').filter(Boolean);
-// medians of three start-ups: one start on this machine swings by ±250 ms
-const TBT = { 'index.html': 1250 }, TBT_DEFAULT = 900, STARTS = 3;
+// medians of three start-ups: one start on this machine swings by ±250 ms — the same build gave 730–1180 ms on
+// «Гидропоника» in one afternoon, the build before the worker of the pictures as much as the one after; the budget
+// catches a start that doubles, not the machine's mood
+const TBT = { 'index.html': 1450 }, TBT_DEFAULT = 1100, STARTS = 3;
 const SLEEP_PAGES = ['index.html', 'uhod.html', 'vkus.html'];
 
 (async () => {
