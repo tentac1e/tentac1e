@@ -257,11 +257,23 @@ window.BasilScene = (() => {
       };
     }
 
+    // the pictures of the leaves, one colour of leaf at a time, a task each (all 24 at once were one long task at the
+    // start of every page); ready() — when the last is there: the canvas fades in then (02-ambient.css)
+    // until a new set is whole the leaves keep the old one (a theme change), or none at the very start
+    let ready = null, building = 0;
     function buildSprites() {
-      sprites = pal.leaves.map(([c1, c2]) => BLUR.map(k => ({
-        top: sprite(g => { g.translate(SPR_W / 2, 4 + SPR_L); paintLeaf(g, SPR_L, 'top', c1, c2); }, SPR_W, SPR_H, k),
-        under: sprite(g => { g.translate(SPR_W / 2, 4 + SPR_L); paintLeaf(g, SPR_L, 'under', c1, c2); }, SPR_W, SPR_H, k)
-      })));
+      const set = pal.leaves.map(() => null), my = ++building;
+      let i = 0;
+      const step = () => {
+        if (my !== building) return;
+        const [c1, c2] = pal.leaves[i];
+        set[i] = BLUR.map(k => ({
+          top: sprite(g => { g.translate(SPR_W / 2, 4 + SPR_L); paintLeaf(g, SPR_L, 'top', c1, c2); }, SPR_W, SPR_H, k),
+          under: sprite(g => { g.translate(SPR_W / 2, 4 + SPR_L); paintLeaf(g, SPR_L, 'under', c1, c2); }, SPR_W, SPR_H, k)
+        }));
+        if (++i < set.length) setTimeout(step, 0); else { sprites = set; if (ready) ready(); }
+      };
+      step();
       sheens = BLUR.map(k => sprite(g => {
         g.translate(SPR_W / 2, 4 + SPR_L);
         leafPath(g, SPR_L);
@@ -493,6 +505,7 @@ window.BasilScene = (() => {
 
     const LAYER_ALPHA = [1, 0.74, 0.5];
     function drawLeaf(l) {
+      if (!sprites[l.v]) return;
       const set = sprites[l.v][l.layer];
       const fc = Math.cos(l.flip);
       const spr = fc >= 0 ? set.top : set.under;
@@ -621,6 +634,8 @@ window.BasilScene = (() => {
     return {
       resize(w, h, d) { resize(w, h, d); },
       render, burst,
+      // fn — called once the pictures of the leaves are all drawn (again after a theme change)
+      onReady(fn) { ready = fn; if (sprites.length) fn(); },
       // a new palette (the theme changed): new sprites, shafts or moon, motes or fireflies
       theme() { readPalette(); buildSprites(); buildBeams(); motes = []; flies = []; populate(); },
       // the pointer: where it is and how fast it goes (t — when, in ms)
@@ -697,7 +712,7 @@ window.BasilScene = (() => {
     }
     self.onmessage = e => {
       const m = e.data;
-      if (m.type === 'init') { E = leafEngine(m.cv, m.sky); E.resize(m.w, m.h, m.dpr); low = m.low; }
+      if (m.type === 'init') { E = leafEngine(m.cv, m.sky); E.resize(m.w, m.h, m.dpr); low = m.low; E.onReady(() => postMessage({ type: 'ready' })); }
       else if (!E) return;
       else if (m.type === 'size') E.resize(m.w, m.h, m.dpr);
       else if (m.type === 'tokens') { self.leafTokens = m.tokens; E.theme(); }
@@ -749,6 +764,7 @@ window.BasilScene = (() => {
     function onPage() {
       E = leafEngine(canvas, skyCanvas);
       E.resize(...size());
+      E.onReady(() => canvas.classList.add('is-on'));
       const ready = gate(60, 30);
       let prevTs = 0, ema = 16.7, warm = 0, last = 0;
       L = loop(ts => {
@@ -774,7 +790,7 @@ window.BasilScene = (() => {
       L.restart = () => { last = performance.now() / 1000; prevTs = 0; };
     }
     if (worker) {
-      worker.onmessage = e => { if (e.data.type === 'low') setLow(); };
+      worker.onmessage = e => { if (e.data.type === 'low') setLow(); if (e.data.type === 'ready') canvas.classList.add('is-on'); };
       // the worker failed (its file did not load): the greenhouse on the page again, on fresh canvases
       worker.onerror = () => {
         worker.terminate(); worker = null;

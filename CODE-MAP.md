@@ -82,7 +82,7 @@
 - `src/js/scene/01-budget.js`: `setLow` 8, `setState` 25, `check` 37, `poke` 44, `onWake` 53, `gate` 55, `calmTick` 72, `loop` 85
 - `src/js/scene/02-noise.js`: `rnd` 5, `fade` 12, `h3` 13, `noise3` 14
 - `src/js/scene/03-wind.js`: `gust` 5, `gustAt` 9, `wind` 17
-- `src/js/scene/04-background.js`: `leafPath` 7, `paintLeaf` 18, `makeCanvas` 58, `sprite` 66, `leafEngine` 82, `tokens` 501, `leafBoot` 502, `leafHost` 516, `initBackground` 562
+- `src/js/scene/04-background.js`: `leafPath` 7, `paintLeaf` 18, `makeCanvas` 58, `sprite` 66, `leafEngine` 82, `tokens` 516, `leafBoot` 517, `leafHost` 531, `initBackground` 577
 - `src/js/scene/05-plant.js`: `mk` 6, `f2` 12, `basil` 16, `bush` 32
 - `src/js/scene/06-plant-bitmaps.js`: `themeKey` 10, `leafBitmaps` 11, `Plant` 38
 - `src/js/scene/07-aroma.js`: `aroma` 9
@@ -173,7 +173,7 @@
 
 ### style.css
 - `src/css/style/01-base.css`: `.skip`, `.eyebrow`, `.num`, `.mono`, `.muted`, `.ico`, `.sprite`, `.lead`, `.hand`
-- `src/css/style/02-ambient.css`: `.is-strained`, `.sky-*`, `.topbar`, `.tabbar`, `.subnav-*`, `.is-off`, `.is-asleep`, `.passport`, `.is-stuck`, `.sheet`, `.page`, `.wrap`
+- `src/css/style/02-ambient.css`: `.is-strained`, `.sky-*`, `.topbar`, `.tabbar`, `.subnav-*`, `.is-on`, `.is-off`, `.is-asleep`, `.passport`, `.is-stuck`, `.sheet`, `.page`
 - `src/css/style/03-header.css`: `.skin-*`, `.search-*`, `.tab-*`, `.garden-*`, `.brand`, `.topbar-*`, `.ico`, `.is-active`, `.progress`, `.icon-*`, `.tabbar`
 - `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.g-link`, `.table-*`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
 - `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
@@ -262,12 +262,12 @@
 
 Свои события страницы (`document`): кто шлёт и кто слушает.
 
-- `basil:calm` — шлёт: `src/js/scene/01-budget.js:35`; слушают: `src/js/scene/04-background.js:629`, `src/js/skins/04-stage.js:349`
+- `basil:calm` — шлёт: `src/js/scene/01-budget.js:35`; слушают: `src/js/scene/04-background.js:645`, `src/js/skins/04-stage.js:349`
 - `basil:garden` — шлёт: `src/js/app/22-garden.js:13`; слушают: `src/js/app/22-garden-view.js:312`, `src/js/app/22-garden-view.js:329`, `src/js/app/22-install.js:24`
 - `basil:panel` — шлёт: `src/js/app/02-router.js:181`; слушают: `src/js/app/22-reading-pos.js:289`, `src/js/science/06-labs-loader.js:186`, `src/js/skins/09-start.js:31`
 - `basil:ready` — шлёт: `src/js/app/23-boot.js:20`; слушают: `src/js/app/03-peek.js:238`, `src/js/app/22-garden-view.js:327`, `src/js/haptics.js:91`, `src/js/science/06-labs-loader.js:176`, `src/js/science/06-labs-loader.js:215`, `src/js/science/07-deep.js:130`
 - `basil:search-ready` — шлёт: `src/js/app/04-search.js:130`; слушают: `src/js/app/04-search.js:426`
-- `basil:theme` — шлёт: `src/js/app/01-theme.js:33`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:677`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/js/skins/09-start.js:57`, `src/labs/vkus/pesto.js:67`
+- `basil:theme` — шлёт: `src/js/app/01-theme.js:33`; слушают: `src/js/app/03-peek.js:203`, `src/js/app/05-scene.js:156`, `src/js/scene/04-background.js:693`, `src/js/scene/06-plant-bitmaps.js:88`, `src/js/science/05-molecules.js:305`, `src/js/skins/09-start.js:57`, `src/labs/vkus/pesto.js:67`
 - `basil:view` — шлёт: `src/js/app/02-router.js:184`; слушают: `src/js/app/02-router.js:263`, `src/js/app/02-router.js:293`, `src/js/app/03-sheets.js:184`, `src/js/science/07-deep.js:132`
 - `basil:weather` — шлёт: `src/js/app/22-garden-weather.js:56`, `src/js/app/22-garden-weather.js:78`; слушают: `src/js/app/22-garden-view.js:313`, `src/js/app/22-garden-view.js:325`
 

@@ -227,7 +227,7 @@
 - `src/js/scene/01-budget.js` (102 стр.): CALM, CALM_FPS
 - `src/js/scene/02-noise.js` (22 стр.)
 - `src/js/scene/03-wind.js` (22 стр.)
-- `src/js/scene/04-background.js` (686 стр.): SPR_L, SCENE_SRC, IN_WORKER, TOKENS, initBackground
+- `src/js/scene/04-background.js` (702 стр.): SPR_L, SCENE_SRC, IN_WORKER, TOKENS, initBackground
 - `src/js/scene/05-plant.js` (49 стр.)
 - `src/js/scene/06-plant-bitmaps.js` (382 стр.): LEAF_D, LEAF_BOX, LEAF_FILLS, Plant
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
