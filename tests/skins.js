@@ -236,6 +236,21 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
         ok(mol.colours > 4 && turned !== mol.turn, tag(`${sk}: the molecule is drawn by the skin (${mol.colours} colours) and turns under the mouse`));
       } else ok(false, tag(`${sk} vkus.html: no molecule viewer`));
 
+      // the initial of a tab: its frame two lines tall at most (the third line runs full), and the legs of Д, Ц, Щ inside
+      // it — at a line height under the face's own the browser hung them through the frame's bottom
+      const cap = await page.evaluate(async () => {
+        const p = document.querySelector('.panel.is-active .panel-lead'), f = getComputedStyle(p, '::first-letter');
+        const F = parseFloat(f.fontSize), L = parseFloat(f.lineHeight), pt = parseFloat(f.paddingTop), pb = parseFloat(f.paddingBottom), bt = parseFloat(f.borderTopWidth), bb = parseFloat(f.borderBottomWidth), mt = parseFloat(f.marginTop);
+        await document.fonts.load(`${f.fontWeight} ${F}px ${f.fontFamily}`, 'ДЦЩВ');
+        const x = document.createElement('canvas').getContext('2d');
+        x.font = `${f.fontWeight} ${F}px ${f.fontFamily}`;
+        const m = x.measureText('В'), fa = m.fontBoundingBoxAscent, fd = m.fontBoundingBoxDescent;
+        const legs = Math.max(...['Д', 'Ц', 'Щ'].map(c => x.measureText(c).actualBoundingBoxDescent));
+        const base = (L - fa - fd) / 2 + fa, cap = m.actualBoundingBoxAscent;
+        return { tall: +((mt + bt + pt + L + pb + bb) / parseFloat(getComputedStyle(p).lineHeight)).toFixed(2), above: +(base - cap).toFixed(1), below: +(L + pb - base - legs).toFixed(1) };
+      });
+      ok(cap.tall <= 2 && cap.above >= 2 && cap.below >= 2, tag(`${sk}: the initial is two lines tall at most, its capital and the legs of Д, Ц, Щ inside its frame ${JSON.stringify(cap)}`));
+
       // «Друид»: the chosen chip and segment wear a vine; no rune before the word, and no room kept for one — the
       // word of every chip stands in its middle (a rune there once lay over the first letter in the models)
       if (sk === 'druid') {

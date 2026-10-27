@@ -291,11 +291,13 @@
 [data-skin="druid"] :is(.card, .pane, .facts, .vt-panel, .exp-card, .garden-box, .tab-part) > h3:not(:has(.ico))::after {
   content: ""; display: block; width: 96px; height: 8px; margin-top: 8px; background: var(--dr-knot) left center / 21px 8px repeat-x; opacity: .9;
 }
+/* the initial on its runestone, two lines tall: the line height and padding are worked out from the face (Underdog:
+   ascent .91, descent .25, capitals .7, the legs of Д, Ц, Щ .19 below the line), so the legs stay on the stone */
 [data-skin="druid"] :is(.panel-lead, .deep-text > p:first-child)::first-letter {
-  float: left; margin: .06em .22em 0 0; padding: .16em .26em .08em;
+  float: left; margin: .04em .14em 0 0; padding: 0 .22em .08em;
   border-radius: 46% 40% 48% 42% / 44% 48% 40% 46%; border: 1px solid rgba(0, 0, 0, .6);
   background: radial-gradient(circle at 34% 28%, var(--stone-hi), var(--stone) 46%, var(--stone-d));
-  font: 400 2.9em/.9 var(--font-title); color: var(--amber); text-shadow: 0 0 12px var(--ember-glow), 0 2px 0 #000;
+  font: 400 2.6em/1.1 var(--font-title); color: var(--amber); text-shadow: 0 0 12px var(--ember-glow), 0 2px 0 #000;
 }
 
 /* ---- the pointer of the grove where there is a mouse: an arrowhead of dark iron, warm over what can be pressed; the

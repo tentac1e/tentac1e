@@ -323,9 +323,12 @@
 [data-skin="grimoire"] :is(.card, .pane, .facts, .vt-panel, .exp-card, .garden-box, .tab-part) > h3:not(:has(.ico))::before, [data-skin="grimoire"] .hy-h:not(:has(.ico))::before {
   content: ""; display: inline-block; width: 18px; height: 18px; margin: 0 10px 0 0; vertical-align: -1px; background: var(--px-sigil) center / 18px 18px no-repeat;
 }
+/* the initial in its gold frame, two lines tall: its line height and padding are worked out from the face (Cormorant
+   Unicase: ascent .92, descent .29, capitals .63, the legs of Д, Ц, Щ .2 below the line) — the capital sits .15 of
+   its size under the frame's top and the legs keep .1 above its bottom; at a lower line height the legs went through */
 [data-skin="grimoire"] :is(.panel-lead, .deep-text > p:first-child)::first-letter {
-  float: left; margin: .1em .2em 0 0; padding: .12em .16em .02em; border: 3px double var(--gold); background: var(--bg-deep);
-  font: 700 3.1em/.84 var(--font-title); color: var(--blood); text-shadow: 2px 2px 0 var(--shade), 0 0 10px color-mix(in srgb, var(--blood) 45%, transparent);
+  float: left; margin: .07em .12em 0 0; padding: 0 .14em .1em; border: 3px double var(--gold); background: var(--bg-deep);
+  font: 700 2.55em/.93 var(--font-title); color: var(--blood); text-shadow: 2px 2px 0 var(--shade), 0 0 10px color-mix(in srgb, var(--blood) 45%, transparent);
 }
 
 /* ---- the pointer of the console where there is a mouse: the arrow, and the hand over what can be pressed; the scroll
