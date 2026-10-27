@@ -31,7 +31,13 @@
   function psxLoop(frame, fps = 30, lo = Math.min(fps, 20)) {
     const gate = SC && SC.gate ? SC.gate(fps, lo) : (() => { let p = 0; return ts => (ts - p >= 1000 / fps - 3 ? (p = ts, true) : false); })();
     if (SC && SC.loop) {
-      const L = SC.loop(ts => { L.next(); if (gate(ts)) frame(ts); });
+      // after a frame of a loop of thirty frames a second or fewer, the page sleeps until a refresh before the next
+      const rest = 1000 / fps - 12;
+      const L = SC.loop(ts => {
+        if (!gate(ts)) { L.next(); return; }
+        frame(ts);
+        if (rest > 8 && L.later) L.later(rest); else L.next();
+      });
       return L;
     }
     let raf = 0, on = false;

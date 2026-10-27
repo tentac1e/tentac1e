@@ -12,10 +12,11 @@
 const { playwright, ok, done, watch, fileUrl, FILES, SKINS, inSkin } = require('./lib');
 
 // what each skin shows: the colour of the browser's bar, the canvas behind the page, the face of the titles, pictures
-// at the console's pixels, the switch of the CRT, a layer of glow over its scenes
+// at the console's pixels, the switch of the CRT (the scene of either is one canvas: its glow and its edges are drawn
+// into it, no layer of its own over it and no mask)
 const LOOK = {
-  grimoire: { meta: '#0B0910', back: 'psx-crypt', face: /Cormorant Unicase/, pixel: true, crt: true, glow: false },
-  druid: { meta: '#0B120D', back: 'psx-forest', face: /Underdog/, pixel: false, crt: false, glow: true }
+  grimoire: { meta: '#0B0910', back: 'psx-crypt', face: /Cormorant Unicase/, pixel: true, crt: true },
+  druid: { meta: '#0B120D', back: 'psx-forest', face: /Underdog/, pixel: false, crt: false }
 };
 const BACKS = Object.values(LOOK).map(l => l.back);
 // what a page in a skin shows, read in it
@@ -32,7 +33,8 @@ function state(backs) {
     backdrop: (() => { const st = document.querySelector('.view-home .hero > .psx-stage, .ch-hero > .psx-stage'), art = document.querySelector('.view-home .hero-art, .ch-hero-art'); return st ? { on: st.classList.contains('is-backdrop'), events: getComputedStyle(st).pointerEvents, art: art ? getComputedStyle(art).display : null, frame: getComputedStyle(st.parentNode).borderTopWidth } : null; })(),
     stages: stages.length, drawn: stages.filter(s => s.classList.contains('is-drawn')).length,
     scene: stages.map(s => s.dataset.scene).join(','), of: [...new Set(stages.map(s => s.dataset.skin))].join(','),
-    glows: stages.filter(s => s.querySelector('.psx-glow')).length,
+    // each scene one canvas, nothing blended or masked over it in the page
+    single: stages.filter(s => s.querySelectorAll('canvas').length === 1 && ['mask-image', '-webkit-mask-image'].every(p => (getComputedStyle(s).getPropertyValue(p) || 'none') === 'none') && [...s.children].every(c => getComputedStyle(c).mixBlendMode === 'normal') && getComputedStyle(s, '::after').content === 'none').length,
     view: (document.querySelector('[data-view]') || { dataset: {} }).dataset.view || null,
     backs: backs.filter(id => document.getElementById(id)),
     field: vis(document.getElementById('leaf-field')), art: vis(document.querySelector('.ch-hero-art')),
@@ -145,8 +147,8 @@ const pick = async (page, skin) => { await page.click('#skin-btn'); await page.c
         await page.goto(fileUrl(f), { waitUntil: 'load' });
         await page.waitForTimeout(1300);
         s = await page.evaluate(state, BACKS);
-        ok(s.dcl && s.dcl.skin === sk && s.dcl.theme === 'dark' && s.on && s.stages === s.heroes && s.heroes > 0 && s.drawn >= 1 && s.backs.join() === L.back && !s.field && L.face.test(s.face) && s.wide <= 0 && s.glows === (L.glow ? s.stages : 0),
-          tag(`${sk} ${f}: in the skin from the start, ${s.stages} scene(s) drawn, its ${L.back} behind ${JSON.stringify({ dcl: s.dcl, stages: s.stages, drawn: s.drawn, heroes: s.heroes, glows: s.glows, wide: s.wide, face: s.face.slice(0, 30) })}`));
+        ok(s.dcl && s.dcl.skin === sk && s.dcl.theme === 'dark' && s.on && s.stages === s.heroes && s.heroes > 0 && s.drawn >= 1 && s.backs.join() === L.back && !s.field && L.face.test(s.face) && s.wide <= 0 && s.single === s.stages,
+          tag(`${sk} ${f}: in the skin from the start, ${s.stages} scene(s) drawn, its ${L.back} behind ${JSON.stringify({ dcl: s.dcl, stages: s.stages, drawn: s.drawn, heroes: s.heroes, single: s.single, wide: s.wide, face: s.face.slice(0, 30) })}`));
         const own = f === 'index.html' ? 'glavnaya' : s.view;
         scenes.add(s.scene);
         const goes = await page.evaluate(async () => {

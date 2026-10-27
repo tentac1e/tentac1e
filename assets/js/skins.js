@@ -34,7 +34,13 @@ window.BasilSkins = (() => {
   function psxLoop(frame, fps = 30, lo = Math.min(fps, 20)) {
     const gate = SC && SC.gate ? SC.gate(fps, lo) : (() => { let p = 0; return ts => (ts - p >= 1000 / fps - 3 ? (p = ts, true) : false); })();
     if (SC && SC.loop) {
-      const L = SC.loop(ts => { L.next(); if (gate(ts)) frame(ts); });
+      // after a frame of a loop of thirty frames a second or fewer, the page sleeps until a refresh before the next
+      const rest = 1000 / fps - 12;
+      const L = SC.loop(ts => {
+        if (!gate(ts)) { L.next(); return; }
+        frame(ts);
+        if (rest > 8 && L.later) L.later(rest); else L.next();
+      });
       return L;
     }
     let raf = 0, on = false;
@@ -44,21 +50,50 @@ window.BasilSkins = (() => {
   /* ------------------------------------------------------------------ */
   /* a small rasterizer of the PS1 kind on a 2D canvas                    */
   /* ------------------------------------------------------------------ */
-  /* Low resolution, vertices snapped to whole pixels (the wobble), textures mapped affinely per triangle (the swim),
-     no filtering, the painter's order by layer and depth, fog, then a few levels a colour channel with an ordered
-     dither between them — the console's look, nothing of it a shader. With smooth (the skin «Друид»): the canvas at
-     the screen's own resolution (scale canvas pixels a CSS pixel), vertices where they fall, textures filtered, no
-     dither — the same low polygons, lit and fogged, as a game of today draws them */
+  /* Low resolution, textures mapped affinely per triangle (the swim), no filtering, the painter's order by layer and
+     depth, fog, then a few levels a colour channel with an ordered dither between them (dither: levels) — the console's
+     look, nothing of it a shader. With smooth (the skin «Друид»): the canvas at the screen's own resolution (scale
+     canvas pixels a CSS pixel), textures filtered, no dither — the same low polygons, lit and fogged, as a game of today
+     draws them. Both draw the same way: every texture lit and fogged ahead (shaded), a colour once a fill, the picture
+     never read back (the graphics card keeps it where it has one); the vertices fall where they fall, so that a camera
+     swinging slowly glides — snapped to whole pixels of the console, the picture went in steps of three points */
   class Raster {
     constructor(canvas, o) {
-      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1, maxPx: 0 }, o);
+      Object.assign(this, { px: 3, maxW: 380, levels: 16, dither: 0, read: false, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1, maxPx: 0 }, o);
       this.c = canvas;
-      // the console's colour is cut down by reading the pixels back; a smooth picture is never read and stays on the GPU
-      this.x = canvas.getContext('2d', this.smooth ? { alpha: false } : { willReadFrequently: true });
+      // a picture read back (post: the console's colours of a molecule) is kept where the script reads it; any other
+      // stays where the browser draws it best
+      this.x = canvas.getContext('2d', this.read ? { willReadFrequently: true } : undefined);
       this.W = this.H = 0;
       this.unit = 1;
       // the glow of what shines (glowTo): a small picture of its own, a part `bloom` of the size, laid over the scene
       this.B = null;
+      // the fills of plain colours, by colour (a string, or with the console's dither a tile of it)
+      this.fills = new Map();
+    }
+    // the style a plain colour is filled with: the string of it, or, with the console's colours, a tile of 4 × 4 of
+    // its two nearest levels in the ordered pattern, laid on the canvas's own grid (what post did to a face of one
+    // colour, done once for the colour)
+    paint(r, g, b) {
+      const d = this.dither;
+      r = r < 0 ? 0 : r > 255 ? 255 : r; g = g < 0 ? 0 : g > 255 ? 255 : g; b = b < 0 ? 0 : b > 255 ? 255 : b;
+      const key = d ? (Math.round(r / 4.05) << 12) | (Math.round(g / 4.05) << 6) | Math.round(b / 4.05) : ((r | 0) << 16) | ((g | 0) << 8) | (b | 0);
+      const F = this.fills;
+      let f = F.get(key);
+      if (f !== undefined) return f;
+      if (F.size > 4096) F.delete(F.keys().next().value);
+      if (!d) f = `rgb(${r | 0},${g | 0},${b | 0})`;
+      else {
+        const c = doc.createElement('canvas');
+        c.width = c.height = 4;
+        const cx = c.getContext('2d'), img = cx.createImageData(4, 4), q = dith(d), v = [(key >> 12) * 4.05, (key >> 6 & 63) * 4.05, (key & 63) * 4.05];
+        for (let i = 0; i < 16; i++) for (let ch = 0; ch < 3; ch++) img.data[i * 4 + ch] = q(v[ch], i & 3, i >> 2);
+        for (let i = 0; i < 16; i++) img.data[i * 4 + 3] = 255;
+        cx.putImageData(img, 0, 0);
+        f = this.x.createPattern(c, 'repeat');
+      }
+      F.set(key, f);
+      return f;
     }
     // the glow of the bright parts, drawn as the picture is: each shining triangle (emis) goes also into this small
     // canvas in its colour, raised to the cube so that only the bright stays (a texture as it is); what else shines —
@@ -105,7 +140,7 @@ window.BasilSkins = (() => {
     view(p) { const C = this.C, d = sub(p, C.eye); return [dot(d, C.r), dot(d, C.u), dot(d, C.f)]; }
     proj(v) {
       const C = this.C, x = C.cx + v[0] * C.focal / v[2], y = C.cy - v[1] * C.focal / v[2];
-      return this.smooth ? [x, y] : [Math.round(x), Math.round(y)];
+      return [x, y];
     }
     shade(n, m, ds) {
       let [r, g, b] = this.amb;
@@ -145,13 +180,12 @@ window.BasilSkins = (() => {
       this.list.push({ p, z: (va[2] + vb[2] + vc[2]) / 3, gz: o.group ? this.view(o.gat)[2] : null, o, l: o.emis ? null : this.shade(n, m, o.ds) });
     }
     draw() {
-      const x = this.x, F = this.fog;
+      const x = this.x, F = this.fog, dz = this.dither;
       // the glow of plain shining triangles: those of one shape (a bubble, a ring) go into it as one path, one fill;
       // whatever solid stands in front (not a cut-out leaf, not added light) darkens it again where it hides what shines
       // — the ground the moon sets behind, a stump over the lines of the circle — the triangles in a row in one fill
       const bx = this.B && this.B.x, cube = v => Math.min(255, (v / 255) ** 3 * 255) | 0;
       const solid = o => !o.emis && !o.cut && o.add == null && o.occlude !== false;
-      const dark = (A, B, C) => { if (!run || run.o !== 'dark') { flush(); run = { o: 'dark', a: 1, col: '#000' }; bx.beginPath(); } bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath(); };
       let run = null;
       const flush = () => {
         if (!run) return;
@@ -159,68 +193,80 @@ window.BasilSkins = (() => {
         if (run.o === 'dark') { bx.globalCompositeOperation = 'source-over'; bx.fill(); bx.globalCompositeOperation = 'lighter'; } else bx.fill();
         bx.globalAlpha = 1; run = null;
       };
+      const dark = (ax, ay, qx, qy, cx, cy) => { if (!run || run.o !== 'dark') { flush(); run = { o: 'dark', a: 1, col: '#000' }; bx.beginPath(); } bx.moveTo(ax, ay); bx.lineTo(qx, qy); bx.lineTo(cx, cy); bx.closePath(); };
+      // the faces of one colour in a row of the painter's order: one path, one fill (the same picture — they are opaque —
+      // and no seam between them); anything else drawn flushes it first
+      let face = null;
+      const paint = () => { if (face) { x.fillStyle = face; x.fill(); face = null; } };
       const lay = o => (o.layer == null ? 1 : o.layer), zOf = t => (t.gz == null ? t.z : t.gz);
       this.list.sort((A, B) => lay(A.o) - lay(B.o) || zOf(B) - zOf(A) || (A.o.group && A.o.group === B.o.group ? (A.o.ord || 0) - (B.o.ord || 0) || B.z - A.z : 0));
       for (const t of this.list) {
-        const o = t.o, [a, b, c] = t.p;
+        const o = t.o, a = t.p[0], b = t.p[1], c = t.p[2];
         const f = o.nofog ? 0 : clamp((t.z - this.fogNear) / (this.fogFar - this.fogNear), 0, 1) ** 1.15;
         // the triangle grown by half a pixel: neighbours meet without cracks
-        const cx = (a[0] + b[0] + c[0]) / 3, cy = (a[1] + b[1] + c[1]) / 3;
-        const g = q => { const dx = q[0] - cx, dy = q[1] - cy, L = Math.hypot(dx, dy) || 1; return [q[0] + dx / L * 0.6, q[1] + dy / L * 0.6]; };
-        const A = g(a), B = g(b), C = g(c);
+        const mx = (a[0] + b[0] + c[0]) / 3, my = (a[1] + b[1] + c[1]) / 3;
+        let dx = a[0] - mx, dy = a[1] - my, L = 0.6 / (Math.sqrt(dx * dx + dy * dy) || 1);
+        const ax = a[0] + dx * L, ay = a[1] + dy * L;
+        dx = b[0] - mx; dy = b[1] - my; L = 0.6 / (Math.sqrt(dx * dx + dy * dy) || 1);
+        const qx = b[0] + dx * L, qy = b[1] + dy * L;
+        dx = c[0] - mx; dy = c[1] - my; L = 0.6 / (Math.sqrt(dx * dx + dy * dy) || 1);
+        const cx = c[0] + dx * L, cy = c[1] + dy * L;
         if (o.tex) {
           // the texture's pixels onto the triangle: the affine map that takes its uv to the screen
           const w = o.tex.width, h = o.tex.height, uv = o.uv;
           const u0 = uv[0][0] * w, v0 = uv[0][1] * h, u1 = uv[1][0] * w, v1 = uv[1][1] * h, u2 = uv[2][0] * w, v2 = uv[2][1] * h;
           const det = (u1 - u0) * (v2 - v0) - (u2 - u0) * (v1 - v0);
-          if (det) {
-            const ta = ((b[0] - a[0]) * (v2 - v0) - (c[0] - a[0]) * (v1 - v0)) / det, tb = ((b[1] - a[1]) * (v2 - v0) - (c[1] - a[1]) * (v1 - v0)) / det;
-            const tc = ((c[0] - a[0]) * (u1 - u0) - (b[0] - a[0]) * (u2 - u0)) / det, td = ((c[1] - a[1]) * (u1 - u0) - (b[1] - a[1]) * (u2 - u0)) / det;
-            const M = [ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0];
-            // smooth: every texture lit and fogged ahead, in fine steps of light (a blend of multiplying over a large
-            // face costs more than the rest of the frame where the canvas is drawn without the graphics card); the
-            // console: only the cut-outs, the rest multiplied by its light here
-            const ahead = this.smooth ? (o.cut || o.add == null) : o.cut;
-            const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10) : o.tex;
-            if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
-            x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath();
-            // the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many times cheaper
-            // where the canvas is drawn without the graphics card
-            const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
-            pat.setTransform(new DOMMatrix(M));
-            x.fillStyle = pat;
-            x.fill();
-            x.globalAlpha = 1;
-            if (bx && solid(o)) dark(A, B, C);
-            if (bx && o.emis) {
-              flush();
-              const bp = src.psxBPat || (src.psxBPat = bx.createPattern(src, 'repeat'));
-              bp.setTransform(new DOMMatrix(M));
-              bx.globalAlpha = (o.add == null ? 1 : o.add) * (1 - f);
-              bx.fillStyle = bp;
-              bx.beginPath(); bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath(); bx.fill();
-              bx.globalAlpha = 1;
-            }
-            if (o.add == null && !ahead) {
-              if (t.l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, t.l[0] * 255) | 0},${Math.min(255, t.l[1] * 255) | 0},${Math.min(255, t.l[2] * 255) | 0})`; x.fill(); }
-              if (f > 0.01) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; x.fill(); }
-            }
-            x.globalCompositeOperation = 'source-over';
+          if (!det) continue;
+          paint();
+          const ta = ((b[0] - a[0]) * (v2 - v0) - (c[0] - a[0]) * (v1 - v0)) / det, tb = ((b[1] - a[1]) * (v2 - v0) - (c[1] - a[1]) * (v1 - v0)) / det;
+          const tc = ((c[0] - a[0]) * (u1 - u0) - (b[0] - a[0]) * (u2 - u0)) / det, td = ((c[1] - a[1]) * (u1 - u0) - (b[1] - a[1]) * (u2 - u0)) / det;
+          const M = new DOMMatrix([ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0]);
+          // every texture lit and fogged ahead (a blend of multiplying over each face cost a fill more a triangle,
+          // more than the rest of the frame where the canvas is drawn without the graphics card), but light added
+          const ahead = o.cut || o.add == null;
+          const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10, dz) : o.tex;
+          if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
+          x.beginPath(); x.moveTo(ax, ay); x.lineTo(qx, qy); x.lineTo(cx, cy); x.closePath();
+          // the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many times cheaper
+          // where the canvas is drawn without the graphics card
+          const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
+          pat.setTransform(M);
+          x.fillStyle = pat;
+          x.fill();
+          x.globalAlpha = 1;
+          x.globalCompositeOperation = 'source-over';
+          if (bx && solid(o)) dark(ax, ay, qx, qy, cx, cy);
+          if (bx && o.emis) {
+            flush();
+            const bp = src.psxBPat || (src.psxBPat = bx.createPattern(src, 'repeat'));
+            bp.setTransform(M);
+            bx.globalAlpha = (o.add == null ? 1 : o.add) * (1 - f);
+            bx.fillStyle = bp;
+            bx.beginPath(); bx.moveTo(ax, ay); bx.lineTo(qx, qy); bx.lineTo(cx, cy); bx.closePath(); bx.fill();
+            bx.globalAlpha = 1;
           }
         } else {
-          const col = o.col, l = t.l || [1, 1, 1];
+          const col = o.col, l = t.l || ONE;
           const r = col[0] * l[0] * (1 - f) + F[0] * f, gg = col[1] * l[1] * (1 - f) + F[1] * f, bb = col[2] * l[2] * (1 - f) + F[2] * f;
-          if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
-          x.fillStyle = `rgb(${Math.min(255, r) | 0},${Math.min(255, gg) | 0},${Math.min(255, bb) | 0})`;
-          x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath(); x.fill();
-          x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
-          if (bx && solid(o)) dark(A, B, C);
+          if (o.add != null) {
+            paint();
+            x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add;
+            x.fillStyle = `rgb(${Math.min(255, r) | 0},${Math.min(255, gg) | 0},${Math.min(255, bb) | 0})`;
+            x.beginPath(); x.moveTo(ax, ay); x.lineTo(qx, qy); x.lineTo(cx, cy); x.closePath(); x.fill();
+            x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
+          } else {
+            const st = this.paint(r, gg, bb);
+            if (st !== face) { paint(); face = st; x.beginPath(); }
+            x.moveTo(ax, ay); x.lineTo(qx, qy); x.lineTo(cx, cy); x.closePath();
+          }
+          if (bx && solid(o)) dark(ax, ay, qx, qy, cx, cy);
           else if (bx && o.emis) {
             if (!run || run.o !== o) { flush(); run = { o, a: (o.add == null ? 1 : o.add) * (1 - f), col: `rgb(${cube(r)},${cube(gg)},${cube(bb)})` }; bx.beginPath(); }
-            bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath();
+            bx.moveTo(ax, ay); bx.lineTo(qx, qy); bx.lineTo(cx, cy); bx.closePath();
           }
         }
       }
+      paint();
       if (bx) flush();
     }
     // the colour depth of the console: a few levels a channel, an ordered (Bayer) dither between them
@@ -237,15 +283,26 @@ window.BasilSkins = (() => {
   }
 
   // a texture lit and fogged (a cut-out one — a leaf, a flame — keeps its outline), kept for the next triangle in the
-  // same light: the light in k steps to one. The light of «Друид» flickers (a fire, runes, the moon behind a cloud) and
-  // a scene asks for a few thousand of them over a minute: the oldest go first when the copies pass SHADED_PX points
-  // (a dozen megabytes) — a cache emptied all at once at 900 copies was made again from nothing, 400 canvases a second
-  const SHADED = new Map(), SHADED_PX = 3e6;
+  // same light: the light in k steps to one, its tint in eight (the light of «Друид» flickers — a fire, runes, the moon
+  // behind a cloud — and goes with the fill light as the camera swings: a light in fine steps in each of three colours
+  // asked for a few thousand copies over a minute, a new canvas every few triangles). The oldest go first when the
+  // copies pass SHADED_PX points (a dozen megabytes). With the console's colours (levels) the copy is cut down to them
+  // in its own pixels, with the ordered dither, in the script — the texture's pixels kept as they were drawn (psxData)
+  const SHADED = new Map(), SHADED_PX = 3e6, ONE = [1, 1, 1];
   let texId = 0, shadedPx = 0;
-  function shaded(tx, l, f, F, k = 10) {
-    const q = v => Math.round(Math.min(1.2, v) * k);
+  function shaded(tx, l, f, F, k = 10, levels = 0) {
+    let lq = null, lk = '-';
+    if (l) {
+      const top = Math.max(l[0], l[1], l[2]);
+      if (top > 0) {
+        const n = Math.round(Math.min(1.2, top) * k), r = Math.round(l[0] / top * 8), g = Math.round(l[1] / top * 8), b = Math.round(l[2] / top * 8);
+        lq = [n / k * r / 8, n / k * g / 8, n / k * b / 8];
+        lk = n + ',' + r + ',' + g + ',' + b;
+      } else { lq = [0, 0, 0]; lk = '0'; }
+    }
     if (!tx.psxId) tx.psxId = ++texId;
-    const key = tx.psxId + ':' + k + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
+    const ff = Math.round(f * 12) / 12;
+    const key = tx.psxId + ':' + k + ':' + levels + ':' + lk + ':' + Math.round(f * 12);
     let c = SHADED.get(key);
     if (c) { SHADED.delete(key); SHADED.set(key, c); return c; }
     for (const [k0, c0] of SHADED) {
@@ -256,15 +313,35 @@ window.BasilSkins = (() => {
     shadedPx += tx.width * tx.height;
     c = doc.createElement('canvas');
     c.width = tx.width; c.height = tx.height;
-    const x = c.getContext('2d');
-    x.drawImage(tx, 0, 0);
-    if (l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, q(l[0]) * 255 / k) | 0},${Math.min(255, q(l[1]) * 255 / k) | 0},${Math.min(255, q(l[2]) * 255 / k) | 0})`; x.fillRect(0, 0, c.width, c.height); }
-    const ff = Math.round(f * 12) / 12;
-    if (ff > 0) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${ff})`; x.fillRect(0, 0, c.width, c.height); }
-    x.globalCompositeOperation = 'destination-in';
-    x.drawImage(tx, 0, 0);
+    const x = c.getContext('2d'), L = lq ? lq.map(v => Math.min(1, v)) : ONE;
+    if (levels) {
+      // the console's: multiplied, fogged and cut down to its levels here, pixel by pixel
+      const w = tx.width, h = tx.height, src = tx.psxData || (tx.psxData = tx.getContext('2d').getImageData(0, 0, w, h).data);
+      const img = x.createImageData(w, h), d = img.data, q = dith(levels);
+      for (let y = 0, i = 0; y < h; y++) for (let xx = 0; xx < w; xx++, i += 4) {
+        if (!src[i + 3]) continue;
+        d[i] = q(src[i] * L[0] * (1 - ff) + F[0] * ff, xx, y);
+        d[i + 1] = q(src[i + 1] * L[1] * (1 - ff) + F[1] * ff, xx, y);
+        d[i + 2] = q(src[i + 2] * L[2] * (1 - ff) + F[2] * ff, xx, y);
+        d[i + 3] = src[i + 3];
+      }
+      x.putImageData(img, 0, 0);
+    } else {
+      x.drawImage(tx, 0, 0);
+      if (lq) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${L[0] * 255 | 0},${L[1] * 255 | 0},${L[2] * 255 | 0})`; x.fillRect(0, 0, c.width, c.height); }
+      if (ff > 0) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${ff})`; x.fillRect(0, 0, c.width, c.height); }
+      x.globalCompositeOperation = 'destination-in';
+      x.drawImage(tx, 0, 0);
+    }
     SHADED.set(key, c);
     return c;
+  }
+  // a value of a colour channel cut down to `levels` with the ordered dither at the pixel (x, y): what post did
+  const DITH = {};
+  function dith(levels) {
+    if (DITH[levels]) return DITH[levels];
+    const step = 255 / (levels - 1), T = BAYER.map(v => (v / 16 - 0.47) * step);
+    return (DITH[levels] = (v, x, y) => { const o = Math.round((v + T[(y & 3) * 4 + (x & 3)]) / step) * step; return o < 0 ? 0 : o > 255 ? 255 : o; });
   }
 
   // shapes: a quad (two triangles), a box, a prism (pot, candle), a low ball (an atom), an egg (a seed, a beetle),
@@ -2153,7 +2230,7 @@ window.BasilSkins = (() => {
     let b = MOLBUF.get(ctx.canvas);
     if (!b) {
       const cv = doc.createElement('canvas');
-      b = { cv, R: new Raster(cv, { levels: 18, fogNear: 9, fogFar: 17, amb: [0.2, 0.17, 0.24] }) };
+      b = { cv, R: new Raster(cv, { levels: 18, read: true, fogNear: 9, fogFar: 17, amb: [0.2, 0.17, 0.24] }) };
       b.R.key = { dir: norm([-0.5, 0.7, -0.6]), i: 0.95, col: [1, 0.95, 0.85] };
       MOLBUF.set(ctx.canvas, b);
     }
@@ -2194,8 +2271,8 @@ window.BasilSkins = (() => {
   /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t), glow(canvas, R) }):
      the options of its rasterizer, its textures, its key light, the three colours of its sky, what its scenes have
      unless they say otherwise, make — what stands round every scene of it ({ draw(t), lights(t), fx(t, F) }: a floor,
-     candles, trees), post — what is done to the finished picture (the console's colours, a glow), glow(canvas, R) —
-     what it does with a small canvas laid over the scene in the page (a layer of the glow, added by the browser).
+     candles, trees), post — what is done to the finished picture, glow(canvas, R) — what it does with a small canvas of
+     the glow of its bright parts (drawn into as the picture is, added to it at the end of the frame).
      A scene is scene(skin, view, S => ({ … })): S.R — the rasterizer, S.T — the textures, S.ang — where the camera
      stands (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
      tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
@@ -2349,14 +2426,18 @@ window.BasilSkins = (() => {
     const x = R.x, u = R.unit, round = R.smooth, bx = R.B && R.B.x;
     const put = (p, s, col) => {
       x.fillStyle = col;
-      if (round) { x.beginPath(); x.arc(p[0], p[1], s * 0.5, 0, Math.PI * 2); x.fill(); } else x.fillRect(p[0], p[1], s, s);
+      if (round) { x.beginPath(); x.arc(p[0], p[1], s * 0.5, 0, Math.PI * 2); x.fill(); } else x.fillRect(Math.round(p[0]), Math.round(p[1]), s, s);
       if (bx) { bx.fillStyle = col; bx.beginPath(); bx.arc(p[0], p[1], s * 1.2, 0, Math.PI * 2); bx.fill(); }
     };
     return {
       halo(p3, r3, c0, c1) {
         const v = R.view(p3);
         if (v[2] < 0.3) return;
-        const p = R.proj(v), r = R.C.focal * r3 / v[2], g = x.createRadialGradient(p[0], p[1], 0, p[0], p[1], r);
+        const p = R.proj(v), r = R.C.focal * r3 / v[2];
+        // the console's: a halo cut down to its levels, in rings, drawn once for its size and colours
+        const sp = R.dither && haloArt(R, r, c0, c1);
+        if (sp) { x.globalAlpha = sp.a; x.drawImage(sp.c, Math.round(p[0]) - sp.r, Math.round(p[1]) - sp.r); x.globalAlpha = 1; return; }
+        const g = x.createRadialGradient(p[0], p[1], 0, p[0], p[1], r);
         g.addColorStop(0, c0); g.addColorStop(1, c1);
         x.fillStyle = g; x.fillRect(p[0] - r, p[1] - r, r * 2, r * 2);
         if (bx) { bx.fillStyle = g; bx.fillRect(p[0] - r, p[1] - r, r * 2, r * 2); bx.fillRect(p[0] - r, p[1] - r, r * 2, r * 2); }
@@ -2387,25 +2468,74 @@ window.BasilSkins = (() => {
         if (v[2] < 0.3) return;
         const p = R.proj(v), l = Math.max(2 * u, R.C.focal * len / v[2]);
         x.fillStyle = col;
-        x.fillRect(p[0], p[1], Math.max(1, u * 0.7), l);
+        x.fillRect(round ? p[0] : Math.round(p[0]), round ? p[1] : Math.round(p[1]), Math.max(1, u * 0.7), l);
       }
     };
   }
+  // a halo of the console: what the radial gradient from c0 to c1 (its alpha nothing) adds to the picture, cut down to the
+  // raster's levels with the ordered dither — in rings, as the console's colours made of it — for its radius in whole
+  // pixels; c0's own alpha is how strongly it is laid on (so a halo that breathes keeps its picture). Null for a halo
+  // of another kind (an edge not clear): that one is drawn as a gradient
+  const HALOS = new Map(), RGBA = new Map();
+  const rgba = s => { let v = RGBA.get(s); if (!v) { const m = s.match(/[\d.]+/g); v = m && m.length >= 3 ? [+m[0], +m[1], +m[2], m.length > 3 ? +m[3] : 1] : [0, 0, 0, 0]; RGBA.set(s, v); } return v; };
+  function haloArt(R, r, c0, c1) {
+    const A = rgba(c0), B = rgba(c1), ri = Math.max(1, Math.round(r));
+    if (B[3] !== 0 || ri > 160) return null;
+    const key = ri + '|' + A[0] + ',' + A[1] + ',' + A[2] + '|' + B[0] + ',' + B[1] + ',' + B[2] + '|' + R.dither;
+    let sp = HALOS.get(key);
+    if (!sp) {
+      if (HALOS.size > 256) HALOS.delete(HALOS.keys().next().value);
+      const n = ri * 2, c = doc.createElement('canvas');
+      c.width = c.height = n;
+      const cx = c.getContext('2d'), img = cx.createImageData(n, n), d = img.data, q = dith(R.dither);
+      for (let y = 0, i = 0; y < n; y++) for (let xx = 0; xx < n; xx++, i += 4) {
+        const k = Math.hypot(xx + 0.5 - ri, y + 0.5 - ri) / ri;
+        if (k >= 1) continue;
+        const w = 1 - k;
+        d[i] = q((A[0] + (B[0] - A[0]) * k) * w, xx, y); d[i + 1] = q((A[1] + (B[1] - A[1]) * k) * w, xx, y); d[i + 2] = q((A[2] + (B[2] - A[2]) * k) * w, xx, y);
+        d[i + 3] = 255;
+      }
+      cx.putImageData(img, 0, 0);
+      sp = { c, r: ri };
+      HALOS.set(key, sp);
+    }
+    return { c: sp.c, r: sp.r, a: A[3] };
+  }
 
   // one scene on a canvas — its world round it, its clock, its frame — wherever it is drawn: on the page, or in the
-  // worker of the scenes (below); glow — the small canvas the world's glow goes into, when it has one (W.glow)
-  function sceneOn(cv, glow, view, skin) {
+  // worker of the scenes (below). Its glow, when the world has one (W.glow), is a small canvas of its own the scene
+  // draws into as it goes and adds to the picture at the end; edges — how the picture fades out at its sides and darkens
+  // round its middle (from the stage's CSS, edges())
+  function sceneOn(cv, view, skin) {
     const W = WORLDS[skin], set = SCENES[skin];
     const T = W.textures();
     const R = new Raster(cv, W.raster());
-    if (glow && W.glow) W.glow(glow, R);
+    if (W.glow) W.glow(doc.createElement('canvas'), R);
     const S = { R, T, view, ang: 0.6 };
     const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, orbit: [0.6, 0.35], ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);
     // the scene's own clock: it goes on by the frames drawn, a long frame or a pause (off the screen, asleep, another
     // tab) counts as a tenth of a second at most — the picture never jumps ahead when it wakes
-    let now0 = null, time = 0, beat = -1;
+    let now0 = null, time = 0, beat = -1, E = EDGES, art = null;
     const tick = now => { if (now0 != null) time += clamp((now - now0) / 1000, 0, 0.1); now0 = now; return time; };
+    // the end of the frame, in the picture itself: the glow drawn up and added, then the fade to nothing at the sides
+    // and the dark round the middle in one pass, only where they change anything. The browser then lays one picture over
+    // the page — a mask and a layer of glow blended in the page cost the whole head of the page again at every frame
+    // where the page is put together without the graphics card (two thirds of the time of each frame of the screen)
+    function finish() {
+      const x = R.x, w = R.W, h = R.H;
+      x.setTransform(1, 0, 0, 1, 0, 0);
+      if (R.B) {
+        x.globalCompositeOperation = 'lighter'; x.globalAlpha = 0.9; x.imageSmoothingEnabled = true;
+        x.drawImage(R.B.c, 0, 0, w, h);
+        x.globalAlpha = 1; x.imageSmoothingEnabled = R.smooth;
+      }
+      if (!art || art.w !== w || art.h !== h) art = edgeArt(w, h, E);
+      // what the mask takes away, taken away (destination-in would clear all the canvas outside each band)
+      x.globalCompositeOperation = 'destination-out';
+      art.at.forEach(([rx, ry, rw, rh]) => { if (rw > 0 && rh > 0) x.drawImage(art.mask, rx, ry, rw, rh, rx, ry, rw, rh); });
+      x.globalCompositeOperation = 'source-over';
+    }
     function frame(now) {
       // the clock of the scene: stands at its chosen moment when the reader asked for less motion
       const t = reduce.matches ? sc.still : tick(now);
@@ -2423,9 +2553,8 @@ window.BasilSkins = (() => {
       if (sc.tick) sc.tick(t);
       R.lights = env.lights(t)
         .concat(sc.fill ? [{ p: [look[0] + Math.cos(ang) * 2.2, look[1] + 1.5, look[2] + Math.sin(ang) * 2.2], col: W.fillCol || [0.78, 0.62, 0.95], i: sc.fill, fall: 0.16 }] : [], sc.lights ? sc.lights(t) : []);
-      const x = R.x, g = x.createLinearGradient(0, 0, 0, R.H), sky = sc.sky || W.sky;
-      g.addColorStop(0, sky[0]); g.addColorStop(0.55, sky[1]); g.addColorStop(1, sky[2]);
-      x.fillStyle = g; x.fillRect(0, 0, R.W, R.H);
+      const x = R.x, sky = sc.sky || W.sky;
+      x.fillStyle = skyFill(R, sky); x.fillRect(0, 0, R.W, R.H);
       if (env.back) env.back(t, x);
       // a floor the world lays straight on the canvas, under every shape (a plane drawn row by row, true in perspective)
       if (env.floor) env.floor(t, x);
@@ -2438,9 +2567,79 @@ window.BasilSkins = (() => {
       env.fx(t, F);
       if (sc.fx) sc.fx(t, F);
       x.globalCompositeOperation = 'source-over';
-      W.post(R, t);
+      if (W.post) W.post(R, t);
+      finish();
     }
-    return { frame, R, seek: s => { time = s; now0 = null; beat = -1; } };
+    // a machine that cannot keep the beat: a smooth picture on half the pixels from then on, and on half of those if it
+    // still cannot (the console's is few already)
+    const low = () => { if (R.smooth && R.maxPx) R.maxPx = Math.round(R.maxPx / 2); };
+    return { frame, R, seek: s => { time = s; now0 = null; beat = -1; }, edges: e => { E = e || EDGES; art = null; }, low };
+  }
+  // the edges of a stage: the fade from nothing to whole and back across (x) and down (y) — four points each, as parts
+  // of the width and the height — and the dark round the middle (vig: a colour, its alpha how deep; none if empty), as
+  // the stage's CSS gives them (--fade-x, --fade-y, --stage-vig: stageEdges)
+  const EDGES = { x: [0, 0.22, 0.86, 1], y: [0, 0.12, 0.78, 1], vig: '' };
+  function stageEdges(el) {
+    const cs = getComputedStyle(el), four = (v, d) => { const n = String(v || '').trim().split(/[\s,]+/).map(Number); return n.length === 4 && n.every(isFinite) ? n : d; };
+    return { x: four(cs.getPropertyValue('--fade-x'), EDGES.x), y: four(cs.getPropertyValue('--fade-y'), EDGES.y), vig: cs.getPropertyValue('--stage-vig').trim() };
+  }
+  // the mask of the edges for a canvas of w × h: the two fades multiplied, and the dark round the middle (an ellipse
+  // 85 % × 95 % of the stage at 50 % 45 %, clear to 42 % of it, as deep as the alpha of vig) taken out of it as well —
+  // the picture thins there over the page's own dark (the night of the grove behind it) instead of being darkened, so
+  // that both are one pass — then turned over (what is taken away); at — the bands of the canvas outside the part the
+  // mask leaves whole
+  function edgeArt(w, h, E) {
+    const mask = doc.createElement('canvas');
+    mask.width = w; mask.height = h;
+    const m = mask.getContext('2d'), ramp = (g, p) => { g.addColorStop(p[0], 'rgba(0,0,0,0)'); g.addColorStop(p[1], '#000'); g.addColorStop(p[2], '#000'); g.addColorStop(p[3], 'rgba(0,0,0,0)'); return g; };
+    m.fillStyle = ramp(m.createLinearGradient(0, 0, w, 0), E.x); m.fillRect(0, 0, w, h);
+    m.globalCompositeOperation = 'destination-in';
+    m.fillStyle = ramp(m.createLinearGradient(0, 0, 0, h), E.y); m.fillRect(0, 0, w, h);
+    let x0 = E.x[1] * w, x1 = E.x[2] * w, y0 = E.y[1] * h, y1 = E.y[2] * h;
+    const deep = rgba(E.vig || 'rgba(0,0,0,0)')[3];
+    if (deep > 0) {
+      const rx = w * 0.85, ry = h * 0.95, g = m.createRadialGradient(0, 0, 0, 0, 0, 1);
+      g.addColorStop(0.42, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${deep})`);
+      m.globalCompositeOperation = 'destination-out';
+      m.setTransform(rx, 0, 0, ry, w * 0.5, h * 0.45);
+      m.fillStyle = g; m.fillRect(-w * 0.5 / rx, -h * 0.45 / ry, w / rx, h / ry);
+      // the clear middle: the rectangle inside the ellipse at 42 %
+      const cx = 0.42 * rx / Math.SQRT2, cy = 0.42 * ry / Math.SQRT2;
+      x0 = Math.max(x0, w * 0.5 - cx); x1 = Math.min(x1, w * 0.5 + cx); y0 = Math.max(y0, h * 0.45 - cy); y1 = Math.min(y1, h * 0.45 + cy);
+    }
+    // turned over: how much of the picture goes at each point
+    m.setTransform(1, 0, 0, 1, 0, 0);
+    m.globalCompositeOperation = 'xor';
+    m.fillStyle = '#000'; m.fillRect(0, 0, w, h);
+    const X0 = Math.floor(x0), X1 = Math.ceil(x1), Y0 = Math.floor(y0), Y1 = Math.ceil(y1);
+    const at = X1 > X0 && Y1 > Y0 ? [[0, 0, w, Y0], [0, Y1, w, h - Y1], [0, Y0, X0, Y1 - Y0], [X1, Y0, w - X1, Y1 - Y0]] : [[0, 0, w, h]];
+    return { w, h, mask, at };
+  }
+  // the sky of a scene: its three colours top to bottom; with the console's colours a strip of four pixels cut down to
+  // its levels with the ordered dither, laid on the canvas's grid (the last few kept)
+  const SKIES = new Map();
+  function skyFill(R, sky) {
+    if (!R.dither || !sky.every(v => /^#[0-9a-f]{6}$/i.test(v))) {
+      const g = R.x.createLinearGradient(0, 0, 0, R.H);
+      g.addColorStop(0, sky[0]); g.addColorStop(0.55, sky[1]); g.addColorStop(1, sky[2]);
+      return g;
+    }
+    const key = R.H + '|' + sky.join() + '|' + R.dither;
+    let f = SKIES.get(key);
+    if (f && f.x === R.x) return f.pat;
+    const H = R.H, c = doc.createElement('canvas');
+    c.width = 4; c.height = H;
+    const cx = c.getContext('2d'), img = cx.createImageData(4, H), q = dith(R.dither);
+    const hex = v => [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)], S0 = hex(sky[0]), S1 = hex(sky[1]), S2 = hex(sky[2]);
+    for (let y = 0; y < H; y++) {
+      const u = (y + 0.5) / H, A = u < 0.55 ? S0 : S1, B = u < 0.55 ? S1 : S2, k = u < 0.55 ? u / 0.55 : (u - 0.55) / 0.45;
+      for (let xx = 0; xx < 4; xx++) { const i = (y * 4 + xx) * 4; for (let ch = 0; ch < 3; ch++) img.data[i + ch] = q(A[ch] + (B[ch] - A[ch]) * k, xx, y); img.data[i + 3] = 255; }
+    }
+    cx.putImageData(img, 0, 0);
+    if (SKIES.size > 6) SKIES.delete(SKIES.keys().next().value);
+    f = { x: R.x, pat: R.x.createPattern(c, 'repeat') };
+    SKIES.set(key, f);
+    return f.pat;
   }
 
   /* The worker of the scenes. A scene costs: its shapes in script, then the browser rasterizing thousands of
@@ -2464,44 +2663,62 @@ window.BasilSkins = (() => {
   // what the worker draws on a canvas the page sends: a scene, the crypt behind the page
   const sized = (m, s) => Object.assign(s, { size: q => { m.cv.clientWidth = q.w; m.cv.clientHeight = q.h; } });
   const OFF = {
-    stage: m => sized(m, sceneOn(m.cv, m.extras.glow, m.view, m.skin)),
+    stage: m => { const r = sized(m, sceneOn(m.cv, m.view, m.skin)); r.edges(m.edges); return r; },
     crypt: m => sized(m, cryptOn(m.cv)),
     grove: m => groveOn({ fly: m.cv, ...m.extras }, m.C, m.lay)
   };
-  // in the worker: the canvases the page sends, drawn by one clock — each at its own frames a second (a scene 30, the
-  // crypt 15), 15 at most when the page is calm, none asleep or off the screen; a still frame with less motion
+  // in the worker: the canvases the page sends, drawn by one clock — a beat thirty times a second (fifteen when the page
+  // is calm, none asleep), each canvas on every beat or every second one (fps: a scene 30, the crypt and the grove 15),
+  // so that what changes on the screen changes together: every canvas drawn apart from the others is one more time
+  // the browser puts the whole screen together; none off the screen, a still frame with less motion. A machine that
+  // cannot keep the beat (the frames of a scene come late) is told to the page once (low), and the scenes draw on fewer
+  // pixels from then on
   function sceneHost() {
     const runs = new Map(), mols = new Map();
-    let state = 'active', pending = false;
+    let state = 'active', pending = false, prev = -1e9, beat = 0, ema = 0, warm = 0, lows = 0;
     const raf = self.requestAnimationFrame ? fn => self.requestAnimationFrame(fn) : fn => setTimeout(() => fn(performance.now()), 16);
+    // a canvas wants frames while the page says it is seen; with less motion only one, when it is new or changed (fresh)
+    const live = r => r.want && (r.fresh || !reduce.matches);
     function loop(now) {
       pending = false;
-      if (state === 'sleep') return;
-      let any = false;
+      if (state === 'sleep' || ![...runs.values()].some(live)) return;
+      wake();
+      const base = state === 'calm' ? 15 : 30, iv = now - prev;
+      if (iv < 1000 / base * (state === 'calm' ? 0.75 : 1) - 3) return;
+      prev = now;
+      beat++;
+      let staged = false;
       runs.forEach(r => {
-        if (!r.on) return;
-        any = true;
-        const fps = state === 'calm' ? Math.min(15, r.fps) : r.fps;
-        if (now - r.prev < 1000 / fps * (state === 'calm' ? 0.75 : 1) - 3) return;
-        r.prev = now;
+        if (!live(r) || !(r.fresh || beat % Math.max(1, Math.round(base / Math.min(base, r.fps))) === 0)) return;
+        r.fresh = false;
         r.s.frame(now);
-        if (!r.drawn) { r.drawn = true; postMessage({ type: 'drawn', id: r.id }); }
-        if (reduce.matches) r.on = false;
+        if (r.kind === 'stage') staged = true;
+        if (!r.shown) { r.shown = true; postMessage({ type: 'drawn', id: r.id }); }
       });
-      if (any) wake();
+      // the beat kept or not, while a scene is drawn and the page awake: late by half again for a while — low (and once
+      // more, if it is still late on half the pixels)
+      if (staged && state === 'active' && lows < 2 && iv < 1000) {
+        if (warm < 60) { warm++; ema = iv; } else {
+          ema += (Math.min(200, iv) - ema) * 0.05;
+          if (ema > 48) { lows++; warm = 0; runs.forEach(r => { if (r.s.low) r.s.low(); }); postMessage({ type: 'low' }); }
+        }
+      }
     }
     const wake = () => { if (!pending && state !== 'sleep') { pending = true; raf(loop); } };
     self.onmessage = e => {
       const m = e.data, r = runs.get(m.id);
       if (m.type === 'canvas') {
         m.cv.clientWidth = m.w; m.cv.clientHeight = m.h;
-        runs.set(m.id, { id: m.id, s: OFF[m.kind](m), on: false, prev: -1e9, drawn: false, fps: m.fps });
-      } else if ((m.type === 'size' || m.type === 'lay') && r) {
+        const q = { id: m.id, kind: m.kind, s: OFF[m.kind](m), want: false, fresh: true, shown: false, fps: m.fps };
+        for (let i = 0; i < lows; i++) if (q.s.low) q.s.low();
+        runs.set(m.id, q);
+      } else if ((m.type === 'size' || m.type === 'lay' || m.type === 'edges') && r) {
         if (m.type === 'size' && r.s.size) r.s.size(m);
         if (m.type === 'lay' && r.s.lay) r.s.lay(m.lay);
-        if (reduce.matches) { r.prev = -1e9; r.on = true; }
+        if (m.type === 'edges' && r.s.edges) r.s.edges(m.edges);
+        r.fresh = true;
       }
-      else if (m.type === 'run' && r) { r.on = m.on; if (m.on) r.prev = -1e9; }
+      else if (m.type === 'run' && r) { r.want = m.on; if (m.on) { r.fresh = true; warm = 0; } }
       else if (m.type === 'drop') runs.delete(m.id);
       else if (m.type === 'mol') {
         // a molecule for the page's viewer: drawn on a canvas of its size here, sent back as a picture
@@ -2513,8 +2730,8 @@ window.BasilSkins = (() => {
         postMessage({ type: 'mol', id: m.id, bmp }, [bmp]);
         return;
       }
-      else if (m.type === 'state') state = m.state;
-      else if (m.type === 'reduce') { self.psxMedia.matches = m.on; runs.forEach(q => { q.prev = -1e9; }); }
+      else if (m.type === 'state') { state = m.state; warm = 0; }
+      else if (m.type === 'reduce') { self.psxMedia.matches = m.on; runs.forEach(q => { q.fresh = true; }); }
       wake();
     };
   }
@@ -2528,7 +2745,12 @@ window.BasilSkins = (() => {
     try {
       const boot = `(${workerBoot})(${JSON.stringify({ src: SELF_SRC, dpr: Math.min(2, window.devicePixelRatio || 1), reduce: reduce.matches })});`;
       const w = new Worker(URL.createObjectURL(new Blob([boot], { type: 'text/javascript' })));
-      w.onmessage = e => { const f = workerWaits.get(e.data.id); if (f) f(e.data); };
+      w.onmessage = e => {
+        // the worker cannot keep the beat of its scenes: the page struggles too (its glass loses its blur)
+        if (e.data.type === 'low') { if (SC && SC.setLow) SC.setLow(); return; }
+        const f = workerWaits.get(e.data.id);
+        if (f) f(e.data);
+      };
       // the worker failed (its file did not load): every stage it had draws on the page again, on fresh canvases
       w.onerror = () => { sceneWorker = null; w.terminate(); workerWaits.forEach(f => f({ type: 'failed' })); };
       const state = () => w.postMessage({ type: 'state', state: SC && SC.calm ? SC.calm.state : 'active' });
@@ -2588,7 +2810,7 @@ window.BasilSkins = (() => {
   }
 
   // the scene as the background of its block (the head of a chapter, the hero of the home page): no finger turns it,
-  // nothing is tapped; it goes on by itself
+  // nothing is tapped; it goes on by itself. One canvas: its glow and its edges are drawn into it (sceneOn)
   function stage(host, view, skin) {
     const W = WORLDS[skin], set = SCENES[skin];
     const holder = doc.createElement('div');
@@ -2598,29 +2820,45 @@ window.BasilSkins = (() => {
     holder.setAttribute('aria-hidden', 'true');
     // the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
     holder.dataset.bg = '';
-    // the scene's canvas and, if its world lays a glow over it, the small canvas of the glow (the browser adds it)
-    const canvases = () => {
-      holder.textContent = '';
-      const cv = doc.createElement('canvas');
-      holder.appendChild(cv);
-      let glow = null;
-      if (W.glow) { glow = doc.createElement('canvas'); glow.className = 'psx-glow'; holder.appendChild(glow); }
-      return { cv, glow };
-    };
-    let { cv, glow } = canvases();
+    const canvas = () => { holder.textContent = ''; const c = doc.createElement('canvas'); holder.appendChild(c); return c; };
+    let cv = canvas();
     host.insertBefore(holder, host.firstChild);
     let seen = false;
     const wanted = () => seen && !doc.hidden;
+    // the edges as the stage's CSS has them now (they change with the width of the screen)
+    let edgesNow = stageEdges(holder), sOn = null;
+    const ro = 'ResizeObserver' in window ? new ResizeObserver(() => {
+      const e = stageEdges(holder);
+      if (JSON.stringify(e) === JSON.stringify(edgesNow)) return;
+      edgesNow = e;
+      if (off) off.post({ type: 'edges', edges: e });
+      if (sOn) sOn.edges(e);
+    }) : null;
+    if (ro) ro.observe(holder);
 
-    // drawn by the worker where it can be; if it fails after all, on the page on fresh canvases
-    const off = offCanvas(cv, 'stage', { view, skin }, W.fps || 30, () => { ({ cv, glow } = canvases()); seen = true; const L = onPage(); L.start(); return { destroy() { L.stop(); } }; }, { glow }, () => holder.classList.add('is-drawn'));
-    if (off) return { destroy() { off.destroy(); holder.remove(); } };
+    // drawn by the worker where it can be; if it fails after all, on the page on a fresh canvas
+    const off = offCanvas(cv, 'stage', { view, skin, edges: edgesNow }, W.fps || 30, () => { cv = canvas(); seen = true; const L = onPage(); L.start(); return { destroy() { L.stop(); } }; }, {}, () => holder.classList.add('is-drawn'));
+    if (off) return { destroy() { if (ro) ro.disconnect(); off.destroy(); holder.remove(); } };
 
     // drawn on the page: runs while on the screen, by the page's frame budget; one still frame with reduced motion
     function onPage() {
-      const s = sceneOn(cv, glow, view, skin);
+      const s = sceneOn(cv, view, skin);
+      s.edges(edgesNow);
+      sOn = s;
+      // the beat kept or not while the page is awake (as in the worker): late by half again for a while — the page
+      // struggles, and the scene goes on fewer pixels
+      let last = 0, ema = 0, warm = 0, lows = 0;
+      const kept = ts => {
+        const iv = ts - last;
+        if (lows > 1 || !last || iv > 1000 || !SC || !SC.calm || SC.calm.state !== 'active') { warm = 0; last = ts; return; }
+        last = ts;
+        if (warm < 60) { warm++; ema = iv; return; }
+        ema += (Math.min(200, iv) - ema) * 0.05;
+        // still late on half the pixels: half of those again
+        if (ema > 48) { lows++; warm = 0; s.low(); if (SC.setLow) SC.setLow(); }
+      };
       // as many frames on a phone as anywhere: at 20 the scenes judder
-      const L = psxLoop(ts => { if (!wanted()) { L.stop(); return; } s.frame(ts); holder.classList.add('is-drawn'); if (reduce.matches) L.stop(); }, W.fps || 30, W.fps || 30);
+      const L = psxLoop(ts => { if (!wanted()) { L.stop(); last = 0; return; } kept(ts); s.frame(ts); holder.classList.add('is-drawn'); if (reduce.matches) L.stop(); }, W.fps || 30, W.fps || 30);
       // a check that draws the scene frame by frame itself (tests/motion.js) sets window.BASIL_STAGES = [] before the
       // page; seek sets the scene's clock, a minute into the page in a moment
       if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame: s.frame, R: s.R, stop: () => L.stop(), seek: s.seek });
@@ -2635,6 +2873,7 @@ window.BasilSkins = (() => {
       destroy() {
         L.stop();
         if (io) io.disconnect();
+        if (ro) ro.disconnect();
         doc.removeEventListener('visibilitychange', vis);
         holder.remove();
       }
@@ -3418,7 +3657,9 @@ window.BasilSkins = (() => {
   /* resolution and cut down to its colours                               */
   /* ------------------------------------------------------------------ */
   world('grimoire', {
-    raster: () => ({ px: 3, maxW: 400, levels: 16, fogNear: 3.5, fogFar: 15, amb: [0.13, 0.1, 0.17] }),
+    // the console's resolution and its colours: sixteen levels a channel, dithered (in the colours and textures, never
+    // read back from the picture)
+    raster: () => ({ px: 3, maxW: 400, dither: 16, fogNear: 3.5, fogFar: 15, amb: [0.13, 0.1, 0.17] }),
     textures: () => textures(),
     key: { dir: norm([-0.35, 0.85, -0.4]), i: 0.42, col: [0.55, 0.5, 0.85] },
     sky: ['#07050B', '#1C1122', '#120B17'],
@@ -3493,9 +3734,7 @@ window.BasilSkins = (() => {
           });
         }
       };
-    },
-    // the colour depth of the console
-    post: R => R.post(16)
+    }
   });
 
   // the stone altar with its sigil: gives the height of its top
@@ -4449,11 +4688,11 @@ window.BasilSkins = (() => {
   }
 
   // the light of the bright parts spread round them, and the edges sinking into the dark: the look of a game of today,
-  // on a 2D canvas. On a stage the glow is a small canvas of its own over the scene (glowLayer), drawn up and added by
-  // the browser: what shines is drawn into it as the picture is drawn (Raster.glowTo — the moon, the runes, the fire,
-  // the lines of the circle), so the picture is never read back from the graphics card for it, and the dark edges are
-  // the stage's CSS. The molecule viewer, a picture now and then, still takes its glow from the picture itself (a
-  // picture at a sixth, its dark pressed down by multiplying it with itself, laid back over it)
+  // on a 2D canvas. On a stage the glow is a small canvas of its own at a sixth of the picture (glowLayer): what shines
+  // is drawn into it as the picture is drawn (Raster.glowTo — the moon, the runes, the fire, the lines of the circle),
+  // and it is drawn up and added to the picture at the end of the frame, with the dark edges (sceneOn, finish) — the
+  // picture is never read back for it. The molecule viewer, a picture now and then, still takes its glow from the
+  // picture itself (a picture at a sixth, its dark pressed down by multiplying it with itself, laid back over it)
   const BLOOM = new WeakMap();
   function glowLayer(c1, R) {
     R.glowTo(c1, 1 / 6);
@@ -4695,11 +4934,13 @@ window.BasilSkins = (() => {
     cv.setAttribute('aria-hidden', 'true');
     const page = $('.page');
     (page ? page.parentNode : doc.body).insertBefore(cv, page);
-    // drawn by the worker of the scenes where it can be, 15 frames a second (fewer calm, none asleep or in another tab);
+    // drawn by the worker of the scenes where it can be, 7.5 frames a second on every fourth beat of the scene (none
+    // asleep or in another tab): its fog drifts and its ash rises by less than a point a frame even so, and every frame of
+    // a layer as large as the screen is the whole screen put together again by the browser;
     // here otherwise, or if the worker fails after all
     const onPage = c => {
       const { frame } = cryptOn(c);
-      const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 15);
+      const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 7.5);
       L.start();
       const vis = () => { if (!doc.hidden) L.start(); };
       doc.addEventListener('visibilitychange', vis);
@@ -4715,7 +4956,7 @@ window.BasilSkins = (() => {
         }
       };
     };
-    return offCanvas(cv, 'crypt', {}, 15, onPage) || onPage(cv);
+    return offCanvas(cv, 'crypt', {}, 7.5, onPage) || onPage(cv);
   }
   /* ------------------------------------------------------------------ */
   /* the grove behind the page of «Друид»: the night is a still gradient  */
@@ -4943,9 +5184,11 @@ window.BasilSkins = (() => {
       boxes[name] = box;
     });
 
-    // the canvases: one in half the pixels of the screen for the fireflies (a soft light, cheap to show), and small ones
-    // only where something moves — the lianas of the branch and of the ivy, the glow of the stump and of the log — at up
-    // to one and a half points a point, so a leaf stays a leaf. Each is a layer of its own
+    // the canvases: one as large as the screen for the fireflies, a point of it to a point of the page (in half of them,
+    // drawn up by the browser at every frame of theirs, it cost the browser twice as much where it puts the screen
+    // together without the graphics card), and small ones only where something moves — the lianas of the branch and of
+    // the ivy, the glow of the stump and of the log — at up to one and a half points a point, so a leaf stays a leaf.
+    // Each is a layer of its own
     const fly = doc.createElement('canvas');
     fly.className = 'fly';
     el.appendChild(fly);
@@ -4964,7 +5207,7 @@ window.BasilSkins = (() => {
     const rect = box => { const r = box.getBoundingClientRect(); return { l: r.left, t: r.top, w: r.width, h: r.height }; };
     function layout() {
       const kv = Math.min(1.5, window.devicePixelRatio || 1), narrow = innerWidth < 600;
-      const lay = { W: Math.round(el.clientWidth * 0.5), H: Math.round(el.clientHeight * 0.5), panes: {}, vines: [], glows: [], flies };
+      const lay = { W: el.clientWidth, H: el.clientHeight, panes: {}, vines: [], glows: [], flies };
       const place = (name, b) => {
         lay.panes[name] = { ...b, kv };
         Object.assign(panes[name].style, { left: b.l + 'px', top: b.t + 'px', width: b.w + 'px', height: b.h + 'px' });
@@ -4994,19 +5237,20 @@ window.BasilSkins = (() => {
     const page = $('.page');
     (page ? page.parentNode : doc.body).insertBefore(el, page);
     let rz = 0, seen = '';
-    // drawn by the worker of the scenes where it can be (the page sends where things stand, again after a resize), 20
-    // frames a second; else here, as before
+    // drawn by the worker of the scenes where it can be (the page sends where things stand, again after a resize), 15
+    // frames a second on every second beat of the scene in the head (so that both change on the screen together);
+    // else here, as before
     let G = null, L = null;
     const local = (cvs, lay) => {
       G = groveOn(cvs, C, lay);
-      L = psxLoop(now => { G.frame(now); }, 20, 20);
+      L = psxLoop(now => { G.frame(now); }, 15, 15);
       const motion = () => { if (reduce.matches) { L.stop(); G.frame(0); } else L.start(); };
       reduce.addEventListener('change', motion);
       motion();
       return { destroy() { L.stop(); reduce.removeEventListener('change', motion); }, lay: l => { G.lay(l); if (reduce.matches) G.frame(0); } };
     };
     const lay0 = layout();
-    const off = offCanvas(fly, 'grove', { C, lay: lay0 }, 20, (fresh, fp) => { Object.assign(panes, fp); return local({ fly: fresh, ...panes }, layout()); }, panes);
+    const off = offCanvas(fly, 'grove', { C, lay: lay0 }, 15, (fresh, fp) => { Object.assign(panes, fp); return local({ fly: fresh, ...panes }, layout()); }, panes);
     const run = off || local({ fly, ...panes }, lay0);
     // a phone's bars coming and going leave the layer as it was (it is as tall as the screen without them): nothing to do
     const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { const key = `${el.clientWidth}x${el.clientHeight}`; if (key === seen) return; seen = key; const lay = layout(); if (off) off.post({ type: 'lay', lay }); else run.lay(lay); }, 150); };
@@ -5084,7 +5328,7 @@ window.BasilSkins = (() => {
       return c;
     })();
 
-    const RAD = 11, k = 0.5;
+    const RAD = 11, k = 1;
     let W = 0, H = 0, sprite = null, time = 0, last = null, frameN = 0, vines = [], glows = [], flies = [];
     function setLay(l) {
       flies = l.flies.map(fl => ({ ...fl, was: null }));
@@ -5150,15 +5394,15 @@ window.BasilSkins = (() => {
       });
       [panes.stump, panes.log].forEach(p => { p.x.globalAlpha = 1; });
     }
-    // the clock goes by drawn frames, so after a pause nothing jumps; the fireflies move at every frame, the lianas at
-    // every second, the glows at every third — each slow enough not to need more. With less motion: all of it at rest
+    // the clock goes by drawn frames, so after a pause nothing jumps; the fireflies and the lianas move at every frame,
+    // the glows at every second — slow enough not to need more. With less motion: all of it at rest
     function frame(now) {
       if (reduce.matches) { drawFlies(0, true); drawVines(0, true); drawGlows(0, true); return; }
       if (last != null) time += clamp((now - last) / 1000, 0, 0.1);
       last = now;
       drawFlies(time, false);
-      if (frameN % 2 === 0) drawVines(time, false);
-      if (frameN % 3 === 0) drawGlows(time, false);
+      drawVines(time, false);
+      if (frameN % 2 === 0) drawGlows(time, false);
       frameN++;
     }
     setLay(lay);

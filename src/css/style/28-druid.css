@@ -239,11 +239,9 @@
 [data-skin="druid"] .ch-hero h1 { margin: 10px 0 12px; font-size: clamp(2.1rem, 5.6vw, 3.9rem); line-height: 1.06; color: var(--birch); }
 [data-skin="druid"] .ch-hero .lead { max-width: 52ch; text-shadow: 0 1px 8px var(--bg); }
 @media (max-width: 700px) { [data-skin="druid"] .ch-hero h1 { font-size: clamp(1.9rem, 8.6vw, 2.6rem); } }
+/* the scene drawn smooth; the glow of its bright parts and the edges of the picture sinking into the dark
+   (--stage-vig) are drawn into its own canvas (04-stage.js, finish) */
 [data-skin="druid"] .psx-stage canvas { image-rendering: auto; }
-/* the glow of the bright parts — a small canvas over the scene, drawn up smooth and added to it by the browser — and
-   the edges of the picture sinking into the dark */
-[data-skin="druid"] .psx-stage .psx-glow { position: absolute; inset: 0; opacity: .9; mix-blend-mode: screen; mix-blend-mode: plus-lighter; pointer-events: none; }
-[data-skin="druid"] .psx-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 85% 95% at 50% 45%, transparent 42%, var(--stage-vig) 100%); }
 
 /* ---- the home page: the grove in place of the living bush ---- */
 [data-skin="druid"] .view-home .hero h1 { font-size: clamp(2.3rem, 5.4vw, 4.1rem); line-height: 1.06; }

@@ -1,21 +1,50 @@
   /* ------------------------------------------------------------------ */
   /* a small rasterizer of the PS1 kind on a 2D canvas                    */
   /* ------------------------------------------------------------------ */
-  /* Low resolution, vertices snapped to whole pixels (the wobble), textures mapped affinely per triangle (the swim),
-     no filtering, the painter's order by layer and depth, fog, then a few levels a colour channel with an ordered
-     dither between them — the console's look, nothing of it a shader. With smooth (the skin «Друид»): the canvas at
-     the screen's own resolution (scale canvas pixels a CSS pixel), vertices where they fall, textures filtered, no
-     dither — the same low polygons, lit and fogged, as a game of today draws them */
+  /* Low resolution, textures mapped affinely per triangle (the swim), no filtering, the painter's order by layer and
+     depth, fog, then a few levels a colour channel with an ordered dither between them (dither: levels) — the console's
+     look, nothing of it a shader. With smooth (the skin «Друид»): the canvas at the screen's own resolution (scale
+     canvas pixels a CSS pixel), textures filtered, no dither — the same low polygons, lit and fogged, as a game of today
+     draws them. Both draw the same way: every texture lit and fogged ahead (shaded), a colour once a fill, the picture
+     never read back (the graphics card keeps it where it has one); the vertices fall where they fall, so that a camera
+     swinging slowly glides — snapped to whole pixels of the console, the picture went in steps of three points */
   class Raster {
     constructor(canvas, o) {
-      Object.assign(this, { px: 3, maxW: 380, levels: 16, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1, maxPx: 0 }, o);
+      Object.assign(this, { px: 3, maxW: 380, levels: 16, dither: 0, read: false, fog: [28, 17, 34], fogNear: 4, fogFar: 14, near: 0.2, amb: [0.16, 0.13, 0.2], key: null, lights: [], smooth: false, scale: 1, maxPx: 0 }, o);
       this.c = canvas;
-      // the console's colour is cut down by reading the pixels back; a smooth picture is never read and stays on the GPU
-      this.x = canvas.getContext('2d', this.smooth ? { alpha: false } : { willReadFrequently: true });
+      // a picture read back (post: the console's colours of a molecule) is kept where the script reads it; any other
+      // stays where the browser draws it best
+      this.x = canvas.getContext('2d', this.read ? { willReadFrequently: true } : undefined);
       this.W = this.H = 0;
       this.unit = 1;
       // the glow of what shines (glowTo): a small picture of its own, a part `bloom` of the size, laid over the scene
       this.B = null;
+      // the fills of plain colours, by colour (a string, or with the console's dither a tile of it)
+      this.fills = new Map();
+    }
+    // the style a plain colour is filled with: the string of it, or, with the console's colours, a tile of 4 × 4 of
+    // its two nearest levels in the ordered pattern, laid on the canvas's own grid (what post did to a face of one
+    // colour, done once for the colour)
+    paint(r, g, b) {
+      const d = this.dither;
+      r = r < 0 ? 0 : r > 255 ? 255 : r; g = g < 0 ? 0 : g > 255 ? 255 : g; b = b < 0 ? 0 : b > 255 ? 255 : b;
+      const key = d ? (Math.round(r / 4.05) << 12) | (Math.round(g / 4.05) << 6) | Math.round(b / 4.05) : ((r | 0) << 16) | ((g | 0) << 8) | (b | 0);
+      const F = this.fills;
+      let f = F.get(key);
+      if (f !== undefined) return f;
+      if (F.size > 4096) F.delete(F.keys().next().value);
+      if (!d) f = `rgb(${r | 0},${g | 0},${b | 0})`;
+      else {
+        const c = doc.createElement('canvas');
+        c.width = c.height = 4;
+        const cx = c.getContext('2d'), img = cx.createImageData(4, 4), q = dith(d), v = [(key >> 12) * 4.05, (key >> 6 & 63) * 4.05, (key & 63) * 4.05];
+        for (let i = 0; i < 16; i++) for (let ch = 0; ch < 3; ch++) img.data[i * 4 + ch] = q(v[ch], i & 3, i >> 2);
+        for (let i = 0; i < 16; i++) img.data[i * 4 + 3] = 255;
+        cx.putImageData(img, 0, 0);
+        f = this.x.createPattern(c, 'repeat');
+      }
+      F.set(key, f);
+      return f;
     }
     // the glow of the bright parts, drawn as the picture is: each shining triangle (emis) goes also into this small
     // canvas in its colour, raised to the cube so that only the bright stays (a texture as it is); what else shines —
@@ -62,7 +91,7 @@
     view(p) { const C = this.C, d = sub(p, C.eye); return [dot(d, C.r), dot(d, C.u), dot(d, C.f)]; }
     proj(v) {
       const C = this.C, x = C.cx + v[0] * C.focal / v[2], y = C.cy - v[1] * C.focal / v[2];
-      return this.smooth ? [x, y] : [Math.round(x), Math.round(y)];
+      return [x, y];
     }
     shade(n, m, ds) {
       let [r, g, b] = this.amb;
@@ -102,13 +131,12 @@
       this.list.push({ p, z: (va[2] + vb[2] + vc[2]) / 3, gz: o.group ? this.view(o.gat)[2] : null, o, l: o.emis ? null : this.shade(n, m, o.ds) });
     }
     draw() {
-      const x = this.x, F = this.fog;
+      const x = this.x, F = this.fog, dz = this.dither;
       // the glow of plain shining triangles: those of one shape (a bubble, a ring) go into it as one path, one fill;
       // whatever solid stands in front (not a cut-out leaf, not added light) darkens it again where it hides what shines
       // — the ground the moon sets behind, a stump over the lines of the circle — the triangles in a row in one fill
       const bx = this.B && this.B.x, cube = v => Math.min(255, (v / 255) ** 3 * 255) | 0;
       const solid = o => !o.emis && !o.cut && o.add == null && o.occlude !== false;
-      const dark = (A, B, C) => { if (!run || run.o !== 'dark') { flush(); run = { o: 'dark', a: 1, col: '#000' }; bx.beginPath(); } bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath(); };
       let run = null;
       const flush = () => {
         if (!run) return;
@@ -116,68 +144,80 @@
         if (run.o === 'dark') { bx.globalCompositeOperation = 'source-over'; bx.fill(); bx.globalCompositeOperation = 'lighter'; } else bx.fill();
         bx.globalAlpha = 1; run = null;
       };
+      const dark = (ax, ay, qx, qy, cx, cy) => { if (!run || run.o !== 'dark') { flush(); run = { o: 'dark', a: 1, col: '#000' }; bx.beginPath(); } bx.moveTo(ax, ay); bx.lineTo(qx, qy); bx.lineTo(cx, cy); bx.closePath(); };
+      // the faces of one colour in a row of the painter's order: one path, one fill (the same picture — they are opaque —
+      // and no seam between them); anything else drawn flushes it first
+      let face = null;
+      const paint = () => { if (face) { x.fillStyle = face; x.fill(); face = null; } };
       const lay = o => (o.layer == null ? 1 : o.layer), zOf = t => (t.gz == null ? t.z : t.gz);
       this.list.sort((A, B) => lay(A.o) - lay(B.o) || zOf(B) - zOf(A) || (A.o.group && A.o.group === B.o.group ? (A.o.ord || 0) - (B.o.ord || 0) || B.z - A.z : 0));
       for (const t of this.list) {
-        const o = t.o, [a, b, c] = t.p;
+        const o = t.o, a = t.p[0], b = t.p[1], c = t.p[2];
         const f = o.nofog ? 0 : clamp((t.z - this.fogNear) / (this.fogFar - this.fogNear), 0, 1) ** 1.15;
         // the triangle grown by half a pixel: neighbours meet without cracks
-        const cx = (a[0] + b[0] + c[0]) / 3, cy = (a[1] + b[1] + c[1]) / 3;
-        const g = q => { const dx = q[0] - cx, dy = q[1] - cy, L = Math.hypot(dx, dy) || 1; return [q[0] + dx / L * 0.6, q[1] + dy / L * 0.6]; };
-        const A = g(a), B = g(b), C = g(c);
+        const mx = (a[0] + b[0] + c[0]) / 3, my = (a[1] + b[1] + c[1]) / 3;
+        let dx = a[0] - mx, dy = a[1] - my, L = 0.6 / (Math.sqrt(dx * dx + dy * dy) || 1);
+        const ax = a[0] + dx * L, ay = a[1] + dy * L;
+        dx = b[0] - mx; dy = b[1] - my; L = 0.6 / (Math.sqrt(dx * dx + dy * dy) || 1);
+        const qx = b[0] + dx * L, qy = b[1] + dy * L;
+        dx = c[0] - mx; dy = c[1] - my; L = 0.6 / (Math.sqrt(dx * dx + dy * dy) || 1);
+        const cx = c[0] + dx * L, cy = c[1] + dy * L;
         if (o.tex) {
           // the texture's pixels onto the triangle: the affine map that takes its uv to the screen
           const w = o.tex.width, h = o.tex.height, uv = o.uv;
           const u0 = uv[0][0] * w, v0 = uv[0][1] * h, u1 = uv[1][0] * w, v1 = uv[1][1] * h, u2 = uv[2][0] * w, v2 = uv[2][1] * h;
           const det = (u1 - u0) * (v2 - v0) - (u2 - u0) * (v1 - v0);
-          if (det) {
-            const ta = ((b[0] - a[0]) * (v2 - v0) - (c[0] - a[0]) * (v1 - v0)) / det, tb = ((b[1] - a[1]) * (v2 - v0) - (c[1] - a[1]) * (v1 - v0)) / det;
-            const tc = ((c[0] - a[0]) * (u1 - u0) - (b[0] - a[0]) * (u2 - u0)) / det, td = ((c[1] - a[1]) * (u1 - u0) - (b[1] - a[1]) * (u2 - u0)) / det;
-            const M = [ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0];
-            // smooth: every texture lit and fogged ahead, in fine steps of light (a blend of multiplying over a large
-            // face costs more than the rest of the frame where the canvas is drawn without the graphics card); the
-            // console: only the cut-outs, the rest multiplied by its light here
-            const ahead = this.smooth ? (o.cut || o.add == null) : o.cut;
-            const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10) : o.tex;
-            if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
-            x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath();
-            // the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many times cheaper
-            // where the canvas is drawn without the graphics card
-            const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
-            pat.setTransform(new DOMMatrix(M));
-            x.fillStyle = pat;
-            x.fill();
-            x.globalAlpha = 1;
-            if (bx && solid(o)) dark(A, B, C);
-            if (bx && o.emis) {
-              flush();
-              const bp = src.psxBPat || (src.psxBPat = bx.createPattern(src, 'repeat'));
-              bp.setTransform(new DOMMatrix(M));
-              bx.globalAlpha = (o.add == null ? 1 : o.add) * (1 - f);
-              bx.fillStyle = bp;
-              bx.beginPath(); bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath(); bx.fill();
-              bx.globalAlpha = 1;
-            }
-            if (o.add == null && !ahead) {
-              if (t.l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, t.l[0] * 255) | 0},${Math.min(255, t.l[1] * 255) | 0},${Math.min(255, t.l[2] * 255) | 0})`; x.fill(); }
-              if (f > 0.01) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${f})`; x.fill(); }
-            }
-            x.globalCompositeOperation = 'source-over';
+          if (!det) continue;
+          paint();
+          const ta = ((b[0] - a[0]) * (v2 - v0) - (c[0] - a[0]) * (v1 - v0)) / det, tb = ((b[1] - a[1]) * (v2 - v0) - (c[1] - a[1]) * (v1 - v0)) / det;
+          const tc = ((c[0] - a[0]) * (u1 - u0) - (b[0] - a[0]) * (u2 - u0)) / det, td = ((c[1] - a[1]) * (u1 - u0) - (b[1] - a[1]) * (u2 - u0)) / det;
+          const M = new DOMMatrix([ta, tb, tc, td, a[0] - ta * u0 - tc * v0, a[1] - tb * u0 - td * v0]);
+          // every texture lit and fogged ahead (a blend of multiplying over each face cost a fill more a triangle,
+          // more than the rest of the frame where the canvas is drawn without the graphics card), but light added
+          const ahead = o.cut || o.add == null;
+          const src = ahead && (t.l || f > 0.01) ? shaded(o.tex, t.l, f, F, this.smooth ? 24 : 10, dz) : o.tex;
+          if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
+          x.beginPath(); x.moveTo(ax, ay); x.lineTo(qx, qy); x.lineTo(cx, cy); x.closePath();
+          // the triangle filled with its texture as a pattern laid onto it — no clip and no mask, many times cheaper
+          // where the canvas is drawn without the graphics card
+          const pat = src.psxPat || (src.psxPat = x.createPattern(src, 'repeat'));
+          pat.setTransform(M);
+          x.fillStyle = pat;
+          x.fill();
+          x.globalAlpha = 1;
+          x.globalCompositeOperation = 'source-over';
+          if (bx && solid(o)) dark(ax, ay, qx, qy, cx, cy);
+          if (bx && o.emis) {
+            flush();
+            const bp = src.psxBPat || (src.psxBPat = bx.createPattern(src, 'repeat'));
+            bp.setTransform(M);
+            bx.globalAlpha = (o.add == null ? 1 : o.add) * (1 - f);
+            bx.fillStyle = bp;
+            bx.beginPath(); bx.moveTo(ax, ay); bx.lineTo(qx, qy); bx.lineTo(cx, cy); bx.closePath(); bx.fill();
+            bx.globalAlpha = 1;
           }
         } else {
-          const col = o.col, l = t.l || [1, 1, 1];
+          const col = o.col, l = t.l || ONE;
           const r = col[0] * l[0] * (1 - f) + F[0] * f, gg = col[1] * l[1] * (1 - f) + F[1] * f, bb = col[2] * l[2] * (1 - f) + F[2] * f;
-          if (o.add != null) { x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add; }
-          x.fillStyle = `rgb(${Math.min(255, r) | 0},${Math.min(255, gg) | 0},${Math.min(255, bb) | 0})`;
-          x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.lineTo(C[0], C[1]); x.closePath(); x.fill();
-          x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
-          if (bx && solid(o)) dark(A, B, C);
+          if (o.add != null) {
+            paint();
+            x.globalCompositeOperation = 'lighter'; x.globalAlpha = o.add;
+            x.fillStyle = `rgb(${Math.min(255, r) | 0},${Math.min(255, gg) | 0},${Math.min(255, bb) | 0})`;
+            x.beginPath(); x.moveTo(ax, ay); x.lineTo(qx, qy); x.lineTo(cx, cy); x.closePath(); x.fill();
+            x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
+          } else {
+            const st = this.paint(r, gg, bb);
+            if (st !== face) { paint(); face = st; x.beginPath(); }
+            x.moveTo(ax, ay); x.lineTo(qx, qy); x.lineTo(cx, cy); x.closePath();
+          }
+          if (bx && solid(o)) dark(ax, ay, qx, qy, cx, cy);
           else if (bx && o.emis) {
             if (!run || run.o !== o) { flush(); run = { o, a: (o.add == null ? 1 : o.add) * (1 - f), col: `rgb(${cube(r)},${cube(gg)},${cube(bb)})` }; bx.beginPath(); }
-            bx.moveTo(A[0], A[1]); bx.lineTo(B[0], B[1]); bx.lineTo(C[0], C[1]); bx.closePath();
+            bx.moveTo(ax, ay); bx.lineTo(qx, qy); bx.lineTo(cx, cy); bx.closePath();
           }
         }
       }
+      paint();
       if (bx) flush();
     }
     // the colour depth of the console: a few levels a channel, an ordered (Bayer) dither between them
@@ -194,15 +234,26 @@
   }
 
   // a texture lit and fogged (a cut-out one — a leaf, a flame — keeps its outline), kept for the next triangle in the
-  // same light: the light in k steps to one. The light of «Друид» flickers (a fire, runes, the moon behind a cloud) and
-  // a scene asks for a few thousand of them over a minute: the oldest go first when the copies pass SHADED_PX points
-  // (a dozen megabytes) — a cache emptied all at once at 900 copies was made again from nothing, 400 canvases a second
-  const SHADED = new Map(), SHADED_PX = 3e6;
+  // same light: the light in k steps to one, its tint in eight (the light of «Друид» flickers — a fire, runes, the moon
+  // behind a cloud — and goes with the fill light as the camera swings: a light in fine steps in each of three colours
+  // asked for a few thousand copies over a minute, a new canvas every few triangles). The oldest go first when the
+  // copies pass SHADED_PX points (a dozen megabytes). With the console's colours (levels) the copy is cut down to them
+  // in its own pixels, with the ordered dither, in the script — the texture's pixels kept as they were drawn (psxData)
+  const SHADED = new Map(), SHADED_PX = 3e6, ONE = [1, 1, 1];
   let texId = 0, shadedPx = 0;
-  function shaded(tx, l, f, F, k = 10) {
-    const q = v => Math.round(Math.min(1.2, v) * k);
+  function shaded(tx, l, f, F, k = 10, levels = 0) {
+    let lq = null, lk = '-';
+    if (l) {
+      const top = Math.max(l[0], l[1], l[2]);
+      if (top > 0) {
+        const n = Math.round(Math.min(1.2, top) * k), r = Math.round(l[0] / top * 8), g = Math.round(l[1] / top * 8), b = Math.round(l[2] / top * 8);
+        lq = [n / k * r / 8, n / k * g / 8, n / k * b / 8];
+        lk = n + ',' + r + ',' + g + ',' + b;
+      } else { lq = [0, 0, 0]; lk = '0'; }
+    }
     if (!tx.psxId) tx.psxId = ++texId;
-    const key = tx.psxId + ':' + k + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
+    const ff = Math.round(f * 12) / 12;
+    const key = tx.psxId + ':' + k + ':' + levels + ':' + lk + ':' + Math.round(f * 12);
     let c = SHADED.get(key);
     if (c) { SHADED.delete(key); SHADED.set(key, c); return c; }
     for (const [k0, c0] of SHADED) {
@@ -213,15 +264,35 @@
     shadedPx += tx.width * tx.height;
     c = doc.createElement('canvas');
     c.width = tx.width; c.height = tx.height;
-    const x = c.getContext('2d');
-    x.drawImage(tx, 0, 0);
-    if (l) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${Math.min(255, q(l[0]) * 255 / k) | 0},${Math.min(255, q(l[1]) * 255 / k) | 0},${Math.min(255, q(l[2]) * 255 / k) | 0})`; x.fillRect(0, 0, c.width, c.height); }
-    const ff = Math.round(f * 12) / 12;
-    if (ff > 0) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${ff})`; x.fillRect(0, 0, c.width, c.height); }
-    x.globalCompositeOperation = 'destination-in';
-    x.drawImage(tx, 0, 0);
+    const x = c.getContext('2d'), L = lq ? lq.map(v => Math.min(1, v)) : ONE;
+    if (levels) {
+      // the console's: multiplied, fogged and cut down to its levels here, pixel by pixel
+      const w = tx.width, h = tx.height, src = tx.psxData || (tx.psxData = tx.getContext('2d').getImageData(0, 0, w, h).data);
+      const img = x.createImageData(w, h), d = img.data, q = dith(levels);
+      for (let y = 0, i = 0; y < h; y++) for (let xx = 0; xx < w; xx++, i += 4) {
+        if (!src[i + 3]) continue;
+        d[i] = q(src[i] * L[0] * (1 - ff) + F[0] * ff, xx, y);
+        d[i + 1] = q(src[i + 1] * L[1] * (1 - ff) + F[1] * ff, xx, y);
+        d[i + 2] = q(src[i + 2] * L[2] * (1 - ff) + F[2] * ff, xx, y);
+        d[i + 3] = src[i + 3];
+      }
+      x.putImageData(img, 0, 0);
+    } else {
+      x.drawImage(tx, 0, 0);
+      if (lq) { x.globalCompositeOperation = 'multiply'; x.fillStyle = `rgb(${L[0] * 255 | 0},${L[1] * 255 | 0},${L[2] * 255 | 0})`; x.fillRect(0, 0, c.width, c.height); }
+      if (ff > 0) { x.globalCompositeOperation = 'source-over'; x.fillStyle = `rgba(${F[0]},${F[1]},${F[2]},${ff})`; x.fillRect(0, 0, c.width, c.height); }
+      x.globalCompositeOperation = 'destination-in';
+      x.drawImage(tx, 0, 0);
+    }
     SHADED.set(key, c);
     return c;
+  }
+  // a value of a colour channel cut down to `levels` with the ordered dither at the pixel (x, y): what post did
+  const DITH = {};
+  function dith(levels) {
+    if (DITH[levels]) return DITH[levels];
+    const step = 255 / (levels - 1), T = BAYER.map(v => (v / 16 - 0.47) * step);
+    return (DITH[levels] = (v, x, y) => { const o = Math.round((v + T[(y & 3) * 4 + (x & 3)]) / step) * step; return o < 0 ? 0 : o > 255 ? 255 : o; });
   }
 
   // shapes: a quad (two triangles), a box, a prism (pot, candle), a low ball (an atom), an egg (a seed, a beetle),

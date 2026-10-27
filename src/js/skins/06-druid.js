@@ -307,11 +307,11 @@
   }
 
   // the light of the bright parts spread round them, and the edges sinking into the dark: the look of a game of today,
-  // on a 2D canvas. On a stage the glow is a small canvas of its own over the scene (glowLayer), drawn up and added by
-  // the browser: what shines is drawn into it as the picture is drawn (Raster.glowTo — the moon, the runes, the fire,
-  // the lines of the circle), so the picture is never read back from the graphics card for it, and the dark edges are
-  // the stage's CSS. The molecule viewer, a picture now and then, still takes its glow from the picture itself (a
-  // picture at a sixth, its dark pressed down by multiplying it with itself, laid back over it)
+  // on a 2D canvas. On a stage the glow is a small canvas of its own at a sixth of the picture (glowLayer): what shines
+  // is drawn into it as the picture is drawn (Raster.glowTo — the moon, the runes, the fire, the lines of the circle),
+  // and it is drawn up and added to the picture at the end of the frame, with the dark edges (sceneOn, finish) — the
+  // picture is never read back for it. The molecule viewer, a picture now and then, still takes its glow from the
+  // picture itself (a picture at a sixth, its dark pressed down by multiplying it with itself, laid back over it)
   const BLOOM = new WeakMap();
   function glowLayer(c1, R) {
     R.glowTo(c1, 1 / 6);

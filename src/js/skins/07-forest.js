@@ -224,9 +224,11 @@
       boxes[name] = box;
     });
 
-    // the canvases: one in half the pixels of the screen for the fireflies (a soft light, cheap to show), and small ones
-    // only where something moves — the lianas of the branch and of the ivy, the glow of the stump and of the log — at up
-    // to one and a half points a point, so a leaf stays a leaf. Each is a layer of its own
+    // the canvases: one as large as the screen for the fireflies, a point of it to a point of the page (in half of them,
+    // drawn up by the browser at every frame of theirs, it cost the browser twice as much where it puts the screen
+    // together without the graphics card), and small ones only where something moves — the lianas of the branch and of
+    // the ivy, the glow of the stump and of the log — at up to one and a half points a point, so a leaf stays a leaf.
+    // Each is a layer of its own
     const fly = doc.createElement('canvas');
     fly.className = 'fly';
     el.appendChild(fly);
@@ -245,7 +247,7 @@
     const rect = box => { const r = box.getBoundingClientRect(); return { l: r.left, t: r.top, w: r.width, h: r.height }; };
     function layout() {
       const kv = Math.min(1.5, window.devicePixelRatio || 1), narrow = innerWidth < 600;
-      const lay = { W: Math.round(el.clientWidth * 0.5), H: Math.round(el.clientHeight * 0.5), panes: {}, vines: [], glows: [], flies };
+      const lay = { W: el.clientWidth, H: el.clientHeight, panes: {}, vines: [], glows: [], flies };
       const place = (name, b) => {
         lay.panes[name] = { ...b, kv };
         Object.assign(panes[name].style, { left: b.l + 'px', top: b.t + 'px', width: b.w + 'px', height: b.h + 'px' });
@@ -275,19 +277,20 @@
     const page = $('.page');
     (page ? page.parentNode : doc.body).insertBefore(el, page);
     let rz = 0, seen = '';
-    // drawn by the worker of the scenes where it can be (the page sends where things stand, again after a resize), 20
-    // frames a second; else here, as before
+    // drawn by the worker of the scenes where it can be (the page sends where things stand, again after a resize), 15
+    // frames a second on every second beat of the scene in the head (so that both change on the screen together);
+    // else here, as before
     let G = null, L = null;
     const local = (cvs, lay) => {
       G = groveOn(cvs, C, lay);
-      L = psxLoop(now => { G.frame(now); }, 20, 20);
+      L = psxLoop(now => { G.frame(now); }, 15, 15);
       const motion = () => { if (reduce.matches) { L.stop(); G.frame(0); } else L.start(); };
       reduce.addEventListener('change', motion);
       motion();
       return { destroy() { L.stop(); reduce.removeEventListener('change', motion); }, lay: l => { G.lay(l); if (reduce.matches) G.frame(0); } };
     };
     const lay0 = layout();
-    const off = offCanvas(fly, 'grove', { C, lay: lay0 }, 20, (fresh, fp) => { Object.assign(panes, fp); return local({ fly: fresh, ...panes }, layout()); }, panes);
+    const off = offCanvas(fly, 'grove', { C, lay: lay0 }, 15, (fresh, fp) => { Object.assign(panes, fp); return local({ fly: fresh, ...panes }, layout()); }, panes);
     const run = off || local({ fly, ...panes }, lay0);
     // a phone's bars coming and going leave the layer as it was (it is as tall as the screen without them): nothing to do
     const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { const key = `${el.clientWidth}x${el.clientHeight}`; if (key === seen) return; seen = key; const lay = layout(); if (off) off.post({ type: 'lay', lay }); else run.lay(lay); }, 150); };
@@ -365,7 +368,7 @@
       return c;
     })();
 
-    const RAD = 11, k = 0.5;
+    const RAD = 11, k = 1;
     let W = 0, H = 0, sprite = null, time = 0, last = null, frameN = 0, vines = [], glows = [], flies = [];
     function setLay(l) {
       flies = l.flies.map(fl => ({ ...fl, was: null }));
@@ -431,15 +434,15 @@
       });
       [panes.stump, panes.log].forEach(p => { p.x.globalAlpha = 1; });
     }
-    // the clock goes by drawn frames, so after a pause nothing jumps; the fireflies move at every frame, the lianas at
-    // every second, the glows at every third — each slow enough not to need more. With less motion: all of it at rest
+    // the clock goes by drawn frames, so after a pause nothing jumps; the fireflies and the lianas move at every frame,
+    // the glows at every second — slow enough not to need more. With less motion: all of it at rest
     function frame(now) {
       if (reduce.matches) { drawFlies(0, true); drawVines(0, true); drawGlows(0, true); return; }
       if (last != null) time += clamp((now - last) / 1000, 0, 0.1);
       last = now;
       drawFlies(time, false);
-      if (frameN % 2 === 0) drawVines(time, false);
-      if (frameN % 3 === 0) drawGlows(time, false);
+      drawVines(time, false);
+      if (frameN % 2 === 0) drawGlows(time, false);
       frameN++;
     }
     setLay(lay);

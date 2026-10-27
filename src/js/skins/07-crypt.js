@@ -40,11 +40,13 @@
     cv.setAttribute('aria-hidden', 'true');
     const page = $('.page');
     (page ? page.parentNode : doc.body).insertBefore(cv, page);
-    // drawn by the worker of the scenes where it can be, 15 frames a second (fewer calm, none asleep or in another tab);
+    // drawn by the worker of the scenes where it can be, 7.5 frames a second on every fourth beat of the scene (none
+    // asleep or in another tab): its fog drifts and its ash rises by less than a point a frame even so, and every frame of
+    // a layer as large as the screen is the whole screen put together again by the browser;
     // here otherwise, or if the worker fails after all
     const onPage = c => {
       const { frame } = cryptOn(c);
-      const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 15);
+      const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 7.5);
       L.start();
       const vis = () => { if (!doc.hidden) L.start(); };
       doc.addEventListener('visibilitychange', vis);
@@ -60,5 +62,5 @@
         }
       };
     };
-    return offCanvas(cv, 'crypt', {}, 15, onPage) || onPage(cv);
+    return offCanvas(cv, 'crypt', {}, 7.5, onPage) || onPage(cv);
   }

@@ -3,7 +3,9 @@
    к этому времени уже прыгает на обороты за кадр). Ничто не выскакивает на один кадр (вторая разность во времени средней
    яркости клеток сетки 32 × 18 — большая, где предмет прыгнул и вернулся, малая при любом плавном движении) и ничто не
    проносится слишком быстро (разница соседних кадров). Светлячок или искра на сетку почти не влияют: среднее берётся по
-   всем точкам клетки. Худшие места каждой сцены — в выводе. Проверяет сборку в корне репозитория.
+   всем точкам клетки. Свечение «Друида» (мягкий свет вокруг светящегося) в замер не входит: оно идёт за своей формой,
+   а сияющее семя или вспышка сдвигают с собой целую клетку. Худшие места каждой сцены — в выводе. Проверяет сборку
+   в корне репозитория.
    node tests/motion.js [sorta,uhod] [--skin=druid] [--s=секунды] */
 const { playwright, ok, done, watch, fileUrl, FILES, SKINS, inSkin } = require('./lib');
 
@@ -22,6 +24,10 @@ function measure(N) {
   const st = (window.BASIL_STAGES || [])[0];
   if (!st) return null;
   st.stop();
+  // the shapes of the scene, as before its glow was drawn into the same canvas: the soft light round what shines (a
+  // sixth of the picture, drawn up) follows its shape and has no jumps of its own, but a glowing seed falling or a burst
+  // of light moves a whole cell of the grid with it
+  st.R.B = null;
   const grid = () => {
     const W = st.R.W, H = st.R.H, d = st.R.x.getImageData(0, 0, W, H).data, o = new Float32Array(32 * 18), n = new Float32Array(32 * 18);
     for (let y = 0; y < H; y++) {

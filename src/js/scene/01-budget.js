@@ -52,12 +52,26 @@
   // a loop that has stopped for the night: called once on the next wake
   const onWake = fn => { if (act.state === 'sleep') act.wakers.add(fn); else fn(); };
 
+  /* the loops of 30 frames a second and fewer go by one beat: a loop of 15 draws on every second beat, so that what
+     changes on the screen changes together — the scene of a skin and the background behind the page, each drawn
+     apart from the other, made the browser put the whole screen together half as often again (where it does it
+     without the graphics card, the most costly thing on the page). The first loop of a frame strikes the beat; a loop
+     whose frames do not divide thirty (20) goes by its own interval, as before */
+  const beat = { at: -1e9, n: 0 };
   function gate(hi = 60, lo = 30) {
-    let prev = -1e9;
+    let prev = -1e9, seen = -1;
     return ts => {
       if (act.state === 'sleep') return false;
       let fps = perf.low ? lo : hi;
       if (act.state === 'calm') fps = Math.min(fps, CALM_FPS);
+      else if (fps <= 30 && Number.isInteger(30 / fps)) {
+        // the beats gone by since it was struck last (a loop that sleeps between its frames may be the only one)
+        if (ts - beat.at >= 1000 / 30 - 3) { beat.n += Math.max(1, Math.round((ts - beat.at) / (1000 / 30))); beat.at = ts; }
+        if (beat.n - seen < 30 / fps) return false;
+        seen = beat.n;
+        prev = ts;
+        return true;
+      }
       // a timer-paced calm frame may come a little early: three quarters of the interval is enough
       if (ts - prev < 1000 / fps * (act.state === 'calm' ? 0.75 : 1) - 3) return false;
       prev = ts;
@@ -81,21 +95,29 @@
 
   /* one animation loop on that budget: a frame per display refresh while active, by the shared timer when calm
      (no wake-ups 60 times a second for 15 frames), none while asleep — it starts again by itself.
-     frame(ts) calls loop.next() to ask for the next one */
+     frame(ts) calls loop.next() to ask for the next one, or loop.later(ms) — the next one in ms or so (a loop of a
+     few frames a second that woke the page at every refresh to let three of four go by cost it a whole update of the
+     page each time) */
   function loop(frame) {
-    let raf = 0, waiting = false, on = false;
+    let raf = 0, waiting = false, on = false, nap = 0;
     const run = ts => { raf = 0; if (on) frame(ts); };
     const go = () => { waiting = false; if (on && !raf) raf = requestAnimationFrame(run); };
+    const later = ms => {
+      if (!on || raf || waiting || nap) return;
+      if (act.state !== 'active') { next(); return; }
+      nap = setTimeout(() => { nap = 0; next(); }, ms);
+    };
     const next = () => {
-      if (!on || raf || waiting) return;
+      if (!on || raf || waiting || nap) return;
       if (act.state === 'sleep') { act.wakers.add(next); return; }
       if (act.state === 'calm') { waiting = true; calmTick(go); }
       else raf = requestAnimationFrame(run);
     };
     return {
       start() { on = true; next(); },
-      stop() { on = false; cancelAnimationFrame(raf); raf = 0; waiting = false; calmQueue.delete(go); act.wakers.delete(next); },
+      stop() { on = false; cancelAnimationFrame(raf); raf = 0; waiting = false; clearTimeout(nap); nap = 0; calmQueue.delete(go); act.wakers.delete(next); },
       next,
+      later,
       get on() { return on; }
     };
   }

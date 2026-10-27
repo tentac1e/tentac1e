@@ -14,10 +14,10 @@ const { playwright, ok, done, watch, server } = require('./lib');
 const BUSY = 25;
 const CASES = [
   { skin: '', page: '/вкус', canvases: ['#leaf-field', '.sky-layer canvas'] },
-  { skin: 'grimoire', page: '/вкус', canvases: ['.psx-stage canvas:not(.psx-glow)', '#psx-crypt'] },
-  { skin: 'druid', page: '/вкус', canvases: ['.psx-stage canvas:not(.psx-glow)', '.psx-stage .psx-glow', '#psx-forest canvas.fly', '#psx-forest .gp-branch', '#psx-forest .gp-stump'] },
-  { skin: 'grimoire', page: '/', canvases: ['.psx-stage canvas:not(.psx-glow)', '#psx-crypt'] },
-  { skin: 'druid', page: '/', canvases: ['.psx-stage canvas:not(.psx-glow)', '#psx-forest canvas.fly'] }
+  { skin: 'grimoire', page: '/вкус', canvases: ['.psx-stage canvas', '#psx-crypt'] },
+  { skin: 'druid', page: '/вкус', canvases: ['.psx-stage canvas', '#psx-forest canvas.fly', '#psx-forest .gp-branch', '#psx-forest .gp-stump'] },
+  { skin: 'grimoire', page: '/', canvases: ['.psx-stage canvas', '#psx-crypt'] },
+  { skin: 'druid', page: '/', canvases: ['.psx-stage canvas', '#psx-forest canvas.fly'] }
 ];
 
 (async () => {

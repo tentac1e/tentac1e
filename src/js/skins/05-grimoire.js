@@ -5,7 +5,9 @@
   /* resolution and cut down to its colours                               */
   /* ------------------------------------------------------------------ */
   world('grimoire', {
-    raster: () => ({ px: 3, maxW: 400, levels: 16, fogNear: 3.5, fogFar: 15, amb: [0.13, 0.1, 0.17] }),
+    // the console's resolution and its colours: sixteen levels a channel, dithered (in the colours and textures, never
+    // read back from the picture)
+    raster: () => ({ px: 3, maxW: 400, dither: 16, fogNear: 3.5, fogFar: 15, amb: [0.13, 0.1, 0.17] }),
     textures: () => textures(),
     key: { dir: norm([-0.35, 0.85, -0.4]), i: 0.42, col: [0.55, 0.5, 0.85] },
     sky: ['#07050B', '#1C1122', '#120B17'],
@@ -80,9 +82,7 @@
           });
         }
       };
-    },
-    // the colour depth of the console
-    post: R => R.post(16)
+    }
   });
 
   // the stone altar with its sigil: gives the height of its top

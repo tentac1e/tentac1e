@@ -76,7 +76,7 @@
     let b = MOLBUF.get(ctx.canvas);
     if (!b) {
       const cv = doc.createElement('canvas');
-      b = { cv, R: new Raster(cv, { levels: 18, fogNear: 9, fogFar: 17, amb: [0.2, 0.17, 0.24] }) };
+      b = { cv, R: new Raster(cv, { levels: 18, read: true, fogNear: 9, fogFar: 17, amb: [0.2, 0.17, 0.24] }) };
       b.R.key = { dir: norm([-0.5, 0.7, -0.6]), i: 0.95, col: [1, 0.95, 0.85] };
       MOLBUF.set(ctx.canvas, b);
     }
