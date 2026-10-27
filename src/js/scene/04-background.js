@@ -77,14 +77,14 @@
     return big;
   }
 
-  function initBackground(canvas) {
-    if (!canvas || !canvas.getContext) return null;
+  // the greenhouse on its canvases — the leaves and what floats with them (canvas), the sky behind them (skyCanvas):
+  // drawn on the page, or in a worker of its own (initBackground below). Its colours are the page's tokens (css)
+  function leafEngine(canvas, skyCanvas) {
     const ctx = canvas.getContext('2d');
-    let W = 0, H = 0, dpr = 1, last = 0;
+    let W = 0, H = 0, dpr = 1;
     let pal = null, sprites = [], sheens = [], glow = null, flyGlow = null, beams = [];
     let leaves = [], motes = [], flies = [], sparks = [];
-    const ptr = { x: -9999, y: -9999, vx: 0, vy: 0, seen: 0 };
-    let lastScroll = window.scrollY;
+    const ptr = { x: -9999, y: -9999, vx: 0, vy: 0, seen: 0, speed: 0 };
     const BLUR = [1, 0.36, 0.2];
     const SPR_W = SPR_L * 0.72 + 8, SPR_H = SPR_L * 1.14 + 8;
 
@@ -132,27 +132,69 @@
       flyGlow = radial(pal.fly, 64, 0.06);
     }
 
-    /* sky: light beams by day, moon glow by night — composited CSS layers, not per-frame canvas work */
-    const sky = document.createElement('div');
-    sky.className = 'sky-layer';
-    sky.setAttribute('aria-hidden', 'true');
-    canvas.parentNode.insertBefore(sky, canvas);
+    /* the sky behind the leaves: shafts of sun by day, the moon's glow by night, and three soft lights drifting
+       across the page. They were CSS layers — six of them over the whole screen, moved by the compositor — and a
+       browser drawing without the graphics card blended all six again on every frame the leaves drew: scrolling fell
+       to 17 frames a second. Now one small canvas, stretched smooth over the screen and drawn a few times a second
+       on the leaves' own frames — the same motion by the same curves as the old keyframes (a shaft sways 1.2 vw in
+       45 s, a light drifts 4 vw in half a minute: at eight frames a second it looks the same) */
+    const sx = skyCanvas.getContext('2d');
+    const SKY_Q = 0.25, SKY_DT = 0.125;
+    let auras = [], moonCol = null, skyClock = 0, skyAt = -1;
+    // the ease-in-out of CSS (cubic-bezier .42 0 .58 1), and a keyframe run back and forth: where it is at time t
+    const easeIO = x => { let u = x; for (let i = 0; i < 6; i++) { const f = 3 * u * (1 - u) * (1 - u) * 0.42 + 3 * u * u * (1 - u) * 0.58 + u * u * u - x, d = 3 * (1 - u) * (1 - u) * 0.42 + 6 * u * (1 - u) * (0.58 - 0.42) + 3 * u * u * (1 - 0.58); if (Math.abs(f) < 1e-5 || !d) break; u = clamp(u - f / d, 0, 1); } return u * u * (3 - 2 * u); };
+    const swing = (t, dur, delay) => { let p = ((t - delay) / dur) % 2; if (p < 0) p += 2; return easeIO(p > 1 ? 2 - p : p); };
+    // a colour of the tokens with its alpha times k, and the same colour fully clear (a gradient to «transparent»
+    // black would darken its edge)
+    const probe = makeCanvas(1, 1).getContext('2d');
+    const rgba = (col, k = 1) => {
+      probe.fillStyle = '#000'; probe.fillStyle = col;
+      const v = probe.fillStyle, m = v.match(/rgba?\(([^)]+)\)/);
+      const [r, g, b, a = 1] = m ? m[1].split(',').map(Number) : [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)];
+      return [`rgba(${r},${g},${b},${+(a * k).toFixed(4)})`, `rgba(${r},${g},${b},0)`];
+    };
     function buildSky() {
-      sky.textContent = '';
+      skyCanvas.width = Math.max(1, Math.ceil(W * SKY_Q));
+      skyCanvas.height = Math.max(1, Math.ceil(H * SKY_Q));
+      const vmax = Math.max(W, H) / 100, vw = W / 100, vh = H / 100;
+      // the three lights: size, place, colour, how long one drift lasts and where it starts
+      auras = [
+        { s: 56 * vmax, x: -18 * vmax, y: -20 * vmax, col: rgba(css('--halo-a') || 'rgba(0,0,0,0)'), dur: 26, delay: 0 },
+        { s: 44 * vmax, x: W + 16 * vmax - 44 * vmax, y: 30 * vh, col: rgba(css('--opal') || '#000', 0.14), dur: 32, delay: -8 },
+        { s: 40 * vmax, x: 20 * vw, y: H + 22 * vmax - 40 * vmax, col: rgba(css('--oil-bright') || '#000', 0.14), dur: 38, delay: -14 }
+      ];
+      moonCol = rgba(pal.moon);
+      skyAt = -1;
+    }
+    function drawSky(dt) {
+      skyClock += Math.min(dt, 0.1);
+      if (skyAt >= 0 && skyClock - skyAt < SKY_DT) return;
+      skyAt = skyClock;
+      const t = skyClock, still = reduce.matches, q = SKY_Q, vw = W / 100, vh = H / 100;
+      sx.setTransform(1, 0, 0, 1, 0, 0);
+      sx.globalAlpha = 1;
+      sx.clearRect(0, 0, skyCanvas.width, skyCanvas.height);
       if (pal.night) {
-        const moon = document.createElement('div');
-        moon.className = 'sky-moon';
-        sky.appendChild(moon);
-        return;
+        // the moon's glow: a wide circle above the top right corner, breathing between .7 and 1
+        const r = 0.7 * Math.max(W, H) * q, g = sx.createRadialGradient(0.86 * W * q, -0.05 * H * q, 0, 0.86 * W * q, -0.05 * H * q, r);
+        g.addColorStop(0, moonCol[0]); g.addColorStop(1, moonCol[1]);
+        sx.globalAlpha = still ? 1 : 0.7 + 0.3 * swing(t, 15.7, 0);
+        sx.fillStyle = g; sx.fillRect(0, 0, skyCanvas.width, skyCanvas.height);
+      } else for (const b of beams) {
+        // a shaft sways 1.2 vw each way in 44.9 s and breathes between .22 and .62
+        const dx = still ? 0 : (-1.2 + 2.4 * swing(t, 44.9, -b.ph / 0.07)) * vw * q;
+        sx.globalAlpha = still ? 0.42 : 0.22 + 0.4 * swing(t, Math.PI / b.sp, -b.ph / b.sp);
+        sx.drawImage(b.c, dx, 0);
       }
-      for (const b of beams) {
-        const wrap = document.createElement('div');
-        wrap.className = 'sky-beam';
-        wrap.style.animationDelay = `${(-b.ph / 0.07).toFixed(1)}s`;
-        b.c.style.animationDuration = `${(Math.PI / b.sp).toFixed(1)}s`;
-        b.c.style.animationDelay = `${(-b.ph / b.sp).toFixed(1)}s`;
-        wrap.appendChild(b.c);
-        sky.appendChild(wrap);
+      sx.globalAlpha = 1;
+      for (const a of auras) {
+        // a light drifts by 4 vw and 3 vh and grows by 8 % about its middle, there and back
+        const p = still ? 0 : swing(t, a.dur, a.delay), k = 1 + 0.08 * p;
+        const cx = (a.x + a.s / 2 + 4 * vw * p) * q, cy = (a.y + a.s / 2 + 3 * vh * p) * q, R = a.s / 2 * Math.SQRT2 * k * q;
+        const g = sx.createRadialGradient(cx, cy, 0, cx, cy, R);
+        g.addColorStop(0, a.col[0]); g.addColorStop(0.65, a.col[1]); g.addColorStop(1, a.col[1]);
+        sx.fillStyle = g;
+        sx.fillRect(cx - R * 0.66, cy - R * 0.66, R * 1.32, R * 1.32);
       }
     }
 
@@ -234,11 +276,12 @@
       flies.length = nFlies;
     }
 
-    function resize() {
-      // soft background leaves do not need retina pixels; 1–1.5x keeps them crisp enough at a third of the cost
-      dpr = Math.min(window.devicePixelRatio || 1, perf.low ? 1 : 1.5);
-      W = window.innerWidth;
-      H = window.innerHeight;
+    // the screen's size and the canvas points a point: soft background leaves do not need retina pixels; 1–1.5x keeps
+    // them crisp enough at a third of the cost (1 where the page struggles)
+    function resize(w, h, d) {
+      dpr = d;
+      W = w;
+      H = h;
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);
       buildBeams();
@@ -363,6 +406,7 @@
     }
 
     function render(t, dt) {
+      drawSky(dt);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.globalAlpha = 1;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -397,43 +441,6 @@
       ctx.globalAlpha = 1;
     }
 
-    const ready = gate(60, 30);
-    let prevTs = 0, ema = 16.7, warm = 0;
-    const L = loop(frame);
-    function frame(ts) {
-      if (skinned()) { L.stop(); return; }
-      L.next();
-      // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps.
-      // Only while active: calm frames are slow on purpose, and a pause is not a missed frame
-      const iv = ts - prevTs;
-      if (prevTs && iv < 150 && calm.state === 'active') {
-        if (warm < 90) warm++;
-        else { ema += (Math.min(100, iv) - ema) * 0.05; if (ema > 24) setLow(); }
-      }
-      prevTs = ts;
-      if (!ready(ts)) return;
-      const t = ts / 1000;
-      let dt = t - last;
-      last = t;
-      if (dt > 0.05) dt = 0.05;
-      if (dt <= 0) return;
-      const k = Math.pow(0.02, dt);
-      ptr.vx *= k; ptr.vy *= k;
-      render(t, dt);
-    }
-    perf.listeners.push(() => { resize(); });
-
-    // a skin («Гримуар», «Друид») has a background of its own behind the page (assets/js/skins.js): the greenhouse rests
-    const skinned = () => document.documentElement.hasAttribute('data-skin');
-    function start() {
-      L.stop();
-      if (skinned()) return;
-      if (reduce.matches) { render(now(), 0); return; }
-      last = performance.now() / 1000;
-      prevTs = 0;
-      L.start();
-    }
-
     function burst(x, y) {
       for (const l of leaves) {
         const dx = l.x - x, dy = l.y - y, d = Math.hypot(dx, dy) || 1;
@@ -454,51 +461,226 @@
 
     readPalette();
     buildSprites();
-    resize();
+    return {
+      resize(w, h, d) { resize(w, h, d); },
+      render, burst,
+      // a new palette (the theme changed): new sprites, shafts or moon, motes or fireflies
+      theme() { readPalette(); buildSprites(); buildBeams(); motes = []; flies = []; populate(); },
+      // the pointer: where it is and how fast it goes (t — when, in ms)
+      move(x, y, t) {
+        if (ptr.seen && t - ptr.seen < 80) {
+          const dt = (t - ptr.seen) / 1000 || 0.016;
+          ptr.vx = lerp(ptr.vx, (x - ptr.x) / dt, 0.5);
+          ptr.vy = lerp(ptr.vy, (y - ptr.y) / dt, 0.5);
+        }
+        ptr.x = x; ptr.y = y; ptr.seen = t;
+      },
+      leave() { ptr.x = ptr.y = -9999; },
+      // the page scrolled by d: the leaves drift against it a little, the near ones more
+      scroll(d) {
+        if (reduce.matches) return;
+        for (const l of leaves) { l.y -= d * (0.05 + l.z * 0.2); if (Math.abs(d) > 30) l.vflip += Math.sign(l.vflip || 1) * 0.3; }
+        for (const m of motes) m.y -= d * (0.04 + m.z * 0.1);
+        for (const f of flies) f.y -= d * 0.06;
+      },
+      // the pointer's speed dies away between frames
+      decay(dt) { const k = Math.pow(0.02, dt); ptr.vx *= k; ptr.vy *= k; }
+    };
+  }
+
+  /* The greenhouse behind the page. Its leaves are a canvas as large as the screen, drawn again every frame — where the
+     browser draws without the graphics card, the picture of every frame cost the page's thread more than the rest of
+     it. Where it can, the page hands both canvases to a worker (transferControlToOffscreen) that loads this file again
+     over a stand-in of the page and draws the greenhouse there; the page only says what happens — the pointer, the
+     scroll, a tap, the theme, the size, awake, calm or asleep. Where it cannot (a page from file://, the book in one
+     file, an older browser) — on the page as before. The worker also watches its frames: if they keep coming late,
+     the whole page drops to 30 frames a second (setLow), as the page did itself */
+  const SCENE_SRC = (document.currentScript && document.currentScript.src) || '';
+  const IN_WORKER = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
+  const TOKENS = ['--sc-g1', '--sc-g2', '--sc-d1', '--sc-d2', '--sc-l1', '--sc-l2', '--sc-p1', '--sc-p2', '--sc-alpha', '--sc-ray', '--sc-mote', '--sc-firefly', '--sc-moon', '--sc-night', '--halo-a', '--opal', '--oil-bright'];
+  const tokens = () => Object.fromEntries(TOKENS.map(n => [n, css(n)]));
+  function leafBoot(o) {
+    const stub = () => ({ style: {}, dataset: {}, classList: { add() {}, remove() {}, toggle() {}, contains: () => false }, setAttribute() {}, getAttribute: () => null, hasAttribute: () => false, appendChild() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() {} });
+    const media = { matches: o.reduce, addEventListener() {}, removeEventListener() {} };
+    self.window = self;
+    self.CustomEvent = self.CustomEvent || function (type, init) { this.type = type; this.detail = init && init.detail; };
+    self.matchMedia = q => (/reduce/.test(q) ? media : { matches: o.coarse, addEventListener() {}, removeEventListener() {} });
+    self.leafTokens = o.tokens;
+    self.getComputedStyle = () => ({ getPropertyValue: n => self.leafTokens[n] || '' });
+    self.document = Object.assign(stub(), { documentElement: stub(), body: null, hidden: false, createElement: tag => (tag === 'canvas' ? new OffscreenCanvas(300, 150) : stub()) });
+    self.leafMedia = media;
+    importScripts(o.src);
+  }
+  // in the worker: the greenhouse drawn by its own clock — 60 frames a second, 30 when the page struggles, 15 calm,
+  // none asleep or with the tab away
+  function leafHost() {
+    let E = null, on = false, state = 'active', low = false, pending = false, prev = -1e9, last = 0, prevTs = 0, ema = 16.7, warm = 0;
+    const raf = self.requestAnimationFrame ? fn => self.requestAnimationFrame(fn) : fn => setTimeout(() => fn(performance.now()), 16);
+    const wake = () => { if (!pending && on && state !== 'sleep') { pending = true; raf(loop); } };
+    function loop(ts) {
+      pending = false;
+      if (!on || state === 'sleep' || !E) return;
+      const iv = ts - prevTs;
+      if (prevTs && iv < 150 && state === 'active' && !low) {
+        if (warm < 90) warm++;
+        else { ema += (Math.min(100, iv) - ema) * 0.05; if (ema > 24) { low = true; postMessage({ type: 'low' }); } }
+      }
+      prevTs = ts;
+      wake();
+      const fps = state === 'calm' ? 15 : low ? 30 : 60;
+      if (ts - prev < 1000 / fps * (state === 'calm' ? 0.75 : 1) - 3) return;
+      prev = ts;
+      const t = ts / 1000;
+      let dt = t - last;
+      last = t;
+      if (dt > 0.05) dt = 0.05;
+      if (dt <= 0) return;
+      E.decay(dt);
+      E.render(t, dt);
+    }
+    self.onmessage = e => {
+      const m = e.data;
+      if (m.type === 'init') { E = leafEngine(m.cv, m.sky); E.resize(m.w, m.h, m.dpr); low = m.low; }
+      else if (!E) return;
+      else if (m.type === 'size') E.resize(m.w, m.h, m.dpr);
+      else if (m.type === 'tokens') { self.leafTokens = m.tokens; E.theme(); }
+      else if (m.type === 'move') E.move(m.x, m.y, m.t);
+      else if (m.type === 'leave') E.leave();
+      else if (m.type === 'scroll') E.scroll(m.d);
+      else if (m.type === 'burst') E.burst(m.x, m.y);
+      else if (m.type === 'state') { state = m.state; prevTs = 0; }
+      else if (m.type === 'low') low = true;
+      else if (m.type === 'reduce') self.leafMedia.matches = m.on;
+      if (m.type === 'run') { on = m.on; last = performance.now() / 1000; prevTs = 0; }
+      // with less motion: one still frame when the picture itself changed, no clock
+      if (reduce.matches) { if (/^(init|size|tokens|run|reduce)$/.test(m.type)) E.render(performance.now() / 1000, 0); return; }
+      wake();
+    };
+  }
+  if (IN_WORKER) leafHost();
+
+  function initBackground(canvas) {
+    if (!canvas || !canvas.getContext) return null;
+    const sky = document.createElement('div');
+    sky.className = 'sky-layer';
+    sky.setAttribute('aria-hidden', 'true');
+    canvas.parentNode.insertBefore(sky, canvas);
+    let skyCanvas = document.createElement('canvas');
+    sky.appendChild(skyCanvas);
+    const size = () => [window.innerWidth, window.innerHeight, Math.min(window.devicePixelRatio || 1, perf.low ? 1 : 1.5)];
+    // a skin («Гримуар», «Друид») has a background of its own behind the page (assets/js/skins.js): the greenhouse rests
+    const skinned = () => document.documentElement.hasAttribute('data-skin');
+    const wanted = () => !skinned() && !document.hidden;
+    let lastScroll = window.scrollY;
+
+    // the worker, where it can be: the canvases go to it once
+    let worker = null;
+    if (SCENE_SRC && location.protocol !== 'file:' && window.Worker && window.OffscreenCanvas && HTMLCanvasElement.prototype.transferControlToOffscreen) {
+      try {
+        const boot = `(${leafBoot})(${JSON.stringify({ src: SCENE_SRC, reduce: reduce.matches, coarse: perf.low, tokens: tokens() })});`;
+        worker = new Worker(URL.createObjectURL(new Blob([boot], { type: 'text/javascript' })));
+        const cv = canvas.transferControlToOffscreen(), sc = skyCanvas.transferControlToOffscreen();
+        const [w, h, dpr] = size();
+        worker.postMessage({ type: 'init', cv, sky: sc, w, h, dpr, low: perf.low }, [cv, sc]);
+        canvas.dataset.off = skyCanvas.dataset.off = '';
+      } catch (e) { worker = null; }
+    }
+    let E = null, L = null, on = null;
+    const post = m => { if (worker) worker.postMessage(m); };
+    // the same on the page: the engine itself and the page's own loop (it watches the frames and drops the page to
+    // 30 if they keep coming late)
+    function onPage() {
+      E = leafEngine(canvas, skyCanvas);
+      E.resize(...size());
+      const ready = gate(60, 30);
+      let prevTs = 0, ema = 16.7, warm = 0, last = 0;
+      L = loop(ts => {
+        if (!wanted()) { L.stop(); return; }
+        L.next();
+        // watch the real frame rate: if the device keeps missing frames, drop the whole page to 30 fps.
+        // Only while active: calm frames are slow on purpose, and a pause is not a missed frame
+        const iv = ts - prevTs;
+        if (prevTs && iv < 150 && calm.state === 'active') {
+          if (warm < 90) warm++;
+          else { ema += (Math.min(100, iv) - ema) * 0.05; if (ema > 24) setLow(); }
+        }
+        prevTs = ts;
+        if (!ready(ts)) return;
+        const t = ts / 1000;
+        let dt = t - last;
+        last = t;
+        if (dt > 0.05) dt = 0.05;
+        if (dt <= 0) return;
+        E.decay(dt);
+        E.render(t, dt);
+      });
+      L.restart = () => { last = performance.now() / 1000; prevTs = 0; };
+    }
+    if (worker) {
+      worker.onmessage = e => { if (e.data.type === 'low') setLow(); };
+      // the worker failed (its file did not load): the greenhouse on the page again, on fresh canvases
+      worker.onerror = () => {
+        worker.terminate(); worker = null;
+        const fresh = c => { const f = c.cloneNode(false); delete f.dataset.off; c.replaceWith(f); return f; };
+        canvas = fresh(canvas); skyCanvas = fresh(skyCanvas);
+        onPage(); on = null; start();
+      };
+      const state = () => post({ type: 'state', state: calm.state });
+      document.addEventListener('basil:calm', state);
+      state();
+    } else onPage();
+    // with E on the page — its engine; with the worker — a message of the same name
+    const call = (name, ...a) => {
+      if (!worker) { E[name](...a); return; }
+      const keys = { move: ['x', 'y', 't'], scroll: ['d'], burst: ['x', 'y'] }[name] || [];
+      post(Object.fromEntries([['type', name], ...keys.map((k, i) => [k, a[i]])]));
+    };
+    function start() {
+      if (worker) {
+        if (reduce.matches && wanted()) post({ type: 'run', on: false });
+        else if (on !== wanted()) { on = wanted(); post({ type: 'run', on }); }
+        return;
+      }
+      L.stop();
+      if (!wanted()) return;
+      if (reduce.matches) { E.render(now(), 0); return; }
+      L.restart();
+      L.start();
+    }
+    perf.listeners.push(() => { const [w, h, dpr] = size(); if (worker) post({ type: 'size', w, h, dpr }); else E.resize(w, h, dpr); post({ type: 'low' }); });
     start();
 
     let resizeTimer = 0;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => { resize(); if (reduce.matches) render(now(), 0); }, 120);
+      resizeTimer = setTimeout(() => { const [w, h, dpr] = size(); if (worker) post({ type: 'size', w, h, dpr }); else { E.resize(w, h, dpr); if (reduce.matches) E.render(now(), 0); } }, 120);
     });
     window.addEventListener('pointermove', e => {
       if (e.pointerType === 'touch' && !e.isPrimary) return;
-      const t = performance.now();
-      if (ptr.seen && t - ptr.seen < 80) {
-        const dt = (t - ptr.seen) / 1000 || 0.016;
-        ptr.vx = lerp(ptr.vx, (e.clientX - ptr.x) / dt, 0.5);
-        ptr.vy = lerp(ptr.vy, (e.clientY - ptr.y) / dt, 0.5);
-      }
-      ptr.x = e.clientX; ptr.y = e.clientY; ptr.seen = t;
+      call('move', e.clientX, e.clientY, performance.now());
     }, { passive: true });
-    document.addEventListener('pointerleave', () => { ptr.x = ptr.y = -9999; });
-    window.addEventListener('pointerup', e => { if (e.pointerType === 'touch') setTimeout(() => { ptr.x = ptr.y = -9999; }, 400); }, { passive: true });
+    document.addEventListener('pointerleave', () => call('leave'));
+    window.addEventListener('pointerup', e => { if (e.pointerType === 'touch') setTimeout(() => call('leave'), 400); }, { passive: true });
     window.addEventListener('pointerdown', e => {
       if (reduce.matches || e.button > 0 || skinned()) return;
       if (e.target.closest('a, button, input, select, textarea, label, summary, dialog, canvas, svg, [role="button"], .pane, .card, .lab-tool, .deep')) return;
-      burst(e.clientX, e.clientY);
+      call('burst', e.clientX, e.clientY);
+      // the gust of a tap goes through the bush on the page too (its wind is this one; the worker has a wind of its own)
+      if (worker) gust(e.clientX < window.innerWidth / 2 ? 1 : -1, 1.1);
     }, { passive: true });
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       const d = clamp(y - lastScroll, -160, 160);
       lastScroll = y;
-      if (reduce.matches) return;
-      for (const l of leaves) { l.y -= d * (0.05 + l.z * 0.2); if (Math.abs(d) > 30) l.vflip += Math.sign(l.vflip || 1) * 0.3; }
-      for (const m of motes) m.y -= d * (0.04 + m.z * 0.1);
-      for (const f of flies) f.y -= d * 0.06;
+      call('scroll', d);
     }, { passive: true });
     document.addEventListener('basil:theme', () => {
-      readPalette();
-      buildSprites();
-      buildBeams();
-      motes = []; flies = [];
-      populate();
-      if (reduce.matches && !skinned()) render(now(), 0);
-      if (!skinned() && !L.on) start();
+      if (worker) post({ type: 'tokens', tokens: tokens() });
+      else { E.theme(); if (reduce.matches && !skinned()) E.render(now(), 0); }
+      start();
     });
-    document.addEventListener('visibilitychange', () => { if (document.hidden) L.stop(); else start(); });
-    if (reduce.addEventListener) reduce.addEventListener('change', start);
-    return { burst };
+    document.addEventListener('visibilitychange', start);
+    if (reduce.addEventListener) reduce.addEventListener('change', () => { post({ type: 'reduce', on: reduce.matches }); start(); });
+    return { burst: (x, y) => call('burst', x, y) };
   }
 

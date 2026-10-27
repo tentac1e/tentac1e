@@ -3,12 +3,8 @@
   /* sparks drifting up. A small canvas drawn up smooth: dithered and     */
   /* drawn up square, its fog lay over the page as a coarse grid of dots  */
   /* ------------------------------------------------------------------ */
-  function crypt() {
-    const cv = doc.createElement('canvas');
-    cv.id = 'psx-crypt';
-    cv.setAttribute('aria-hidden', 'true');
-    const page = $('.page');
-    (page ? page.parentNode : doc.body).insertBefore(cv, page);
+  // the crypt on a canvas: what it draws at the time now — on the page, or in the worker of the scenes (04-stage.js)
+  function cryptOn(cv) {
     const R = new Raster(cv, { smooth: true }), x = R.x;
     const motes = [...Array(70)].map((_, i) => ({ x: (i * 0.618) % 1, y: (i * 0.37) % 1, s: 0.2 + (i % 7) / 10, ember: i % 9 === 0 }));
     const blobs = [[0.2, 0.3, '40,20,58'], [0.8, 0.2, '62,14,26'], [0.6, 0.8, '34,18,48'], [0.1, 0.9, '58,16,28']];
@@ -36,19 +32,33 @@
         x.fillRect(xx, y * H, 1, 1);
       });
     }
-    const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 15);
-    L.start();
-    const vis = () => { if (!doc.hidden) L.start(); };
-    doc.addEventListener('visibilitychange', vis);
-    let rz = 0;
-    const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { if (reduce.matches) frame(performance.now()); }, 120); };
-    addEventListener('resize', onResize);
-    return {
-      destroy() {
-        L.stop();
-        removeEventListener('resize', onResize);
-        doc.removeEventListener('visibilitychange', vis);
-        cv.remove();
-      }
+    return { frame, R };
+  }
+  function crypt() {
+    const cv = doc.createElement('canvas');
+    cv.id = 'psx-crypt';
+    cv.setAttribute('aria-hidden', 'true');
+    const page = $('.page');
+    (page ? page.parentNode : doc.body).insertBefore(cv, page);
+    // drawn by the worker of the scenes where it can be, 15 frames a second (fewer calm, none asleep or in another tab);
+    // here otherwise, or if the worker fails after all
+    const onPage = c => {
+      const { frame } = cryptOn(c);
+      const L = psxLoop(ts => { if (doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, 15);
+      L.start();
+      const vis = () => { if (!doc.hidden) L.start(); };
+      doc.addEventListener('visibilitychange', vis);
+      let rz = 0;
+      const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { if (reduce.matches) frame(performance.now()); }, 120); };
+      addEventListener('resize', onResize);
+      return {
+        destroy() {
+          L.stop();
+          removeEventListener('resize', onResize);
+          doc.removeEventListener('visibilitychange', vis);
+          c.remove();
+        }
+      };
     };
+    return offCanvas(cv, 'crypt', {}, 15, onPage) || onPage(cv);
   }

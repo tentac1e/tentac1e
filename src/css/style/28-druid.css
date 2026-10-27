@@ -14,7 +14,7 @@
 
 /* ---- the page: the greenhouse and its sky step aside for the grove ---- */
 [data-skin="druid"] body { font-size: 1.06rem; line-height: 1.66; }
-[data-skin="druid"] #leaf-field, [data-skin="druid"] .aura, [data-skin="druid"] .sky-layer { display: none !important; }
+[data-skin="druid"] #leaf-field, [data-skin="druid"] .sky-layer { display: none !important; }
 /* the grove behind the page (07-forest.js): the night is a still gradient with the moon's haze in a corner and a glow
    of moss at the foot; an old stump with its roots and runes stands in the lower left corner over ferns, a mossy fallen
    log in the lower right, a gnarled branch reaches in at the top left and ivy runs along the top on the right; lianas

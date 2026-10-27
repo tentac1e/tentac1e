@@ -5,11 +5,11 @@
   /* (05-grimoire.js, 06-druid.js) and the chapter's own scene in the     */
   /* middle (05-grimoire-*.js, 06-druid-*.js)                             */
   /* ------------------------------------------------------------------ */
-  /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t), overlay(holder, R) }):
+  /* A world is world(skin, { raster, textures(), key, sky, defaults, make(S, sc), post(R, t), glow(canvas, R) }):
      the options of its rasterizer, its textures, its key light, the three colours of its sky, what its scenes have
      unless they say otherwise, make — what stands round every scene of it ({ draw(t), lights(t), fx(t, F) }: a floor,
-     candles, trees), post — what is done to the finished picture (the console's colours, a glow), overlay — what it
-     lays over the canvas in the page (a layer of the glow, blended by the browser).
+     candles, trees), post — what is done to the finished picture (the console's colours, a glow), glow(canvas, R) —
+     what it does with a small canvas laid over the scene in the page (a layer of the glow, added by the browser).
      A scene is scene(skin, view, S => ({ … })): S.R — the rasterizer, S.T — the textures, S.ang — where the camera
      stands (updated every frame). It gives draw(t) — its shapes at the time t, in seconds — and, if it needs them:
      tick(t) before anything is drawn (the state of the moment; the key light may be changed there), lights(t) — its
@@ -206,24 +206,13 @@
     };
   }
 
-  // the scene as the background of its block (the head of a chapter, the hero of the home page): no finger turns it,
-  // nothing is tapped; it goes on by itself
-  function stage(host, view, skin) {
+  // one scene on a canvas — its world round it, its clock, its frame — wherever it is drawn: on the page, or in the
+  // worker of the scenes (below); glow — the small canvas the world's glow goes into, when it has one (W.glow)
+  function sceneOn(cv, glow, view, skin) {
     const W = WORLDS[skin], set = SCENES[skin];
-    const holder = doc.createElement('div');
-    holder.className = 'psx-stage is-backdrop';
-    holder.dataset.scene = set[view] ? view : 'glavnaya';
-    holder.dataset.skin = skin;
-    holder.setAttribute('aria-hidden', 'true');
-    // the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
-    holder.dataset.bg = '';
-    const cv = doc.createElement('canvas');
-    holder.appendChild(cv);
-    host.insertBefore(holder, host.firstChild);
     const T = W.textures();
     const R = new Raster(cv, W.raster());
-    // what the world lays over its canvas (a glow the page itself adds over it)
-    if (W.overlay) W.overlay(holder, R);
+    if (glow && W.glow) W.glow(glow, R);
     const S = { R, T, view, ang: 0.6 };
     const sc = { still: 0, look: [0, 1.45, 0], rad: 5.6, near: 5.6, fill: 0.6, orbit: [0.6, 0.35], ...W.defaults, ...(set[view] || set.glavnaya)(S) };
     const env = W.make(S, sc);
@@ -264,18 +253,197 @@
       if (sc.fx) sc.fx(t, F);
       x.globalCompositeOperation = 'source-over';
       W.post(R, t);
-      holder.classList.add('is-drawn');
     }
-    // runs while on the screen, by the page's frame budget; one still frame with reduced motion
+    return { frame, R, seek: s => { time = s; now0 = null; beat = -1; } };
+  }
+
+  /* The worker of the scenes. A scene costs: its shapes in script, then the browser rasterizing thousands of
+     textured triangles — on a computer without the graphics card for the page, a scene ate the page's whole thread and
+     the page scrolled in jerks. Where the browser can, the stage (and the crypt and the grove behind the page) hands its canvases to a worker
+     (transferControlToOffscreen): the same file loaded there again over a stand-in of the page (workerBoot), the scene
+     drawn there, the page only says where it is — its size, on the screen or not, the page awake, calm or asleep, less
+     motion. Where it cannot (a page from file://, the book in one file, an older browser, a check that draws the frames
+     itself through window.BASIL_STAGES) — on the page as before */
+  function workerBoot(o) {
+    const stub = () => ({ style: {}, dataset: {}, classList: { add() {}, remove() {}, toggle() {}, contains: () => false }, setAttribute() {}, getAttribute: () => null, hasAttribute: () => false, appendChild() {}, insertBefore() {}, remove() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() {}, querySelector: () => null, querySelectorAll: () => [] });
+    const media = { matches: o.reduce, addEventListener() {}, removeEventListener() {} };
+    self.window = self;
+    self.devicePixelRatio = o.dpr;
+    self.matchMedia = () => media;
+    self.MutationObserver = function () { return { observe() {}, disconnect() {} }; };
+    self.document = Object.assign(stub(), { documentElement: stub(), body: null, hidden: false, scripts: [], createElement: tag => (tag === 'canvas' ? new OffscreenCanvas(300, 150) : stub()) });
+    self.psxMedia = media;
+    importScripts(o.src);
+  }
+  // what the worker draws on a canvas the page sends: a scene, the crypt behind the page
+  const sized = (m, s) => Object.assign(s, { size: q => { m.cv.clientWidth = q.w; m.cv.clientHeight = q.h; } });
+  const OFF = {
+    stage: m => sized(m, sceneOn(m.cv, m.extras.glow, m.view, m.skin)),
+    crypt: m => sized(m, cryptOn(m.cv)),
+    grove: m => groveOn({ fly: m.cv, ...m.extras }, m.C, m.lay)
+  };
+  // in the worker: the canvases the page sends, drawn by one clock — each at its own frames a second (a scene 30, the
+  // crypt 15), 15 at most when the page is calm, none asleep or off the screen; a still frame with less motion
+  function sceneHost() {
+    const runs = new Map(), mols = new Map();
+    let state = 'active', pending = false;
+    const raf = self.requestAnimationFrame ? fn => self.requestAnimationFrame(fn) : fn => setTimeout(() => fn(performance.now()), 16);
+    function loop(now) {
+      pending = false;
+      if (state === 'sleep') return;
+      let any = false;
+      runs.forEach(r => {
+        if (!r.on) return;
+        any = true;
+        const fps = state === 'calm' ? Math.min(15, r.fps) : r.fps;
+        if (now - r.prev < 1000 / fps * (state === 'calm' ? 0.75 : 1) - 3) return;
+        r.prev = now;
+        r.s.frame(now);
+        if (!r.drawn) { r.drawn = true; postMessage({ type: 'drawn', id: r.id }); }
+        if (reduce.matches) r.on = false;
+      });
+      if (any) wake();
+    }
+    const wake = () => { if (!pending && state !== 'sleep') { pending = true; raf(loop); } };
+    self.onmessage = e => {
+      const m = e.data, r = runs.get(m.id);
+      if (m.type === 'canvas') {
+        m.cv.clientWidth = m.w; m.cv.clientHeight = m.h;
+        runs.set(m.id, { id: m.id, s: OFF[m.kind](m), on: false, prev: -1e9, drawn: false, fps: m.fps });
+      } else if ((m.type === 'size' || m.type === 'lay') && r) {
+        if (m.type === 'size' && r.s.size) r.s.size(m);
+        if (m.type === 'lay' && r.s.lay) r.s.lay(m.lay);
+        if (reduce.matches) { r.prev = -1e9; r.on = true; }
+      }
+      else if (m.type === 'run' && r) { r.on = m.on; if (m.on) r.prev = -1e9; }
+      else if (m.type === 'drop') runs.delete(m.id);
+      else if (m.type === 'mol') {
+        // a molecule for the page's viewer: drawn on a canvas of its size here, sent back as a picture
+        const c = mols.get(m.id) || new OffscreenCanvas(m.cw, m.ch);
+        mols.set(m.id, c);
+        if (c.width !== m.cw || c.height !== m.ch) { c.width = m.cw; c.height = m.ch; }
+        MOLDRAW[m.skin](c.getContext('2d'), m.mol, m.P, m.R3, m.W, m.H);
+        const bmp = c.transferToImageBitmap();
+        postMessage({ type: 'mol', id: m.id, bmp }, [bmp]);
+        return;
+      }
+      else if (m.type === 'state') state = m.state;
+      else if (m.type === 'reduce') { self.psxMedia.matches = m.on; runs.forEach(q => { q.prev = -1e9; }); }
+      wake();
+    };
+  }
+  // on the page: the one worker of all its stages, made the first time a stage asks for it (null where it cannot be)
+  let sceneWorker, stageIds = 0;
+  const workerWaits = new Map();
+  function scenesWorker() {
+    if (sceneWorker !== undefined) return sceneWorker;
+    sceneWorker = null;
+    if (!SELF_SRC || location.protocol === 'file:' || Array.isArray(window.BASIL_STAGES) || !window.Worker || !window.OffscreenCanvas || !(HTMLCanvasElement.prototype.transferControlToOffscreen)) return null;
+    try {
+      const boot = `(${workerBoot})(${JSON.stringify({ src: SELF_SRC, dpr: Math.min(2, window.devicePixelRatio || 1), reduce: reduce.matches })});`;
+      const w = new Worker(URL.createObjectURL(new Blob([boot], { type: 'text/javascript' })));
+      w.onmessage = e => { const f = workerWaits.get(e.data.id); if (f) f(e.data); };
+      // the worker failed (its file did not load): every stage it had draws on the page again, on fresh canvases
+      w.onerror = () => { sceneWorker = null; w.terminate(); workerWaits.forEach(f => f({ type: 'failed' })); };
+      const state = () => w.postMessage({ type: 'state', state: SC && SC.calm ? SC.calm.state : 'active' });
+      doc.addEventListener('basil:calm', state);
+      reduce.addEventListener('change', () => w.postMessage({ type: 'reduce', on: reduce.matches }));
+      state();
+      sceneWorker = w;
+    } catch (e) { sceneWorker = null; }
+    return sceneWorker;
+  }
+
+  // a canvas the worker draws: kind — what it draws there (OFF), o — what it needs to know of it, fps — its frames a
+  // second; extras — more canvases of it by name (the glow of a scene, the panes of the grove); drawn() — called when its
+  // first frame is there. The page sends the canvases once, then the size and whether it is wanted (on the screen, the tab
+  // in front); post() — anything else it has to say. Gives null where there is no worker; again(canvas, extras) — how it
+  // is drawn on the page if the worker fails after all, on fresh canvases in the old ones' places
+  function offCanvas(cv, kind, o, fps, again, extras = {}, drawn) {
+    const wk = scenesWorker();
+    if (!wk) return null;
+    const id = ++stageIds, post = (m, tr) => { if (sceneWorker) sceneWorker.postMessage({ ...m, id }, tr || []); };
+    const names = Object.keys(extras).filter(n => extras[n]);
+    const a = cv.transferControlToOffscreen(), more = {};
+    names.forEach(n => { more[n] = extras[n].transferControlToOffscreen(); });
+    post({ type: 'canvas', kind, ...o, fps, cv: a, extras: more, w: cv.clientWidth, h: cv.clientHeight }, [a, ...Object.values(more)]);
+    [cv, ...names.map(n => extras[n])].forEach(c => { c.dataset.off = ''; });
+    let seen = false, on = null, local = null;
+    const wanted = () => seen && !doc.hidden;
+    const run = () => { if (on !== wanted()) { on = wanted(); post({ type: 'run', on }); } };
+    workerWaits.set(id, m => {
+      if (m.type === 'drawn' && drawn) drawn();
+      if (m.type === 'failed' && !local) {
+        // the canvases are the worker's for good: fresh ones in their places
+        const fresh = c => { const f = c.cloneNode(false); delete f.dataset.off; c.replaceWith(f); return f; };
+        const fe = {};
+        names.forEach(n => { fe[n] = fresh(extras[n]); });
+        cv = fresh(cv);
+        local = again(cv, fe);
+      }
+    });
+    const ro = 'ResizeObserver' in window ? new ResizeObserver(() => post({ type: 'size', w: cv.clientWidth, h: cv.clientHeight })) : null;
+    if (ro) ro.observe(cv);
+    const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); run(); }) : null;
+    if (io) io.observe(cv); else { seen = true; run(); }
+    doc.addEventListener('visibilitychange', run);
+    return {
+      post,
+      destroy() {
+        if (local) local.destroy();
+        post({ type: 'drop' });
+        workerWaits.delete(id);
+        if (ro) ro.disconnect();
+        if (io) io.disconnect();
+        doc.removeEventListener('visibilitychange', run);
+        cv.remove();
+      }
+    };
+  }
+
+  // the scene as the background of its block (the head of a chapter, the hero of the home page): no finger turns it,
+  // nothing is tapped; it goes on by itself
+  function stage(host, view, skin) {
+    const W = WORLDS[skin], set = SCENES[skin];
+    const holder = doc.createElement('div');
+    holder.className = 'psx-stage is-backdrop';
+    holder.dataset.scene = set[view] ? view : 'glavnaya';
+    holder.dataset.skin = skin;
+    holder.setAttribute('aria-hidden', 'true');
+    // the ground under the words, like the paper of a picture (tests/overlap.js lets text lie on it)
+    holder.dataset.bg = '';
+    // the scene's canvas and, if its world lays a glow over it, the small canvas of the glow (the browser adds it)
+    const canvases = () => {
+      holder.textContent = '';
+      const cv = doc.createElement('canvas');
+      holder.appendChild(cv);
+      let glow = null;
+      if (W.glow) { glow = doc.createElement('canvas'); glow.className = 'psx-glow'; holder.appendChild(glow); }
+      return { cv, glow };
+    };
+    let { cv, glow } = canvases();
+    host.insertBefore(holder, host.firstChild);
     let seen = false;
-    // as many frames on a phone as anywhere: at 20 the scenes judder
-    const L = psxLoop(ts => { if (!seen || doc.hidden) { L.stop(); return; } frame(ts); if (reduce.matches) L.stop(); }, W.fps || 30, W.fps || 30);
-    // a check that draws the scene frame by frame itself (tests/motion.js) sets window.BASIL_STAGES = [] before the page;
-    // seek sets the scene's clock, a minute into the page in a moment
-    if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame, R, stop: () => L.stop(), seek: s => { time = s; now0 = null; beat = -1; } });
+    const wanted = () => seen && !doc.hidden;
+
+    // drawn by the worker where it can be; if it fails after all, on the page on fresh canvases
+    const off = offCanvas(cv, 'stage', { view, skin }, W.fps || 30, () => { ({ cv, glow } = canvases()); seen = true; const L = onPage(); L.start(); return { destroy() { L.stop(); } }; }, { glow }, () => holder.classList.add('is-drawn'));
+    if (off) return { destroy() { off.destroy(); holder.remove(); } };
+
+    // drawn on the page: runs while on the screen, by the page's frame budget; one still frame with reduced motion
+    function onPage() {
+      const s = sceneOn(cv, glow, view, skin);
+      // as many frames on a phone as anywhere: at 20 the scenes judder
+      const L = psxLoop(ts => { if (!wanted()) { L.stop(); return; } s.frame(ts); holder.classList.add('is-drawn'); if (reduce.matches) L.stop(); }, W.fps || 30, W.fps || 30);
+      // a check that draws the scene frame by frame itself (tests/motion.js) sets window.BASIL_STAGES = [] before the
+      // page; seek sets the scene's clock, a minute into the page in a moment
+      if (Array.isArray(window.BASIL_STAGES)) window.BASIL_STAGES.push({ frame: s.frame, R: s.R, stop: () => L.stop(), seek: s.seek });
+      return L;
+    }
+    const L = onPage();
     const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => { seen = es.some(e => e.isIntersecting); if (seen) L.start(); else L.stop(); }) : null;
     if (io) io.observe(holder); else { seen = true; L.start(); }
-    const vis = () => { if (!doc.hidden && seen) L.start(); };
+    const vis = () => { if (wanted()) L.start(); };
     doc.addEventListener('visibilitychange', vis);
     return {
       destroy() {
@@ -286,3 +454,4 @@
       }
     };
   }
+

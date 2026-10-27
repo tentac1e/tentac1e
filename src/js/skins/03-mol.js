@@ -42,7 +42,35 @@
      atoms twenty flat faces, bonds four-sided rods, vertices snapped to the console's pixels — and drawn back up
      without smoothing */
   const MOLDRAW = {};
-  function drawMol(ctx, mol, P, R3, W, H) { (MOLDRAW[skinNow()] || MOLDRAW.grimoire)(ctx, mol, P, R3, W, H); }
+  function drawMol(ctx, mol, P, R3, W, H) {
+    const skin = MOLDRAW[skinNow()] ? skinNow() : 'grimoire', wk = scenesWorker();
+    if (wk) molAsk(wk, ctx, skin, mol, P, R3, W, H);
+    else MOLDRAW[skin](ctx, mol, P, R3, W, H);
+  }
+  // where the scenes have a worker (04-stage.js), the molecule is drawn there too: the page sends the turn, the worker
+  // sends the picture back (an ImageBitmap) and the page lays it on the viewer's canvas. One picture on the way at a
+  // time for each canvas: a turn asked for meanwhile waits, and only the newest
+  const MOLJOBS = new WeakMap();
+  let molIds = 0;
+  function molAsk(wk, ctx, skin, mol, P, R3, W, H) {
+    let j = MOLJOBS.get(ctx.canvas);
+    if (!j) {
+      j = { id: 'mol' + (++molIds), busy: false, next: null };
+      MOLJOBS.set(ctx.canvas, j);
+      const send = m => { j.busy = true; sceneWorker.postMessage(m); };
+      workerWaits.set(j.id, m => {
+        if (m.type === 'failed') { j.busy = false; j.next = null; return; }
+        if (m.type !== 'mol') return;
+        if (skinNow()) { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.drawImage(m.bmp, 0, 0, ctx.canvas.width, ctx.canvas.height); }
+        if (m.bmp.close) m.bmp.close();
+        j.busy = false;
+        if (j.next && sceneWorker) { const n = j.next; j.next = null; send(n); }
+      });
+      j.send = send;
+    }
+    const job = { type: 'mol', id: j.id, skin, mol: { atoms: mol.atoms, bonds: mol.bonds }, P, R3, W, H, cw: ctx.canvas.width, ch: ctx.canvas.height };
+    if (j.busy) j.next = job; else j.send(job);
+  }
   const MOLBUF = new WeakMap();
   MOLDRAW.grimoire = function molCrypt(ctx, mol, P, R3, W, H) {
     let b = MOLBUF.get(ctx.canvas);

@@ -57,3 +57,5 @@
   doc.addEventListener('basil:theme', () => { if (skinNow()) start(); else stop(); });
 
   const api = { start, stop, drawMol, say, get on() { return !!skinNow(); }, get skin() { return skinNow(); } };
+  // loaded again in the worker of the scenes (04-stage.js): it only draws the stages the page sends it
+  if (IN_WORKER) sceneHost();

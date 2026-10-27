@@ -6,7 +6,7 @@
 #   sh tests/run.sh --changed --list   только назвать их, ничего не запуская
 #   JOBS=2 sh tests/run.sh        сколько наборов идут сразу (по умолчанию 3)
 # Наборы идут по нескольку сразу, самые долгие первыми; то, что меряет время на замедленном процессоре
-# (perf и загрузка картинок, ills --net), — в конце, по одному. Вывод каждого — tests/out/run-<имя>.log,
+# (perf, offscreen и загрузка картинок, ills --net), — в конце, по одному. Вывод каждого — tests/out/run-<имя>.log,
 # на экран — в обычном порядке.
 cd "$(dirname "$0")/.." || exit 1
 mkdir -p tests/out
@@ -33,14 +33,14 @@ if [ "$1" = "--one" ]; then
   exit 0
 fi
 
-ALL="pages clean nav peek labs overlap controls gestures ills garden agronom skins motion depth pwa perf single"
+ALL="pages clean nav peek labs overlap controls gestures ills garden agronom skins motion depth pwa offscreen perf single"
 # the suites a changed file concerns (the first pattern that fits); a file the table does not know — all of them
 suites_for() {
   case "$1" in
     tests/run.sh|tests/lib.js|scripts/build.py|scripts/serve.py|scripts/bundle.py) echo "$ALL" ;;
     tests/gallery.js) echo "" ;;
     tests/*.js) basename "$1" .js ;;
-    src/js/skins/*) echo "skins motion depth" ;;
+    src/js/skins/*) echo "skins motion depth offscreen" ;;
     # the pictures of the skins: their icons and their frames
     scripts/skin-icons.js) echo "skins" ;;
     scripts/skin-art.js) echo "skins overlap controls" ;;
@@ -57,7 +57,7 @@ suites_for() {
     src/css/*) echo "overlap controls gestures ills pages peek skins" ;;
     src/pages/udobreniya/*|src/pages/spravka/*) echo "peek pages nav clean overlap controls ills single" ;;
     src/pages/*) echo "pages overlap controls ills single" ;;
-    src/js/scene/*) echo "perf ills" ;;
+    src/js/scene/*) echo "perf ills offscreen" ;;
     # written by the build, or prose
     *.html|*.md|assets/*|dist/*|tests/out/*) echo "" ;;
     *) echo "$ALL" ;;
@@ -102,6 +102,7 @@ for t in ills labs nav peek controls agronom overlap garden skins motion depth g
 done
 case " $list " in *" skins "*) pool="$pool grimoire-labs druid-labs grimoire-overlap druid-overlap" ;; esac
 case " $list " in *" ills "*) tail="$tail ills-net" ;; esac
+case " $list " in *" offscreen "*) tail="$tail offscreen" ;; esac
 case " $list " in *" perf "*) tail="$tail perf" ;; esac
 for t in $pool $tail; do rm -f "tests/out/run-$t.code"; done
 [ -n "$pool" ] && printf '%s\n' $pool | xargs -P "${JOBS:-3}" -I{} sh tests/run.sh --one {}

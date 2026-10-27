@@ -9,6 +9,10 @@
   const SKINS = ['grimoire', 'druid'];
   const skinNow = () => { const s = root.getAttribute('data-skin'); return SKINS.includes(s) ? s : null; };
   const SC = window.BasilScene;
+  // where this file came from (the worker of the scenes loads it again, 04-stage.js), and whether this is that worker:
+  // then the page here is a stand-in — no document, canvases off the screen
+  const SELF_SRC = (doc.currentScript && doc.currentScript.src) || '';
+  const IN_WORKER = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
   // a seeded random: the same scene at every visit
   function rng(seed) {
     let a = seed >>> 0;

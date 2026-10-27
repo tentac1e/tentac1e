@@ -536,7 +536,7 @@ h4 { margin: 0 0 .35em; font-size: 1.04rem; font-weight: 700; line-height: 1.3; 
 .hand { font-family: var(--font-hand); font-weight: 600; font-size: 1.55rem; line-height: 1.15; color: var(--opal); }
 
 /* ================= ambient background ================= */
-#leaf-field, .aura {
+#leaf-field {
   position: fixed;
   inset: 0;
   width: 100%;
@@ -544,25 +544,21 @@ h4 { margin: 0 0 .35em; font-size: 1.04rem; font-weight: 700; line-height: 1.3; 
   z-index: 0;
   pointer-events: none;
 }
-.aura { overflow: hidden; }
-.aura span { position: absolute; border-radius: 50%; animation: drift 26s ease-in-out infinite alternate; }
-.aura span:nth-child(1) { width: 56vmax; height: 56vmax; left: -18vmax; top: -20vmax; background: radial-gradient(circle, var(--halo-a), transparent 65%); }
-.aura span:nth-child(2) { width: 44vmax; height: 44vmax; right: -16vmax; top: 30vh; background: radial-gradient(circle, color-mix(in srgb, var(--opal) 14%, transparent), transparent 65%); animation-duration: 32s; animation-delay: -8s; }
-.aura span:nth-child(3) { width: 40vmax; height: 40vmax; left: 20vw; bottom: -22vmax; background: radial-gradient(circle, color-mix(in srgb, var(--oil-bright) 14%, transparent), transparent 65%); animation-duration: 38s; animation-delay: -14s; }
-@keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(4vw, 3vh, 0) scale(1.08); } }
-/* sky layers: animated by the compositor, the main thread never repaints them */
-.sky-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.sky-beam { position: absolute; inset: 0; animation: sky-sway 44.9s ease-in-out infinite alternate; will-change: transform; }
-.sky-beam canvas { display: block; width: 100%; height: 100%; opacity: .42; animation: sky-breathe 13s ease-in-out infinite alternate; will-change: opacity; }
-.sky-moon { position: absolute; inset: 0; background: radial-gradient(70vmax circle at 86% -5%, var(--sc-moon, rgba(190, 220, 255, .12)), transparent); animation: sky-moon 15.7s ease-in-out infinite alternate; will-change: opacity; }
-@keyframes sky-breathe { from { opacity: .22; } to { opacity: .62; } }
-@keyframes sky-sway { from { transform: translate3d(-1.2vw, 0, 0); } to { transform: translate3d(1.2vw, 0, 0); } }
-@keyframes sky-moon { from { opacity: .7; } to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .sky-beam, .sky-beam canvas, .sky-moon { animation: none; } }
+/* the sky behind the leaves — shafts of sun, the moon's glow, three soft drifting lights: one small canvas stretched
+   smooth over the screen (04-background.js draws it a few times a second) */
+.sky-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.sky-layer canvas { display: block; width: 100%; height: 100%; }
 .is-off, .is-off *, .is-off::before, .is-off::after, .is-off *::before, .is-off *::after { animation-play-state: paused !important; }
 /* the page left alone for a while (scene/01-budget.js): the sky, the floating pictures and every other
    endless animation stand still until the next touch, scroll or key */
 .is-asleep *, .is-asleep *::before, .is-asleep *::after { animation-play-state: paused !important; }
+/* a page that proves to struggle (scene/01-budget.js, setLow — its frames keep coming late): the glass of the header,
+   the tab bar, the chapter's tabs and the passport without its blur, a little denser instead so nothing shows through.
+   A browser drawing without the graphics card blurred them again on every frame the leaves drew beneath: scrolling
+   fell from 60 frames a second to 30. Where the frames come in time the glass stays as it is */
+.is-strained :is(.topbar, .tabbar, .subnav-wrap, .passport) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root.is-strained:not([data-skin]) :is(.topbar, .tabbar, .subnav-wrap, .subnav-wrap.is-stuck) { background: color-mix(in srgb, var(--bg) 95%, transparent); }
+.is-strained .sheet::backdrop { -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 .page { position: relative; z-index: 1; overflow-x: clip; }
 
@@ -3081,7 +3077,7 @@ svg, canvas {
 @media (max-width: 560px) { .tools-seg { display: flex; } }
 /* ================= «Заглянуть»: a page shown inside the sheet of another (?peek=1, 03-peek.js) ================= */
 /* only the place asked for: no header, tab bar, footer, chapter head, tabs, pagers or sky behind it */
-.is-peek .topbar, .is-peek .footer, .is-peek .tabbar, .is-peek .to-top, .is-peek .skip, .is-peek #leaf-field, .is-peek .aura,
+.is-peek .topbar, .is-peek .footer, .is-peek .tabbar, .is-peek .to-top, .is-peek .skip, .is-peek #leaf-field, .is-peek .sky-layer,
 .is-peek .resume-pill, .is-peek .ch-hero, .is-peek .subnav-wrap, .is-peek .pager, .is-peek .panel-next { display: none !important; }
 /* beside the path to the place, nothing (the page's own markup stays as it is: its scripts work as on their page) */
 .is-peek [data-peek-up] > :not([data-peek-up]):not([data-peek]) { display: none !important; }
@@ -3190,7 +3186,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 
 /* ---- the page: the greenhouse and its sky step aside for the crypt ---- */
 [data-skin="grimoire"] body { font-size: 1.02rem; line-height: 1.62; font-weight: 500; }
-[data-skin="grimoire"] #leaf-field, [data-skin="grimoire"] .aura, [data-skin="grimoire"] .sky-layer { display: none !important; }
+[data-skin="grimoire"] #leaf-field, [data-skin="grimoire"] .sky-layer { display: none !important; }
 #psx-crypt { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
 [data-skin="grimoire"] ::selection { background: var(--blood); color: var(--ink); }
 [data-skin="grimoire"] :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 2px; }
@@ -3544,7 +3540,7 @@ html.is-peek body { padding-bottom: 0; background: var(--surface); }
 
 /* ---- the page: the greenhouse and its sky step aside for the grove ---- */
 [data-skin="druid"] body { font-size: 1.06rem; line-height: 1.66; }
-[data-skin="druid"] #leaf-field, [data-skin="druid"] .aura, [data-skin="druid"] .sky-layer { display: none !important; }
+[data-skin="druid"] #leaf-field, [data-skin="druid"] .sky-layer { display: none !important; }
 /* the grove behind the page (07-forest.js): the night is a still gradient with the moon's haze in a corner and a glow
    of moss at the foot; an old stump with its roots and runes stands in the lower left corner over ferns, a mossy fallen
    log in the lower right, a gnarled branch reaches in at the top left and ivy runs along the top on the right; lianas

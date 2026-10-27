@@ -7,7 +7,7 @@
 
 /* ---- the page: the greenhouse and its sky step aside for the crypt ---- */
 [data-skin="grimoire"] body { font-size: 1.02rem; line-height: 1.62; font-weight: 500; }
-[data-skin="grimoire"] #leaf-field, [data-skin="grimoire"] .aura, [data-skin="grimoire"] .sky-layer { display: none !important; }
+[data-skin="grimoire"] #leaf-field, [data-skin="grimoire"] .sky-layer { display: none !important; }
 #psx-crypt { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
 [data-skin="grimoire"] ::selection { background: var(--blood); color: var(--ink); }
 [data-skin="grimoire"] :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 2px; }

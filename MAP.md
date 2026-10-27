@@ -224,10 +224,10 @@
 
 **scene.js**
 - `src/js/scene/00-core.js` (8 стр.): TAU
-- `src/js/scene/01-budget.js` (99 стр.): CALM, CALM_FPS
+- `src/js/scene/01-budget.js` (102 стр.): CALM, CALM_FPS
 - `src/js/scene/02-noise.js` (22 стр.)
 - `src/js/scene/03-wind.js` (22 стр.)
-- `src/js/scene/04-background.js` (504 стр.): SPR_L, initBackground
+- `src/js/scene/04-background.js` (686 стр.): SPR_L, SCENE_SRC, IN_WORKER, TOKENS, initBackground
 - `src/js/scene/05-plant.js` (49 стр.)
 - `src/js/scene/06-plant-bitmaps.js` (382 стр.): LEAF_D, LEAF_BOX, LEAF_FILLS, Plant
 - `src/js/scene/07-aroma.js` (41 стр.): NOTES
@@ -246,15 +246,15 @@
 - `src/js/data/10-experiments.js` (50 стр.): EXPERIMENTS
 
 **skins.js**
-- `src/js/skins/00-core.js` (36 стр.): SKINS, BAYER
-- `src/js/skins/01-raster.js` (291 стр.): SHADED, FACES, ICO, OCT
+- `src/js/skins/00-core.js` (40 стр.): SKINS, SELF_SRC, IN_WORKER, BAYER
+- `src/js/skins/01-raster.js` (298 стр.): SHADED, FACES, ICO, OCT
 - `src/js/skins/02-icons-druid.js` (70 стр.): DRUID_ICONS
 - `src/js/skins/02-icons-grimoire-hand.js` (242 стр.): GRIMOIRE_HAND
 - `src/js/skins/02-icons-grimoire.js` (1142 стр.): GRIMOIRE_ICONS
 - `src/js/skins/02-icons.js` (83 стр.): PIX, ICON_SETS, BRAND
 - `src/js/skins/02-textures.js` (199 стр.): FLOORS, RUNE_STROKES, GLYPH
-- `src/js/skins/03-mol.js` (81 стр.): SHAPES, MOLDRAW, drawMol, MOLBUF
-- `src/js/skins/04-stage.js` (288 стр.): WORLDS, PAIRS, ESSENCE
+- `src/js/skins/03-mol.js` (109 стр.): SHAPES, MOLDRAW, drawMol, MOLJOBS, MOLBUF
+- `src/js/skins/04-stage.js` (457 стр.): WORLDS, PAIRS, ESSENCE, OFF
 - `src/js/skins/05-grimoire-formirovka.js` (99 стр.)
 - `src/js/skins/05-grimoire-gidro.js` (66 стр.)
 - `src/js/skins/05-grimoire-glavnaya.js` (117 стр.)
@@ -278,12 +278,12 @@
 - `src/js/skins/06-druid-udobreniya.js` (67 стр.)
 - `src/js/skins/06-druid-uhod.js` (46 стр.)
 - `src/js/skins/06-druid-vkus.js` (47 стр.)
-- `src/js/skins/06-druid.js` (516 стр.): PHASE_TODAY, BLOOM, GROVEMOL
-- `src/js/skins/07-crypt.js` (54 стр.)
-- `src/js/skins/07-forest.js` (422 стр.)
+- `src/js/skins/06-druid.js` (513 стр.): PHASE_TODAY, BLOOM, GROVEMOL
+- `src/js/skins/07-crypt.js` (64 стр.)
+- `src/js/skins/07-forest.js` (447 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
 - `src/js/skins/08-words.js` (147 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
-- `src/js/skins/09-start.js` (59 стр.): BACKS
+- `src/js/skins/09-start.js` (61 стр.): BACKS
 
 ## Стили (src/css/)
 

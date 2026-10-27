@@ -313,10 +313,7 @@
   // the stage's CSS. The molecule viewer, a picture now and then, still takes its glow from the picture itself (a
   // picture at a sixth, its dark pressed down by multiplying it with itself, laid back over it)
   const BLOOM = new WeakMap();
-  function glowLayer(holder, R) {
-    const c1 = doc.createElement('canvas');
-    c1.className = 'psx-glow';
-    holder.appendChild(c1);
+  function glowLayer(c1, R) {
     R.glowTo(c1, 1 / 6);
     BLOOM.set(R, { page: true });
   }
@@ -476,7 +473,7 @@
       };
     },
     post: R => glowPost(R),
-    overlay: glowLayer
+    glow: glowLayer
   });
 
   /* The molecule viewer in «Друид»: the same molecule, turned the same way — carbon white berries of mistletoe,

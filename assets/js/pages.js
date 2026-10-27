@@ -891,6 +891,6 @@ window.BASIL_PAGES = {
    ]
   },
   "search": "bbeb679a",
-  "skins": "7bf23101"
+  "skins": "8875b01f"
  }
 };

@@ -194,16 +194,23 @@
   }
 
   // a texture lit and fogged (a cut-out one — a leaf, a flame — keeps its outline), kept for the next triangle in the
-  // same light: the light in k steps to one
-  const SHADED = new Map();
-  let texId = 0;
+  // same light: the light in k steps to one. The light of «Друид» flickers (a fire, runes, the moon behind a cloud) and
+  // a scene asks for a few thousand of them over a minute: the oldest go first when the copies pass SHADED_PX points
+  // (a dozen megabytes) — a cache emptied all at once at 900 copies was made again from nothing, 400 canvases a second
+  const SHADED = new Map(), SHADED_PX = 3e6;
+  let texId = 0, shadedPx = 0;
   function shaded(tx, l, f, F, k = 10) {
     const q = v => Math.round(Math.min(1.2, v) * k);
     if (!tx.psxId) tx.psxId = ++texId;
     const key = tx.psxId + ':' + k + ':' + (l ? l.map(q).join(',') : '-') + ',' + Math.round(f * 12);
     let c = SHADED.get(key);
-    if (c) return c;
-    if (SHADED.size > 900) SHADED.clear();
+    if (c) { SHADED.delete(key); SHADED.set(key, c); return c; }
+    for (const [k0, c0] of SHADED) {
+      if (shadedPx + tx.width * tx.height <= SHADED_PX) break;
+      SHADED.delete(k0);
+      shadedPx -= c0.width * c0.height;
+    }
+    shadedPx += tx.width * tx.height;
     c = doc.createElement('canvas');
     c.width = tx.width; c.height = tx.height;
     const x = c.getContext('2d');

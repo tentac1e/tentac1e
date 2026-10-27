@@ -6,6 +6,9 @@
   const coarse = window.matchMedia('(pointer: coarse)').matches;
   const perf = { low: coarse, listeners: [] };
   function setLow() {
+    // a page that proves to struggle (not a phone that is simply low from the start): its glass loses its blur too
+    // (02-ambient.css, .is-strained)
+    document.documentElement.classList.add('is-strained');
     if (perf.low) return;
     perf.low = true;
     perf.listeners.forEach(fn => fn());

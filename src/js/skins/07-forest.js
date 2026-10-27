@@ -230,10 +230,86 @@
     const fly = doc.createElement('canvas');
     fly.className = 'fly';
     el.appendChild(fly);
-    const pane = cls => { const c = doc.createElement('canvas'); c.className = 'grove-pane ' + cls; el.appendChild(c); return { c, x: c.getContext('2d'), box: null }; };
+    const pane = cls => { const c = doc.createElement('canvas'); c.className = 'grove-pane ' + cls; el.appendChild(c); return c; };
     const panes = { branch: pane('gp-branch'), ivy: pane('gp-ivy'), stump: pane('gp-stump'), log: pane('gp-log') };
-    const fx = fly.getContext('2d');
 
+    // the fireflies: each wanders on a path of its own — across and up and down at two paces, never quite stopping —
+    // and glows up now and then; fewer on a narrow screen. In «less motion» a few simply stand lit
+    const nFly = innerWidth < 600 ? 14 : 26, flies = [];
+    for (let i = 0; i < nFly; i++) {
+      const tx = 9 + R() * 10, ty = 7 + R() * 8, b = 4 + R() * 5;
+      flies.push({ x: 0.04 + R() * 0.92, y: 0.22 + R() * 0.74, dx: 24 + R() * 46, dy: 14 + R() * 30, tx, ty, b, px: R() * 6.3, py: R() * 6.3, pb: R(), still: i % 3 ? 0 : 0.8, was: null });
+    }
+    // where everything moving stands, read from the page: the fireflies' canvas, each pane over its picture (its place on
+    // the page, its size in canvas points), each liana from its anchor, each glow on its rune or mushroom
+    const rect = box => { const r = box.getBoundingClientRect(); return { l: r.left, t: r.top, w: r.width, h: r.height }; };
+    function layout() {
+      const kv = Math.min(1.5, window.devicePixelRatio || 1), narrow = innerWidth < 600;
+      const lay = { W: Math.round(el.clientWidth * 0.5), H: Math.round(el.clientHeight * 0.5), panes: {}, vines: [], glows: [], flies };
+      const place = (name, b) => {
+        lay.panes[name] = { ...b, kv };
+        Object.assign(panes[name].style, { left: b.l + 'px', top: b.t + 'px', width: b.w + 'px', height: b.h + 'px' });
+      };
+      // the lianas: from the anchors of the branch and of the ivy, as long as the picture is drawn wide (shorter on a
+      // narrow screen, and only every other one)
+      [['branch', 1], ['ivy', 2]].forEach(([name, seed]) => {
+        const b = rect(boxes[name]), s = b.w / PIC[name].vb[0];
+        const list = PIC[name].anchors.filter(([ax]) => !narrow || (name === 'ivy' ? ax * s > b.w - 90 : ax * s < 90));
+        const made = list.map(([ax, ay, len], i) => ({ ax: b.l + ax * s, ay: b.t + ay * s, len: len * b.w * (narrow ? 0.32 : 0.6), seed: seed * 100 + i }));
+        let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+        made.forEach(v => { const reach = 24 + v.len * 0.1; x0 = Math.min(x0, v.ax - reach); x1 = Math.max(x1, v.ax + reach); y0 = Math.min(y0, v.ay - 6); y1 = Math.max(y1, v.ay + v.len + 30); });
+        const box = { l: Math.floor(x0), t: Math.floor(y0), w: Math.ceil(x1 - x0), h: Math.ceil(y1 - y0) };
+        place(name, box);
+        made.forEach(v => lay.vines.push({ pane: name, x: v.ax - box.l, y: v.ay - box.t, len: v.len, seed: v.seed }));
+      });
+      // the runes and the mushrooms of the stump and the log: their glows, where the pictures put them
+      ['stump', 'log'].forEach(name => {
+        const b = rect(boxes[name]), s = b.w / PIC[name].vb[0];
+        place(name, { l: Math.floor(b.l), t: Math.floor(b.t), w: Math.ceil(b.w), h: Math.ceil(b.h) });
+        PIC[name].runes.forEach((st, i) => lay.glows.push({ pane: name, rune: st, s, P: 9 + i * 1.7, ph: i * 1.9 + (name === 'log' ? 3 : 0) }));
+        PIC[name].caps.forEach(([cx, cy, r], i) => lay.glows.push({ pane: name, cap: [cx * s, cy * s, Math.max(10, r * s * 2.6)], P: 7 + i * 1.3, ph: i * 2.3 }));
+      });
+      return lay;
+    }
+
+    const page = $('.page');
+    (page ? page.parentNode : doc.body).insertBefore(el, page);
+    let rz = 0, seen = '';
+    // drawn by the worker of the scenes where it can be (the page sends where things stand, again after a resize), 20
+    // frames a second; else here, as before
+    let G = null, L = null;
+    const local = (cvs, lay) => {
+      G = groveOn(cvs, C, lay);
+      L = psxLoop(now => { G.frame(now); }, 20, 20);
+      const motion = () => { if (reduce.matches) { L.stop(); G.frame(0); } else L.start(); };
+      reduce.addEventListener('change', motion);
+      motion();
+      return { destroy() { L.stop(); reduce.removeEventListener('change', motion); }, lay: l => { G.lay(l); if (reduce.matches) G.frame(0); } };
+    };
+    const lay0 = layout();
+    const off = offCanvas(fly, 'grove', { C, lay: lay0 }, 20, (fresh, fp) => { Object.assign(panes, fp); return local({ fly: fresh, ...panes }, layout()); }, panes);
+    const run = off || local({ fly, ...panes }, lay0);
+    // a phone's bars coming and going leave the layer as it was (it is as tall as the screen without them): nothing to do
+    const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { const key = `${el.clientWidth}x${el.clientHeight}`; if (key === seen) return; seen = key; const lay = layout(); if (off) off.post({ type: 'lay', lay }); else run.lay(lay); }, 150); };
+    seen = `${el.clientWidth}x${el.clientHeight}`;
+    addEventListener('resize', onResize);
+    return {
+      destroy() {
+        run.destroy();
+        clearTimeout(rz);
+        removeEventListener('resize', onResize);
+        el.remove();
+      }
+    };
+  }
+
+  // what moves in the grove, on its canvases (cvs: fly, branch, ivy, stump, log): the fireflies, the lianas, the glows of
+  // the runes and the mushrooms — on the page, or in the worker of the scenes (04-stage.js). C — the colours of the
+  // grove, lay — where everything stands (forest(), read from the page)
+  function groveOn(cvs, C, lay) {
+    const fx = cvs.fly.getContext('2d');
+    const panes = {};
+    ['branch', 'ivy', 'stump', 'log'].forEach(n => { panes[n] = { c: cvs[n], x: cvs[n].getContext('2d'), box: null }; });
     // a liana: a thin stem with ivy-like leaves on short stalks, in turns to either side, and now and then a tendril;
     // drawn once into three pieces, each hanging from the end of the one above, so it can bend as it sways
     function liana(len, seed, kv) {
@@ -289,55 +365,22 @@
       return c;
     })();
 
-    // the fireflies: each wanders on a path of its own — across and up and down at two paces, never quite stopping —
-    // and glows up now and then; fewer on a narrow screen. In «less motion» a few simply stand lit
-    const nFly = innerWidth < 600 ? 14 : 26, flies = [];
-    for (let i = 0; i < nFly; i++) {
-      const tx = 9 + R() * 10, ty = 7 + R() * 8, b = 4 + R() * 5;
-      flies.push({ x: 0.04 + R() * 0.92, y: 0.22 + R() * 0.74, dx: 24 + R() * 46, dy: 14 + R() * 30, tx, ty, b, px: R() * 6.3, py: R() * 6.3, pb: R(), still: i % 3 ? 0 : 0.8, was: null });
-    }
     const RAD = 11, k = 0.5;
-    let W = 0, H = 0, sprite = null, time = 0, last = null, frameN = 0, vines = [], glows = [];
-    const rect = box => { const r = box.getBoundingClientRect(); return { l: r.left, t: r.top, w: r.width, h: r.height }; };
-    function size() {
-      W = fly.width = Math.round(el.clientWidth * k); H = fly.height = Math.round(el.clientHeight * k);
+    let W = 0, H = 0, sprite = null, time = 0, last = null, frameN = 0, vines = [], glows = [], flies = [];
+    function setLay(l) {
+      flies = l.flies.map(fl => ({ ...fl, was: null }));
+      W = cvs.fly.width = l.W; H = cvs.fly.height = l.H;
       const r = Math.ceil(RAD * k);
       sprite = doc.createElement('canvas');
       sprite.width = sprite.height = r * 2;
       const sx = sprite.getContext('2d'), g = sx.createRadialGradient(r, r, 0, r, r, r);
       g.addColorStop(0, C.fly); g.addColorStop(0.12, C.fly); g.addColorStop(0.34, C.flyGlow); g.addColorStop(1, 'rgba(196,240,120,0)');
       sx.fillStyle = g; sx.fillRect(0, 0, r * 2, r * 2);
-      flies.forEach(fl => { fl.was = null; });
       fx.clearRect(0, 0, W, H);
-      const kv = Math.min(1.5, window.devicePixelRatio || 1), narrow = innerWidth < 600;
-      // the lianas: from the anchors of the branch and of the ivy, as long as the picture is drawn wide (shorter on a
-      // narrow screen, and only every other one)
-      vines = [];
-      [['branch', 1], ['ivy', 2]].forEach(([name, seed]) => {
-        const b = rect(boxes[name]), s = b.w / PIC[name].vb[0];
-        const list = PIC[name].anchors.filter(([ax]) => !narrow || (name === 'ivy' ? ax * s > b.w - 90 : ax * s < 90));
-        const made = list.map(([ax, ay, len], i) => ({ ax: b.l + ax * s, ay: b.t + ay * s, ...liana(len * b.w * (narrow ? 0.32 : 0.6), seed * 100 + i, kv) }));
-        let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-        made.forEach(v => { const reach = 24 + v.len * 0.1; x0 = Math.min(x0, v.ax - reach); x1 = Math.max(x1, v.ax + reach); y0 = Math.min(y0, v.ay - 6); y1 = Math.max(y1, v.ay + v.len + 30); });
-        const p = panes[name];
-        p.box = { l: Math.floor(x0), t: Math.floor(y0), w: Math.ceil(x1 - x0), h: Math.ceil(y1 - y0), kv };
-        Object.assign(p.c.style, { left: p.box.l + 'px', top: p.box.t + 'px', width: p.box.w + 'px', height: p.box.h + 'px' });
-        p.c.width = Math.ceil(p.box.w * kv); p.c.height = Math.ceil(p.box.h * kv);
-        made.forEach(v => { v.pane = p; });
-        vines.push(...made);
-      });
-      // the runes and the mushrooms of the stump and the log: their glows, where the pictures put them
-      glows = [];
-      ['stump', 'log'].forEach(name => {
-        const b = rect(boxes[name]), s = b.w / PIC[name].vb[0], p = panes[name];
-        p.box = { l: Math.floor(b.l), t: Math.floor(b.t), w: Math.ceil(b.w), h: Math.ceil(b.h), kv };
-        Object.assign(p.c.style, { left: p.box.l + 'px', top: p.box.t + 'px', width: p.box.w + 'px', height: p.box.h + 'px' });
-        p.c.width = Math.ceil(p.box.w * kv); p.c.height = Math.ceil(p.box.h * kv);
-        PIC[name].runes.forEach((st, i) => glows.push({ pane: p, rune: glowOf(st, s, kv), s, P: 9 + i * 1.7, ph: i * 1.9 + (name === 'log' ? 3 : 0) }));
-        PIC[name].caps.forEach(([cx, cy, r], i) => glows.push({ pane: p, cap: [cx * s, cy * s, Math.max(10, r * s * 2.6)], P: 7 + i * 1.3, ph: i * 2.3 }));
-      });
+      Object.entries(l.panes).forEach(([n, b]) => { const p = panes[n]; p.box = b; p.c.width = Math.ceil(b.w * b.kv); p.c.height = Math.ceil(b.h * b.kv); });
+      vines = l.vines.map(v => { const p = panes[v.pane]; return { pane: p, ax: v.x, ay: v.y, ...liana(v.len, v.seed, p.box.kv) }; });
+      glows = l.glows.map(g0 => { const p = panes[g0.pane]; return g0.rune ? { pane: p, rune: glowOf(g0.rune, g0.s, p.box.kv), s: g0.s, P: g0.P, ph: g0.ph } : { pane: p, cap: g0.cap, P: g0.P, ph: g0.ph }; });
     }
-
     // how bright a firefly is at the time t: dark most of its round, then a glow that swells and fades
     const flyGlow = (fl, t) => { const p = ((t / fl.b + fl.pb) % 1 + 1) % 1; return p < 0.4 || p > 0.9 ? 0 : Math.pow(Math.sin(Math.PI * (p - 0.4) / 0.5), 1.5); };
     function drawFlies(t, still) {
@@ -363,7 +406,7 @@
       const T = Math.PI * 2;
       vines.forEach(v => {
         const x = v.pane.x, b = v.pane.box;
-        x.setTransform(b.kv, 0, 0, b.kv, (v.ax - b.l) * b.kv, (v.ay - b.t) * b.kv);
+        x.setTransform(b.kv, 0, 0, b.kv, v.ax * b.kv, v.ay * b.kv);
         v.segs.forEach((sg, j) => {
           if (!still) x.rotate(v.A * (1 + 0.35 * j) * Math.sin(T * t / v.P + v.ph - j * 0.7) + v.A * 0.3 * Math.sin(T * t / (v.P * 2.3) + v.ph * 1.7));
           x.drawImage(sg.c, -sg.ox, -sg.oy, sg.w, sg.h);
@@ -389,34 +432,16 @@
       [panes.stump, panes.log].forEach(p => { p.x.globalAlpha = 1; });
     }
     // the clock goes by drawn frames, so after a pause nothing jumps; the fireflies move at every frame, the lianas at
-    // every second, the glows at every third — each slow enough not to need more
-    const L = psxLoop(now => {
+    // every second, the glows at every third — each slow enough not to need more. With less motion: all of it at rest
+    function frame(now) {
+      if (reduce.matches) { drawFlies(0, true); drawVines(0, true); drawGlows(0, true); return; }
       if (last != null) time += clamp((now - last) / 1000, 0, 0.1);
       last = now;
       drawFlies(time, false);
       if (frameN % 2 === 0) drawVines(time, false);
       if (frameN % 3 === 0) drawGlows(time, false);
       frameN++;
-    }, 20, 20);
-    const page = $('.page');
-    (page ? page.parentNode : doc.body).insertBefore(el, page);
-    const still = () => { drawFlies(0, true); drawVines(0, true); drawGlows(0, true); };
-    size();
-    const motion = () => { if (reduce.matches) { L.stop(); still(); } else { last = null; L.start(); } };
-    let rz = 0, seen = '';
-    // a phone's bars coming and going leave the layer as it was (it is as tall as the screen without them): nothing to do
-    const onResize = () => { clearTimeout(rz); rz = setTimeout(() => { const key = `${el.clientWidth}x${el.clientHeight}`; if (key === seen) return; seen = key; size(); if (reduce.matches) still(); }, 150); };
-    seen = `${el.clientWidth}x${el.clientHeight}`;
-    addEventListener('resize', onResize);
-    reduce.addEventListener('change', motion);
-    motion();
-    return {
-      destroy() {
-        L.stop();
-        clearTimeout(rz);
-        removeEventListener('resize', onResize);
-        reduce.removeEventListener('change', motion);
-        el.remove();
-      }
-    };
+    }
+    setLay(lay);
+    return { frame, lay: l => { setLay(l); frameN = 0; } };
   }
