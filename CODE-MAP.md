@@ -174,14 +174,14 @@
 
 ### style.css
 - `src/css/style/01-base.css`: `.skip`, `.eyebrow`, `.num`, `.mono`, `.muted`, `.ico`, `.sprite`, `.lead`, `.hand`
-- `src/css/style/02-ambient.css`: `.is-strained`, `.sky-*`, `.topbar`, `.tabbar`, `.subnav-*`, `.is-on`, `.is-off`, `.is-asleep`, `.passport`, `.is-stuck`, `.sheet`, `.page`
+- `src/css/style/02-ambient.css`: `.is-strained`, `.sky-*`, `.topbar`, `.tabbar`, `.is-on`, `.is-off`, `.is-asleep`, `.passport`, `.sheet`, `.page`, `.wrap`
 - `src/css/style/03-header.css`: `.skin-*`, `.search-*`, `.tab-*`, `.garden-*`, `.brand`, `.topbar-*`, `.ico`, `.is-active`, `.progress`, `.icon-*`, `.tabbar`
 - `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.g-link`, `.table-*`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
 - `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
 - `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
 - `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-sol-*`, `.ar-root-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`
 - `src/css/style/08-home.css`: `.facts`, `.hero-*`, `.toc-*`, `.home-*`, `.short-*`, `.journey`, `.passport-*`, `.q-card`, `.season-*`, `.rule-*`, `.continue`, `.ico` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
-- `src/css/style/09-chapter-chrome.css`: `.ch-hero-*`, `.subnav-*`, `.pager`, `.blob`, `.art-*`, `.is-stuck`, `.pg-art`, `.eyebrow`, `.lead`, `.next` · анимации: `morph`, `morph-fade`
+- `src/css/style/09-chapter-chrome.css`: `.subnav-*`, `.ch-hero-*`, `.pager`, `.blob`, `.art-*`, `.is-stuck`, `.pg-art`, `.eyebrow`, `.lead`, `.next` · анимации: `morph`, `morph-fade`
 - `src/css/style/10-varieties.css`: `.quiz-*`, `.v-leaf`, `.vtype`, `.vt-panel-*`, `.meter`, `.vt-specs`, `.vt-sorts`, `.vd-head`, `.qr`, `.versus`, `.filters`, `.vt-toggle` · анимации: `vt-in`
 - `src/css/style/11-places.css`: `.place-*`, `.params`, `.tab`, `.comp-*`, `.tabs`, `.ill`, `.lead`, `.ico`
 - `src/css/style/12-steps.css`: `.step-*`, `.soil-*`, `.ill-*`, `.rescue-*`, `.steps`, `.mx-a`, `.mx-b`, `.mx-c`, `.mx-d`
@@ -199,7 +199,7 @@
 - `src/css/style/24-toc.css`: `.toc-*`, `.tools-*`, `.ico`, `.sheet-*`, `.is-open`, `.garden-*`, `.is-closing`, `.tool`, `.t-where`, `.is-on` · анимации: `toc-drop`
 - `src/css/style/25-peek.css`: `.is-peek`, `.deep-*`, `.topbar`, `.footer`, `.tabbar`, `.to-top`, `.skip`, `.sky-*`, `.resume-*`, `.ch-hero`, `.subnav-*`, `.pager`
 - `src/css/style/26-hydro.css`: `.hy-water-*`, `.hy-routine`, `.hy-cost-*`, `.hy-time`, `.hy-role-*`, `.hy-rules`, `.hy-path`, `.hy-when`, `.hy-trio`, `.hy-h`, `.hy-paths`, `.sub`
-- `src/css/style/27-grimoire.css`: `.subnav-*`, `.toc-*`, `.ico`, `.ch-hero-*`, `.skin-*`, `.hero-*`, `.view-*`, `.chip`, `.tab-*`, `.seg`, `.brand`, `.search-*` · анимации: `psx-flicker`, `psx-point`
+- `src/css/style/27-grimoire.css`: `.toc-*`, `.ico`, `.ch-hero-*`, `.subnav`, `.skin-*`, `.hero-*`, `.view-*`, `.chip`, `.tab-*`, `.seg`, `.brand`, `.search-*` · анимации: `psx-flicker`, `psx-point`
 - `src/css/style/28-druid.css`: `.toc-*`, `.btn-*`, `.subnav`, `.tab-*`, `.ico`, `.skin-*`, `.card`, `.pane`, `.brand`, `.pager`, `.exp-*`, `.search-*`
 
 ### lab.css

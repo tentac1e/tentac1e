@@ -262,18 +262,7 @@
   :root[data-skin] .ch-hero .psx-stage.is-backdrop { bottom: auto; height: 290px; --fade-x: 0 .1 .9 1; --fade-y: 0 0 .66 1; }
 }
 
-/* ---- the chapter's tabs in a skin: no band across the screen. At the top of a chapter they stand on the backdrop
-   itself, with no bed and no line; stuck over the text they get a bed of night under them, dense under the column and
-   fading out towards the edges of the screen and below — no long line cuts the background of a wide screen ---- */
-:root[data-skin] .subnav-wrap, :root[data-skin] .subnav-wrap.is-stuck { background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 0; }
-:root[data-skin] .subnav-wrap { --band-fade: max(16px, calc(50vw - 640px)); }
-:root[data-skin] .subnav-wrap::before {
-  content: ""; position: absolute; inset: 0 0 -22px; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .3s;
-  background: linear-gradient(to bottom, var(--bg) 0, color-mix(in srgb, var(--bg) 94%, transparent) calc(100% - 22px), transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
-}
-:root[data-skin] .subnav-wrap.is-stuck::before { opacity: 1; }
+/* ---- the chapter's tabs in a skin: as in every theme, no band across the screen (09-chapter-chrome.css) ---- */
 /* the line of reading under the header: as long as the column of text, not the screen — at the end of a page it would be
    one more stick across a wide screen */
 :root[data-skin] .progress { left: 50%; right: auto; width: min(1100px, calc(100% - 32px)); transform: translateX(-50%); border-radius: 2px; }

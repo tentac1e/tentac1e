@@ -23,8 +23,8 @@
    the tab bar, the chapter's tabs and the passport without its blur, a little denser instead so nothing shows through.
    A browser drawing without the graphics card blurred them again on every frame the leaves drew beneath: scrolling
    fell from 60 frames a second to 30. Where the frames come in time the glass stays as it is */
-.is-strained :is(.topbar, .tabbar, .subnav-wrap, .passport) { -webkit-backdrop-filter: none; backdrop-filter: none; }
-:root.is-strained:not([data-skin]) :is(.topbar, .tabbar, .subnav-wrap, .subnav-wrap.is-stuck) { background: color-mix(in srgb, var(--bg) 95%, transparent); }
+.is-strained :is(.topbar, .tabbar, .passport) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root.is-strained:not([data-skin]) :is(.topbar, .tabbar) { background: color-mix(in srgb, var(--bg) 95%, transparent); }
 .is-strained .sheet::backdrop { -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 .page { position: relative; z-index: 1; overflow-x: clip; }

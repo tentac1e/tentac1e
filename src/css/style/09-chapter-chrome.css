@@ -55,21 +55,26 @@
   .ch-hero-art { grid-column: 2; grid-row: 1; width: 96px; margin-top: -6px; }
 }
 
-/* the chapter's sections: tabs on a thin rail, the open one underlined — navigation, not one more row of filter chips */
+/* the chapter's sections: tabs on a thin rail, the open one underlined — navigation, not one more row of filter chips.
+   No band across the screen, in every theme (so the owner decided: on a wide screen such a stick cuts the background):
+   at the top of a chapter the tabs stand on the page itself, with no bed and no line across; stuck over the text they
+   get a bed of the page's colour, dense under the column — dense enough that the lines scrolling under it do not show
+   through — and fading out towards the edges of the screen and below */
 .subnav-wrap {
   position: sticky;
   top: var(--sticky-top);
   z-index: 40;
   margin: 0 calc(50% - 50vw) clamp(18px, 3vw, 28px);
   padding: 4px calc(50vw - 50%) 0;
-  background: color-mix(in srgb, var(--bg) 84%, transparent);
-  -webkit-backdrop-filter: blur(14px) saturate(1.3);
-  backdrop-filter: blur(14px) saturate(1.3);
-  border-bottom: 1px solid transparent;
-  transition: border-color .3s;
+  --band-fade: max(16px, calc(50vw - 640px));
 }
-/* stuck over the text: dense enough that the lines scrolling under it do not show through */
-.subnav-wrap.is-stuck { border-bottom-color: var(--line); background: color-mix(in srgb, var(--bg) 94%, transparent); }
+.subnav-wrap::before {
+  content: ""; position: absolute; inset: 0 0 -22px; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: linear-gradient(to bottom, var(--bg) calc(100% - 22px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 var(--band-fade), #000 calc(100% - var(--band-fade)), transparent);
+}
+.subnav-wrap.is-stuck::before { opacity: 1; }
 .subnav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; box-shadow: inset 0 -1px 0 var(--line); }
 .subnav-wrap.is-stuck .subnav { box-shadow: none; }
 .subnav::-webkit-scrollbar { display: none; }
