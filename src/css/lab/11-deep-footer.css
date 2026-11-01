@@ -34,7 +34,7 @@
 }
 .deeper > summary::-webkit-details-marker { display: none; }
 .deeper > summary::marker { content: ""; }
-.deeper-k { display: block; margin-bottom: 3px; font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
+.deeper-k { display: block; margin-bottom: 3px; font: 500 .72rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
 .deeper-k::before { content: "▾▾ "; letter-spacing: -.1em; }
 .deeper-t { display: block; font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.22rem; line-height: 1.15; color: var(--ink); }
 .deeper-plus { position: absolute; right: 16px; top: 50%; width: 28px; height: 28px; margin-top: -14px; border-radius: 50%; border: 1px dashed color-mix(in srgb, var(--k) 60%, transparent); transition: transform .45s var(--ease-float), background-color .3s; }
@@ -53,7 +53,7 @@
 }
 
 .deep-src { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--line-strong); }
-.deep-src-h { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.deep-src-h { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font: 500 .72rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
 .deep-src-h::before { content: ""; width: 14px; height: 10px; border: 1.5px solid currentColor; border-radius: 2px 5px 5px 2px; }
 .deep-src ol { margin: 0; padding: 0; list-style: none; counter-reset: src; display: grid; gap: 5px; }
 .deep-src li { counter-increment: src; position: relative; padding-left: 30px; font-size: .8rem; line-height: 1.45; color: var(--ink-3); }

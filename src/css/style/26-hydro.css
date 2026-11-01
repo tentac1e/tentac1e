@@ -18,7 +18,7 @@
 .hy-routine .card { display: grid; gap: 6px; align-content: start; }
 .hy-routine h3, .hy-routine p { margin: 0; }
 .hy-routine p:not(.hy-when) { color: var(--ink-2); font-size: .94rem; }
-.hy-when { font: 600 .7rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--basil-deep); }
+.hy-when { font: 600 .72rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--basil-deep); }
 /* milestones of the history of hydroponics */
 .hy-time { list-style: none; margin: 0; padding: 0 0 0 14px; display: grid; gap: 10px; border-left: 2px solid var(--line-strong); }
 .hy-time li { display: grid; gap: 1px; position: relative; }
@@ -37,7 +37,7 @@
 .hy-water-key li { display: flex; align-items: center; gap: 5px; }
 .hy-water-key i { width: 10px; height: 10px; border-radius: 3px; }
 /* a few words that open a part of a tab */
-.hy-intro { max-width: 60em; margin: -6px 0 16px; color: var(--ink-2); }
+.hy-intro { max-width: 72ch; margin: -6px 0 16px; color: var(--ink-2); }
 /* the five rules: numbered cards, two in a row on a wide screen */
 .hy-rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 12px; }
 .hy-rules li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: start; }
@@ -55,7 +55,7 @@
 .hy-cost { display: grid; gap: 14px; }
 .hy-cost-h { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: center; }
 .hy-cost-h h3 { margin: 0; }
-.hy-cost-p { margin: 0; max-width: 60em; color: var(--ink-2); }
+.hy-cost-p { margin: 0; max-width: 72ch; color: var(--ink-2); }
 .hy-cost-list { columns: 2 300px; column-gap: 28px; margin: 0; }
 .hy-cost-list li { break-inside: avoid; }
 /* a part of a tab with its own heading (the jar, the bucket): a link can open it whole in the sheet */

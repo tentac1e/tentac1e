@@ -15,9 +15,9 @@
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 .panel > .lab-tool.lab-wide:first-child, .panel-lead + .lab-tool { margin-top: 0; }
 .lab-head { display: grid; gap: 4px; margin-bottom: 14px; max-width: 70ch; }
-.lab-kicker { margin: 0; font: 500 .68rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
+.lab-kicker { margin: 0; font: 500 .72rem/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--k); }
 .lab-title { margin: 0; font-family: var(--font-display); font-size: 1.4rem; line-height: 1.1; }
-.lab-note { margin: 0; font-size: .9rem; color: var(--ink-3); }
+.lab-note { max-width: 72ch; margin: 0; font-size: .9rem; color: var(--ink-3); }
 .lab-grid { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(16px, 3vw, 30px); align-items: start; }
 .lab-grid.wide-stage { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
 @media (max-width: 760px) { .lab-grid, .lab-grid.wide-stage { grid-template-columns: 1fr; } }
@@ -43,7 +43,7 @@
 .lab-stage { min-width: 0; display: grid; place-items: center; }
 .lab-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-inline: -4px; padding-inline: 4px; }
 .lab-scroll > svg { min-width: 560px; width: 100%; height: auto; display: block; }
-.lab-foot { margin: 8px 0 0; font-size: .84rem; color: var(--ink-3); }
+.lab-foot { max-width: 72ch; margin: 8px 0 0; font-size: .84rem; color: var(--ink-3); }
 .lab-read {
   display: flex;
   flex-wrap: wrap;

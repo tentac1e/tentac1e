@@ -3,7 +3,7 @@
 .heat-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) 60px; gap: 12px; align-items: center; }
 .heat-name { display: grid; }
 .heat-name b { font-size: .88rem; }
-.heat-name small { font: 500 .68rem/1.2 var(--font-mono); color: var(--ink-3); }
+.heat-name small { font: 500 .72rem/1.2 var(--font-mono); color: var(--ink-3); }
 .heat-bar { position: relative; height: 16px; }
 .heat-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: var(--w); border-radius: 0 8px 8px 0; transition: width .45s var(--ease-float); }
 .heat-ghost { background: var(--ser-muted); }

@@ -7,7 +7,7 @@
 Имена верхнего уровня каждого куска с номером строки. Куски одного модуля (`src/js/<модуль>/NN-*.js`) — одна область видимости: имя, объявленное в одном, видно во всех следующих.
 
 ### app.js
-- `src/js/app/00-core.js`: `$` 6, `$$` 7, `clamp` 9, `f1` 10, `esc` 11, `nb` 26, `plural` 28, `fmtNum` 37, `addDays` 42, `fd` 43, `fr` 44, `toISO` 49, `fromISO` 50, `today` 54, `dayDiff` 55, `icon` 56, `chapterById` 57, `paintIll` 60, `pageOf` 69, `aliasOf` 77, `urlFor` 79, `fixLinks` 88, `smooth` 98, `toast` 101, `copyText` 110
+- `src/js/app/00-core.js`: `$` 6, `$$` 7, `clamp` 9, `f1` 10, `esc` 11, `nb` 26, `tieText` 33, `tieIn` 34, `plural` 44, `fmtNum` 53, `addDays` 58, `fd` 59, `fr` 60, `toISO` 65, `fromISO` 66, `today` 70, `dayDiff` 71, `icon` 72, `chapterById` 73, `paintIll` 76, `pageOf` 85, `aliasOf` 93, `urlFor` 95, `fixLinks` 104, `smooth` 114, `toast` 117, `copyText` 126
 - `src/js/app/01-theme.js`: `initTheme` 10, `loadSkins` 85
 - `src/js/app/02-router.js`: `stickyOffset` 9, `homeView` 21, `ENTRY` 22, `resolve` 29, `activatePanel` 51, `updateChrome` 76, `jump` 103, `rowTop` 111, `scrollAfter` 118, `route` 160, `navigate` 193, `initRouter` 201, `initPagers` 224, `initScrollChrome` 267
 - `src/js/app/03-peek.js`: `decodeSafe` 10, `placeOf` 15, `placeUrl` 27, `frameSrc` 28, `peekable` 31, `peekShow` 48, `peekLoad` 62, `resetFrame` 69, `openPeek` 78, `goToPlace` 94, `peekPop` 110, `onPeekClosed` 119, `sendTheme` 129, `onPeekMessage` 133, `initPeek` 154, `toParent` 207, `markPeek` 210, `initPeekFrame` 240
@@ -44,20 +44,20 @@
 Общие помощники app.js — кто зовёт:
 - `clamp` (00-core.js:9) — 10: 02-router, 05-scene, 08-varieties …
 - `esc` (00-core.js:11) — 9: 02-router, 03-sheets, 04-search …
-- `plural` (00-core.js:28) — 12: 08-varieties, 10-soil, 11-calendar …
-- `fmtNum` (00-core.js:37) — 5: 10-soil, 12-light, 17-nutrients-dose …
-- `addDays` (00-core.js:42) — 5: 11-calendar, 15-nutrients-plan, 22-garden-ics …
-- `toISO` (00-core.js:49) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
-- `fromISO` (00-core.js:50) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
-- `today` (00-core.js:54) — 8: 07-home, 11-calendar, 15-nutrients-plan …
-- `dayDiff` (00-core.js:55) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
-- `icon` (00-core.js:56) — 14: 02-router, 04-search, 07-home …
-- `chapterById` (00-core.js:57) — 5: 02-router, 03-peek, 03-sheets …
-- `paintIll` (00-core.js:60) — 4: 08-varieties, 09-places, 13-nutrients-elements …
-- `aliasOf` (00-core.js:77) — 3: 02-router, 03-peek, 04-search
-- `fixLinks` (00-core.js:88) — 3: 09-places, 22-garden-view, 22-reading-pos
-- `smooth` (00-core.js:98) — 6: 02-router, 08-varieties, 13-nutrients-elements …
-- `toast` (00-core.js:101) — 4: 22-garden-ics, 22-garden-view, 22-install …
+- `plural` (00-core.js:44) — 12: 08-varieties, 10-soil, 11-calendar …
+- `fmtNum` (00-core.js:53) — 5: 10-soil, 12-light, 17-nutrients-dose …
+- `addDays` (00-core.js:58) — 5: 11-calendar, 15-nutrients-plan, 22-garden-ics …
+- `toISO` (00-core.js:65) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
+- `fromISO` (00-core.js:66) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
+- `today` (00-core.js:70) — 8: 07-home, 11-calendar, 15-nutrients-plan …
+- `dayDiff` (00-core.js:71) — 5: 11-calendar, 15-nutrients-plan, 22-garden-view …
+- `icon` (00-core.js:72) — 14: 02-router, 04-search, 07-home …
+- `chapterById` (00-core.js:73) — 5: 02-router, 03-peek, 03-sheets …
+- `paintIll` (00-core.js:76) — 4: 08-varieties, 09-places, 13-nutrients-elements …
+- `aliasOf` (00-core.js:93) — 3: 02-router, 03-peek, 04-search
+- `fixLinks` (00-core.js:104) — 3: 09-places, 22-garden-view, 22-reading-pos
+- `smooth` (00-core.js:114) — 6: 02-router, 08-varieties, 13-nutrients-elements …
+- `toast` (00-core.js:117) — 4: 22-garden-ics, 22-garden-view, 22-install …
 - `openSheet` (03-sheets.js:8) — 3: 03-peek, 08-varieties, 22-garden-view
 - `closeSheet` (03-sheets.js:30) — 4: 02-router, 03-peek, 04-search …
 - `miniPlant` (06-mini-plants.js:4) — 3: 07-home, 14-nutrients-stages, 22-garden-view
@@ -107,7 +107,7 @@
 - `src/js/skins/07-crypt.js`: `cryptOn` 7, `crypt` 37
 - `src/js/skins/07-forest.js`: `forest` 12, `groveOn` 312
 - `src/js/skins/08-ills.js`: `cellFilter` 16, `fitCell` 43, `pixelate` 53, `pixelateIn` 73, `refit` 81, `onToggle` 82, `onPanel` 83, `onResize` 84
-- `src/js/skins/08-words.js`: `roman` 11, `say` 102, `wordNode` 109, `putWords` 110, `wordsOn` 136, `wordsOff` 142
+- `src/js/skins/08-words.js`: `roman` 11, `tieWords` 104, `say` 105, `wordNode` 112, `putWords` 113, `wordsOn` 139, `wordsOff` 145
 - `src/js/skins/09-start.js`: `start` 9, `stop` 37
 
 Общие помощники skins.js — кто зовёт:
@@ -178,7 +178,7 @@
 - `src/css/style/03-header.css`: `.skin-*`, `.search-*`, `.tab-*`, `.garden-*`, `.brand`, `.topbar-*`, `.ico`, `.is-active`, `.progress`, `.icon-*`, `.tabbar`
 - `src/css/style/04-controls.css`: `.btn-*`, `.field-*`, `.seg`, `.range`, `.chip`, `.row-*`, `.g-link`, `.table-*`, `.bare`, `.wide-*`, `.ico`, `.chips-*`
 - `src/css/style/05-views.css`: `.js`, `.view`, `.is-active`, `.panel`, `.is-entering`, `.steps`, `.step`, `.storage`, `.card`, `.ref-*`, `.principles`, `.myths` · анимации: `vt-out`, `vt-in`, `panel-in`, `rise`
-- `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.chart-*`, `.sub-*`, `.data-*`, `.two-*`, `.ico`, `.is-warn`, `.group` · анимации: `toast-in`
+- `src/css/style/06-blocks.css`: `.table-*`, `.mini-*`, `.callout`, `.ticks`, `.stack`, `.sub-*`, `.chart-*`, `.data-*`, `.tab-*`, `.two-*`, `.ico`, `.is-warn` · анимации: `toast-in`
 - `src/css/style/07-chapter-art.css`: `.ar-leaf-*`, `.ar-rim-*`, `.ar-hl-*`, `.ar-can-*`, `.ar-lid-*`, `.ar-lens-*`, `.ar-sol-*`, `.ar-root-*`, `.ar-paper`, `.ar-band`, `.ar-zig`, `.ar-line`
 - `src/css/style/08-home.css`: `.facts`, `.hero-*`, `.toc-*`, `.home-*`, `.short-*`, `.journey`, `.passport-*`, `.q-card`, `.season-*`, `.rule-*`, `.continue`, `.ico` · анимации: `breathe`, `spin`, `bob`, `sway-all`, `leaf-sway`
 - `src/css/style/09-chapter-chrome.css`: `.subnav-*`, `.ch-hero-*`, `.pager`, `.blob`, `.art-*`, `.is-stuck`, `.pg-art`, `.eyebrow`, `.lead`, `.next` · анимации: `morph`, `morph-fade`
@@ -208,7 +208,7 @@
 - `src/css/lab/00-tokens.css`: `.sr-only`
 - `src/css/lab/01-hero.css`: `.pot-*`, `.hero-*`, `.aroma-*`, `.plant-*`, `.passport`, `.pl-stem-*`, `.pl-leaf`, `.is-purple`, `.pl-scar`, `.pl-pet`, `.pl-fold`, `.pl-shine` · анимации: `aroma-rise`, `label-rise`
 - `src/css/lab/04-deep-kinds.css`: `.deep`, `.lab-*`
-- `src/css/lab/05-deep.css`: `.deep-*`, `.chel-*`, `.num-*`, `.ico`, `.eq`, `.ph-strip`, `.ticks`, `.chem`, `.eq-label`, `.eq-enz`, `.margin-*`, `.aside-*`
+- `src/css/lab/05-deep.css`: `.deep-*`, `.chel-*`, `.num-*`, `.ph-strip`, `.ico`, `.eq`, `.ticks`, `.chem`, `.eq-label`, `.eq-enz`, `.margin-*`, `.aside-*`
 - `src/css/lab/06-lab-tools.css`: `.lab-*`, `.zone-*`, `.gdd-*`, `.fam-*`, `.line`, `.legend`, `.range`, `.band-*`, `.s1`, `.s2`, `.s3`, `.mol-*` · анимации: `shimmer`
 - `src/css/lab/07-vkus.css`: `.world-*`, `.cols-*`, `.kitchen-*`
 - `src/css/lab/08-home-science.css`: `.sh-mol`, `.sh-kinds`, `.science-*`, `.sh-text`, `.sh-open`, `.is-open`, `.sh-chev`, `.mol-*`, `.sh-fold`, `.eyebrow`, `.is-total`, `.ico`
@@ -257,7 +257,7 @@
 - `src/labs/vkus/pairing.css`: `.pa-food`, `.pa-type`, `.pa-rib`, `.pa-varieties`, `.pa-foods`, `.pa-var`, `.pa-meter`, `.is-contrast`, `.pa-title`, `.pa-types`, `.pa-stage`, `.is-dash` · анимации: `pa-draw`
 - `src/labs/vkus/pathway.css`: `.pw-end`, `.is-hot`, `.pw-node`, `.pw-info`, `.pw-chip`, `.pw-lane`, `.pw-edge`, `.pw-ah`, `.pw-enz`, `.pw-tag`, `.is-sel`, `.pw-pick`
 - `src/labs/vkus/pesto.css`: `.pesto-*`
-- `src/labs/vkus/trichome.css`: `.tr-info`, `.tr-controls`, `.mic-*`, `.tr-pel`, `.lab-*`, `.tr-svg`, `.tr-grid`, `.tr-top`, `.tr-sto`, `.tr-wrap`, `.tr-chart`, `.is-burst`
+- `src/labs/vkus/trichome.css`: `.tr-info`, `.tr-controls`, `.mic-*`, `.tr-pel`, `.tr-top`, `.lab-*`, `.tr-svg`, `.tr-grid`, `.tr-sto`, `.tr-wrap`, `.tr-chart`, `.is-burst`
 
 ## События
 
@@ -299,22 +299,22 @@
 - `max-width: 640px` — 12: 05-deep.css, 06-blocks.css ×2, 12-sci-notes.css ×2, 13-calendar.css, 13-recipes.css, 14-care.css, 16-pinching.css ×2, 23-garden.css, molecules.css
 - `max-width: 760px` — 10: 06-lab-tools.css, 12-steps.css, 16-grimoire.css, 26-hydro.css, 27-grimoire.css ×2, _shared.css, drift.css, flows.css, kratky.css
 - `max-width: 700px` — 8: 08-home.css, 09-chapter-chrome.css, 10-varieties.css, 11-places.css, 27-grimoire.css ×2, 28-druid.css ×2
+- `min-width: 900px` — 8: 11-deep-footer.css, 15-fertilizers.css, 19-reference.css, 24-toc.css, 27-grimoire.css, 28-druid.css ×2, pairing.css
 - `max-width: 480px` — 7: 09-chapter-chrome.css, 10-varieties.css, 12-steps.css ×2, 18-problems.css, 23-garden.css ×2
 - `max-width: 520px` — 7: 11-places.css, 15-fertilizers.css, 16-pinching.css, anthocyanin.css, chemotype.css ×2, heat.css
 - `max-width: 860px` — 7: 05-deep.css, 08-home-science.css ×2, 11-places.css, 15-fertilizers.css ×2, chemotype.css
 - `max-width: 460px` — 6: 10-varieties.css, 26-hydro.css, alloc.css, hcheck.css, o2.css, oxide.css
-- `min-width: 900px` — 6: 11-deep-footer.css, 24-toc.css, 27-grimoire.css, 28-druid.css ×2, pairing.css
 - `max-width: 899px` — 5: 03-header.css, 24-toc.css ×2, 27-grimoire.css, 28-druid.css
 - `max-width: 420px` — 3: 04-controls.css, 15-fertilizers.css ×2
 - `max-width: 720px` — 3: 08-home.css ×2, 17-harvest.css
 - `max-width: 820px` — 3: 14-care.css, 15-fertilizers.css ×2
 - `max-width: 940px` — 3: 15-fertilizers.css, 18-problems.css ×2
 - `max-width: 1279px` — 3: 21-sheets.css ×3
+- `min-width: 561px` — 2: 19-reference.css, 23-garden.css
 - `min-width: 941px` — 2: 18-problems.css ×2
 - `max-width: 1060px` — 2: 08-home.css, 26-hydro.css
 - `min-width: 1280px` — 2: 21-sheets.css ×2
 - `min-width: 481px` — 1: 12-steps.css
-- `min-width: 561px` — 1: 23-garden.css
 - `max-width: 600px` — 1: 28-druid.css
 - `max-width: 800px` — 1: molecules.css
 - `max-width: 1099px` — 1: 03-header.css

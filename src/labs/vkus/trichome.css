@@ -11,11 +11,12 @@
 .tr-light-note { margin: 8px 2px 0; }
 .tr-info { margin-top: 12px; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); min-height: 7.5em; }
 .tr-info h5 { font-family: var(--font-display); font-size: 1.3rem; margin: 2px 0 6px; }
-.tr-info p { margin: 0; color: var(--ink-2); font-size: .95rem; line-height: 1.55; }
+.tr-info p { max-width: 72ch; margin: 0; color: var(--ink-2); font-size: .95rem; line-height: 1.55; }
 .tr-controls .lab-seg button { white-space: nowrap; }
 .tr-info .tr-size { margin-top: 8px; font: 500 .78rem/1.4 var(--font-mono); color: var(--ink-3); }
 .tr-grid { margin-top: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); align-items: center; }
 .tr-top { display: grid; gap: 6px; justify-items: center; text-align: center; }
+.tr-top p.tick { margin: 0; font-size: .76rem; color: var(--ink-3); }
 .tr-top svg { width: 100%; max-width: 220px; height: auto; border-radius: 16px; box-shadow: 0 0 0 1px var(--line); }
 .tr-surf { fill: var(--mic-epi-2); }
 .tr-wall { fill: none; stroke: var(--mic-wall-soft); stroke-width: 1.2; }

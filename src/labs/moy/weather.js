@@ -15,7 +15,7 @@
     // the place: by name, or where the phone is
     const findForm = () => `<form class="wx-find" id="wx-find" novalidate>
         <label for="wx-q">${W.place() ? 'Другое место' : 'Где растёт ваш базилик'}</label>
-        <div class="wx-find-row"><input id="wx-q" type="search" autocomplete="off" maxlength="60" placeholder="Город или посёлок, например Воронеж" enterkeyhint="search">
+        <div class="wx-find-row"><input id="wx-q" type="search" autocomplete="off" maxlength="60" placeholder="Город, например Воронеж" enterkeyhint="search">
           <button class="btn btn-primary btn-small" type="submit">Найти</button>
           <button class="btn btn-ghost btn-small" type="button" data-wx-here>${h.icon('home')}Где я</button></div>
         ${found.length ? `<ul class="wx-found">${found.map((x, i) => `<li><button type="button" class="wx-pick" data-wx-pick="${i}"><b>${esc(x.name)}</b><small>${esc(x.region)}</small></button></li>`).join('')}</ul>` : ''}

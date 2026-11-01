@@ -114,6 +114,9 @@
   --ph-10: #36A07A;
   --ph-11: #7FAE3F;
   --ph-12: #C9B237;
+  /* the words on a band of those colours: white, dark on the light green and yellow ones (--t of the band) */
+  --on-dye: #FFFFFF;
+  --on-dye-light: #0B140E;
   --pesto-fresh: #3E8E2E;
   --pesto-olive: #7C7A30;
   --pesto-brown: #5B472B;

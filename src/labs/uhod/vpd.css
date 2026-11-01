@@ -7,5 +7,5 @@
 .vpd-legend { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; font-size: .82rem; color: var(--ink-2); }
 .vpd-legend i { display: inline-block; width: 14px; height: 14px; margin-right: 8px; border-radius: 4px; vertical-align: -2px; }
 .vpd-legend .z0 { background: var(--z0); } .vpd-legend .z1 { background: var(--z1); } .vpd-legend .z2 { background: var(--z2); } .vpd-legend .z3 { background: var(--z3); } .vpd-legend .z4 { background: var(--z4); }
-.vpd-legend small { font-family: var(--font-mono); color: var(--ink-3); }
+.vpd-legend small { font-family: var(--font-mono); font-size: .74rem; color: var(--ink-3); }
 

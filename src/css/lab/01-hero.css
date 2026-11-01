@@ -73,7 +73,7 @@
 }
 .aroma-label svg { grid-row: span 2; width: 22px; height: 22px; fill: none; stroke: var(--sci-chem); stroke-width: 1.8; }
 .aroma-label b { font: 700 .82rem/1.1 var(--font-body); color: var(--ink); }
-.aroma-label small { font: 500 .7rem/1.1 var(--font-mono); color: var(--ink-3); }
+.aroma-label small { font: 500 .72rem/1.1 var(--font-mono); color: var(--ink-3); }
 @keyframes label-rise {
   0% { opacity: 0; transform: translate(-50%, -30%) scale(.8); }
   15% { opacity: 1; transform: translate(-50%, -120%) scale(1); }

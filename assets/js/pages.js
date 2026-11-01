@@ -827,15 +827,15 @@ window.BASIL_PAGES = {
  },
  "v": {
   "labs": {
-   "sorta": "48fb635c",
-   "posadka": "822ac97a",
-   "uhod": "30172f10",
-   "udobreniya": "fec08694",
-   "gidro": "7851625e",
+   "sorta": "64a8024a",
+   "posadka": "a14fbc3f",
+   "uhod": "c8af14e7",
+   "udobreniya": "6f5a993e",
+   "gidro": "e4d80333",
    "formirovka": "907d6bbb",
-   "vkus": "e056550f",
+   "vkus": "2c56a5c2",
    "problemy": "7000594b",
-   "moy": "9600ef4e"
+   "moy": "6320dfb5"
   },
   "lib": {
    "micro": "bbc6c98e",
@@ -890,7 +890,7 @@ window.BASIL_PAGES = {
     "agro"
    ]
   },
-  "search": "bbeb679a",
-  "skins": "4150a55f"
+  "search": "ed7ba847",
+  "skins": "935b2332"
  }
 };

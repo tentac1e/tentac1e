@@ -37,7 +37,7 @@
 .timeline li:first-child .tl-mark::before { top: 20px; }
 .timeline li:last-child .tl-mark::before { bottom: auto; height: 20px; }
 .tl-date { padding: 10px 0 16px; text-align: right; font-family: var(--font-mono); font-size: .86rem; font-weight: 500; color: var(--basil-deep); line-height: 1.35; }
-.tl-date small { display: block; font-size: .7rem; color: var(--ink-3); }
+.tl-date small { display: block; font-size: .72rem; color: var(--ink-3); }
 .tl-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 34px; height: 34px; margin-top: 4px; border-radius: 50%; background: var(--surface); border: 2px solid var(--leaf); color: var(--basil); }
 .tl-dot .ico { width: 17px; height: 17px; }
 .tl-dot.is-key { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }

@@ -3,7 +3,7 @@
 .ox-rows { display: grid; gap: 12px; margin-top: 16px; }
 .ox-row { display: grid; grid-template-columns: 110px minmax(0, 1fr) 84px; gap: 12px; align-items: center; }
 .ox-name { display: grid; }
-.ox-name small { font: 500 .7rem/1.2 var(--font-mono); color: var(--ink-3); }
+.ox-name small { font: 500 .72rem/1.2 var(--font-mono); color: var(--ink-3); }
 .ox-bars { display: grid; gap: 4px; }
 .ox-bars i { height: 9px; width: var(--w); border-radius: 0 5px 5px 0; transition: width .4s var(--ease-float); }
 .ox-pack { background: var(--ser-muted); }

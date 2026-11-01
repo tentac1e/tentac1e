@@ -5592,12 +5592,15 @@ window.BasilSkins = (() => {
     druid: 'О чём спросить рощу? Например, желтеют листья'
   };
 
-  // a label in the skin's words (the plain one when no skin is on, or it has no word for it)
+  // a label in the skin's words (the plain one when no skin is on, or it has no word for it), its short prepositions
+  // tied to the word after them as the guide ties every text it writes (nb in src/js/app/00-core.js): tied already, the
+  // words stay as they are written and are known again
+  const tieWords = s => s.replace(/(^|[^а-яёa-z\u00ad-])(в|с|к|у|о|а|и|я|во|со|ко|об|на|за|по|до|от|из|не|ни|но) (?=\S)/gi, '$1$2\u00a0');
   function say(text, skin = skinNow()) {
     if (!skin || !WORDS[skin]) return text;
     const t = text.trim(), key = t.replace(/ /g, ' '), w = WORDS[skin][key];
-    if (w) return text.replace(t, w);
-    for (const [re, to] of PATTERNS[skin]) if (re.test(key)) return text.replace(t, key.replace(re, to));
+    if (w) return text.replace(t, tieWords(w));
+    for (const [re, to] of PATTERNS[skin]) if (re.test(key)) return text.replace(t, tieWords(key.replace(re, to)));
     return text;
   }
   const wordNode = el => [...el.childNodes].find(n => n.nodeType === 3 && n.data.trim());

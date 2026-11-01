@@ -107,7 +107,7 @@
 
 /* the tools, by what they are for; under each one — the chapter and section it opens */
 .toc-group + .toc-group { margin-top: 12px; }
-.toc-group h3 { margin: 0 0 4px; padding: 6px 10px 0; font: 700 .7rem/1.2 var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+.toc-group h3 { margin: 0 0 4px; padding: 6px 10px 0; font: 700 .72rem/1.2 var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
 .toc-group ul { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
 .toc-tool b { display: block; font-size: .96rem; line-height: 1.25; }
 .toc-tool small { display: block; margin-top: 1px; font-size: .78rem; line-height: 1.3; color: var(--ink-3); }

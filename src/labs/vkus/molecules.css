@@ -29,11 +29,11 @@
   transition: transform .3s var(--ease-float);
 }
 .vol-chip b { font-size: .74rem; line-height: 1.1; color: var(--ink); }
-.vol-chip small { font: 500 .64rem/1 var(--font-mono); color: var(--ink-3); }
+.vol-chip small { font: 500 .72rem/1 var(--font-mono); color: var(--ink-3); }
 .vol-chip { border-color: var(--mc, var(--line-strong)); }
 .vol-chip:hover { transform: translateY(-2px); }
 @media (pointer: coarse) { .vol-chip { min-height: 38px; align-content: center; } }
 .vol-chip[aria-pressed="true"] { box-shadow: 0 0 0 3px color-mix(in srgb, var(--k) 45%, transparent); }
-.vol-axis { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font: 500 .68rem/1.2 var(--font-mono); color: var(--ink-3); }
+.vol-axis { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font: 500 .72rem/1.2 var(--font-mono); color: var(--ink-3); }
 @media (max-width: 640px) { .vol-axis span:nth-child(2) { display: none; } }
 

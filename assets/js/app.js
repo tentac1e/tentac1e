@@ -28,6 +28,22 @@
   // number + short word → non-breaking space ("20 °C", "1 г/л", "3 пары")
   const nb = s => String(s).replace(/([\d¼½¾]) (?=[^\s\d–—-]{1,6}(?=[\s,.;:)!?/]|$))/g, '$1\u00a0').replace(/(\d)([–…])(?=[+−]?\d)/g, '$1$2\u2060').replace(/(^|[^а-яёa-z])([а-яё]{1,4}) (?=[+−≈~]?[\d¼½¾])/gi, '$1$2\u00a0').replace(/([а-яё²³])\/(?=[а-яё])/gi, '$1/\u2060').replace(/(\S) — /g, '$1\u00a0— ').replace(/(^|[^а-яёa-z\u00ad-])(в|с|к|у|о|а|и|я|во|со|ко|об|на|за|по|до|от|из|не|ни|но) (?=\S)/gi, '$1$2\u00a0');
 
+  /* the words a script writes keep together too: a card, the reading of a model, «Дальше в главе», a recipe get the
+     ties the build gives the text of the pages (typeset) — a short preposition with the word after it, a number with
+     its short word, a dash with the word before it — whichever script wrote them, so that no line ends in «в» or «по».
+     What is written once is tied once: nb() leaves tied text as it is */
+  const TIE_OFF = 'script, style, textarea, code, pre, svg, [contenteditable]';
+  const tieText = n => { const t = nb(n.data); if (t !== n.data) n.data = t; };
+  function tieIn(node) {
+    if (node.nodeType === 3) { if (node.data.length > 2 && node.parentElement && !node.parentElement.closest(TIE_OFF)) tieText(node); return; }
+    if (node.nodeType !== 1 || node.closest(TIE_OFF)) return;
+    const w = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    for (let n = w.nextNode(); n; n = w.nextNode()) if (n.data.length > 2 && !n.parentElement.closest(TIE_OFF)) tieText(n);
+  }
+  tieIn(document.body);
+  new MutationObserver(rs => rs.forEach(r => { if (r.type === 'characterData') tieIn(r.target); else r.addedNodes.forEach(tieIn); }))
+    .observe(document.body, { childList: true, subtree: true, characterData: true });
+
   const plural = (n, one, few, many) => {
     const a = Math.abs(n) % 100, b = a % 10;
     if (a > 10 && a < 20) return many;

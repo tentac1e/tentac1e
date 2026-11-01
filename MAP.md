@@ -178,7 +178,7 @@
 ## Скрипты (src/js/)
 
 **app.js**
-- `src/js/app/00-core.js` (128 стр.): MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES, PEEK
+- `src/js/app/00-core.js` (144 стр.): TIE_OFF, MONTHS, MONTHS_NOM, MONTHS_SHORT, HAP, PAGES, PEEK
 - `src/js/app/01-theme.js` (96 стр.): SKINS, initTheme
 - `src/js/app/02-router.js` (297 стр.): ENTRY, initRouter, initPagers, initScrollChrome
 - `src/js/app/03-peek.js` (264 стр.): PEEK_SKIP, initPeek, initPeekFrame
@@ -282,7 +282,7 @@
 - `src/js/skins/07-crypt.js` (66 стр.)
 - `src/js/skins/07-forest.js` (450 стр.)
 - `src/js/skins/08-ills.js` (84 стр.): SVGNS, KEEP, CELL_PX, STEPS, BAYER_PNG
-- `src/js/skins/08-words.js` (147 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
+- `src/js/skins/08-words.js` (150 стр.): ROMAN, ORD, WORDS, PATTERNS, WORD_AT, PLACEHOLDER
 - `src/js/skins/09-start.js` (61 стр.): BACKS
 
 ## Стили (src/css/)

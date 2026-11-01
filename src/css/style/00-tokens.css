@@ -10,7 +10,13 @@
   --glass-strong: rgba(251, 253, 248, .95);
   --ink: #15261A;
   --ink-2: #42574A;
-  --ink-3: #62756A;
+  --ink-3: #56685D;
+  /* the words on a bar of colour (the parts of NPK, the zones of a scale): dark on the bright bars of every theme, the
+     purple of phosphorus in the light one excepted */
+  --on-bar: #0B140E;
+  --on-bar-p: #FFFFFF;
+  /* the zone «норма» of the heat scale: the leaf, lightened enough for those words */
+  --zone-ok: color-mix(in srgb, var(--leaf) 70%, var(--surface));
   --line: #D5E1CF;
   --line-strong: #B9CDB1;
   --basil: #2D6932;
@@ -109,7 +115,8 @@
     --glass-strong: rgba(22, 36, 26, .95);
     --ink: #E4EEDF;
     --ink-2: #B3C4AF;
-    --ink-3: #8A9E86;
+    --ink-3: #90A48C;
+    --on-bar-p: #0B140E;
     --line: #26392B;
     --line-strong: #37523D;
     --basil: #86C46A;
@@ -171,7 +178,8 @@
   --glass-strong: rgba(22, 36, 26, .95);
   --ink: #E4EEDF;
   --ink-2: #B3C4AF;
-  --ink-3: #8A9E86;
+  --ink-3: #90A48C;
+  --on-bar-p: #0B140E;
   --line: #26392B;
   --line-strong: #37523D;
   --basil: #86C46A;
@@ -310,6 +318,7 @@
    shadows; a rough hand for titles, labels and numbers (Underdog), a calm text face (Philosopher), notes in a
    quick hand (Caveat), runes and ogham for ornament (28-druid.css dresses the components) */
 :root[data-skin="druid"] {
+  --zone-ok: color-mix(in srgb, var(--leaf) 80%, var(--ink));
   --bg: #0B120D;
   --bg-deep: #070C09;
   --surface: #142019;

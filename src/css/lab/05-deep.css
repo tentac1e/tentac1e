@@ -118,7 +118,7 @@
   background: var(--k-soft);
   border: 1px solid color-mix(in srgb, var(--k) 25%, transparent);
 }
-.eq-label { display: block; margin-bottom: 4px; font: 500 .66rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--k); }
+.eq-label { display: block; margin-bottom: 4px; font: 500 .72rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--k); }
 .eq p { margin: 0; font: 500 .9rem/1.5 var(--font-mono); color: var(--ink); overflow-wrap: anywhere; }
 .eq-enz { display: inline-block; margin: 0 2px; padding: 0 5px; border-radius: 6px; background: var(--surface); font-size: .72rem; color: var(--k); vertical-align: 2px; }
 .num-note { display: grid; gap: 2px; padding: 4px 0 10px 14px; border-left: 2px solid color-mix(in srgb, var(--k) 45%, transparent); }
@@ -131,10 +131,11 @@
 .deep-link a::after { content: " →"; }
 .lab-table { margin-top: 14px; }
 .ph-strip { display: flex; height: 44px; border-radius: 12px; overflow: hidden; }
-.ph-strip span { flex: 1; display: grid; place-items: end center; padding-bottom: 4px; background: var(--c); color: #fff; font: 600 .72rem/1 var(--font-mono); text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
+.ph-strip span { flex: 1; display: grid; place-items: end center; padding-bottom: 4px; background: var(--c); color: var(--t, var(--on-dye)); font: 600 .72rem/1 var(--font-mono); text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
+.ph-strip span[style*="--t"] { text-shadow: none; }
 .chel { display: grid; gap: 6px; padding: 10px 12px; border-radius: 14px; background: var(--k-soft); }
 .chel div { display: grid; grid-template-columns: 58px 1fr; align-items: center; gap: 8px; font: 500 .74rem/1 var(--font-mono); color: var(--ink-2); }
 .chel i { height: 8px; width: var(--w); border-radius: 4px; background: var(--k); }
-.chel-scale { display: flex; justify-content: space-between; margin: 0 0 0 66px; font: 500 .64rem/1 var(--font-mono); color: var(--ink-3); }
+.chel-scale { display: flex; justify-content: space-between; margin: 0 0 0 66px; font: 500 .72rem/1 var(--font-mono); color: var(--ink-3); }
 
 
