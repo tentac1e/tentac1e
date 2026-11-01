@@ -88,7 +88,7 @@ function codeMap() {
     got: [...document.querySelectorAll('#variety-grid .variety')].filter(e => e.offsetParent).map(e => e.querySelector('.v-name').textContent).sort().join(','),
     count: document.getElementById('variety-count').textContent
   }));
-  ok(fl.want === fl.got && /из 26/.test(fl.count), 'filter shows the matching varieties ' + JSON.stringify(fl));
+  ok(fl.want === fl.got && /из\s26/.test(fl.count), 'filter shows the matching varieties ' + JSON.stringify(fl));
 
   await page.goto(fileUrl('index.html#udobreniya-plan'), { waitUntil: 'load' });
   await page.waitForTimeout(700);
@@ -128,14 +128,14 @@ function codeMap() {
     await page.fill('#search-input', q);
     await page.waitForTimeout(250);
     return page.evaluate(() => ({
-      titles: [...document.querySelectorAll('.sr-item b')].map(b => b.textContent.trim()),
+      titles: [...document.querySelectorAll('.sr-item b')].map(b => b.textContent.replace(/\u00a0/g, ' ').trim()),
       marks: [...document.querySelectorAll('.sr-item mark')].map(m => m.textContent.toLowerCase()),
-      groups: [...document.querySelectorAll('.sr-gh span:first-child')].map(g => g.textContent),
+      groups: [...document.querySelectorAll('.sr-gh span:first-child')].map(g => g.textContent.replace(/\u00a0/g, ' ')),
       note: (document.querySelector('.sr-note') || {}).textContent || ''
     }));
   };
   const yl = await find('желтые листья');
-  ok(yl.titles.includes('Желтеют нижние листья') && yl.marks.includes('желтеют') && yl.groups.includes('Проблемы и симптомы') && yl.groups.includes('Разделы'), 'word forms: «желтые листья» finds «желтеют» ' + JSON.stringify(yl.groups));
+  ok(yl.titles.includes('Желтеют нижние листья') && yl.marks.includes('желтеют') && yl.groups.includes('Проблемы и симптомы') && yl.groups.includes('Разделы'), 'word forms: «желтые листья» finds «желтеют» ' + JSON.stringify({ groups: yl.groups, titles: yl.titles.slice(0, 4), marks: yl.marks.slice(0, 6) }));
   const lv = await find('листьев');
   ok(lv.marks.includes('листья') && lv.marks.includes('листьев'), 'one stem, many forms: «листьев» marks «листья»');
   const kb = await find('gjkbd');

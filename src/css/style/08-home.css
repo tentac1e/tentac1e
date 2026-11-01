@@ -64,7 +64,7 @@
   border-radius: 8px 28px 8px 28px;
   box-shadow: var(--shadow-float);
 }
-.passport-kicker { grid-area: k; align-self: end; margin: 0; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
+.passport-kicker { grid-area: k; align-self: end; margin: 0; font-family: var(--font-mono); font-size: .72rem; line-height: 1.2; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
 .passport-name { grid-area: n; align-self: start; margin: 2px 0 0; font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--basil-deep); }
 .passport dl { grid-area: d; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 16px; margin: 0; }
 .passport dl div { padding: 2px 0 2px 14px; border-left: 1px dashed var(--line-strong); font-size: .84rem; line-height: 1.35; }

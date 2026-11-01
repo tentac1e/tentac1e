@@ -42,7 +42,7 @@ const iso = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d
     await page.click('#garden-home [data-garden-add="seed"]');
     await page.waitForTimeout(450);
     await fill('seed', 'Гвоздичный', 40, 'Гвоздичный на кухне');
-    const sheet = await page.evaluate(() => ({ open: document.getElementById('sheet-garden').open, text: document.getElementById('garden-detail').innerText }));
+    const sheet = await page.evaluate(() => ({ open: document.getElementById('sheet-garden').open, text: document.getElementById('garden-detail').innerText.replace(/\u00a0/g, ' ') }));
     ok(sheet.open && /Гвоздичный на кухне/.test(sheet.text) && /41-й день/.test(sheet.text) && /Первое прищипывание/.test(sheet.text), M + 'saved bush shows its plan in the sheet');
     await closeG();
     const c1 = await card();
@@ -159,7 +159,7 @@ const iso = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d
     await closeG();
     await page.reload({ waitUntil: 'load' });
     await page.waitForTimeout(500);
-    const kept = await page.evaluate(() => [...document.querySelectorAll('.g-card h3')].map(h => h.textContent));
+    const kept = await page.evaluate(() => [...document.querySelectorAll('.g-card h3')].map(h => h.textContent.replace(/\u00a0/g, ' ')));
     ok(kept.length === 1 && kept[0] === 'Гвоздичный у окна', M + 'edited and kept after reload ' + JSON.stringify(kept));
 
     // a copy in a file, the bush deleted, the copy read back

@@ -153,7 +153,7 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
   await page.click(near);
   await page.waitForTimeout(1200);
   const went = await page.evaluate(() => ({ y: Math.round(scrollY), sheet: document.getElementById('sheet-peek').open, pill: (document.querySelector('.back-pill') || {}).textContent }));
-  ok(!went.sheet && went.y > y0 + 200 && /Вернуться к тексту/.test(went.pill || ''), `a link lower on the tab scrolls there (${y0}→${went.y}) and offers «${(went.pill || '').replace(/\s+/g, ' ').trim()}»`);
+  ok(!went.sheet && went.y > y0 + 200 && /Вернуться к\sтексту/.test(went.pill || ''), `a link lower on the tab scrolls there (${y0}→${went.y}) and offers «${(went.pill || '').replace(/\s+/g, ' ').trim()}»`);
   await page.click('.back-pill .resume-go');
   await page.waitForTimeout(1400);
   const up = await page.evaluate(sel => { const r = document.querySelector(sel).getBoundingClientRect(); const m = document.querySelector('.resume-mark'); return { top: Math.round(r.top), H: innerHeight, mark: !!m }; }, near);

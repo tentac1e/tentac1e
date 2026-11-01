@@ -110,10 +110,10 @@ const bushes = () => ({ v: 2, plants: [
     await page.goto(fileUrl('index.html'), { waitUntil: 'load' });
     await page.waitForTimeout(500);
     const cards = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('#garden-home .g-card')].map(c => [c.dataset.plantCard, {
-      wx: [...c.querySelectorAll('.g-task.is-wx')].map(t => t.querySelector('b').textContent + ' | ' + t.querySelector('small').textContent),
-      advice: [...c.querySelectorAll('.g-wx')].map(a => a.textContent)
+      wx: [...c.querySelectorAll('.g-task.is-wx')].map(t => (t.querySelector('b').textContent + ' | ' + t.querySelector('small').textContent).replace(/\u00a0/g, ' ')),
+      advice: [...c.querySelectorAll('.g-wx')].map(a => a.textContent.replace(/\u00a0/g, ' '))
     }])));
-    const strip = await page.evaluate(() => (document.querySelector('#garden-home .g-wx-strip') || {}).textContent || '');
+    const strip = await page.evaluate(() => ((document.querySelector('#garden-home .g-wx-strip') || {}).textContent || '').replace(/\u00a0/g, ' '));
     const b = cards.b1 || { wx: [], advice: [] }, g = cards.g1 || { wx: [], advice: [] }, hm = cards.h1 || { wx: [], advice: [] };
     ok(b.wx.some(t => /^Ночью до \+4\s°C — занесите на ночь \| .+ ночью$/.test(t)) && b.wx.some(t => /^Жара до \+33\s°C/.test(t)) &&
       g.wx.some(t => /укройте грядку/.test(t)) && g.advice.some(a => /^Дождь 12\sмм сегодня/.test(a)) && !b.advice.some(a => /Дождь/.test(a)) &&

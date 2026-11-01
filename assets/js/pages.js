@@ -830,7 +830,7 @@ window.BASIL_PAGES = {
    "sorta": "64a8024a",
    "posadka": "a14fbc3f",
    "uhod": "c8af14e7",
-   "udobreniya": "6f5a993e",
+   "udobreniya": "2bbd2f09",
    "gidro": "e4d80333",
    "formirovka": "907d6bbb",
    "vkus": "2c56a5c2",
