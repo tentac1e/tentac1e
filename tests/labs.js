@@ -8,10 +8,11 @@
    node tests/labs.js --dark                тёмная тема
    node tests/labs.js --skin=grimoire       в оформлении (grimoire, druid; --grimoire — то же, что --skin=grimoire):
                                             его шрифты и рисунки
+   node tests/labs.js --date=2027-01-15     в этот день (модели солнца, длины дня, сроков)
    Проверяет сборку в корне репозитория (python3 scripts/build.py). */
 const fs = require('fs');
 const path = require('path');
-const { ROOT, playwright, ok, done, watch, fileUrl, OUT, FILES, skinArg, inSkin } = require('./lib');
+const { ROOT, playwright, ok, done, watch, fileUrl, OUT, FILES, skinArg, inSkin, dateArg, atDate } = require('./lib');
 
 const args = process.argv.slice(2);
 const only = (args.find(a => !a.startsWith('--')) || '').split(',').filter(Boolean);
@@ -147,6 +148,7 @@ async function check(ctx, mode, f, errs) {
       colorScheme: dark ? 'dark' : 'light', reducedMotion: 'reduce'
     });
     await inSkin(ctx[mode], skin);
+    await atDate(ctx[mode], dateArg(process.argv));
   }
   const jobs = [];
   for (const mode of modes) for (const f of FILES) jobs.push({ mode, f });

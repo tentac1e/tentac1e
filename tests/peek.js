@@ -7,7 +7,7 @@
    python3 scripts/build.py && python3 scripts/build.py --clean --out dist/site && node tests/peek.js */
 const fs = require('fs');
 const path = require('path');
-const { ROOT, playwright, server, ok, done, watch, landedAt, FILES, fileUrl } = require('./lib');
+const { ROOT, playwright, server, ok, done, watch, landedAt, FILES, fileUrl, HOME_MAX } = require('./lib');
 
 // what never goes to the sheet: read from the code, so that the audit below asks what the page does
 const SKIP = /const PEEK_SKIP = '([^']+)'/.exec(fs.readFileSync(path.join(ROOT, 'src/js/app/03-peek.js'), 'utf8'))[1];
@@ -209,8 +209,8 @@ const state = page => page.evaluate(() => ({ y: Math.round(scrollY), url: locati
     await c.close();
   };
   // about five screens of an iPhone 13 (844 px) and of a computer (900 px)
-  await home({ ...devices['iPhone 13'] }, 4450);
-  await home({ viewport: { width: 1440, height: 900 } }, 4600);
+  await home({ ...devices['iPhone 13'] }, HOME_MAX.phone);
+  await home({ viewport: { width: 1440, height: 900 } }, HOME_MAX.desktop);
 
   // «Удобрения» in five tabs: «Мифы» and «План» are parts of «Основы» and «По стадиям», at their old anchors;
   // «Гидропоника» is a chapter of its own

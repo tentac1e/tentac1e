@@ -38,7 +38,8 @@
 .deep-fact .ico { width: 18px; height: 18px; margin-top: 1px; color: var(--k); }
 @media (max-width: 640px) { .deep-fact { grid-column: 1 / -1; margin-top: -2px; } }
 /* at the top of «Для любопытных»: the facts of the tab with no dive of their own here */
-.deep-facts { display: grid; gap: 10px; max-width: 72ch; margin: 0; padding: 0; list-style: none; }
+/* 64ch of the list: its items are in a smaller face, about 72 of their own letters */
+.deep-facts { display: grid; gap: 10px; max-width: 64ch; margin: 0; padding: 0; list-style: none; }
 .deep-facts li { --k: var(--sci-bio); display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
 .deep-facts li[data-kind="chem"] { --k: var(--sci-chem); }
 .deep-facts li[data-kind="phys"] { --k: var(--sci-phys); }

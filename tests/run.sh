@@ -33,7 +33,7 @@ if [ "$1" = "--one" ]; then
   exit 0
 fi
 
-ALL="pages clean nav peek labs overlap controls gestures ills garden agronom skins motion depth pwa offscreen perf single"
+ALL="pages facts clean nav peek labs overlap design seasons controls gestures ills garden agronom skins motion depth pwa offscreen perf single"
 # the suites a changed file concerns (the first pattern that fits); a file the table does not know — all of them
 suites_for() {
   case "$1" in
@@ -44,19 +44,19 @@ suites_for() {
     # the pictures of the skins: their icons and their frames
     scripts/skin-icons.js) echo "skins" ;;
     scripts/skin-art.js) echo "skins overlap controls" ;;
-    src/css/style/27-grimoire.css|src/css/lab/16-grimoire.css|src/css/style/28-druid.css|src/css/lab/17-druid.css|src/fonts/*|scripts/fonts.py) echo "skins" ;;
+    src/css/style/27-grimoire.css|src/css/lab/16-grimoire.css|src/css/style/28-druid.css|src/css/lab/17-druid.css|src/fonts/*|scripts/fonts.py) echo "skins design" ;;
     src/js/app/01-theme.js) echo "skins pages nav" ;;
-    src/labs/*) echo "labs overlap controls ills single skins" ;;
-    src/pages/moy/*) echo "garden agronom controls pwa" ;;
-    src/js/app/22-garden*|src/js/data/08-*|src/js/data/09-*|src/js/data/10-*) echo "garden agronom controls" ;;
+    src/labs/*) echo "labs overlap controls ills single skins facts design seasons" ;;
+    src/pages/moy/*) echo "garden agronom controls pwa facts design" ;;
+    src/js/app/22-garden*|src/js/data/08-*|src/js/data/09-*|src/js/data/10-*) echo "garden agronom controls facts" ;;
     src/sw.js|src/sw-off.js|src/js/app/22-install.js|src/icons/*) echo "pwa clean" ;;
     src/js/app/03-peek.js|src/css/style/25-peek.css) echo "peek nav pages clean gestures single pwa" ;;
     src/js/app/02-router.js|src/js/app/03-sheets.js|src/js/app/22-reading-pos.js|src/js/data/00-nav.js|src/layout.html|src/js/haptics.js) echo "nav peek pages clean gestures single" ;;
-    src/pages/glavnaya.html|src/js/app/07-home.js) echo "peek pages overlap controls ills gestures single" ;;
+    src/pages/glavnaya.html|src/js/app/07-home.js) echo "peek pages overlap controls ills gestures single facts design seasons" ;;
     src/js/app/04-search*) echo "nav pages" ;;
-    src/css/*) echo "overlap controls gestures ills pages peek skins" ;;
-    src/pages/udobreniya/*|src/pages/spravka/*) echo "peek pages nav clean overlap controls ills single" ;;
-    src/pages/*) echo "pages overlap controls ills single" ;;
+    src/css/*) echo "overlap controls gestures ills pages peek skins design seasons" ;;
+    src/pages/udobreniya/*|src/pages/spravka/*) echo "peek pages nav clean overlap controls ills single facts design seasons" ;;
+    src/pages/*) echo "pages overlap controls ills single facts design seasons" ;;
     src/js/scene/*) echo "perf ills offscreen" ;;
     # written by the build, or prose
     *.html|*.md|assets/*|dist/*|tests/out/*) echo "" ;;
@@ -97,7 +97,7 @@ wait $b2 || { cat tests/out/run-build-clean.log; exit 1; }
 
 # the pool: the longest first, so that the short ones fill the gaps at the end
 pool="" tail=""
-for t in ills labs nav peek controls agronom overlap garden skins motion depth gestures pages clean single pwa; do
+for t in design ills labs nav peek controls agronom overlap garden skins motion seasons depth gestures pages clean single pwa facts; do
   case " $list " in *" $t "*) pool="$pool $t" ;; esac
 done
 case " $list " in *" skins "*) pool="$pool grimoire-labs druid-labs grimoire-overlap druid-overlap" ;; esac

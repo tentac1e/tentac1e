@@ -9,8 +9,9 @@
    node tests/overlap.js vkus.html,uhod.html только эти
    node tests/overlap.js --phone | --desktop
    node tests/overlap.js --skin=druid       в оформлении (grimoire, druid; --grimoire — то же, что --skin=grimoire)
+   node tests/overlap.js --date=2027-07-15  в этот день (всё, что зависит от даты: см. seasons.js)
    Проверяет сборку в корне репозитория (python3 scripts/build.py). */
-const { playwright, ok, done, watch, fileUrl, FILES, skinArg, inSkin } = require('./lib');
+const { playwright, ok, done, watch, fileUrl, FILES, skinArg, inSkin, dateArg, atDate } = require('./lib');
 
 const args = process.argv.slice(2);
 const only = (args.find(a => !a.startsWith('--')) || '').split(',').filter(Boolean);
@@ -181,7 +182,7 @@ if (require.main === module) (async () => {
   const ctx = {};
   for (const mode of modes) ctx[mode] = await browser.newContext({ ...(mode === 'phone' ? { ...devices['iPhone 13 Mini'], deviceScaleFactor: 1 } : { viewport: { width: 1280, height: 900 } }), reducedMotion: 'reduce' });
   // --skin=<name> (--grimoire): the same checks in a skin of the guide (its own faces and pictures)
-  for (const mode of modes) await inSkin(ctx[mode], skinArg(args));
+  for (const mode of modes) { await inSkin(ctx[mode], skinArg(args)); await atDate(ctx[mode], dateArg(args)); }
   const jobs = [];
   for (const mode of modes) for (const f of FILES) if (!only.length || only.includes(f)) jobs.push({ mode, f });
   // four pages at a time; the lines come out in the usual order

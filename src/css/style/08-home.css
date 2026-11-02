@@ -175,11 +175,18 @@
 .season-mark svg { width: 76px; height: 76px; }
 .season-text { margin: 4px 0; font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.25; color: var(--ink); }
 .season-note { margin: 0; font-size: .84rem; color: var(--ink-3); }
+/* a phone: the calendar a small mark in place of the dash before «Сейчас, январь», the tip across the whole card
+   under it — in a column of its own the mark held the words to 264 px, and the longer tips of January and September
+   took one more line than the home page had room for (tests/seasons.js) */
 @media (max-width: 560px) {
-  .season-tip { grid-template-columns: 48px minmax(0, 1fr); gap: 12px; align-items: start; }
-  .season-mark .art-float, .season-mark svg { width: 48px; height: 48px; }
-  .season-text { font-size: 1.12rem; }
-  .season-note { font-size: .8rem; }
+  .season-tip { grid-template-columns: 20px minmax(0, 1fr); grid-template-areas: "m h" "t t" "n n"; gap: 0 10px; align-items: center; padding-block: 12px; }
+  .season-tip > div:last-child { display: contents; }
+  .season-mark { grid-area: m; display: flex; }
+  .season-mark .art-float, .season-mark svg { width: 20px; height: 20px; }
+  #season-h { grid-area: h; }
+  #season-h::before { display: none; }
+  .season-text { grid-area: t; margin: 4px 0; font-size: 1.12rem; }
+  .season-note { grid-area: n; font-size: .8rem; }
 }
 
 /* «Главы гида»: the contents' list (24-toc.css, scripts/build.py), each chapter with what it holds in a line, opening

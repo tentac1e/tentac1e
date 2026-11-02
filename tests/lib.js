@@ -91,5 +91,11 @@ const SKINS = ['grimoire', 'druid'];
 const skinArg = args => { const a = args.find(x => x.startsWith('--skin=')); return a ? a.slice(7) : args.includes('--grimoire') ? 'grimoire' : null; };
 // a browser context whose pages open in the skin (the choice the menu in the header stores)
 const inSkin = (ctx, skin) => (skin ? ctx.addInitScript(s => { try { localStorage.setItem('basil-skin', JSON.stringify(s)); } catch (e) { /* the skin stays off */ } }, skin) : null);
+// the home page stays about five screens tall: an iPhone 13 (844 px) and a computer of 1440 × 900 (peek.js, seasons.js)
+const HOME_MAX = { phone: 4450, desktop: 4600 };
+// --date=2027-01-15 on a check: the pages think it is that day (the season tip, the calendar, the plans, the models of
+// the sun and the day); Date only, the timers and the frames run as usual
+const dateArg = args => { const a = args.find(x => x.startsWith('--date=')); return a ? a.slice(7) : null; };
+const atDate = (ctx, iso) => (iso ? ctx.clock.setFixedTime(new Date(iso + 'T12:00:00')) : null);
 
-module.exports = { ROOT, OUT, playwright, server, serve, ok, done, watch, landedAt, FILES, SLUGS, MOVED, fileUrl, results, SKINS, skinArg, inSkin };
+module.exports = { ROOT, OUT, playwright, server, serve, ok, done, watch, landedAt, FILES, SLUGS, MOVED, fileUrl, results, SKINS, skinArg, inSkin, HOME_MAX, dateArg, atDate };
