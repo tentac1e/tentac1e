@@ -323,11 +323,12 @@
   font: 700 2.55em/.93 var(--font-title); color: var(--blood); text-shadow: 2px 2px 0 var(--shade), 0 0 10px color-mix(in srgb, var(--blood) 45%, transparent);
 }
 
-/* ---- the pointer of the console where there is a mouse: the arrow, and the hand over what can be pressed; the scroll
-   bar in bone over the dark ---- */
+/* ---- the pointer of the grimoire where there is a mouse: a ritual dagger, and a hand of bone over what can be
+   pressed (scripts/skin-art.js; the points — the dagger's tip and the forefinger's); the scroll bar in bone over the
+   dark ---- */
 @media (pointer: fine) {
-  [data-skin="grimoire"] body { cursor: var(--px-cur) 0 0, auto; }
-  [data-skin="grimoire"] :is(a, button, summary, label[for], select, [role="button"], [role="menuitemradio"], [role="tab"], .chip, input[type="range"], input[type="checkbox"]) { cursor: var(--px-hand) 4 0, pointer; }
+  [data-skin="grimoire"] body { cursor: var(--px-cur) 2 2, auto; }
+  [data-skin="grimoire"] :is(a, button, summary, label[for], select, [role="button"], [role="menuitemradio"], [role="tab"], .chip, input[type="range"], input[type="checkbox"]) { cursor: var(--px-hand) 11 1, pointer; }
   [data-skin="grimoire"] :is(input[type="text"], input[type="search"], input[type="number"], input[type="date"], textarea) { cursor: text; }
 }
 :root[data-skin="grimoire"] { scrollbar-color: var(--rim-d) var(--bg-deep); }

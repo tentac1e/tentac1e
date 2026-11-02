@@ -6,7 +6,7 @@
 
    «Гримуар» — пиксели: рамка окна в 9 частей (костяная труба, чёрная линия, шов старой крови, золотые заклёпки по
    углам), окно-диалог, ячейка инвентаря, выпуклая и нажатая кнопка, знак у заголовка, камень ползунка, треугольник
-   «дальше», стрелка и рука курсора. Рамка рисуется по профилю каждой кромки снаружи внутрь, угол берёт профиль ближней
+   «дальше», курсор — кинжал и костяная рука. Рамка рисуется по профилю каждой кромки снаружи внутрь, угол берёт профиль ближней
    кромки, крайний пиксель угла срезан, поверх углов — штамп. «Друид» — вектор: рама из тёмного тёсаного дерева со
    срезанными углами и железными уголками на двух гвоздях, каменная табличка с мхом, плетёный шнур, волокно досок,
    лоза вокруг выбранной кнопки, наконечник курсора. Цвета в картинках — те же, что у токенов оформлений: в data URI токены CSS не работают. */
@@ -18,11 +18,13 @@ const PAL = {
   k: '#000', K: 'rgba(0,0,0,.55)', w: '#EBE1C8', b: '#CDBF9E', B: '#9C8F72', d: '#4A3C42', g: '#E2BE63', G: '#8A6826', y: '#F6DF96',
   r: '#C62B35', R: '#5E1219', h: 'rgba(255,255,255,.34)', H: 'rgba(255,255,255,.16)', s: 'rgba(0,0,0,.42)', S: 'rgba(0,0,0,.62)', v: '#8FD45A'
 };
-// rows of characters → an SVG of pixels
-function pix(rows) {
+// rows of characters → an SVG of pixels; scale: points of the page to a pixel (a cursor is not stretched by
+// border-image, it is drawn at its own size)
+function pix(rows, scale = 1) {
   const W = rows[0].length, H = rows.length, runs = {};
+  if (rows.some(r => r.length !== W)) throw new Error('pix: rows of different length');
   rows.forEach((row, y) => { let x = 0; while (x < W) { const c = row[x]; let n = 1; while (row[x + n] === c) n++; if (PAL[c]) (runs[c] = runs[c] || []).push(`M${x} ${y}h${n}v1h-${n}z`); x += n; } });
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" shape-rendering="crispEdges">${Object.keys(runs).map(c => `<path fill="${PAL[c]}" d="${runs[c].join('')}"/>`).join('')}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W * scale}" height="${H * scale}"${scale !== 1 ? ` viewBox="0 0 ${W} ${H}"` : ''} shape-rendering="crispEdges">${Object.keys(runs).map(c => `<path fill="${PAL[c]}" d="${runs[c].join('')}"/>`).join('')}</svg>`;
 }
 // a 9-slice frame of side 2n+1: each edge has its profile from the outside in (top, right, bottom, left); the corners
 // take the profile of the nearer edge, the outermost pixel of each corner is cut; stamps go over the corners
@@ -124,44 +126,46 @@ G['px-more'] = pix([
   '...kgk...',
   '....k....'
 ]);
-// the pointers of the console: the arrow, and the hand over what can be pressed
+// the pointers of the grimoire, a pixel of them two points of the page (32 × 32, as the frames): a ritual dagger —
+// its tip the point (2 2 in 27-grimoire.css), a blade of bone-white steel lit along its edge, a guard of gold, a grip
+// wound with blood, a drop of blood in a ring of gold for a pommel; and over what can be pressed, a hand of bone —
+// its forefinger the point (11 1), the knuckles of its fingers marked, a ring with a stone of blood, a cuff of gold
 G['px-cur'] = pix([
-  'k...........',
-  'kk..........',
-  'kwk.........',
-  'kwwk........',
-  'kwwwk.......',
-  'kwwwwk......',
-  'kwwwwwk.....',
-  'kwwwwwwk....',
-  'kwwwwwwwk...',
-  'kwwwwwwwwk..',
-  'kwwwwwkkkkk.',
-  'kwwkwwk.....',
-  'kwk.kwwk....',
-  'kk..kwwk....',
-  'k....kwwk...',
-  '.....kwwk...',
-  '......kk....'
-]);
+  '.kk.............',
+  'kwwk............',
+  'kBbwk...........',
+  '.kBbwk..........',
+  '..kBbwk.........',
+  '...kBbwk........',
+  '....kBbwk...kk..',
+  '.....kBbwk.kygk.',
+  '......kBbwkyGk..',
+  '.......kBbyGk...',
+  '......kkkyGdk...',
+  '.....kygGkkdRk..',
+  '....kgGk...kdRk.',
+  '....kkk....kywrk',
+  '...........kgrRk',
+  '............kkk.'
+], 2);
 G['px-hand'] = pix([
-  '....kk..........',
-  '...kwwk.........',
-  '...kwwk.........',
-  '...kwwk.........',
-  '...kwwkkk.......',
-  '...kwwkwwkkk....',
-  '...kwwkwwkwwkk..',
-  'kk.kwwkwwkwwkwk.',
-  'kwkkwwwwwwwwkwwk',
-  'kwwkwwwwwwwwwwwk',
-  '.kwwwwwwwwwwwwwk',
-  '..kwwwwwwwwwwwk.',
-  '..kwwwwwwwwwwwk.',
-  '...kwwwwwwwwwk..',
-  '...kwwwwwwwwwk..',
+  '.....kk.........',
+  '....kwbk........',
+  '....kwbk........',
+  '....kBBk........',
+  '....kwbk........',
+  '....kwbk........',
+  '....kyrk.kk.....',
+  '....kgGkkwbk.kk.',
+  '.kk.kwbkkBBkkwbk',
+  'kwbkkwbkkwbkkBBk',
+  'kBwbkwbbkwbbkwBk',
+  '.kBwbbbbbbbbbbBk',
+  '..kBbbbbbbbbbBk.',
+  '...kgygygygygk..',
+  '...kGGGGGGGGGk..',
   '....kkkkkkkkk...'
-]);
+], 2);
 
 // «Друид»: vector pictures
 const D = {};
